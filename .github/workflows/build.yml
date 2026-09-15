@@ -109,6 +109,66 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
 
+      # Der Server ist die naechste Stufe nach der Datengenerierung: er laedt die erzeugten
+      # Daten wirklich, baut eine Welt und tickt sie. Damit faellt auf, was beim Schreiben der
+      # Dateien noch niemanden gestoert hat -- ein Rezept, das sich nicht lesen laesst, ein
+      # Tag auf einen Gegenstand, den es nicht gibt, ein Vorkommen ohne Merkmal.
+      #
+      # Beendet wird er ueber seine eigene Standardeingabe ("stop"), mit einem harten Abbruch
+      # nach Zeitablauf als Rueckfalloption. Geurteilt wird ueber das PROTOKOLL, nicht ueber
+      # den Rueckgabewert: bei einem Abbruch nach Zeitablauf ist der ohnehin von aussen gesetzt.
+      - name: Run dedicated server (world load smoke test)
+        run: |
+          mkdir -p run/server
+          echo "eula=true" > run/server/eula.txt
+          {
+            echo "max-tick-time=-1"
+            echo "level-name=ci-world"
+            echo "online-mode=false"
+            echo "sync-chunk-writes=false"
+          } > run/server/server.properties
+
+          ( sleep 240; echo stop; sleep 120 ) | timeout 1200 ./gradlew runServer --console=plain > server.log 2>&1 || true
+
+          echo "----- letzte 80 Zeilen -----"
+          tail -80 server.log
+
+          if ! grep -q 'Done (' server.log; then
+            echo
+            echo "FEHLER: Der Server hat die Welt nie fertig geladen ('Done (' fehlt im Protokoll)."
+            echo "Die ersten Ausnahmen:"
+            grep -n -m 5 -A 12 'Exception\|Caused by:' server.log || true
+            exit 1
+          fi
+
+          if grep -q 'Stopping the server' server.log; then
+            echo "OK - Welt geladen, Server sauber beendet."
+          else
+            echo "OK - Welt geladen. (Kein sauberes Herunterfahren im Protokoll -- der harte"
+            echo "     Abbruch nach Zeitablauf hat gegriffen.)"
+          fi
+
+      # Das Protokoll laeuft mit logLevel DEBUG und wird schnell hunderte Megabyte gross --
+      # hochgeladen wird deshalb nur das Ende, und alles, was nach einem Fehler aussieht.
+      - name: Upload server log
+        if: always()
+        run: |
+          if [ -f server.log ]; then
+            tail -n 5000 server.log > server-tail.log
+            grep -n -B 2 -A 30 'Exception\|Caused by:\|ERROR\]' server.log | head -n 4000 > server-errors.log || true
+          fi
+        continue-on-error: true
+
+      - name: Upload server log tail
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-log
+          path: |
+            server-tail.log
+            server-errors.log
+          if-no-files-found: ignore
+
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4
         with:
