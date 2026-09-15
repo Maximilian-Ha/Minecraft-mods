@@ -2399,3 +2399,38 @@ sie ein `BlockNoDrop`; die Eigenschaft am Block genügt, die Zeile im Erzeuger i
 `noLootTable()` (sonst `Missing loottable`), und kein Block mit beidem. Gezählt wird nur die erste
 Stelle eines Aufrufs — sonst zählte ein Block mit, der bloß als Beute eines anderen vorkommt.
 Gemessen: **608 Blöcke, 589 Tabellen, 19 mit `noLootTable()`, null Funde.**
+
+### Lauf acht: ein Dreisatz in einer Zeichenkette
+
+```
+ResourceLocationException: Non [a-z0-9/._-] character in path of location:
+hbmsntm:ingot_compat.is_mod_loaded(_compat._mod__gt6
+```
+
+Im Original heißt das Uran-Material `Uraninite`, sobald GregTech 6 geladen ist, sonst `Uranium`:
+
+```java
+public static final DictFrame U = new DictFrame(Compat.isModLoaded(Compat.MOD_GT6) ? "Uraninite" : "Uranium");
+```
+
+Bei der Portierung ist der ganze Dreisatz **in die Zeichenkette gerutscht** — `df("Compat.isModLoaded(Compat.MOD_GT6")`. GregTech 6 gibt es für 1.21 nicht, also steht dort jetzt schlicht `df("Uranium")`.
+
+Der Name entsteht erst zur Laufzeit (`toTagName` macht aus camelCase snake_case) und stand deshalb
+nirgends als fertiger Pfad im Quelltext — genau die Lücke, durch die er acht Runden lang gefallen
+ist. Das Ortungs-Tor wendet die Umformung jetzt selbst an und prüft das Ergebnis; dazu nimmt es
+jede ausgeschriebene Kennung aus `withDefaultNamespace("...")` mit. Von 5474 auf **6439 geprüfte
+Namen**.
+
+### Zwei Befunde nebenbei, beide ohne Absturz
+
+Die Suche nach fehlenden Namen und Modellen hat zwei stille Lücken gehoben:
+
+* **28 Blöcke und Gegenstände ohne Namen** — neun Erze, der Schrottblock, der ZIRNOX samt Ruine,
+  die beiden Funkfackeln, elf ZIRNOX-Stäbe, Bergbauhelm, Plan C, Kassette und Fluid-Sinnbild. Im
+  Spiel hätte dort der rohe Schlüssel gestanden.
+* **Drei Gegenstände ganz ohne Modell** — Blaupausen, Bergbauhelm, Plan C. Im Spiel der
+  schwarz-violette Würfel.
+
+Beides prüfen die Tore jetzt mit, und beide Male leiten sie die zulässigen Ausnahmen aus dem
+Quelltext her statt aus einer gepflegten Liste: `multiName` hängt den Aufzählungswert an, eine
+Klasse mit eigenem `getDescriptionId` oder eigener Modellanmeldung bestimmt ihren Schlüssel selbst.
