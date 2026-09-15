@@ -541,7 +541,10 @@ public class NtmBlockLootTableProvider extends BlockLootSubProvider {
         this.dropSelf(NtmBlocks.MACHINE_EXPOSURE_CHAMBER.get());
         this.dropSelf(NtmBlocks.MACHINE_RAD_GEN.get());
         this.dropSelf(NtmBlocks.MACHINE_MINING_LASER.get());
-        this.add(NtmBlocks.BARRICADE.get(), noDrop());
+        /* Die Barrikade steht hier absichtlich NICHT: der Block traegt noLootTable(), seine
+         * Tabelle ist damit die leere von Minecraft. Wer ihm trotzdem eine anlegt, bekommt
+         * "Created block loot tables for non-blocks: [minecraft:empty]" -- die Tabelle bleibt
+         * uebrig, weil kein Block sie abholt. */
         this.dropSelf(NtmBlocks.MACHINE_COMPRESSOR_COMPACT.get());
         this.dropSelf(NtmBlocks.MACHINE_TURBINE.get());
         this.dropSelf(NtmBlocks.MACHINE_SOLAR_BOILER.get());

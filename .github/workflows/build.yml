@@ -64,6 +64,11 @@ jobs:
           chmod +x ./tools/lang-check.sh
           ./tools/lang-check.sh
 
+      - name: Check block loot tables
+        run: |
+          chmod +x ./tools/loot-check.sh
+          ./tools/loot-check.sh
+
       # Die Datengenerierung laeuft VOR dem Bau, und zwar aus zwei Gruenden:
       #
       # 1. Sie ist der beste Ersatz fuer einen Client-Start, den CI leisten kann. Sie faehrt den
