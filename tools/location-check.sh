@@ -17,6 +17,7 @@
 #   - die Registriernamen der DeferredRegister (Items, Bloecke, Blockeintraege, Menues, ...)
 #   - Tonverweise im NtmSoundDefinitionsProvider (Quelle der erzeugten sounds.json)
 #   - Materialnamen in Mats.java, aus denen zur Laufzeit Tag- und Gegenstandsnamen entstehen
+#   - jede ausgeschriebene Kennung in withDefaultNamespace("...")
 #   - die Dateinamen unter assets/hbmsntm (Texturen, Modelle, Tondateien)
 #
 # AUSSERDEM: doppelt vergebene Registriernamen. Ein Block bekommt auf 1.21 ein BlockItem im
@@ -88,6 +89,17 @@ if os.path.isfile(mats):
     for m in re.finditer(r'\bdf\(([^)]*)\)', src):
         for arg in re.findall(r'"([^"]*)"', m.group(1)):
             check(to_tag_name(arg), rel, "Materialname")
+
+# 1c. Jede ausgeschriebene Ressourcenkennung: withDefaultNamespace("...") baut daraus direkt
+# eine ResourceLocation, gleich wofuer -- Texturen, Modelle, Tags, Schadensarten, Kennungen von
+# Modellvorhersagen. Das kostet nichts und deckt alles ab, was nicht erst zur Laufzeit entsteht.
+for dirpath, _, files in os.walk(java):
+    for f in files:
+        if not f.endswith('.java'): continue
+        p_ = os.path.join(dirpath, f)
+        src = open(p_, encoding='utf-8').read()
+        for m in re.finditer(r'withDefaultNamespace\(\s*"([^"]*)"', src):
+            check(m.group(1), os.path.relpath(p_, root), "Ressourcenkennung")
 
 # 2. Die Tonverweise. Die sounds.json wird erzeugt, nicht geschrieben -- geprueft wird
 # deshalb ihre Quelle, der NtmSoundDefinitionsProvider.
