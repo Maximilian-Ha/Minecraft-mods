@@ -23,11 +23,15 @@
 # zeigt auf item/canned_<wert>.png. Das Tor liest die Vorlage deshalb aus dem Quelltext, statt
 # sie zu raten; sonst meldet es 27 Fehlstellen, die keine sind.
 #
+# Dritter Weg: der Block-Erzeuger leitet Blocktexturen ebenso aus dem Registriernamen ab,
+# teils mit Endungen (_side, _bottom, _top). Auch das hat erst runData gezeigt, an struct_icf.
+#
 # GEMESSEN: ueber den ganzen Baum null Funde (798 basicItem-Aufrufe, 216 abgeleitete
-# Meta-Texturen). Mit geloeschter rbmk_link.png genau ein Fund, mit geloeschter
-# pellet_rtg.polonium.png genau einer, mit geloeschter canned_tuna.png genau einer, mit
-# geloeschter reinforced_glass_pane.png genau einer, mit geloeschter rail_narrow.png (nur
-# ueber die Hilfsfunktion erreichbar) genau einer.
+# Meta-Texturen, 322 abgeleitete Blocktexturen). Mit je einer geloeschten Textur genau ein
+# Fund: rbmk_link.png (Gegenstands-Erzeuger), reinforced_glass_pane.png (Block-Erzeuger),
+# rail_narrow.png (nur ueber eine Hilfsfunktion erreichbar), pellet_rtg.polonium.png
+# (abgeleitete Meta-Textur), canned_tuna.png (ueberschriebene Vorlage), struct_icf.png und
+# c4_side.png (abgeleitete Blocktexturen).
 
 set -u
 
@@ -79,7 +83,7 @@ def args_at(src, open_idx):
 items = {}
 for path in sorted(set(files.values())):
     src = open(path, encoding='utf-8').read()
-    for m in re.finditer(r'(?:NtmItems\.)?\b([A-Z][A-Z0-9_]{2,})\s*=\s*[^;]{0,200}?\bregister\w*\(\s*"([^"]+)"', src, re.S):
+    for m in re.finditer(r'(?:NtmItems\.)?\b([A-Z][A-Z0-9_]+)\s*=\s*[^;]{0,300}?\bregister\w*\(\s*"([^"]+)"', src, re.S):
         items.setdefault(m.group(1), m.group(2))
 
 # basicItem-Aufrufe in allen Erzeugern einsammeln. Drei Formen kommen vor: der Gegenstand
@@ -217,20 +221,55 @@ for name, cls in sorted(built.items()):
         if tex[len('item/'):] not in have:
             meta_missing.append((cls, tex))
 
+# ---------------------------------------------------------------- Teil 3: Blocktexturen
+
+# Der Block-Erzeuger leitet Texturen genauso still ab wie der Gegenstands-Erzeuger: aus dem
+# Registriernamen des Blocks. Gefunden an struct_icf, das seit seiner Portierung ohne Bild war
+# -- die Vorlage heisst upstream struct_icf_core.
+texdir_block = os.path.join(root, 'src/main/resources/assets/hbmsntm/textures/block')
+have_block = {f[:-4] for f in os.listdir(texdir_block) if f.endswith('.png')}
+
+bsp = os.path.join(java, 'com/hbm/datagen/NtmBlockStateProvider.java')
+bsrc = re.sub(r'//[^\n]*', '', re.sub(r'/\*.*?\*/', '', open(bsp, encoding='utf-8').read(), flags=re.S))
+
+# Je Form: der Aufruf, sein Muster und die Endungen, die er an den Namen haengt.
+formen = [
+    ('simpleCubeAllBlock',       r'\bsimpleCubeAllBlock\(\s*NtmBlocks\.([A-Z][A-Z0-9_]*)\s*\)',           ['']),
+    ('simpleCubeBottomTopBlock', r'\bsimpleCubeBottomTopBlock\(\s*NtmBlocks\.([A-Z][A-Z0-9_]*)\s*\)',     ['_side', '_bottom', '_top']),
+    ('cubeTop',                  r'(?<!\.)\bcubeTop\(\s*NtmBlocks\.([A-Z][A-Z0-9_]*)\s*\)',               ['_side', '_top']),
+    ('simpleBlock',              r'\bsimpleBlock\(\s*NtmBlocks\.([A-Z][A-Z0-9_]*)\.get\(\)\s*\)',         ['']),
+    ('cubeAll',                  r'\bcubeAll\(\s*NtmBlocks\.([A-Z][A-Z0-9_]*)\.get\(\)\s*\)',             ['']),
+    ('blockTexture',             r'\bblockTexture\(\s*NtmBlocks\.([A-Z][A-Z0-9_]*)(?:\.get\(\))?\s*\)',   ['']),
+]
+
+block_missing = []
+block_count = 0
+for aufruf, muster, endungen in formen:
+    for feld in re.findall(muster, bsrc):
+        name = items.get(feld)
+        for e in endungen:
+            block_count += 1
+            if name is None:
+                blind.append("%s(%s): Registriername nicht aufloesbar" % (aufruf, feld)); continue
+            if (name + e) not in have_block:
+                block_missing.append((aufruf, feld, name + e))
+block_missing = sorted(set(block_missing))
+
 # ---------------------------------------------------------------- Bericht
 
 # Was Teil 1 nicht aufloesen konnte, zaehlt wie eine blinde Stelle: ein Tor, das schweigt,
 # wo es nicht hinsieht, ist schlimmer als keines.
 blind = unresolved + blind
 
-print("Pruefe Modell-Texturen ... %d basicItem-Aufrufe, %d abgeleitete Meta-Texturen, %d Texturen vorhanden"
-      % (len(calls), meta_count, len(have)))
+print("Pruefe Modell-Texturen ... %d basicItem-Aufrufe, %d abgeleitete Meta-Texturen, %d abgeleitete Blocktexturen"
+      % (len(calls), meta_count, block_count))
+print("                          %d Gegenstands- und %d Blocktexturen vorhanden" % (len(have), len(have_block)))
 
 if unknown:
     print("  HINWEIS: fuer %d Felder liess sich der Registriername nicht aufloesen (%s)"
           % (len(unknown), ", ".join(unknown[:5])))
 
-if not missing and not meta_missing and not blind:
+if not missing and not meta_missing and not block_missing and not blind:
     print("OK - jede stillschweigend erwartete Textur ist da.")
     sys.exit(0)
 
@@ -238,12 +277,14 @@ if blind:
     print("  BLINDE STELLEN: %d -- das Tor kann diese Faelle nicht pruefen" % len(blind))
     for b in blind: print("  " + b)
 
-if missing or meta_missing:
-    print("  AUFFAELLIG: %d" % (len(missing) + len(meta_missing)))
+if missing or meta_missing or block_missing:
+    print("  AUFFAELLIG: %d" % (len(missing) + len(meta_missing) + len(block_missing)))
     for field, name in missing:
         print("  %s erwartet item/%s.png -- die Datei fehlt" % (field, name))
     for cls, tex in meta_missing:
         print("  %s erwartet %s.png -- die Datei fehlt" % (cls, tex))
+    for aufruf, feld, tex in block_missing:
+        print("  %s(NtmBlocks.%s) erwartet block/%s.png -- die Datei fehlt" % (aufruf, feld, tex))
     print()
     print("runData bricht dafuer ab: \"Texture hbmsntm:item/<name> does not exist in any known")
     print("resource pack\". Entweder die Textur nachlegen oder den Aufruf entfernen.")

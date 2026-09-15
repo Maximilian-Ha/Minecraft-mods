@@ -587,5 +587,66 @@ public class NtmSoundDefinitionsProvider extends SoundDefinitionsProvider {
         this.add(NtmSoundEvents.CHIME, SoundDefinition.definition()
                 .with(sound(NuclearTechMod.withDefaultNamespace("alarm/chime")))
         );
+        /* Die Sirenen der Runde 127. Sie standen bis hierher nur in der handgeschriebenen
+         * sounds.json -- und die lag im selben Pfad, den dieser Erzeuger schreibt. Zwei
+         * Dateien auf einem Pfad heisst: eine gewinnt, und die Sirenen waeren beim ersten
+         * runData-Lauf verschwunden. Jetzt stehen alle Tonereignisse an einer Stelle. */
+        this.add(NtmSoundEvents.ALARM_AIR_RAID, SoundDefinition.definition()
+                .with(sound("hbmsntm:alarm/air_raid").stream())
+        );
+        this.add(NtmSoundEvents.ALARM_AMS_SIREN, SoundDefinition.definition()
+                .with(sound("hbmsntm:alarm/ams_siren"))
+        );
+        this.add(NtmSoundEvents.ALARM_APC_LOOP, SoundDefinition.definition()
+                .with(sound("hbmsntm:alarm/apc_loop"))
+        );
+        this.add(NtmSoundEvents.ALARM_APC_PASS, SoundDefinition.definition()
+                .with(sound("hbmsntm:alarm/apc_pass"))
+        );
+        this.add(NtmSoundEvents.ALARM_AUTOPILOT, SoundDefinition.definition()
+                .with(sound("hbmsntm:alarm/boeing707_autopilot_disconnected"))
+        );
+        this.add(NtmSoundEvents.ALARM_BANK, SoundDefinition.definition()
+                .with(sound("hbmsntm:alarm/bank_alarm"))
+        );
+        this.add(NtmSoundEvents.ALARM_BEEP_SIREN, SoundDefinition.definition()
+                .with(sound("hbmsntm:alarm/beep_siren"))
+        );
+        this.add(NtmSoundEvents.ALARM_BLAST_DOOR, SoundDefinition.definition()
+                .with(sound("hbmsntm:alarm/blast_door_alarm"))
+        );
+        this.add(NtmSoundEvents.ALARM_CLASSIC, SoundDefinition.definition()
+                .with(sound("hbmsntm:alarm/classic_siren"))
+        );
+        this.add(NtmSoundEvents.ALARM_CONTAINER, SoundDefinition.definition()
+                .with(sound("hbmsntm:alarm/container_alarm"))
+        );
+        this.add(NtmSoundEvents.ALARM_EAS, SoundDefinition.definition()
+                .with(sound("hbmsntm:alarm/eas_alarm"))
+        );
+        this.add(NtmSoundEvents.ALARM_FO_KLAXON_A, SoundDefinition.definition()
+                .with(sound("hbmsntm:alarm/fo_klaxon_a"))
+        );
+        this.add(NtmSoundEvents.ALARM_FO_KLAXON_B, SoundDefinition.definition()
+                .with(sound("hbmsntm:alarm/fo_klaxon_b"))
+        );
+        this.add(NtmSoundEvents.ALARM_KLAXON, SoundDefinition.definition()
+                .with(sound("hbmsntm:alarm/klaxon"))
+        );
+        this.add(NtmSoundEvents.ALARM_NOSTROMO, SoundDefinition.definition()
+                .with(sound("hbmsntm:alarm/nostromo_siren"))
+        );
+        this.add(NtmSoundEvents.ALARM_RAZORTRAIN, SoundDefinition.definition()
+                .with(sound("hbmsntm:alarm/razortrain_horn"))
+        );
+        this.add(NtmSoundEvents.ALARM_REGULAR_SIREN, SoundDefinition.definition()
+                .with(sound("hbmsntm:alarm/regular_siren"))
+        );
+        this.add(NtmSoundEvents.ALARM_STRIDER_SIREN, SoundDefinition.definition()
+                .with(sound("hbmsntm:alarm/strider_siren"))
+        );
+        this.add(NtmSoundEvents.ALARM_SWEEP_SIREN, SoundDefinition.definition()
+                .with(sound("hbmsntm:alarm/sweep_siren"))
+        );
     }
 }

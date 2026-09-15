@@ -15,7 +15,7 @@
 # GEPRUEFT WERDEN:
 #   - die Namen in NtmSoundEvents.reg("...")
 #   - die Registriernamen der DeferredRegister (Items, Bloecke, Blockeintraege, Menues, ...)
-#   - Schluessel und Dateiverweise in sounds.json
+#   - Tonverweise im NtmSoundDefinitionsProvider (Quelle der erzeugten sounds.json)
 #   - die Dateinamen unter assets/hbmsntm (Texturen, Modelle, Tondateien)
 #
 # AUSSERDEM: doppelt vergebene Registriernamen. Ein Block bekommt auf 1.21 ein BlockItem im
@@ -31,7 +31,7 @@ set -u
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 python3 - "$ROOT" <<'PY'
-import re, os, sys, json
+import re, os, sys
 
 root = sys.argv[1]
 java = os.path.join(root, 'src/main/java')
@@ -65,17 +65,16 @@ for dirpath, _, files in os.walk(java):
         for m in pat_deferred.finditer(src):
             check(m.group(1), rel, "Registriername")
 
-# 2. sounds.json: Schluessel und Dateiverweise.
-sounds = os.path.join(assets, 'sounds.json')
-if os.path.isfile(sounds):
-    rel = os.path.relpath(sounds, root)
-    data = json.load(open(sounds, encoding='utf-8'))
-    for key, entry in data.items():
-        check(key, rel, "Tonschluessel")
-        for s in entry.get('sounds', []):
-            name = s if isinstance(s, str) else s.get('name', '')
-            # Ein Verweis darf einen Namensraum tragen: "hbmsntm:alarm/air_raid"
-            check(name.split(':', 1)[-1], rel, "Tonverweis")
+# 2. Die Tonverweise. Die sounds.json wird erzeugt, nicht geschrieben -- geprueft wird
+# deshalb ihre Quelle, der NtmSoundDefinitionsProvider.
+prov = os.path.join(java, 'com/hbm/datagen/NtmSoundDefinitionsProvider.java')
+if os.path.isfile(prov):
+    rel = os.path.relpath(prov, root)
+    src = open(prov, encoding='utf-8').read()
+    # Beide Schreibweisen: sound("hbmsntm:pfad") und sound(withDefaultNamespace("pfad")).
+    for m in re.finditer(r'sound\(\s*(?:NuclearTechMod\.withDefaultNamespace\(\s*)?"([^"]+)"', src):
+        # Ein Verweis darf einen Namensraum tragen: "hbmsntm:alarm/air_raid"
+        check(m.group(1).split(':', 1)[-1], rel, "Tonverweis")
 
 # 3. Dateinamen unter assets: sie werden selbst zu ResourceLocation-Pfaden.
 for dirpath, _, files in os.walk(assets):
