@@ -69,6 +69,15 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.simpleCubeAllBlock(NtmBlocks.SAND_OILY);
         this.simpleCubeAllBlock(NtmBlocks.SAND_RED_OILY);
         this.layeringBlock(NtmBlocks.OIL_SPILL.get(), modLoc("block/oil_spill"));
+
+        /* Die vier Fluessigkeitsbloecke. Ihr Aussehen bestimmt der Fluid-Renderer aus der
+         * Fluessigkeit selbst; aus der Blockstate holt sich das Spiel nur die Partikeltextur.
+         * Ohne diese Zeilen hat der Block gar keine Blockstate -- das Spiel meldet ein
+         * fehlendes Modell und zeichnet schwarz-violette Partikel. */
+        this.fluidBlock(NtmBlocks.CORIUM, "corium_still");
+        this.fluidBlock(NtmBlocks.MUD, "mud_still");
+        this.fluidBlock(NtmBlocks.RAD_LAVA, "rad_lava_still");
+        this.fluidBlock(NtmBlocks.VOLCANIC_LAVA, "volcanic_lava_still");
         this.simpleCubeAllBlock(NtmBlocks.ORE_OIL);
         this.simpleCubeAllBlock(NtmBlocks.ORE_OIL_EMPTY);
         this.simpleCubeAllBlock(NtmBlocks.ORE_OIL_SAND);
@@ -1570,6 +1579,12 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         });
 
         this.simpleBlockItem(block, model);
+    }
+
+    private void fluidBlock(DeferredBlock<? extends Block> block, String stillTexture) {
+        this.simpleBlock(block.get(), this.models()
+                .getBuilder(name(block))
+                .texture("particle", modLoc("block/" + stillTexture)));
     }
 
     private void layeringBlock(Block block, ResourceLocation texture) {
