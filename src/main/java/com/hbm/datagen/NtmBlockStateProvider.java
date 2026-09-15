@@ -1315,14 +1315,16 @@ public class NtmBlockStateProvider extends BlockStateProvider {
     /** Die elf Bauteile des Druckwasserreaktors. */
     private void registerPwr() {
 
-        this.simpleBlockWithItem(NtmBlocks.PWR_CONTROLLER.get(), this.models().cube(
+        /* Die Steuerung dreht sich zum Spieler; das Modell zeigt nach Norden und wird gedreht.
+         * Der Zustand wird GENAU EINMAL erklaert: simpleBlockWithItem hat hier frueher schon
+         * eine Variante gesetzt, und der Erzeuger haette den Block danach zweimal beschrieben. */
+        ModelFile controller = this.models().cube(
                 this.name(NtmBlocks.PWR_CONTROLLER.get()),
                 modLoc("block/pwr_casing_blank"), modLoc("block/pwr_casing_blank"),
                 modLoc("block/pwr_controller"),
                 modLoc("block/pwr_casing_blank"), modLoc("block/pwr_casing_blank"), modLoc("block/pwr_casing_blank")
-        ).texture("particle", modLoc("block/pwr_casing_blank")));
+        ).texture("particle", modLoc("block/pwr_casing_blank"));
 
-        /* Die Steuerung dreht sich zum Spieler; das Modell zeigt nach Norden und wird gedreht. */
         this.getVariantBuilder(NtmBlocks.PWR_CONTROLLER.get()).forAllStates(state -> {
             int y = switch(state.getValue(com.hbm.blocks.machine.MachinePWRControllerBlock.FACING)) {
                 case EAST -> 90;
@@ -1330,10 +1332,10 @@ public class NtmBlockStateProvider extends BlockStateProvider {
                 case WEST -> 270;
                 default -> 0;
             };
-            return ConfiguredModel.builder()
-                    .modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + this.name(NtmBlocks.PWR_CONTROLLER.get()))))
-                    .rotationY(y).build();
+            return ConfiguredModel.builder().modelFile(controller).rotationY(y).build();
         });
+
+        this.simpleBlockItem(NtmBlocks.PWR_CONTROLLER.get(), controller);
 
         this.simpleCubeAllBlock(NtmBlocks.PWR_CASING);
         this.simpleCubeAllBlock(NtmBlocks.PWR_REFLECTOR);
