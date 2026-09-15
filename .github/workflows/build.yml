@@ -49,6 +49,11 @@ jobs:
           chmod +x ./tools/location-check.sh
           ./tools/location-check.sh
 
+      - name: Check model textures
+        run: |
+          chmod +x ./tools/model-check.sh
+          ./tools/model-check.sh
+
       # Die Datengenerierung laeuft VOR dem Bau, und zwar aus zwei Gruenden:
       #
       # 1. Sie ist der beste Ersatz fuer einen Client-Start, den CI leisten kann. Sie faehrt den

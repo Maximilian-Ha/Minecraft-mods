@@ -2238,3 +2238,38 @@ nie. Gemessen:
 Die .jar war also auch nach den Absturzfixes unvollständig: 493 Blöcke ohne Modell, jeder Name
 als roher Schlüssel, keine Beutetabellen. Dass `runData` jetzt vor dem Bau läuft, behebt beides
 mit demselben Schritt.
+
+## Der erste `runData`-Lauf: die Registrierung steht
+
+Der erste Lauf mit Datengenerierung in CI kam **durch den Mod-Konstruktor und durch sämtliche
+Registrierungen** — die drei Startabstürze sind damit bestätigt behoben, ohne dass jemand das
+Spiel starten musste. Er scheiterte erst beim Erzeuger der Gegenstandsmodelle:
+
+```
+IllegalArgumentException: Texture hbmsntm:item/rbmk_link does not exist in any known resource pack
+  at NtmItemModelProvider.registerModels(NtmItemModelProvider.java:39)
+```
+
+`basicItem(NtmItems.X)` nennt keine Textur: der Erzeuger leitet sie aus dem Registriernamen ab
+und sucht `item/<name>.png`. Der `asset-check` findet das nicht — er prüft Referenzen, die im
+Quelltext **ausgeschrieben** stehen, und hier steht keine.
+
+Statt auf den nächsten Lauf zu warten, ließ sich die Frage lokal vollständig beantworten:
+**784 `basicItem`-Aufrufe gegen 1546 vorhandene Texturen, genau eine Lücke** — `rbmk_link`, seit
+seiner Portierung ohne Bild. Die Textur heißt im Original `rbmk_tool` und ist jetzt unter dem
+Namen des Ports abgelegt.
+
+**Das zehnte Tor, `tools/model-check.sh`**, schließt diese Klasse: es löst für jeden
+`basicItem`-Aufruf den Registriernamen auf (über alle drei Wege — `ITEMS.register`,
+Hilfsfunktionen wie `registerNugget`, und die Waffenfabrik) und prüft, ob die Datei da ist.
+Gemessen: null Funde; mit gelöschter `rbmk_link.png` genau ein Fund.
+
+### Nebenbefund: zwei Blöcke ohne Modell
+
+Beim Abgleich der 498 registrierten Blöcke gegen den Blockzustandsgeber fielen
+`RADIO_TORCH_SENDER` und `RADIO_TORCH_RECEIVER` auf: Beutetabelle ja, Rezepte ja, **Modell nein**
+— im Spiel wären sie der schwarz-violette Ersatzwürfel gewesen. Beide haben jetzt eines. Die
+übrigen drei ohne Eintrag (`FOUNDRY_*`) haben handgeschriebene Blockzustände und sind in Ordnung.
+
+*Abweichung:* das Original hat für die Funkfackeln je ein Bild für an und aus. Der Block des
+Ports führt nur `FACING` und keinen Leuchtzustand, deshalb steht dort das Bild für „aus".

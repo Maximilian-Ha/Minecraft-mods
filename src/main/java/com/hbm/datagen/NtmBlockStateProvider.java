@@ -338,6 +338,24 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.blockItem(NtmBlocks.CRANE_PARTITIONER);
 
         /*
+         * Die beiden Funkfackeln aus Runde 112. Sie hatten Beutetabelle und Rezepte, aber KEIN
+         * Modell -- im Spiel waeren sie der schwarz-violette Ersatzwuerfel gewesen. Gefunden
+         * beim Abgleich der 498 registrierten Bloecke gegen den Blockzustandsgeber.
+         *
+         * ABWEICHUNG: das Original hat je zwei Bilder, eines fuer an und eines fuer aus. Der
+         * Block des Ports fuehrt nur FACING und keinen Leuchtzustand, deshalb steht hier das
+         * Bild fuer "aus". Die beiden "an"-Bilder bleiben draussen, solange es den Zustand
+         * nicht gibt.
+         */
+        this.directionalBlock(NtmBlocks.RADIO_TORCH_SENDER.get(), this.models()
+                .cubeAll("radio_torch_sender", modLoc("block/rtty_sender_off")));
+        this.blockItem(NtmBlocks.RADIO_TORCH_SENDER);
+
+        this.directionalBlock(NtmBlocks.RADIO_TORCH_RECEIVER.get(), this.models()
+                .cubeAll("radio_torch_receiver", modLoc("block/rtty_rec_off")));
+        this.blockItem(NtmBlocks.RADIO_TORCH_RECEIVER);
+
+        /*
          * Runde 103: die Weiche. Sie ist zwei Bloecke breit, und beide tragen verschiedene
          * Bilder -- der Kern die linke Spur, der Beiblock die rechte. Gewaehlt wird nach der
          * Bauteilart des Blockstates, gedreht nach seiner Richtung.
