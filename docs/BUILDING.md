@@ -45,13 +45,18 @@ Vor dem Packen einer benutzbaren JAR also einmal:
 ./gradlew runData && ./gradlew build
 ```
 
-Zwei Dateien liegen doppelt vor — handgeschrieben unter `src/main/resources` und zugleich
-von einem Datengenerator erzeugt: `assets/hbmsntm/sounds.json` sowie Blockstate und Modelle
-von `machine_shredder` und `ore_bedrock_oil`. Das stammt aus der Ausgangsbasis. Solange
-`src/generated/resources` fehlt, faellt es nicht auf; sobald `runData` gelaufen ist, liefern
-beide Quellverzeichnisse denselben Pfad. Beim Aufraeumen sind die handgeschriebenen Fassungen
-die ueberholten: der Datengenerator deckt sie vollstaendig ab (106 Sound-Eintraege gegenueber
-47).
+Der erste `runData`-Lauf hat eine Altlast der Ausgangsbasis sichtbar gemacht: 149 Dateien
+lagen doppelt vor — handgeschrieben unter `src/main/resources` und zugleich vom
+Datengenerator erzeugt. Zwei Quellverzeichnisse liefern dann denselben Pfad, und beim Packen
+gewinnt eine der beiden Fassungen, ohne dass man steuern koennte, welche. Die
+handgeschriebenen Doppel sind entfernt (`sounds.json`, 90 Beutetabellen, 13 Rezepte samt
+Fortschritten, 19 Tag-Dateien, sieben Modelle und Blockstates); erhalten blieb, was kein
+Erzeuger schreibt — die Giesserei, drei Blocktags, `no_impact` und die 90
+Weltgenerations-Dateien der Erzadern.
+
+Praktisch heisst das: **eine JAR ohne vorherigen `runData`-Lauf ist unvollstaendig.**
+`src/generated/resources` ist nicht versioniert, also fehlen ohne den Lauf die Blockstates,
+die Modelle, die Sprachdatei, die Beutetabellen, die Rezepte und die Tonliste.
 
 ## Wenn kein Netzzugriff auf die Maven-Repos besteht
 
