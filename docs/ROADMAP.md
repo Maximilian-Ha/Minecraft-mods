@@ -2451,3 +2451,26 @@ Schadensarten, Biome und Vorkommen stehen nicht in einer Registry des Codes, son
 Datapack füllen (`builder.add(..., X::bootstrap)`), sucht die Erzeuger, die deren Einträge nennen,
 und prüft, mit welcher Tabelle sie gebaut werden. Gemessen: ein solcher Erzeuger, null Funde; mit
 der alten Tabelle genau ein Fund.
+
+## Grün: der erste vollständige Lauf
+
+Lauf zehn ist durchgelaufen — **alle vierzehn Tore, `runData`, die Doppelpfad-Prüfung und
+`./gradlew build`**. Das Artefakt `hbmsntm` liegt mit 25,4 MB im Lauf 35019529242.
+
+Was damit belegt ist, und was nicht:
+
+| belegt | nicht belegt |
+|---|---|
+| Der Mod-Konstruktor läuft durch | Dass im Spiel etwas richtig **aussieht** |
+| Jede Registrierung greift — Blöcke, Gegenstände, Fluide, Tonereignisse, Entitäten, Menüs | Dass die Blockentitäten-Renderer zeichnen |
+| Jeder Datenerzeuger schreibt seine Dateien | Dass Maschinen **rechnen** wie das Original |
+| Blockzustände, Modelle, Sprachdatei, Beutetabellen, Rezepte, Tags sind vollständig erzeugt | Dass eine Welt lädt (`runServer` steht noch aus) |
+| Keine Datei liegt doppelt vor | |
+| Die .jar lässt sich packen | |
+
+Zehn Läufe, zehn Ursachen — und keine davon hätte ein Übersetzungsfehler sein können, denn
+übersetzt hat es die ganze Zeit. Das ist die Lehre aus dieser Runde: **„es baut" und „es läuft"
+sind zwei verschiedene Aussagen**, und zwischen ihnen lagen hier zehn Abbrüche.
+
+Die Tore sind von zehn auf vierzehn gewachsen; jedes einzelne ist an einem echten Absturz
+gemessen worden, nicht an einer Vermutung.
