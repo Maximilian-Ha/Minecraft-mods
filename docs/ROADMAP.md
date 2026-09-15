@@ -2434,3 +2434,20 @@ Die Suche nach fehlenden Namen und Modellen hat zwei stille Lücken gehoben:
 Beides prüfen die Tore jetzt mit, und beide Male leiten sie die zulässigen Ausnahmen aus dem
 Quelltext her statt aus einer gepflegten Liste: `multiName` hängt den Aufzählungswert an, eine
 Klasse mit eigenem `getDescriptionId` oder eigener Modellanmeldung bestimmt ihren Schlüssel selbst.
+
+### Lauf neun: die Schadensart-Tags sahen ihre eigenen Schadensarten nicht
+
+```
+IllegalArgumentException: Couldn't define tag minecraft:is_explosion as it is missing
+following references: hbmsntm:nuclear_blast
+```
+
+Schadensarten, Biome und Vorkommen stehen nicht in einer Registry des Codes, sondern im
+**Datapack**, das der `DatapackBuiltinEntriesProvider` erzeugt. Die Nachschlagetabelle aus dem
+`GatherDataEvent` kennt sie deshalb nicht — nur die des Datapack-Erzeugers
+(`getRegistryProvider()`) tut das. Der Tag-Erzeuger bekam die falsche.
+
+**Das vierzehnte Tor, `datagen-check`**, liest aus `NtmDataGenerators`, welche Klassen das
+Datapack füllen (`builder.add(..., X::bootstrap)`), sucht die Erzeuger, die deren Einträge nennen,
+und prüft, mit welcher Tabelle sie gebaut werden. Gemessen: ein solcher Erzeuger, null Funde; mit
+der alten Tabelle genau ein Fund.
