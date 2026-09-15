@@ -1,0 +1,431 @@
+package com.hbm.render.loader;
+
+import com.hbm.main.NuclearTechMod;
+import com.hbm.render.loader.old.ModelFormatException;
+import com.hbm.render.loader.old.TextureCoordinate;
+import com.hbm.render.loader.old.Vertex;
+import com.hbm.render.util.NtmShaders;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexBuffer;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class HFRWavefrontObject {
+
+    /** For resource reloading */
+    public static final Set<HFRWavefrontObject> allModels = Collections.synchronizedSet(new LinkedHashSet<>());
+    public static final LinkedHashMap<HFRWavefrontObjectVBO, HFRWavefrontObject> allVBOs = new LinkedHashMap<>();
+
+    private static final Pattern VERTEX_PATTERN = Pattern.compile("(v( (\\-){0,1}\\d+(\\.\\d+)?){3,4} *\\n)|(v( (\\-){0,1}\\d+(\\.\\d+)?){3,4} *$)");
+    private static final Pattern VERTEX_NORMAL_PATTERN = Pattern.compile("(vn( (\\-){0,1}\\d+(\\.\\d+)?){3,4} *\\n)|(vn( (\\-){0,1}\\d+(\\.\\d+)?){3,4} *$)");
+    private static final Pattern TEXTURE_COORDINATE_PATTERN = Pattern.compile("(vt( (\\-){0,1}\\d+\\.\\d+){2,3} *\\n)|(vt( (\\-){0,1}\\d+(\\.\\d+)?){2,3} *$)");
+    private static final Pattern FACE_V_VT_VN_PATTERN = Pattern.compile("(f( \\d+/\\d+/\\d+){3,4} *\\n)|(f( \\d+/\\d+/\\d+){3,4} *$)");
+    private static final Pattern FACE_V_VT_PATTERN = Pattern.compile("(f( \\d+/\\d+){3,4} *\\n)|(f( \\d+/\\d+){3,4} *$)");
+    private static final Pattern FACE_V_VN_PATTERN = Pattern.compile("(f( \\d+//\\d+){3,4} *\\n)|(f( \\d+//\\d+){3,4} *$)");
+    private static final Pattern FACE_V_PATTERN = Pattern.compile("(f( \\d+){3,4} *\\n)|(f( \\d+){3,4} *$)");
+    private static final Pattern GROUP_OBJECT_PATTERN = Pattern.compile("([go]( [\\w\\d\\.]+) *\\n)|([go]( [\\w\\d\\.]+) *$)");
+
+    // multi-thread shenanigans
+    private static final ThreadLocal<Matcher> vertexMatcher = ThreadLocal.withInitial(() -> VERTEX_PATTERN.matcher(""));
+    private static final ThreadLocal<Matcher> vertexNormalMatcher = ThreadLocal.withInitial(() -> VERTEX_NORMAL_PATTERN.matcher(""));
+    private static final ThreadLocal<Matcher> textureCoordinateMatcher = ThreadLocal.withInitial(() -> TEXTURE_COORDINATE_PATTERN.matcher(""));
+    private static final ThreadLocal<Matcher> face_V_VT_VN_Matcher = ThreadLocal.withInitial(() -> FACE_V_VT_VN_PATTERN.matcher(""));
+    private static final ThreadLocal<Matcher> face_V_VT_Matcher = ThreadLocal.withInitial(() -> FACE_V_VT_PATTERN.matcher(""));
+    private static final ThreadLocal<Matcher> face_V_VN_Matcher = ThreadLocal.withInitial(() -> FACE_V_VN_PATTERN.matcher(""));
+    private static final ThreadLocal<Matcher> face_V_Matcher = ThreadLocal.withInitial(() -> FACE_V_PATTERN.matcher(""));
+    private static final ThreadLocal<Matcher> groupObjectMatcher = ThreadLocal.withInitial(() -> GROUP_OBJECT_PATTERN.matcher(""));
+
+    public ArrayList<Vertex> vertices = new ArrayList<>();
+    public ArrayList<Vertex> vertexNormals = new ArrayList<>();
+    public ArrayList<TextureCoordinate> textureCoordinates = new ArrayList<>();
+    public ArrayList<S_GroupObject> groupObjects = new ArrayList<>();
+    private S_GroupObject currentGroupObject;
+    public ResourceLocation resource;
+    private final String fileName;
+    private boolean smoothing = true;
+    private boolean allowMixedMode = false;
+
+    public HFRWavefrontObject(String path) throws ModelFormatException {
+        this(NuclearTechMod.withDefaultNamespace(path), false);
+    }
+
+    public HFRWavefrontObject(String path, boolean mixedMode) throws ModelFormatException {
+        this(NuclearTechMod.withDefaultNamespace(path), mixedMode);
+    }
+
+    public HFRWavefrontObject noSmooth() {
+        this.smoothing = false;
+        return this;
+    }
+
+    /** Provides a way for a model to have both tris and quads, however this means it can't be rendered directly.
+     * Useful for ISBRHs which access vertices manually, allowing the quad to tri trick without forcing the entire model to be redundant tris. */
+    public void mixedMode() { this.allowMixedMode = true; }
+
+    public HFRWavefrontObject(ResourceLocation resource) throws ModelFormatException {
+        this(resource, false);
+    }
+
+    public HFRWavefrontObject(ResourceLocation resource, boolean mixedMode) throws ModelFormatException {
+        if(mixedMode) this.mixedMode();
+
+        this.resource = resource;
+        this.fileName = resource.toString();
+
+        try {
+            Resource res = Minecraft.getInstance().getResourceManager().getResourceOrThrow(resource);
+
+            try (InputStream stream = res.open()) {
+                loadObjModel(stream);
+            }
+        } catch(IOException e) {
+            throw new ModelFormatException("Failed to load OBJ model: " + resource, e);
+        }
+
+        allModels.add(this);
+    }
+
+    public void destroy() {
+        vertices.clear();
+        vertexNormals.clear();
+        textureCoordinates.clear();
+        groupObjects.clear();
+        currentGroupObject = null;
+    }
+
+    public void loadObjModel(InputStream inputStream) throws ModelFormatException {
+        BufferedReader reader = null;
+
+        String currentLine;
+        int lineCount = 0;
+
+        try {
+            reader = new BufferedReader(new InputStreamReader(inputStream));
+
+            while((currentLine = reader.readLine()) != null) {
+                lineCount++;
+                currentLine = currentLine.replaceAll("\\s+", " ").trim();
+
+                if(currentLine.startsWith("#") || currentLine.length() == 0) {
+                    continue;
+                }
+                if(currentLine.startsWith("v ")) {
+                    Vertex vertex = parseVertex(currentLine, lineCount);
+                    if(vertex != null) {
+                        vertices.add(vertex);
+                    }
+                } else if(currentLine.startsWith("vn ")) {
+                    Vertex vertex = parseVertexNormal(currentLine, lineCount);
+                    if(vertex != null) {
+                        vertexNormals.add(vertex);
+                    }
+                } else if(currentLine.startsWith("vt ")) {
+                    TextureCoordinate textureCoordinate = parseTextureCoordinate(currentLine, lineCount);
+                    if(textureCoordinate != null) {
+                        textureCoordinates.add(textureCoordinate);
+                    }
+                } else if(currentLine.startsWith("f ")) {
+
+                    if(currentGroupObject == null) {
+                        currentGroupObject = new S_GroupObject("Default");
+                    }
+
+                    S_Face face = parseFace(currentLine, lineCount);
+
+                    currentGroupObject.faces.add(face);
+
+                } else if(currentLine.startsWith("g ") | currentLine.startsWith("o ")) {
+                    S_GroupObject group = parseGroupObject(currentLine, lineCount);
+
+                    if(group != null) {
+                        if(currentGroupObject != null) {
+                            groupObjects.add(currentGroupObject);
+                        }
+                    }
+
+                    currentGroupObject = group;
+                }
+            }
+
+            groupObjects.add(currentGroupObject);
+        } catch(IOException e) {
+            throw new ModelFormatException("caught IO Exception while reading model format", e);
+        } finally {
+            try {
+                reader.close();
+            } catch(IOException e) {
+                // hush
+            }
+
+            try {
+                inputStream.close();
+            } catch(IOException e) {
+                // hush
+            }
+        }
+    }
+
+    private Vertex parseVertex(String line, int lineCount) throws ModelFormatException {
+        Vertex vertex = null;
+
+        if(isValidVertexLine(line)) {
+            line = line.substring(line.indexOf(" ") + 1);
+            String[] tokens = line.split(" ");
+
+            try {
+                if(tokens.length == 2) {
+                    return new Vertex(Float.parseFloat(tokens[0]), Float.parseFloat(tokens[1]));
+                } else if(tokens.length == 3) {
+                    return new Vertex(Float.parseFloat(tokens[0]), Float.parseFloat(tokens[1]), Float.parseFloat(tokens[2]));
+                }
+            } catch(NumberFormatException e) {
+                throw new ModelFormatException(String.format("Number formatting error at line %d", lineCount), e);
+            }
+        } else {
+            throw new ModelFormatException("Error parsing entry ('" + line + "'" + ", line " + lineCount + ") in file '" + fileName + "' - Incorrect format");
+        }
+
+        return vertex;
+    }
+
+    private Vertex parseVertexNormal(String line, int lineCount) throws ModelFormatException {
+        Vertex vertexNormal = null;
+
+        if(isValidVertexNormalLine(line)) {
+            line = line.substring(line.indexOf(" ") + 1);
+            String[] tokens = line.split(" ");
+
+            try {
+                if(tokens.length == 3)
+                    return new Vertex(Float.parseFloat(tokens[0]), Float.parseFloat(tokens[1]), Float.parseFloat(tokens[2]));
+            } catch(NumberFormatException e) {
+                throw new ModelFormatException(String.format("Number formatting error at line %d", lineCount), e);
+            }
+        } else {
+            throw new ModelFormatException("Error parsing entry ('" + line + "'" + ", line " + lineCount + ") in file '" + fileName + "' - Incorrect format");
+        }
+
+        return vertexNormal;
+    }
+
+    private TextureCoordinate parseTextureCoordinate(String line, int lineCount) throws ModelFormatException {
+        TextureCoordinate textureCoordinate = null;
+
+        if(isValidTextureCoordinateLine(line)) {
+            line = line.substring(line.indexOf(" ") + 1);
+            String[] tokens = line.split(" ");
+
+            try {
+                if(tokens.length == 2)
+                    return new TextureCoordinate(Float.parseFloat(tokens[0]), 1 - Float.parseFloat(tokens[1]));
+                else if(tokens.length == 3)
+                    return new TextureCoordinate(Float.parseFloat(tokens[0]), 1 - Float.parseFloat(tokens[1]), Float.parseFloat(tokens[2]));
+            } catch(NumberFormatException e) {
+                throw new ModelFormatException(String.format("Number formatting error at line %d", lineCount), e);
+            }
+        } else {
+            throw new ModelFormatException("Error parsing entry ('" + line + "'" + ", line " + lineCount + ") in file '" + fileName + "' - Incorrect format");
+        }
+
+        return textureCoordinate;
+    }
+
+    private S_Face parseFace(String line, int lineCount) throws ModelFormatException {
+        S_Face face;
+
+        if(isValidFaceLine(line)) {
+            face = new S_Face(this.smoothing);
+
+            String trimmedLine = line.substring(line.indexOf(" ") + 1);
+            String[] tokens = trimmedLine.split(" ");
+            String[] subTokens;
+
+            if(!this.allowMixedMode) {
+                if(tokens.length == 3) {
+                    if(currentGroupObject.mode == null) {
+                        currentGroupObject.mode = VertexFormat.Mode.TRIANGLES;
+                    } else if(currentGroupObject.mode != VertexFormat.Mode.TRIANGLES) {
+                        throw new ModelFormatException("Error parsing entry ('" + line + "'" + ", line " + lineCount + ") in file '" + fileName
+                                + "' - Invalid number of points for face (expected 4, found " + tokens.length + ")");
+                    }
+                } else if(tokens.length == 4) {
+                    if(currentGroupObject.mode == null) {
+                        currentGroupObject.mode = VertexFormat.Mode.QUADS;
+                    } else if(currentGroupObject.mode != VertexFormat.Mode.QUADS) {
+                        throw new ModelFormatException("Error parsing entry ('" + line + "'" + ", line " + lineCount + ") in file '" + fileName
+                                + "' - Invalid number of points for face (expected 3, found " + tokens.length + ")");
+                    }
+                }
+            }
+
+            // f v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3 ...
+            if(isValidFace_V_VT_VN_Line(line)) {
+                face.vertices = new Vertex[tokens.length];
+                face.textureCoordinates = new TextureCoordinate[tokens.length];
+                face.vertexNormals = new Vertex[tokens.length];
+
+                for(int i = 0; i < tokens.length; ++i) {
+                    subTokens = tokens[i].split("/");
+
+                    face.vertices[i] = vertices.get(Integer.parseInt(subTokens[0]) - 1);
+                    face.textureCoordinates[i] = textureCoordinates.get(Integer.parseInt(subTokens[1]) - 1);
+                    face.vertexNormals[i] = vertexNormals.get(Integer.parseInt(subTokens[2]) - 1);
+                }
+
+                face.faceNormal = face.calculateFaceNormal();
+            }
+            // f v1/vt1 v2/vt2 v3/vt3 ...
+            else if(isValidFace_V_VT_Line(line)) {
+                face.vertices = new Vertex[tokens.length];
+                face.textureCoordinates = new TextureCoordinate[tokens.length];
+
+                for(int i = 0; i < tokens.length; ++i) {
+                    subTokens = tokens[i].split("/");
+
+                    face.vertices[i] = vertices.get(Integer.parseInt(subTokens[0]) - 1);
+                    face.textureCoordinates[i] = textureCoordinates.get(Integer.parseInt(subTokens[1]) - 1);
+                }
+
+                face.faceNormal = face.calculateFaceNormal();
+            }
+            // f v1//vn1 v2//vn2 v3//vn3 ...
+            else if(isValidFace_V_VN_Line(line)) {
+                face.vertices = new Vertex[tokens.length];
+                face.vertexNormals = new Vertex[tokens.length];
+
+                for(int i = 0; i < tokens.length; ++i) {
+                    subTokens = tokens[i].split("//");
+
+                    face.vertices[i] = vertices.get(Integer.parseInt(subTokens[0]) - 1);
+                    face.vertexNormals[i] = vertexNormals.get(Integer.parseInt(subTokens[1]) - 1);
+                }
+
+                face.faceNormal = face.calculateFaceNormal();
+            }
+            // f v1 v2 v3 ...
+            else if(isValidFace_V_Line(line)) {
+                face.vertices = new Vertex[tokens.length];
+
+                for(int i = 0; i < tokens.length; ++i) {
+                    face.vertices[i] = vertices.get(Integer.parseInt(tokens[i]) - 1);
+                }
+
+                face.faceNormal = face.calculateFaceNormal();
+            } else {
+                throw new ModelFormatException("Error parsing entry ('" + line + "'" + ", line " + lineCount + ") in file '" + fileName + "' - Incorrect format");
+            }
+        } else {
+            throw new ModelFormatException("Error parsing entry ('" + line + "'" + ", line " + lineCount + ") in file '" + fileName + "' - Incorrect format");
+        }
+
+        return face;
+    }
+
+    private S_GroupObject parseGroupObject(String line, int lineCount) throws ModelFormatException {
+        S_GroupObject group = null;
+
+        if(isValidGroupObjectLine(line)) {
+            String trimmedLine = line.substring(line.indexOf(" ") + 1);
+
+            if(trimmedLine.length() > 0) {
+                group = new S_GroupObject(trimmedLine);
+            }
+        } else {
+            throw new ModelFormatException("Error parsing entry ('" + line + "'" + ", line " + lineCount + ") in file '" + fileName + "' - Incorrect format");
+        }
+
+        return group;
+    }
+
+    private static boolean isValidVertexLine(String line) {
+        return vertexMatcher.get().reset(line).matches();
+    }
+
+    private static boolean isValidVertexNormalLine(String line) {
+        return vertexNormalMatcher.get().reset(line).matches();
+    }
+
+    private static boolean isValidTextureCoordinateLine(String line) {
+        return textureCoordinateMatcher.get().reset(line).matches();
+    }
+
+    private static boolean isValidFace_V_VT_VN_Line(String line) {
+        return face_V_VT_VN_Matcher.get().reset(line).matches();
+    }
+
+    private static boolean isValidFace_V_VT_Line(String line) {
+        return face_V_VT_Matcher.get().reset(line).matches();
+    }
+
+    private static boolean isValidFace_V_VN_Line(String line) {
+        return face_V_VN_Matcher.get().reset(line).matches();
+    }
+
+    private static boolean isValidFace_V_Line(String line) {
+        return face_V_Matcher.get().reset(line).matches();
+    }
+
+    private static boolean isValidFaceLine(String line) {
+        return isValidFace_V_VT_VN_Line(line) || isValidFace_V_VT_Line(line) || isValidFace_V_VN_Line(line) || isValidFace_V_Line(line);
+    }
+
+    private static boolean isValidGroupObjectLine(String line) {
+        return groupObjectMatcher.get().reset(line).matches();
+    }
+
+    public HFRWavefrontObjectVBO asVBO() {
+        HFRWavefrontObjectVBO vbo = new HFRWavefrontObjectVBO(this);
+        allVBOs.put(vbo, this);
+        return vbo;
+    }
+
+    public static final HashMap<HFRWavefrontObject, Map<String, VertexBuffer>> vbos = new LinkedHashMap<>();
+
+    public Map<String, VertexBuffer> getUploadedBuffer() {
+        return vbos.computeIfAbsent(this, HFRWavefrontObject::upload);
+    }
+
+    public IObjRenderer getRenderer() {
+        return new ObjRenderer(this.getUploadedBuffer());
+    }
+
+    /** Uploads the model to the GPU */
+    public static Map<String, VertexBuffer> upload(HFRWavefrontObject obj) {
+        Map<String, VertexBuffer> buffers = new HashMap<>();
+
+        for(S_GroupObject g : obj.groupObjects) {
+            BufferBuilder builder = Tesselator.getInstance().begin(g.mode, NtmShaders.NtmVertexFormat.POSITION_TEX_NORMAL);
+
+            for(S_Face face : g.faces) {
+                for(int i = 0; i < face.vertices.length; i++) {
+                    Vertex vert = face.vertices[i];
+                    TextureCoordinate tex = face.textureCoordinates != null && face.textureCoordinates.length > 0
+                            ? face.textureCoordinates[i]
+                            : new TextureCoordinate(0, 0);
+                    Vertex normal = face.vertexNormals[i];
+
+                    builder.addVertex(vert.x, vert.y, vert.z).setUv(tex.u, tex.v).setNormal(normal.x, normal.y, normal.z);
+                }
+            }
+
+            VertexBuffer buffer = new VertexBuffer(VertexBuffer.Usage.STATIC);
+            buffer.bind();
+            buffer.upload(builder.buildOrThrow());
+            VertexBuffer.unbind();
+
+            buffers.put(g.name, buffer);
+        }
+        return buffers;
+    }
+}

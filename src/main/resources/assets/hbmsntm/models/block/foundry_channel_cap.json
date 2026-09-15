@@ -1,0 +1,22 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "particle": "hbmsntm:block/foundry_channel_side",
+    "top": "hbmsntm:block/foundry_channel_top",
+    "side": "hbmsntm:block/foundry_channel_side",
+    "bottom": "hbmsntm:block/foundry_channel_bottom",
+    "inner": "hbmsntm:block/foundry_channel_inner"
+  },
+  "elements": [
+    {
+      "from": [5, 2, 5], "to": [11, 8, 6],
+      "faces": {
+        "up": { "texture": "#top" },
+        "north": { "texture": "#side" },
+        "south": { "texture": "#inner" },
+        "east": { "texture": "#side" },
+        "west": { "texture": "#side" }
+      }
+    }
+  ]
+}

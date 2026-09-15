@@ -1,0 +1,73 @@
+package com.hbm.items.tools;
+
+import com.hbm.items.IDesignatorItem;
+import com.hbm.lib.Library;
+import com.hbm.registry.NtmSoundEvents;
+import com.hbm.util.SoundUtils;
+import com.hbm.util.TagsUtil;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
+
+import java.util.List;
+
+public class DesignatorRangeItem extends Item implements IDesignatorItem {
+
+    public DesignatorRangeItem(Properties properties) {
+        super(properties);
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
+        ItemStack stack = player.getItemInHand(usedHand);
+
+        BlockHitResult bhr = Library.rayTrace(player, 300, 1);
+
+        BlockPos pos = bhr.getBlockPos();
+        if(!level.isClientSide) {
+            CompoundTag tag = TagsUtil.getCustomData(stack);
+            tag.putInt("x", pos.getX());
+            tag.putInt("z", pos.getZ());
+            TagsUtil.putCustomData(stack, tag);
+
+            player.displayClientMessage(Component.translatable("item.hbmsntm.obj_designator_range.pos_set", pos.getX(), pos.getZ()), false);
+            SoundUtils.playAtEntity(player, NtmSoundEvents.TECH_BLEEP.get(), SoundSource.PLAYERS);
+        }
+
+        return InteractionResultHolder.pass(stack);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> components, TooltipFlag flag) {
+        if(TagsUtil.hasCustomData(stack)) {
+            CompoundTag tag = TagsUtil.getCustomData(stack);
+            components.add(Component.translatable("item.hbmsntm.obj_designator.pos_target").withStyle(ChatFormatting.GRAY));
+            components.add(Component.literal("X: " + tag.getInt("x")).withStyle(ChatFormatting.GRAY));
+            components.add(Component.literal("Z: " + tag.getInt("z")).withStyle(ChatFormatting.GRAY));
+        } else {
+            components.add(Component.translatable("item.hbmsntm.obj_designator.pos_select").withStyle(ChatFormatting.GRAY));
+        }
+    }
+
+    @Override
+    public boolean isReady(Level level, ItemStack stack, BlockPos pos) {
+        return TagsUtil.hasCustomData(stack);
+    }
+
+    @Override
+    public Vec3 getCoords(Level level, ItemStack stack, BlockPos pos) {
+        CompoundTag tag = TagsUtil.getCustomData(stack);
+        return new Vec3(tag.getInt("x"), 0, tag.getInt("z"));
+    }
+}

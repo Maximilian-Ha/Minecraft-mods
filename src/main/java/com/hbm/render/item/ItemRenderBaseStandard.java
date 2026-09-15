@@ -1,0 +1,180 @@
+package com.hbm.render.item;
+
+import com.hbm.main.NuclearTechMod;
+import com.hbm.main.ResourceManager;
+import com.hbm.render.util.NtmShaders.NtmVertexFormat;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.math.Axis;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.color.item.ItemColors;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderStateShard.TextureStateShard;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.util.FastColor;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.client.model.data.ModelData;
+
+import javax.annotation.Nullable;
+import java.util.List;
+
+public abstract class ItemRenderBaseStandard extends BlockEntityWithoutLevelRenderer {
+
+    public static final RenderType SOLID = RenderType.create(
+            "solid_nt",
+            DefaultVertexFormat.NEW_ENTITY,
+            VertexFormat.Mode.QUADS,
+            15346,
+            true,
+            false,
+            RenderType.CompositeState.builder()
+                    .setShaderState(RenderType.RENDERTYPE_ENTITY_SOLID_SHADER)
+                    .setTextureState(RenderType.BLOCK_SHEET_MIPPED)
+                    .setLightmapState(RenderType.LIGHTMAP)
+                    .setOverlayState(RenderType.OVERLAY)
+                    .createCompositeState(true)
+    );
+
+    public static final RenderType CUTOUT = RenderType.create(
+            "cutout_nt",
+            DefaultVertexFormat.NEW_ENTITY,
+            VertexFormat.Mode.QUADS,
+            15346,
+            true,
+            false,
+            RenderType.CompositeState.builder()
+                    .setShaderState(RenderType.RENDERTYPE_ENTITY_CUTOUT_SHADER)
+                    .setTextureState(RenderType.BLOCK_SHEET_MIPPED)
+                    .setLightmapState(RenderType.LIGHTMAP)
+                    .setOverlayState(RenderType.OVERLAY)
+                    .createCompositeState(true)
+    );
+
+    public static final RandomSource RANDOM = RandomSource.create(42);
+
+    public TextureAtlasSprite[] sprites;
+    public BakedModel[] models;
+
+    public ItemRenderBaseStandard() {
+        super(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
+    }
+
+    @Override
+    public void renderByItem(ItemStack itemStackIn, ItemDisplayContext displayContext, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
+        poseStack.pushPose();
+
+        if(this.sprites == null || this.models == null) {
+            this.registerModelsAndSprites();
+        }
+
+        if (displayContext != ItemDisplayContext.GUI) poseStack.translate(0.5F, 0F, 0.5F);
+        switch (displayContext) {
+            case FIRST_PERSON_RIGHT_HAND -> {
+                poseStack.translate(-0.08F, 0.41F, 0.1F);
+                poseStack.scale(0.35F, 0.35F, 0.35F);
+                poseStack.mulPose(Axis.YP.rotationDegrees(180F));
+                poseStack.mulPose(Axis.YN.rotationDegrees(135F));
+                renderNonInv(itemStackIn, poseStack, buffer, packedLight, packedOverlay, true);
+                renderFirstPerson(poseStack, buffer, packedLight, packedOverlay, true);
+            }
+            case FIRST_PERSON_LEFT_HAND -> {
+                poseStack.translate(0.08F, 0.41F, 0.1F);
+                poseStack.scale(0.35F, 0.35F, 0.35F);
+                poseStack.mulPose(Axis.YP.rotationDegrees(135F));
+                renderNonInv(itemStackIn, poseStack, buffer, packedLight, packedOverlay, false);
+                renderFirstPerson(poseStack, buffer, packedLight, packedOverlay, false);
+            }
+            case THIRD_PERSON_RIGHT_HAND, HEAD -> {
+                poseStack.translate(0F, 0.55F, -0.18F);
+                poseStack.scale(0.35F, 0.35F, 0.35F);
+                poseStack.mulPose(Axis.XP.rotationDegrees(70F));
+                poseStack.mulPose(Axis.YN.rotationDegrees(135F));
+                renderNonInv(itemStackIn, poseStack, buffer, packedLight, packedOverlay, true);
+                poseStack.mulPose(Axis.YP.rotationDegrees(90F));
+            }
+            case THIRD_PERSON_LEFT_HAND -> {
+                poseStack.translate(0F, 0.55F, -0.18F);
+                poseStack.scale(0.35F, 0.35F, 0.35F);
+                poseStack.mulPose(Axis.XP.rotationDegrees(70F));
+                poseStack.mulPose(Axis.YP.rotationDegrees(135F));
+                renderNonInv(itemStackIn, poseStack, buffer, packedLight, packedOverlay, false);
+                poseStack.mulPose(Axis.YP.rotationDegrees(90F));
+            }
+            case GROUND -> {
+                poseStack.translate(0F, 0.3F, 0F);
+                poseStack.scale(0.35F, 0.35F, 0.35F);
+                poseStack.mulPose(Axis.YP.rotationDegrees(90F));
+                renderGround(poseStack, buffer, packedLight, packedOverlay);
+            }
+            case FIXED -> {
+                poseStack.translate(0F, 0.3F, 0F);
+                poseStack.scale(0.25F, 0.25F, 0.25F);
+                poseStack.mulPose(Axis.YP.rotationDegrees(90F));
+                renderNonInv(itemStackIn, poseStack, buffer, packedLight, packedOverlay, false);
+            }
+            case GUI -> {
+                poseStack.mulPose(Axis.XP.rotationDegrees(30F));
+                poseStack.mulPose(Axis.YP.rotationDegrees(225F));  // 45 + 180
+                poseStack.scale(0.0620F, 0.0620F, 0.0620F);
+                poseStack.translate(0F, 11.6F, -11.6F);
+                poseStack.scale(10F, 10F, 10F);
+                poseStack.mulPose(Axis.YP.rotationDegrees(90F));
+                renderInventory(itemStackIn, poseStack, buffer, packedLight, packedOverlay);
+            }
+            case NONE -> {}
+        }
+
+        renderCommon(itemStackIn, poseStack, buffer, packedLight, packedOverlay);
+        poseStack.popPose();
+    }
+
+    protected TextureAtlasSprite getSprite(String path) {
+        return Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(NuclearTechMod.withDefaultNamespace(path));
+    }
+
+    public void renderQuadList(@Nullable ItemStack stack, PoseStack poseStack, VertexConsumer consumer, List<BakedQuad> quads, int combinedLight, int combinedOverlay) {
+
+        ItemColors itemColors = Minecraft.getInstance().getItemColors();
+
+        for(BakedQuad bakedquad : quads) {
+            int i = -1;
+            if(bakedquad.isTinted()) {
+                if(stack != null) i = itemColors.getColor(stack, bakedquad.getTintIndex());
+            }
+
+            float a = (float) FastColor.ARGB32.alpha(i) / 255.0F;
+            float r = (float) FastColor.ARGB32.red(i) / 255.0F;
+            float g = (float) FastColor.ARGB32.green(i) / 255.0F;
+            float b = (float) FastColor.ARGB32.blue(i) / 255.0F;
+            consumer.putBulkData(poseStack.last(), bakedquad, r, g, b, a, combinedLight, combinedOverlay, true);
+        }
+    }
+
+    public void renderModel(ItemStack stack, PoseStack poseStack, VertexConsumer consumer, BakedModel model, int packedLight, int packedOverlay) {
+        this.renderQuadList(stack, poseStack, consumer, model.getQuads(null, null, RANDOM, ModelData.EMPTY, null), packedLight, packedOverlay);
+    }
+    public void renderModel(PoseStack poseStack, VertexConsumer consumer, BakedModel model, int packedLight, int packedOverlay) {
+        this.renderModel(null, poseStack, consumer, model, packedLight, packedOverlay);
+    }
+
+    public abstract void registerModelsAndSprites();
+
+    public void renderNonInv(ItemStack stack, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay, boolean righthand) { renderNonInv(poseStack, buffer, packedLight, packedOverlay, righthand); }
+    public void renderInventory(ItemStack stack, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) { renderInventory(poseStack, buffer, packedLight, packedOverlay); }
+    public void renderCommon(ItemStack stack, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) { renderCommon(poseStack, buffer, packedLight, packedOverlay); }
+    public void renderNonInv(PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay, boolean righthand) { }
+    public void renderInventory(PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) { }
+    public void renderCommon(PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) { }
+    public void renderGround(PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) { }
+    public void renderFirstPerson(PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay, boolean righthand) { }
+}

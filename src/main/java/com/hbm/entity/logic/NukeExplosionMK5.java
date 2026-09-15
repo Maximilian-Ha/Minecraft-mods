@@ -1,0 +1,173 @@
+package com.hbm.entity.logic;
+
+import com.hbm.config.NtmConfig;
+import com.hbm.entity.NtmEntityTypes;
+import com.hbm.entity.effect.FalloutRain;
+import com.hbm.explosion.ExplosionNukeGeneric;
+import com.hbm.explosion.ExplosionNukeRayParallelized;
+import com.hbm.interfaces.IExplosionRay;
+import com.hbm.main.NuclearTechMod;
+import com.hbm.util.ContaminationUtil;
+import com.hbm.util.ContaminationUtil.ContaminationType;
+import com.hbm.util.ContaminationUtil.HazardType;
+import com.hbm.world.WorldUtil;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+
+import java.util.List;
+
+public class NukeExplosionMK5 extends ExplosionChunkLoading {
+
+    //Strength of the blast
+    public int strength;
+    //How many rays are calculated per tick
+    public int speed;
+    public int length;
+    private long explosionStart;
+    public boolean fallout = true;
+    private int falloutAdd = 0;
+
+    private IExplosionRay explosion;
+
+    public NukeExplosionMK5(EntityType<? extends NukeExplosionMK5> type, Level level) {
+        super(type, level);
+    }
+
+    @Override
+    protected void readAdditionalSaveData(CompoundTag tag) {
+        this.tickCount = tag.getInt("age");
+    }
+
+    @Override
+    protected void addAdditionalSaveData(CompoundTag tag) {
+        tag.putInt("age", this.tickCount);
+    }
+
+    @Override protected void defineSynchedData(SynchedEntityData.Builder builder) {}
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        if(strength == 0) this.discard();
+
+        this.updateChunkTicket();
+
+        if(!this.level.isClientSide && fallout && explosion != null && this.tickCount < 10 && strength >= 75) {
+            this.radiate(2_500_000F / (this.tickCount * 5 + 1), this.length * 2);
+        }
+
+        ExplosionNukeGeneric.dealDamage(this.level, this.position.x, this.position.y, this.position.z, this.length * 2);
+
+        if(explosion == null) {
+            explosionStart = System.currentTimeMillis();
+            // todo make config val
+            //explosion = new ExplosionNukeRayBatched(this.level, this.blockPosition.getX(), this.blockPosition.getY(), this.blockPosition.getZ(), strength, speed, length);
+            explosion = new ExplosionNukeRayParallelized(this.level, this.blockPosition.getX(), this.blockPosition.getY(), this.blockPosition.getZ(), strength, speed, length);
+        }
+
+        if(!explosion.isComplete()) {
+            explosion.cacheChunksTick(NtmConfig.COMMON.MK5.get());
+            explosion.destructionTick(NtmConfig.COMMON.MK5.get());
+        } else {
+            if(NtmConfig.COMMON.ENABLE_EXTENDED_LOGGING.get() && explosionStart != 0) {
+                NuclearTechMod.LOGGER.info("[NUKE] Explosion complete. Time elapsed: {}ms", (System.currentTimeMillis() - explosionStart));
+            }
+            if(fallout) {
+                FalloutRain fallout = new FalloutRain(this.level);
+                fallout.setPos(this.position.x, this.position.y, this.position.z);
+                fallout.setScale((int) (this.length * 2.5 + falloutAdd) * NtmConfig.COMMON.FALLOUT_RANGE.get() / 100);
+                WorldUtil.loadAndAddFreshEntity(fallout);
+            }
+            this.discard();
+        }
+    }
+
+    private void radiate(float rads, double range) {
+        AABB box = new AABB(getX(), getY(), getZ(), getX(), getY(), getZ()).inflate(range);
+        List<LivingEntity> entities = this.level.getEntitiesOfClass(LivingEntity.class, box);
+
+        for(LivingEntity e : entities) {
+            Vec3 vec = new Vec3(e.getX() - getX(), (e.getEyeY()) - getY(), e.getZ() - getZ());
+            double len = vec.length();
+            vec = vec.normalize();
+
+            float res = 0;
+
+            for(int i = 1; i < len; i++) {
+                BlockPos pos = new BlockPos(
+                        (int) Math.floor(getX() + vec.x * i),
+                        (int) Math.floor(getY() + vec.y * i),
+                        (int) Math.floor(getZ() + vec.z * i)
+                );
+                BlockState state = level().getBlockState(pos);
+                res += state.getExplosionResistance(level(), pos, null);
+            }
+
+            if(res < 1) res = 1;
+
+            float eRads = rads;
+            eRads /= res;
+            eRads /= (float)(len * len);
+
+            ContaminationUtil.contaminate(e, HazardType.RADIATION, ContaminationType.RAD_BYPASS, eRads);
+        }
+    }
+
+    @Override
+    public void remove(RemovalReason reason) {
+        if(explosion != null) explosion.cancel();
+        super.remove(reason);
+    }
+
+    public static NukeExplosionMK5 statFac(Level level, int strength, double x, double y, double z) {
+        if(NtmConfig.COMMON.ENABLE_EXTENDED_LOGGING.get() && !level.isClientSide) {
+            NuclearTechMod.LOGGER.info("[NUKE] Initialized explosion at {} / {} / {} with strength {}!", x, y, z, strength);
+        }
+
+        if (strength == 0) strength = 25;
+        strength *= 2;
+
+        NukeExplosionMK5 explosionMK5 = new NukeExplosionMK5(NtmEntityTypes.NUKE_MK5.get(), level);
+        explosionMK5.strength = strength;
+        explosionMK5.speed = (int) Math.ceil(100000D / explosionMK5.strength);
+        explosionMK5.setPos(x, y, z);
+        explosionMK5.length = explosionMK5.strength / 2;
+        level.addFreshEntity(explosionMK5);
+        return explosionMK5;
+    }
+
+    // FUCK
+    public static NukeExplosionMK5 statFacNoSpawn(Level level, int strength, double x, double y, double z) {
+        if (NtmConfig.COMMON.ENABLE_EXTENDED_LOGGING.get() && !level.isClientSide) {
+            NuclearTechMod.LOGGER.info("[NUKE] Initialized explosion at {} / {} / {} with strength {}!", x, y, z, strength);
+        }
+
+        if (strength == 0) strength = 25;
+        strength *= 2;
+
+        NukeExplosionMK5 explosionMK5 = new NukeExplosionMK5(NtmEntityTypes.NUKE_MK5.get(), level);
+        explosionMK5.strength = strength;
+        explosionMK5.speed = (int) Math.ceil(100000D / explosionMK5.strength);
+        explosionMK5.setPos(x, y, z);
+        explosionMK5.length = explosionMK5.strength / 2;
+        return explosionMK5;
+    }
+
+    public NukeExplosionMK5 setNoRad() {
+        fallout = false;
+        return this;
+    }
+
+    public NukeExplosionMK5 setMoreFallout(int toAdd) {
+        falloutAdd = toAdd;
+        return this;
+    }
+}

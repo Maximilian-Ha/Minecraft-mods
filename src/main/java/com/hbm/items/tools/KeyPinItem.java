@@ -1,0 +1,47 @@
+package com.hbm.items.tools;
+
+import com.hbm.items.NtmItems;
+import com.hbm.util.TagsUtil;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+
+import java.util.List;
+
+public class KeyPinItem extends Item {
+    public KeyPinItem(Properties properties) {
+        super(properties);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+        int pins = getPins(stack);
+        if(pins != 0) {
+            tooltipComponents.add(Component.literal("Pin configuration: " + pins));
+        } else {
+            tooltipComponents.add(Component.literal("Pins not set!"));
+        }
+
+        if(this == NtmItems.KEY_FAKE.get()) {
+            tooltipComponents.add(Component.empty());
+            tooltipComponents.add(Component.literal("Pins can neither be changed, nor copied."));
+        }
+    }
+
+    public static int getPins(ItemStack stack) {
+        CompoundTag tag = TagsUtil.getCustomData(stack);
+        return tag.getInt("pins");
+    }
+
+    public static void setPins(ItemStack stack, int pins) {
+        CompoundTag tag = TagsUtil.getCustomData(stack);
+        tag.putInt("pins", pins);
+        TagsUtil.putCustomData(stack, tag);
+    }
+
+    public boolean canTransfer() {
+        return this != NtmItems.KEY_FAKE.get();
+    }
+}

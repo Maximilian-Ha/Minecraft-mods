@@ -1,0 +1,100 @@
+package com.hbm.items.special;
+
+import com.hbm.extprop.HbmLivingAttachments;
+import com.hbm.items.NtmItems;
+import com.hbm.particle.NtmParticleTypes;
+import com.hbm.particle.vanilla.NbtParticleOptions;
+import com.hbm.registry.NtmSoundEvents;
+import com.hbm.util.i18n.I18nUtil;
+import com.hbm.util.particle.ParticleUtil;
+import net.minecraft.ChatFormatting;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.Level;
+
+import java.util.List;
+
+// this class sucks, but not much
+@Deprecated
+public class CigaretteItem extends Item {
+
+    public CigaretteItem(Properties properties) { super(properties); }
+
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
+        return 30;
+    }
+
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.BOW;
+    }
+
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        return ItemUtils.startUsingInstantly(level, player, hand);
+    }
+
+    @Override
+    public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity living) {
+        Player player = living instanceof Player ? (Player) living : null;
+        if(player instanceof ServerPlayer serverPlayer) CriteriaTriggers.CONSUME_ITEM.trigger(serverPlayer, stack);
+
+        if(!level.isClientSide) {
+            if(this == NtmItems.CIGARETTE.get()) {
+                HbmLivingAttachments.incrementBlackLung(living, 2000);
+                HbmLivingAttachments.incrementAsbestos(living, 2000);
+                HbmLivingAttachments.incrementRadiation(living, 100F);
+            }
+            if(this == NtmItems.CRACKPIPE.get()) {
+                HbmLivingAttachments.incrementBlackLung(living, 500);
+                living.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0));
+                living.heal(10F);
+            }
+
+            level.playSound(null, living.getX(), living.getY(), living.getZ(), NtmSoundEvents.COUGH.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+
+            CompoundTag tag = new CompoundTag();
+            tag.putInt("count", 30);
+            tag.putInt("entity", living.getId());
+            ParticleUtil.addParticle(level, new NbtParticleOptions(NtmParticleTypes.VOMIT_SMOKE.get(), tag), living.getX(), living.getY(), living.getZ(), 25.0);
+        }
+
+        if(player != null) {
+            player.awardStat(Stats.ITEM_USED.get(this));
+            stack.consume(1, player);
+        }
+
+        return stack;
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> components, TooltipFlag flag) {
+        if(this == NtmItems.CIGARETTE.get()) {
+            for(String s : I18nUtil.resolveKeyArray("item.hbmsntm.obj_cigarette.desc0")) components.add(Component.translatable(s).withStyle(ChatFormatting.RED));
+        }
+        if(this == NtmItems.CRACKPIPE.get()) {
+            ChatFormatting[] formattings = new ChatFormatting[] {
+                    ChatFormatting.RED,
+                    ChatFormatting.GOLD,
+                    ChatFormatting.YELLOW,
+                    ChatFormatting.GREEN,
+                    ChatFormatting.AQUA,
+                    ChatFormatting.BLUE,
+                    ChatFormatting.DARK_PURPLE,
+                    ChatFormatting.LIGHT_PURPLE,
+            };
+            int len = 2000;
+            components.add(Component.translatable("item.hbmsntm.obj_cigarette.desc1").withStyle(ChatFormatting.GRAY)
+                    .append(Component.translatable("item.hbmsntm.obj_cigarette.desc2").withStyle(formattings[(int)(System.currentTimeMillis() % len * formattings.length / len)])));
+        }
+    }
+}

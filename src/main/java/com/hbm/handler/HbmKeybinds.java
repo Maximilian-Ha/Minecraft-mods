@@ -1,0 +1,217 @@
+package com.hbm.handler;
+
+import com.hbm.main.NuclearTechMod;
+import com.hbm.inventory.screens.CalculatorScreen;
+import com.hbm.extprop.HbmPlayerAttachments;
+import com.hbm.items.IKeybindReceiver;
+import com.hbm.network.toserver.KeybindReceiver;
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
+import org.lwjgl.glfw.GLFW;
+
+@EventBusSubscriber(modid = NuclearTechMod.MODID, value = Dist.CLIENT)
+public class HbmKeybinds {
+
+    private static final String category = "hbmsntm.keys";
+
+    public static final KeyMapping CALCULATOR = new KeyMapping(category + ".calc", InputConstants.Type.KEYSYM, InputConstants.KEY_N, category);
+    public static final KeyMapping JETPACK = new KeyMapping(category + ".toggleBack", InputConstants.Type.KEYSYM, InputConstants.KEY_C, category);
+    public static final KeyMapping MAGNET = new KeyMapping(category + ".toggleMagnet", InputConstants.Type.KEYSYM, InputConstants.KEY_Z, category);
+    public static final KeyMapping HUD = new KeyMapping(category + ".toggleHUD", InputConstants.Type.KEYSYM, InputConstants.KEY_V, category);
+
+    public static final KeyMapping CRANE_UP = new KeyMapping(category + ".craneMoveUp", InputConstants.Type.KEYSYM, InputConstants.KEY_UP, category);
+    public static final KeyMapping CRANE_DOWN = new KeyMapping(category + ".craneMoveDown", InputConstants.Type.KEYSYM, InputConstants.KEY_DOWN, category);
+    public static final KeyMapping CRANE_LEFT = new KeyMapping(category + ".craneMoveLeft", InputConstants.Type.KEYSYM, InputConstants.KEY_LEFT, category);
+    public static final KeyMapping CRANE_RIGHT = new KeyMapping(category + ".craneMoveRight", InputConstants.Type.KEYSYM, InputConstants.KEY_RIGHT, category);
+    public static final KeyMapping CRANE_LOAD = new KeyMapping(category + ".craneLoad", InputConstants.Type.KEYSYM, InputConstants.KEY_RETURN, category);
+
+    public static final KeyMapping ABILITY_CYCLE = new KeyMapping(category + ".ability", InputConstants.Type.MOUSE, InputConstants.MOUSE_BUTTON_RIGHT, category);
+    public static final KeyMapping ABILITY_ALT = new KeyMapping(category + ".abilityAlt", InputConstants.Type.KEYSYM, InputConstants.KEY_LALT, category);
+
+    public static final KeyMapping RELOAD = new KeyMapping(category + ".reload", InputConstants.Type.KEYSYM, InputConstants.KEY_R, category);
+    public static final KeyMapping GUN_PRIMARY = new KeyMapping(category + ".gunPrimary", InputConstants.Type.MOUSE, InputConstants.MOUSE_BUTTON_LEFT, category);
+    public static final KeyMapping GUN_SECONDARY = new KeyMapping(category + ".gunSecondary", InputConstants.Type.MOUSE, InputConstants.MOUSE_BUTTON_RIGHT, category);
+    public static final KeyMapping GUN_TERTIARY = new KeyMapping(category + ".gunTertiary", InputConstants.Type.MOUSE, InputConstants.MOUSE_BUTTON_MIDDLE, category);
+
+    @SubscribeEvent
+    public static void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
+        event.register(CALCULATOR);
+        event.register(JETPACK);
+        event.register(MAGNET);
+        event.register(HUD);
+
+        event.register(CRANE_UP);
+        event.register(CRANE_DOWN);
+        event.register(CRANE_LEFT);
+        event.register(CRANE_RIGHT);
+        event.register(CRANE_LOAD);
+
+        event.register(ABILITY_CYCLE);
+        event.register(ABILITY_ALT);
+
+        event.register(RELOAD);
+        event.register(GUN_PRIMARY);
+        event.register(GUN_SECONDARY);
+        event.register(GUN_TERTIARY);
+    }
+
+    @SubscribeEvent
+    public static void onMouseInput(InputEvent.MouseButton.Pre event) {
+        /// KEYBIND PROPS ///
+        handleProps(event.getAction() == GLFW.GLFW_PRESS, event.getButton());
+    }
+
+    @SubscribeEvent
+    public static void onKeyInput(InputEvent.Key event) {
+        /// KEYBIND PROPS ///
+        handleProps(event.getAction() == GLFW.GLFW_PRESS, event.getKey());
+    }
+
+//    @SubscribeEvent
+//    public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
+//        Minecraft mc = Minecraft.getInstance();
+//        LocalPlayer player = mc.player;
+//        if (player == null || mc.screen != null) return;
+//
+//        if (mc.options.keyUse.getKey() == ABILITY_CYCLE.getKey()) {
+//            boolean last = clientKeysPressed[EnumKeybind.ABILITY_CYCLE.ordinal()];
+//            boolean current = ABILITY_CYCLE.isDown();
+//
+//            if (last != current) {
+//                clientKeysPressed[EnumKeybind.ABILITY_CYCLE.ordinal()] = current;
+//                PacketDistributor.sendToServer(new KeybindReceiver(EnumKeybind.ABILITY_CYCLE, current));
+//                onPressedClient(player, EnumKeybind.ABILITY_CYCLE, current);
+//            }
+//        }
+//    }
+
+    @SubscribeEvent
+    public static void onClientTick(ClientTickEvent.Post event) {
+        Minecraft mc = Minecraft.getInstance();
+        LocalPlayer player = mc.player;
+        if (player == null || mc.screen != null) return;
+
+        if (CALCULATOR.isDown()) {
+            Minecraft.getInstance().setScreen(null);
+            Minecraft.getInstance().setScreen(new CalculatorScreen());
+        }
+
+        if (mc.options.keyUse.getKey() == ABILITY_CYCLE.getKey()) {
+            boolean last = clientKeysPressed[EnumKeybind.ABILITY_CYCLE.ordinal()];
+            boolean current = ABILITY_CYCLE.isDown();
+
+            if (last != current) {
+                clientKeysPressed[EnumKeybind.ABILITY_CYCLE.ordinal()] = current;
+                PacketDistributor.sendToServer(new KeybindReceiver(EnumKeybind.ABILITY_CYCLE, current));
+                onPressedClient(player, EnumKeybind.ABILITY_CYCLE, current);
+            }
+        }
+    }
+
+    // unused for now, maybe will be used in future
+    /** Handles keybind overlap. Make sure this runs first before referencing the keybinds set by the extprops */
+//    public static void handleOverlap(boolean state, int keyCode) {
+//        Minecraft mc = Minecraft.getInstance();
+//        if (MainConfig.COMMON.ENABLE_KEYBIND_OVERLAP.get() && mc.screen == null) {
+//            for (Entry<String, KeyMapping> entry : KeyMapping.ALL.entrySet()) {
+//                KeyMapping key = entry.getValue();
+//
+//                if (keyCode != -1 && key.getKey().getValue() == keyCode && !KeyMapping.ALL.containsValue(key)) {
+//                    key.setDown(state);
+//                    if (state && key.clickCount == 0) {
+//                        key.clickCount = 1;
+//                    }
+//                }
+//            }
+//        }
+//    }
+
+    private static final boolean[] clientKeysPressed = new boolean[EnumKeybind.values().length];
+
+    public static void handleProps(boolean state, int keyCode) {
+
+        /// KEYBIND PROPS ///
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) return;
+
+        for (EnumKeybind key : EnumKeybind.values()) {
+            boolean last = clientKeysPressed[key.ordinal()];
+            boolean current = getIsKeyPressed(key);
+
+            if (last != current) {
+
+                if (key == EnumKeybind.ABILITY_CYCLE && Minecraft.getInstance().options.keyUse.getKey().getValue() == ABILITY_CYCLE.getKey().getValue()) continue;
+
+                clientKeysPressed[key.ordinal()] = current;
+                // Wie im Original auch clientseitig merken: der Ladekran liest den Tastenstand
+                // zum Zeichnen der Hebelneigung direkt aus den Spielerdaten.
+                HbmPlayerAttachments.setKeyPressed(player, key, current);
+                PacketDistributor.sendToServer(new KeybindReceiver(key, current));
+                onPressedClient(player, key, current);
+            }
+        }
+    }
+
+    public static void onPressedClient(LocalPlayer player, EnumKeybind key, boolean state) {
+        // ITEM HANDLING
+        ItemStack held = player.getItemInHand(InteractionHand.MAIN_HAND);
+        if (held.getItem() instanceof IKeybindReceiver rec) {
+            if (rec.canHandleKeybind(player, held, key)) rec.handleKeybindClient(player, held, key, state);
+        }
+    }
+
+    public static boolean getIsKeyPressed(EnumKeybind key) {
+        return switch (key) {
+            case JETPACK -> Minecraft.getInstance().options.keyJump.isDown();
+            case TOGGLE_JETPACK -> JETPACK.isDown();
+            case TOGGLE_MAGNET -> MAGNET.isDown();
+            case TOGGLE_HEAD -> HUD.isDown();
+            case CRANE_UP -> CRANE_UP.isDown();
+            case CRANE_DOWN -> CRANE_DOWN.isDown();
+            case CRANE_LEFT -> CRANE_LEFT.isDown();
+            case CRANE_RIGHT -> CRANE_RIGHT.isDown();
+            case CRANE_LOAD -> CRANE_LOAD.isDown();
+            case ABILITY_CYCLE -> ABILITY_CYCLE.isDown();
+            case ABILITY_ALT -> ABILITY_ALT.isDown();
+            case GUN_PRIMARY -> GUN_PRIMARY.isDown();
+            case GUN_SECONDARY -> GUN_SECONDARY.isDown();
+            case GUN_TERTIARY -> GUN_TERTIARY.isDown();
+            case RELOAD -> RELOAD.isDown();
+            default -> false;
+        };
+    }
+
+    public enum EnumKeybind {
+        JETPACK,
+        TOGGLE_JETPACK,
+        TOGGLE_MAGNET,
+        TOGGLE_HEAD,
+        DUCK,
+        DASH,
+        TRAIN,
+        CRANE_UP,
+        CRANE_DOWN,
+        CRANE_LEFT,
+        CRANE_RIGHT,
+        CRANE_LOAD,
+        ABILITY_CYCLE,
+        ABILITY_ALT,
+        TOOL_ALT,
+        TOOL_CTRL,
+        GUN_PRIMARY,
+        GUN_SECONDARY,
+        GUN_TERTIARY,
+        RELOAD
+    }
+}

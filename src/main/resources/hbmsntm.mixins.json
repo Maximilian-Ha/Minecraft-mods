@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "package": "com.hbm.util.mixins",
+  "compatibilityLevel": "JAVA_21",
+  "minVersion": "0.8",
+  "mixins": [
+    "ServerPlayerGameModeMixin",
+    "ExplosionMixin",
+    "LivingEntityMixin",
+    "ItemStackMixin"
+  ],
+  "client": [
+    "invokers.RegisterClientExtensionsEventInvoker",
+    "LevelRendererMixin",
+    "ParticleEngineMixin",
+    "ItemInHandRendererMixin",
+    "GameRendererMixin"
+  ]
+}

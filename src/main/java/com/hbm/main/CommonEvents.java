@@ -1,0 +1,315 @@
+package com.hbm.main;
+
+import com.hbm.config.MachineDynConfig;
+import com.hbm.blockentity.bomb.LaunchPadBaseBlockEntity;
+import com.hbm.blockentity.machine.MachineRadarBlockEntity;
+import com.hbm.blockentity.machine.MachineRadGenBlockEntity;
+import com.hbm.blocks.NtmBlocks;
+import com.hbm.commands.ChunkRadCommand;
+import com.hbm.commands.LivingPropsCommand;
+import com.hbm.commands.PollutionCommand;
+import com.hbm.commands.RbmkDialCommand;
+import com.hbm.commands.SatellitesCommand;
+import com.hbm.config.FalloutConfigJSON;
+import com.hbm.entity.NtmEntityTypes;
+import com.hbm.entity.mob.CreeperNuclear;
+import com.hbm.entity.mob.Duck;
+import com.hbm.handler.EntityEffectHandler;
+import com.hbm.handler.HTTPHandler;
+import com.hbm.handler.HazmatRegistry;
+import com.hbm.hazard.HazardRegistry;
+import com.hbm.hazard.HazardSystem;
+import com.hbm.inventory.FluidContainerRegistry;
+import com.hbm.inventory.NtmMenuTypes;
+import com.hbm.inventory.fluid.Fluids;
+import com.hbm.inventory.recipes.GasCentrifugeRecipes;
+import com.hbm.inventory.recipes.loader.SerializableRecipe;
+import com.hbm.items.machine.MoldItem;
+import com.hbm.blocks.generic.ToolConversionBlock;
+import com.hbm.items.machine.ICFPelletItem;
+import com.hbm.blockentity.turret.TurretChekhovBlockEntity;
+import com.hbm.blockentity.turret.TurretFriendlyBlockEntity;
+import com.hbm.blockentity.turret.TurretHowardBlockEntity;
+import com.hbm.blockentity.turret.TurretJeremyBlockEntity;
+import com.hbm.blockentity.turret.TurretSentryBlockEntity;
+import com.hbm.items.weapon.sedna.mods.XWeaponModManager;
+import com.hbm.inventory.screens.*;
+import com.hbm.itempool.ItemPoolsSatellite;
+import com.hbm.items.IEquipReceiver;
+import com.hbm.items.weapon.sedna.GunBaseNTItem;
+import com.hbm.saveddata.satellite.XSatelliteRegistry;
+import com.hbm.util.ArmorUtil;
+import com.hbm.util.DamageResistanceHandler;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.level.BlockEvent.BreakEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
+
+@EventBusSubscriber(modid = NuclearTechMod.MODID)
+public class CommonEvents {
+
+    @SubscribeEvent
+    public static void commonSetup(FMLCommonSetupEvent event) {
+
+        event.enqueueWork(() -> {
+            // to make sure that foreign registered fluids are accounted for,
+            // even when the reload listener is registered too late due to load order
+            // IMPORTANT: fluids have to load before recipes. weird shit happens if not.
+            Fluids.reloadFluids();
+            FluidContainerRegistry.register();
+
+            //the good stuff
+            MachineDynConfig.initialize();
+
+            MoldItem.registerMolds();
+            ToolConversionBlock.registerRecipes();
+            ICFPelletItem.init();
+            XWeaponModManager.init();
+            TurretSentryBlockEntity.initAmmo();
+            TurretJeremyBlockEntity.initAmmo();
+            TurretHowardBlockEntity.initAmmo();
+            TurretChekhovBlockEntity.initAmmo();
+            TurretFriendlyBlockEntity.initAmmo();
+
+            SerializableRecipe.registerAllHandlers();
+            SerializableRecipe.initialize();
+
+            /* Die Gaszentrifuge ist kein SerializableRecipe -- ihre Stufen stehen fest im
+             * Quelltext, wie im Original. Nur die Zuordnung Fluid -> Kette wird hier gebaut,
+             * und die braucht Fluids.init() davor. */
+            GasCentrifugeRecipes.register();
+
+            HTTPHandler.loadStats();
+            FalloutConfigJSON.initialize();
+            DamageResistanceHandler.init();
+            HazardRegistry.registerItems();
+            HazmatRegistry.registerHazmats();
+            ArmorUtil.register();
+            XSatelliteRegistry.register();
+            ItemPoolsSatellite.init();
+            LaunchPadBaseBlockEntity.registerLaunchables();
+
+            /* Die Brennstofftafel des Radiothermalgenerators steht fest im Quelltext, wie im
+             * Original -- sie braucht nur die fertig registrierten Gegenstaende. */
+            MachineRadGenBlockEntity.registerFuels();
+
+            MachineRadarBlockEntity.registerEntityClasses();
+            MachineRadarBlockEntity.registerConverters();
+        });
+    }
+
+    @SubscribeEvent
+    public static void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
+        ItemStack itemInHand = event.getEntity().getItemInHand(InteractionHand.MAIN_HAND);
+        if(itemInHand.getItem() instanceof GunBaseNTItem) event.setCanceled(true);
+    }
+
+    @SubscribeEvent
+    public static void onEntityAttributeCreation(EntityAttributeCreationEvent event) {
+        event.put(NtmEntityTypes.DUCK.get(), Duck.createAttributes().build());
+        event.put(NtmEntityTypes.CREEPER_NUCLEAR.get(), CreeperNuclear.createAttributes().build());
+    }
+
+    @SubscribeEvent
+    public static void onLivingTick(EntityTickEvent.Pre event) {
+        Entity entity = event.getEntity();
+
+        if (entity instanceof Player player) {
+            HazardSystem.updatePlayerInventory(player);
+        }
+        if (entity instanceof ItemEntity itemEntity) {
+            HazardSystem.updateDroppedItem(itemEntity);
+        }
+        if (entity instanceof LivingEntity livingEntity) {
+            HazardSystem.updateLivingInventory(livingEntity);
+            EntityEffectHandler.tick(livingEntity);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onEquipmentChange(LivingEquipmentChangeEvent event) {
+        if(event.getSlot() != EquipmentSlot.MAINHAND) return;
+
+        if(!(event.getEntity() instanceof ServerPlayer player)) return;
+
+        ItemStack from = event.getFrom();
+        ItemStack to = event.getTo();
+
+        if(to.isEmpty()) return;
+        if(!from.isEmpty() && from.getItem() == to.getItem()) return;
+
+        if(to.getItem() instanceof IEquipReceiver receiver) {
+            receiver.onEquip(player, to);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onBlockBreak(BreakEvent event) {
+        BlockPos pos = event.getPos();
+        Level level = (Level) event.getLevel();
+
+        if (!level.isClientSide) {
+            if (event.getState() == Blocks.COAL_ORE.defaultBlockState() || event.getState() == Blocks.DEEPSLATE_COAL_ORE.defaultBlockState() || event.getState() == Blocks.COAL_BLOCK.defaultBlockState()) {
+                for (Direction dir : Direction.values()) {
+                    BlockPos offsetPos = pos.relative(dir);
+
+                    if (level.random.nextInt(2) == 0 && level.getBlockState(offsetPos).isAir()) {
+                        level.setBlock(offsetPos, NtmBlocks.GAS_COAL.get().defaultBlockState(), 3);
+                    }
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void registerCommands(RegisterCommandsEvent event) {
+        LivingPropsCommand.register(event.getDispatcher());
+        SatellitesCommand.register(event.getDispatcher());
+        ChunkRadCommand.register(event.getDispatcher());
+        PollutionCommand.register(event.getDispatcher());
+        RbmkDialCommand.register(event.getDispatcher());
+    }
+
+    @SubscribeEvent
+    public static void registerScreens(RegisterMenuScreensEvent event) {
+        event.register(NtmMenuTypes.MACHINE_SOLDERING_STATION.get(), MachineSolderingStationScreen::new);
+        event.register(NtmMenuTypes.MACHINE_ARC_WELDER.get(), MachineArcWelderScreen::new);
+        event.register(NtmMenuTypes.MACHINE_SHREDDER.get(), MachineShredderScreen::new);
+        event.register(NtmMenuTypes.MACHINE_ELECTRIC_FURNACE.get(), MachineElectricFurnaceScreen::new);
+        event.register(NtmMenuTypes.MACHINE_RTG_FURNACE.get(), MachineRtgFurnaceScreen::new);
+        event.register(NtmMenuTypes.MACHINE_DIFURNACE_RTG.get(), MachineDiFurnaceRtgScreen::new);
+        event.register(NtmMenuTypes.MACHINE_PWR.get(), MachinePWRScreen::new);
+        event.register(NtmMenuTypes.MACHINE_DIFURNACE.get(), MachineDiFurnaceScreen::new);
+        event.register(NtmMenuTypes.MACHINE_COMBUSTION_ENGINE.get(), MachineCombustionEngineScreen::new);
+        event.register(NtmMenuTypes.MACHINE_TURBINEGAS.get(), MachineTurbineGasScreen::new);
+        event.register(NtmMenuTypes.MACHINE_TURBOFAN.get(), MachineTurbofanScreen::new);
+        event.register(NtmMenuTypes.MACHINE_AUTOCRAFTER.get(), MachineAutocrafterScreen::new);
+        event.register(NtmMenuTypes.MACHINE_EPRESS.get(), MachineEPressScreen::new);
+        event.register(NtmMenuTypes.MACHINE_FUNNEL.get(), MachineFunnelScreen::new);
+        event.register(NtmMenuTypes.MACHINE_STRAND_CASTER.get(), MachineStrandCasterScreen::new);
+        event.register(NtmMenuTypes.MACHINE_KEY_FORGE.get(), MachineKeyForgeScreen::new);
+        event.register(NtmMenuTypes.MACHINE_CHEMICAL_FACTORY.get(), MachineChemicalFactoryScreen::new);
+        event.register(NtmMenuTypes.MACHINE_ASSEMBLY_FACTORY.get(), MachineAssemblyFactoryScreen::new);
+        event.register(NtmMenuTypes.MACHINE_CRYSTALLIZER.get(), MachineCrystallizerScreen::new);
+        event.register(NtmMenuTypes.MACHINE_RTG.get(), MachineRTGScreen::new);
+        event.register(NtmMenuTypes.MACHINE_BATTERY.get(), MachineBatteryScreen::new);
+        event.register(NtmMenuTypes.MACHINE_DIESEL.get(), MachineDieselScreen::new);
+        event.register(NtmMenuTypes.MACHINE_COMPRESSOR.get(), MachineCompressorScreen::new);
+        event.register(NtmMenuTypes.MACHINE_GAS_CENT.get(), MachineGasCentScreen::new);
+        event.register(NtmMenuTypes.MACHINE_CYCLOTRON.get(), MachineCyclotronScreen::new);
+        event.register(NtmMenuTypes.MACHINE_PA_SOURCE.get(), MachinePASourceScreen::new);
+        event.register(NtmMenuTypes.MACHINE_PA_RFC.get(), MachinePARFCScreen::new);
+        event.register(NtmMenuTypes.MACHINE_PA_QUADRUPOLE.get(), MachinePAQuadrupoleScreen::new);
+        event.register(NtmMenuTypes.MACHINE_PA_DIPOLE.get(), MachinePADipoleScreen::new);
+        event.register(NtmMenuTypes.MACHINE_PA_DETECTOR.get(), MachinePADetectorScreen::new);
+        event.register(NtmMenuTypes.MACHINE_EXPOSURE_CHAMBER.get(), MachineExposureChamberScreen::new);
+        event.register(NtmMenuTypes.MACHINE_RAD_GEN.get(), MachineRadGenScreen::new);
+        event.register(NtmMenuTypes.MACHINE_MINING_LASER.get(), MachineMiningLaserScreen::new);
+        event.register(NtmMenuTypes.MACHINE_MIXER.get(), MachineMixerScreen::new);
+        event.register(NtmMenuTypes.MACHINE_TURBINE.get(), MachineTurbineScreen::new);
+        event.register(NtmMenuTypes.FURNACE_IRON.get(), FurnaceIronScreen::new);
+        event.register(NtmMenuTypes.FURNACE_STEEL.get(), FurnaceSteelScreen::new);
+        event.register(NtmMenuTypes.MACHINE_ROCK_MILL.get(), MachineRockMillScreen::new);
+        event.register(NtmMenuTypes.MACHINE_OIL_WELL.get(), MachineOilWellScreen::new);
+        event.register(NtmMenuTypes.MACHINE_REFINERY.get(), MachineRefineryScreen::new);
+        event.register(NtmMenuTypes.FURNACE_COMBINATION.get(), MachineFurnaceCombinationScreen::new);
+        event.register(NtmMenuTypes.MACHINE_BLAST_FURNACE.get(), MachineBlastFurnaceScreen::new);
+        event.register(NtmMenuTypes.MACHINE_WOOD_BURNER.get(), MachineWoodBurnerScreen::new);
+        event.register(NtmMenuTypes.MACHINE_ASHPIT.get(), AshpitScreen::new);
+        event.register(NtmMenuTypes.MACHINE_CENTRIFUGE.get(), MachineCentrifugeScreen::new);
+        event.register(NtmMenuTypes.MACHINE_PUREX.get(), MachinePUREXScreen::new);
+        event.register(NtmMenuTypes.MACHINE_RADIOLYSIS.get(), MachineRadiolysisScreen::new);
+        event.register(NtmMenuTypes.MACHINE_CHEMICAL_PLANT.get(), MachineChemicalPlantScreen::new);
+        event.register(NtmMenuTypes.MACHINE_ARC_FURNACE.get(), MachineArcFurnaceLargeScreen::new);
+        event.register(NtmMenuTypes.MACHINE_CRUCIBLE.get(), MachineCrucibleScreen::new);
+        event.register(NtmMenuTypes.MACHINE_ROTARY_FURNACE.get(), MachineRotaryFurnaceScreen::new);
+        event.register(NtmMenuTypes.RBMK_ROD.get(), RBMKRodScreen::new);
+        event.register(NtmMenuTypes.RBMK_CONTROL.get(), RBMKControlScreen::new);
+        event.register(NtmMenuTypes.RBMK_BOILER.get(), RBMKBoilerScreen::new);
+        event.register(NtmMenuTypes.RBMK_HEATER.get(), RBMKHeaterScreen::new);
+        event.register(NtmMenuTypes.RBMK_OUTGASSER.get(), RBMKOutgasserScreen::new);
+        event.register(NtmMenuTypes.RBMK_CONTROL_AUTO.get(), RBMKControlAutoScreen::new);
+        event.register(NtmMenuTypes.RBMK_STORAGE.get(), RBMKStorageScreen::new);
+        event.register(NtmMenuTypes.CRANE_INSERTER.get(), CraneInserterScreen::new);
+        event.register(NtmMenuTypes.CRANE_EXTRACTOR.get(), CraneExtractorScreen::new);
+        event.register(NtmMenuTypes.CRANE_GRABBER.get(), CraneGrabberScreen::new);
+        event.register(NtmMenuTypes.CRANE_BOXER.get(), CraneBoxerScreen::new);
+        event.register(NtmMenuTypes.CRANE_UNBOXER.get(), CraneUnboxerScreen::new);
+        event.register(NtmMenuTypes.CRANE_ROUTER.get(), CraneRouterScreen::new);
+        event.register(NtmMenuTypes.RBMK_AUTOLOADER.get(), RBMKAutoloaderScreen::new);
+        event.register(NtmMenuTypes.WASTE_DRUM.get(), WasteDrumScreen::new);
+        event.register(NtmMenuTypes.SAT_LINKER.get(), MachineSatLinkerScreen::new);
+        event.register(NtmMenuTypes.SAT_DOCK.get(), MachineSatDockScreen::new);
+        event.register(NtmMenuTypes.TAPE_DRIVE.get(), MachineTapeDriveScreen::new);
+        event.register(NtmMenuTypes.SUPER_COMPUTER.get(), MachineSuperComputerScreen::new);
+        event.register(NtmMenuTypes.AMMO_PRESS.get(), MachineAmmoPressScreen::new);
+        event.register(NtmMenuTypes.RADAR.get(), MachineRadarSlotsScreen::new);
+        event.register(NtmMenuTypes.SIREN.get(), MachineSirenScreen::new);
+        event.register(NtmMenuTypes.ANNIHILATOR.get(), MachineAnnihilatorScreen::new);
+        event.register(NtmMenuTypes.BARREL.get(), BarrelScreen::new);
+        event.register(NtmMenuTypes.CRATE.get(), CrateScreen::new);
+        event.register(NtmMenuTypes.ANVIL.get(), AnvilMenuScreen::new);
+        event.register(NtmMenuTypes.HEATER_FIREBOX.get(), HeaterFireboxScreen::new);
+        event.register(NtmMenuTypes.HEATER_OVEN.get(), HeaterOvenScreen::new);
+        event.register(NtmMenuTypes.HEATER_OILBURNER.get(), HeaterOilburnerScreen::new);
+        event.register(NtmMenuTypes.HEATER_HEATEX.get(), HeaterHeatexScreen::new);
+
+        event.register(NtmMenuTypes.FLUID_TANK.get(), MachineFluidTankScreen::new);
+
+        event.register(NtmMenuTypes.ASSEMBLY_MACHINE.get(), MachineAssemblyMachineScreen::new);
+        event.register(NtmMenuTypes.PRECASS.get(), MachinePrecAssScreen::new);
+        event.register(NtmMenuTypes.ORE_SLOPPER.get(), MachineOreSlopperScreen::new);
+        event.register(NtmMenuTypes.EXCAVATOR.get(), MachineExcavatorScreen::new);
+        event.register(NtmMenuTypes.MISSILE_ASSEMBLY.get(), MachineMissileAssemblyScreen::new);
+        event.register(NtmMenuTypes.PRESS.get(), MachinePressScreen::new);
+
+        event.register(NtmMenuTypes.REACTOR_ZIRNOX.get(), ReactorZirnoxScreen::new);
+        event.register(NtmMenuTypes.WATZ.get(), WatzScreen::new);
+        event.register(NtmMenuTypes.ICF.get(), ICFScreen::new);
+        event.register(NtmMenuTypes.ICF_PRESS.get(), ICFPressScreen::new);
+        event.register(NtmMenuTypes.FUSION_TORUS.get(), FusionTorusScreen::new);
+        event.register(NtmMenuTypes.FUSION_KLYSTRON.get(), FusionKlystronScreen::new);
+        event.register(NtmMenuTypes.FUSION_BREEDER.get(), FusionBreederScreen::new);
+        event.register(NtmMenuTypes.FUSION_PLASMA_FORGE.get(), FusionPlasmaForgeScreen::new);
+        event.register(NtmMenuTypes.REACTOR_RESEARCH.get(), ReactorResearchScreen::new);
+        event.register(NtmMenuTypes.MACHINE_REACTOR_BREEDING.get(), MachineReactorBreedingScreen::new);
+        event.register(NtmMenuTypes.TURRET_BASE.get(), TurretBaseScreen::new);
+        event.register(NtmMenuTypes.REACTOR_CONTROL.get(), ReactorControlScreen::new);
+        event.register(NtmMenuTypes.WEAPON_TABLE.get(), WeaponTableScreen::new);
+
+        event.register(NtmMenuTypes.BATTERY_SOCKET.get(), BatterySocketScreen::new);
+        event.register(NtmMenuTypes.BATTERY_REDD.get(), BatteryREDDScreen::new);
+
+        event.register(NtmMenuTypes.NUKE_GADGET.get(), NukeGadgetScreen::new);
+        event.register(NtmMenuTypes.NUKE_LITTLE_BOY.get(), NukeLittleBoyScreen::new);
+        event.register(NtmMenuTypes.NUKE_FAT_MAN.get(), NukeFatManScreen::new);
+        event.register(NtmMenuTypes.NUKE_IVY_MIKE.get(), NukeIvyMikeScreen::new);
+        event.register(NtmMenuTypes.NUKE_TSAR_BOMBA.get(), NukeTsarBombaScreen::new);
+        event.register(NtmMenuTypes.NUKE_PROTOTYPE.get(), NukePrototypeScreen::new);
+        event.register(NtmMenuTypes.NUKE_FLEIJA.get(), NukeFleijaScreen::new);
+        event.register(NtmMenuTypes.NUKE_SOLINIUM.get(), NukeSoliniumScreen::new);
+        event.register(NtmMenuTypes.NUKE_N2.get(), NukeN2Screen::new);
+        event.register(NtmMenuTypes.NUKE_FSTBMB.get(), NukeFstbmbScreen::new);
+
+        event.register(NtmMenuTypes.LAUNCH_PAD_LARGE.get(), LaunchPadLargeScreen::new);
+        event.register(NtmMenuTypes.SOYUZ_LAUNCHER.get(), SoyuzLauncherScreen::new);
+    }
+}

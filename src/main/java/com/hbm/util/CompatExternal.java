@@ -1,0 +1,37 @@
+package com.hbm.util;
+
+import com.hbm.blocks.DummyableBlock;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+
+import javax.annotation.Nullable;
+
+/**
+ * EXTERNAL COMPATIBILITY CLASS - DO NOT CHANGE METHOD NAMES/PARAMS ONCE CREATED
+ * Is there a smarter way to do this? Most likely. Is there an easier one? Probably not.
+ * @author hbm
+ */
+public class CompatExternal {
+
+    /**
+     * Gets the tile entity at that pos. If the tile entity is an mk1 or mk2 dummy, it will return the core instead.
+     * This method will be updated in the event that other multiblock systems or dummies are added to retrain the intended functionality.
+     * @return the core tile entity if the given position holds a dummy, the tile entity at that position if it doesn't or null if there is no tile entity
+     */
+    @Nullable
+    public static BlockEntity getCoreFromPos(Level level, BlockPos pos) {
+
+        Block block = level.getBlockState(pos).getBlock();
+
+        if(block instanceof DummyableBlock dummyable) {
+            BlockPos core = dummyable.findCore(level, pos);
+
+            if(core != null) return level.getBlockEntity(core);
+        }
+
+        // otherwise, return the be at that position whihc could be null
+        return level.getBlockEntity(pos);
+    }
+}

@@ -1,0 +1,52 @@
+package com.hbm.blockentity.bomb;
+
+import com.hbm.blockentity.NtmBlockEntityTypes;
+import com.hbm.blockentity.NukeBaseBlockEntity;
+import com.hbm.inventory.menus.NukeN2Menu;
+import com.hbm.items.NtmItems;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+
+public class NukeN2BlockEntity extends NukeBaseBlockEntity {
+
+    public NukeN2BlockEntity(BlockPos pos, BlockState state) {
+        super(NtmBlockEntityTypes.NUKE_N2.get(), pos, state, 12);
+    }
+
+    @Override public Component getDefaultName() { return Component.translatable("container.nuke_n2"); }
+
+    @Override public int getMaxStackSize() { return 1; }
+
+    @Override
+    public boolean canPlaceItem(int slot, ItemStack stack) {
+        Item item = stack.getItem();
+        return item == NtmItems.N2_CHARGE.get();
+    }
+
+    @Override
+    public boolean isReady() {
+        return slots.get(0).getItem() == NtmItems.N2_CHARGE.get() &&
+                slots.get(1).getItem() == NtmItems.N2_CHARGE.get() &&
+                slots.get(2).getItem() == NtmItems.N2_CHARGE.get() &&
+                slots.get(3).getItem() == NtmItems.N2_CHARGE.get() &&
+                slots.get(4).getItem() == NtmItems.N2_CHARGE.get() &&
+                slots.get(5).getItem() == NtmItems.N2_CHARGE.get() &&
+                slots.get(6).getItem() == NtmItems.N2_CHARGE.get() &&
+                slots.get(7).getItem() == NtmItems.N2_CHARGE.get() &&
+                slots.get(8).getItem() == NtmItems.N2_CHARGE.get() &&
+                slots.get(9).getItem() == NtmItems.N2_CHARGE.get() &&
+                slots.get(10).getItem() == NtmItems.N2_CHARGE.get() &&
+                slots.get(11).getItem() == NtmItems.N2_CHARGE.get();
+    }
+
+    @Override
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
+        return new NukeN2Menu(id, inventory, this);
+    }
+}

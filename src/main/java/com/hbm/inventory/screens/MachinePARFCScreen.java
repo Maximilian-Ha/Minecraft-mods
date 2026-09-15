@@ -1,0 +1,64 @@
+package com.hbm.inventory.screens;
+
+import com.hbm.blockentity.machine.albion.MachinePARFCBlockEntity;
+import com.hbm.inventory.menus.MachinePARFCMenu;
+import com.hbm.main.NuclearTechMod;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+
+/**
+ * Portiert aus 1.7.10: com.hbm.inventory.gui.GUIPARFC.
+ * Blit- und Trefferkoordinaten unveraendert uebernommen.
+ */
+public class MachinePARFCScreen extends InfoScreen<MachinePARFCMenu> {
+
+    private static final ResourceLocation TEXTURE = NuclearTechMod.withDefaultNamespace("textures/gui/particleaccelerator/gui_rfc.png");
+
+    private final MachinePARFCBlockEntity be;
+
+    public MachinePARFCScreen(MachinePARFCMenu menu, Inventory inv, Component title) {
+        super(menu, inv, title);
+        this.be = menu.be;
+        this.imageWidth = 176;
+        this.imageHeight = 204;
+    }
+
+    @Override
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+
+        super.render(guiGraphics, mouseX, mouseY, partialTicks);
+
+        this.be.coolantTanks[0].renderTankTooltip(guiGraphics, mouseX, mouseY, this.leftPos + 89, this.topPos + 36, 16, 52);
+        this.be.coolantTanks[1].renderTankTooltip(guiGraphics, mouseX, mouseY, this.leftPos + 107, this.topPos + 36, 16, 52);
+        this.drawElectricityInfo(guiGraphics, mouseX, mouseY, this.leftPos + 53, this.topPos + 18, 16, 52, this.be.power, this.be.getMaxPower());
+
+        this.renderTooltip(guiGraphics, mouseX, mouseY);
+    }
+
+    @Override
+    protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+
+        guiGraphics.drawString(this.font, this.playerInventoryTitle, 8, this.imageHeight - 96 + 2, 4210752, false);
+
+        guiGraphics.drawString(this.font, Component.literal("/123K").withStyle(ChatFormatting.AQUA), 91, 22, 4210752, false);
+
+        int heat = (int) Math.ceil(this.be.temperature);
+        Component label = Component.literal(heat + "K").withStyle(heat > 123 ? ChatFormatting.RED : ChatFormatting.AQUA);
+        guiGraphics.drawString(this.font, label, 121 - this.font.width(label), 12, 4210752, false);
+    }
+
+    @Override
+    protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY) {
+
+        guiGraphics.blit(TEXTURE, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+
+        int power = (int) (this.be.power * 52 / this.be.getMaxPower());
+        if(power > 0) guiGraphics.blit(TEXTURE, this.leftPos + 53, this.topPos + 70 - power, 184, 52 - power, 16, power);
+
+        this.be.coolantTanks[0].renderTank(this.leftPos + 89, this.topPos + 88, 0, 16, 52);
+        this.be.coolantTanks[1].renderTank(this.leftPos + 107, this.topPos + 88, 0, 16, 52);
+    }
+}

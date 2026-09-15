@@ -1,0 +1,76 @@
+package com.hbm.blockentity;
+
+import com.hbm.blocks.DummyableBlock;
+import com.hbm.blocks.IProxyController;
+import com.hbm.util.Compat;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+
+import javax.annotation.Nullable;
+
+public class ProxyBaseBlockEntity extends LoadedBaseBlockEntity {
+
+    public ProxyBaseBlockEntity(BlockEntityType<? extends ProxyBaseBlockEntity> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
+    }
+
+    public BlockPos cachedPosition;
+
+    public boolean canUpdate() { return false; }
+
+    @Nullable
+    public BlockEntity getBE() {
+
+        if(this.level == null) return null;
+
+        if(cachedPosition != null) {
+            BlockEntity be = Compat.getBlockEntityStandard(level, cachedPosition);
+            if (be != null && !(be instanceof ProxyBaseBlockEntity)) return be;
+            cachedPosition = null;
+            this.setChanged();
+        }
+
+        if(this.getBlockState().getBlock() instanceof DummyableBlock dummy) {
+            BlockPos corePos = dummy.findCore(level, this.getBlockPos());
+
+            if(corePos != null) {
+                BlockEntity be = Compat.getBlockEntityStandard(level, corePos);
+                if(be != null && !(be instanceof ProxyBaseBlockEntity)) return be;
+            }
+        }
+
+        if(this.getBlockState().getBlock() instanceof IProxyController controller) {
+            BlockEntity be = controller.getCore(level, this.getBlockPos());
+
+            if(be != null && !(be instanceof ProxyBaseBlockEntity)) return be;
+        }
+
+        return null;
+    }
+
+    @Override
+    public boolean isValidBlockState(BlockState state) { return true; }
+
+    @Override
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
+
+        if(tag.getBoolean("HasPosition")) cachedPosition = new BlockPos(tag.getInt("pX"), tag.getInt("pY"), tag.getInt("pZ"));
+    }
+
+    @Override
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
+
+        if(this.cachedPosition != null) {
+            tag.putBoolean("HasPosition", true);
+            tag.putInt("pX", this.cachedPosition.getX());
+            tag.putInt("pY", this.cachedPosition.getY());
+            tag.putInt("pZ", this.cachedPosition.getZ());
+        }
+    }
+}

@@ -1,0 +1,63 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "particle": "hbmsntm:block/foundry_channel_side",
+    "top": "hbmsntm:block/foundry_channel_top",
+    "side": "hbmsntm:block/foundry_channel_side",
+    "bottom": "hbmsntm:block/foundry_channel_bottom",
+    "inner": "hbmsntm:block/foundry_channel_inner"
+  },
+  "elements": [
+    {
+      "from": [5, 0, 5], "to": [11, 2, 11],
+      "faces": {
+        "down": { "texture": "#bottom" },
+        "up": { "texture": "#inner" },
+        "north": { "texture": "#side" },
+        "south": { "texture": "#side" },
+        "east": { "texture": "#side" },
+        "west": { "texture": "#side" }
+      }
+    },
+    {
+      "from": [5, 2, 5], "to": [11, 8, 6],
+      "faces": {
+        "up": { "texture": "#top" },
+        "north": { "texture": "#side" },
+        "south": { "texture": "#inner" },
+        "east": { "texture": "#side" },
+        "west": { "texture": "#side" }
+      }
+    },
+    {
+      "from": [5, 2, 10], "to": [11, 8, 11],
+      "faces": {
+        "up": { "texture": "#top" },
+        "south": { "texture": "#side" },
+        "north": { "texture": "#inner" },
+        "east": { "texture": "#side" },
+        "west": { "texture": "#side" }
+      }
+    },
+    {
+      "from": [5, 2, 6], "to": [6, 8, 10],
+      "faces": {
+        "up": { "texture": "#top" },
+        "west": { "texture": "#side" },
+        "east": { "texture": "#inner" },
+        "north": { "texture": "#side" },
+        "south": { "texture": "#side" }
+      }
+    },
+    {
+      "from": [10, 2, 6], "to": [11, 8, 10],
+      "faces": {
+        "up": { "texture": "#top" },
+        "east": { "texture": "#side" },
+        "west": { "texture": "#inner" },
+        "north": { "texture": "#side" },
+        "south": { "texture": "#side" }
+      }
+    }
+  ]
+}

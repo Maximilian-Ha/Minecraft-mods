@@ -1,0 +1,259 @@
+# Baseline fuer tools/syntax-check.sh
+#
+# Hier stehen javac-Meldungen, die NICHT auf einen Fehler in unserem Code hindeuten,
+# sondern reine Folgefehler der fehlenden Minecraft-/NeoForge-API sind. Sie treten nur
+# auf, wenn ohne Zugriff auf maven.neoforged.net / libraries.minecraft.net kompiliert
+# wird. Das Skript meldet nur Abweichungen von dieser Liste.
+#
+# JEDE Zeile wurde einzeln geprueft. Nichts ungeprueft ergaenzen.
+#
+# Die Eintraege stehen bewusst OHNE Zeilennummer: sonst gaelte jede Meldung nach einer
+# Einfuegung weiter oben in derselben Datei faelschlich als neuer Fehler.
+#
+# ---------------------------------------------------------------------------------
+# Kategorie 1: "types X and Y are incompatible; ... inherits unrelated defaults ..."
+# ---------------------------------------------------------------------------------
+# Nachweis am Beispiel ProxyComboBlockEntity:
+#   IEnergyReceiverMK2.trySubscribe(Level, DirPos)              -> 2 Parameter
+#   IFluidReceiverMK2.trySubscribe(FluidType, Level, DirPos)    -> 3 Parameter
+# Unterschiedliche Stelligkeit: in gueltigem Java kollidieren diese Default-Methoden
+# nicht. javac haelt sie nur deshalb fuer gleich, weil Level/FluidType/DirPos waehrend
+# der Fehlerbehandlung Error-Typen sind und die Signaturen dadurch zusammenfallen.
+# Die Faelle "types X and X are incompatible" (identischer Name auf beiden Seiten) sind
+# derselbe Effekt: javac fuehrt dasselbe Interface durch Fehlerbehandlung doppelt.
+# Gegenprobe: `javac -sourcepath src/main/java src/main/java/api/hbm/fluidmk2/*.java`
+# uebersetzt dieselbe Hierarchie fehlerfrei.
+# Zusaetzlicher Nachweis: MachinePollutingBlockEntity implementiert
+# IFluidStandardSenderMK2 nur EINMAL, javac meldet den Konflikt aber trotzdem
+# "from types IFluidStandardSenderMK2 and IFluidStandardSenderMK2" -- dieselbe
+# Schnittstelle auf beiden Seiten. Ein echter Default-Methoden-Konflikt ist das
+# per Definition nicht. Wortgleich meldet javac das auch fuer die bereits
+# ausgelieferte TurbineBaseBlockEntity, die in der CI fehlerfrei uebersetzt.
+#
+# Runde 5: DiFurnaceExtensionBlockEntity extends ProxyComboBlockEntity und
+# MachineDiFurnaceBlockEntity extends MachinePollutingBlockEntity. Beide deklarieren
+# selbst KEINE Schnittstelle; die Meldung ist wortgleich die ihrer jeweiligen
+# Basisklasse, die bereits in dieser Liste steht und in der CI fehlerfrei uebersetzt.
+#
+# Runde 6: MachineCombustionEngineBlockEntity erbt von MachinePollutingBlockEntity (steht
+# bereits in dieser Liste). MachineTurbineGasBlockEntity implementiert
+# IFluidStandardTransceiverMK2 in genau derselben Form wie TurbineBaseBlockEntity, die
+# ebenfalls schon hier steht und in der CI fehlerfrei uebersetzt. Beide Meldungen sind
+# wortgleich die ihrer jeweiligen Vorlage.
+#
+# Runde 20: MachineRotaryFurnaceBlockEntity erbt von MachinePollutingBlockEntity und
+# deklariert zusaetzlich IFluidStandardTransceiverMK2 -- dieselbe Form wie
+# MachineCombustionEngineBlockEntity und MachineTurbofanBlockEntity, die beide schon in
+# dieser Liste stehen und in der CI fehlerfrei uebersetzen. Auch das Original hat genau
+# diese Form (TileEntityMachinePolluting + IFluidStandardTransceiverMK2).
+#
+# Runde 23: RBMKBoilerBlockEntity und RBMKCoolerBlockEntity deklarieren
+# IFluidStandardTransceiverMK2 in genau derselben Form wie AbstractBoilerBlockEntity, die
+# schon in dieser Liste steht und in der CI fehlerfrei uebersetzt. Auch das Original hat
+# diese Form (TileEntityRBMKSlottedBase bzw. TileEntityRBMKBase plus
+# IFluidStandardTransceiverMK2). Die Meldungen sind wortgleich die der Vorlage.
+#
+# Runde 24: RBMKHeaterBlockEntity deklariert IFluidStandardTransceiverMK2 wie schon
+# RBMKBoilerBlockEntity; RBMKOutletBlockEntity deklariert nur IFluidStandardSenderMK2,
+# genau wie MachinePollutingBlockEntity -- beide Vorlagen stehen bereits in dieser Liste
+# und uebersetzen in der CI fehlerfrei. Die Meldung entspringt der Schnittstelle selbst,
+# die weiter unten ebenfalls gelistet ist: ohne Minecraft-Klassenpfad sieht javac ihre
+# Hierarchie nicht. Der Einlass, der nur IFluidStandardReceiverMK2 deklariert, wird
+# folgerichtig gar nicht beanstandet.
+#
+# Runde 25: RBMKOutgasserBlockEntity deklariert IFluidStandardSenderMK2 in derselben Form
+# wie der Auslass aus Runde 24 und MachinePollutingBlockEntity.
+# Runde 40: MachineRadiolysisBlockEntity deklariert IFluidStandardTransceiverMK2 in
+# genau derselben Form wie MachineChemicalPlantBlockEntity, die schon in dieser Liste
+# steht und in der CI fehlerfrei uebersetzt. Auch das Original hat diese Form
+# (TileEntityMachineBase plus IFluidStandardTransceiver). Die Meldung ist wortgleich.
+#
+# Runde 54: MachinePWRControllerBlockEntity deklariert IFluidStandardTransceiverMK2 genau wie
+# MachinePUREXBlockEntity und MachineRadiolysisBlockEntity. Beide stehen bereits in dieser
+# Liste und uebersetzen in der CI fehlerfrei; die Meldung ist wortgleich.
+#
+# Runde 62: ICFBlockEntity deklariert IFluidStandardTransceiverMK2 wie jede andere Maschine
+# dieser Liste. Wortgleiche Meldung.
+#
+# Runde 60: BulletConfig.setItem(Ammo) und setItem(AmmoSecret). Ammo und AmmoSecret sind zwei
+# verschiedene Aufzaehlungen in GunFactory -- javac kann sie ohne Minecraft-Klassenpfad nicht
+# aufloesen, weil GunFactory daran haengt, und behandelt beide als Fehlertyp. Zwei Fehlertypen
+# erodieren gleich, also meldet er einen Namenskonflikt. Die Meldung erscheint erst, seit der
+# Chicago Pile BulletConfig benutzt und javac die Klasse dadurch ueberhaupt durchgeht; in der CI
+# uebersetzt sie seit jeher fehlerfrei.
+#
+# Runde 58: WatzBlockEntity deklariert IFluidStandardTransceiverMK2 genau wie
+# ReactorZirnoxBlockEntity, die bereits in dieser Liste steht und in der CI fehlerfrei
+# uebersetzt. Auch im Original steht an beiden Stellen dieselbe Zeile. Wortgleiche Meldung.
+#
+# Runde 56: PWRBlockEntity ebenso. Die Meldung erschien erst, nachdem die Klasse mit
+# isLoaded() eine eigene Methode aus der Schnittstellenhierarchie bekam -- vorher hat javac
+# die Schnittstellen dieser Klasse gar nicht erst aufgeloest und deshalb auch nichts gemeldet.
+# Genau daran lag der CI-Fehlschlag aus Runde 54: die fehlende Methode blieb unsichtbar.
+# tools/override-check.sh prueft diese Fehlerklasse seither in einem eigenen Durchgang.
+#
+# Runde 41: MachinePUREXBlockEntity ist bis auf den Namen dieselbe Deklaration wie
+# MachineChemicalPlantBlockEntity -- auch im Original stehen beide Zeilen wortgleich da.
+#
+# Runde 7: CondenserBlockEntity und CondenserPoweredBlockEntity erben von
+# CondenserBaseBlockEntity, MachineTurbofanBlockEntity von MachinePollutingBlockEntity --
+# beide Basisklassen stehen bereits in dieser Liste. Die Meldungen sind wortgleich.
+#
+# ---------------------------------------------------------------------------------
+# Kategorie 2: "recursive constructor invocation" (BlockPosNT.java:25)
+# ---------------------------------------------------------------------------------
+#   public BlockPosNT(BlockEntity te) { this(te.getBlockPos()); }
+# Da BlockPos unbekannt ist, hat te.getBlockPos() einen Error-Typ; die
+# Ueberladungsaufloesung faellt dadurch auf BlockPosNT(BlockEntity) zurueck -- also auf
+# den Konstruktor selbst. Gegenprobe mit minimalen Stubs fuer BlockPos/BlockEntity/Mth:
+# die Datei uebersetzt fehlerfrei.
+#
+# Runde 8: MachineCrystallizerBlockEntity implementiert IEnergyReceiverMK2 und (ueber
+# IFluidStandardReceiverMK2) IFluidReceiverMK2 -- dieselbe Form wie ProxyComboBlockEntity.
+# CrystallizerRecipes.java:277 ist Kategorie 2, wortgleich zum BlockPosNT-Fall:
+#   public CrystallizerRecipe(ItemLike output, int duration) { this(new ItemStack(output), duration); }
+# ItemStack ist ohne die Minecraft-API ein Fehlertyp, die Ueberladungsaufloesung faellt
+# dadurch auf den Konstruktor selbst zurueck statt auf die ItemStack-Variante.
+#
+# Runde 108: MachineIndustrialTurbineBlockEntity erbt von TurbineBaseBlockEntity und
+# deklariert selbst KEINE Schnittstelle. Die Meldung ist wortgleich die ihrer Basisklasse
+# und die der Schwesterklasse ChungusBlockEntity; beide stehen bereits in dieser Liste und
+# uebersetzen in der CI fehlerfrei.
+#
+# Runde 109: MachineStrandCasterBlockEntity deklariert IFluidStandardTransceiverMK2 in genau
+# derselben Form wie TurbineBaseBlockEntity und MachineTurbineGasBlockEntity, die beide
+# bereits in dieser Liste stehen und in der CI fehlerfrei uebersetzen. Auch das Original hat
+# diese Form (TileEntityFoundryCastingBase + IFluidStandardTransceiver).
+#
+# Runde 110: MachineHephaestusBlockEntity deklariert IFluidStandardTransceiverMK2 in derselben
+# Form wie MachineStrandCasterBlockEntity und TurbineBaseBlockEntity, die beide bereits in
+# dieser Liste stehen und in der CI fehlerfrei uebersetzen.
+#
+# Runde 113: ProxyDynBlockEntity erbt von ProxyComboBlockEntity und deklariert selbst keine
+# Schnittstelle; die Meldung ist wortgleich die der Oberklasse, die bereits hier steht.
+# MachineChemicalFactoryBlockEntity deklariert IFluidStandardTransceiverMK2 in derselben Form
+# wie MachineChemicalPlantBlockEntity -- javac meldet sie zweimal, fuer die Klasse selbst und
+# fuer ihren inneren Kuehl-Stellvertreter, der dieselbe Schnittstelle traegt.
+#
+# Runde 114: MachineAssemblyFactoryBlockEntity ist wortgleich der Fall der Chemiefabrik aus
+# Runde 113 -- dieselbe Schnittstelle, derselbe innere Kuehl-Stellvertreter.
+#
+# Runde 115: MachineGasCentBlockEntity traegt IEnergyReceiverMK2 und (ueber
+# IFluidStandardReceiverMK2) IFluidReceiverMK2 -- dieselbe Erklaerung, Wort fuer Wort, wie
+# MachineCrystallizerBlockEntity, SoyuzLauncherBlockEntity und LaunchPadBaseBlockEntity, die
+# alle drei bereits in dieser Liste stehen und in der CI fehlerfrei uebersetzen.
+#
+# Runde 116: MachineCyclotronBlockEntity traegt IFluidStandardTransceiverMK2 in genau
+# derselben Form wie MachineCompressorBlockEntity, ChungusBlockEntity und die beiden Fabriken
+# aus Runde 113 und 114 -- alle stehen bereits in dieser Liste und uebersetzen in der CI
+# fehlerfrei.
+#
+# Runde 118: MachineMiningLaserBlockEntity traegt IFluidStandardSenderMK2 in genau derselben
+# Form wie MachinePumpBaseBlockEntity, MachineIntakeBlockEntity und die beiden RBMK-Auslaesse
+# -- alle vier stehen bereits in dieser Liste und uebersetzen in der CI fehlerfrei.
+#
+# Runde 124: MachineSuperComputerBlockEntity traegt IFluidStandardTransceiverMK2 in genau
+# derselben Form wie MachineChemicalPlantBlockEntity -- dieselben zwei Schnittstellen in
+# derselben Reihenfolge, dieselbe Oberklasse. Die Chemiefabrik steht seit Runde 113 in dieser
+# Liste und uebersetzt in der CI fehlerfrei.
+#
+# ---------------------------------------------------------------------------------
+# Kategorie 3: "invalid method reference" (ProjectileNT.java:50)
+# ---------------------------------------------------------------------------------
+#   HitResult hr = this.getHitResult(this::canHitEntity);
+# javac meldet in derselben Zeile zuerst "cannot find symbol: class HitResult".
+# canHitEntity wird von net.minecraft.world.entity.projectile.Projectile geerbt und ist
+# ohne die Minecraft-API nicht auffindbar -- die Methodenreferenz ist Folgefehler davon.
+#
+src/main/java/api/hbm/fluidmk2/IFluidStandardSenderMK2.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/api/hbm/fluidmk2/IFluidStandardTransceiverMK2.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/CooledBaseBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/MachinePollutingBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/ProxyComboBlockEntity.java: error: types IEnergyReceiverMK2 and IFluidReceiverMK2 are incompatible;
+src/main/java/com/hbm/blockentity/ProxyDynBlockEntity.java: error: types IEnergyReceiverMK2 and IFluidReceiverMK2 are incompatible;
+src/main/java/com/hbm/blockentity/bomb/LaunchPadBaseBlockEntity.java: error: types IEnergyReceiverMK2 and IFluidReceiverMK2 are incompatible;
+src/main/java/com/hbm/blockentity/bomb/LaunchPadBlockEntity.java: error: types IEnergyReceiverMK2 and IFluidReceiverMK2 are incompatible;
+src/main/java/com/hbm/blockentity/bomb/LaunchPadLargeBlockEntity.java: error: types IEnergyReceiverMK2 and IFluidReceiverMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/ChungusBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/CondenserBaseBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/CondenserBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/CondenserPoweredBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/DiFurnaceExtensionBlockEntity.java: error: types IEnergyReceiverMK2 and IFluidReceiverMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineArcWelderBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineAssemblyFactoryBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineAssemblyMachineBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineBlastFurnaceBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineChemicalFactoryBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineChemicalPlantBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineCombustionEngineBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineCompressorBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineCompressorCompactBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineCrystallizerBlockEntity.java: error: types IEnergyReceiverMK2 and IFluidReceiverMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineCyclotronBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineDiFurnaceBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineDieselBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineExcavatorBlockEntity.java: error: types IEnergyReceiverMK2 and IFluidReceiverMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineFurnaceCombinationBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineGasCentBlockEntity.java: error: types IEnergyReceiverMK2 and IFluidReceiverMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineHephaestusBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineIndustrialTurbineBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineIntakeBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineMiningLaserBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineMixerBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineOreSlopperBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachinePUREXBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachinePWRControllerBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachinePrecAssBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachinePumpBaseBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachinePumpElectricBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachinePumpSteamBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineRadiolysisBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineRockMillBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineRotaryFurnaceBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineSolderingStationBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineSteamEngineBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineStrandCasterBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineSuperComputerBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineTurbineBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineTurbineGasBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/MachineTurbofanBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/PWRBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/ReactorZirnoxBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/SolarBoilerBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/SoyuzLauncherBlockEntity.java: error: types IEnergyReceiverMK2 and IFluidReceiverMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/TowerSmallBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/TurbineBaseBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/WatzBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/albion/MachinePADetectorBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/albion/MachinePADipoleBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/albion/MachinePAQuadrupoleBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/albion/MachinePARFCBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/albion/MachinePASourceBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/boiler/AbstractBoilerBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/boiler/MachineHeatBoilerBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/boiler/MachineIndustrialBoilerBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/fusion/FusionBoilerBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/fusion/FusionBreederBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/fusion/FusionKlystronBlockEntity.java: error: types IEnergyReceiverMK2 and IFluidReceiverMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/fusion/FusionMHDTBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/fusion/FusionPlasmaForgeBlockEntity.java: error: types IEnergyReceiverMK2 and IFluidReceiverMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/fusion/FusionTorusBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/heater/HeaterHeatexBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/heater/HeaterOilburnerBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/icf/ICFBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/oil/MachineFrackingTowerBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/oil/MachineOilWellBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/oil/MachinePumpjackBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/oil/MachineRefineryBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/oil/OilDrillBaseBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/rbmk/RBMKBoilerBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/rbmk/RBMKCoolerBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/rbmk/RBMKHeaterBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/rbmk/RBMKOutgasserBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/rbmk/RBMKOutletBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/storage/BarrelBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/storage/MachineFluidTankBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/entity/projectile/ProjectileNT.java: error: invalid method reference
+src/main/java/com/hbm/inventory/recipes/CrystallizerRecipes.java: error: recursive constructor invocation
+src/main/java/com/hbm/items/weapon/sedna/BulletConfig.java: error: name clash: class BulletConfig has two methods with the same erasure, yet neither overrides the other
+src/main/java/com/hbm/util/fauxpointtwelve/BlockPosNT.java: error: recursive constructor invocation

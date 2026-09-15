@@ -1,0 +1,59 @@
+package com.hbm.lib.effects;
+
+import com.hbm.blocks.NtmBlocks;
+import com.hbm.config.NtmConfig;
+import com.hbm.registry.NtmDamageTypes;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.common.EffectCure;
+
+import java.util.Set;
+
+public class TaintEffect extends MobEffect {
+
+    public TaintEffect(MobEffectCategory category, int color) {
+        super(category, color);
+    }
+
+    @Override
+    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
+        if (!entity.level().isClientSide) {
+
+            // if (!(entity instanceof EntityCreeperTainted) && !(entity instanceof EntityTaintCrab)) {
+            if (entity.level().random.nextInt(40) == 0) {
+                DamageSource src = new DamageSource(
+                        entity.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(NtmDamageTypes.TAINT)
+                );
+                entity.hurt(src, (float) (amplifier + 1));
+            }
+            // }
+
+            if (NtmConfig.SERVER.TAINT_TRAILS.get()) {
+                Level level = entity.level();
+                BlockPos posBelow = entity.blockPosition().below();
+                BlockState stateBelow = level.getBlockState(posBelow);
+
+                if (posBelow.getY() > level.getMinBuildHeight() && stateBelow.canOcclude() && !stateBelow.isAir()) {
+                    level.setBlock(posBelow, NtmBlocks.TAINT.get().defaultBlockState(), 3);
+                }
+            }
+        }
+        return true;
+    }
+
+
+    @Override
+    public void fillEffectCures(Set<EffectCure> cures, MobEffectInstance instance) { }
+
+    @Override
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
+        return true;
+    }
+}

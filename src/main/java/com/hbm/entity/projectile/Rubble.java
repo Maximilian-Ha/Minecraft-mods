@@ -1,0 +1,87 @@
+package com.hbm.entity.projectile;
+
+import com.hbm.network.toclient.ParticleBurst;
+import com.hbm.registry.NtmDamageTypes;
+import com.hbm.registry.NtmSoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.neoforged.neoforge.network.PacketDistributor;
+
+public class Rubble extends ProjectileNT {
+
+    private static final EntityDataAccessor<String> BLOCK_ID = SynchedEntityData.defineId(Rubble.class, EntityDataSerializers.STRING);
+
+    public Rubble(EntityType<? extends Rubble> type, Level level) {
+        super(type, level);
+    }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+
+        builder.define(BLOCK_ID, "");
+    }
+
+    @Override
+    protected void onHitBlock(BlockHitResult bhr) {
+        super.onHitBlock(bhr);
+
+        this.impact();
+    }
+
+    @Override
+    protected void onHitEntity(EntityHitResult ehr) {
+
+        Entity entityToHurt = ehr.getEntity();
+        entityToHurt.hurt(entityToHurt.damageSources().source(NtmDamageTypes.RUBBLE), 15);
+        this.impact();
+    }
+
+    protected void impact() {
+        Level level = this.level;
+
+        if(this.tickCount > 2) {
+            this.discard();
+
+            level.playSound(null, this.getX(), this.getY(), this.getZ(), NtmSoundEvents.DEBRIS, SoundSource.BLOCKS, 1.5F, 1.0F);
+
+            if(level instanceof ServerLevel serverLevel) {
+                PacketDistributor.sendToPlayersNear(serverLevel, null, this.getX(), this.getY(), this.getZ(), 50, new ParticleBurst(BlockPos.containing(this.getX(), this.getY(), this.getZ()), this.getBlock()));
+            }
+        }
+    }
+
+    @Override
+    protected float getAirDrag() {
+        return 1F;
+    }
+
+    public Block getBlock() { return BuiltInRegistries.BLOCK.get(ResourceLocation.parse(entityData.get(BLOCK_ID))); }
+    public void setBlock(Block block) { entityData.set(BLOCK_ID, BuiltInRegistries.BLOCK.getKey(block).toString()); }
+
+    @Override
+    protected void addAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+
+        tag.putString("Block", entityData.get(BLOCK_ID));
+    }
+
+    @Override
+    protected void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+
+        entityData.set(BLOCK_ID, tag.getString("Block"));
+    }
+}
