@@ -59,6 +59,11 @@ jobs:
           chmod +x ./tools/state-check.sh
           ./tools/state-check.sh
 
+      - name: Check translation keys
+        run: |
+          chmod +x ./tools/lang-check.sh
+          ./tools/lang-check.sh
+
       # Die Datengenerierung laeuft VOR dem Bau, und zwar aus zwei Gruenden:
       #
       # 1. Sie ist der beste Ersatz fuer einen Client-Start, den CI leisten kann. Sie faehrt den

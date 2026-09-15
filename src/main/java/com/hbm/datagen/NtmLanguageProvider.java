@@ -1768,7 +1768,9 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("item.hbmsntm.mirror_tool.angle", "Mirror angle too shallow! (min 45\u00b0)");
 
         this.add(NtmItems.WIRING_TOOL, "Wire Spool");
-        this.add(NtmItems.WIRING_TOOL, DESC, "Right-click a pylon to memorise it,$then right-click a second pylon to run a wire between them.");
+        /* Die Beschreibung steht weiter unten bei den uebrigen Zeilen des Werkzeugs. Hier stand
+         * sie ein zweites Mal, mit $ als Zeilentrenner -- den setzt aber nur ITooltipProvider um,
+         * und WiringToolItem baut seinen Hinweis direkt aus Component.translatable. */
 
         this.add(NtmItems.PISTON_SET, this.getName(PistonType.STEEL), "Steel Piston Set");
         this.add(NtmItems.PISTON_SET, this.getName(PistonType.DURA), "High-Speed Steel Piston Set");
