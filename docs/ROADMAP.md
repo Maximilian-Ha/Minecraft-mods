@@ -2366,3 +2366,36 @@ das schwarz-violette Ersatzmuster gestoben.
 `src/generated/resources` ist **nicht versioniert**. Eine .jar ohne vorherigen `runData`-Lauf ist
 damit unvollständig — es fehlen Blockzustände, Modelle, Sprachdatei, Beutetabellen, Rezepte und die
 Tonliste. `docs/BUILDING.md` sagt das jetzt deutlich.
+
+### Lauf sechs und sieben: die Sprachdatei und die Beutetabellen
+
+Nach den Blockzuständen kamen die nächsten beiden Stufen dran, und jede brachte einen Fehler, den
+kein bisheriges Tor sehen konnte.
+
+**`Duplicate translation key item.hbmsntm.wiring_tool.desc`.** Die beiden Zeilen sahen nicht gleich
+aus — einmal aus dem Gegenstand plus Endung gebaut, einmal ausgeschrieben:
+
+```java
+this.add(NtmItems.WIRING_TOOL, DESC, "Right-click a pylon to memorise it,$then ...");
+this.add("item.hbmsntm.wiring_tool.desc", "Right-click two pylons to connect them.");
+```
+
+Geblieben ist die zweite. Die erste trug `$` als Zeilentrenner, und den setzt nur
+`ITooltipProvider` um — das Kabelwerkzeug baut seinen Hinweis aber direkt aus
+`Component.translatable`, dort wäre das Zeichen stehen geblieben.
+
+**Das zwölfte Tor, `lang-check`**, löst alle Schreibweisen auf denselben Schlüssel auf: den
+ausgeschriebenen, den aus Gegenstand oder Block gebauten, die Endungen (`DESC`, `P11`, ein Literal,
+`getName(Wert)` oder eine Summe daraus) und `addDamage`. Auch Schleifen über Aufzählungen: `type.key`
+wird aus der Aufzählung selbst gelesen, eine Zeile vergibt dort so viele Schlüssel wie es Werte gibt.
+Gemessen: **3324 Schlüssel, keine Dopplung, keine blinde Stelle.**
+
+**`Created block loot tables for non-blocks: [minecraft:empty]`.** Die Barrikade trägt
+`noLootTable()` — ihr Tabellenschlüssel ist damit der leere von Minecraft — und der Erzeuger legte
+ihr zusätzlich eine leere Tabelle an. Die blieb übrig, weil kein Block sie abholt. Im Original ist
+sie ein `BlockNoDrop`; die Eigenschaft am Block genügt, die Zeile im Erzeuger ist fort.
+
+**Das dreizehnte Tor, `loot-check`**, prüft beide Richtungen: kein Block ohne Tabelle *und* ohne
+`noLootTable()` (sonst `Missing loottable`), und kein Block mit beidem. Gezählt wird nur die erste
+Stelle eines Aufrufs — sonst zählte ein Block mit, der bloß als Beute eines anderen vorkommt.
+Gemessen: **608 Blöcke, 589 Tabellen, 19 mit `noLootTable()`, null Funde.**
