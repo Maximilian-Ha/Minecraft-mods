@@ -49,6 +49,19 @@ jobs:
           chmod +x ./tools/location-check.sh
           ./tools/location-check.sh
 
+      # Die Datengenerierung laeuft VOR dem Bau, und zwar aus zwei Gruenden:
+      #
+      # 1. Sie ist der beste Ersatz fuer einen Client-Start, den CI leisten kann. Sie faehrt den
+      #    Mod-Konstruktor hoch und feuert saemtliche Registrierungen -- genau die Phase, in der
+      #    die drei Startabstuerze lagen (FT_Toxin, alarm.airRaid, pwr_fuel). Ein Bildschirm
+      #    wird dafuer nicht gebraucht.
+      # 2. Ohne sie ist die .jar unvollstaendig: src/generated/resources liegt nicht im Baum,
+      #    wird aber von sourceSets.main.resources eingezogen. Ohne diesen Schritt fehlen die
+      #    Blockzustaende von 493 der 498 Bloecke, saemtliche erzeugten Modelle, die Sprachdatei
+      #    und die Beutetabellen.
+      - name: Run data generation (also exercises mod construction and all registries)
+        run: ./gradlew runData
+
       - name: Build with Gradle
         run: ./gradlew build
 

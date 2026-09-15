@@ -2202,3 +2202,39 @@ eingesetzt genau ein Fund, der die Kollision benennt.
 Alle drei sind **Portierungsfallen**, keine Flüchtigkeitsfehler: jeder war auf 1.7.10 korrekt und
 ist es auf 1.21 nicht mehr. Alle drei sind jetzt durch ein Tor abgedeckt, und alle drei Tore sind
 gemessen — null Funde sauber, genau ein Fund mit wieder eingesetztem Fehler.
+
+## Der Start lässt sich nicht hier, aber in CI nachstellen
+
+Auf die Frage, ob sich der Client-Start simulieren lässt: **hier nicht.** `maven.neoforged.net`
+ist für diese Umgebung gesperrt (nachgeprüft: der Proxy antwortet mit 403), es gibt also keinen
+Minecraft-Klassenpfad und damit weder `runClient` noch `runData`. Genau deshalb existieren die
+neun textlichen Tore.
+
+**In CI geht es**, und das Projekt hatte die Konfiguration die ganze Zeit: `runs { client,
+server, gameTestServer, data }`. Ab jetzt läuft `./gradlew runData` dort vor dem Bau. Das ist der
+beste Ersatz für einen Start, den ein Rechner ohne Bildschirm leisten kann:
+
+| Phase | von `runData` durchlaufen? |
+|---|---|
+| Mod-Konstruktor (`NuclearTechMod.<init>`) | ja — hier lag Absturz 1 (`FT_Toxin`) |
+| alle `DeferredRegister` | ja — hier lagen Absturz 2 und 3 (`alarm.airRaid`, `pwr_fuel`) |
+| Datengeneratoren (Modelle, Sprache, Beute, Tags) | ja |
+| Welt laden, Rendern, Spielen | nein |
+
+**Alle drei Startabstürze wären damit in CI aufgefallen**, ohne dass jemand das Spiel startet.
+
+### Und ein zweiter Befund, beim Nachsehen gefunden
+
+`src/generated/resources` liegt **nicht** im Baum, wird aber von
+`sourceSets.main.resources` eingezogen — erzeugt wird es nur von `runData`, und das lief im Bau
+nie. Gemessen:
+
+| | |
+|---|---:|
+| registrierte Blöcke | 498 |
+| Blockzustände im Baum | **5** |
+| Sprachdatei `lang/` | **fehlt ganz** |
+
+Die .jar war also auch nach den Absturzfixes unvollständig: 493 Blöcke ohne Modell, jeder Name
+als roher Schlüssel, keine Beutetabellen. Dass `runData` jetzt vor dem Bau läuft, behebt beides
+mit demselben Schritt.
