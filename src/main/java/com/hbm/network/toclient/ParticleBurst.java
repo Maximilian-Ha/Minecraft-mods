@@ -1,10 +1,7 @@
 package com.hbm.network.toclient;
 
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-
+import com.hbm.network.toclient.client.ClientPacketEffects;
 import com.hbm.main.NuclearTechMod;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
@@ -36,12 +33,10 @@ public record ParticleBurst(BlockPos pos, Block block) implements CustomPacketPa
                 }
             };
 
-    @OnlyIn(Dist.CLIENT)
+    /* Siehe ClientPacketEffects: die Methodenreferenz muss auf dem Server existieren, der
+     * Rumpf darf dort nichts vom Client nennen. */
     public static void handleClient(ParticleBurst packet, IPayloadContext context) {
-        context.enqueueWork(() -> {
-            BlockState state = packet.block().defaultBlockState();
-            Minecraft.getInstance().particleEngine.destroy(packet.pos(), state);
-        });
+        context.enqueueWork(() -> ClientPacketEffects.particleBurst(packet));
     }
 
     @Override public Type<? extends CustomPacketPayload> type() { return TYPE; }

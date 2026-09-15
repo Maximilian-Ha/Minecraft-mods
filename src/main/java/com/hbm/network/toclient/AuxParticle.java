@@ -1,11 +1,7 @@
 package com.hbm.network.toclient;
 
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-
+import com.hbm.network.toclient.client.ClientPacketEffects;
 import com.hbm.main.NuclearTechMod;
-import com.hbm.main.NuclearTechModClient;
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -37,17 +33,10 @@ public record AuxParticle(CompoundTag nbt, double x, double y, double z) impleme
                 }
             };
 
-    @OnlyIn(Dist.CLIENT)
+    /* Siehe ClientPacketEffects: die Methodenreferenz muss auf dem Server existieren, der
+     * Rumpf darf dort nichts vom Client nennen. */
     public static void handleClient(AuxParticle packet, IPayloadContext context) {
-        context.enqueueWork(() -> {
-            Minecraft mc = Minecraft.getInstance();
-            packet.nbt().putDouble("posX", packet.x());
-            packet.nbt().putDouble("posY", packet.y());
-            packet.nbt().putDouble("posZ", packet.z());
-            if (mc.level != null) {
-                NuclearTechModClient.effectNT(packet.nbt());
-            }
-        });
+        context.enqueueWork(() -> ClientPacketEffects.auxParticle(packet));
     }
 
     @Override

@@ -1,11 +1,7 @@
 package com.hbm.network.toclient;
 
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-
+import com.hbm.network.toclient.client.ClientPacketEffects;
 import com.hbm.main.NuclearTechMod;
-import com.hbm.explosion.vanillant.standard.ExplosionEffectStandard;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -67,9 +63,11 @@ public record VanillaExplosionLike(double x, double y, double z, float size, Lis
                 }
             };
 
-    @OnlyIn(Dist.CLIENT)
+    /* Ohne @OnlyIn, denn NtmNetwork verweist mit einer Methodenreferenz hierher, und die loest
+     * der Server beim Registrieren auf. Der Rumpf nennt nur gemeinsame Typen -- was der Client
+     * damit tut, steht in ClientPacketEffects und wird erst geladen, wenn das Lambda laeuft. */
     public static void handleClient(VanillaExplosionLike packet, IPayloadContext context) {
-        context.enqueueWork(() -> ExplosionEffectStandard.performClient(Minecraft.getInstance().level, packet.x,  packet.y, packet.z, packet.size, packet.affectedBlocks));
+        context.enqueueWork(() -> ClientPacketEffects.vanillaExplosion(packet));
     }
 
     @Override
