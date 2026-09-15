@@ -1,5 +1,8 @@
 package com.hbm.blocks.machine.heater;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import com.hbm.blockentity.ITickable;
 import com.hbm.blockentity.ProxyComboBlockEntity;
 import com.hbm.blockentity.machine.heater.HeaterHeatexBlockEntity;
@@ -146,6 +149,7 @@ public class HeaterHeatexBlock extends AbstractHeaterBlock implements ITooltipPr
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void printHook(RenderGuiEvent.Pre event, Level level, BlockPos pos) {
         BlockPos corePos = this.findCore(level, pos);
         if(corePos == null) return;

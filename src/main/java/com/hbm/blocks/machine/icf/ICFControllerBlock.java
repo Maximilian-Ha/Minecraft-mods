@@ -1,5 +1,8 @@
 package com.hbm.blocks.machine.icf;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import com.hbm.blockentity.ITickable;
 import com.hbm.blockentity.machine.icf.ICFControllerBlockEntity;
 import com.hbm.blockentity.machine.icf.ICFWrapperBlockEntity;
@@ -188,6 +191,7 @@ public class ICFControllerBlock extends BaseEntityBlock implements ILookOverlay 
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void printHook(RenderGuiEvent.Pre event, Level level, BlockPos pos) {
 
         if(!(level.getBlockEntity(pos) instanceof ICFControllerBlockEntity controller)) return;

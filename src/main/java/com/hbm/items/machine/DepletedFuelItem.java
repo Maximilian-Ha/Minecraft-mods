@@ -1,5 +1,8 @@
 package com.hbm.items.machine;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import com.hbm.inventory.MetaHelper;
 import com.hbm.items.ICustomItemModelRegister;
 import com.hbm.items.IMetaItem;
@@ -64,6 +67,7 @@ public class DepletedFuelItem extends Item implements IMetaItem, ICustomItemMode
      * ueberhaupt gefunden wird -- der Gegenstand heisst ja anders als sie.
      */
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void registerItemModel(ItemModelProvider provider, ResourceLocation modelLocation) {
 
         ItemModelBuilder builder = provider.getBuilder(modelLocation.toString());

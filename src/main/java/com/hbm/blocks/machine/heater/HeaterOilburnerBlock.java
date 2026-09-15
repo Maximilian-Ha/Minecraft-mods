@@ -1,5 +1,8 @@
 package com.hbm.blocks.machine.heater;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import api.hbm.block.IToolable;
 import com.hbm.blockentity.ITickable;
 import com.hbm.blockentity.ProxyComboBlockEntity;
@@ -145,6 +148,7 @@ public class HeaterOilburnerBlock extends AbstractHeaterBlock implements IToolti
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void printHook(RenderGuiEvent.Pre event, Level level, BlockPos pos) {
         BlockPos corePos = this.findCore(level, pos);
         if(corePos == null) return;

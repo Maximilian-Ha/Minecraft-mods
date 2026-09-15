@@ -1,5 +1,8 @@
 package com.hbm.inventory.recipes;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import com.hbm.inventory.material.Mats;
 import com.hbm.inventory.material.Mats.MaterialStack;
 import com.hbm.inventory.recipes.loader.GenericRecipe;
@@ -55,6 +58,7 @@ public class CrucibleRecipe extends GenericRecipe {
         for(MaterialStack stack : this.output) this.line(list, stack);
     }
 
+    @OnlyIn(Dist.CLIENT)
     private void line(List<Component> list, MaterialStack stack) {
         list.add(Component.literal("  ").append(stack.material.getName())
                 .append(": " + Mats.formatAmount(stack.amount, Screen.hasShiftDown())).withStyle(ChatFormatting.GRAY));

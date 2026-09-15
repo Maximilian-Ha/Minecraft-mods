@@ -1,5 +1,8 @@
 package com.hbm.items.machine;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import com.hbm.inventory.MetaHelper;
 import com.hbm.items.ICustomItemModelRegister;
 import com.hbm.items.IMetaItem;
@@ -62,6 +65,7 @@ public class RBMKPelletItem extends Item implements IMetaItem, ICustomItemModelR
      * item_meta -- je Zustand ein Modell aus zwei oder drei Texturschichten.
      */
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void registerItemModel(ItemModelProvider provider, ResourceLocation modelLocation) {
 
         ItemModelBuilder builder = provider.getBuilder(modelLocation.toString());

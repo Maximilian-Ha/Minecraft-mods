@@ -1,5 +1,8 @@
 package com.hbm.blocks.generic;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import api.hbm.block.IToolable;
 import com.hbm.blocks.ILookOverlay;
 import com.hbm.blocks.NtmBlocks;
@@ -111,6 +114,7 @@ public class ToolConversionBlock extends Block implements IToolable, ILookOverla
 
     /** Blendet ein, welches Werkzeug und welches Material der naechste Umbauschritt braucht. */
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void printHook(RenderGuiEvent.Pre event, Level level, BlockPos pos) {
 
         Player player = Minecraft.getInstance().player;

@@ -1,5 +1,8 @@
 package com.hbm.blocks.machine;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import api.hbm.block.IToolable;
 import com.hbm.blockentity.ITickable;
 import com.hbm.blockentity.machine.MachineThresherBlockEntity;
@@ -124,6 +127,7 @@ public class MachineThresherBlock extends BaseEntityBlock implements ILookOverla
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void printHook(RenderGuiEvent.Pre event, Level level, BlockPos pos) {
 
         BlockEntity te = level.getBlockEntity(pos);

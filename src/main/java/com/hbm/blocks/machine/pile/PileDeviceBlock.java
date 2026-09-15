@@ -1,5 +1,8 @@
 package com.hbm.blocks.machine.pile;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import api.hbm.block.IToolable;
 import com.hbm.blockentity.ITickable;
 import com.hbm.blockentity.machine.pile.PileControlBlockEntity;
@@ -158,6 +161,7 @@ public abstract class PileDeviceBlock extends BaseEntityBlock implements IToolab
 
     /** Was beim Hinsehen ueber dem Geraet steht. */
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void printHook(RenderGuiEvent.Pre event, Level level, BlockPos pos) {
 
         List<Component> text = new ArrayList<>();

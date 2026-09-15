@@ -1,5 +1,8 @@
 package com.hbm.items.special;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import com.hbm.inventory.MetaHelper;
 import com.hbm.inventory.material.MaterialShapes;
 import com.hbm.inventory.material.Mats;
@@ -215,6 +218,7 @@ public class BedrockOreItem extends Item implements IMetaItem, ICustomItemModelR
      * sie ueber den Farbgeber kommt.
      */
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void registerItemModel(ItemModelProvider provider, ResourceLocation modelLocation) {
 
         ItemModelBuilder builder = provider.getBuilder(modelLocation.toString());

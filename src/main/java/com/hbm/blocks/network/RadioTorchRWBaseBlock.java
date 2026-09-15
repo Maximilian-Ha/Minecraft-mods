@@ -31,6 +31,7 @@ public abstract class RadioTorchRWBaseBlock extends RadioTorchBaseBlock {
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void printHook(RenderGuiEvent.Pre event, Level level, BlockPos pos) {
 
         BlockEntity be = level.getBlockEntity(pos);

@@ -1,5 +1,8 @@
 package com.hbm.util;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import api.hbm.item.IGasMask;
 import com.hbm.handler.ArmorModHandler;
 import net.minecraft.ChatFormatting;
@@ -21,6 +24,7 @@ public class ArmorRegistry {
         hazardClasses.put(item, new ArrayList<>(Arrays.asList(hazards)));
     }
 
+    @OnlyIn(Dist.CLIENT)
     public static void addTooltip(List<Component> components, ItemStack stack) {
         List<HazardClass> hazInfo = ArmorRegistry.hazardClasses.get(stack.getItem());
 

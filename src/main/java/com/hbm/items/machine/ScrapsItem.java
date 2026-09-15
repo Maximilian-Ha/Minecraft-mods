@@ -1,5 +1,8 @@
 package com.hbm.items.machine;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import com.hbm.inventory.MetaHelper;
 import com.hbm.inventory.material.MaterialShapes;
 import com.hbm.inventory.material.Mats;
@@ -111,6 +114,7 @@ public class ScrapsItem extends Item implements IMetaItem, ICustomItemModelRegis
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> components, TooltipFlag flag) {
 
         MaterialStack contents = getMats(stack);
@@ -133,6 +137,7 @@ public class ScrapsItem extends Item implements IMetaItem, ICustomItemModelRegis
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void registerItemModel(ItemModelProvider provider, ResourceLocation modelLocation) {
 
         ItemModelBuilder builder = provider.getBuilder(modelLocation.toString())

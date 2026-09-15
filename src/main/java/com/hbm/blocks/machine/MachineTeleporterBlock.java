@@ -1,5 +1,8 @@
 package com.hbm.blocks.machine;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import com.hbm.blockentity.ITickable;
 import com.hbm.blockentity.machine.MachineTeleporterBlockEntity;
 import com.hbm.blocks.ILookOverlay;
@@ -49,6 +52,7 @@ public class MachineTeleporterBlock extends BaseEntityBlock implements ILookOver
     @Override protected RenderShape getRenderShape(BlockState state) { return RenderShape.MODEL; }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void printHook(RenderGuiEvent.Pre event, Level level, BlockPos pos) {
 
         if(!(level.getBlockEntity(pos) instanceof MachineTeleporterBlockEntity tele)) return;

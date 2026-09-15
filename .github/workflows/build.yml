@@ -74,6 +74,11 @@ jobs:
           chmod +x ./tools/datagen-check.sh
           ./tools/datagen-check.sh
 
+      - name: Check client/server separation
+        run: |
+          chmod +x ./tools/dist-check.sh
+          ./tools/dist-check.sh
+
       # Die Datengenerierung laeuft VOR dem Bau, und zwar aus zwei Gruenden:
       #
       # 1. Sie ist der beste Ersatz fuer einen Client-Start, den CI leisten kann. Sie faehrt den

@@ -1,5 +1,8 @@
 package com.hbm.items.armor;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import com.hbm.extprop.HbmLivingAttachments;
 import com.hbm.extprop.HbmPlayerAttachments;
 import com.hbm.render.model.armor.ModelNo9;
@@ -36,11 +39,13 @@ public class ArmorNo9 extends ArmorItem {
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
             private ModelNo9 replacement;
 
             @Override
+            @OnlyIn(Dist.CLIENT)
             public Model getGenericArmorModel(LivingEntity living, ItemStack itemStack, EquipmentSlot slot, HumanoidModel<?> original) {
                 if(replacement == null) replacement = new ModelNo9(original, slot);
                 replacement.getPropertiesFrom(original);

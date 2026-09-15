@@ -1,5 +1,8 @@
 package com.hbm.blockentity.machine.fusion;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import api.hbm.energymk2.IEnergyReceiverMK2;
 import api.hbm.fluidmk2.IFluidStandardReceiverMK2;
 import com.hbm.blockentity.MachineBaseBlockEntity;
@@ -134,6 +137,7 @@ public class FusionKlystronBlockEntity extends MachineBaseBlockEntity implements
         this.networkPackNT(100);
     }
 
+    @OnlyIn(Dist.CLIENT)
     protected void clientUpdate() {
 
         double mult = FusionTorusBlockEntity.getSpeedScaled(this.outputTarget, this.output);

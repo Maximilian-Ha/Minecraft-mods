@@ -1,5 +1,8 @@
 package com.hbm.blockentity.machine.fusion;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import api.hbm.energymk2.IEnergyProviderMK2;
 import api.hbm.fluidmk2.IFluidStandardTransceiverMK2;
 import com.google.gson.JsonObject;
@@ -123,6 +126,7 @@ public class FusionMHDTBlockEntity extends LoadedBaseBlockEntity implements ITic
         this.plasmaEnergy = 0;
     }
 
+    @OnlyIn(Dist.CLIENT)
     private void clientUpdate() {
 
         if(this.plasmaEnergy > 0 && this.isCool()) this.rotorSpeed += ROTOR_ACCELERATION;

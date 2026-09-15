@@ -1,5 +1,8 @@
 package com.hbm.blocks.generic;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import com.hbm.blockentity.BedrockOreBlockEntity;
 import com.hbm.blocks.ILookOverlay;
 import com.mojang.serialization.MapCodec;
@@ -52,6 +55,7 @@ public class BedrockOreBlock extends BaseEntityBlock implements ILookOverlay {
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void printHook(RenderGuiEvent.Pre event, Level level, BlockPos pos) {
 
         if(!(level.getBlockEntity(pos) instanceof BedrockOreBlockEntity ore)) return;

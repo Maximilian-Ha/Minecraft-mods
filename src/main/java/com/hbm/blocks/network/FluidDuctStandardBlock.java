@@ -1,5 +1,8 @@
 package com.hbm.blocks.network;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import com.hbm.blockentity.network.PipeBaseBlockEntity;
 import com.hbm.blocks.ILookOverlay;
 import com.hbm.inventory.MetaHelper;
@@ -118,6 +121,7 @@ public class FluidDuctStandardBlock extends FluidDuctConnectingBlock implements 
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void printHook(RenderGuiEvent.Pre event, Level level, BlockPos pos) {
         BlockEntity be = level.getBlockEntity(pos);
 

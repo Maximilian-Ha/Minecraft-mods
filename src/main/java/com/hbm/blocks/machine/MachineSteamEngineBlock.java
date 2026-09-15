@@ -1,5 +1,8 @@
 package com.hbm.blocks.machine;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import com.hbm.blockentity.ITickable;
 import com.hbm.blockentity.ProxyComboBlockEntity;
 import com.hbm.blockentity.machine.MachineSteamEngineBlockEntity;
@@ -74,6 +77,7 @@ public class MachineSteamEngineBlock extends DummyableBlock implements ILookOver
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void printHook(Pre event, Level level, BlockPos pos) {
         BlockPos corePos = this.findCore(level, pos);
         if(corePos == null) return;

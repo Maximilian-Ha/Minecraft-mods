@@ -1,5 +1,8 @@
 package com.hbm.items;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import com.hbm.interfaces.IOrderedEnum;
 import com.hbm.inventory.MetaHelper;
 import com.hbm.items.component.NtmDataComponents;
@@ -41,6 +44,7 @@ public class EnumMultiItem extends Item implements IMetaItem, ICustomItemModelRe
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void registerItemModel(ItemModelProvider provider, ResourceLocation modelLocation) {
         if(multiTexture) {
             Enum<?>[] enums = theEnum.getEnumConstants();

@@ -1,5 +1,8 @@
 package com.hbm.blockentity.machine.fusion;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import com.hbm.blockentity.CooledBaseBlockEntity;
 import com.hbm.blockentity.LoadedBaseBlockEntity;
 import com.hbm.blockentity.NtmBlockEntityTypes;
@@ -227,6 +230,7 @@ public class FusionTorusBlockEntity extends CooledBaseBlockEntity implements ICo
         this.klystronEnergy = 0;
     }
 
+    @OnlyIn(Dist.CLIENT)
     private void clientUpdate() {
 
         double powerFactor = getSpeedScaled(this.getMaxPower(), this.power);

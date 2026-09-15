@@ -1,5 +1,8 @@
 package com.hbm.blocks.network;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import com.hbm.blockentity.ITickable;
 import com.hbm.blockentity.network.CableGaugeBlockEntity;
 import com.hbm.blocks.ILookOverlay;
@@ -82,6 +85,7 @@ public class CableGaugeBlock extends Block implements EntityBlock, ILookOverlay,
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void printHook(RenderGuiEvent.Pre event, Level level, BlockPos pos) {
 
         BlockEntity be = level.getBlockEntity(pos);

@@ -1,5 +1,8 @@
 package com.hbm.blocks.machine;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import api.hbm.block.IToolable;
 import com.hbm.blockentity.IPersistentNBT;
 import com.hbm.blockentity.IRepairable;
@@ -159,6 +162,7 @@ public class MachineFluidTankBlock extends DummyableBlock implements IToolable, 
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void printHook(RenderGuiEvent.Pre event, Level level, BlockPos pos) {
         IRepairable.addGenericOverlay(event, level, pos, this);
     }

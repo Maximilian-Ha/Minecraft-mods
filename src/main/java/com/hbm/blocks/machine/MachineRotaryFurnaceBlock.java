@@ -1,5 +1,8 @@
 package com.hbm.blocks.machine;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import com.hbm.blockentity.ITickable;
 import com.hbm.blockentity.ProxyComboBlockEntity;
 import com.hbm.blockentity.machine.MachineRotaryFurnaceBlockEntity;
@@ -85,6 +88,7 @@ public class MachineRotaryFurnaceBlock extends DummyableBlock implements ILookOv
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void printHook(RenderGuiEvent.Pre event, Level level, BlockPos pos) {
 
         BlockPos corePos = this.findCore(level, pos);

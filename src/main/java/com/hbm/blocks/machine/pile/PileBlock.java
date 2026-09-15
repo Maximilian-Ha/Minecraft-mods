@@ -1,5 +1,8 @@
 package com.hbm.blocks.machine.pile;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import api.hbm.block.IToolable;
 import com.hbm.blockentity.ITickable;
 import com.hbm.blockentity.machine.pile.PileBaseBlockEntity;
@@ -127,6 +130,7 @@ public class PileBlock extends BaseEntityBlock implements IToolable, ILookOverla
 
     /** Was beim Hinsehen ueber dem Block steht. */
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void printHook(RenderGuiEvent.Pre event, Level level, BlockPos pos) {
 
         BlockState state = level.getBlockState(pos);

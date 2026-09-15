@@ -178,6 +178,7 @@ public class GunBaseNTItem extends Item implements IKeybindReceiver, IHUDItem, I
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> components, TooltipFlag flag) {
 
         Player player = Minecraft.getInstance().player;

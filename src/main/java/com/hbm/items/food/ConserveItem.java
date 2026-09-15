@@ -1,5 +1,8 @@
 package com.hbm.items.food;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import com.hbm.blocks.ITooltipProvider;
 import com.hbm.entity.NtmEntityTypes;
 import com.hbm.entity.effect.Vortex;
@@ -93,6 +96,7 @@ public class ConserveItem extends EnumMultiItem {
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void registerItemModel(ItemModelProvider provider, ResourceLocation modelLocation) {
         Enum<?>[] enums = theEnum.getEnumConstants();
 

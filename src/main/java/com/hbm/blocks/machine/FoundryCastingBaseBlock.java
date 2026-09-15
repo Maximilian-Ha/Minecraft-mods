@@ -1,5 +1,8 @@
 package com.hbm.blocks.machine;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import api.hbm.block.ICrucibleAcceptor;
 import api.hbm.block.IToolable;
 import com.hbm.blockentity.ITickable;
@@ -206,6 +209,7 @@ public abstract class FoundryCastingBaseBlock extends BaseEntityBlock implements
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void printHook(RenderGuiEvent.Pre event, Level level, BlockPos pos) {
 
         if(!(level.getBlockEntity(pos) instanceof FoundryCastingBaseBlockEntity cast)) return;

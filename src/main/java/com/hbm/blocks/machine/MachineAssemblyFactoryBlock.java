@@ -1,5 +1,8 @@
 package com.hbm.blocks.machine;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import com.hbm.blockentity.ITickable;
 import com.hbm.blockentity.ProxyDynBlockEntity;
 import com.hbm.blockentity.machine.MachineAssemblyFactoryBlockEntity;
@@ -104,6 +107,7 @@ public class MachineAssemblyFactoryBlock extends DummyableBlock implements ITool
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void printHook(RenderGuiEvent.Pre event, Level level, BlockPos pos) {
 
         BlockPos corePos = this.findCore(level, pos);

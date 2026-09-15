@@ -1,5 +1,8 @@
 package com.hbm.items.machine;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import com.hbm.blocks.NtmBlocks;
 import com.hbm.inventory.MetaHelper;
 import com.hbm.inventory.material.MatShapeItems;
@@ -156,6 +159,7 @@ public class MoldItem extends Item implements IMetaItem, ICustomItemModelRegiste
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void registerItemModel(ItemModelProvider provider, ResourceLocation modelLocation) {
 
         registerMolds();

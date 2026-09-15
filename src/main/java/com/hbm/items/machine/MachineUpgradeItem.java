@@ -1,5 +1,8 @@
 package com.hbm.items.machine;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import com.hbm.blockentity.IUpgradeInfoProvider;
 import com.hbm.blocks.ITooltipProvider;
 import net.minecraft.ChatFormatting;
@@ -36,6 +39,7 @@ public class MachineUpgradeItem extends Item {
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> components, TooltipFlag flag) {
 
         Screen open = Minecraft.getInstance().screen;

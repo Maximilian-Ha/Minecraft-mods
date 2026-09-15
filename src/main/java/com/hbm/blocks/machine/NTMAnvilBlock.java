@@ -193,6 +193,7 @@ public class NTMAnvilBlock extends FallingBlock implements IMultiBlock, ICustomB
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void registerModel(BlockStateProvider provider, ResourceLocation modelLocation) {
         String baseName = modelLocation.getPath();
         Variant[] variants = Variant.values();

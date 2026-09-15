@@ -1,5 +1,8 @@
 package com.hbm.network.toclient;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import com.hbm.main.NuclearTechMod;
 import com.hbm.main.NuclearTechModClient;
 import net.minecraft.client.Minecraft;
@@ -34,6 +37,7 @@ public record AuxParticle(CompoundTag nbt, double x, double y, double z) impleme
                 }
             };
 
+    @OnlyIn(Dist.CLIENT)
     public static void handleClient(AuxParticle packet, IPayloadContext context) {
         context.enqueueWork(() -> {
             Minecraft mc = Minecraft.getInstance();

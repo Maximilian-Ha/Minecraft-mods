@@ -1,5 +1,8 @@
 package com.hbm.items.special;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import com.hbm.inventory.MetaHelper;
 import com.hbm.items.ICustomItemModelRegister;
 import com.hbm.items.ICustomRarityItem;
@@ -54,6 +57,7 @@ public class SoyuzItem extends Item implements IMetaItem, ICustomRarityItem, ICu
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void registerItemModel(ItemModelProvider provider, ResourceLocation modelLocation) {
 
         ItemModelBuilder builder = provider.getBuilder(modelLocation.toString());

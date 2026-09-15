@@ -7,7 +7,6 @@ import api.hbm.fluidmk2.IFluidConnectorBlockMK2;
 import api.hbm.fluidmk2.IFluidConnectorMK2;
 import com.hbm.interfaces.Spaghetti;
 import com.hbm.inventory.fluid.FluidType;
-import net.minecraft.client.multiplayer.ClientChunkCache;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -22,6 +21,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkSource;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
@@ -155,14 +155,17 @@ public class Library {
         return rayTraceBlocksInternal(world, startVec, endVec, stopOnLiquid, ignoreBlockWithoutBoundingBox, returnLastUncollidableBlock, maxSteps);
     }
 
+    /* Beide Seiten, und deshalb OHNE @OnlyIn: der Strahlengang wird auf dem Server genauso
+     * gebraucht wie beim Zeichnen. Der Client-Zweig lief frueher ueber ClientChunkCache --
+     * eine Klasse, die es auf dem Server nicht gibt, und die den Dist-Cleaner beim Laden
+     * ausloest. getChunk(...) steht schon in ChunkSource, also braucht es sie gar nicht. */
     private static LevelChunk getChunkForBlockTrace(Level level, int cx, int cz) {
         ChunkSource source = level.getChunkSource();
         if(source instanceof ServerChunkCache scc) {
             return scc.getChunkNow(cx, cz);
-        } else if(source instanceof ClientChunkCache ccc) {
-            return ccc.getChunk(cx, cz, ChunkStatus.FULL, false);
         }
-        return null;
+        ChunkAccess chunk = source.getChunk(cx, cz, ChunkStatus.FULL, false);
+        return chunk instanceof LevelChunk lc ? lc : null;
     }
 
     // copied from ce edition

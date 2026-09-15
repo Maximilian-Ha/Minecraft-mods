@@ -109,6 +109,7 @@ public class CableDiodeBlock extends Block implements EntityBlock, IEnergyConnec
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void printHook(RenderGuiEvent.Pre event, Level level, BlockPos pos) {
 
         BlockEntity be = level.getBlockEntity(pos);

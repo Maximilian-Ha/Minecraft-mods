@@ -1,5 +1,8 @@
 package com.hbm.blocks.machine;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import com.hbm.blockentity.ITickable;
 import com.hbm.blockentity.network.ConverterHeRfBlockEntity;
 import com.hbm.blocks.ILookOverlay;
@@ -47,6 +50,7 @@ public class MachineConverterHeRfBlock extends BaseEntityBlock implements ILookO
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void printHook(RenderGuiEvent.Pre event, Level level, BlockPos pos) {
 
         BlockEntity be = level.getBlockEntity(pos);

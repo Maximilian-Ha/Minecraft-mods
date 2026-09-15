@@ -1,5 +1,8 @@
 package com.hbm.blocks.bomb;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import com.hbm.blockentity.BlockEntityNT;
 import com.hbm.blockentity.ITickable;
 import com.hbm.blockentity.NtmBlockEntityTypes;
@@ -104,6 +107,7 @@ public class VolcanoBlock extends MultiBlock implements EntityBlock, ICustomBloc
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void registerModel(BlockStateProvider provider, ResourceLocation modelLocation) {
         provider.simpleBlockWithItem(this, provider.cubeAll(this));
     }

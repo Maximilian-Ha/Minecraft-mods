@@ -1,5 +1,8 @@
 package com.hbm.items.tools;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import com.hbm.blocks.ITooltipProvider;
 import com.hbm.entity.logic.Bomber;
 import com.hbm.inventory.MetaHelper;
@@ -86,6 +89,7 @@ public class BombCallerItem extends Item implements IMetaItem, ICustomItemModelR
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void registerItemModel(ItemModelProvider provider, ResourceLocation modelLocation) {
         provider.basicItem(this);
     }

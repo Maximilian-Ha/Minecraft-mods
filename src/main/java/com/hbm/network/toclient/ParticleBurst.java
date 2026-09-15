@@ -1,5 +1,8 @@
 package com.hbm.network.toclient;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import com.hbm.main.NuclearTechMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -33,6 +36,7 @@ public record ParticleBurst(BlockPos pos, Block block) implements CustomPacketPa
                 }
             };
 
+    @OnlyIn(Dist.CLIENT)
     public static void handleClient(ParticleBurst packet, IPayloadContext context) {
         context.enqueueWork(() -> {
             BlockState state = packet.block().defaultBlockState();
