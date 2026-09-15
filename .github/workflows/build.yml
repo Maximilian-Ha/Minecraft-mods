@@ -77,6 +77,25 @@ jobs:
       - name: Run data generation (also exercises mod construction and all registries)
         run: ./gradlew runData
 
+      # src/main/resources und src/generated/resources sind beide Quellen desselben
+      # Ressourcenpfads. Liegt eine Datei in beiden, gewinnt beim Packen eine von ihnen, und
+      # welche, laesst sich nicht steuern. Hier wird das gemessen, statt geraten: der Vergleich
+      # braucht die erzeugten Dateien und steht deshalb hinter runData, nicht bei den Toren.
+      - name: Check for duplicate resource paths
+        run: |
+          comm -12 \
+            <(cd src/main/resources && find . -type f | sort) \
+            <(cd src/generated/resources && find . -type f | sort) > doppelte-pfade.txt
+          if [ -s doppelte-pfade.txt ]; then
+            echo "Diese Dateien liegen handgeschrieben UND erzeugt vor:"
+            cat doppelte-pfade.txt
+            echo
+            echo "Die handgeschriebene Fassung gehoert geloescht, sofern der Erzeuger sie"
+            echo "vollstaendig abdeckt -- sonst muss der Erzeuger sie abbilden."
+            exit 1
+          fi
+          echo "OK - keine Datei liegt doppelt vor."
+
       - name: Build with Gradle
         run: ./gradlew build
 
