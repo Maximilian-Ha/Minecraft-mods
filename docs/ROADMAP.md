@@ -2273,3 +2273,96 @@ Beim Abgleich der 498 registrierten Blöcke gegen den Blockzustandsgeber fielen
 
 *Abweichung:* das Original hat für die Funkfackeln je ein Bild für an und aus. Der Block des
 Ports führt nur `FACING` und keinen Leuchtzustand, deshalb steht dort das Bild für „aus".
+
+## Der zweite bis fünfte Datenlauf: was zwei Quellverzeichnisse anrichten
+
+Die folgenden Läufe brachten eine Reihe, die sich rückblickend als **eine einzige Ursache** lesen
+lässt: `runData` schreibt nach `src/generated/resources`, und dieses Verzeichnis war bis dahin
+leer. Alles, was der Datengenerator erzeugt, lag zugleich handgeschrieben unter
+`src/main/resources` — und beide Verzeichnisse sind Quellen desselben Ressourcenpfads.
+
+| Lauf | Abbruch bei | Ursache |
+|---|---|---|
+| 2 | `Texture hbmsntm:item/reinforced_glass_pane` | `basicItem` steht auch im **Block**erzeuger |
+| 3 | `Texture hbmsntm:block/struct_icf` | Blocktexturen werden ebenso still abgeleitet |
+| 4 | `Cannot set models for a state ...` | die PWR-Steuerung war **zweimal** beschrieben |
+
+### Was das Modell-Tor nicht sah
+
+Das zehnte Tor prüfte nur `NtmItemModelProvider`. `basicItem` steht aber auch im Blockerzeuger —
+für Blöcke, deren Gegenstandsform ein flaches Bild bekommt (Scheibe, Stahlleiter, Verlieskette,
+Schmalspurschiene), teils hinter einer Hilfsfunktion, die den Block als Parameter nimmt. Alle vier
+haben in 1.7.10 nur eine Blocktextur; die Gegenstandsform wurde dort flach aus ihr gezeichnet, also
+übernimmt der Port genau diese vier Bilder in den `item`-Ordner.
+
+Dieselbe Blindheit auf der Blockseite: `simpleCubeAllBlock` und Geschwister leiten
+`block/<name>.png` ab, teils mit Endungen `_side`, `_bottom`, `_top`. Dort fehlte `struct_icf` —
+der Block heißt upstream `struct_icf_core` und trägt dort die Textur gleichen Namens; der Port hat
+den Block übernommen, das Bild nicht.
+
+Und ein drittes Mal: `EnumMultiItem` mit `multiTexture` leitet **pro Aufzählungswert** eine Textur
+ab. Die erste Messung meldete dort 27 Fehlstellen — alle falsch: `ConserveItem` überschreibt
+`registerItemModel` und zeigt auf `canned_<wert>`, nicht auf `canned_conserve.<wert>`. Das Tor liest
+die Vorlage jetzt aus dem Quelltext, statt sie zu raten. Beim Bauen fiel außerdem auf, dass sein
+Feldmuster **mindestens drei Zeichen** verlangte: `C4` war unsichtbar.
+
+Das Tor deckt jetzt 798 `basicItem`-Aufrufe, 216 abgeleitete Meta- und 322 abgeleitete
+Blocktexturen ab. Jede der drei Formen ist einzeln gemessen: null Funde sauber, genau ein Fund je
+entfernter Datei.
+
+### 149 Dateien lagen doppelt
+
+Der Reihe nach durchgezählt, was der Erzeuger schreibt und was daneben handgeschrieben liegt:
+
+| Art | doppelt | bleibt |
+|---|---|---|
+| `sounds.json` | 1 | – |
+| Beutetabellen | 90 | `c4`, `taint` → beide ebenfalls überholt, siehe unten |
+| Rezepte + Fortschritte | 29 | – |
+| Tag-Dateien | 19 | `actually_stone`, `ground`, `plants`, `no_impact` |
+| Schadensarten | 21 | – |
+| Modelle und Blockzustände | 7 | die Gießerei |
+| Weltgenerierung | 0 | alle 90 |
+
+Jede einzelne ist vor dem Löschen geprüft worden. Die Beutetabellen etwa: 14 der 94
+handgeschriebenen tragen Sonderverhalten (Stufen, Schnee statt Holz, Scheren, Erzbonus) — der
+Erzeuger bildet alle 14 nach. `c4.json` war beim ersten Durchgang nur deshalb stehen geblieben,
+weil das Feld `C4` durch dasselbe Dreizeichen-Muster fiel; `taint.json` ist wirkungslos, denn der
+Block trägt `noLootTable()`.
+
+### Das Ton-Tor maß die falsche Datei
+
+Der auffälligste Fund: die handgeschriebene `sounds.json` führte 72 Ereignisse, der Erzeuger 160.
+Ihre 53 gemeinsamen Einträge stimmen Datei für Datei überein; die 19 Sirenen der Runde 127 gab es
+nur in der Handdatei. Damit war auch die **Baseline der 107 stummen Ereignisse falsch**: sie maß
+die Handdatei, während der Erzeuger sie längst abdeckte.
+
+Die 19 Sirenen stehen jetzt im Erzeuger, die Handdatei ist fort, und alle **179 registrierten
+Ereignisse** haben einen Eintrag. `tools/sound-baseline.txt` entfällt. Das Tor liest jetzt den
+Erzeuger und streicht vorher die Kommentare weg — ein auskommentierter Eintrag ist gültiges Java
+und sah bisher aus wie ein vorhandener. Genau so hatte sich `FT_Toxin` drei Runden lang versteckt.
+
+### Das elfte Tor: `state-check`
+
+Der vierte Abbruch war die PWR-Steuerung: `simpleBlockWithItem` setzt bereits eine Variante, und
+der folgende `getVariantBuilder` beschrieb denselben Block ein zweites Mal. Das kostet einen vollen
+CI-Lauf, denn es zeigt sich erst, wenn die Datengenerierung an dieser Stelle ankommt.
+
+`tools/state-check.sh` misst beide Richtungen, und zwar bewusst unterschiedlich scharf:
+
+* **Doppelte Beschreibung** streng, über eine Liste zustandsdefinierender Aufrufe. Nur so fällt der
+  Absturz auf.
+* **Gar keine Beschreibung** grob — gefragt wird nur, ob der Block im Erzeuger überhaupt vorkommt,
+  eine eigene Modellanmeldung trägt oder eine handgeschriebene Datei hat. Eine strenge Zählung
+  meldete hier 115 Blöcke, die der Erzeuger in eigenen Methoden über Zwischenvariablen beschreibt.
+
+Gefunden hat die grobe Hälfte sofort etwas: **die vier Flüssigkeitsblöcke** (Corium, Schlamm,
+Radiolava, vulkanische Lava) standen in keiner Blockstate. Ihr Aussehen zeichnet der
+Fluid-Renderer, aber die Partikeltextur holt sich das Spiel aus der Blockstate — ohne sie wäre dort
+das schwarz-violette Ersatzmuster gestoben.
+
+### Was daraus folgt
+
+`src/generated/resources` ist **nicht versioniert**. Eine .jar ohne vorherigen `runData`-Lauf ist
+damit unvollständig — es fehlen Blockzustände, Modelle, Sprachdatei, Beutetabellen, Rezepte und die
+Tonliste. `docs/BUILDING.md` sagt das jetzt deutlich.
