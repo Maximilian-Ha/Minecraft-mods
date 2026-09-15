@@ -159,6 +159,15 @@ jobs:
             echo "     Abbruch nach Zeitablauf hat gegriffen.)"
           fi
 
+          # Nicht toedlich, aber wissenswert: woran der Mod sich waehrend des Laufs gestoert hat.
+          # Das faellt sonst niemandem auf, weil der Schritt gruen ist.
+          FEHLER=$(grep -c '/ERROR\]' server.log || true)
+          echo "Fehlerzeilen im Protokoll: $FEHLER"
+          if [ "$FEHLER" -gt 0 ]; then
+            echo "Die ersten zehn:"
+            grep -m 10 '/ERROR\]' server.log | cut -c1-200
+          fi
+
       # Das Protokoll laeuft mit logLevel DEBUG und wird schnell hunderte Megabyte gross --
       # hochgeladen wird deshalb nur das Ende, und alles, was nach einem Fehler aussieht.
       - name: Upload server log

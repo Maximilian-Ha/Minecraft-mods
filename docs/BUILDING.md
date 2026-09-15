@@ -45,6 +45,17 @@ Vor dem Packen einer benutzbaren JAR also einmal:
 ./gradlew runData && ./gradlew build
 ```
 
+Und wer wissen will, ob der Mod auch **läuft**, startet danach einen Server:
+
+```bash
+mkdir -p run/server && echo "eula=true" > run/server/eula.txt
+./gradlew runServer            # "stop" auf der Konsole beendet ihn wieder
+```
+
+Das ist die schärfste Prüfung, die ohne Bildschirm möglich ist: der Server liest die erzeugten
+Daten zurück, führt `FMLCommonSetupEvent` aus — den die Datengenerierung überspringt —, erzeugt
+eine Welt und tickt sie. CI macht genau das nach jedem Bau.
+
 Der erste `runData`-Lauf hat eine Altlast der Ausgangsbasis sichtbar gemacht: 149 Dateien
 lagen doppelt vor — handgeschrieben unter `src/main/resources` und zugleich vom
 Datengenerator erzeugt. Zwei Quellverzeichnisse liefern dann denselben Pfad, und beim Packen

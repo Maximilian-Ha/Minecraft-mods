@@ -2474,3 +2474,75 @@ sind zwei verschiedene Aussagen**, und zwischen ihnen lagen hier zehn Abbrüche.
 
 Die Tore sind von zehn auf vierzehn gewachsen; jedes einzelne ist an einem echten Absturz
 gemessen worden, nicht an einer Vermutung.
+
+## Der Server läuft
+
+`runServer` gehört jetzt zur Kette, und der dritte Anlauf ist durchgekommen:
+
+```
+[21:35:23] [Server thread/INFO] [minecraft/DedicatedServer]: Done (15.548s)! For help, type "help"
+[21:38:39] [Server thread/INFO] [minecraft/MinecraftServer]: Stopping the server
+[21:38:40] ThreadedAnvilChunkStorage: All dimensions are saved
+OK - Welt geladen, Server sauber beendet.
+```
+
+Der Server hat eine Welt **erzeugt** (samt der 30 Erzvorkommen aus den handgeschriebenen
+Weltgenerations-Dateien), sie drei Minuten lang **getickt** und sich sauber beendet. Damit ist
+zum ersten Mal auch `FMLCommonSetupEvent` gelaufen — der ganze Block mit Fluid-Neuladen,
+Rezept-Serialisierern, `FalloutConfigJSON`, Gefahren- und Hazmat-Registern, Geschütz-Munition
+und der Brennstofftafel des Radiothermalgenerators. Die Datengenerierung führt ihn **nicht** aus;
+er war bis hierher der größte ungetestete Block des Ports.
+
+### Der Mod lief auf keinem Server — 65 Methoden
+
+```
+RuntimeException: Attempted to load class net/minecraft/client/player/LocalPlayer
+for invalid dist DEDICATED_SERVER
+  at com.hbm.blocks.NtmBlocks.lambda$static$486(NtmBlocks.java:801)
+```
+
+Ein dedizierter Server hat die Clientklassen nicht, und **es reicht, dass eine Methode da ist** —
+ausgeführt werden muss sie nicht. Die Prüfung der Klasse lädt die Typen ihrer Zuweisungen, und
+über `Player player = Minecraft.getInstance().player` fällt der Dist-Cleaner. Es traf den
+Umbaublock und das Waffen-Grundstück, und beide rissen die ganze Registrierung mit.
+
+Nachgemessen: **65 Methoden in 63 Dateien.** 40 × `printHook` der Blockeinblendung, zehnmal die
+Modellanmeldung der Datengeneratoren, drei Fusions-Blockentitäten, drei Pakete an den Client,
+Rüstung, Werkzeugtafel, Einzelfälle. Alle tragen jetzt `@OnlyIn(Dist.CLIENT)`.
+
+**Eine Stelle war ausdrücklich kein Fall dafür:** `Library.getChunkForBlockTrace` läuft auf beiden
+Seiten — der Strahlengang wird auf dem Server genauso gebraucht wie beim Zeichnen. Gekennzeichnet
+wäre sie dort verschwunden und beim ersten Schuss mit `NoSuchMethodError` aufgeschlagen. Dort ist
+stattdessen die Clientklasse aus dem Rumpf verschwunden; `getChunk(...)` steht schon in
+`ChunkSource`.
+
+### Und einer, bei dem die Kennzeichnung selbst das Problem war
+
+```
+NoSuchMethodError: 'void VanillaExplosionLike.handleClient(VanillaExplosionLike, IPayloadContext)'
+  at NtmNetwork.registerPackets(NtmNetwork.java:25)
+```
+
+`NtmNetwork` verweist mit einer **Methodenreferenz** auf `handleClient`, und die löst auch der
+Server auf — er muss die Pakete kennen, um sie senden zu können. Die gekennzeichnete Methode war
+dort aber entfernt. Die drei Pakete behalten sie deshalb und rufen nur noch weiter: was der Client
+tut, steht in `ClientPacketEffects`. Der Aufruf steht in einem Lambda und nennt ausschließlich
+gemeinsame Typen, also braucht die Prüfung die Clientklasse nicht zu laden — geladen wird sie
+erst, wenn jemand das Lambda ausführt.
+
+**Das fünfzehnte Tor, `dist-check`**, hält die Regel fest. Seine beiden Ausnahmen sind hergeleitet
+statt gepflegt: Klassen aus dem `client`-Abschnitt der Mixin-Datei, und Klassen, die außer sich
+selbst nur in Clientdateien vorkommen. Gemessen: 944 angesehene Methoden, null Funde; mit einer
+entfernten Kennzeichnung genau ein Fund.
+
+### Was jetzt belegt ist
+
+| belegt | nicht belegt |
+|---|---|
+| Mod-Konstruktor, alle Registrierungen, alle Datenerzeuger | dass im Spiel etwas richtig **aussieht** |
+| `commonSetup` — Rezepte, Register, Konfigurationen | dass die Blockentitäten-Renderer zeichnen |
+| Eine Welt entsteht, wird getickt und gespeichert | dass Maschinen **rechnen** wie das Original |
+| Die Erzvorkommen des Ports erzeugen sich | dass der Client startet (kein Bildschirm in CI) |
+| Die .jar lässt sich packen | |
+
+Elf Läufe, elf Ursachen — und keine davon hätte ein Übersetzungsfehler sein können.
