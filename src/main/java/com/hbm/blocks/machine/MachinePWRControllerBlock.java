@@ -197,7 +197,7 @@ public class MachinePWRControllerBlock extends BaseEntityBlock {
             if(isValidCore(block)) {
 
                 assembly.put(pos, block);
-                if(block == NtmBlocks.PWR_FUEL.get()) fuelRods.put(pos, block);
+                if(block == NtmBlocks.PWR_FUEL_CHANNEL.get()) fuelRods.put(pos, block);
 
                 for(Direction dir : Direction.values()) open.add(pos.relative(dir));
                 continue;
@@ -217,7 +217,7 @@ public class MachinePWRControllerBlock extends BaseEntityBlock {
     }
 
     private static boolean isValidCore(Block block) {
-        return block == NtmBlocks.PWR_FUEL.get()
+        return block == NtmBlocks.PWR_FUEL_CHANNEL.get()
                 || block == NtmBlocks.PWR_CONTROL.get()
                 || block == NtmBlocks.PWR_CHANNEL.get()
                 || block == NtmBlocks.PWR_HEATEX.get()

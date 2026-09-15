@@ -134,7 +134,7 @@ public class MachinePWRControllerBlockEntity extends MachineBaseBlockEntity impl
 
             Block block = entry.getValue();
 
-            if(block == NtmBlocks.PWR_FUEL.get()) this.rodCount++;
+            if(block == NtmBlocks.PWR_FUEL_CHANNEL.get()) this.rodCount++;
             if(block == NtmBlocks.PWR_HEATEX.get()) this.heatexCount++;
             if(block == NtmBlocks.PWR_CHANNEL.get()) this.channelCount++;
             if(block == NtmBlocks.PWR_HEATSINK.get()) this.heatsinkCount++;
@@ -164,7 +164,7 @@ public class MachinePWRControllerBlockEntity extends MachineBaseBlockEntity impl
 
                     if(atPos == NtmBlocks.PWR_CONTROL.get()) controlled = true;
 
-                    if(atPos == NtmBlocks.PWR_FUEL.get()) {
+                    if(atPos == NtmBlocks.PWR_FUEL_CHANNEL.get()) {
                         if(controlled) connectionsControlledDouble++;
                         else connectionsDouble++;
                         break;

@@ -18,6 +18,11 @@
 #   - Schluessel und Dateiverweise in sounds.json
 #   - die Dateinamen unter assets/hbmsntm (Texturen, Modelle, Tondateien)
 #
+# AUSSERDEM: doppelt vergebene Registriernamen. Ein Block bekommt auf 1.21 ein BlockItem im
+# SELBEN Verzeichnis wie jeder andere Gegenstand -- auf 1.7.10 waren das noch zwei getrennte.
+# "pwr_fuel" gab es im Original als Block UND als Gegenstand; im Port brach NeoForge dafuer mit
+# "IllegalArgumentException: Duplicate registration pwr_fuel" beim Start ab.
+#
 # GEMESSEN: ueber den ganzen Baum null Funde. Mit "alarm.airRaid" wieder eingesetzt genau ein
 # Fund je betroffener Stelle, der Datei, Name und das stoerende Zeichen benennt.
 
@@ -82,11 +87,42 @@ for dirpath, _, files in os.walk(assets):
         if rel_asset.startswith('lang/'): continue
         check(rel_asset, os.path.relpath(p, root), "Dateiname")
 
-print("Pruefe ResourceLocation-Namen ... %d geprueft" % checked)
+# 4. Doppelte Registriernamen. Bloecke und Gegenstaende teilen sich auf 1.21 das
+#    Gegenstandsverzeichnis, also darf kein Blockname einen Gegenstandsnamen wiederholen.
+import collections
 
-if not findings:
-    print("OK - jeder Name besteht nur aus [a-z0-9/._-].")
+def names_in(path, pattern):
+    f = os.path.join(java, path)
+    if not os.path.isfile(f): return []
+    return re.findall(pattern, open(f, encoding='utf-8').read())
+
+items  = names_in('com/hbm/items/NtmItems.java',  r'ITEMS\.register\(\s*"([^"]+)"')
+blocks = names_in('com/hbm/blocks/NtmBlocks.java', r'(?<![A-Za-z0-9_])register\(\s*"([^"]+)"')
+
+dups = []
+for label, names in (("NtmItems", items), ("NtmBlocks", blocks)):
+    for name, c in collections.Counter(names).items():
+        if c > 1:
+            dups.append("%s vergibt \"%s\" %dmal" % (label, name, c))
+for name in sorted(set(items) & set(blocks)):
+    dups.append("\"%s\" ist Gegenstand UND Block -- das BlockItem kollidiert mit dem Gegenstand" % name)
+
+print("Pruefe ResourceLocation-Namen ... %d geprueft, %d Gegenstaende + %d Bloecke auf Dopplung"
+      % (checked, len(items), len(blocks)))
+
+if not findings and not dups:
+    print("OK - jeder Name besteht nur aus [a-z0-9/._-], keiner doppelt vergeben.")
     sys.exit(0)
+
+if dups:
+    print("  DOPPELT VERGEBEN: %d" % len(dups))
+    for d in dups:
+        print("  " + d)
+    print()
+    print("NeoForge bricht dafuer beim Start mit \"Duplicate registration\" ab.")
+    if not findings:
+        sys.exit(1)
+    print()
 
 print("  AUFFAELLIG: %d" % len(findings))
 for where, what, value, bad in findings:

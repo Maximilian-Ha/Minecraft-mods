@@ -2162,3 +2162,43 @@ Datei, Name und dem störenden Zeichen. Läuft ab jetzt in CI mit.
 Auch diese Lücke ist rein textlich entscheidbar — deshalb gibt es dafür ein Tor. Die Reihenfolge
 der Befunde ist übrigens kein Zufall: **jeder Absturz beim Start deckt genau einen Fehler auf**,
 weil der Mod danach abbricht. Erst der nächste Start zeigt den nächsten.
+
+## Der dritte Start: ein Name, zwei Verzeichnisse
+
+```
+IllegalArgumentException: Duplicate registration pwr_fuel
+  at net.neoforged.neoforge.registries.DeferredRegister$Items.register
+  at com.hbm.blocks.NtmBlocks.<clinit>(NtmBlocks.java:915)
+```
+
+Im Original gibt es `pwr_fuel` **zweimal**: als Block (`BlockPillarPWR`, der Brennstoffkanal im
+Reaktorbau) und als Gegenstand (`ItemPWRFuel`, der Brennstab). Auf 1.7.10 war das erlaubt, weil
+Blöcke und Gegenstände getrennte Verzeichnisse hatten. Auf 1.21 bekommt jeder Block ein
+`BlockItem` im **selben** Verzeichnis wie jeder andere Gegenstand — der Name ist dann doppelt
+vergeben, und NeoForge bricht beim Start ab.
+
+Der Port hat beide Namen unverändert übernommen. Gemessen: über 1034 Gegenstände und 498 Blöcke
+ist das die **einzige** Kollision, und innerhalb der beiden Listen gibt es keine Dopplung.
+
+**Aufgelöst über die Anzeige**, die den Unterschied längst benennt: der Block heißt „PWR Fuel
+Channel" (Geschwister: „PWR Control Rod Channel", „PWR Coolant Channel"), das Item „… PWR Fuel
+Rod". Der Block heißt jetzt `pwr_fuel_channel`, der Brennstab behält `pwr_fuel` wie im Original
+und wie seine Geschwister `pwr_fuel_hot` und `pwr_fuel_depleted`. Das Feld heißt mit, denn
+`NtmBlocks.PWR_FUEL` neben `NtmItems.PWR_FUEL` war genau die Verwechslung, die den Fehler
+erzeugt hat.
+
+**`location-check.sh` prüft das ab jetzt mit**: doppelte Namen innerhalb einer Liste und
+Kollisionen zwischen Blockname und Gegenstandsname. Gemessen: null Funde; mit `pwr_fuel` wieder
+eingesetzt genau ein Fund, der die Kollision benennt.
+
+### Die drei Startabstürze im Rückblick
+
+| # | Fehler | aus Runde | warum kein Tor ihn vorher sah |
+|---|---|---|---|
+| 1 | `FT_Toxin` nicht registriert | 14 | die auskommentierte Zeile ist gültiges Java |
+| 2 | `alarm.airRaid` in camelCase | 127 | für den Compiler ist ein String ein String |
+| 3 | `pwr_fuel` doppelt vergeben | früh | auf 1.7.10 war es erlaubt |
+
+Alle drei sind **Portierungsfallen**, keine Flüchtigkeitsfehler: jeder war auf 1.7.10 korrekt und
+ist es auf 1.21 nicht mehr. Alle drei sind jetzt durch ein Tor abgedeckt, und alle drei Tore sind
+gemessen — null Funde sauber, genau ein Fund mit wieder eingesetztem Fehler.

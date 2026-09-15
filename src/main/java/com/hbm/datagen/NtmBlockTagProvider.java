@@ -396,7 +396,7 @@ public class NtmBlockTagProvider extends BlockTagsProvider {
                         NtmBlocks.PWR_HEATEX.get(),
                         NtmBlocks.PWR_HEATSINK.get(),
                         NtmBlocks.PWR_NEUTRON_SOURCE.get(),
-                        NtmBlocks.PWR_FUEL.get(),
+                        NtmBlocks.PWR_FUEL_CHANNEL.get(),
                         NtmBlocks.PWR_CONTROL.get(),
                         NtmBlocks.PWR_CHANNEL.get(),
                         NtmBlocks.PWR_BLOCK.get(),

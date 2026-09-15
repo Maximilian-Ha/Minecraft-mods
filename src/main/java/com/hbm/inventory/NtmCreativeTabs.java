@@ -1264,7 +1264,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.PWR_HEATEX);
                         output.accept(NtmBlocks.PWR_HEATSINK);
                         output.accept(NtmBlocks.PWR_NEUTRON_SOURCE);
-                        output.accept(NtmBlocks.PWR_FUEL);
+                        output.accept(NtmBlocks.PWR_FUEL_CHANNEL);
                         output.accept(NtmBlocks.PWR_CONTROL);
                         output.accept(NtmBlocks.PWR_CHANNEL);
 

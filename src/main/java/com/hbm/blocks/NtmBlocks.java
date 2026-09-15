@@ -912,7 +912,13 @@ public class NtmBlocks {
     public static final DeferredBlock<Block> PWR_HEATEX = register("pwr_heatex", () -> new Block(pwrPart()));
     public static final DeferredBlock<Block> PWR_HEATSINK = register("pwr_heatsink", () -> new Block(pwrPart()));
     public static final DeferredBlock<Block> PWR_NEUTRON_SOURCE = register("pwr_neutron_source", () -> new Block(pwrPart()));
-    public static final DeferredBlock<Block> PWR_FUEL = register("pwr_fuel", () -> new Block(pwrPart()));
+    /* HIER STAND EIN ABSTURZ: Block und Gegenstand hiessen beide "pwr_fuel". Auf 1.7.10 ging
+     * das, weil Bloecke und Gegenstaende getrennte Verzeichnisse hatten; auf 1.21 liegt das
+     * BlockItem im selben Verzeichnis wie jeder andere Gegenstand, und NeoForge bricht mit
+     * "Duplicate registration pwr_fuel" ab. Der Block heisst jetzt so, wie seine Anzeige ihn
+     * ohnehin nennt -- "PWR Fuel Channel" --, passend zu pwr_control (Control Rod Channel) und
+     * pwr_channel (Coolant Channel). Der Brennstab behaelt pwr_fuel. */
+    public static final DeferredBlock<Block> PWR_FUEL_CHANNEL = register("pwr_fuel_channel", () -> new Block(pwrPart()));
     public static final DeferredBlock<Block> PWR_CONTROL = register("pwr_control", () -> new Block(pwrPart()));
     public static final DeferredBlock<Block> PWR_CHANNEL = register("pwr_channel", () -> new Block(pwrPart()));
 

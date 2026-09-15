@@ -1325,7 +1325,7 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.simpleCubeAllBlock(NtmBlocks.PWR_NEUTRON_SOURCE);
 
         /* Die drei Saeulenbauteile: Deckel und Boden anders als die Seiten. */
-        this.pwrColumn(NtmBlocks.PWR_FUEL, "pwr_fuel");
+        this.pwrColumn(NtmBlocks.PWR_FUEL_CHANNEL, "pwr_fuel");
         this.pwrColumn(NtmBlocks.PWR_CONTROL, "pwr_control");
         this.pwrColumn(NtmBlocks.PWR_CHANNEL, "pwr_channel");
 

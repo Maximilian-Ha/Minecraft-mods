@@ -584,7 +584,7 @@ public class NtmBlockLootTableProvider extends BlockLootSubProvider {
         this.dropSelf(NtmBlocks.PWR_HEATEX.get());
         this.dropSelf(NtmBlocks.PWR_HEATSINK.get());
         this.dropSelf(NtmBlocks.PWR_NEUTRON_SOURCE.get());
-        this.dropSelf(NtmBlocks.PWR_FUEL.get());
+        this.dropSelf(NtmBlocks.PWR_FUEL_CHANNEL.get());
         this.dropSelf(NtmBlocks.PWR_CONTROL.get());
         this.dropSelf(NtmBlocks.PWR_CHANNEL.get());
         this.dropSelf(NtmBlocks.STRUCT_WATZ_CORE.get());

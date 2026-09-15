@@ -2757,7 +2757,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.PWR_HEATEX, "PWR Heat Exchanger");
         this.add(NtmBlocks.PWR_HEATSINK, "PWR Heatsink");
         this.add(NtmBlocks.PWR_NEUTRON_SOURCE, "PWR Neutron Source");
-        this.add(NtmBlocks.PWR_FUEL, "PWR Fuel Channel");
+        this.add(NtmBlocks.PWR_FUEL_CHANNEL, "PWR Fuel Channel");
         this.add(NtmBlocks.PWR_CONTROL, "PWR Control Rod Channel");
         this.add(NtmBlocks.PWR_CHANNEL, "PWR Coolant Channel");
         this.add(NtmBlocks.PWR_BLOCK, "PWR Structure");
