@@ -3528,6 +3528,40 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("max", "max");
 
         this.add("autoswitch", "Part of auto switch group \"%s\"$Recipe changes based on first ingredient");
+
+        /* Nachgetragen: diese Bloecke und Gegenstaende waren registriert, hatten aber keinen
+         * Namen -- im Spiel haette dort der rohe Schluessel gestanden. Die Bezeichnungen
+         * stammen aus der en_US.lang des Originals; wo dort keine steht, ist sie hier neu. */
+        this.add(NtmBlocks.ORE_SCHRABIDIUM, "Schrabidium Ore");
+        this.add(NtmBlocks.ORE_TIKITE, "Trixite");
+        this.add(NtmBlocks.ORE_NETHER_URANIUM, "Nether Uranium Ore");
+        this.add(NtmBlocks.ORE_NETHER_PLUTONIUM, "Nether Plutonium Ore");
+        this.add(NtmBlocks.ORE_NETHER_SCHRABIDIUM, "Nether Schrabidium Ore");
+        this.add(NtmBlocks.ORE_NETHER_URANIUM_SCORCHED, "Scorched Nether Uranium Ore");
+        this.add(NtmBlocks.ORE_GNEISS_URANIUM, "Schist Uranium Ore");
+        this.add(NtmBlocks.ORE_GNEISS_SCHRABIDIUM, "Schist Schrabidium Ore");
+        this.add(NtmBlocks.ORE_GNEISS_URANIUM_SCORCHED, "Scorched Schist Uranium Ore");
+        this.add(NtmBlocks.BLOCK_SCRAP, "Block of Scrap");
+        this.add(NtmBlocks.REACTOR_ZIRNOX, "ZIRNOX Nuclear Reactor");
+        this.add(NtmBlocks.ZIRNOX_DESTROYED, "Destroyed ZIRNOX");
+        this.add(NtmBlocks.RADIO_TORCH_SENDER, "Redstone-over-Radio Transmitter");
+        this.add(NtmBlocks.RADIO_TORCH_RECEIVER, "Redstone-over-Radio Receiver");
+
+        this.add(NtmItems.ROD_ZIRNOX_EMPTY, "Empty ZIRNOX Rod");
+        this.add(NtmItems.ROD_ZIRNOX_TRITIUM, "ZIRNOX Tritium Rod");
+        this.add(NtmItems.ROD_ZIRNOX_NATURAL_URANIUM_FUEL_DEPLETED, "Depleted ZIRNOX Natural Uranium Fuel Rod");
+        this.add(NtmItems.ROD_ZIRNOX_URANIUM_FUEL_DEPLETED, "Depleted ZIRNOX Uranium Fuel Rod");
+        this.add(NtmItems.ROD_ZIRNOX_U233_FUEL_DEPLETED, "Depleted ZIRNOX Uranium-233 Fuel Rod");
+        this.add(NtmItems.ROD_ZIRNOX_U235_FUEL_DEPLETED, "Depleted ZIRNOX Uranium-235 Fuel Rod");
+        this.add(NtmItems.ROD_ZIRNOX_LES_FUEL_DEPLETED, "Depleted ZIRNOX LES Fuel Rod");
+        this.add(NtmItems.ROD_ZIRNOX_MOX_FUEL_DEPLETED, "Depleted ZIRNOX MOX Fuel Rod");
+        this.add(NtmItems.ROD_ZIRNOX_PLUTONIUM_FUEL_DEPLETED, "Depleted ZIRNOX Plutonium Fuel Rod");
+        this.add(NtmItems.ROD_ZIRNOX_THORIUM_FUEL_DEPLETED, "Depleted ZIRNOX Thorium Fuel Rod");
+        this.add(NtmItems.ROD_ZIRNOX_ZFB_MOX_DEPLETED, "Depleted ZIRNOX ZFB MOX Fuel Rod");
+        this.add(NtmItems.NO9, "Mining Helmet");
+        this.add(NtmItems.PLAN_C, "Plan C");
+        this.add(NtmItems.CASSETTE, "Cassette");
+        this.add(NtmItems.FLUID_ICON, "Fluid");
     }
 
     // HELPERS //

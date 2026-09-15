@@ -26,8 +26,15 @@
 # Was es nicht aufloesen kann, meldet es als blinde Stelle und faellt durch -- ein Tor, das
 # schweigt, wo es nicht hinsieht, ist schlimmer als keines.
 #
-# GEMESSEN: 3324 Schluessel, null Dopplungen, null blinde Stellen. Mit einer wieder
-# eingesetzten zweiten Zeile fuer wiring_tool.desc genau ein Fund.
+# Zweitens prueft es die Gegenrichtung: ein registrierter Block oder Gegenstand OHNE
+# Namenszeile zeigt im Spiel den rohen Schluessel. Das ist kein Absturz und faellt deshalb
+# nirgends auf -- so gefunden wurden 28 Faelle, darunter neun Erze, der ZIRNOX und die beiden
+# Funkfackeln. Die Ausnahmen leitet das Tor aus dem Quelltext her: multiName haengt den
+# Aufzaehlungswert an, eine Klasse mit eigenem getDescriptionId bestimmt ihren Schluessel selbst.
+#
+# GEMESSEN: 3353 Schluessel, null Dopplungen, null fehlende Namen, null blinde Stellen. Mit
+# einer wieder eingesetzten zweiten Zeile fuer wiring_tool.desc genau ein Fund, mit geloeschter
+# Namenszeile fuer ore_tikite genau einer.
 
 set -uo pipefail
 cd "$(dirname "$0")/.."
@@ -222,14 +229,54 @@ for m in re.finditer(r'this\.(add|addDamage|addDamagePlayer)\s*\(', rumpf):
 
     schluessel.append(basis)
 
+
+# ---------------------------------------------------------------- Teil 2: fehlende Namen
+
+# Ein registrierter Block oder Gegenstand ohne Namenszeile zeigt im Spiel den rohen Schluessel
+# ("block.hbmsntm.ore_tikite"). Das ist kein Absturz und faellt deshalb nirgends auf -- gefunden
+# wurden so 28 Faelle, darunter neun Erze und der ZIRNOX.
+#
+# Drei Ausnahmen sind KEIN Fund, und sie werden aus dem Quelltext hergeleitet, nicht gepflegt:
+# ein EnumMultiItem mit multiName haengt den Aufzaehlungswert an, eine Klasse mit eigenem
+# getDescriptionId bestimmt ihren Schluessel selbst.
+import os, glob as _glob
+
+dateien = {os.path.basename(p)[:-5]: p for p in _glob.glob('src/main/java/**/*.java', recursive=True)}
+genannt_i = set(re.findall(r'add\(\s*NtmItems\.([A-Z][A-Z0-9_]*)\s*[,)]', rumpf))
+genannt_b = set(re.findall(r'add\(\s*NtmBlocks\.([A-Z][A-Z0-9_]*)\s*[,)]', rumpf))
+literale = set(re.findall(r'add\(\s*"((?:item|block)\.hbmsntm\.[a-z0-9_.]+)"', rumpf))
+
+def ohne_namen(quelldatei, praefix, genannt):
+    quelle = entkommentieren(open(quelldatei, encoding='utf-8').read())
+    offen = []
+    for m in re.finditer(r'\b([A-Z][A-Z0-9_]+)\s*=\s*([^;]{0,500}?);', quelle, re.S):
+        feld, roh = m.group(1), m.group(2)
+        rn = re.search(r'\bregister\w*\(\s*"([^"]+)"', roh)
+        if not rn: continue
+        name = rn.group(1)
+        if feld in genannt or (praefix + name) in literale: continue
+        kl = re.search(r'new\s+([A-Za-z0-9_]+)\s*\(', roh)
+        kl = kl.group(1) if kl else None
+        if kl == 'EnumMultiItem' and re.search(r'EnumMultiItem\([^)]*,\s*true\s*,', roh): continue
+        if kl and kl in dateien:
+            src = open(dateien[kl], encoding='utf-8').read()
+            if re.search(r'super\(\s*[^,]+,\s*\w+\.class\s*,\s*true\s*,', src): continue
+            if 'getDescriptionId' in src: continue
+        offen.append((feld, praefix + name))
+    return offen
+
+namenlos = ohne_namen('src/main/java/com/hbm/items/NtmItems.java', 'item.hbmsntm.', genannt_i)
+namenlos += ohne_namen('src/main/java/com/hbm/blocks/NtmBlocks.java', 'block.hbmsntm.', genannt_b)
+
 zaehler = collections.Counter(schluessel)
 doppelt = sorted(k for k, v in zaehler.items() if v > 1)
 
 print("Pruefe Uebersetzungsschluessel ... %d Zeilen, %d verschiedene Schluessel" % (len(schluessel), len(zaehler)))
 print("  doppelt vergeben : %d" % len(doppelt))
+print("  ohne Namenszeile : %d" % len(namenlos))
 print("  blinde Stellen   : %d" % len(blind))
 
-if not doppelt and not blind:
+if not doppelt and not namenlos and not blind:
     print("OK - jeder Schluessel wird genau einmal vergeben.")
     sys.exit(0)
 
@@ -237,6 +284,11 @@ if doppelt:
     print()
     print("DOPPELT VERGEBEN -- runData bricht damit ab:")
     for k in doppelt: print("   %s (%dx)" % (k, zaehler[k]))
+
+if namenlos:
+    print()
+    print("OHNE NAMENSZEILE -- im Spiel steht dort der rohe Schluessel:")
+    for feld, k in namenlos: print("   %s  (%s)" % (k, feld))
 
 if blind:
     print()
