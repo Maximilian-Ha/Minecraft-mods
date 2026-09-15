@@ -18,6 +18,7 @@
 #   - Tonverweise im NtmSoundDefinitionsProvider (Quelle der erzeugten sounds.json)
 #   - Materialnamen in Mats.java, aus denen zur Laufzeit Tag- und Gegenstandsnamen entstehen
 #   - jede ausgeschriebene Kennung in withDefaultNamespace("...")
+#   - doppelte Namen, und zwar in JEDEM Verzeichnis, nicht nur bei Bloecken und Gegenstaenden
 #   - die Dateinamen unter assets/hbmsntm (Texturen, Modelle, Tondateien)
 #
 # AUSSERDEM: doppelt vergebene Registriernamen. Ein Block bekommt auf 1.21 ein BlockItem im
@@ -142,8 +143,28 @@ for label, names in (("NtmItems", items), ("NtmBlocks", blocks)):
 for name in sorted(set(items) & set(blocks)):
     dups.append("\"%s\" ist Gegenstand UND Block -- das BlockItem kollidiert mit dem Gegenstand" % name)
 
-print("Pruefe ResourceLocation-Namen ... %d geprueft, %d Gegenstaende + %d Bloecke auf Dopplung"
-      % (checked, len(items), len(blocks)))
+# 4b. Dieselbe Frage fuer alle uebrigen Verzeichnisse: Blockentitaeten, Entitaeten,
+# Effekte, Fluide, Datenbestandteile und so fort. Zwei gleiche Namen in EINEM Verzeichnis
+# brechen den Start genauso ab -- nur faellt es dort noch spaeter auf.
+je_register = collections.defaultdict(list)
+for dirpath, _, files in os.walk(java):
+    for f in files:
+        if not f.endswith('.java'): continue
+        p_ = os.path.join(dirpath, f)
+        src = re.sub(r'//[^\n]*', '', re.sub(r'/\*.*?\*/', '', open(p_, encoding='utf-8').read(), flags=re.S))
+        for m in re.finditer(r'\b([A-Z][A-Z0-9_]*)\.register\(\s*"([^"]+)"', src):
+            je_register[m.group(1)].append(m.group(2))
+
+weitere = 0
+for reg, namen in sorted(je_register.items()):
+    if reg in ('ITEMS', 'BLOCKS'): continue   # oben schon vollstaendig geprueft
+    weitere += len(namen)
+    for name, c in collections.Counter(namen).items():
+        if c > 1:
+            dups.append("%s vergibt \"%s\" %dmal" % (reg, name, c))
+
+print("Pruefe ResourceLocation-Namen ... %d geprueft, %d Gegenstaende + %d Bloecke + %d weitere Eintraege auf Dopplung"
+      % (checked, len(items), len(blocks), weitere))
 
 if not findings and not dups:
     print("OK - jeder Name besteht nur aus [a-z0-9/._-], keiner doppelt vergeben.")
