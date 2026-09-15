@@ -78,7 +78,10 @@ public class Mats {
     public static final NTMMaterial MAT_MALACHITE = makeAdditive(2901, df("Malachite"), 0xA2F0C8, 0x227048, 0x61AF87).m();
     public static final NTMMaterial MAT_BAUXITE = makeNonSmeltable(2902, df("Bauxite"), 0xF4BA30, 0xAA320A, 0xE2560F).setAutogen(FRAGMENT).n();
     public static final NTMMaterial MAT_CRYOLITE = makeNonSmeltable(2903, df("Cryolite"), 0xCBC2A4, 0x8B711F, 0x8B701A).setAutogen(FRAGMENT).n();
-    public static final NTMMaterial MAT_URANIUM = makeSmeltable(9200, df("Compat.isModLoaded(Compat.MOD_GT6"), 0xC1C7BD, 0x2B3227, 0x9AA196).setAutogen(FRAGMENT, NUGGET, BILLET, DUST, BLOCK).m();
+    /* Im Original heisst dieses Material "Uraninite", sobald GregTech 6 geladen ist, sonst
+     * "Uranium" -- der Dreisatz dahinter ist bei der Portierung in die Zeichenkette gerutscht.
+     * GregTech 6 gibt es fuer 1.21 nicht, also bleibt es schlicht Uranium. */
+    public static final NTMMaterial MAT_URANIUM = makeSmeltable(9200, df("Uranium"), 0xC1C7BD, 0x2B3227, 0x9AA196).setAutogen(FRAGMENT, NUGGET, BILLET, DUST, BLOCK).m();
     public static final NTMMaterial MAT_U233 = makeSmeltable(9233, df("Uranium233", "U233"), 0xC1C7BD, 0x2B3227, 0x9AA196).setAutogen(NUGGET, BILLET, DUST, BLOCK).m();
     public static final NTMMaterial MAT_U235 = makeSmeltable(9235, df("Uranium235", "U235"), 0xC1C7BD, 0x2B3227, 0x9AA196).setAutogen(NUGGET, BILLET, DUST, BLOCK).m();
     public static final NTMMaterial MAT_U238 = makeSmeltable(9238, df("Uranium238", "U238"), 0xC1C7BD, 0x2B3227, 0x9AA196).setAutogen(FRAGMENT, NUGGET, BILLET, DUST, BLOCK).m();

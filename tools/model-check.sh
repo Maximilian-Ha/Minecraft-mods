@@ -26,7 +26,10 @@
 # Dritter Weg: der Block-Erzeuger leitet Blocktexturen ebenso aus dem Registriernamen ab,
 # teils mit Endungen (_side, _bottom, _top). Auch das hat erst runData gezeigt, an struct_icf.
 #
-# GEMESSEN: ueber den ganzen Baum null Funde (798 basicItem-Aufrufe, 216 abgeleitete
+# Viertens faellt auf, wenn ein Gegenstand GAR KEIN Modell bekommt -- auch das ist kein
+# Absturz, sondern nur ein schwarz-violetter Wuerfel im Spiel.
+#
+# GEMESSEN: ueber den ganzen Baum null Funde (801 basicItem-Aufrufe, 216 abgeleitete
 # Meta-Texturen, 322 abgeleitete Blocktexturen). Mit je einer geloeschten Textur genau ein
 # Fund: rbmk_link.png (Gegenstands-Erzeuger), reinforced_glass_pane.png (Block-Erzeuger),
 # rail_narrow.png (nur ueber eine Hilfsfunktion erreichbar), pellet_rtg.polonium.png
@@ -255,6 +258,46 @@ for aufruf, muster, endungen in formen:
                 block_missing.append((aufruf, feld, name + e))
 block_missing = sorted(set(block_missing))
 
+# ---------------------------------------------------------------- Teil 4: Gegenstand ohne Modell
+
+# Ein registrierter Gegenstand, den kein Erzeuger anfasst, hat im Spiel kein Modell und wird als
+# schwarz-violetter Wuerfel gezeichnet. Kein Absturz, keine Meldung. So gefunden: blueprints,
+# no9 und plan_c, alle drei seit ihrer Portierung ohne Bild.
+#
+# Ein Modell kann aus drei Quellen kommen, und alle drei zaehlen:
+#   1. der Gegenstand wird im NtmItemModelProvider genannt (NtmItems.X),
+#   2. sein Registriername steht dort als Zeichenkette (etwa bei withExistingParent),
+#   3. seine Klasse meldet ihr Modell selbst -- ICustomItemModelRegister, auch geerbt.
+erbt, meldet_selbst = {}, set()
+for pfad in sorted(set(files.values())):
+    q = open(pfad, encoding='utf-8').read()
+    for m in re.finditer(r'class\s+(\w+)(?:<[^>]*>)?\s*(?:extends\s+([\w.<>]+))?\s*(?:implements\s+([^{]+))?\{', q):
+        if m.group(2): erbt[m.group(1)] = m.group(2).split('<')[0].split('.')[-1]
+        if 'ICustomItemModelRegister' in (m.group(3) or ''): meldet_selbst.add(m.group(1))
+
+def meldet(klasse):
+    for _ in range(10):
+        if klasse in meldet_selbst: return True
+        klasse = erbt.get(klasse)
+        if not klasse: return False
+    return False
+
+imp = re.sub(r'//[^\n]*', '', re.sub(r'/\*.*?\*/', '', open(os.path.join(java, 'com/hbm/datagen/NtmItemModelProvider.java'), encoding='utf-8').read(), flags=re.S))
+ni = re.sub(r'//[^\n]*', '', re.sub(r'/\*.*?\*/', '', open(os.path.join(java, 'com/hbm/items/NtmItems.java'), encoding='utf-8').read(), flags=re.S))
+genannt = set(re.findall(r'NtmItems\.([A-Z][A-Z0-9_]*)', imp))
+literale = set(re.findall(r'"([a-z0-9_]+)"', imp))
+
+ohne_modell = []
+for m in re.finditer(r'\b([A-Z][A-Z0-9_]+)\s*=\s*([^;]{0,400}?);', ni, re.S):
+    feld, roh = m.group(1), m.group(2)
+    rn = re.search(r'\bregister\w*\(\s*"([^"]+)"', roh)
+    if not rn: continue
+    name = rn.group(1)
+    if feld in genannt or name in literale: continue
+    kl = re.search(r'new\s+([A-Za-z0-9_]+)\s*\(', roh)
+    if kl and meldet(kl.group(1)): continue
+    ohne_modell.append((feld, name))
+
 # ---------------------------------------------------------------- Bericht
 
 # Was Teil 1 nicht aufloesen konnte, zaehlt wie eine blinde Stelle: ein Tor, das schweigt,
@@ -264,14 +307,21 @@ blind = unresolved + blind
 print("Pruefe Modell-Texturen ... %d basicItem-Aufrufe, %d abgeleitete Meta-Texturen, %d abgeleitete Blocktexturen"
       % (len(calls), meta_count, block_count))
 print("                          %d Gegenstands- und %d Blocktexturen vorhanden" % (len(have), len(have_block)))
+print("                          %d Gegenstaende ohne jedes Modell" % len(ohne_modell))
 
 if unknown:
     print("  HINWEIS: fuer %d Felder liess sich der Registriername nicht aufloesen (%s)"
           % (len(unknown), ", ".join(unknown[:5])))
 
-if not missing and not meta_missing and not block_missing and not blind:
+if not missing and not meta_missing and not block_missing and not ohne_modell and not blind:
     print("OK - jede stillschweigend erwartete Textur ist da.")
     sys.exit(0)
+
+if ohne_modell:
+    print()
+    print("OHNE MODELL -- im Spiel der schwarz-violette Wuerfel:")
+    for feld, name in ohne_modell:
+        print("  NtmItems.%s (%s)" % (feld, name))
 
 if blind:
     print("  BLINDE STELLEN: %d -- das Tor kann diese Faelle nicht pruefen" % len(blind))

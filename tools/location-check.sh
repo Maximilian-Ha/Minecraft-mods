@@ -16,6 +16,7 @@
 #   - die Namen in NtmSoundEvents.reg("...")
 #   - die Registriernamen der DeferredRegister (Items, Bloecke, Blockeintraege, Menues, ...)
 #   - Tonverweise im NtmSoundDefinitionsProvider (Quelle der erzeugten sounds.json)
+#   - Materialnamen in Mats.java, aus denen zur Laufzeit Tag- und Gegenstandsnamen entstehen
 #   - die Dateinamen unter assets/hbmsntm (Texturen, Modelle, Tondateien)
 #
 # AUSSERDEM: doppelt vergebene Registriernamen. Ein Block bekommt auf 1.21 ein BlockItem im
@@ -64,6 +65,29 @@ for dirpath, _, files in os.walk(java):
                 check(m.group(1), rel, "Tonereignis")
         for m in pat_deferred.finditer(src):
             check(m.group(1), rel, "Registriername")
+
+# 1b. Die Materialnamen. Aus ihnen baut das Materialsystem zur Laufzeit Tag- und
+# Gegenstandsnamen (toTagName: camelCase wird zu snake_case). Sie stehen nirgends als fertiger
+# Pfad im Quelltext und entgehen deshalb der Pruefung oben -- gefunden wurde so, dass bei
+# MAT_URANIUM ein ganzer Dreisatz des Originals in die Zeichenkette gerutscht war:
+#
+#   ResourceLocationException: Non [a-z0-9/._-] character in path of location:
+#   hbmsntm:ingot_compat.is_mod_loaded(_compat._mod__gt6
+def to_tag_name(name):
+    out = []
+    for i, c in enumerate(name):
+        if c.isupper() and i > 0 and not name[i-1].isupper() and not name[i-1].isdigit():
+            out.append('_')
+        out.append(c.lower())
+    return ''.join(out)
+
+mats = os.path.join(java, 'com/hbm/inventory/material/Mats.java')
+if os.path.isfile(mats):
+    rel = os.path.relpath(mats, root)
+    src = re.sub(r'//[^\n]*', '', re.sub(r'/\*.*?\*/', '', open(mats, encoding='utf-8').read(), flags=re.S))
+    for m in re.finditer(r'\bdf\(([^)]*)\)', src):
+        for arg in re.findall(r'"([^"]*)"', m.group(1)):
+            check(to_tag_name(arg), rel, "Materialname")
 
 # 2. Die Tonverweise. Die sounds.json wird erzeugt, nicht geschrieben -- geprueft wird
 # deshalb ihre Quelle, der NtmSoundDefinitionsProvider.

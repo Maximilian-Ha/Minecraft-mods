@@ -785,6 +785,12 @@ public class NtmItemModelProvider extends ItemModelProvider {
          * das Original hat fuer sie ueberhaupt kein eigenes Bild, und so sieht man wenigstens
          * auf den ersten Blick, welcher Stab welches Band legt.
          */
+        /* Drei Gegenstaende standen ohne Modell da -- im Spiel waeren sie der schwarz-violette
+         * Wuerfel gewesen. Ihre Bilder tragen im Original dieselben Namen. */
+        this.basicItem(NtmItems.BLUEPRINTS.get());
+        this.basicItem(NtmItems.NO9.get());
+        this.basicItem(NtmItems.PLAN_C.get());
+
         this.withExistingParent("conveyor_wand", mcLoc("item/generated")).texture("layer0", modLoc("block/conveyor"));
         this.withExistingParent("conveyor_wand_express", mcLoc("item/generated")).texture("layer0", modLoc("block/conveyor_express"));
         this.withExistingParent("conveyor_wand_double", mcLoc("item/generated")).texture("layer0", modLoc("block/conveyor_double"));
