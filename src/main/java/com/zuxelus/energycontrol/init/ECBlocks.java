@@ -5,6 +5,7 @@ import com.zuxelus.energycontrol.blocks.EnergyCounterBlock;
 import com.zuxelus.energycontrol.blocks.HowlerAlarmBlock;
 import com.zuxelus.energycontrol.blocks.IndustrialAlarmBlock;
 import com.zuxelus.energycontrol.blocks.InfoPanelBlock;
+import com.zuxelus.energycontrol.blocks.KitAssemblerBlock;
 import com.zuxelus.energycontrol.blocks.InfoPanelExtenderBlock;
 import com.zuxelus.energycontrol.blocks.RangeTriggerBlock;
 import com.zuxelus.energycontrol.blocks.RemoteThermalMonitorBlock;
@@ -43,6 +44,9 @@ public class ECBlocks {
 
     public static final DeferredBlock<EnergyCounterBlock> ENERGY_COUNTER =
             register("energy_counter", () -> new EnergyCounterBlock(machineProperties()));
+
+    public static final DeferredBlock<KitAssemblerBlock> KIT_ASSEMBLER =
+            register("kit_assembler", () -> new KitAssemblerBlock(machineProperties()));
 
     public static final DeferredBlock<HowlerAlarmBlock> HOWLER_ALARM =
             register("howler_alarm", () -> new HowlerAlarmBlock(machineProperties()));

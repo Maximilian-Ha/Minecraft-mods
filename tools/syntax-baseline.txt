@@ -14,3 +14,4 @@ src/main/java/com/zuxelus/energycontrol/menus/InfoPanelMenu.java: error: recursi
 src/main/java/com/zuxelus/energycontrol/menus/RangeTriggerMenu.java: error: recursive constructor invocation
 src/main/java/com/zuxelus/energycontrol/menus/ThermalMonitorMenu.java: error: recursive constructor invocation
 src/main/java/com/zuxelus/energycontrol/menus/EnergyCounterMenu.java: error: recursive constructor invocation
+src/main/java/com/zuxelus/energycontrol/menus/KitAssemblerMenu.java: error: recursive constructor invocation

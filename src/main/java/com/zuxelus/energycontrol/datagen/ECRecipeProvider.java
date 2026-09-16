@@ -1,7 +1,9 @@
 package com.zuxelus.energycontrol.datagen;
 
+import com.zuxelus.energycontrol.EnergyControl;
 import com.zuxelus.energycontrol.init.ECBlocks;
 import com.zuxelus.energycontrol.init.ECItems;
+import com.zuxelus.energycontrol.recipes.KitAssemblerRecipe;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
@@ -10,9 +12,13 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -35,6 +41,33 @@ public class ECRecipeProvider extends RecipeProvider {
         blocks(output);
         upgrades(output);
         kitsAndCards(output);
+        assembler(output);
+    }
+
+    /**
+     * Die Rezepte der Bausatzmontage: zwei Karten und zwei Schaltungen ergeben zwei
+     * Bausaetze. Genau das Verhaeltnis des Originals -- die Montage lohnt sich, weil sie
+     * gleich zwei Bausaetze liefert und weil sie ueberzaehlige Karten aufbraucht.
+     */
+    private void assembler(RecipeOutput output) {
+        assemblerKit(output, "energy", ECItems.CARD_ENERGY.get(), ECItems.KIT_ENERGY.get());
+        assemblerKit(output, "liquid", ECItems.CARD_LIQUID.get(), ECItems.KIT_LIQUID.get());
+        assemblerKit(output, "inventory", ECItems.CARD_INVENTORY.get(), ECItems.KIT_INVENTORY.get());
+        assemblerKit(output, "redstone", ECItems.CARD_REDSTONE.get(), ECItems.KIT_REDSTONE.get());
+        assemblerKit(output, "vanilla", ECItems.CARD_VANILLA.get(), ECItems.KIT_VANILLA.get());
+        assemblerKit(output, "toggle", ECItems.CARD_TOGGLE.get(), ECItems.KIT_TOGGLE.get());
+        assemblerKit(output, "counter", ECItems.CARD_COUNTER.get(), ECItems.KIT_COUNTER.get());
+        assemblerKit(output, "hbm", ECItems.CARD_HBM.get(), ECItems.KIT_HBM.get());
+        assemblerKit(output, "mekanism", ECItems.CARD_MEKANISM.get(), ECItems.KIT_MEKANISM.get());
+    }
+
+    private void assemblerKit(RecipeOutput output, String name, Item card, Item kit) {
+        KitAssemblerRecipe recipe = new KitAssemblerRecipe(
+                List.of(new SizedIngredient(Ingredient.of(card), 2),
+                        new SizedIngredient(Ingredient.of(ECItems.BASIC_CIRCUIT.get()), 2)),
+                new ItemStack(kit, 2),
+                KitAssemblerRecipe.DEFAULT_TIME);
+        output.accept(EnergyControl.loc("kit_assembler/" + name), recipe, null);
     }
 
     private void components(RecipeOutput output) {
@@ -147,6 +180,17 @@ public class ECRecipeProvider extends RecipeProvider {
                 .define('M', ECItems.MACHINE_CASING.get())
                 .define('R', Items.REDSTONE)
                 .unlockedBy("has_machine_casing", has(ECItems.MACHINE_CASING.get()))
+                .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, ECBlocks.KIT_ASSEMBLER.get())
+                .pattern("ICI")
+                .pattern("CMC")
+                .pattern("IRI")
+                .define('I', Items.IRON_INGOT)
+                .define('C', ECItems.ADVANCED_CIRCUIT.get())
+                .define('M', ECItems.MACHINE_CASING.get())
+                .define('R', Items.REDSTONE_BLOCK)
+                .unlockedBy("has_advanced_circuit", has(ECItems.ADVANCED_CIRCUIT.get()))
                 .save(output);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, ECBlocks.HOWLER_ALARM.get())

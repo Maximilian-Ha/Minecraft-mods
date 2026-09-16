@@ -4,6 +4,7 @@ import com.zuxelus.energycontrol.EnergyControl;
 import com.zuxelus.energycontrol.blockentity.EnergyCounterBlockEntity;
 import com.zuxelus.energycontrol.blockentity.HowlerAlarmBlockEntity;
 import com.zuxelus.energycontrol.blockentity.InfoPanelBlockEntity;
+import com.zuxelus.energycontrol.blockentity.KitAssemblerBlockEntity;
 import com.zuxelus.energycontrol.blockentity.RangeTriggerBlockEntity;
 import com.zuxelus.energycontrol.blockentity.RemoteThermalMonitorBlockEntity;
 import com.zuxelus.energycontrol.blockentity.ThermalMonitorBlockEntity;
@@ -34,6 +35,9 @@ public class ECBlockEntityTypes {
 
     public static final Supplier<BlockEntityType<RangeTriggerBlockEntity>> RANGE_TRIGGER = BLOCK_ENTITY_TYPES.register(
             "range_trigger", () -> BlockEntityType.Builder.of(RangeTriggerBlockEntity::new, ECBlocks.RANGE_TRIGGER.get()).build(null));
+
+    public static final Supplier<BlockEntityType<KitAssemblerBlockEntity>> KIT_ASSEMBLER = BLOCK_ENTITY_TYPES.register(
+            "kit_assembler", () -> BlockEntityType.Builder.of(KitAssemblerBlockEntity::new, ECBlocks.KIT_ASSEMBLER.get()).build(null));
 
     public static final Supplier<BlockEntityType<HowlerAlarmBlockEntity>> HOWLER_ALARM = BLOCK_ENTITY_TYPES.register(
             "howler_alarm", () -> BlockEntityType.Builder.of(HowlerAlarmBlockEntity::new, ECBlocks.HOWLER_ALARM.get()).build(null));

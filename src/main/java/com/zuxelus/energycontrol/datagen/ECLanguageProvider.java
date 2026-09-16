@@ -34,6 +34,7 @@ public class ECLanguageProvider extends LanguageProvider {
         block(ECBlocks.REMOTE_THERMAL_MONITOR.get(), "Remote Thermal Monitor", "Fernwaermeanzeige");
         block(ECBlocks.RANGE_TRIGGER.get(), "Range Trigger", "Bereichsmelder");
         block(ECBlocks.ENERGY_COUNTER.get(), "Energy Counter", "Energiezaehler");
+        block(ECBlocks.KIT_ASSEMBLER.get(), "Kit Assembler", "Bausatzmontage");
         block(ECBlocks.HOWLER_ALARM.get(), "Howler Alarm", "Heulalarm");
         block(ECBlocks.INDUSTRIAL_ALARM.get(), "Industrial Alarm", "Warnleuchte");
 
@@ -42,6 +43,7 @@ public class ECLanguageProvider extends LanguageProvider {
         both("container.energycontrol.range_trigger", "Range Trigger", "Bereichsmelder");
         both("container.energycontrol.remote_thermal_monitor", "Remote Thermal Monitor", "Fernwaermeanzeige");
         both("container.energycontrol.energy_counter", "Energy Counter", "Energiezaehler");
+        both("container.energycontrol.kit_assembler", "Kit Assembler", "Bausatzmontage");
 
         // ------------------------------------------------------------- Karten
         item(ECItems.CARD_ENERGY.get(), "Energy Sensor Card", "Stromsensorkarte");

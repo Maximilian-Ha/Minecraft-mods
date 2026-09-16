@@ -1,6 +1,7 @@
 package com.zuxelus.energycontrol.datagen;
 
 import com.zuxelus.energycontrol.EnergyControl;
+import com.zuxelus.energycontrol.blocks.KitAssemblerBlock;
 import com.zuxelus.energycontrol.blocks.RangeTriggerBlock;
 import com.zuxelus.energycontrol.blocks.ThermalMonitorBlock;
 import com.zuxelus.energycontrol.init.ECBlocks;
@@ -32,6 +33,7 @@ public class ECBlockStateProvider extends BlockStateProvider {
         remoteThermalMonitor();
         rangeTrigger();
         energyCounter();
+        kitAssembler();
 
         alarm(ECBlocks.HOWLER_ALARM.get(), "howler_alarm",
                 block("howler_alarm_side"), block("howler_alarm_face"), block("howler_alarm_back"));
@@ -106,6 +108,26 @@ public class ECBlockStateProvider extends BlockStateProvider {
         });
 
         simpleBlockItem(ECBlocks.RANGE_TRIGGER.get(), models[0]);
+    }
+
+    /**
+     * Die Bausatzmontage steht waagerecht wie ein Ofen; ihre Schauseite zeigt an, ob sie
+     * arbeitet. Der Blockzustand traegt beides, Richtung und Betrieb.
+     */
+    private void kitAssembler() {
+        ResourceLocation side = block("kit_assembler_all");
+        ModelFile off = models().orientable("kit_assembler", side, block("kit_assembler_face"), side);
+        ModelFile on = models().orientable("kit_assembler_active", side, block("kit_assembler_face_active"), side);
+
+        getVariantBuilder(ECBlocks.KIT_ASSEMBLER.get()).forAllStates(state -> {
+            int yRot = (int) state.getValue(KitAssemblerBlock.FACING).toYRot();
+            return ConfiguredModel.builder()
+                    .modelFile(state.getValue(KitAssemblerBlock.ACTIVE) ? on : off)
+                    .rotationY((yRot + 180) % 360)
+                    .build();
+        });
+
+        simpleBlockItem(ECBlocks.KIT_ASSEMBLER.get(), off);
     }
 
     /** Heuler und Warnleuchte teilen sich den Aufbau: Schauseite vorn, Rueckseite hinten. */

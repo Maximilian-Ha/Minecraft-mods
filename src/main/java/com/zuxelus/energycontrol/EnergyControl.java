@@ -7,6 +7,7 @@ import com.zuxelus.energycontrol.init.ECCapabilities;
 import com.zuxelus.energycontrol.init.ECCreativeTabs;
 import com.zuxelus.energycontrol.init.ECItems;
 import com.zuxelus.energycontrol.init.ECMenuTypes;
+import com.zuxelus.energycontrol.init.ECRecipes;
 import com.zuxelus.energycontrol.init.ECSounds;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
@@ -39,6 +40,7 @@ public class EnergyControl {
         ECBlocks.register(eventBus);
         ECBlockEntityTypes.register(eventBus);
         ECMenuTypes.register(eventBus);
+        ECRecipes.register(eventBus);
         ECSounds.register(eventBus);
         ECCreativeTabs.register(eventBus);
 

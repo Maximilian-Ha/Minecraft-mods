@@ -27,6 +27,7 @@ public class ECCreativeTabs {
                         output.accept(ECBlocks.REMOTE_THERMAL_MONITOR.get());
                         output.accept(ECBlocks.RANGE_TRIGGER.get());
                         output.accept(ECBlocks.ENERGY_COUNTER.get());
+                        output.accept(ECBlocks.KIT_ASSEMBLER.get());
                         output.accept(ECBlocks.HOWLER_ALARM.get());
                         output.accept(ECBlocks.INDUSTRIAL_ALARM.get());
 
