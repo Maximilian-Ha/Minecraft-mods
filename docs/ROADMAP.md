@@ -2804,3 +2804,41 @@ steht.
 |---|---|
 | portiert | Bohrturm, Pumpe, Frackingturm, Raffinerie, **Fraktionierturm**, Zwischenstück |
 | offen (10) | Krackturm, Reformer, Coker, Gasfackel, Hydrotreater, Verflüssiger, Pyroofen, Verfestiger, Vakuumdestille, Abstandshalter des Krackturms |
+
+## Stufe 6 — Runden 139 bis 141: Reformer, Hydrotreater, Vakuumdestille
+
+Drei Maschinen der Erdölkette nach demselben Muster: Blockentität mit Strom und Tanks, Block,
+Menü, Oberfläche, Darsteller, dazu je eine Rezeptliste als `SerializableRecipe`.
+
+| Runde | Maschine | Was sie tut |
+|---|---|---|
+| 139 | Katalytischer Reformer | baut lange Ketten zu ringförmigen Verbindungen um; braucht einen Katalysator |
+| 140 | Hydrotreater | wäscht unter Wasserstoffdruck den Schwefel aus einem Öl |
+| 141 | Vakuumdestille | zieht aus einem Öl vier Fraktionen statt zwei; das Öl muss unter Druck ankommen |
+
+Neu dazugekommen ist der Gegenstand `catalytic_converter`, den Reformer und Hydrotreater
+beide brauchen und den es im Port noch nicht gab.
+
+**Eine Abweichung kommt in allen dreien vor.** Das Original sperrt die Kanisterplätze für
+Stoffe, die unter Druck stehen müssen, mit dem Slot-Typ `SlotDeprecated`. Den gibt es im Port
+nicht; stattdessen weist die Blockentität sie in `canPlaceItem` ab, und `SlotNonRetarded`
+fragt genau danach. Die Plätze bleiben erhalten, damit die Nummerierung dieselbe ist wie im
+Original.
+
+Die üblichen Abbildungen gelten weiter: `ANY_RESISTANTALLOY` → DURA, Desh-Motor → gewöhnlicher
+Motor, `CHIP_BISMOID` → Mikrochip, `ANY_HARDPLASTIC` → Polycarbonat, `ANY_BISMOID` →
+Wismutbronze; die `inputItemsEx`-Variante der Montagerezepte entfällt wie überall.
+
+### Stand der Erdölkette nach Runde 141
+
+| | |
+|---|---|
+| portiert (9) | Bohrturm, Pumpe, Frackingturm, Raffinerie, Fraktionierturm, Zwischenstück, **Reformer**, **Hydrotreater**, **Vakuumdestille** |
+| offen (6) | Krackturm, Coker, Gasfackel, Verflüssiger, Pyroofen, Verfestiger |
+
+**Was den sechs noch fehlt.** Verflüssiger und Verfestiger brauchen Gegenstände, die es im
+Port noch nicht gibt — vor allem `oil_tar` in seinen fünf Spielarten, dazu `solid_fuel_bf`,
+`ingot_mercury`, `biomass_compressed` und `bio_wafer`. Die gehören in eine eigene, kleine
+Runde vorweg, sonst müsste jede der beiden Maschinen ihre halbe Rezeptliste auslassen. Der
+Krackturm ist der aufwendigste: im Original kein Turm, sondern ein großer,
+richtungsabhängiger Verbund mit fünf Teilkörpern und richtungsbezogenen Anschlusspunkten.
