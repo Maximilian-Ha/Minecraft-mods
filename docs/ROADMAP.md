@@ -3176,3 +3176,23 @@ Die Änderung ist zurückgenommen. Richtig ist die Aufteilung, die der Port ohne
 `NtmItemModelProvider` nennt jeden Gegenstand einzeln — `basicItem`, wo es eine Textur gibt,
 `entityItem`, wo ein Darsteller zeichnet. Die beiden PWR-Brennstoffe waren dort schlicht
 vergessen worden und stehen jetzt drin.
+
+### Zweiter Nachtrag: das Tor meldete 27 Fehlalarme
+
+Der nächste Lauf kam durch `runData` und blieb am neuen Tor hängen: **27 `canned_*`-Gegenstände
+ohne Modell**. Alle 27 waren falsch.
+
+`canned_conserve` ist **ein** registrierter Gegenstand mit siebenundzwanzig Metawerten, und
+`ConserveItem.getDescriptionId` gibt für jeden eine eigene Namenszeile aus —
+`item.hbmsntm.canned_asbestos`, `canned_spam` und so weiter. Meine Annahme, die erzeugte
+Sprachdatei sei das Verzeichnis der Gegenstände, stimmt für Metagegenstände nicht.
+
+Die Sprachdatei wird jetzt gegen die **tatsächlichen Registrierungsnamen** gesiebt: alles, was
+im Quelltext als `register("name", ...)` auftaucht. Das erfasst `NtmItems`, die
+`register`-Helfer von `NtmBlocks` und auch, was `GunFactory` zur Laufzeit anmeldet — daher kam
+`ammo_debug`, und genau deshalb sah `model-check.sh` ihn nicht. Gemessen: alle neun echten
+Fundstellen bleiben drin, die sechsundzwanzig Metawerte fallen heraus.
+
+Die Selbstprobe deckt den Fehlalarm jetzt mit ab: ihre Nachbildung enthält eine
+`canned_asbestos`-Zeile, die **nicht** gemeldet werden darf. Entfernt man das Sieb, meldet sie
+vier statt drei Fundstellen und schlägt fehl — gegengeprüft.

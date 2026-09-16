@@ -34,12 +34,16 @@ if [ "${1:-}" = "--selbstprobe" ]; then
   mkdir -p "$T/assets/hbmsntm/models/item" "$T/assets/hbmsntm/lang"
   printf '{ "parent": "hbmsntm:block/fence_metal_inventory" }\n' > "$T/assets/hbmsntm/models/item/fence_metal.json"
   printf '{ "parent": "item/generated" }\n'                      > "$T/assets/hbmsntm/models/item/ingot_lead.json"
+  # canned_asbestos ist die Namenszeile eines METAWERTS von canned_conserve, kein eigener
+  # Gegenstand. Sie steht hier, damit die Probe auch den Fehlalarm abfaengt, den der erste
+  # Entwurf siebenundzwanzigfach erzeugt hat.
   cat > "$T/assets/hbmsntm/lang/en_us.json" <<'JSON'
 {
   "block.hbmsntm.door_metal": "Metal Door",
   "block.hbmsntm.pwr_block": "PWR Block",
   "item.hbmsntm.pwr_fuel_hot": "Hot PWR Fuel",
   "item.hbmsntm.ingot_lead": "Lead Ingot",
+  "item.hbmsntm.canned_asbestos": "Canned Asbestos",
   "block.hbmsntm.fence_metal": "Metal Fence"
 }
 JSON
@@ -47,7 +51,7 @@ JSON
   ELTERN=$(printf '%s' "$OUT" | sed -n 's/.*Elternmodell fehlt *: \([0-9]*\).*/\1/p')
   OHNE=$(printf   '%s' "$OUT" | sed -n 's/.*Gegenstand ohne Modell *: \([0-9]*\).*/\1/p')
   if [ "$RC" = "1" ] && [ "$ELTERN" = "1" ] && [ "$OHNE" = "3" ]; then
-    echo "OK - Selbstprobe: 1 fehlendes Elternmodell und 3 Gegenstaende ohne Modell erkannt."
+    echo "OK - Selbstprobe: 1 fehlendes Elternmodell, 3 Gegenstaende ohne Modell, Metawert nicht gemeldet."
     exit 0
   fi
   echo "FEHLER - die Selbstprobe erkennt die eingebauten Fehler nicht mehr:"
@@ -104,9 +108,20 @@ for key in sorted(models):
         unresolved.append((key, 'Elternmodell %s fehlt' % parent))
 
 # ------------------------------------------------------------------ Gegenstand ohne Modell
-# Die erzeugte Sprachdatei ist die einzige vollstaendige Liste der Registrierungsnamen, die
-# nach runData vorliegt. lang-check.sh stellt sicher, dass jeder Eintrag darin eine Namenszeile
-# hat -- damit ist sie hier als Verzeichnis brauchbar.
+# Die erzeugte Sprachdatei nennt jeden Gegenstand -- aber nicht nur die. Metagegenstaende
+# geben je Wert eine eigene Namenszeile aus, obwohl nur EIN Gegenstand registriert ist:
+# canned_conserve etwa liefert siebenundzwanzig Zeilen item.hbmsntm.canned_asbestos,
+# canned_spam und so weiter. Der erste Entwurf dieser Pruefung hielt sie fuer Gegenstaende und
+# meldete siebenundzwanzig Fehlalarme.
+#
+# Deshalb wird die Sprachdatei gegen die tatsaechlichen Registrierungsnamen gesiebt: jeder
+# Name, der im Quelltext als register("name", ...) auftaucht. Das erfasst NtmItems, die
+# register-Helfer von NtmBlocks und auch das, was GunFactory zur Laufzeit anmeldet -- ammo_debug
+# kam genau von dort und war der Grund, warum model-check.sh ihn nicht sah.
+#
+# Die Liste enthaelt auch Fluide, Toene und Menues; das schadet nicht, denn nur item.- und
+# block.-Zeilen werden ueberhaupt gegen sie gehalten. Umgekehrt gilt: was der Ausdruck nicht
+# faengt, bleibt unbemerkt -- eine blinde Stelle, kein Fehlalarm.
 # Neun Bloecke bekommen absichtlich KEINEN Gegenstand: sie stehen mit dem blanken
 # BLOCKS.register im Quelltext statt mit einem der register-Helfer, die sonst jedem Block
 # einen BlockItem mitgeben. Fluessigkeiten, Feuer, Wrapper -- nichts davon soll in der Hand
@@ -117,6 +132,19 @@ OHNE_GEGENSTAND = {
     'mud', 'pile_block', 'rad_lava', 'volcanic_lava',
 }
 
+def registry_namen(quelle='src/main/java'):
+    import re as _re
+    namen = set()
+    REG = _re.compile(r'\bregister\w*\(\s*"([a-z0-9_]+)"\s*,')
+    for dirpath, _, names in os.walk(quelle):
+        for fn in names:
+            if not fn.endswith('.java'):
+                continue
+            t = open(os.path.join(dirpath, fn), encoding='utf-8', errors='replace').read()
+            t = _re.sub(r'//[^\n]*', '', _re.sub(r'/\*.*?\*/', '', t, flags=_re.S))
+            namen |= set(REG.findall(t))
+    return namen
+
 ohne_modell = []
 lang = None
 for root in roots:
@@ -124,20 +152,25 @@ for root in roots:
     if os.path.isfile(cand):
         lang = cand
 
-if lang:
+registriert = registry_namen() if os.path.isdir('src/main/java') else None
+
+if lang and registriert:
     keys = json.load(open(lang, encoding='utf-8'))
     for k in sorted(keys):
         teile = k.split('.')
         if len(teile) != 3: continue
         art, ns, name = teile
         if ns != MOD or art not in ('item', 'block'): continue
+        if name not in registriert: continue      # Namenszeile eines Metawerts, kein Gegenstand
         if art == 'block' and name in OHNE_GEGENSTAND: continue
         if ('item/' + name) not in models:
             ohne_modell.append((art, name))
 
 # ------------------------------------------------------------------ Bericht
-print("Pruefe erzeugte Modelle ... %d Modelle in %d Baeumen%s"
-      % (len(models), len(roots), ", Verzeichnis aus %s" % lang if lang else ", ohne Sprachdatei"))
+print("Pruefe erzeugte Modelle ... %d Modelle in %d Baeumen%s%s"
+      % (len(models), len(roots),
+         ", Verzeichnis aus %s" % lang if lang else ", ohne Sprachdatei",
+         ", %d Registrierungsnamen" % len(registriert) if registriert else ""))
 print("  Elternmodell fehlt      : %d" % len(unresolved))
 print("  Gegenstand ohne Modell  : %d" % len(ohne_modell))
 
