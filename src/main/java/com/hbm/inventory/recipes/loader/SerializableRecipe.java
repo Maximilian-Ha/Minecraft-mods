@@ -25,6 +25,7 @@ import com.hbm.inventory.recipes.CrucibleRecipes;
 import com.hbm.inventory.recipes.CrackingRecipes;
 import com.hbm.inventory.recipes.FractionRecipes;
 import com.hbm.inventory.recipes.ReformingRecipes;
+import com.hbm.inventory.recipes.HydrotreatingRecipes;
 import com.hbm.inventory.recipes.BreederRecipes;
 import com.hbm.inventory.recipes.FluidBreederRecipes;
 import com.hbm.inventory.recipes.PlasmaForgeRecipes;
@@ -111,6 +112,7 @@ public abstract class SerializableRecipe {
         recipeHandlers.add(new CrackingRecipes());
         recipeHandlers.add(new FractionRecipes());
         recipeHandlers.add(new ReformingRecipes());
+        recipeHandlers.add(new HydrotreatingRecipes());
         recipeHandlers.add(new FluidBreederRecipes());
         recipeHandlers.add(new BreederRecipes());
     }

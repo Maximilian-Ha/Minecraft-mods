@@ -1168,6 +1168,21 @@ public class AssemblyMachineRecipes extends GenericRecipes<GenericRecipe> {
                         new ComparableStack(NtmItems.CIRCUIT_INTEGRATED_BOARD.get(), 1)
                 ));
 
+        // ---- Runde 140 ----
+        // Original "ass.hydrotreater". Denselben Abbildungen wie beim Reformer; zusaetzlich
+        // steht der gewoehnliche Motor an der Stelle des Desh-Motors, den der Port nicht hat.
+        this.register(new GenericRecipe("ass.hydrotreater").setup(200, 100).outputItems(new ItemStack(NtmBlocks.MACHINE_HYDROTREATER, 1))
+                .inputItems(
+                        NtmItems.castPlateWeldedIngredient(CastPlateItem.Type.STEEL, 8),
+                        NtmItems.castPlateIngredient(CastPlateItem.Type.COPPER, 4),
+                        new ComparableStack(NtmItems.INGOT_NIOBIUM.get(), 8),
+                        new ComparableStack(NtmItems.INGOT_DURA_STEEL.get(), 4),
+                        new ComparableStack(NtmItems.SHELL_STEEL.get(), 2),
+                        new ComparableStack(NtmItems.PIPES_STEEL.get(), 8),
+                        new ComparableStack(NtmItems.MOTOR.get(), 2),
+                        new ComparableStack(NtmItems.CIRCUIT_INTEGRATED_BOARD.get(), 1)
+                ));
+
         FluidType[] order = Fluids.getInNiceOrder();
         for(int i = 1; i < order.length; ++i) {
             FluidType type = order[i];

@@ -2725,6 +2725,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.MACHINE_FRACTION_TOWER, "Fractioning Tower");
         this.add(NtmBlocks.FRACTION_SPACER, "Fractioning Tower Spacer");
         this.add(NtmBlocks.MACHINE_CATALYTIC_REFORMER, "Catalytic Reformer");
+        this.add(NtmBlocks.MACHINE_HYDROTREATER, "Hydrotreater");
         this.add(NtmBlocks.ORE_METEOR_IRON, "Meteor Iron Ore");
         this.add(NtmBlocks.ORE_METEOR_COBALT, "Meteor Cobalt Ore");
         this.add(NtmBlocks.ORE_METEOR_ALUMINIUM, "Meteor Aluminium Ore");
@@ -3545,6 +3546,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("armorMod.insert.speed", "%s speed");
         this.add("armorMod.insert.rad", "+%s RAD/s");
         this.add("container.machine_catalytic_reformer", "Catalytic Reformer");
+        this.add("container.machine_hydrotreater", "Hydrotreater");
 
         this.add("bomb.detonated", "Detonated successfully!");
         this.add("bomb.triggered", "Triggered successfully!");
