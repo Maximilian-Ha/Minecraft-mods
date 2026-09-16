@@ -39,6 +39,20 @@ public class InfoPanelRenderer implements BlockEntityRenderer<InfoPanelBlockEnti
         this.font = context.getFont();
     }
 
+    /**
+     * Ein grosser Schirm reicht ueber den Block hinaus, an dem die Tafel haengt. Bliebe es
+     * bei der ueblichen Sichtpruefung, verschwaende seine Schrift, sobald dieser eine Block
+     * aus dem Bild laeuft. Einzelne Tafeln behalten die uebliche Pruefung.
+     *
+     * Der Weg ueber getRenderBoundingBox der Block-Entitaet fuehrt nicht zum Ziel: die
+     * Methode gibt es auf 1.21.1 dort nicht (im HBM-Port steht sie ohne @Override und wird
+     * nie aufgerufen).
+     */
+    @Override
+    public boolean shouldRenderOffScreen(InfoPanelBlockEntity be) {
+        return be.hasLargeScreen();
+    }
+
     @Override
     public void render(InfoPanelBlockEntity be, float partialTick, PoseStack pose, MultiBufferSource buffers, int light, int overlay) {
         // Ohne Strom bleibt der Schirm leer, wie im Original.

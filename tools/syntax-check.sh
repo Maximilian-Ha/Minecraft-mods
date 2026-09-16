@@ -16,6 +16,13 @@
 # beim Portieren ab: kaputte Edits (fehlende Klammern, halbe Methoden, unvollstaendige
 # Merges, verrutschte Bloecke).
 #
+# WAS ES NICHT SEHEN KANN, und zwar grundsaetzlich: ein @Override auf einer Methode, die
+# gar nichts ueberschreibt. javac meldet das als "does not override or implement a method
+# from a supertype" -- dieselbe Meldung entsteht aber massenhaft, sobald eine Oberklasse
+# aus der fehlenden Minecraft-API stammt, und steht deshalb in der Filterliste unten. In
+# Runde 4 kostete das einen CI-Lauf: getRenderBoundingBox() gibt es auf 1.21.1 nicht an der
+# Block-Entitaet, sondern am Renderer. Dagegen hilft nur der volle Bau.
+#
 # BASELINE
 # --------
 # javac erzeugt bei fehlender API vereinzelt Folgefehler, die wie echte Fehler

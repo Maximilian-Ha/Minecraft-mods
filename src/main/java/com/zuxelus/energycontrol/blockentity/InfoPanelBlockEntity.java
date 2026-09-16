@@ -27,7 +27,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -124,7 +123,6 @@ public class InfoPanelBlockEntity extends CardReaderBlockEntity {
 
         screenMin = screen.min();
         screenMax = screen.max();
-        renderBox = null;
         return true;
     }
 
@@ -184,22 +182,9 @@ public class InfoPanelBlockEntity extends CardReaderBlockEntity {
         return screenMax != null ? screenMax : worldPosition;
     }
 
-    private AABB renderBox;
-
-    /**
-     * Der Renderer zeichnet ueber die ganze Flaeche. Bliebe es beim Standardkasten des
-     * einzelnen Blocks, verschwaende die Schrift eines grossen Schirms, sobald der Block mit
-     * der Tafel aus dem Bild laeuft.
-     */
-    @Override
-    public AABB getRenderBoundingBox() {
-        if(renderBox == null) {
-            BlockPos min = getScreenMin();
-            BlockPos max = getScreenMax();
-            renderBox = new AABB(min.getX(), min.getY(), min.getZ(),
-                    max.getX() + 1.0D, max.getY() + 1.0D, max.getZ() + 1.0D);
-        }
-        return renderBox;
+    /** Ob die Tafel mehr als ihren eigenen Block bespielt. */
+    public boolean hasLargeScreen() {
+        return !getScreenMin().equals(getScreenMax());
     }
 
     /** Reichweite in Bloecken: Grundwert plus Aufwertungen im zweiten Fach. */
@@ -408,7 +393,6 @@ public class InfoPanelBlockEntity extends CardReaderBlockEntity {
             screenMin = null;
             screenMax = null;
         }
-        renderBox = null;
 
         cachedLines = null;
     }
