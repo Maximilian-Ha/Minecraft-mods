@@ -1198,6 +1198,16 @@ public class AssemblyMachineRecipes extends GenericRecipes<GenericRecipe> {
                         new ComparableStack(NtmItems.CIRCUIT_MICROCHIP.get(), 4)
                 ));
 
+        // ---- Runde 145 ----
+        // Original "ass.flarestack". Alle Zutaten stehen unveraendert.
+        this.register(new GenericRecipe("ass.flarestack").setup(100, 100).outputItems(new ItemStack(NtmBlocks.MACHINE_GAS_FLARE, 1))
+                .inputItems(
+                        new ComparableStack(NtmItems.PLATE_STEEL.get(), 12),
+                        new ComparableStack(NtmItems.PLATE_COPPER.get(), 4),
+                        new ComparableStack(NtmItems.SHELL_STEEL.get(), 4),
+                        new ComparableStack(NtmItems.THERMO_ELEMENT.get(), 3)
+                ));
+
         // ---- Runde 144 ----
         // Original "ass.liquefactor". ANY_TAR wird der Sammeltag der Teersorten, sonst steht
         // alles unveraendert.

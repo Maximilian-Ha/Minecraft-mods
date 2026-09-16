@@ -2951,3 +2951,35 @@ ist, wird zu Nährflüssigkeit, so viel wie sein Sättigungswert hergibt.
 |---|---|
 | portiert (12) | Bohrturm, Pumpe, Frackingturm, Raffinerie, Fraktionierturm, Zwischenstück, Reformer, Hydrotreater, Vakuumdestille, Verfestiger, Pyroofen, **Verflüssiger** |
 | offen (3) | Krackturm, Coker, Gasfackel |
+
+## Stufe 6 — Runde 145: die Gasfackel
+
+Der Schornstein, an dem in der Raffinerie abgelassen wird, was sonst nirgends hinpasst. Zwölf
+Blöcke hoch auf einem Feld von drei mal drei, angeschlossen wird unten an den vier Füßen.
+
+Zwei Schalter in der Oberfläche, beide über `IControlReceiver`: das **Ventil** lässt überhaupt
+etwas hinauf, die **Zündung** entscheidet, ob es oben abgefackelt oder nur abgeblasen wird.
+Abgefackelt wird nur Brennbares — dabei fällt Strom an, fünfmal so viel aus Gas wie aus einer
+Flüssigkeit. Abgeblasen wird nur Gasförmiges, dafür fünfmal so schnell. Wer der Flamme zu nahe
+kommt, brennt.
+
+Sie ist die erste Maschine der Kette, die **kippt**: steht sie nicht auf vier tragenden Ecken,
+neigt sie sich und stellt den Betrieb ein. Das Kippsystem gibt es im Port seit dem
+Hochofen; hier wird es zum ersten Mal in der Erdölkette benutzt.
+
+**Zwei Abweichungen.**
+
+- Das Original spielt beim Abfackeln `hbm:weapon.flamethrowerShoot`. Diesen Ton gibt es im Port
+  nicht; an seiner Stelle steht das Feuerknistern von Vanilla.
+- Beim Verbrennen zeigt das Original zusätzlich eine Rauchfahne aus einer Partikelsorte, die der
+  Port nicht kennt — sie bleibt weg. Die Gasfahne beim Abblasen und die Flamme selbst sind da.
+
+### Stand der Erdölkette nach Runde 145
+
+| | |
+|---|---|
+| portiert (13) | Bohrturm, Pumpe, Frackingturm, Raffinerie, Fraktionierturm, Zwischenstück, Reformer, Hydrotreater, Vakuumdestille, Verfestiger, Pyroofen, Verflüssiger, **Gasfackel** |
+| offen (2) | Krackturm, Coker |
+
+Die beiden letzten sind die aufwendigsten: beides große, richtungsabhängige Verbunde mit
+mehreren Teilkörpern (`getAllDimensions`), der Coker zusätzlich am Wärmenetz statt am Stromnetz.

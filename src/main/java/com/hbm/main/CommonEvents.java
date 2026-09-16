@@ -268,6 +268,7 @@ public class CommonEvents {
         event.register(NtmMenuTypes.MACHINE_SOLIDIFIER.get(), MachineSolidifierScreen::new);
         event.register(NtmMenuTypes.MACHINE_PYRO_OVEN.get(), MachinePyroOvenScreen::new);
         event.register(NtmMenuTypes.MACHINE_LIQUEFACTOR.get(), MachineLiquefactorScreen::new);
+        event.register(NtmMenuTypes.MACHINE_GAS_FLARE.get(), MachineGasFlareScreen::new);
         event.register(NtmMenuTypes.FURNACE_COMBINATION.get(), MachineFurnaceCombinationScreen::new);
         event.register(NtmMenuTypes.MACHINE_BLAST_FURNACE.get(), MachineBlastFurnaceScreen::new);
         event.register(NtmMenuTypes.MACHINE_WOOD_BURNER.get(), MachineWoodBurnerScreen::new);
