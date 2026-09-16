@@ -385,6 +385,11 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.doorBlockWithRenderType(NtmBlocks.DOOR_METAL.get(), modLoc("block/door_metal_bottom"), modLoc("block/door_metal_top"), "cutout");
         this.doorBlockWithRenderType(NtmBlocks.DOOR_OFFICE.get(), modLoc("block/door_office_bottom"), modLoc("block/door_office_top"), "cutout");
         this.doorBlockWithRenderType(NtmBlocks.DOOR_BUNKER.get(), modLoc("block/door_bunker_bottom"), modLoc("block/door_bunker_top"), "cutout");
+        /* Tueren tragen ihr Gegenstandsmodell nicht aus dem Blockmodell, sondern flach aus
+         * einer eigenen Textur -- doorBlockWithRenderType erzeugt es nicht mit. */
+        this.itemModels().basicItem(NtmBlocks.DOOR_METAL.asItem());
+        this.itemModels().basicItem(NtmBlocks.DOOR_OFFICE.asItem());
+        this.itemModels().basicItem(NtmBlocks.DOOR_BUNKER.asItem());
         this.trapdoorBlockWithRenderType(NtmBlocks.TRAPDOOR_STEEL.get(), modLoc("block/trapdoor_steel"), true, "cutout");
         this.blockItem(NtmBlocks.TRAPDOOR_STEEL, "_bottom");
 
@@ -399,6 +404,10 @@ public class NtmBlockStateProvider extends BlockStateProvider {
 
         this.fenceBlock(NtmBlocks.FENCE_METAL.get(), modLoc("block/fence_metal"));
         this.fenceBlock(NtmBlocks.FENCE_METAL_POST.get(), modLoc("block/fence_metal_post"));
+        /* fenceBlock erzeugt nur _post und _side; das Inventarmodell, auf das die beiden
+         * blockItem-Zeilen darunter zeigen, muss eigens angelegt werden. */
+        this.models().fenceInventory("fence_metal_inventory", modLoc("block/fence_metal"));
+        this.models().fenceInventory("fence_metal_post_inventory", modLoc("block/fence_metal_post"));
         this.blockItem(NtmBlocks.FENCE_METAL, "_inventory");
         this.blockItem(NtmBlocks.FENCE_METAL_POST, "_inventory");
 
@@ -1374,6 +1383,7 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         /* Der Stellvertreter sieht ueberall gleich aus, ob Anschlussstelle oder nicht. */
         ModelFile pwrBlock = this.models().cubeAll(this.name(NtmBlocks.PWR_BLOCK.get()), modLoc("block/pwr_block"));
         this.getVariantBuilder(NtmBlocks.PWR_BLOCK.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(pwrBlock).build());
+        this.blockItem(NtmBlocks.PWR_BLOCK);
     }
 
     /** Die Aussenwand: roh und verschraubt, im Original zwei Metadatenwerte. */

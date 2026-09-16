@@ -111,6 +111,15 @@ jobs:
           fi
           echo "OK - keine Datei liegt doppelt vor."
 
+      # Ob jedes Modell auch wirklich entsteht, steht nicht im Quelltext, sondern haengt daran,
+      # was der Erzeuger TUT -- kein Tor auf dem Quelltext kann das sehen. Diese Pruefung sieht
+      # das Ergebnis und steht deshalb hier, hinter runData. Die Selbstprobe davor stellt
+      # sicher, dass sie ueberhaupt noch anschlaegt.
+      - name: Check generated models resolve
+        run: |
+          bash tools/model-resolve-check.sh --selbstprobe
+          bash tools/model-resolve-check.sh
+
       - name: Build with Gradle
         run: ./gradlew build
 

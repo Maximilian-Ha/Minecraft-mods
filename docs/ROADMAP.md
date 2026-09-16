@@ -3124,3 +3124,36 @@ dessen Gegenstände schon alle vergeben sind, wird übersprungen.
 Assetlücke, sondern eine Doppelanmeldung zur Laufzeit — sichtbar erst, wenn ein echter Client
 lädt. Der `runServer`-Rauchtest der CI läuft ohne Client und kommt an
 `RegisterClientExtensionsEvent` gar nicht vorbei.
+
+## Runde 150: die fehlenden Modelle aus dem Spielprotokoll, und ein Tor dafür
+
+Dasselbe Protokoll vom 16.09. meldete neun Gegenstände mit dem fehlenden-Modell-Würfel und acht
+fehlende Partikelbilder. Alle neun hatten verschiedene Ursachen:
+
+| Fundstelle | Ursache |
+|---|---|
+| `door_metal`, `door_office`, `door_bunker` | `doorBlockWithRenderType` erzeugt kein Gegenstandsmodell — Türen tragen es flach aus eigener Textur |
+| `fence_metal`, `fence_metal_post` | `fenceBlock` erzeugt kein `_inventory`; die vorhandenen `blockItem`-Zeilen zeigten auf ein Modell, das nie entstand |
+| `pwr_block` | Blockmodell war da, das `blockItem` fehlte |
+| `pwr_fuel_hot`, `pwr_fuel_depleted` | `EnumMultiItem.registerItemModel` schrieb für `multiTexture == false` **gar nichts** |
+| `ammo_debug` | in keinem Erzeuger genannt; es gibt auch im Original keine Textur dafür → läuft auf den Platzhalter `nothing` |
+
+Dazu die Partikel: `vanilla_cloud.json` und `gas_flame.json` zeigten auf
+`hbmsntm:vanilla/generic_0..7` — einen Unterordner, den es nie gab. Beide sind Kopien von
+Vanillas `cloud.json`, bei denen der Namensraum mit umgeschrieben wurde. Sie zeigen jetzt wieder
+auf `minecraft:generic_0..7`.
+
+### Ein sechzehntes Tor, und warum es nicht bei den anderen steht
+
+Die fünfzehn Tore arbeiten auf dem Quelltext. Sechs der neun Fundstellen hängen aber nicht
+daran, was im Quelltext **steht**, sondern daran, was der Erzeuger **tut** — und der braucht den
+Minecraft-Klassenpfad, der in der Entwicklungsumgebung gesperrt ist.
+
+`tools/model-resolve-check.sh` läuft deshalb in der CI, direkt hinter `runData`, und sieht das
+Ergebnis: löst jedes Elternmodell auf, und hat jeder Eintrag der erzeugten Sprachdatei ein
+Gegenstandsmodell? Das hätte alle neun gefunden.
+
+**Es misst seine eigene Empfindlichkeit.** `--selbstprobe` baut eine Nachbildung der Fundstellen
+in einem Temp-Verzeichnis und besteht nur, wenn die Regel genau ein fehlendes Elternmodell und
+drei Gegenstände ohne Modell meldet. Die CI führt erst die Selbstprobe aus, dann die Prüfung —
+ein Tor, dessen Empfindlichkeit niemand misst, ist eine Attrappe.

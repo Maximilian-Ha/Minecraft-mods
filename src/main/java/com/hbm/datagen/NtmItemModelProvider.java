@@ -579,6 +579,9 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicItem(NtmItems.REACTOR_SENSOR.get());
         this.basicItem(NtmItems.TURRET_CHIP.get());
         this.basicItem(NtmItems.AMMO_DGK.get());
+        /* Der Debugmunition fehlt eine Textur -- auch das Original hat keine. Damit sie nicht
+         * als fehlendes Modell erscheint, laeuft sie auf den Platzhalter. */
+        this.withExistingParent("ammo_debug", mcLoc("item/generated")).texture("layer0", modLoc("item/nothing"));
         this.basicItem(NtmItems.PLATE_KEVLAR.get());
         this.basicItem(NtmItems.PLATE_MIXED.get());
         this.basicItem(NtmItems.PLATE_PAA.get());
