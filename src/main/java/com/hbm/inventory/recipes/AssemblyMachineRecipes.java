@@ -1183,6 +1183,21 @@ public class AssemblyMachineRecipes extends GenericRecipes<GenericRecipe> {
                         new ComparableStack(NtmItems.CIRCUIT_INTEGRATED_BOARD.get(), 1)
                 ));
 
+        // ---- Runde 141 ----
+        // Original "ass.vaccumrefinery" (der Schreibfehler steht so im Original, der Name
+        // hier ist berichtigt). Dieselben Abbildungen wie beim Reformer; CHIP_BISMOID wird
+        // der Mikrochip, wie in Runde 123.
+        this.register(new GenericRecipe("ass.vacuumdistill").setup(200, 100).outputItems(new ItemStack(NtmBlocks.MACHINE_VACUUM_DISTILL, 1))
+                .inputItems(
+                        NtmItems.castPlateIngredient(CastPlateItem.Type.STEEL, 16),
+                        new ComparableStack(NtmItems.PLATE_COPPER.get(), 16),
+                        new ComparableStack(NtmItems.INGOT_DURA_STEEL.get(), 4),
+                        new ComparableStack(NtmItems.SPHERE_STEEL.get(), 1),
+                        new ComparableStack(NtmItems.PIPES_STEEL.get(), 12),
+                        new ComparableStack(NtmItems.MOTOR.get(), 3),
+                        new ComparableStack(NtmItems.CIRCUIT_MICROCHIP.get(), 4)
+                ));
+
         FluidType[] order = Fluids.getInNiceOrder();
         for(int i = 1; i < order.length; ++i) {
             FluidType type = order[i];

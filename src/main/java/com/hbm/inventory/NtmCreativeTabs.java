@@ -1363,6 +1363,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.FRACTION_SPACER);
                         output.accept(NtmBlocks.MACHINE_CATALYTIC_REFORMER);
                         output.accept(NtmBlocks.MACHINE_HYDROTREATER);
+                        output.accept(NtmBlocks.MACHINE_VACUUM_DISTILL);
                         output.accept(NtmBlocks.FURNACE_COMBINATION);
                         output.accept(NtmBlocks.MACHINE_DRAIN);
                         output.accept(NtmBlocks.MACHINE_INTAKE);

@@ -68,6 +68,7 @@ public class ResourceManager {
     public static final ResourceLocation FRACTION_SPACER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/fraction_spacer.png");
     public static final ResourceLocation CATALYTIC_REFORMER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/catalytic_reformer.png");
     public static final ResourceLocation HYDROTREATER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/hydrotreater.png");
+    public static final ResourceLocation VACUUM_DISTILL_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/vacuum_distill.png");
     public static final ResourceLocation FURNACE_COMBINATION_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/combination_oven.png");
     public static final ResourceLocation BLAST_FURNACE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/blast_furnace.png");
     public static final ResourceLocation WOOD_BURNER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/wood_burner.png");
@@ -457,6 +458,7 @@ public class ResourceManager {
     public static IModelCustom fractionSpacer;
     public static IModelCustom catalyticReformer;
     public static IModelCustom hydrotreater;
+    public static IModelCustom vacuumDistill;
     public static IModelCustom furnace_combination;
     public static IModelCustom blast_furnace;
     public static IModelCustom wood_burner;
@@ -705,6 +707,7 @@ public class ResourceManager {
         fractionSpacer = new HFRWavefrontObject("models/obj/machines/fraction_spacer.obj").asVBO();
         catalyticReformer = new HFRWavefrontObject("models/obj/machines/catalytic_reformer.obj").asVBO();
         hydrotreater = new HFRWavefrontObject("models/obj/machines/hydrotreater.obj").asVBO();
+        vacuumDistill = new HFRWavefrontObject("models/obj/machines/vacuum_distill.obj").asVBO();
         furnace_combination = new HFRWavefrontObject("models/obj/machines/combination_oven.obj").asVBO();
         blast_furnace = new HFRWavefrontObject("models/obj/machines/blast_furnace.obj").asVBO();
         wood_burner = new HFRWavefrontObject("models/obj/machines/wood_burner.obj").asVBO();
