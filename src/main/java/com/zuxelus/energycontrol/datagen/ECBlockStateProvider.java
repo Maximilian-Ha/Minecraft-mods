@@ -42,6 +42,11 @@ public class ECBlockStateProvider extends BlockStateProvider {
                 block("info_panel_panel_all"), block("info_panel_panel_face"), block("info_panel_panel_all"));
         directionalBlock(ECBlocks.INFO_PANEL.get(), state -> model);
         simpleBlockItem(ECBlocks.INFO_PANEL.get(), model);
+
+        ModelFile extender = models().orientable("info_panel_extender",
+                block("info_panel_extender_all"), block("info_panel_extender_face"), block("info_panel_extender_all"));
+        directionalBlock(ECBlocks.INFO_PANEL_EXTENDER.get(), state -> extender);
+        simpleBlockItem(ECBlocks.INFO_PANEL_EXTENDER.get(), extender);
     }
 
     /**

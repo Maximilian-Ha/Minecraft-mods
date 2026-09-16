@@ -29,6 +29,7 @@ public class ECLanguageProvider extends LanguageProvider {
 
         // ------------------------------------------------------------- Bloecke
         block(ECBlocks.INFO_PANEL.get(), "Industrial Information Panel", "Industrielle Informationstafel");
+        block(ECBlocks.INFO_PANEL_EXTENDER.get(), "Information Panel Extender", "Tafelerweiterung");
         block(ECBlocks.THERMAL_MONITOR.get(), "Thermal Monitor", "Waermemelder");
         block(ECBlocks.RANGE_TRIGGER.get(), "Range Trigger", "Bereichsmelder");
         block(ECBlocks.HOWLER_ALARM.get(), "Howler Alarm", "Heulalarm");

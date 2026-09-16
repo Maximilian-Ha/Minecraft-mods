@@ -94,6 +94,17 @@ public class ECRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_machine_casing", has(ECItems.MACHINE_CASING.get()))
                 .save(output);
 
+        // Die Erweiterung fuehrt keine Daten und braucht deshalb keine Schaltung.
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, ECBlocks.INFO_PANEL_EXTENDER.get(), 2)
+                .pattern("GGG")
+                .pattern("IMI")
+                .pattern("III")
+                .define('G', Items.GLASS)
+                .define('M', ECItems.MACHINE_CASING.get())
+                .define('I', Items.IRON_INGOT)
+                .unlockedBy("has_machine_casing", has(ECItems.MACHINE_CASING.get()))
+                .save(output);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, ECBlocks.THERMAL_MONITOR.get())
                 .pattern(" T ")
                 .pattern("CMC")

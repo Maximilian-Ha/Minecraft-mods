@@ -22,6 +22,7 @@ public class ECCreativeTabs {
                     .title(Component.translatable("itemGroup.energycontrol"))
                     .displayItems((parameters, output) -> {
                         output.accept(ECBlocks.INFO_PANEL.get());
+                        output.accept(ECBlocks.INFO_PANEL_EXTENDER.get());
                         output.accept(ECBlocks.THERMAL_MONITOR.get());
                         output.accept(ECBlocks.RANGE_TRIGGER.get());
                         output.accept(ECBlocks.HOWLER_ALARM.get());

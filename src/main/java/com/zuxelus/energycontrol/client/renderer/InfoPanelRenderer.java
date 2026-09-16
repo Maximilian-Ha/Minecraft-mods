@@ -9,7 +9,9 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
 
 import java.util.List;
@@ -17,16 +19,19 @@ import java.util.List;
 /**
  * Portiert aus 1.12.2: com.zuxelus.energycontrol.renderers.TileEntityInfoPanelRenderer.
  *
- * Zeichnet die Zeilen der Karte auf die Schauseite der Tafel. Das Original zeichnete
- * zusaetzlich den farbigen Hintergrund; hier ist der Hintergrund die Blocktextur selbst,
- * der Renderer kuemmert sich nur um die Schrift.
+ * Zeichnet die Zeilen der Karte auf die Schauseite der Tafel -- und, wenn Erweiterungen
+ * angebaut sind, ueber die ganze Flaeche. Das Original zeichnete zusaetzlich den farbigen
+ * Hintergrund; hier ist der Hintergrund die Blocktextur selbst, der Renderer kuemmert sich nur
+ * um die Schrift.
  */
 public class InfoPanelRenderer implements BlockEntityRenderer<InfoPanelBlockEntity> {
 
-    /** Die Schauseite wird als Feld von 64 mal 64 Schriftpunkten behandelt. */
+    /** Ein Block der Schauseite ist ein Feld von 64 mal 64 Schriftpunkten. */
     private static final float SCALE = 1F / 64F;
+    private static final int BLOCK_UNITS = 64;
     private static final int LINE_HEIGHT = 9;
-    private static final int MAX_LINES = 6;
+    /** Abstand zum Rand, damit die Schrift nicht an der Fuge klebt. */
+    private static final int MARGIN = 3;
 
     private final Font font;
 
@@ -44,25 +49,46 @@ public class InfoPanelRenderer implements BlockEntityRenderer<InfoPanelBlockEnti
 
         Direction facing = be.getBlockState().getValue(InfoPanelBlock.FACING);
 
+        // Die Flaeche in Blockeinheiten des oertlichen Achsenkreuzes: wo ihre Mitte
+        // gegenueber dieser Tafel liegt und wie gross sie ist.
+        BlockPos self = be.getBlockPos();
+        Vec3i right = right(facing);
+        Vec3i up = up(facing);
+
+        int x1 = dot(be.getScreenMin(), self, right);
+        int x2 = dot(be.getScreenMax(), self, right);
+        int y1 = dot(be.getScreenMin(), self, up);
+        int y2 = dot(be.getScreenMax(), self, up);
+
+        float centerX = (Math.min(x1, x2) + Math.max(x1, x2)) / 2F;
+        float centerY = (Math.min(y1, y2) + Math.max(y1, y2)) / 2F;
+        int width = Math.abs(x2 - x1) + 1;
+        int height = Math.abs(y2 - y1) + 1;
+
         pose.pushPose();
         pose.translate(0.5F, 0.5F, 0.5F);
         alignToFace(pose, facing);
-        // Ein halber Block nach vorn, plus ein Hauch, damit die Schrift nicht in der
-        // Blockflaeche steckt und flimmert.
-        pose.translate(0F, 0F, 0.5F + 0.005F);
+        // Erst in die Mitte der Flaeche, dann einen halben Block nach vorn -- plus ein Hauch,
+        // damit die Schrift nicht in der Blockflaeche steckt und flimmert.
+        pose.translate(centerX, centerY, 0.5F + 0.005F);
         // Negatives Y, weil die Schriftart nach unten laeuft, die Welt aber nach oben.
         pose.scale(SCALE, -SCALE, SCALE);
 
-        int count = Math.min(lines.size(), MAX_LINES);
+        int drawWidth = BLOCK_UNITS * width;
+        int drawHeight = BLOCK_UNITS * height;
+        int maxLines = Math.max(1, (drawHeight - 2 * MARGIN) / LINE_HEIGHT);
+
+        int count = Math.min(lines.size(), maxLines);
         float top = -(count * LINE_HEIGHT) / 2F;
         int color = be.getColorText();
+        float edge = drawWidth / 2F - MARGIN;
 
         for(int i = 0; i < count; i++) {
             PanelString line = lines.get(i);
             float y = top + i * LINE_HEIGHT;
-            drawPart(pose, buffers, light, line.textLeft, colorOr(line.colorLeft, color), -30F, y, Align.LEFT);
-            drawPart(pose, buffers, light, line.textCenter, colorOr(line.colorCenter, color), 0F, y, Align.CENTER);
-            drawPart(pose, buffers, light, line.textRight, colorOr(line.colorRight, color), 30F, y, Align.RIGHT);
+            draw(pose, buffers, light, line.textLeft, colorOr(line.colorLeft, color), -edge, y, Align.LEFT);
+            draw(pose, buffers, light, line.textCenter, colorOr(line.colorCenter, color), 0F, y, Align.CENTER);
+            draw(pose, buffers, light, line.textRight, colorOr(line.colorRight, color), edge, y, Align.RIGHT);
         }
 
         pose.popPose();
@@ -70,7 +96,7 @@ public class InfoPanelRenderer implements BlockEntityRenderer<InfoPanelBlockEnti
 
     private enum Align { LEFT, CENTER, RIGHT }
 
-    private void drawPart(PoseStack pose, MultiBufferSource buffers, int light, Component text, int color, float x, float y, Align align) {
+    private void draw(PoseStack pose, MultiBufferSource buffers, int light, Component text, int color, float x, float y, Align align) {
         if(text == null) return;
 
         float width = font.width(text);
@@ -87,6 +113,34 @@ public class InfoPanelRenderer implements BlockEntityRenderer<InfoPanelBlockEnti
     /** Eine eigene Zeilenfarbe schlaegt die Grundfarbe der Tafel. */
     private static int colorOr(int lineColor, int panelColor) {
         return lineColor != 0 ? lineColor : panelColor;
+    }
+
+    private static int dot(BlockPos pos, BlockPos origin, Vec3i axis) {
+        return (pos.getX() - origin.getX()) * axis.getX()
+                + (pos.getY() - origin.getY()) * axis.getY()
+                + (pos.getZ() - origin.getZ()) * axis.getZ();
+    }
+
+    /**
+     * Die Weltrichtung, die auf dem Schirm nach rechts zeigt -- also die oertliche X-Achse,
+     * nachdem {@link #alignToFace} gedreht hat.
+     */
+    private static Vec3i right(Direction facing) {
+        return switch(facing) {
+            case NORTH -> new Vec3i(-1, 0, 0);
+            case EAST -> new Vec3i(0, 0, -1);
+            case WEST -> new Vec3i(0, 0, 1);
+            default -> new Vec3i(1, 0, 0);
+        };
+    }
+
+    /** Dasselbe fuer oben: die oertliche Y-Achse. */
+    private static Vec3i up(Direction facing) {
+        return switch(facing) {
+            case UP -> new Vec3i(0, 0, -1);
+            case DOWN -> new Vec3i(0, 0, 1);
+            default -> new Vec3i(0, 1, 0);
+        };
     }
 
     /**

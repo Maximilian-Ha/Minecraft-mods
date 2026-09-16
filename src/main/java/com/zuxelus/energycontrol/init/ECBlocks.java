@@ -4,6 +4,7 @@ import com.zuxelus.energycontrol.EnergyControl;
 import com.zuxelus.energycontrol.blocks.HowlerAlarmBlock;
 import com.zuxelus.energycontrol.blocks.IndustrialAlarmBlock;
 import com.zuxelus.energycontrol.blocks.InfoPanelBlock;
+import com.zuxelus.energycontrol.blocks.InfoPanelExtenderBlock;
 import com.zuxelus.energycontrol.blocks.RangeTriggerBlock;
 import com.zuxelus.energycontrol.blocks.ThermalMonitorBlock;
 import net.minecraft.world.item.BlockItem;
@@ -25,6 +26,9 @@ public class ECBlocks {
 
     public static final DeferredBlock<InfoPanelBlock> INFO_PANEL =
             register("info_panel", () -> new InfoPanelBlock(machineProperties()));
+
+    public static final DeferredBlock<InfoPanelExtenderBlock> INFO_PANEL_EXTENDER =
+            register("info_panel_extender", () -> new InfoPanelExtenderBlock(machineProperties()));
 
     public static final DeferredBlock<ThermalMonitorBlock> THERMAL_MONITOR =
             register("thermal_monitor", () -> new ThermalMonitorBlock(machineProperties()));

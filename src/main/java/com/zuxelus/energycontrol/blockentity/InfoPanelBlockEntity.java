@@ -11,7 +11,9 @@ import com.zuxelus.energycontrol.items.ItemUpgrade.UpgradeType;
 import com.zuxelus.energycontrol.items.cards.ItemCardBase;
 import com.zuxelus.energycontrol.items.cards.ItemCardReader;
 import com.zuxelus.energycontrol.menus.InfoPanelMenu;
+import com.zuxelus.energycontrol.blocks.InfoPanelBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -21,6 +23,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,6 +74,15 @@ public class InfoPanelBlockEntity extends CardReaderBlockEntity {
     private List<PanelString> cachedLines;
     private ItemStack cachedFor = ItemStack.EMPTY;
 
+    /**
+     * Die Flaeche, die diese Tafel bespielt -- sie selbst plus ihre Erweiterungen. Wird auf
+     * dem Server in jedem Takt neu ermittelt und mit uebertragen; der Renderer braucht sie,
+     * und auf dem Client laesst sie sich nicht zuverlaessig selbst ausrechnen (die Nachbarn
+     * koennen in einem noch nicht geladenen Chunk liegen).
+     */
+    private BlockPos screenMin;
+    private BlockPos screenMax;
+
     public InfoPanelBlockEntity(BlockPos pos, BlockState state) {
         super(ECBlockEntityTypes.INFO_PANEL.get(), pos, state, 4);
     }
@@ -87,7 +99,29 @@ public class InfoPanelBlockEntity extends CardReaderBlockEntity {
 
         if(updateTicker-- > 0) return;
         updateTicker = Math.max(1, tickRate) - 1;
-        updateCards();
+
+        // Nur abgleichen, wenn es etwas zu melden gibt: eine Tafel ohne Karte und ohne
+        // Aenderung an der Flaeche haette sonst je Takt ein Paket verschickt.
+        boolean changed = updateScreen();
+        changed |= updateCards();
+        if(changed) sync();
+    }
+
+    /**
+     * Rechnet die Schirmflaeche neu aus. Das geschieht in jedem Takt statt beim Setzen und
+     * Abbauen einzelner Bloecke: eine Suche ueber hoechstens vierundsechzig Bloecke einmal je
+     * Sekunde kostet nichts, und dafuer gibt es keinen Zustand, der veralten kann.
+     */
+    private boolean updateScreen() {
+        Direction facing = getBlockState().getValue(InfoPanelBlock.FACING);
+        PanelScreens.Screen screen = PanelScreens.around(level, worldPosition, facing);
+
+        if(screen.min().equals(screenMin) && screen.max().equals(screenMax)) return false;
+
+        screenMin = screen.min();
+        screenMax = screen.max();
+        renderBox = null;
+        return true;
     }
 
     @Override
@@ -103,9 +137,9 @@ public class InfoPanelBlockEntity extends CardReaderBlockEntity {
      * im Fach uebertragen wird -- deshalb reicht ein Blockabgleich, und der Renderer
      * braucht keine eigene Leitung.
      */
-    private void updateCards() {
+    private boolean updateCards() {
         ItemStack stack = getItem(SLOT_CARD);
-        if(!ItemCardBase.isCard(stack)) return;
+        if(!ItemCardBase.isCard(stack)) return false;
 
         ItemCardReader reader = new ItemCardReader(stack);
         applyTitleFromName(stack, reader);
@@ -121,9 +155,8 @@ public class InfoPanelBlockEntity extends CardReaderBlockEntity {
             state = CardState.CUSTOM_ERROR;
         }
         reader.setState(state);
-
         cachedLines = null;
-        sync();
+        return true;
     }
 
     /**
@@ -135,6 +168,34 @@ public class InfoPanelBlockEntity extends CardReaderBlockEntity {
         if(!stack.has(net.minecraft.core.component.DataComponents.CUSTOM_NAME)) return;
         String name = stack.getHoverName().getString();
         if(!name.equals(reader.getTitle())) reader.setTitle(name);
+    }
+
+    // ------------------------------------------------------------------ Schirm
+
+    public BlockPos getScreenMin() {
+        return screenMin != null ? screenMin : worldPosition;
+    }
+
+    public BlockPos getScreenMax() {
+        return screenMax != null ? screenMax : worldPosition;
+    }
+
+    private AABB renderBox;
+
+    /**
+     * Der Renderer zeichnet ueber die ganze Flaeche. Bliebe es beim Standardkasten des
+     * einzelnen Blocks, verschwaende die Schrift eines grossen Schirms, sobald der Block mit
+     * der Tafel aus dem Bild laeuft.
+     */
+    @Override
+    public AABB getRenderBoundingBox() {
+        if(renderBox == null) {
+            BlockPos min = getScreenMin();
+            BlockPos max = getScreenMax();
+            renderBox = new AABB(min.getX(), min.getY(), min.getZ(),
+                    max.getX() + 1.0D, max.getY() + 1.0D, max.getZ() + 1.0D);
+        }
+        return renderBox;
     }
 
     /** Reichweite in Bloecken: Grundwert plus Aufwertungen im zweiten Fach. */
@@ -281,6 +342,16 @@ public class InfoPanelBlockEntity extends CardReaderBlockEntity {
         CompoundTag settings = tag.getCompound("displaySettings");
         for(String name : settings.getAllKeys()) displaySettings.put(name, settings.getInt(name));
 
+        int[] screen = tag.getIntArray("screen");
+        if(screen.length == 6) {
+            screenMin = new BlockPos(screen[0], screen[1], screen[2]);
+            screenMax = new BlockPos(screen[3], screen[4], screen[5]);
+        } else {
+            screenMin = null;
+            screenMax = null;
+        }
+        renderBox = null;
+
         cachedLines = null;
     }
 
@@ -295,6 +366,11 @@ public class InfoPanelBlockEntity extends CardReaderBlockEntity {
         CompoundTag settings = new CompoundTag();
         displaySettings.forEach(settings::putInt);
         tag.put("displaySettings", settings);
+
+        BlockPos min = getScreenMin();
+        BlockPos max = getScreenMax();
+        tag.putIntArray("screen", new int[] {
+                min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ() });
     }
 
     // -------------------------------------------------------------- Oberflaeche

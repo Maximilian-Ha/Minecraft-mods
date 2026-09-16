@@ -16,6 +16,7 @@
 | Datengeneratoren | Blockzustände, Modelle, Sprache (en/de), Rezepte, Loot, Tags |
 | **Stufe 1:** Strom für die Tafeln | Stromspeicher als `Capabilities.EnergyStorage.BLOCK`, Energiebalken, abschaltbar |
 | **Stufe 2:** Karten anderer Mods | Inventar auch über `Capabilities.ItemHandler.BLOCK`, Durchsatz auf der Stromkarte |
+| **Stufe 3:** Große Schirme | Tafelerweiterung, Flächenerkennung ohne Verwaltung, Schrift über das ganze Rechteck |
 
 ---
 
@@ -91,21 +92,24 @@ hängen an Mekanisms eigener API und stehen in Stufe 5.
 
 **Aufwand:** klein. **Risiko:** gering.
 
-## Stufe 3 — Große Schirme (Tafelerweiterungen)
+## Stufe 3 — Große Schirme (Tafelerweiterungen) &nbsp;&nbsp;**[fertig]**
 
 **Ziel:** Mehrere Tafeln zu einer Fläche zusammenschalten, wie im Original.
 
 **Inhalt:** Erweiterungsblock, Flächenerkennung (welche Blöcke bilden ein sauberes Rechteck mit
 gleicher Blickrichtung?), Weiterleitung von Klick und Oberfläche an die Haupttafel, und ein
-Renderer, der die Schrift über das ganze Rechteck streckt statt über einen Block. Die Texturen
-dafür liegen im Original bereit (`extender_all`, `extender_face`) und sind bis dahin aus diesem
-Zweig entfernt, damit der Texturen-Torwächter nicht über ungenutzte Dateien stolpert.
+Renderer, der die Schrift über das ganze Rechteck streckt statt über einen Block. Die Texturen stammen aus dem
+Original (`extender_all`, `extender_face`).
 
-Im Original steckt das in `ScreenManager` (rund 430 Zeilen) plus zwei Renderern. Der Port kann
-es kürzer, weil er die Fläche aus dem Blockzustand herleiten kann statt sie zu verwalten.
+Im Original steckt das in `ScreenManager` (rund 430 Zeilen), der die Schirme je Welt in einer
+Liste führte und beim Setzen, Abbauen und Laden von Hand nachziehen musste — der häufigste
+Fehlerort des ganzen Mods. Der Port verwaltet nichts: die Tafel rechnet ihre Fläche in ihrem
+eigenen Takt neu aus. Eine Suche über höchstens vierundsechzig Blöcke einmal je Sekunde kostet
+nichts, und dafür gibt es keinen Zustand, der veralten kann.
 
-**Aufwand:** mittel. **Risiko:** mittel — die Flächenerkennung muss beim Abbauen, Drehen und
-Chunk-Laden sauber zerfallen.
+Drei Regeln halten die Fläche sauber: gleiche Ebene und gleiche Blickrichtung, volles Rechteck
+(sonst bleibt es beim Einzelblock), und **genau eine** Tafel je Schirm — reichen zwei Tafeln
+über dieselben Erweiterungen, gibt jede ihren Anspruch auf, statt übereinanderzuschreiben.
 
 ## Stufe 4 — Bedienung: Textfeld, Farbwahl, Berührung
 
