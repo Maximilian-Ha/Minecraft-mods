@@ -9,7 +9,7 @@ dieses Repositories.
 Energy Control zeigt Messwerte anderer Maschinen auf Informationstafeln an. Die Werte holen
 **Sensorkarten**, die mit einem **Bausatz** auf einen Block eingemessen werden.
 
-> **Status: erster Bauabschnitt.** Enthalten sind:
+> **Status: alle sechs Stufen des Stufenplans sind umgesetzt.** Enthalten sind:
 >
 > - **Informationstafel** mit Kartenfach, drei Aufwertungsfächern und Textanzeige auf der Schauseite —
 >   erweiterbar zu großen Schirmen, mit freier Farbwahl und als Schaltfläche benutzbar
@@ -25,9 +25,10 @@ Energy Control zeigt Messwerte anderer Maschinen auf Informationstafeln an. Die 
 >   und das **Tafelwerkzeug**, das die Blöcke dieses Mods ausrichtet
 >
 > Die Tafeln brauchen **Strom** und nehmen ihn über Forge Energy — also aus jeder Energie-Mod
-> dieser Fassung; in der Konfiguration abschaltbar. Die offenen Schritte sind als Stufenplan in
-> [`docs/ROADMAP.md`](docs/ROADMAP.md) beschrieben, was gegenüber dem Original bewusst anders
-> ist, in [`docs/ENTSCHEIDUNGEN.md`](docs/ENTSCHEIDUNGEN.md).
+> dieser Fassung; in der Konfiguration abschaltbar. Der Weg dorthin steht als Stufenplan in
+> [`docs/ROADMAP.md`](docs/ROADMAP.md), zusammen mit dem, was bewusst nicht übernommen wurde;
+> was gegenüber dem Original anders gelöst ist, in
+> [`docs/ENTSCHEIDUNGEN.md`](docs/ENTSCHEIDUNGEN.md).
 >
 > **Zum Bauen:** `./gradlew build` übersetzt nur. Blockmodelle, Sprachdateien, Rezepte und
 > Loot-Tabellen entstehen erst durch `./gradlew runData` — das gehört einmal vor dem Packen
