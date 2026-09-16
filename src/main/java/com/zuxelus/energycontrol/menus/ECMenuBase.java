@@ -4,9 +4,12 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+
+import java.util.function.IntSupplier;
 
 /**
  * Portiert aus 1.12.2: com.zuxelus.zlib.containers.ContainerBase.
@@ -26,6 +29,33 @@ public abstract class ECMenuBase<T extends Container> extends AbstractContainerM
     @Override
     public boolean stillValid(Player player) {
         return be.stillValid(player);
+    }
+
+    /**
+     * Haengt einen Ganzzahlwert an die Oberflaeche, der waehrend des Zusehens mitlaeuft --
+     * hier der Fuellstand des Stromspeichers.
+     *
+     * Minecraft schickt so einen Wert als Short. Ein Fuellstand passt da nicht hinein, sobald
+     * der Speicher groesser als 32767 FE ist, deshalb gehen zwei Werte hinaus: die unteren und
+     * die oberen sechzehn Bit. Zusammengesetzt ist der Wert wieder genau.
+     */
+    protected void addEnergySync(IntSupplier energy) {
+        addDataSlot(new DataSlot() {
+            @Override public int get() { return energy.getAsInt() & 0xFFFF; }
+            @Override public void set(int value) { low = value & 0xFFFF; }
+        });
+        addDataSlot(new DataSlot() {
+            @Override public int get() { return (energy.getAsInt() >>> 16) & 0xFFFF; }
+            @Override public void set(int value) { high = value & 0xFFFF; }
+        });
+    }
+
+    private int low;
+    private int high;
+
+    /** Der mitgelaufene Fuellstand, zum Zeichnen auf dem Client. */
+    public int getSyncedEnergy() {
+        return (high << 16) | low;
     }
 
     /** Spielerinventar mit den Abstaenden, die Minecraft selbst benutzt. */

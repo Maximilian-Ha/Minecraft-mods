@@ -1,5 +1,6 @@
 package com.zuxelus.energycontrol.client.screens;
 
+import com.zuxelus.energycontrol.ECConfig;
 import com.zuxelus.energycontrol.EnergyControl;
 import com.zuxelus.energycontrol.api.PanelString;
 import com.zuxelus.energycontrol.blockentity.RangeTriggerBlockEntity;
@@ -19,6 +20,13 @@ import net.minecraft.world.entity.player.Inventory;
 public class RangeTriggerScreen extends AbstractContainerScreen<RangeTriggerMenu> {
 
     private static final ResourceLocation TEXTURE = EnergyControl.loc("textures/gui/gui_range_trigger.png");
+
+    // Stehend unter den beiden Faechern: in der Breite ist zwischen den Schrittknoepfen
+    // kein Platz, links unter den Faechern schon.
+    private static final int BAR_X = 8;
+    private static final int BAR_Y = 58;
+    private static final int BAR_WIDTH = 16;
+    private static final int BAR_HEIGHT = 36;
 
     public RangeTriggerScreen(RangeTriggerMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
@@ -75,12 +83,23 @@ public class RangeTriggerScreen extends AbstractContainerScreen<RangeTriggerMenu
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         renderBackground(guiGraphics, mouseX, mouseY, partialTick);
         super.render(guiGraphics, mouseX, mouseY, partialTick);
+
+        if(ECConfig.requirePower()) {
+            EnergyBar.tooltip(guiGraphics, font, mouseX, mouseY, leftPos + BAR_X, topPos + BAR_Y,
+                    BAR_WIDTH, BAR_HEIGHT, menu.getSyncedEnergy(), menu.be.getMaxEnergyStored());
+        }
+
         renderTooltip(guiGraphics, mouseX, mouseY);
     }
 
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
         guiGraphics.blit(TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
+
+        if(ECConfig.requirePower()) {
+            EnergyBar.renderVertical(guiGraphics, leftPos + BAR_X, topPos + BAR_Y,
+                    BAR_WIDTH, BAR_HEIGHT, menu.getSyncedEnergy(), menu.be.getMaxEnergyStored());
+        }
     }
 
     @Override

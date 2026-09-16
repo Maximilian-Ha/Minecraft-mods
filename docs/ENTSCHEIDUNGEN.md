@@ -2,25 +2,28 @@
 
 Was dieser Port bewusst anders macht als das Original, und warum.
 
-## Die Tafeln brauchen keinen Strom — **überholt**
-
-> **Diese Entscheidung ist zurückgenommen.** Die Tafeln sollen Strom brauchen; umgesetzt wird
-> das über die Energie-Schnittstelle von NeoForge (Forge Energy) als
-> [Stufe 1 der Roadmap](ROADMAP.md#stufe-1--die-tafeln-brauchen-strom). Bis dahin gilt im Code
-> noch, was hier steht.
+## Die Tafeln brauchen Strom -- über Forge Energy
 
 Im Original zog jede Informationstafel EU aus einem IC2-Netz und blieb ohne Strom dunkel.
+IC2 gibt es auf 1.21.1 nicht. An seine Stelle tritt die Energie-Schnittstelle von NeoForge:
+Tafel und Bereichsmelder führen einen Stromspeicher und melden ihn als
+`Capabilities.EnergyStorage.BLOCK` an. Damit speist jede Mod ein, die Forge Energy abgibt --
+Mekanism, Thermal, Immersive Engineering und alle anderen --, ohne dass hier eine Zeile je Mod
+steht. Forge Energy steckt in NeoForge selbst, der Mod bekommt dadurch also **keine** neue
+Abhängigkeit: eine Tafel ohne Kabel verhält sich wie eine Tafel ohne Strom.
 
-IC2 gibt es auf 1.21.1 nicht. Die Tafel stattdessen an HBMs Stromnetz zu hängen, hätte den
-**Kern** des Mods von HBM abhängig gemacht — dann ließe er sich ohne HBM nicht mehr laden, und
-die weiche Anbindung wäre hinfällig.
+Abgegeben wird nichts. Ein Kartenleser verbraucht Strom, er verteilt ihn nicht; `maxExtract`
+ist null.
 
-Der Fehler im ursprünglichen Schluss war der nächste Satz: eine eigene Stromaufnahme über die
-NeoForge-Schnittstelle stelle in einer Welt mit HBM zwei Systeme nebeneinander. Das tut sie,
-aber das ist kein Einwand — HBM stellt selbst zwei Systeme nebeneinander und hält dafür genau
-zwei Wandlerblöcke bereit. Forge Energy steckt zudem in NeoForge, nicht in einer fremden Mod;
-sie zu benutzen schafft also keine neue Abhängigkeit, und jede Energie-Mod dieser Fassung kann
-eine Tafel versorgen, ohne dass hier eine Zeile je Mod steht.
+Wer den Strombedarf nicht will, schaltet ihn in der Konfiguration ab (`requirePower`). Dann
+arbeiten beide Blöcke wie in der ersten Fassung dieses Ports.
+
+**Die erste Fassung entschied anders, und das war falsch.** Die Begründung damals: eine eigene
+Stromaufnahme stelle in einer Welt mit HBM zwei Systeme nebeneinander. Das tut sie -- aber das
+ist kein Einwand, denn HBM stellt selbst zwei Systeme nebeneinander und hält dafür genau zwei
+Wandlerblöcke bereit (`machine_converter_he_rf`, `machine_converter_rf_he`; im ganzen Port die
+einzigen Übergänge). Richtig an der alten Überlegung war nur der Teil, der geblieben ist: die
+Tafel an HBMs Stromnetz zu hängen hätte den **Kern** des Mods von HBM abhängig gemacht.
 
 ## Eine Kartenart ist ein eigener Gegenstand
 

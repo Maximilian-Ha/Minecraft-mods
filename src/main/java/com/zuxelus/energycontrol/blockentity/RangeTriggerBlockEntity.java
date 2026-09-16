@@ -30,7 +30,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * Verglichen wird das Feld "energy", ersatzweise "amount" -- also Stromspeicher und
  * Tankfuellstand, so wie im Original.
  */
-public class RangeTriggerBlockEntity extends ECContainerBlockEntity {
+public class RangeTriggerBlockEntity extends CardReaderBlockEntity {
 
     public static final int SLOT_CARD = 0;
     public static final int SLOT_UPGRADE_RANGE = 1;
@@ -53,6 +53,14 @@ public class RangeTriggerBlockEntity extends ECContainerBlockEntity {
 
     public void tick() {
         if(level == null || level.isClientSide) return;
+
+        tickPower();
+        if(!isPowered()) {
+            // Ohne Strom meldet der Melder nichts -- auch nicht "innerhalb".
+            if(status != STATUS_UNKNOWN) setStatus(STATUS_UNKNOWN);
+            return;
+        }
+
         if(level.getGameTime() % 20L != 0L) return;
         updateCard();
     }
@@ -83,6 +91,10 @@ public class RangeTriggerBlockEntity extends ECContainerBlockEntity {
             }
         }
 
+        setStatus(newStatus);
+    }
+
+    private void setStatus(int newStatus) {
         boolean signalChanged = getSignalFor(newStatus) != getSignal();
         status = newStatus;
         updateBlockState();
@@ -153,6 +165,7 @@ public class RangeTriggerBlockEntity extends ECContainerBlockEntity {
 
     @Override
     protected void readProperties(CompoundTag tag, HolderLookup.Provider registries) {
+        super.readProperties(tag, registries);
         levelStart = tag.getLong("levelStart");
         levelEnd = tag.contains("levelEnd") ? tag.getLong("levelEnd") : 40000L;
         invertRedstone = tag.getBoolean("invert");
@@ -161,6 +174,7 @@ public class RangeTriggerBlockEntity extends ECContainerBlockEntity {
 
     @Override
     protected void writeProperties(CompoundTag tag, HolderLookup.Provider registries) {
+        super.writeProperties(tag, registries);
         tag.putLong("levelStart", levelStart);
         tag.putLong("levelEnd", levelEnd);
         tag.putBoolean("invert", invertRedstone);

@@ -27,6 +27,23 @@ Daraus folgt dreierlei:
 In `neoforge.mods.toml` steht `hbmsntm` als **optionale** Abhängigkeit mit
 `ordering="AFTER"`: ist der Port da, wird er zuerst geladen.
 
+## Strom für die Tafeln
+
+HBMs Stromnetz (HE) ist bewusst von Forge Energy getrennt. `NtmCapabilities` meldet
+`EnergyStorage.BLOCK` an genau zwei Blöcken an, mit dem Kommentar *"das Stromnetz des Mods
+selbst bleibt bewusst getrennt -- so hält es auch das Original"*:
+
+- `machine_converter_he_rf` — HE hinein, Forge Energy heraus
+- `machine_converter_rf_he` — umgekehrt
+
+Eine Informationstafel an einem HBM-Netz hängt deshalb **hinter dem HE→RF-Wandler**. Das ist
+kein Umweg dieses Ports, sondern die Bauweise, die das Original schon hatte.
+
+*Später denkbar:* ein eigener HE-Anschlussblock, der ohne Wandler auskommt. Der müsste
+`IEnergyReceiverMK2` umsetzen und damit im Paket `crossmod/hbm` liegen, das ohne HBM gar nicht
+übersetzt wird -- die Anmeldung des Blocks müsste ihn über seinen Namen laden und ohne HBM auf
+eine leere Block-Entität zurückfallen. Machbar, aber umständlich; der Wandler tut es auch.
+
 ## Woher die Werte kommen
 
 ### Strom

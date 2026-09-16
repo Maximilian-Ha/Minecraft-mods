@@ -41,7 +41,7 @@ import java.util.Map;
  * NICHT UEBERNOMMEN: die Erweiterungen fuer grosse Schirme und der Beruehrungsbetrieb.
  * Siehe docs/ROADMAP.md.
  */
-public class InfoPanelBlockEntity extends ECContainerBlockEntity {
+public class InfoPanelBlockEntity extends CardReaderBlockEntity {
 
     public static final int SLOT_CARD = 0;
     public static final int SLOT_UPGRADE_RANGE = 1;
@@ -79,9 +79,22 @@ public class InfoPanelBlockEntity extends ECContainerBlockEntity {
 
     public void tick() {
         if(level == null || level.isClientSide) return;
+
+        tickPower();
+        // Ohne Strom bleibt der Schirm leer -- und die Karte wird auch nicht mehr
+        // nachgefuehrt, sonst stuende nach dem Einschalten ein alter Messwert da.
+        if(!isPowered()) return;
+
         if(updateTicker-- > 0) return;
         updateTicker = Math.max(1, tickRate) - 1;
         updateCards();
+    }
+
+    @Override
+    protected void onPowerChanged() {
+        cachedLines = null;
+        // Beim Einschalten sofort messen, nicht erst nach dem naechsten vollen Takt.
+        if(isPowered()) updateTicker = 0;
     }
 
     /**
@@ -258,6 +271,7 @@ public class InfoPanelBlockEntity extends ECContainerBlockEntity {
 
     @Override
     protected void readProperties(CompoundTag tag, HolderLookup.Provider registries) {
+        super.readProperties(tag, registries);
         showLabels = !tag.contains("showLabels") || tag.getBoolean("showLabels");
         colorBackground = tag.contains("colorBackground") ? tag.getInt("colorBackground") : DEFAULT_BACKGROUND;
         colorText = tag.getInt("colorText");
@@ -272,6 +286,7 @@ public class InfoPanelBlockEntity extends ECContainerBlockEntity {
 
     @Override
     protected void writeProperties(CompoundTag tag, HolderLookup.Provider registries) {
+        super.writeProperties(tag, registries);
         tag.putBoolean("showLabels", showLabels);
         tag.putInt("colorBackground", colorBackground);
         tag.putInt("colorText", colorText);

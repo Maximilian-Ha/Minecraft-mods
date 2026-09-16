@@ -1,5 +1,6 @@
 package com.zuxelus.energycontrol.client.screens;
 
+import com.zuxelus.energycontrol.ECConfig;
 import com.zuxelus.energycontrol.EnergyControl;
 import com.zuxelus.energycontrol.api.PanelSetting;
 import com.zuxelus.energycontrol.blockentity.InfoPanelBlockEntity;
@@ -16,17 +17,30 @@ import java.util.List;
 /**
  * Portiert aus 1.12.2: com.zuxelus.energycontrol.gui.GuiInfoPanel.
  *
- * Links die vier Faecher, rechts je ein Schalter fuer jede Zeile, die die steckende
- * Karte anbieten kann, darunter Beschriftung und Takt.
+ * Links die vier Faecher, oben der Energiebalken, darunter Beschriftung und Takt, in der
+ * Mitte je ein Schalter fuer jede Zeile, die die steckende Karte anbieten kann, unten die
+ * Farbwahl -- die nur erscheint, wenn die Farbaufwertung steckt.
  *
- * Im Original waren die Schalter selbstgebaute Ankreuzfelder mit eigener Grafik; hier
- * sind es die Knoepfe von Minecraft. Ihr Text sagt mit einem Haken, ob die Zeile an ist.
+ * Im Original waren die Schalter selbstgebaute Ankreuzfelder mit eigener Grafik; hier sind es
+ * die Knoepfe von Minecraft. Ihr Text sagt mit einem Haken, ob die Zeile an ist.
  */
 public class InfoPanelScreen extends AbstractContainerScreen<InfoPanelMenu> {
 
     private static final ResourceLocation TEXTURE = EnergyControl.loc("textures/gui/gui_info_panel.png");
 
-    private int knownSettings = -1;
+    private static final int BAR_X = 8;
+    private static final int BAR_Y = 16;
+    private static final int BAR_WIDTH = 160;
+
+    /** Zwei Spalten mal vier Zeilen -- so viele Schalter bietet keine Karte je an. */
+    private static final int SETTING_COLUMNS = 2;
+    private static final int SETTING_ROWS = 4;
+    private static final int SETTING_WIDTH = 68;
+    private static final int SETTING_HEIGHT = 12;
+    private static final int SETTING_X = 30;
+    private static final int SETTING_Y = 44;
+
+    private int knownState = -1;
 
     public InfoPanelScreen(InfoPanelMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
@@ -43,53 +57,55 @@ public class InfoPanelScreen extends AbstractContainerScreen<InfoPanelMenu> {
 
     private void rebuildButtons() {
         clearWidgets();
+        knownState = fingerprint();
 
         InfoPanelBlockEntity panel = menu.be;
-        List<PanelSetting> settings = panel.getSettingsList();
-        int current = panel.getDisplaySettings(panel.getItem(InfoPanelBlockEntity.SLOT_CARD));
-        knownSettings = settingsFingerprint();
-
-        int y = topPos + 18;
-        for(PanelSetting setting : settings) {
-            boolean on = (current & setting.displayBit) != 0;
-            // Die Kennung des Knopfes ist die Stelle im Einstellungswort, nicht die Maske.
-            int bitIndex = Integer.numberOfTrailingZeros(setting.displayBit);
-            Component label = Component.literal(on ? "☑ " : "☐ ").append(setting.title);
-            addRenderableWidget(Button.builder(label, button -> send(bitIndex))
-                    .bounds(leftPos + 30, y, 138, 14).build());
-            y += 15;
-            if(y > topPos + 100) break;
-        }
 
         addRenderableWidget(Button.builder(
                         Component.translatable("msg.ec.cbShowLabels")
                                 .append(": ")
                                 .append(Component.translatable(panel.getShowLabels() ? "options.on" : "options.off")),
                         button -> send(InfoPanelMenu.BUTTON_LABELS))
-                .bounds(leftPos + 30, topPos + 101, 138, 14).build());
+                .bounds(leftPos + 8, topPos + 26, 80, 13).build());
 
         addRenderableWidget(Button.builder(
                         Component.translatable("msg.ec.PanelRefreshRate")
                                 .append(": ")
                                 .append(Component.translatable("msg.ec.Ticks", panel.getTickRate())),
                         button -> send(InfoPanelMenu.BUTTON_TICKRATE))
-                .bounds(leftPos + 30, topPos + 84, 138, 14).build());
+                .bounds(leftPos + 90, topPos + 26, 78, 13).build());
+
+        List<PanelSetting> settings = panel.getSettingsList();
+        int current = panel.getDisplaySettings(panel.getItem(InfoPanelBlockEntity.SLOT_CARD));
+
+        for(int i = 0; i < settings.size() && i < SETTING_COLUMNS * SETTING_ROWS; i++) {
+            PanelSetting setting = settings.get(i);
+            boolean on = (current & setting.displayBit) != 0;
+            // Die Kennung des Knopfes ist die Stelle im Einstellungswort, nicht die Maske.
+            int bitIndex = Integer.numberOfTrailingZeros(setting.displayBit);
+            Component label = Component.literal(on ? "☑ " : "☐ ").append(setting.title);
+
+            int x = leftPos + SETTING_X + (i % SETTING_COLUMNS) * (SETTING_WIDTH + 2);
+            int y = topPos + SETTING_Y + (i / SETTING_COLUMNS) * SETTING_HEIGHT;
+            addRenderableWidget(Button.builder(label, button -> send(bitIndex))
+                    .bounds(x, y, SETTING_WIDTH, SETTING_HEIGHT).build());
+        }
 
         if(panel.hasColorUpgrade()) {
             addRenderableWidget(Button.builder(Component.translatable("msg.ec.ColorText"),
                             button -> send(InfoPanelMenu.BUTTON_COLOR_TEXT))
-                    .bounds(leftPos + 30, topPos + 67, 68, 14).build());
+                    .bounds(leftPos + 30, topPos + 92, SETTING_WIDTH, SETTING_HEIGHT).build());
             addRenderableWidget(Button.builder(Component.translatable("msg.ec.ColorBackground"),
                             button -> send(InfoPanelMenu.BUTTON_COLOR_BACKGROUND))
-                    .bounds(leftPos + 100, topPos + 67, 68, 14).build());
+                    .bounds(leftPos + 100, topPos + 92, SETTING_WIDTH, SETTING_HEIGHT).build());
         }
     }
 
     /**
-     * Woran sich erkennen laesst, dass die Knoepfe nicht mehr passen: andere Karte,
-     * andere Schalterstellungen, andere Aufwertungen.
+     * Woran sich erkennen laesst, dass die Knoepfe nicht mehr passen: andere Karte, andere
+     * Schalterstellungen, anderer Takt, andere Aufwertungen.
      */
-    private int settingsFingerprint() {
+    private int fingerprint() {
         InfoPanelBlockEntity panel = menu.be;
         int hash = panel.getItem(InfoPanelBlockEntity.SLOT_CARD).getItem().hashCode();
         hash = hash * 31 + panel.getDisplaySettings(panel.getItem(InfoPanelBlockEntity.SLOT_CARD));
@@ -102,7 +118,7 @@ public class InfoPanelScreen extends AbstractContainerScreen<InfoPanelMenu> {
     @Override
     protected void containerTick() {
         super.containerTick();
-        if(settingsFingerprint() != knownSettings) rebuildButtons();
+        if(fingerprint() != knownState) rebuildButtons();
     }
 
     private void send(int id) {
@@ -114,11 +130,22 @@ public class InfoPanelScreen extends AbstractContainerScreen<InfoPanelMenu> {
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         renderBackground(guiGraphics, mouseX, mouseY, partialTick);
         super.render(guiGraphics, mouseX, mouseY, partialTick);
+
+        if(ECConfig.requirePower()) {
+            EnergyBar.tooltip(guiGraphics, font, mouseX, mouseY, leftPos + BAR_X, topPos + BAR_Y, BAR_WIDTH,
+                    menu.getSyncedEnergy(), menu.be.getMaxEnergyStored());
+        }
+
         renderTooltip(guiGraphics, mouseX, mouseY);
     }
 
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
         guiGraphics.blit(TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
+
+        if(ECConfig.requirePower()) {
+            EnergyBar.render(guiGraphics, leftPos + BAR_X, topPos + BAR_Y, BAR_WIDTH,
+                    menu.getSyncedEnergy(), menu.be.getMaxEnergyStored());
+        }
     }
 }

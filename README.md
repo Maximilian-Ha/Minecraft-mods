@@ -16,11 +16,11 @@ Energy Control zeigt Messwerte anderer Maschinen auf Informationstafeln an. Die 
 >   Temperatur ein Redstone-Signal
 > - **Bereichsmelder** — gibt ein Redstone-Signal, wenn der Messwert einer Karte einen Bereich verlässt
 > - **Heulalarm** und **Warnleuchte**
-> - **Karten**: Strom, Flüssigkeit, Inventar, Redstone, Vanilla, Zeit, Text und **HBM**
+> - **Karten**: Strom (mit Durchsatz), Flüssigkeit, Inventar, Redstone, Vanilla, Zeit, Text und **HBM**
 > - **Bausätze** zu allen Karten mit Ziel, dazu Reichweiten-, Farb- und Berührungsaufwertung
 >
-> Die Tafeln arbeiten in diesem Stand noch **ohne Strom**; der Anschluss an Forge Energy ist
-> als Stufe 1 geplant. Die offenen Schritte sind als Stufenplan in
+> Die Tafeln brauchen **Strom** und nehmen ihn über Forge Energy — also aus jeder Energie-Mod
+> dieser Fassung; in der Konfiguration abschaltbar. Die offenen Schritte sind als Stufenplan in
 > [`docs/ROADMAP.md`](docs/ROADMAP.md) beschrieben, was gegenüber dem Original bewusst anders
 > ist, in [`docs/ENTSCHEIDUNGEN.md`](docs/ENTSCHEIDUNGEN.md).
 >

@@ -7,8 +7,8 @@ import com.zuxelus.energycontrol.items.ItemUpgrade;
 import com.zuxelus.energycontrol.items.ItemUpgrade.UpgradeType;
 import com.zuxelus.energycontrol.items.cards.*;
 import com.zuxelus.energycontrol.items.kits.ItemKitBase;
+import com.zuxelus.energycontrol.utils.BlockInventory;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.IEventBus;
@@ -39,7 +39,7 @@ public class ECItems {
     public static final DeferredItem<Item> KIT_LIQUID = kit("kit_liquid", CARD_LIQUID,
             (level, pos) -> CrossModLoader.getAllTanks(level.getBlockEntity(pos)) != null);
     public static final DeferredItem<Item> KIT_INVENTORY = kit("kit_inventory", CARD_INVENTORY,
-            (level, pos) -> level.getBlockEntity(pos) instanceof Container);
+            (level, pos) -> BlockInventory.of(level, pos) != null);
     public static final DeferredItem<Item> KIT_REDSTONE = kit("kit_redstone", CARD_REDSTONE,
             (level, pos) -> true);
     public static final DeferredItem<Item> KIT_VANILLA = kit("kit_vanilla", CARD_VANILLA,

@@ -35,6 +35,7 @@ public class InfoPanelMenu extends ECMenuBase<InfoPanelBlockEntity> {
         addSlot(new SlotFiltered(be, InfoPanelBlockEntity.SLOT_UPGRADE_COLOR, 8, 78));
         addSlot(new SlotFiltered(be, InfoPanelBlockEntity.SLOT_UPGRADE_TOUCH, 8, 96));
 
+        addEnergySync(be::getEnergyStored);
         addPlayerInventory(inventory, 8, 119);
     }
 

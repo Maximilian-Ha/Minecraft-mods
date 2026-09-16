@@ -111,6 +111,7 @@ public class ECLanguageProvider extends LanguageProvider {
         both("msg.ec.cbInfoPanelFree", "Free", "Frei");
         both("msg.ec.cbInfoPanelCapacity", "Capacity", "Fassung");
         both("msg.ec.cbInfoPanelPercentage", "Percentage", "Anteil");
+        both("msg.ec.cbInfoPanelDifference", "Throughput", "Durchsatz");
         both("msg.ec.cbInfoPanelTankNo", "Tank %s", "Tank %s");
         both("msg.ec.cbInfoPanelStatus", "Status", "Zustand");
         both("msg.ec.cbInfoPanelReactor", "Reactor data", "Reaktordaten");
@@ -132,6 +133,7 @@ public class ECLanguageProvider extends LanguageProvider {
         both("msg.ec.cbShowLabels", "Labels", "Beschriftung");
 
         // ------------------------------------------------------------ Schalter
+        both("msg.ec.EnergyStored", "%s / %s FE", "%s / %s FE");
         both("msg.ec.PanelRefreshRate", "Refresh", "Takt");
         both("msg.ec.Ticks", "%s tick(s)", "%s Tick(s)");
         both("msg.ec.ColorText", "Text colour", "Schriftfarbe");

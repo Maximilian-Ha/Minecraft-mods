@@ -36,6 +36,9 @@ public class InfoPanelRenderer implements BlockEntityRenderer<InfoPanelBlockEnti
 
     @Override
     public void render(InfoPanelBlockEntity be, float partialTick, PoseStack pose, MultiBufferSource buffers, int light, int overlay) {
+        // Ohne Strom bleibt der Schirm leer, wie im Original.
+        if(!be.isPowered()) return;
+
         List<PanelString> lines = be.getPanelStringList(be.getShowLabels());
         if(lines == null || lines.isEmpty()) return;
 

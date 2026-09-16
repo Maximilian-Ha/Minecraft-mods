@@ -14,6 +14,8 @@
 | Bausätze | zu allen Karten mit Ziel |
 | HBM-Anbindung | siehe [`HBM-KOMPATIBILITAET.md`](HBM-KOMPATIBILITAET.md) |
 | Datengeneratoren | Blockzustände, Modelle, Sprache (en/de), Rezepte, Loot, Tags |
+| **Stufe 1:** Strom für die Tafeln | Stromspeicher als `Capabilities.EnergyStorage.BLOCK`, Energiebalken, abschaltbar |
+| **Stufe 2:** Karten anderer Mods | Inventar auch über `Capabilities.ItemHandler.BLOCK`, Durchsatz auf der Stromkarte |
 
 ---
 
@@ -24,7 +26,7 @@ Reihenfolge ist keine Willkür: Stufe 1 und 2 sind ausdrücklich gewünscht, Stu
 Kennzeichen des Mods, und Stufe 4 bündelt drei Dinge, die alle dasselbe fehlende Stück
 brauchen.
 
-## Stufe 1 — Die Tafeln brauchen Strom
+## Stufe 1 — Die Tafeln brauchen Strom &nbsp;&nbsp;**[fertig]**
 
 **Ziel:** Eine Informationstafel ohne Strom bleibt dunkel, wie im Original. Der Strom kommt
 über die Energie-Schnittstelle von NeoForge, also aus jeder Mod, die Forge Energy abgibt.
@@ -61,7 +63,7 @@ umständlich; der Wandler tut es zunächst auch.
 
 **Aufwand:** klein. **Risiko:** gering — eine Capability, ein Feld, ein Balken.
 
-## Stufe 2 — Was die Karten von anderen Mods sehen
+## Stufe 2 — Was die Karten von anderen Mods sehen &nbsp;&nbsp;**[fertig]**
 
 **Ziel:** Die vorhandenen Karten sollen bei jeder gängigen Mod etwas anzeigen, ohne dass es je
 Mod eine eigene Anbindung braucht.

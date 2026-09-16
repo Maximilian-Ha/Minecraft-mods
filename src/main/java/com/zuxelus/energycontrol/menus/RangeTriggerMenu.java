@@ -27,6 +27,7 @@ public class RangeTriggerMenu extends ECMenuBase<RangeTriggerBlockEntity> {
         addSlot(new SlotFiltered(be, RangeTriggerBlockEntity.SLOT_CARD, 8, 21));
         addSlot(new SlotFiltered(be, RangeTriggerBlockEntity.SLOT_UPGRADE_RANGE, 8, 39));
 
+        addEnergySync(be::getEnergyStored);
         addPlayerInventory(inventory, 8, 108);
     }
 

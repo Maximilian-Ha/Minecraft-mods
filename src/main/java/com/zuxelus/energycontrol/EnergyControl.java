@@ -3,6 +3,7 @@ package com.zuxelus.energycontrol;
 import com.zuxelus.energycontrol.crossmod.CrossModLoader;
 import com.zuxelus.energycontrol.init.ECBlockEntityTypes;
 import com.zuxelus.energycontrol.init.ECBlocks;
+import com.zuxelus.energycontrol.init.ECCapabilities;
 import com.zuxelus.energycontrol.init.ECCreativeTabs;
 import com.zuxelus.energycontrol.init.ECItems;
 import com.zuxelus.energycontrol.init.ECMenuTypes;
@@ -42,6 +43,7 @@ public class EnergyControl {
         ECCreativeTabs.register(eventBus);
 
         eventBus.addListener(this::commonSetup);
+        eventBus.addListener(ECCapabilities::register);
 
         ECConfig.register(container);
     }

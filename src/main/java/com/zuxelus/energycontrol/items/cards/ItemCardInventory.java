@@ -9,10 +9,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.Container;
+import com.zuxelus.energycontrol.utils.BlockInventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -38,8 +37,8 @@ public class ItemCardInventory extends ItemCardBase {
         if(target == null) return CardState.NO_TARGET;
         if(!inRange(target, pos, range)) return CardState.OUT_OF_RANGE;
 
-        BlockEntity be = level.getBlockEntity(target);
-        if(!(be instanceof Container container)) return CardState.NO_TARGET;
+        BlockInventory inventory = BlockInventory.of(level, target);
+        if(inventory == null) return CardState.NO_TARGET;
 
         reader.reset();
 
@@ -47,15 +46,15 @@ public class ItemCardInventory extends ItemCardBase {
         int total = 0;
         Map<String, Integer> byName = new LinkedHashMap<>();
 
-        for(int i = 0; i < container.getContainerSize(); i++) {
-            ItemStack stack = container.getItem(i);
+        for(int i = 0; i < inventory.size(); i++) {
+            ItemStack stack = inventory.get(i);
             if(stack.isEmpty()) continue;
             used++;
             total += stack.getCount();
             byName.merge(stack.getHoverName().getString(), stack.getCount(), Integer::sum);
         }
 
-        reader.setInt("slots", container.getContainerSize());
+        reader.setInt("slots", inventory.size());
         reader.setInt("usedSlots", used);
         reader.setInt("totalItems", total);
 
