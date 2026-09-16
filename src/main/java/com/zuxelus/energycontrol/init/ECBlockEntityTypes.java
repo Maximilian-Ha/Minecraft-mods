@@ -1,6 +1,7 @@
 package com.zuxelus.energycontrol.init;
 
 import com.zuxelus.energycontrol.EnergyControl;
+import com.zuxelus.energycontrol.blockentity.AdvancedInfoPanelBlockEntity;
 import com.zuxelus.energycontrol.blockentity.EnergyCounterBlockEntity;
 import com.zuxelus.energycontrol.blockentity.HowlerAlarmBlockEntity;
 import com.zuxelus.energycontrol.blockentity.InfoPanelBlockEntity;
@@ -23,6 +24,9 @@ public class ECBlockEntityTypes {
 
     public static final Supplier<BlockEntityType<InfoPanelBlockEntity>> INFO_PANEL = BLOCK_ENTITY_TYPES.register(
             "info_panel", () -> BlockEntityType.Builder.of(InfoPanelBlockEntity::new, ECBlocks.INFO_PANEL.get()).build(null));
+
+    public static final Supplier<BlockEntityType<AdvancedInfoPanelBlockEntity>> ADVANCED_INFO_PANEL = BLOCK_ENTITY_TYPES.register(
+            "advanced_info_panel", () -> BlockEntityType.Builder.of(AdvancedInfoPanelBlockEntity::new, ECBlocks.ADVANCED_INFO_PANEL.get()).build(null));
 
     public static final Supplier<BlockEntityType<ThermalMonitorBlockEntity>> THERMAL_MONITOR = BLOCK_ENTITY_TYPES.register(
             "thermal_monitor", () -> BlockEntityType.Builder.of(ThermalMonitorBlockEntity::new, ECBlocks.THERMAL_MONITOR.get()).build(null));

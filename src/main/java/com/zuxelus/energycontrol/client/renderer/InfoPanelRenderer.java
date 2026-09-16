@@ -5,6 +5,7 @@ import com.mojang.math.Axis;
 import com.zuxelus.energycontrol.api.PanelString;
 import com.zuxelus.energycontrol.blockentity.InfoPanelBlockEntity;
 import com.zuxelus.energycontrol.blocks.InfoPanelBlock;
+import com.zuxelus.energycontrol.blocks.PanelThickness;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -13,6 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
 
@@ -61,7 +63,13 @@ public class InfoPanelRenderer implements BlockEntityRenderer<InfoPanelBlockEnti
         List<PanelString> lines = be.getPanelStringList(be.getShowLabels());
         if(lines == null || lines.isEmpty()) return;
 
-        Direction facing = be.getBlockState().getValue(InfoPanelBlock.FACING);
+        BlockState state = be.getBlockState();
+        Direction facing = state.getValue(InfoPanelBlock.FACING);
+        // Die fortgeschrittene Tafel ist duenner als ein voller Block; ihre Schauseite
+        // liegt entsprechend weiter hinten, und die Schrift gehoert genau davor.
+        float depth = state.hasProperty(PanelThickness.THICKNESS)
+                ? -0.5F + state.getValue(PanelThickness.THICKNESS) / 16F
+                : 0.5F;
 
         // Die Flaeche in Blockeinheiten des oertlichen Achsenkreuzes: wo ihre Mitte
         // gegenueber dieser Tafel liegt und wie gross sie ist.
@@ -84,7 +92,7 @@ public class InfoPanelRenderer implements BlockEntityRenderer<InfoPanelBlockEnti
         alignToFace(pose, facing);
         // Erst in die Mitte der Flaeche, dann einen halben Block nach vorn -- plus ein Hauch,
         // damit die Schrift nicht in der Blockflaeche steckt und flimmert.
-        pose.translate(centerX, centerY, 0.5F + 0.005F);
+        pose.translate(centerX, centerY, depth + 0.005F);
         // Negatives Y, weil die Schriftart nach unten laeuft, die Welt aber nach oben.
         pose.scale(SCALE, -SCALE, SCALE);
 

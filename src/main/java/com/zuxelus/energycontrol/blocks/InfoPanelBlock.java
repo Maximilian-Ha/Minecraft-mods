@@ -39,8 +39,13 @@ public class InfoPanelBlock extends BaseEntityBlock {
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
+    /**
+     * Der Rueckgabetyp ist bewusst offen gehalten: die fortgeschrittene Tafel erbt von
+     * dieser Klasse und bringt ihren eigenen Codec mit -- mit {@code MapCodec<InfoPanelBlock>}
+     * liesse sich die Methode nicht ueberschreiben.
+     */
     @Override
-    public MapCodec<InfoPanelBlock> codec() {
+    public MapCodec<? extends Block> codec() {
         return CODEC;
     }
 

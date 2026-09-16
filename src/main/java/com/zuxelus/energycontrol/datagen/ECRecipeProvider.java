@@ -138,6 +138,26 @@ public class ECRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_machine_casing", has(ECItems.MACHINE_CASING.get()))
                 .save(output);
 
+        // Die fortgeschrittene Tafel ist eine gewoehnliche mit besserer Schaltung; die
+        // Erweiterung dazu ebenso.
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, ECBlocks.ADVANCED_INFO_PANEL.get())
+                .pattern(" A ")
+                .pattern("APA")
+                .pattern(" A ")
+                .define('A', ECItems.ADVANCED_CIRCUIT.get())
+                .define('P', ECBlocks.INFO_PANEL.get())
+                .unlockedBy("has_info_panel", has(ECBlocks.INFO_PANEL.get()))
+                .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, ECBlocks.ADVANCED_INFO_PANEL_EXTENDER.get(), 2)
+                .pattern(" A ")
+                .pattern("AEA")
+                .pattern(" A ")
+                .define('A', ECItems.ADVANCED_CIRCUIT.get())
+                .define('E', ECBlocks.INFO_PANEL_EXTENDER.get())
+                .unlockedBy("has_info_panel", has(ECBlocks.INFO_PANEL.get()))
+                .save(output);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, ECBlocks.THERMAL_MONITOR.get())
                 .pattern(" T ")
                 .pattern("CMC")

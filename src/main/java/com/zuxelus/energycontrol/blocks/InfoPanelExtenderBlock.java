@@ -35,8 +35,9 @@ public class InfoPanelExtenderBlock extends Block {
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
+    /** Offen gehalten wie bei der Tafel: die fortgeschrittene Erweiterung erbt von hier. */
     @Override
-    public MapCodec<InfoPanelExtenderBlock> codec() {
+    public MapCodec<? extends Block> codec() {
         return CODEC;
     }
 

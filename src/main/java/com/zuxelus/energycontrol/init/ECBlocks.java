@@ -1,6 +1,8 @@
 package com.zuxelus.energycontrol.init;
 
 import com.zuxelus.energycontrol.EnergyControl;
+import com.zuxelus.energycontrol.blocks.AdvancedInfoPanelBlock;
+import com.zuxelus.energycontrol.blocks.AdvancedInfoPanelExtenderBlock;
 import com.zuxelus.energycontrol.blocks.EnergyCounterBlock;
 import com.zuxelus.energycontrol.blocks.HowlerAlarmBlock;
 import com.zuxelus.energycontrol.blocks.IndustrialAlarmBlock;
@@ -32,6 +34,12 @@ public class ECBlocks {
 
     public static final DeferredBlock<InfoPanelExtenderBlock> INFO_PANEL_EXTENDER =
             register("info_panel_extender", () -> new InfoPanelExtenderBlock(machineProperties()));
+
+    public static final DeferredBlock<AdvancedInfoPanelBlock> ADVANCED_INFO_PANEL =
+            register("advanced_info_panel", () -> new AdvancedInfoPanelBlock(machineProperties()));
+
+    public static final DeferredBlock<AdvancedInfoPanelExtenderBlock> ADVANCED_INFO_PANEL_EXTENDER =
+            register("advanced_info_panel_extender", () -> new AdvancedInfoPanelExtenderBlock(machineProperties()));
 
     public static final DeferredBlock<ThermalMonitorBlock> THERMAL_MONITOR =
             register("thermal_monitor", () -> new ThermalMonitorBlock(machineProperties()));

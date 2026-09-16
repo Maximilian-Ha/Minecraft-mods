@@ -19,6 +19,7 @@
 | **Stufe 3:** Große Schirme | Tafelerweiterung, Flächenerkennung ohne Verwaltung, Schrift über das ganze Rechteck |
 | **Stufe 4:** Bedienung | Steuerpaket, Texteingabe, Farbtafel, Berührungsbetrieb mit Umschaltkarte, freie Zahleneingabe |
 | **Stufe 5:** Mekanism | Chemikalien, Joule, Wärme, alle sieben Mehrblockbauten, digitaler Bergmann — siehe [`MEKANISM-KOMPATIBILITAET.md`](MEKANISM-KOMPATIBILITAET.md) |
+| **Stufe 6:** Der Rest aus dem Original | Fernwärmeanzeige, Energiezähler mit Zählerkarte, Bausatzmontage, Kartenhalter, tragbare Tafel, fortgeschrittene Tafel, Tafelwerkzeug |
 
 ---
 
@@ -178,19 +179,25 @@ Kommt eine dieser Mods als Wunsch, ist Mekanism die Vorlage: eine Klasse unter
 `crossmod/<mod>`, ein Eintrag in `CrossModLoader`, ein Aufruf von `tools/api_check.py`, ein
 Block in `build.gradle`.
 
-## Stufe 6 — Der Rest aus dem Original
+## Stufe 6 — Der Rest aus dem Original &nbsp;&nbsp;**[fertig]**
 
-Kleinteile, die keinen eigenen Unterbau brauchen:
-
-| Teil | Was es ist |
+| Teil | Stand |
 | --- | --- |
-| Fernwärmeanzeige | Wärmemelder, der seinen Reaktor über eine Karte findet statt über Nachbarschaft |
-| Zählerkarte und Energiezähler | Durchsatzmessung mit einem Block in der Leitung |
-| Bausatzmontage (`kit_assembler`) | Maschine, in der Bausätze entstehen, statt an der Werkbank |
-| Kartenhalter, tragbare Tafel | Gegenstände, die Karten führen bzw. eine Tafel in der Hand sind |
-| Fortgeschrittene Tafel | Größere Bauform des Originals mit Neigung und eigener Oberfläche |
+| Fernwärmeanzeige | misst dort, wohin die eingelegte Karte eingemessen ist; Reichweite mit Aufwertungen erweiterbar |
+| Zählerkarte und Energiezähler | Block in der Leitung, zählt was wirklich durchgeht, mit Durchsatz je Tick |
+| Bausatzmontage (`kit_assembler`) | eigener Rezepttyp, sechs Eingabefächer, Strom und Laufzeit je Rezept |
+| Kartenhalter, tragbare Tafel | Gegenstände mit eigenem Inventar; die Tafel misst, solange man sie offen hält |
+| Fortgeschrittene Tafel | eigene Bauform mit einstellbarer Dicke, eigene Erweiterung, gemeinsame Schirme |
+| Tafelwerkzeug | richtet die Blöcke dieses Mods aus und stellt die Dicke ein — vorher ein toter Bauteil |
 
-**Aufwand:** je Teil klein bis mittel.
+**Nicht übernommen: die freie Neigung der fortgeschrittenen Tafel.** Im Original zeichnete
+ein eigener Renderer den ganzen Block als Netz aus Vierecken (`RotationOffset`, rund 220
+Zeilen, plus zwei Renderer) — nur deshalb war dort sowohl die Dicke stufenlos als auch die
+Neigung frei. Der Port macht die Tafel stattdessen zu einem gewöhnlichen Block mit
+gewöhnlichem Modell: die Dicke steht in sechzehn Stufen im Blockzustand, und dafür sieht die
+Tafel aus wie jeder andere Block — mit Licht, mit Schatten, und in jedem Ressourcenpaket
+austauschbar. Eine geneigte *Schrift* auf einem ungeneigten Block wäre schlechter als keine
+Neigung, deshalb fehlt sie ganz statt halb.
 
 ---
 

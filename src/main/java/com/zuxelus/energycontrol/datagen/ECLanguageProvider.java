@@ -30,6 +30,8 @@ public class ECLanguageProvider extends LanguageProvider {
         // ------------------------------------------------------------- Bloecke
         block(ECBlocks.INFO_PANEL.get(), "Industrial Information Panel", "Industrielle Informationstafel");
         block(ECBlocks.INFO_PANEL_EXTENDER.get(), "Information Panel Extender", "Tafelerweiterung");
+        block(ECBlocks.ADVANCED_INFO_PANEL.get(), "Advanced Information Panel", "Fortgeschrittene Informationstafel");
+        block(ECBlocks.ADVANCED_INFO_PANEL_EXTENDER.get(), "Advanced Panel Extender", "Fortgeschrittene Tafelerweiterung");
         block(ECBlocks.THERMAL_MONITOR.get(), "Thermal Monitor", "Waermemelder");
         block(ECBlocks.REMOTE_THERMAL_MONITOR.get(), "Remote Thermal Monitor", "Fernwaermeanzeige");
         block(ECBlocks.RANGE_TRIGGER.get(), "Range Trigger", "Bereichsmelder");
@@ -39,6 +41,7 @@ public class ECLanguageProvider extends LanguageProvider {
         block(ECBlocks.INDUSTRIAL_ALARM.get(), "Industrial Alarm", "Warnleuchte");
 
         both("container.energycontrol.info_panel", "Information Panel", "Informationstafel");
+        both("container.energycontrol.advanced_info_panel", "Advanced Information Panel", "Fortgeschrittene Informationstafel");
         both("container.energycontrol.thermal_monitor", "Thermal Monitor", "Waermemelder");
         both("container.energycontrol.range_trigger", "Range Trigger", "Bereichsmelder");
         both("container.energycontrol.remote_thermal_monitor", "Remote Thermal Monitor", "Fernwaermeanzeige");
@@ -157,6 +160,8 @@ public class ECLanguageProvider extends LanguageProvider {
         both("msg.ec.InfoPanelRadius", "Radius: %s", "Radius: %s");
         both("msg.ec.InfoPanelMinY", "Lowest layer: %s", "Unterste Schicht: %s");
         both("msg.ec.InfoPanelMaxY", "Highest layer: %s", "Oberste Schicht: %s");
+        both("item.ec.panel_toolkit.info", "Right-click a block of this mod to turn it; on an advanced panel, click its face to change the thickness.",
+                "Rechtsklick auf einen Block dieses Mods dreht ihn; auf der Schauseite einer fortgeschrittenen Tafel stellt er die Dicke ein.");
         both("msg.ec.InfoPanelCounter", "Counter: %s", "Zaehlerstand: %s");
         both("msg.ec.CounterTotal", "Counter: %s FE", "Zaehlerstand: %s FE");
         both("msg.ec.CounterRate", "Throughput: %s FE/t", "Durchsatz: %s FE/t");

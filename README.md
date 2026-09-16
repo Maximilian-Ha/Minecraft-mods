@@ -20,6 +20,9 @@ Energy Control zeigt Messwerte anderer Maschinen auf Informationstafeln an. Die 
 > - **Karten**: Strom (mit Durchsatz), Flüssigkeit, Inventar, Redstone, Vanilla, Zeit, Text,
 >   Fernschaltung, **HBM** und **Mekanism**
 > - **Bausätze** zu allen Karten mit Ziel, dazu Reichweiten-, Farb- und Berührungsaufwertung
+> - **Fernwärmeanzeige**, **Energiezähler** mit Zählerkarte, **Bausatzmontage**,
+>   **Kartenhalter**, **tragbare Tafel**, **fortgeschrittene Tafel** mit einstellbarer Dicke
+>   und das **Tafelwerkzeug**, das die Blöcke dieses Mods ausrichtet
 >
 > Die Tafeln brauchen **Strom** und nehmen ihn über Forge Energy — also aus jeder Energie-Mod
 > dieser Fassung; in der Konfiguration abschaltbar. Die offenen Schritte sind als Stufenplan in

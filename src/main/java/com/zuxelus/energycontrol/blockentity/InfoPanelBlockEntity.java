@@ -26,6 +26,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
@@ -39,13 +40,11 @@ import java.util.Map;
  * Die Informationstafel. Sie liest in festem Takt die Karte in ihrem Fach aus und zeigt
  * deren Zeilen auf ihrer Vorderseite.
  *
- * NICHT UEBERNOMMEN: der Stromverbrauch. Im Original zog die Tafel EU aus einem
- * IC2-Netz und blieb ohne Strom dunkel. IC2 gibt es auf 1.21.1 nicht, und die Tafel an
- * HBMs Stromnetz zu haengen haette den Kern des Mods von HBM abhaengig gemacht -- dann
- * liesse er sich ohne HBM nicht mehr laden. Die Tafel arbeitet deshalb ohne Strom.
+ * Der Strom kommt aus der Energie-Schnittstelle von NeoForge statt aus einem IC2-Netz wie
+ * im Original -- IC2 gibt es auf 1.21.1 nicht. Ohne Strom bleibt der Schirm dunkel, wie
+ * dort; abschalten laesst sich der Bedarf in der Konfiguration.
  *
- * NICHT UEBERNOMMEN: die Erweiterungen fuer grosse Schirme und der Beruehrungsbetrieb.
- * Siehe docs/ROADMAP.md.
+ * Die fortgeschrittene Tafel erbt alles von hier und fuegt nur ihre Dicke hinzu.
  */
 public class InfoPanelBlockEntity extends CardReaderBlockEntity {
 
@@ -88,6 +87,10 @@ public class InfoPanelBlockEntity extends CardReaderBlockEntity {
 
     public InfoPanelBlockEntity(BlockPos pos, BlockState state) {
         super(ECBlockEntityTypes.INFO_PANEL.get(), pos, state, 4);
+    }
+
+    protected InfoPanelBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state, 4);
     }
 
     // ------------------------------------------------------------------- Takt

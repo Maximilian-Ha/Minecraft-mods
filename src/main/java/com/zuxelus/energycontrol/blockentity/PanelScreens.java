@@ -1,7 +1,10 @@
 package com.zuxelus.energycontrol.blockentity;
 
+import com.zuxelus.energycontrol.blocks.AdvancedInfoPanelBlock;
+import com.zuxelus.energycontrol.blocks.AdvancedInfoPanelExtenderBlock;
 import com.zuxelus.energycontrol.blocks.InfoPanelBlock;
 import com.zuxelus.energycontrol.blocks.InfoPanelExtenderBlock;
+import com.zuxelus.energycontrol.blocks.PanelThickness;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -33,6 +36,8 @@ import java.util.Set;
  *   hinausragt, macht aus der Tafel wieder einen Einzelblock.
  * - Zu einem Schirm gehoert genau **eine** Tafel. Reichen zwei Tafeln ueber dieselben
  *   Erweiterungen, gibt jede ihren Anspruch auf -- sonst schrieben beide uebereinander.
+ * - Alle Teile eines Schirms sind von derselben Art und derselben Dicke. Eine duenne
+ *   Erweiterung an einer vollen Tafel waere sonst eine Stufe mitten im Schirm.
  */
 public final class PanelScreens {
 
@@ -62,14 +67,30 @@ public final class PanelScreens {
         return result.toArray(new Direction[0]);
     }
 
-    private static boolean isExtender(BlockState state, Direction facing) {
+    private static boolean isExtender(BlockState state, BlockState origin, Direction facing) {
         return state.getBlock() instanceof InfoPanelExtenderBlock
-                && state.getValue(InfoPanelExtenderBlock.FACING) == facing;
+                && state.getValue(InfoPanelExtenderBlock.FACING) == facing
+                && matches(state, origin);
     }
 
-    private static boolean isPanel(BlockState state, Direction facing) {
+    private static boolean isPanel(BlockState state, BlockState origin, Direction facing) {
         return state.getBlock() instanceof InfoPanelBlock
-                && state.getValue(InfoPanelBlock.FACING) == facing;
+                && state.getValue(InfoPanelBlock.FACING) == facing
+                && matches(state, origin);
+    }
+
+    /** Gleiche Art, gleiche Dicke -- sonst gehoert der Block nicht zu diesem Schirm. */
+    private static boolean matches(BlockState state, BlockState origin) {
+        return advanced(state) == advanced(origin) && thickness(state) == thickness(origin);
+    }
+
+    private static boolean advanced(BlockState state) {
+        return state.getBlock() instanceof AdvancedInfoPanelBlock
+                || state.getBlock() instanceof AdvancedInfoPanelExtenderBlock;
+    }
+
+    private static int thickness(BlockState state) {
+        return state.hasProperty(PanelThickness.THICKNESS) ? state.getValue(PanelThickness.THICKNESS) : 16;
     }
 
     /**
@@ -79,6 +100,7 @@ public final class PanelScreens {
     public static Screen around(Level level, BlockPos panel, Direction facing) {
         if(level == null) return Screen.single(panel);
 
+        BlockState origin = level.getBlockState(panel);
         Set<BlockPos> region = new HashSet<>();
         Deque<BlockPos> queue = new ArrayDeque<>();
         Direction[] plane = plane(facing);
@@ -96,11 +118,11 @@ public final class PanelScreens {
                 if(!level.isLoaded(next)) continue;
 
                 BlockState state = level.getBlockState(next);
-                if(isPanel(state, facing)) {
+                if(isPanel(state, origin, facing)) {
                     sharedWithOtherPanel = true;
                     continue;
                 }
-                if(!isExtender(state, facing)) continue;
+                if(!isExtender(state, origin, facing)) continue;
 
                 region.add(next);
                 if(region.size() > MAX_BLOCKS) return Screen.single(panel);
@@ -130,6 +152,7 @@ public final class PanelScreens {
      * eine Oberflaeche oeffnen.
      */
     public static BlockPos findPanel(BlockGetter level, BlockPos extender, Direction facing) {
+        BlockState origin = level.getBlockState(extender);
         Set<BlockPos> seen = new HashSet<>();
         Deque<BlockPos> queue = new ArrayDeque<>();
         Direction[] plane = plane(facing);
@@ -146,11 +169,11 @@ public final class PanelScreens {
                 if(!seen.add(next)) continue;
 
                 BlockState state = level.getBlockState(next);
-                if(isPanel(state, facing)) {
+                if(isPanel(state, origin, facing)) {
                     if(best == null || next.asLong() < best.asLong()) best = next;
                     continue;
                 }
-                if(!isExtender(state, facing)) continue;
+                if(!isExtender(state, origin, facing)) continue;
 
                 if(seen.size() > MAX_BLOCKS) return best;
                 queue.add(next);

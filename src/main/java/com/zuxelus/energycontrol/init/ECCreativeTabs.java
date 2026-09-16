@@ -23,6 +23,8 @@ public class ECCreativeTabs {
                     .displayItems((parameters, output) -> {
                         output.accept(ECBlocks.INFO_PANEL.get());
                         output.accept(ECBlocks.INFO_PANEL_EXTENDER.get());
+                        output.accept(ECBlocks.ADVANCED_INFO_PANEL.get());
+                        output.accept(ECBlocks.ADVANCED_INFO_PANEL_EXTENDER.get());
                         output.accept(ECBlocks.THERMAL_MONITOR.get());
                         output.accept(ECBlocks.REMOTE_THERMAL_MONITOR.get());
                         output.accept(ECBlocks.RANGE_TRIGGER.get());

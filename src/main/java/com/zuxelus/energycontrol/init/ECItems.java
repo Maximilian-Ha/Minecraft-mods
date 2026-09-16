@@ -4,6 +4,7 @@ import com.zuxelus.energycontrol.EnergyControl;
 import com.zuxelus.energycontrol.crossmod.CrossModLoader;
 import com.zuxelus.energycontrol.crossmod.ModIDs;
 import com.zuxelus.energycontrol.items.ItemCardHolder;
+import com.zuxelus.energycontrol.items.ItemPanelToolkit;
 import com.zuxelus.energycontrol.items.ItemPortablePanel;
 import com.zuxelus.energycontrol.items.ItemUpgrade;
 import com.zuxelus.energycontrol.items.ItemUpgrade.UpgradeType;
@@ -71,7 +72,7 @@ public class ECItems {
     public static final DeferredItem<Item> BASIC_CIRCUIT = ITEMS.register("basic_circuit", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> ADVANCED_CIRCUIT = ITEMS.register("advanced_circuit", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> THERMOMETER = ITEMS.register("thermometer", () -> new Item(new Item.Properties()));
-    public static final DeferredItem<Item> PANEL_TOOLKIT = ITEMS.register("panel_toolkit", () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> PANEL_TOOLKIT = ITEMS.register("panel_toolkit", () -> new ItemPanelToolkit(new Item.Properties()));
 
     private static DeferredItem<Item> kit(String name, Supplier<? extends Item> card, BiPredicate<Level, BlockPos> suitable) {
         return ITEMS.register(name, () -> new ItemKitBase(new Item.Properties(), card, suitable));

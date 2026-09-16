@@ -35,5 +35,6 @@ public class EnergyControlClient {
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(ECBlockEntityTypes.INFO_PANEL.get(), InfoPanelRenderer::new);
+        event.registerBlockEntityRenderer(ECBlockEntityTypes.ADVANCED_INFO_PANEL.get(), InfoPanelRenderer::new);
     }
 }

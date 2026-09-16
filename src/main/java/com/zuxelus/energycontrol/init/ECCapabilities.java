@@ -14,6 +14,8 @@ public class ECCapabilities {
     public static void register(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ECBlockEntityTypes.INFO_PANEL.get(),
                 (be, side) -> be.getEnergyStorage());
+        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ECBlockEntityTypes.ADVANCED_INFO_PANEL.get(),
+                (be, side) -> be.getEnergyStorage());
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ECBlockEntityTypes.RANGE_TRIGGER.get(),
                 (be, side) -> be.getEnergyStorage());
 
