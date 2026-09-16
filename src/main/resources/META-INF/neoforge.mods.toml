@@ -37,3 +37,21 @@ issueTrackerURL="https://github.com/Maximilian-Ha/Minecraft-mods/issues"
     versionRange="[0,)"
     ordering="AFTER"
     side="BOTH"
+
+# Mekanism. Wie oben nicht erforderlich: ohne Mekanism bleibt nur die Mekanism-Karte
+# ohne Wirkung.
+[[dependencies.${mod_id}]]
+    modId="${mekanism_mod_id}"
+    type="optional"
+    versionRange="[0,)"
+    ordering="AFTER"
+    side="BOTH"
+
+# Mekanisms Generatoren -- Spaltreaktor, Fusionsanlage, Turbine. Ohne sie zeigt die
+# Karte alles uebrige von Mekanism, nur eben keine Reaktordaten.
+[[dependencies.${mod_id}]]
+    modId="${mekanism_generators_mod_id}"
+    type="optional"
+    versionRange="[0,)"
+    ordering="AFTER"
+    side="BOTH"

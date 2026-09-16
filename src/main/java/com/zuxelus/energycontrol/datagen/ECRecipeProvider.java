@@ -194,6 +194,14 @@ public class ECRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_advanced_circuit", has(ECItems.ADVANCED_CIRCUIT.get()))
                 .save(output);
 
+        // Der Mekanism-Bausatz liest Reaktoren und Matrizen aus -- wie der HBM-Bausatz.
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ECItems.KIT_MEKANISM.get())
+                .requires(ECItems.ADVANCED_CIRCUIT.get())
+                .requires(Items.REDSTONE_BLOCK)
+                .requires(Items.PAPER)
+                .unlockedBy("has_advanced_circuit", has(ECItems.ADVANCED_CIRCUIT.get()))
+                .save(output);
+
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ECItems.CARD_TEXT.get())
                 .requires(ECItems.BASIC_CIRCUIT.get())
                 .requires(Items.PAPER)

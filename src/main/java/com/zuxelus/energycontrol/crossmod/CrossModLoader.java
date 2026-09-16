@@ -33,6 +33,7 @@ public final class CrossModLoader {
 
     public static void init() {
         load(ModIDs.HBM, "com.zuxelus.energycontrol.crossmod.hbm.CrossHbm");
+        load(ModIDs.MEKANISM, "com.zuxelus.energycontrol.crossmod.mekanism.CrossMekanism");
     }
 
     private static void load(String modId, String className) {

@@ -11,9 +11,9 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
  * Anbindung an eine Mod baut daraus ihre eigenen Tanks um; der Kern kennt nur diese drei
  * Angaben und die Fluid-Schnittstelle von NeoForge.
  */
-public record FluidInfo(Component name, int amount, int capacity) {
+public record FluidInfo(Component name, long amount, long capacity) {
 
-    public static FluidInfo of(FluidStack stack, int capacity) {
+    public static FluidInfo of(FluidStack stack, long capacity) {
         if(stack == null || stack.isEmpty()) return empty(capacity);
         return new FluidInfo(stack.getHoverName(), stack.getAmount(), capacity);
     }
@@ -22,7 +22,7 @@ public record FluidInfo(Component name, int amount, int capacity) {
         return of(handler.getFluidInTank(tank), handler.getTankCapacity(tank));
     }
 
-    public static FluidInfo empty(int capacity) {
+    public static FluidInfo empty(long capacity) {
         return new FluidInfo(Component.translatable("msg.ec.InfoPanelEmpty"), 0, capacity);
     }
 

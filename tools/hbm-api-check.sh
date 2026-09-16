@@ -18,6 +18,9 @@
 #   2. Jedes Feld und jede Methode, die die Anbindung auf einem solchen Typ anspricht,
 #      steht in dessen Datei oder in einer ihrer Oberklassen/Schnittstellen.
 #
+# Das Skript dahinter (tools/api_check.py) ist nicht auf HBM festgelegt; die
+# Mekanism-Anbindung wird von tools/mekanism-api-check.sh genauso geprueft.
+#
 # Es ersetzt keinen Bau -- Signaturen und Typen prueft es nicht. Es faengt aber die
 # Fehlerklasse ab, die beim Mitwachsen mit dem HBM-Port entsteht: umbenannt, verschoben,
 # entfernt.
@@ -39,4 +42,8 @@ if [ -z "$SRC" ] || [ ! -d "$SRC" ]; then
   exit 0
 fi
 
-HBM_SRC="$SRC" python3 tools/hbm_api_check.py
+API_CHECK_NAME="HBM" \
+API_CHECK_DIR="src/main/java/com/zuxelus/energycontrol/crossmod/hbm" \
+API_CHECK_SRC="$SRC" \
+API_CHECK_PKGS="com.hbm,api.hbm" \
+python3 tools/api_check.py

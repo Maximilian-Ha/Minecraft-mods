@@ -9,6 +9,7 @@ Dieser Zweig ist ein Port von **Energy Control** auf Minecraft 1.21.1 / NeoForge
 | [Zuxelus/Energy-Control](https://github.com/Zuxelus/Energy-Control) | Mechanik, Aufbau, Texturen, Klänge, Sprachdatei | GPL-3.0 |
 | [Nuclear Control](https://www.curseforge.com/minecraft/mc-mods/nuclear-control) (Shedar) | Ursprung, aus dem Energy Control hervorgegangen ist | GPL-3.0 |
 | HBM-Port dieses Repositories (Zweig `claude/intelligent-meitner-ashog3`) | Gegenstelle der Anbindung; von dort stammt kein Quelltext, nur die benutzte API | GPL-3.0 / LGPL-3.0 |
+| [mekanism/Mekanism](https://github.com/mekanism/Mekanism) | Gegenstelle der Anbindung; von dort stammt kein Quelltext, nur die benutzte API. Die JARs werden zum Übersetzen geladen und nicht mitgeliefert | MIT |
 
 ## Was übernommen wurde
 
@@ -32,8 +33,10 @@ kein Deutsch.
 
 ## Was nicht übernommen wurde
 
-- Der ganze Bestand an Anbindungen an andere Mods (IC2, Mekanism, Thermal Expansion,
-  Draconic Evolution, GregTech, AE2, …). Keine dieser Mods ist auf 1.21.1 verfügbar.
+- Der ganze Bestand an Anbindungen an andere Mods (IC2, Thermal Expansion, Draconic
+  Evolution, GregTech, AE2, …). Keine dieser Mods ist auf 1.21.1 verfügbar. Die
+  Mekanism-Anbindung ist neu geschrieben: Mekanism 10 hat mit der Fassung von 1.12.2 keine
+  Klasse mehr gemein.
 - `com.zuxelus.hooklib` — ein eigener Bytecode-Weber. Auf 1.21.1 gibt es dafür Mixins, und
   der Port braucht ihn an keiner Stelle.
 - Die ComputerCraft- und OpenComputers-Anbindung und der WebSocket-Server.

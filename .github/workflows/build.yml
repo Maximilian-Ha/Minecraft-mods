@@ -6,6 +6,9 @@ env:
   # Der Zweig dieses Repos, der den HBM-Port traegt. Gegen ihn wird die Anbindung
   # geprueft und uebersetzt.
   HBM_BRANCH: claude/intelligent-meitner-ashog3
+  # Der Zweig von Mekanism, der auf 1.21.1 steht. Von dort kommen die Quellen fuer die
+  # Torwaechter-Pruefung; die JARs selbst holt der Bau von Modrinth.
+  MEKANISM_BRANCH: 1.21.x
 
 jobs:
   # ---------------------------------------------------------------------------------
@@ -55,10 +58,28 @@ jobs:
           chmod +x ./tools/hbm-api-check.sh
           ./tools/hbm-api-check.sh
 
+      # Die Quellen von Mekanism, ebenfalls nur zum Nachschlagen. Ausgecheckt werden die
+      # drei Quelltextsaetze, nicht das ganze Verzeichnis -- der Rest ist Grafik.
+      - name: Checkout Mekanism (sources only)
+        uses: actions/checkout@v4
+        with:
+          repository: mekanism/mekanism
+          ref: ${{ env.MEKANISM_BRANCH }}
+          path: mek
+          sparse-checkout: |
+            src/api/java
+            src/main/java
+            src/generators/java
+
+      - name: Check Mekanism bridge against Mekanism
+        run: |
+          chmod +x ./tools/mekanism-api-check.sh
+          ./tools/mekanism-api-check.sh
+
   # ---------------------------------------------------------------------------------
   # Der eigentliche Bau. Zweimal, mit Absicht:
-  #   ohne HBM-JAR -> beweist, dass der Kern den HBM-Port nicht braucht
-  #   mit HBM-JAR  -> beweist, dass die Anbindung gegen den echten Port uebersetzt
+  #   ohne fremde JARs -> beweist, dass der Kern weder HBM noch Mekanism braucht
+  #   mit den JARs     -> beweist, dass die Anbindungen gegen die echten Mods uebersetzen
   build:
     runs-on: ubuntu-latest
     steps:
@@ -79,9 +100,9 @@ jobs:
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
 
-      # Erst ohne die Anbindung: so faellt auf, wenn sich in den Kern versehentlich ein
-      # Verweis auf eine HBM-Klasse schleicht. Der Mod muss ohne HBM uebersetzen und laufen.
-      - name: Build without the HBM port
+      # Erst ohne die Anbindungen: so faellt auf, wenn sich in den Kern versehentlich ein
+      # Verweis auf eine fremde Klasse schleicht. Der Mod muss ohne sie uebersetzen und laufen.
+      - name: Build without any bridge
         run: ./gradlew build
 
       - name: Checkout HBM port
@@ -96,24 +117,44 @@ jobs:
         run: |
           chmod +x ./hbm/gradlew
           (cd hbm && ./gradlew build --console=plain)
+          echo "HBM_JAR=$PWD/$(ls hbm/build/libs/*.jar | grep -v sources | head -n 1)" >> "$GITHUB_ENV"
 
-      - name: Build with the HBM bridge
+      # Mekanism veroeffentlicht keine Maven-Artefakte; die JARs kommen deshalb ueber die
+      # oeffentliche Schnittstelle von Modrinth. Sie werden nur zum Uebersetzen gebraucht
+      # und landen nicht in der fertigen JAR.
+      - name: Fetch Mekanism jars (compile-time only)
         run: |
-          JAR=$(ls hbm/build/libs/*.jar | grep -v sources | head -n 1)
-          echo "HBM-JAR: $JAR"
-          ./gradlew build -Phbm_jar="$PWD/$JAR" --console=plain
-          if ! unzip -l build/libs/*.jar | grep -q 'crossmod/hbm/CrossHbm.class'; then
-            echo "FEHLER: Die JAR enthaelt die HBM-Anbindung nicht."
-            exit 1
-          fi
-          echo "OK - die Anbindung liegt in der JAR."
+          mkdir -p libs
+          for SLUG in mekanism mekanism-generators; do
+            URL=$(curl -sSf "https://api.modrinth.com/v2/project/$SLUG/version?loaders=%5B%22neoforge%22%5D&game_versions=%5B%221.21.1%22%5D" \
+              | python3 -c 'import json,sys; vs=json.load(sys.stdin); f=[f for f in vs[0]["files"] if f["primary"]] or vs[0]["files"]; print(f[0]["url"])')
+            echo "$SLUG: $URL"
+            curl -sSfL -o "libs/$(basename "$URL")" "$URL"
+          done
+          ls -l libs
+
+      # Ab hier tragen alle Laeufe beide Anbindungen: die hochgeladene JAR ist damit die,
+      # die man auch ausliefern wuerde, und der Servertest laeuft mit den Bruecken in der
+      # JAR, aber ohne die fremden Mods -- genau der Fall, in dem CrossModLoader sie nicht
+      # laden darf.
+      - name: Build with the HBM and Mekanism bridges
+        run: |
+          echo "HBM-JAR: $HBM_JAR"
+          ./gradlew build -Phbm_jar="$HBM_JAR" --console=plain
+          for CLASS in crossmod/hbm/CrossHbm.class crossmod/mekanism/CrossMekanism.class crossmod/mekanism/MekGenerators.class; do
+            if ! unzip -l build/libs/*.jar | grep -q "$CLASS"; then
+              echo "FEHLER: Die JAR enthaelt $CLASS nicht."
+              exit 1
+            fi
+          done
+          echo "OK - beide Anbindungen liegen in der JAR."
 
       # Die Datengenerierung ist der beste Ersatz fuer einen Client-Start, den CI leisten
       # kann: sie faehrt den Mod-Konstruktor hoch und feuert saemtliche Registrierungen.
       # Ausserdem ist die JAR ohne sie unvollstaendig -- src/generated/resources liegt nicht
       # im Baum, wird aber von sourceSets.main.resources eingezogen.
       - name: Run data generation
-        run: ./gradlew runData --console=plain
+        run: ./gradlew runData -Phbm_jar="$HBM_JAR" --console=plain
 
       - name: Check for duplicate resource paths
         run: |
@@ -128,7 +169,7 @@ jobs:
           echo "OK - keine Datei liegt doppelt vor."
 
       - name: Build packable jar
-        run: ./gradlew build --console=plain
+        run: ./gradlew build -Phbm_jar="$HBM_JAR" --console=plain
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4
@@ -150,7 +191,7 @@ jobs:
             echo "sync-chunk-writes=false"
           } > run/server/server.properties
 
-          ( sleep 180; echo stop; sleep 120 ) | timeout 900 ./gradlew runServer --console=plain > server.log 2>&1 || true
+          ( sleep 180; echo stop; sleep 120 ) | timeout 900 ./gradlew runServer -Phbm_jar="$HBM_JAR" --console=plain > server.log 2>&1 || true
 
           echo "----- letzte 80 Zeilen -----"
           tail -80 server.log

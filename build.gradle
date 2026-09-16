@@ -20,40 +20,62 @@ base {
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 /*
- * Die HBM-Anbindung wird gegen die Klassen des HBM-Ports uebersetzt, nicht ueber
- * Reflexion angesprochen. Die JAR dafuer wird hier gesucht, in dieser Reihenfolge:
+ * Die Anbindungen an fremde Mods werden gegen deren Klassen uebersetzt, nicht ueber
+ * Reflexion angesprochen. Die JARs dafuer werden hier gesucht; findet sich eine nicht,
+ * faellt das zugehoerige Paket aus dem Quelltextsatz. Der Kern kennt die fremden Klassen
+ * nicht -- CrossModLoader laedt jede Bruecke ueber ihren Namen --, der Rest der Mod
+ * uebersetzt und laeuft also auch ohne sie. Zur Laufzeit ist eine Bruecke nur aktiv,
+ * wenn die fremde Mod geladen ist.
  *
- *   1. -Phbm_jar=/pfad/zur/hbmsntm-198A.jar
- *   2. libs/*.jar                        (haendisch abgelegt)
- *   3. hbm/build/libs/hbmsntm-*.jar      (Nachbar-Auscheckung des HBM-Zweigs)
+ * Gesucht wird in dieser Reihenfolge:
+ *   1. -P<name>_jar=/pfad/zur/datei.jar
+ *   2. libs/<vorsatz>*.jar        (haendisch abgelegt oder von CI geholt)
+ *   3. die angegebenen Nachbarverzeichnisse
  *
- * Findet sich keine, wird das Paket crossmod/hbm aus dem Quelltextsatz genommen.
- * Der Kern kennt die HBM-Klassen nicht -- CrossModLoader laedt die Bruecke ueber
- * ihren Namen --, der Rest der Mod uebersetzt und laeuft also auch ohne sie.
- * Zur Laufzeit ist die Bruecke nur aktiv, wenn der HBM-Port geladen ist.
+ * Die Suche geht ueber den Vorsatz des Dateinamens, nicht ueber "irgendeine JAR" --
+ * in libs/ liegen inzwischen mehrere, und jede gehoert zu einer anderen Mod.
  */
-def resolveHbmJar() {
-    if(project.hasProperty('hbm_jar')) {
-        File explicit = file(project.property('hbm_jar'))
-        if(!explicit.isFile()) throw new GradleException("hbm_jar zeigt auf keine Datei: ${explicit}")
-        return explicit
-    }
-    File[] candidates = [
-            file('libs'),
-            file('hbm/build/libs')
-    ].findAll { it.isDirectory() }
-     .collect { it.listFiles({ File f -> f.name.endsWith('.jar') && !f.name.endsWith('-sources.jar') } as FileFilter) ?: new File[0] }
-     .flatten() as File[]
-    return candidates.find { it.name.startsWith(hbm_mod_id) } ?: candidates.find { true }
+def jarsIn(String dir) {
+    File folder = file(dir)
+    if(!folder.isDirectory()) return new File[0]
+    return folder.listFiles({ File f -> f.name.endsWith('.jar') && !f.name.endsWith('-sources.jar') } as FileFilter) ?: new File[0]
 }
 
-ext.hbmJar = resolveHbmJar()
+def resolveJar(String property, String pattern, List<String> dirs) {
+    if(project.hasProperty(property)) {
+        File explicit = file(project.property(property))
+        if(!explicit.isFile()) throw new GradleException("${property} zeigt auf keine Datei: ${explicit}")
+        return explicit
+    }
+    for(String dir : dirs) {
+        File found = jarsIn(dir).find { it.name ==~ pattern }
+        if(found != null) return found
+    }
+    return null
+}
+
+ext.hbmJar = resolveJar('hbm_jar', "(?i)${hbm_mod_id}.*\\.jar", ['libs', 'hbm/build/libs'])
+ext.mekanismJar = resolveJar('mekanism_jar', '(?i)mekanism-(?!generators).*\\.jar', ['libs'])
+ext.mekanismGeneratorsJar = resolveJar('mekanism_generators_jar', '(?i)mekanismgenerators.*\\.jar', ['libs'])
 
 if(ext.hbmJar == null) {
     logger.lifecycle("Energy Control: keine HBM-JAR gefunden, die Anbindung crossmod/hbm wird nicht uebersetzt.")
     sourceSets.main.java.exclude 'com/zuxelus/energycontrol/crossmod/hbm/**'
 } else {
     logger.lifecycle("Energy Control: HBM-Anbindung wird gegen ${ext.hbmJar} uebersetzt.")
+}
+
+/*
+ * Mekanism und seine Generatoren sind zwei Mods, die Anbindung ist aber eine. Sie braucht
+ * beide JARs zum Uebersetzen; im Spiel genuegt Mekanism selbst -- alles, was die
+ * Generatoren betrifft, steht in MekGenerators und wird nur angesprochen, wenn die Mod
+ * geladen ist.
+ */
+if(ext.mekanismJar == null || ext.mekanismGeneratorsJar == null) {
+    logger.lifecycle("Energy Control: keine vollstaendigen Mekanism-JARs gefunden, die Anbindung crossmod/mekanism wird nicht uebersetzt.")
+    sourceSets.main.java.exclude 'com/zuxelus/energycontrol/crossmod/mekanism/**'
+} else {
+    logger.lifecycle("Energy Control: Mekanism-Anbindung wird gegen ${ext.mekanismJar} und ${ext.mekanismGeneratorsJar} uebersetzt.")
 }
 
 neoForge {
@@ -122,6 +144,9 @@ dependencies {
     if(project.ext.hbmJar != null) {
         compileOnly files(project.ext.hbmJar)
     }
+    if(project.ext.mekanismJar != null && project.ext.mekanismGeneratorsJar != null) {
+        compileOnly files(project.ext.mekanismJar, project.ext.mekanismGeneratorsJar)
+    }
 }
 
 tasks.withType(ProcessResources).configureEach {
@@ -138,6 +163,8 @@ tasks.withType(ProcessResources).configureEach {
             mod_version             : mod_version,
             mod_authors             : mod_authors,
             hbm_mod_id              : hbm_mod_id,
+            mekanism_mod_id         : mekanism_mod_id,
+            mekanism_generators_mod_id : mekanism_generators_mod_id,
     ]
 
     duplicatesStrategy = DuplicatesStrategy.WARN

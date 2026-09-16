@@ -18,7 +18,7 @@ Energy Control zeigt Messwerte anderer Maschinen auf Informationstafeln an. Die 
 > - **Bereichsmelder** — gibt ein Redstone-Signal, wenn der Messwert einer Karte einen Bereich verlässt
 > - **Heulalarm** und **Warnleuchte**
 > - **Karten**: Strom (mit Durchsatz), Flüssigkeit, Inventar, Redstone, Vanilla, Zeit, Text,
->   Fernschaltung und **HBM**
+>   Fernschaltung, **HBM** und **Mekanism**
 > - **Bausätze** zu allen Karten mit Ziel, dazu Reichweiten-, Farb- und Berührungsaufwertung
 >
 > Die Tafeln brauchen **Strom** und nehmen ihn über Forge Energy — also aus jeder Energie-Mod
@@ -29,6 +29,17 @@ Energy Control zeigt Messwerte anderer Maschinen auf Informationstafeln an. Die 
 > **Zum Bauen:** `./gradlew build` übersetzt nur. Blockmodelle, Sprachdateien, Rezepte und
 > Loot-Tabellen entstehen erst durch `./gradlew runData` — das gehört einmal vor dem Packen
 > ausgeführt, sonst fehlen sie in der JAR. Siehe [`docs/BUILDING.md`](docs/BUILDING.md).
+
+## Zusammenspiel mit Mekanism
+
+Mekanism hat seit Stufe 5 eine eigene Anbindung, beschrieben in
+[`docs/MEKANISM-KOMPATIBILITAET.md`](docs/MEKANISM-KOMPATIBILITAET.md). Sie holt, was die
+Standard-Schnittstellen nicht hergeben: Chemikalientanks, Strom in Joule statt in
+umgerechnetem FE, Wärmespeicher, den digitalen Bergmann und alle sieben Mehrblockbauten —
+Kessel, Induktionsmatrix, Verdunstungsanlage, SPS, Spaltreaktor, Fusionsanlage, Turbine.
+Der Wärmemelder findet auch einen Mekanism-Spaltreaktor.
+
+Wie bei HBM ist die Anbindung weich: ohne Mekanism lädt der Mod unverändert.
 
 ## Zusammenspiel mit dem HBM-Port
 

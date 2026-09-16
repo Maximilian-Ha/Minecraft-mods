@@ -18,6 +18,7 @@
 | **Stufe 2:** Karten anderer Mods | Inventar auch über `Capabilities.ItemHandler.BLOCK`, Durchsatz auf der Stromkarte |
 | **Stufe 3:** Große Schirme | Tafelerweiterung, Flächenerkennung ohne Verwaltung, Schrift über das ganze Rechteck |
 | **Stufe 4:** Bedienung | Steuerpaket, Texteingabe, Farbtafel, Berührungsbetrieb mit Umschaltkarte, freie Zahleneingabe |
+| **Stufe 5:** Mekanism | Chemikalien, Joule, Wärme, alle sieben Mehrblockbauten, digitaler Bergmann — siehe [`MEKANISM-KOMPATIBILITAET.md`](MEKANISM-KOMPATIBILITAET.md) |
 
 ---
 
@@ -143,7 +144,7 @@ Wahl, und wer eine andere will, tippt sie als Hexwert ein. Die Berührung schalt
 `useWithoutItem` des Zielblocks — also genau so, als hätte der Spieler danebengestanden und
 geklickt; erlaubt sind Hebel, Knöpfe, Türen, Falltüren und Zauntore.
 
-## Stufe 5 — Benannte Anbindungen (Mekanism und andere)
+## Stufe 5 — Benannte Anbindungen (Mekanism und andere) &nbsp;&nbsp;**[fertig für Mekanism]**
 
 **Ziel:** Für eine Mod, die mehr hergibt als die Standard-Schnittstellen, eine eigene Karte —
 so, wie es `crossmod/hbm` für HBM vormacht.
@@ -153,15 +154,29 @@ so, wie es `crossmod/hbm` für HBM vormacht.
 die API beim Bauen fehlt — dasselbe Muster, dieselbe Torwächter-Prüfung (`hbm-api-check.sh`
 lässt sich dafür verallgemeinern).
 
-Für **Mekanism** wären das: Chemikalientanks (Gas, Schlamm, Pigment, Infusion), Spaltreaktor
-und Fusionsanlage, Wärmespeicher, Digital Miner, Boiler und Turbine — im Original rund 430
-Zeilen, die sich zu großen Teilen übertragen lassen.
+**Mekanism ist umgesetzt** und in [`MEKANISM-KOMPATIBILITAET.md`](MEKANISM-KOMPATIBILITAET.md)
+beschrieben: Chemikalientanks, Strom in Joule, Wärmespeicher, digitaler Bergmann sowie alle
+sieben Mehrblockbauten — Kessel, Induktionsmatrix, Verdunstungsanlage, SPS, Spaltreaktor,
+Fusionsanlage, Turbine. Die vier Chemikalienarten des Originals (Gas, Schlamm, Pigment,
+Infusion) sind seit Mekanism 10.7 ein einziger Typ und damit eine Tankart statt vier.
 
-Weitere Kandidaten in der Reihenfolge, in der sie auf 1.21.1 verfügbar sind: Thermal
-Expansion, Immersive Engineering, Applied Energistics, Ad Astra.
+Dabei ist aus dem Muster ein Werkzeug geworden: `tools/api_check.py` bekommt Verzeichnis,
+Quellen und Paketvorsätze von außen und prüft jede Anbindung; `build.gradle` sucht die JARs
+über eine gemeinsame Funktion; CI baut einmal ohne und einmal mit allen fremden JARs.
 
-**Aufwand:** je Mod mittel. **Risiko:** gering für den Rest des Mods — jede Anbindung ist
-gekapselt und fällt bei fehlender API einfach weg.
+**Offen bleiben die weiteren Kandidaten** — Thermal Expansion, Immersive Engineering,
+Applied Energistics, Ad Astra. Der Grund ist nicht der Aufwand, sondern der Nutzen:
+
+- Was diese Mods anbieten, ist überwiegend Forge Energy, `IFluidHandler` und
+  `IItemHandler` — das liest der Mod seit Stufe 2 **ohne** eigene Anbindung. Eine eigene
+  Karte lohnt erst, wo eine Mod etwas Eigenes führt, wie Mekanisms Chemikalien oder HBMs
+  Reaktoren.
+- Jede weitere Anbindung braucht ihre JAR im Bau und ihre Quellen in der Prüfung. Das ist
+  Ballast, solange niemand die Karte vermisst.
+
+Kommt eine dieser Mods als Wunsch, ist Mekanism die Vorlage: eine Klasse unter
+`crossmod/<mod>`, ein Eintrag in `CrossModLoader`, ein Aufruf von `tools/api_check.py`, ein
+Block in `build.gradle`.
 
 ## Stufe 6 — Der Rest aus dem Original
 
