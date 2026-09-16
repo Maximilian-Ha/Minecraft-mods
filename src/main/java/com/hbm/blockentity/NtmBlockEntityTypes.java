@@ -36,6 +36,7 @@ import com.hbm.blockentity.machine.heater.*;
 import com.hbm.blockentity.machine.oil.MachineFractionTowerBlockEntity;
 import com.hbm.blockentity.machine.oil.MachineCatalyticReformerBlockEntity;
 import com.hbm.blockentity.machine.oil.MachineHydrotreaterBlockEntity;
+import com.hbm.blockentity.machine.oil.MachineSolidifierBlockEntity;
 import com.hbm.blockentity.machine.oil.MachineVacuumDistillBlockEntity;
 import com.hbm.blockentity.machine.oil.MachineFrackingTowerBlockEntity;
 import com.hbm.blockentity.machine.oil.MachineOilWellBlockEntity;
@@ -271,6 +272,7 @@ public class NtmBlockEntityTypes {
     public static final Supplier<BlockEntityType<MachineCatalyticReformerBlockEntity>> MACHINE_CATALYTIC_REFORMER = BLOCK_ENTITY_TYPES.register("machine_catalytic_reformer", () -> BlockEntityType.Builder.of(MachineCatalyticReformerBlockEntity::new, NtmBlocks.MACHINE_CATALYTIC_REFORMER.get()).build(null));
     public static final Supplier<BlockEntityType<MachineHydrotreaterBlockEntity>> MACHINE_HYDROTREATER = BLOCK_ENTITY_TYPES.register("machine_hydrotreater", () -> BlockEntityType.Builder.of(MachineHydrotreaterBlockEntity::new, NtmBlocks.MACHINE_HYDROTREATER.get()).build(null));
     public static final Supplier<BlockEntityType<MachineVacuumDistillBlockEntity>> MACHINE_VACUUM_DISTILL = BLOCK_ENTITY_TYPES.register("machine_vacuum_distill", () -> BlockEntityType.Builder.of(MachineVacuumDistillBlockEntity::new, NtmBlocks.MACHINE_VACUUM_DISTILL.get()).build(null));
+    public static final Supplier<BlockEntityType<MachineSolidifierBlockEntity>> MACHINE_SOLIDIFIER = BLOCK_ENTITY_TYPES.register("machine_solidifier", () -> BlockEntityType.Builder.of(MachineSolidifierBlockEntity::new, NtmBlocks.MACHINE_SOLIDIFIER.get()).build(null));
 
     public static final Supplier<BlockEntityType<MachineRefineryBlockEntity>> MACHINE_REFINERY = BLOCK_ENTITY_TYPES.register(
             "machine_refinery",

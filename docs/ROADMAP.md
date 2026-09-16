@@ -2842,3 +2842,47 @@ Port noch nicht gibt — vor allem `oil_tar` in seinen fünf Spielarten, dazu `s
 Runde vorweg, sonst müsste jede der beiden Maschinen ihre halbe Rezeptliste auslassen. Der
 Krackturm ist der aufwendigste: im Original kein Turm, sondern ein großer,
 richtungsabhängiger Verbund mit fünf Teilkörpern und richtungsbezogenen Anschlusspunkten.
+
+## Stufe 6 — Runde 142: der Verfestiger
+
+Die Maschine, die die Kette hinten schließt: sie macht aus einer Flüssigkeit wieder einen festen
+Gegenstand. Wasser wird Eis, Lava wird Obsidian, Öl wird Teer, und alles, was brennt, lässt sich
+zu Brennstoffwürfeln pressen. Vier Blöcke hoch auf einem Feld; angeschlossen wird oben an der
+Haube und an den vier Auslegern auf mittlerer Höhe.
+
+Wie viel von einem brennbaren Stoff ein Würfel kostet, steht nicht in der Liste, sondern rechnet
+sich aus seinem Wärmewert: so viel, dass die Wärme dem Würfel entspricht, plus fünfundzwanzig
+Prozent Aufschlag fürs Pressen, danach auf eine glatte Zahl gerundet. Das ist unverändert aus dem
+Original übernommen — dadurch bleiben die sechsundzwanzig Einträge automatisch stimmig, wenn sich
+einmal ein Wärmewert ändert.
+
+**Drei Gegenstände sind neu**, weil die Rezeptliste sie braucht: `solid_fuel_bf` (der
+Balefire-Würfel), `biomass_compressed` und `bio_wafer`. Die fünf Spielarten von `oil_tar` waren
+entgegen der Notiz nach Runde 141 bereits im Port vorhanden — als sechs einzelne Gegenstände
+statt als einer mit Metadaten.
+
+**Zwei Abweichungen vom Original.**
+
+- **Quecksilber fehlt.** `ingot_mercury` gibt es im Port nicht und im Original auch keine Textur
+  dafür; der Eintrag entfällt, wie schon in `CrystallizerRecipes` vermerkt.
+- **Balefire steht nur einmal in der Liste.** Das Original trägt es zweimal ein: erst fest mit
+  250 mB, danach über dieselbe Automatik, die den festen Wert wieder überschreibt. Hier steht
+  nur die Automatik — der feste Eintrag wäre ohne jede Wirkung.
+
+**Drei Abweichungen gegenüber dem ersten Entwurf dieser Runde**, alle beim Vergleich mit dem
+Original gefunden: der Fortschrittsbalken teilte durch 24 statt durch 42, die Lampe über der
+Batterieanzeige fehlte ganz, und die Rezeptdatei hieß `hbmSolidification.json` statt
+`hbmSolidifier.json` und schrieb die Eingabemenge als eigenes Feld statt als Füllstand des
+Eingabestoffs.
+
+### Stand der Erdölkette nach Runde 142
+
+| | |
+|---|---|
+| portiert (10) | Bohrturm, Pumpe, Frackingturm, Raffinerie, Fraktionierturm, Zwischenstück, Reformer, Hydrotreater, Vakuumdestille, **Verfestiger** |
+| offen (5) | Krackturm, Coker, Gasfackel, Verflüssiger, Pyroofen |
+
+**Noch offen für die ganze Kette: die JEI-Ansichten.** Keine der Maschinen aus den Runden 138
+bis 142 hat bisher eine — im Original gibt es für Fraktionierung, Reformierung, Hydrotreating,
+Vakuumdestillation und Verfestigung je einen NEI-Handler. Das gehört in eine eigene Runde, wenn
+die Kette vollständig ist.

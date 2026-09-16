@@ -433,6 +433,14 @@ public class NtmItems {
     public static final DeferredItem<Item> TANK_STEEL = ITEMS.register("tank_steel", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> CATALYST_CLAY = ITEMS.register("catalyst_clay", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> CATALYTIC_CONVERTER = ITEMS.register("catalytic_converter", () -> new Item(new Item.Properties().stacksTo(1)));
+
+    /* ---- Runde 142: die Erzeugnisse der Erdoelkette, die noch fehlten ---------------- */
+
+    /* Der Brennstoffwuerfel aus Balefire -- der energiedichteste der Kette. */
+    public static final DeferredItem<Item> SOLID_FUEL_BF = ITEMS.register("solid_fuel_bf", () -> new Item(new Item.Properties()));
+    /* Gepresste Biomasse und der Riegel, den der Verfestiger aus Nahrfluessigkeit macht. */
+    public static final DeferredItem<Item> BIOMASS_COMPRESSED = ITEMS.register("biomass_compressed", () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> BIO_WAFER = ITEMS.register("bio_wafer", () -> new Item(new Item.Properties().food(NtmFoods.BIO_WAFER)));
     public static final DeferredItem<Item> DEUTERIUM_FILTER = ITEMS.register("deuterium_filter", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> FINS_FLAT = ITEMS.register("fins_flat", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> FINS_SMALL_STEEL = ITEMS.register("fins_small_steel", () -> new Item(new Item.Properties()));

@@ -8,6 +8,8 @@ public class NtmFoods {
 
     public static final FoodProperties SMORE = new FoodProperties.Builder().nutrition(10).saturationModifier(20F).build();
     public static final FoodProperties GLYPHID_MEAT = new FoodProperties.Builder().nutrition(5).saturationModifier(0F).build();
+    /* Portiert aus 1.7.10: ItemLemon(4, 2F, false) -- vier Punkte, Saettigungsfaktor zwei. */
+    public static final FoodProperties BIO_WAFER = new FoodProperties.Builder().nutrition(4).saturationModifier(2F).build();
     public static final FoodProperties CHOCOLATE = new FoodProperties.Builder()
             .nutrition(1)
             .saturationModifier(0F)

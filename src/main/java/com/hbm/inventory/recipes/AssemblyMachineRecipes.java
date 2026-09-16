@@ -1198,6 +1198,19 @@ public class AssemblyMachineRecipes extends GenericRecipes<GenericRecipe> {
                         new ComparableStack(NtmItems.CIRCUIT_MICROCHIP.get(), 4)
                 ));
 
+        // ---- Runde 142 ----
+        // Original "ass.solidifier". ANY_PLASTIC.ingot() wird das Bakelit, das im Port der
+        // einzige Kunststoffbarren ist; der Kondensatorschaltkreis und die Kupferspule
+        // stehen unveraendert.
+        this.register(new GenericRecipe("ass.solidifier").setup(200, 100).outputItems(new ItemStack(NtmBlocks.MACHINE_SOLIDIFIER, 1))
+                .inputItems(
+                        new ComparableStack(NtmItems.SHELL_STEEL.get(), 4),
+                        new ComparableStack(NtmItems.PLATE_ALUMINIUM.get(), 12),
+                        new ComparableStack(NtmItems.INGOT_BAKELITE.get(), 4),
+                        new ComparableStack(NtmItems.CIRCUIT_CAPACITOR.get(), 12),
+                        new ComparableStack(NtmItems.COIL_COPPER.get(), 4)
+                ));
+
         FluidType[] order = Fluids.getInNiceOrder();
         for(int i = 1; i < order.length; ++i) {
             FluidType type = order[i];

@@ -2727,6 +2727,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.MACHINE_CATALYTIC_REFORMER, "Catalytic Reformer");
         this.add(NtmBlocks.MACHINE_HYDROTREATER, "Hydrotreater");
         this.add(NtmBlocks.MACHINE_VACUUM_DISTILL, "Vacuum Distillation Tower");
+        this.add(NtmBlocks.MACHINE_SOLIDIFIER, "Solidifier");
         this.add(NtmBlocks.ORE_METEOR_IRON, "Meteor Iron Ore");
         this.add(NtmBlocks.ORE_METEOR_COBALT, "Meteor Cobalt Ore");
         this.add(NtmBlocks.ORE_METEOR_ALUMINIUM, "Meteor Aluminium Ore");
@@ -3549,6 +3550,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("container.machine_catalytic_reformer", "Catalytic Reformer");
         this.add("container.machine_hydrotreater", "Hydrotreater");
         this.add("container.machine_vacuum_distill", "Vacuum Distillation Tower");
+        this.add("container.machine_solidifier", "Solidifier");
 
         this.add("bomb.detonated", "Detonated successfully!");
         this.add("bomb.triggered", "Triggered successfully!");
@@ -3669,6 +3671,9 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.INSERT_YHARONITE, "Yharonite Insert");
         this.add(NtmItems.INSERT_DOXIUM, "Astolfium-Doped Doxium Insert");
         this.add(NtmItems.CATALYTIC_CONVERTER, "Catalytic Converter");
+        this.add(NtmItems.SOLID_FUEL_BF, "Balefire-Infused Solid Fuel");
+        this.add(NtmItems.BIOMASS_COMPRESSED, "Compressed Biomass");
+        this.add(NtmItems.BIO_WAFER, "Bio Wafer");
         this.add(NtmItems.PLAN_C, "Plan C");
         this.add(NtmItems.CASSETTE, "Cassette");
         this.add(NtmItems.FLUID_ICON, "Fluid");

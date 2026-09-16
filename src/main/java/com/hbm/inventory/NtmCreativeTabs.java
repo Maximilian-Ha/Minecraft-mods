@@ -324,6 +324,9 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.TANK_STEEL.get());
                         output.accept(NtmItems.CATALYST_CLAY.get());
                         output.accept(NtmItems.CATALYTIC_CONVERTER.get());
+                        output.accept(NtmItems.SOLID_FUEL_BF.get());
+                        output.accept(NtmItems.BIOMASS_COMPRESSED.get());
+                        output.accept(NtmItems.BIO_WAFER.get());
                         output.accept(NtmItems.DEUTERIUM_FILTER.get());
                         output.accept(NtmItems.FINS_FLAT.get());
                         output.accept(NtmItems.FINS_SMALL_STEEL.get());
@@ -1364,6 +1367,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.MACHINE_CATALYTIC_REFORMER);
                         output.accept(NtmBlocks.MACHINE_HYDROTREATER);
                         output.accept(NtmBlocks.MACHINE_VACUUM_DISTILL);
+                        output.accept(NtmBlocks.MACHINE_SOLIDIFIER);
                         output.accept(NtmBlocks.FURNACE_COMBINATION);
                         output.accept(NtmBlocks.MACHINE_DRAIN);
                         output.accept(NtmBlocks.MACHINE_INTAKE);
