@@ -161,7 +161,8 @@ public class InfoPanelScreen extends AbstractContainerScreen<InfoPanelMenu> {
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        renderBackground(guiGraphics, mouseX, mouseY, partialTick);
+        // Den Hintergrund zeichnet AbstractContainerScreen selbst -- ein zweiter Aufruf
+        // legte die Abdunklung doppelt uebereinander.
         super.render(guiGraphics, mouseX, mouseY, partialTick);
 
         if(ECConfig.requirePower()) {
