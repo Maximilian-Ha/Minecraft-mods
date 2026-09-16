@@ -87,7 +87,16 @@ public class NtmJeiPlugin implements IModPlugin {
                 new PWRRecipeHandler(guiHelper),
                 new FuelPoolRecipeHandler(guiHelper),
                 new RTGRecipeHandler(guiHelper),
-                new RBMKDisassemblyRecipeHandler(guiHelper)
+                new RBMKDisassemblyRecipeHandler(guiHelper),
+                new FractionRecipeHandler(guiHelper),
+                new ReformingRecipeHandler(guiHelper),
+                new HydrotreatingRecipeHandler(guiHelper),
+                new VacuumRefineryRecipeHandler(guiHelper),
+                new SolidificationRecipeHandler(guiHelper),
+                new LiquefactionRecipeHandler(guiHelper),
+                new PyroOvenRecipeHandler(guiHelper),
+                new CokerRecipeHandler(guiHelper),
+                new CrackingRecipeHandler(guiHelper)
         );
     }
 
@@ -123,10 +132,59 @@ public class NtmJeiPlugin implements IModPlugin {
         registration.addRecipes(FuelPoolRecipeHandler.RECIPE_TYPE, FuelPoolRecipeHandler.getRecipes());
         registration.addRecipes(RTGRecipeHandler.RECIPE_TYPE, RTGRecipeHandler.getRecipes());
         registration.addRecipes(RBMKDisassemblyRecipeHandler.RECIPE_TYPE, RBMKDisassemblyRecipeHandler.getRecipes());
+
+        /* ---- die Erdoelkette, Runde 148 ---- */
+        registration.addRecipes(FractionRecipeHandler.RECIPE_TYPE, FractionRecipeHandler.getRecipes());
+        registration.addRecipes(ReformingRecipeHandler.RECIPE_TYPE, ReformingRecipeHandler.getRecipes());
+        registration.addRecipes(HydrotreatingRecipeHandler.RECIPE_TYPE, HydrotreatingRecipeHandler.getRecipes());
+        registration.addRecipes(VacuumRefineryRecipeHandler.RECIPE_TYPE, VacuumRefineryRecipeHandler.getRecipes());
+        registration.addRecipes(SolidificationRecipeHandler.RECIPE_TYPE, SolidificationRecipeHandler.getRecipes());
+        registration.addRecipes(LiquefactionRecipeHandler.RECIPE_TYPE, LiquefactionRecipeHandler.getRecipes());
+        registration.addRecipes(PyroOvenRecipeHandler.RECIPE_TYPE, PyroOvenRecipeHandler.getRecipes());
+        registration.addRecipes(CokerRecipeHandler.RECIPE_TYPE, CokerRecipeHandler.getRecipes());
+        registration.addRecipes(CrackingRecipeHandler.RECIPE_TYPE, CrackingRecipeHandler.getRecipes());
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+
+        /* ---- die Erdoelkette, Runde 148 ---- */
+        registration.addRecipeCatalyst(
+                NtmBlocks.MACHINE_FRACTION_TOWER.asItem(),
+                FractionRecipeHandler.RECIPE_TYPE
+        );
+        registration.addRecipeCatalyst(
+                NtmBlocks.MACHINE_CATALYTIC_REFORMER.asItem(),
+                ReformingRecipeHandler.RECIPE_TYPE
+        );
+        registration.addRecipeCatalyst(
+                NtmBlocks.MACHINE_HYDROTREATER.asItem(),
+                HydrotreatingRecipeHandler.RECIPE_TYPE
+        );
+        registration.addRecipeCatalyst(
+                NtmBlocks.MACHINE_VACUUM_DISTILL.asItem(),
+                VacuumRefineryRecipeHandler.RECIPE_TYPE
+        );
+        registration.addRecipeCatalyst(
+                NtmBlocks.MACHINE_SOLIDIFIER.asItem(),
+                SolidificationRecipeHandler.RECIPE_TYPE
+        );
+        registration.addRecipeCatalyst(
+                NtmBlocks.MACHINE_LIQUEFACTOR.asItem(),
+                LiquefactionRecipeHandler.RECIPE_TYPE
+        );
+        registration.addRecipeCatalyst(
+                NtmBlocks.MACHINE_PYRO_OVEN.asItem(),
+                PyroOvenRecipeHandler.RECIPE_TYPE
+        );
+        registration.addRecipeCatalyst(
+                NtmBlocks.MACHINE_COKER.asItem(),
+                CokerRecipeHandler.RECIPE_TYPE
+        );
+        registration.addRecipeCatalyst(
+                NtmBlocks.MACHINE_CATALYTIC_CRACKER.asItem(),
+                CrackingRecipeHandler.RECIPE_TYPE
+        );
         for(com.hbm.blocks.machine.NTMAnvilBlock.Variant variant : com.hbm.blocks.machine.NTMAnvilBlock.Variant.values()) {
             registration.addRecipeCatalyst(
                     MetaHelper.newStack(NtmBlocks.ANVIL.asItem(), variant.ordinal()),

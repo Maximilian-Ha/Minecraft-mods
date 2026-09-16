@@ -3058,3 +3058,29 @@ und die Erdölkette" erfüllt (die erste war die Hazmat-Familie in den Runden 13
 Runden 138 bis 147 hat eine — im Original gibt es für Fraktionierung, Reformierung,
 Hydrotreating, Vakuumdestillation, Verfestigung, Verflüssigung, Pyrolyse, Verkokung und Kracken
 je einen NEI-Handler. Das ist die nächste sinnvolle Runde.
+
+## Stufe 6 — Runde 148: die JEI-Ansichten der Erdölkette
+
+Der letzte offene Punkt aus Runde 147. Neun neue Ansichten, für jede Rezeptart der Kette eine:
+
+| Ansicht | zeigt |
+|---|---|
+| Fraktionierung | ein Öl → zwei Fraktionen |
+| Reformierung | ein Öl → drei Erzeugnisse |
+| Hydrotreating | Öl + Wasserstoff → entschwefeltes Öl + Sauergas |
+| Vakuumdestillation | ein Öl → vier Fraktionen |
+| Verfestigung | eine Flüssigkeit → ein Gegenstand |
+| Verflüssigung | ein Gegenstand → eine Flüssigkeit |
+| Pyrolyse | Gegenstand und/oder Fluid → Gegenstand und/oder Fluid |
+| Verkokung | ein Öl → Koks + Nebenprodukt |
+| Kracken | Öl + Dampf → zwei Erzeugnisse + Altdampf |
+
+Alle neun benutzen denselben allgemeinen Hintergrund wie die übrigen Fluid-Ansichten des Ports
+und nehmen ihre Einträge direkt aus den Rezeptlisten, die in den Runden 138 bis 147 entstanden
+sind — eine eigene Datenhaltung braucht keine davon.
+
+Der Krackturm ist der einzige, dessen Überschrift nicht auf einen `container.*`-Schlüssel zeigt:
+er hat keine Oberfläche, also gibt es keinen. Seine Ansicht trägt den Blocknamen.
+
+**Damit ist die Erdölkette in jedem Sinn fertig:** jede Maschine des Originals ist portiert, und
+jede Umwandlung ist im Spiel nachschlagbar.
