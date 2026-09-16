@@ -18,8 +18,13 @@ import os, re, sys
 SRC = 'src/main/java/com/zuxelus/energycontrol'
 LANG = os.path.join(SRC, 'datagen', 'ECLanguageProvider.java')
 
-# Schluessel, die Minecraft selbst mitbringt.
+# Schluessel, die Minecraft selbst mitbringt. Alles mit "energycontrol" darin ist unser
+# eigener -- auch unter gui.*, sonst faellt ein fehlender gui.energycontrol.*-Schluessel
+# durch das Sieb.
 FOREIGN_PREFIXES = ('options.', 'container.inventory', 'gui.', 'key.')
+
+def is_foreign(key):
+    return key.startswith(FOREIGN_PREFIXES) and 'energycontrol' not in key
 
 def strip_comments(text):
     return re.sub(r'//[^\n]*|/\*.*?\*/', '', text, flags=re.S)
@@ -50,8 +55,7 @@ declared = set(re.findall(r'both\(\s*"([^"]+)"', lang))
 # Schluessel im Quelltext -- die stehen hier als block(...)/item(...).
 auto = len(re.findall(r'\b(?:block|item)\(EC', lang))
 
-missing = sorted(k for k in used
-                 if k not in declared and not k.startswith(FOREIGN_PREFIXES))
+missing = sorted(k for k in used if k not in declared and not is_foreign(k))
 unused = sorted(k for k in declared if k not in used and not k.startswith(
     ('itemGroup.', 'container.energycontrol.', 'subtitles.')))
 

@@ -6,7 +6,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -68,13 +67,21 @@ public class InfoPanelBlock extends BaseEntityBlock {
         };
     }
 
+    /**
+     * Ein Rechtsklick mit leerer Hand faehrt zuerst die Beruehrung: traegt die Tafel die
+     * Beruehrungsaufwertung und kann die Karte etwas damit anfangen, wirkt der Klick auf das
+     * Ziel der Karte. Sonst -- und im Schleichen immer -- oeffnet er die Oberflaeche.
+     */
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if(level.isClientSide) return InteractionResult.SUCCESS;
-        if(player.isShiftKeyDown()) return InteractionResult.PASS;
 
         BlockEntity be = level.getBlockEntity(pos);
-        if(be instanceof MenuProvider menu) player.openMenu(new SimpleMenuProvider(menu, menu.getDisplayName()), pos);
+        if(!(be instanceof InfoPanelBlockEntity panel)) return InteractionResult.PASS;
+
+        if(!player.isShiftKeyDown() && panel.tryTouch(player)) return InteractionResult.CONSUME;
+
+        player.openMenu(new SimpleMenuProvider(panel, panel.getDisplayName()), pos);
         return InteractionResult.CONSUME;
     }
 

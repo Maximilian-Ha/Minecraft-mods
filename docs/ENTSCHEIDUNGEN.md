@@ -41,23 +41,27 @@ Karte liegt daher in `minecraft:custom_data` — derselbe Weg, den auch der HBM-
 gegenstandsgebundenen Daten nimmt. Die Karten merken davon nichts; sie sehen weiter nur
 benannte Felder über `ICardReader`.
 
-## Alle Schalter laufen über `clickMenuButton`
+## Ein Paket für Werte, `clickMenuButton` für Schalter
 
 Das Original brauchte für jeden Schalter in einer Oberfläche ein eigenes Netzwerkpaket
 (`PacketCard`, `PacketKeys`, `PacketAlarm`). Minecraft hat dafür längst einen Weg:
-`AbstractContainerMenu.clickMenuButton`. Der Port benutzt ihn durchgehend und kommt damit
-**ganz ohne eigene Netzwerkpakete** aus.
+`AbstractContainerMenu.clickMenuButton`. Alles, was nur "dieser Schalter wurde gedrückt"
+bedeutet, läuft hier darüber -- Beschriftung an/aus, Takt weiterschalten, Redstone umkehren,
+ein Ankreuzfeld einer Karte.
 
-Der Preis: wo das Original Textfelder und Schieberegler hatte, stehen hier Knöpfe.
+Für alles, was einen **Wert** mitbringt, genügt das nicht: eingetippter Text, eine Farbe, eine
+Zahl. Dafür gibt es genau **ein** Paket, `PanelControl`, mit Blockposition und einem
+NBT-Beutel; was gemeint ist, steht darin unter `action`. Drei Pakete wie im Original braucht
+es nicht.
 
-- Der **Bereichsmelder** bekommt statt zweier Zahlenfelder je ein Knopfpaar pro Schrittweite.
-- Der **Wärmemelder** schaltet durch neun feste Schwellen statt freier Eingabe.
-- Der **Heulalarm** hat gar keine Oberfläche mehr: Rechtsklick schaltet den Ton weiter,
-  Rechtsklick im Schleichen die Hörweite.
-- Die **Überschrift einer Karte** kommt aus ihrem Namen — man benennt sie im Amboss. Das gilt
-  auch für die Textkarte, deren ganzer Zweck eine feste Zeile ist.
+Die Rechteprüfung liegt beim Empfänger, nicht beim Paket (`IControlReceiver.hasPermission`):
+nur der Block weiß, wer ihn bedienen darf. In der Regel ist das dieselbe Grenze, die Minecraft
+für die Fächer zieht -- `stillValid`, also acht Blöcke. Ein Paket auf einen nicht geladenen
+Chunk wird verworfen, statt ihn auf Zuruf vom Client zu laden.
 
-Ein eigenes Paket nachzurüsten ist jederzeit möglich; siehe [`ROADMAP.md`](ROADMAP.md).
+**Die erste Fassung dieses Ports kam ganz ohne Paket aus** und behalf sich mit Knöpfen:
+Schrittknöpfe statt Zahlenfeldern, sechzehn feste Farben zum Durchschalten, und der Text einer
+Textkarte kam aus ihrem Namen im Amboss. Mit Stufe 4 ist das ersetzt.
 
 ## Zeilen sind `Component`, nicht `String`
 
@@ -70,6 +74,14 @@ Zeilen sind deshalb `Component`; übersetzt wird erst beim Zeichnen.
 Die HBM-Karte könnte HBMs eigene Schlüssel benutzen (`trait.rbmk.melt`, `geiger.chunkRad`).
 Sie tut es nicht: zwei Mods, die denselben Schlüssel belegen, überschreiben einander in nicht
 festgelegter Reihenfolge. Alle Zeilen dieses Mods stehen unter `msg.ec.…`.
+
+## Der Heulalarm hat keine Oberfläche
+
+Im Original wählte man Ton und Hörweite in einer eigenen Oberfläche mit Listenfeld und
+Schieberegler. Hier geht beides am Block: Rechtsklick mit leerer Hand schaltet den Ton weiter,
+Rechtsklick im Schleichen die Hörweite; was eingestellt ist, sagt eine Meldung über der
+Schnellleiste. Für zwei Werte lohnt keine Oberfläche, und der Block braucht dadurch weder
+Menü noch Fächer.
 
 ## Reflexion nur an einer Stelle
 

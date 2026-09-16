@@ -17,6 +17,7 @@
 | **Stufe 1:** Strom für die Tafeln | Stromspeicher als `Capabilities.EnergyStorage.BLOCK`, Energiebalken, abschaltbar |
 | **Stufe 2:** Karten anderer Mods | Inventar auch über `Capabilities.ItemHandler.BLOCK`, Durchsatz auf der Stromkarte |
 | **Stufe 3:** Große Schirme | Tafelerweiterung, Flächenerkennung ohne Verwaltung, Schrift über das ganze Rechteck |
+| **Stufe 4:** Bedienung | Steuerpaket, Texteingabe, Farbtafel, Berührungsbetrieb mit Umschaltkarte, freie Zahleneingabe |
 
 ---
 
@@ -111,7 +112,7 @@ Drei Regeln halten die Fläche sauber: gleiche Ebene und gleiche Blickrichtung, 
 (sonst bleibt es beim Einzelblock), und **genau eine** Tafel je Schirm — reichen zwei Tafeln
 über dieselben Erweiterungen, gibt jede ihren Anspruch auf, statt übereinanderzuschreiben.
 
-## Stufe 4 — Bedienung: Textfeld, Farbwahl, Berührung
+## Stufe 4 — Bedienung: Textfeld, Farbwahl, Berührung &nbsp;&nbsp;**[fertig]**
 
 **Ziel:** Die drei Stellen, an denen der Port heute mit Knöpfen behilft, bekommen ihre richtige
 Bedienung.
@@ -132,8 +133,15 @@ Client zum Server. Der Port kommt bisher mit `clickMenuButton` aus (siehe
   bis dahin nichts.
 - Freie Zahleneingabe im Bereichs- und Wärmemelder statt der Schrittknöpfe.
 
-**Aufwand:** mittel. **Risiko:** mittel — Eingaben vom Client sind der Ort, an dem man
-Rechteprüfung und Wertebereiche nicht vergessen darf.
+Umgesetzt mit **einem** Paket (`PanelControl`) statt der drei des Originals: was gemeint ist,
+steht im NBT-Beutel unter `action`. Die Rechteprüfung liegt beim Empfänger
+(`IControlReceiver.hasPermission`, in der Regel `stillValid` — acht Blöcke), und ein Paket auf
+einen nicht geladenen Chunk wird verworfen, statt ihn auf Zuruf vom Client zu laden.
+
+Die Farbwahl ist gegenüber dem Original **freier**: die sechzehn Farben stehen als Felder zur
+Wahl, und wer eine andere will, tippt sie als Hexwert ein. Die Berührung schaltet über
+`useWithoutItem` des Zielblocks — also genau so, als hätte der Spieler danebengestanden und
+geklickt; erlaubt sind Hebel, Knöpfe, Türen, Falltüren und Zauntore.
 
 ## Stufe 5 — Benannte Anbindungen (Mekanism und andere)
 

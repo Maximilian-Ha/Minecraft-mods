@@ -184,6 +184,7 @@ public class ECRecipeProvider extends RecipeProvider {
         kit(output, ECItems.KIT_INVENTORY.get(), Items.CHEST);
         kit(output, ECItems.KIT_REDSTONE.get(), Items.REDSTONE_TORCH);
         kit(output, ECItems.KIT_VANILLA.get(), Items.FURNACE);
+        kit(output, ECItems.KIT_TOGGLE.get(), Items.LEVER);
 
         // Der HBM-Bausatz misst Reaktoren aus und braucht deshalb die bessere Schaltung.
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ECItems.KIT_HBM.get())

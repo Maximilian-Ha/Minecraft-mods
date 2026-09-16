@@ -39,9 +39,6 @@ public class RangeTriggerBlockEntity extends CardReaderBlockEntity {
     public static final int STATUS_INSIDE = 1;
     public static final int STATUS_OUTSIDE = 2;
 
-    /** Schrittweiten der Knoepfe in der Oberflaeche. */
-    public static final long[] STEPS = { 1L, 10L, 100L, 1000L, 10000L, 100000L };
-
     private long levelStart = 0L;
     private long levelEnd = 40000L;
     private boolean invertRedstone;
@@ -150,12 +147,23 @@ public class RangeTriggerBlockEntity extends CardReaderBlockEntity {
         sync();
     }
 
-    /** Verschiebt eine der beiden Grenzen um einen Schritt. */
-    public void adjust(boolean end, int stepIndex, boolean negative) {
-        if(stepIndex < 0 || stepIndex >= STEPS.length) return;
-        long delta = STEPS[stepIndex] * (negative ? -1L : 1L);
-        if(end) levelEnd = Math.max(0L, levelEnd + delta);
-        else levelStart = Math.max(0L, levelStart + delta);
+    @Override
+    public void receiveControl(Player player, CompoundTag tag) {
+        switch(tag.getString("action")) {
+            case "levelStart" -> setLevels(tag.getLong("value"), levelEnd);
+            case "levelEnd" -> setLevels(levelStart, tag.getLong("value"));
+            default -> { }
+        }
+    }
+
+    /** Freie Eingabe aus der Oberflaeche. */
+    public void setLevels(long start, long end) {
+        long newStart = Math.max(0L, start);
+        long newEnd = Math.max(0L, end);
+        if(newStart == levelStart && newEnd == levelEnd) return;
+
+        levelStart = newStart;
+        levelEnd = newEnd;
         updateCard();
     }
 

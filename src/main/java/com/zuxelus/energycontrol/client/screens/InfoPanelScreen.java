@@ -4,6 +4,7 @@ import com.zuxelus.energycontrol.ECConfig;
 import com.zuxelus.energycontrol.EnergyControl;
 import com.zuxelus.energycontrol.api.PanelSetting;
 import com.zuxelus.energycontrol.blockentity.InfoPanelBlockEntity;
+import com.zuxelus.energycontrol.items.cards.ItemCardText;
 import com.zuxelus.energycontrol.menus.InfoPanelMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -11,6 +12,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
@@ -39,6 +41,8 @@ public class InfoPanelScreen extends AbstractContainerScreen<InfoPanelMenu> {
     private static final int SETTING_HEIGHT = 12;
     private static final int SETTING_X = 30;
     private static final int SETTING_Y = 44;
+    /** Drei Knoepfe in der unteren Reihe, von x=30 bis zum rechten Rand bei x=168. */
+    private static final int BOTTOM_WIDTH = 45;
 
     private int knownState = -1;
 
@@ -91,14 +95,43 @@ public class InfoPanelScreen extends AbstractContainerScreen<InfoPanelMenu> {
                     .bounds(x, y, SETTING_WIDTH, SETTING_HEIGHT).build());
         }
 
+        /*
+         * Die untere Reihe fasst bis zu drei kurze Knoepfe: die beiden Farbwahlen, wenn die
+         * Farbaufwertung steckt, und die Texteingabe, wenn eine Textkarte im Fach liegt. Die
+         * Beschriftungen sind bewusst kurz -- drei Knoepfe nebeneinander haben je 46 Punkte,
+         * und ein ueberlaufender Text sieht schlechter aus als ein knapper.
+         */
+        ItemStack card = panel.getItem(InfoPanelBlockEntity.SLOT_CARD);
+        int x = leftPos + 30;
+
         if(panel.hasColorUpgrade()) {
-            addRenderableWidget(Button.builder(Component.translatable("msg.ec.ColorText"),
-                            button -> send(InfoPanelMenu.BUTTON_COLOR_TEXT))
-                    .bounds(leftPos + 30, topPos + 92, SETTING_WIDTH, SETTING_HEIGHT).build());
-            addRenderableWidget(Button.builder(Component.translatable("msg.ec.ColorBackground"),
-                            button -> send(InfoPanelMenu.BUTTON_COLOR_BACKGROUND))
-                    .bounds(leftPos + 100, topPos + 92, SETTING_WIDTH, SETTING_HEIGHT).build());
+            addRenderableWidget(Button.builder(Component.translatable("msg.ec.ColorTextShort"),
+                            button -> openColorPicker("colorText", panel.getColorText(), "msg.ec.ColorText"))
+                    .bounds(x, topPos + 92, BOTTOM_WIDTH, SETTING_HEIGHT).build());
+            x += BOTTOM_WIDTH + 2;
+
+            addRenderableWidget(Button.builder(Component.translatable("msg.ec.ColorBackgroundShort"),
+                            button -> openColorPicker("colorBackground", panel.getColorBackground(), "msg.ec.ColorBackground"))
+                    .bounds(x, topPos + 92, BOTTOM_WIDTH, SETTING_HEIGHT).build());
+            x += BOTTOM_WIDTH + 2;
         }
+
+        if(card.getItem() instanceof ItemCardText) {
+            addRenderableWidget(Button.builder(Component.translatable("gui.energycontrol.edit_text"),
+                            button -> openTextEditor(card))
+                    .bounds(x, topPos + 92, BOTTOM_WIDTH, SETTING_HEIGHT).build());
+        }
+    }
+
+    private void openColorPicker(String action, int current, String titleKey) {
+        if(minecraft == null) return;
+        minecraft.setScreen(new ColorPickerScreen(this, menu.be.getBlockPos(), action, current,
+                Component.translatable(titleKey)));
+    }
+
+    private void openTextEditor(ItemStack card) {
+        if(minecraft == null) return;
+        minecraft.setScreen(new CardTextScreen(this, menu.be.getBlockPos(), card));
     }
 
     /**

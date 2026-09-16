@@ -4,12 +4,14 @@ import com.zuxelus.energycontrol.ECConfig;
 import com.zuxelus.energycontrol.api.CardState;
 import com.zuxelus.energycontrol.api.IItemCard;
 import com.zuxelus.energycontrol.api.PanelSetting;
+import com.zuxelus.energycontrol.api.ITouchAction;
 import com.zuxelus.energycontrol.api.PanelString;
 import com.zuxelus.energycontrol.init.ECBlockEntityTypes;
 import com.zuxelus.energycontrol.items.ItemUpgrade;
 import com.zuxelus.energycontrol.items.ItemUpgrade.UpgradeType;
 import com.zuxelus.energycontrol.items.cards.ItemCardBase;
 import com.zuxelus.energycontrol.items.cards.ItemCardReader;
+import com.zuxelus.energycontrol.items.cards.ItemCardText;
 import com.zuxelus.energycontrol.menus.InfoPanelMenu;
 import com.zuxelus.energycontrol.blocks.InfoPanelBlock;
 import net.minecraft.core.BlockPos;
@@ -17,6 +19,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -234,6 +238,68 @@ public class InfoPanelBlockEntity extends CardReaderBlockEntity {
         return lines;
     }
 
+    // ---------------------------------------------------------------- Eingaben
+
+    @Override
+    public void receiveControl(Player player, CompoundTag tag) {
+        switch(tag.getString("action")) {
+            case "colorText" -> setColorText(tag.getInt("value"));
+            case "colorBackground" -> setColorBackground(tag.getInt("value"));
+            case "text" -> writeTextCard(tag);
+            default -> { }
+        }
+    }
+
+    /**
+     * Schreibt die eingetippten Zeilen in die Textkarte im Fach. Die Karte leert ihren
+     * Speicher beim Messen nicht, die Zeilen bleiben also stehen.
+     */
+    private void writeTextCard(CompoundTag tag) {
+        ItemStack stack = getItem(SLOT_CARD);
+        if(!(stack.getItem() instanceof ItemCardText)) return;
+
+        ItemCardReader reader = new ItemCardReader(stack);
+        ListTag lines = tag.getList("lines", Tag.TAG_STRING);
+        int[] colors = tag.getIntArray("colors");
+
+        for(int i = 0; i < ItemCardText.MAX_LINES; i++) {
+            String text = i < lines.size() ? lines.getString(i) : "";
+            if(text.isEmpty()) {
+                reader.removeField("line" + i);
+                reader.removeField("color" + i);
+                continue;
+            }
+            reader.setString("line" + i, text);
+            reader.setInt("color" + i, i < colors.length ? colors[i] : 0);
+        }
+
+        cachedLines = null;
+        sync();
+    }
+
+    /**
+     * Ein Rechtsklick auf den Schirm. Traegt die Tafel die Beruehrungsaufwertung und kann die
+     * steckende Karte etwas damit anfangen, wirkt der Klick auf das Ziel der Karte.
+     *
+     * @return ob der Klick verbraucht wurde
+     */
+    public boolean tryTouch(Player player) {
+        if(level == null || level.isClientSide) return false;
+        if(!isPowered()) return false;
+        if(!ItemUpgrade.is(getItem(SLOT_UPGRADE_TOUCH), UpgradeType.TOUCH)) return false;
+
+        ItemStack stack = getItem(SLOT_CARD);
+        if(!ItemCardBase.isCard(stack)) return false;
+        if(!(stack.getItem() instanceof ITouchAction touch) || !touch.enableTouch(stack)) return false;
+
+        ItemCardReader reader = new ItemCardReader(stack);
+        if(!touch.runTouchAction(level, player, reader, stack)) return false;
+
+        // Sofort nachmessen, damit der Schirm den neuen Zustand zeigt und nicht den alten.
+        updateTicker = 0;
+        return true;
+    }
+
     // ---------------------------------------------------------- Einstellungen
 
     private static String key(ItemStack stack) {
@@ -244,6 +310,18 @@ public class InfoPanelBlockEntity extends CardReaderBlockEntity {
         if(!ItemCardBase.isCard(stack)) return 0;
         Integer value = displaySettings.get(key(stack));
         return value != null ? value : ((IItemCard) stack.getItem()).getDefaultSettings();
+    }
+
+    private void setColorText(int value) {
+        if(!hasColorUpgrade()) return;
+        colorText = value & 0xFFFFFF;
+        sync();
+    }
+
+    private void setColorBackground(int value) {
+        if(!hasColorUpgrade()) return;
+        colorBackground = value & 0xFFFFFF;
+        sync();
     }
 
     public void setDisplaySettings(ItemStack stack, int value) {
@@ -302,31 +380,11 @@ public class InfoPanelBlockEntity extends CardReaderBlockEntity {
         return colorText;
     }
 
-    /** Schaltet die Hintergrundfarbe weiter -- nur mit Farbaufwertung. */
-    public void cycleColorBackground() {
-        if(!hasColorUpgrade()) return;
-        colorBackground = nextColor(colorBackground);
-        sync();
-    }
-
-    public void cycleColorText() {
-        if(!hasColorUpgrade()) return;
-        colorText = nextColor(colorText);
-        sync();
-    }
-
     /** Die Farbleiste des Originals: die sechzehn Farben der Wolle, in derselben Folge. */
     public static final int[] COLORS = {
             0x000000, 0xFFFFFF, 0xCCCCCC, 0x999999, 0x00CC00, 0x00FF00, 0x00FFFF, 0x0000FF,
             0x7F00FF, 0xFF00FF, 0xFF0000, 0xFF7F00, 0xFFFF00, 0x7F3F00, 0x007F00, 0x00007F
     };
-
-    private static int nextColor(int current) {
-        for(int i = 0; i < COLORS.length; i++) {
-            if(COLORS[i] == current) return COLORS[(i + 1) % COLORS.length];
-        }
-        return COLORS[0];
-    }
 
     // ------------------------------------------------------------- Speichern
 

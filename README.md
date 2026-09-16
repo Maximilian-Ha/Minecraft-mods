@@ -11,12 +11,14 @@ Energy Control zeigt Messwerte anderer Maschinen auf Informationstafeln an. Die 
 
 > **Status: erster Bauabschnitt.** Enthalten sind:
 >
-> - **Informationstafel** mit Kartenfach, drei Aufwertungsfächern und Textanzeige auf der Schauseite
+> - **Informationstafel** mit Kartenfach, drei Aufwertungsfächern und Textanzeige auf der Schauseite —
+>   erweiterbar zu großen Schirmen, mit freier Farbwahl und als Schaltfläche benutzbar
 > - **Wärmemelder** — sucht einen HBM-Reaktor in der Nachbarschaft und gibt ab einer einstellbaren
 >   Temperatur ein Redstone-Signal
 > - **Bereichsmelder** — gibt ein Redstone-Signal, wenn der Messwert einer Karte einen Bereich verlässt
 > - **Heulalarm** und **Warnleuchte**
-> - **Karten**: Strom (mit Durchsatz), Flüssigkeit, Inventar, Redstone, Vanilla, Zeit, Text und **HBM**
+> - **Karten**: Strom (mit Durchsatz), Flüssigkeit, Inventar, Redstone, Vanilla, Zeit, Text,
+>   Fernschaltung und **HBM**
 > - **Bausätze** zu allen Karten mit Ziel, dazu Reichweiten-, Farb- und Berührungsaufwertung
 >
 > Die Tafeln brauchen **Strom** und nehmen ihn über Forge Energy — also aus jeder Energie-Mod

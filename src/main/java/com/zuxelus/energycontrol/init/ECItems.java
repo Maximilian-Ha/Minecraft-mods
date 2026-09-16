@@ -31,6 +31,7 @@ public class ECItems {
     public static final DeferredItem<Item> CARD_VANILLA = ITEMS.register("card_vanilla", () -> new ItemCardVanilla(new Item.Properties()));
     public static final DeferredItem<Item> CARD_TIME = ITEMS.register("card_time", () -> new ItemCardTime(new Item.Properties()));
     public static final DeferredItem<Item> CARD_TEXT = ITEMS.register("card_text", () -> new ItemCardText(new Item.Properties()));
+    public static final DeferredItem<Item> CARD_TOGGLE = ITEMS.register("card_toggle", () -> new ItemCardToggle(new Item.Properties()));
     public static final DeferredItem<Item> CARD_HBM = ITEMS.register("card_hbm", () -> new ItemCardHBM(new Item.Properties()));
 
     // ---------------------------------------------------------------- Bausaetze
@@ -44,6 +45,8 @@ public class ECItems {
             (level, pos) -> true);
     public static final DeferredItem<Item> KIT_VANILLA = kit("kit_vanilla", CARD_VANILLA,
             (level, pos) -> level.getBlockEntity(pos) != null);
+    public static final DeferredItem<Item> KIT_TOGGLE = kit("kit_toggle", CARD_TOGGLE,
+            (level, pos) -> ItemCardToggle.isToggleable(level.getBlockState(pos)));
     public static final DeferredItem<Item> KIT_HBM = kit("kit_hbm", CARD_HBM,
             (level, pos) -> CrossModLoader.getCrossMod(ModIDs.HBM).getCardData(level, pos) != null);
 

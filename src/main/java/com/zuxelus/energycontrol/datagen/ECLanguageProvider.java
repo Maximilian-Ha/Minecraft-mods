@@ -47,6 +47,7 @@ public class ECLanguageProvider extends LanguageProvider {
         item(ECItems.CARD_VANILLA.get(), "Vanilla Sensor Card", "Vanilla-Sensorkarte");
         item(ECItems.CARD_TIME.get(), "Time Card", "Zeitkarte");
         item(ECItems.CARD_TEXT.get(), "Text Card", "Textkarte");
+        item(ECItems.CARD_TOGGLE.get(), "Remote Toggle Card", "Fernschaltkarte");
         item(ECItems.CARD_HBM.get(), "HBM Sensor Card", "HBM-Sensorkarte");
 
         item(ECItems.KIT_ENERGY.get(), "Energy Sensor Kit", "Stromsensor-Bausatz");
@@ -54,6 +55,7 @@ public class ECLanguageProvider extends LanguageProvider {
         item(ECItems.KIT_INVENTORY.get(), "Inventory Sensor Kit", "Inventarsensor-Bausatz");
         item(ECItems.KIT_REDSTONE.get(), "Redstone Sensor Kit", "Redstone-Sensor-Bausatz");
         item(ECItems.KIT_VANILLA.get(), "Vanilla Sensor Kit", "Vanilla-Sensor-Bausatz");
+        item(ECItems.KIT_TOGGLE.get(), "Remote Toggle Kit", "Fernschalt-Bausatz");
         item(ECItems.KIT_HBM.get(), "HBM Sensor Kit", "HBM-Sensor-Bausatz");
 
         item(ECItems.UPGRADE_RANGE.get(), "Range Upgrade", "Reichweitenaufwertung");
@@ -139,11 +141,16 @@ public class ECLanguageProvider extends LanguageProvider {
         both("msg.ec.Ticks", "%s tick(s)", "%s Tick(s)");
         both("msg.ec.ColorText", "Text colour", "Schriftfarbe");
         both("msg.ec.ColorBackground", "Background", "Hintergrund");
+        both("msg.ec.ColorTextShort", "Font", "Schrift");
+        both("msg.ec.ColorBackgroundShort", "Back", "Grund");
+        both("gui.energycontrol.edit_text", "Lines", "Zeilen");
+        both("gui.energycontrol.card_text", "Text card", "Textkarte");
         both("msg.ec.InvertRedstone", "Invert redstone", "Redstone umkehren");
         both("msg.ec.Thermo", "Hull heat: %s", "Huellentemperatur: %s");
-        both("msg.ec.ThermalMonitorSignalAt", "Signal at %s heat", "Signal ab %s Waerme");
-        both("msg.ec.RangeTriggerStart", "Lower limit: %s", "Untere Grenze: %s");
-        both("msg.ec.RangeTriggerEnd", "Upper limit: %s", "Obere Grenze: %s");
+        both("msg.ec.ThermalMonitorSignalAtShort", "Signal at:", "Signal ab:");
+        both("msg.ec.InvertRedstoneShort", "Invert", "Umkehr");
+        both("msg.ec.RangeTriggerStartShort", "Lower limit:", "Untere Grenze:");
+        both("msg.ec.RangeTriggerEndShort", "Upper limit:", "Obere Grenze:");
         both("msg.ec.HowlerAlarmSound", "Sound", "Ton");
         both("msg.ec.HowlerAlarmSoundRange", "Sound range: %s", "Hoerweite: %s");
         both("msg.ec.AlarmDefault", "Default", "Standard");

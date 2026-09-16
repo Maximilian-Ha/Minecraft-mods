@@ -133,6 +133,8 @@ JAVA_LANG = {
 INHERITED_NESTED = {
     'Properties',   # Item.Properties
     'Factory',      # SavedData.Factory
+    'Type',         # CustomPacketPayload.Type -- in jedem Paket
+    'TooltipContext',  # Item.TooltipContext -- in jeder appendHoverText-Signatur
 }
 
 problems = []

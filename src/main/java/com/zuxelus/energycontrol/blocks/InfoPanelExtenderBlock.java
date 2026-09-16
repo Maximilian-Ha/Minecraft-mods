@@ -1,11 +1,11 @@
 package com.zuxelus.energycontrol.blocks;
 
 import com.mojang.serialization.MapCodec;
+import com.zuxelus.energycontrol.blockentity.InfoPanelBlockEntity;
 import com.zuxelus.energycontrol.blockentity.PanelScreens;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -50,18 +50,21 @@ public class InfoPanelExtenderBlock extends Block {
         return this.defaultBlockState().setValue(FACING, context.getClickedFace());
     }
 
-    /** Der Klick auf eine Erweiterung oeffnet die Oberflaeche ihrer Tafel. */
+    /**
+     * Eine Erweiterung ist ein Stueck Schirm: der Klick darauf wirkt wie der Klick auf die
+     * Tafel selbst -- erst die Beruehrung, sonst die Oberflaeche.
+     */
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if(level.isClientSide) return InteractionResult.SUCCESS;
-        if(player.isShiftKeyDown()) return InteractionResult.PASS;
 
-        BlockPos panel = PanelScreens.findPanel(level, pos, state.getValue(FACING));
-        if(panel == null) return InteractionResult.PASS;
+        BlockPos panelPos = PanelScreens.findPanel(level, pos, state.getValue(FACING));
+        if(panelPos == null) return InteractionResult.PASS;
+        if(!(level.getBlockEntity(panelPos) instanceof InfoPanelBlockEntity panel)) return InteractionResult.PASS;
 
-        if(level.getBlockEntity(panel) instanceof MenuProvider menu) {
-            player.openMenu(new SimpleMenuProvider(menu, menu.getDisplayName()), panel);
-        }
+        if(!player.isShiftKeyDown() && panel.tryTouch(player)) return InteractionResult.CONSUME;
+
+        player.openMenu(new SimpleMenuProvider(panel, panel.getDisplayName()), panelPos);
         return InteractionResult.CONSUME;
     }
 }

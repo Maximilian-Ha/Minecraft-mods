@@ -26,7 +26,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * die Tafel zeichnet ihre Zeilen aus der Karte, die im Fach liegt, also muss der Client
  * die Karte samt Messwerten kennen.
  */
-public abstract class ECContainerBlockEntity extends BlockEntity implements Container, MenuProvider {
+public abstract class ECContainerBlockEntity extends BlockEntity implements Container, MenuProvider, IControlReceiver {
 
     protected final NonNullList<ItemStack> slots;
 
@@ -83,6 +83,21 @@ public abstract class ECContainerBlockEntity extends BlockEntity implements Cont
     public void clearContent() {
         slots.clear();
     }
+
+    // ------------------------------------------------------------- Eingaben
+
+    /**
+     * Wer den Block bedienen darf: wer nah genug steht. {@code stillValid} prueft genau das
+     * und wird von Minecraft fuer die Faecher ohnehin benutzt -- also dieselbe Grenze fuer
+     * Fach und Eingabefeld.
+     */
+    @Override
+    public boolean hasPermission(Player player) {
+        return stillValid(player);
+    }
+
+    @Override
+    public void receiveControl(Player player, CompoundTag tag) { }
 
     // ------------------------------------------------------------- Speichern
 

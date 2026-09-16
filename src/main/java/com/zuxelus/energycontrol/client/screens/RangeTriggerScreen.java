@@ -2,11 +2,11 @@ package com.zuxelus.energycontrol.client.screens;
 
 import com.zuxelus.energycontrol.ECConfig;
 import com.zuxelus.energycontrol.EnergyControl;
-import com.zuxelus.energycontrol.api.PanelString;
 import com.zuxelus.energycontrol.blockentity.RangeTriggerBlockEntity;
 import com.zuxelus.energycontrol.menus.RangeTriggerMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -15,18 +15,22 @@ import net.minecraft.world.entity.player.Inventory;
 /**
  * Portiert aus 1.12.2: com.zuxelus.energycontrol.gui.GuiRangeTrigger.
  *
- * Fuer jede Schrittweite ein Knopfpaar, je einmal fuer die untere und die obere Grenze.
+ * Untere und obere Grenze werden eingetippt, wie im Original. Die erste Fassung dieses Ports
+ * hatte dafuer ein Raster aus Schrittknoepfen, weil es noch kein Steuerpaket gab; seit Stufe 4
+ * gibt es eines.
  */
 public class RangeTriggerScreen extends AbstractContainerScreen<RangeTriggerMenu> {
 
     private static final ResourceLocation TEXTURE = EnergyControl.loc("textures/gui/gui_range_trigger.png");
 
-    // Stehend unter den beiden Faechern: in der Breite ist zwischen den Schrittknoepfen
-    // kein Platz, links unter den Faechern schon.
+    // Stehend unter den beiden Faechern: in der Breite brauchen die Eingabefelder den Platz.
     private static final int BAR_X = 8;
     private static final int BAR_Y = 58;
     private static final int BAR_WIDTH = 16;
     private static final int BAR_HEIGHT = 36;
+
+    private EditBox lower;
+    private EditBox upper;
 
     public RangeTriggerScreen(RangeTriggerMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
@@ -39,39 +43,43 @@ public class RangeTriggerScreen extends AbstractContainerScreen<RangeTriggerMenu
     protected void init() {
         super.init();
 
-        int steps = RangeTriggerBlockEntity.STEPS.length;
-        int width = 138 / steps;
+        lower = numberField(topPos + 34, menu.be.getLevelStart());
+        upper = numberField(topPos + 66, menu.be.getLevelEnd());
 
-        for(int i = 0; i < steps; i++) {
-            int index = i;
-            int x = leftPos + 30 + i * width;
-            addRenderableWidget(Button.builder(Component.literal("+" + shortStep(index)),
-                            button -> send(RangeTriggerMenu.buttonId(false, index, false)))
-                    .bounds(x, topPos + 24, width - 1, 13).build());
-            addRenderableWidget(Button.builder(Component.literal("-" + shortStep(index)),
-                            button -> send(RangeTriggerMenu.buttonId(false, index, true)))
-                    .bounds(x, topPos + 38, width - 1, 13).build());
-            addRenderableWidget(Button.builder(Component.literal("+" + shortStep(index)),
-                            button -> send(RangeTriggerMenu.buttonId(true, index, false)))
-                    .bounds(x, topPos + 62, width - 1, 13).build());
-            addRenderableWidget(Button.builder(Component.literal("-" + shortStep(index)),
-                            button -> send(RangeTriggerMenu.buttonId(true, index, true)))
-                    .bounds(x, topPos + 76, width - 1, 13).build());
-        }
+        addRenderableWidget(Button.builder(Component.translatable("gui.done"), button -> apply())
+                .bounds(leftPos + 126, topPos + 34, 42, 16).build());
 
-        // Rechts unten, damit der Knopf die Beschriftung des Spielerinventars links
-        // daneben nicht ueberdeckt.
-        addRenderableWidget(Button.builder(Component.translatable("msg.ec.InvertRedstone"),
+        addRenderableWidget(Button.builder(Component.translatable("msg.ec.InvertRedstoneShort"),
                         button -> send(RangeTriggerMenu.BUTTON_INVERT))
-                .bounds(leftPos + 100, topPos + 90, 68, 14).build());
+                .bounds(leftPos + 126, topPos + 66, 42, 16).build());
     }
 
-    /** "1k" statt "1000", damit die Beschriftung in den Knopf passt. */
-    private static String shortStep(int index) {
-        long value = RangeTriggerBlockEntity.STEPS[index];
-        if(value >= 1_000_000L) return (value / 1_000_000L) + "M";
-        if(value >= 1_000L) return (value / 1_000L) + "k";
-        return Long.toString(value);
+    private EditBox numberField(int y, long value) {
+        EditBox box = new EditBox(font, leftPos + 30, y, 90, 16, Component.empty());
+        box.setMaxLength(18);
+        box.setFilter(text -> text.matches("\\d*"));
+        box.setValue(Long.toString(value));
+        addRenderableWidget(box);
+        return box;
+    }
+
+    private void apply() {
+        long start = parse(lower, menu.be.getLevelStart());
+        long end = parse(upper, menu.be.getLevelEnd());
+
+        ControlSender.sendLong(menu.be.getBlockPos(), "levelStart", start);
+        ControlSender.sendLong(menu.be.getBlockPos(), "levelEnd", end);
+    }
+
+    /** Ein leeres oder zu langes Feld laesst die Grenze, wie sie war. */
+    private static long parse(EditBox box, long fallback) {
+        String value = box.getValue();
+        if(value.isEmpty()) return fallback;
+        try {
+            return Long.parseLong(value);
+        } catch(NumberFormatException e) {
+            return fallback;
+        }
     }
 
     private void send(int id) {
@@ -107,11 +115,11 @@ public class RangeTriggerScreen extends AbstractContainerScreen<RangeTriggerMenu
         RangeTriggerBlockEntity trigger = menu.be;
 
         guiGraphics.drawString(font, title, (imageWidth - font.width(title)) / 2, 6, 0x404040, false);
+        guiGraphics.drawString(font, Component.translatable("msg.ec.RangeTriggerStartShort"), 30, 24, 0x404040, false);
+        guiGraphics.drawString(font, Component.translatable("msg.ec.RangeTriggerEndShort"), 30, 56, 0x404040, false);
 
-        guiGraphics.drawString(font, Component.translatable("msg.ec.RangeTriggerStart",
-                PanelString.format(trigger.getLevelStart())), 30, 16, 0x404040, false);
-        guiGraphics.drawString(font, Component.translatable("msg.ec.RangeTriggerEnd",
-                PanelString.format(trigger.getLevelEnd())), 30, 54, 0x404040, false);
+        Component inverted = Component.translatable(trigger.isInverted() ? "options.on" : "options.off");
+        guiGraphics.drawString(font, inverted, 126, 86, 0x404040, false);
 
         guiGraphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, 0x404040, false);
     }

@@ -20,8 +20,6 @@ public class InfoPanelMenu extends ECMenuBase<InfoPanelBlockEntity> {
     /** Knopfkennungen ab 100, damit sie nie mit einer Ankreuzstelle zusammenfallen. */
     public static final int BUTTON_LABELS = 100;
     public static final int BUTTON_TICKRATE = 101;
-    public static final int BUTTON_COLOR_TEXT = 102;
-    public static final int BUTTON_COLOR_BACKGROUND = 103;
 
     public InfoPanelMenu(int id, Inventory inventory, FriendlyByteBuf extraData) {
         this(id, inventory, (InfoPanelBlockEntity) inventory.player.level().getBlockEntity(extraData.readBlockPos()));
@@ -44,8 +42,6 @@ public class InfoPanelMenu extends ECMenuBase<InfoPanelBlockEntity> {
         switch(id) {
             case BUTTON_LABELS -> be.toggleShowLabels();
             case BUTTON_TICKRATE -> be.cycleTickRate();
-            case BUTTON_COLOR_TEXT -> be.cycleColorText();
-            case BUTTON_COLOR_BACKGROUND -> be.cycleColorBackground();
             default -> {
                 if(id < 0 || id >= 32) return false;
                 be.toggleSetting(1 << id);

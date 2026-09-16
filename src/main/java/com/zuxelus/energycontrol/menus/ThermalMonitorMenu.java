@@ -9,14 +9,12 @@ import net.minecraft.world.entity.player.Player;
 /**
  * Portiert aus 1.12.2: com.zuxelus.energycontrol.containers.ContainerThermalMonitor.
  *
- * Der Waermemelder hat keine Faecher; die Oberflaeche zeigt nur den Messwert und die
- * beiden Schalter.
+ * Der Waermemelder hat keine Faecher; die Schwelle kommt als Zahl ueber das Steuerpaket,
+ * hier laeuft nur der Schalter fuer die umgekehrte Redstone-Ausgabe.
  */
 public class ThermalMonitorMenu extends ECMenuBase<ThermalMonitorBlockEntity> {
 
-    public static final int BUTTON_HEAT_UP = 0;
-    public static final int BUTTON_HEAT_DOWN = 1;
-    public static final int BUTTON_INVERT = 2;
+    public static final int BUTTON_INVERT = 0;
 
     public ThermalMonitorMenu(int id, Inventory inventory, FriendlyByteBuf extraData) {
         this(id, inventory, (ThermalMonitorBlockEntity) inventory.player.level().getBlockEntity(extraData.readBlockPos()));
@@ -29,14 +27,8 @@ public class ThermalMonitorMenu extends ECMenuBase<ThermalMonitorBlockEntity> {
 
     @Override
     public boolean clickMenuButton(Player player, int id) {
-        switch(id) {
-            case BUTTON_HEAT_UP -> be.cycleHeatLevel(false);
-            case BUTTON_HEAT_DOWN -> be.cycleHeatLevel(true);
-            case BUTTON_INVERT -> be.toggleInverted();
-            default -> {
-                return false;
-            }
-        }
+        if(id != BUTTON_INVERT) return false;
+        be.toggleInverted();
         return true;
     }
 }

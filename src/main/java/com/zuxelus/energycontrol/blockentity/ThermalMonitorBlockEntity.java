@@ -29,9 +29,6 @@ public class ThermalMonitorBlockEntity extends ECContainerBlockEntity {
     public static final int STATUS_OK = 1;
     public static final int STATUS_ALARM = 2;
 
-    /** Die Schwellen, die der Knopf in der Oberflaeche durchschaltet. */
-    public static final int[] HEAT_STEPS = { 100, 250, 500, 1000, 2000, 5000, 10000, 25000, 50000 };
-
     private int heatLevel = 500;
     private boolean invertRedstone;
     private int status = STATUS_NO_REACTOR;
@@ -98,17 +95,17 @@ public class ThermalMonitorBlockEntity extends ECContainerBlockEntity {
         sync();
     }
 
-    /** Schaltet auf die naechste Schwelle weiter, mit Umlauf. */
-    public void cycleHeatLevel(boolean backwards) {
-        int index = 0;
-        for(int i = 0; i < HEAT_STEPS.length; i++) {
-            if(HEAT_STEPS[i] == heatLevel) {
-                index = i;
-                break;
-            }
-        }
-        index = (index + (backwards ? HEAT_STEPS.length - 1 : 1)) % HEAT_STEPS.length;
-        heatLevel = HEAT_STEPS[index];
+    @Override
+    public void receiveControl(Player player, CompoundTag tag) {
+        if(!"heatLevel".equals(tag.getString("action"))) return;
+        setHeatLevel(tag.getInt("value"));
+    }
+
+    /** Freie Eingabe aus der Oberflaeche. Negatives ergibt keinen Sinn und wird abgefangen. */
+    public void setHeatLevel(int value) {
+        int clamped = Math.max(0, value);
+        if(clamped == heatLevel) return;
+        heatLevel = clamped;
         sync();
     }
 

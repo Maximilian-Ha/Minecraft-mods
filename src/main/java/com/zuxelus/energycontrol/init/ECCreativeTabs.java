@@ -35,6 +35,7 @@ public class ECCreativeTabs {
                         output.accept(ECItems.CARD_VANILLA.get());
                         output.accept(ECItems.CARD_TIME.get());
                         output.accept(ECItems.CARD_TEXT.get());
+                        output.accept(ECItems.CARD_TOGGLE.get());
                         output.accept(ECItems.CARD_HBM.get());
 
                         output.accept(ECItems.KIT_ENERGY.get());
@@ -42,6 +43,7 @@ public class ECCreativeTabs {
                         output.accept(ECItems.KIT_INVENTORY.get());
                         output.accept(ECItems.KIT_REDSTONE.get());
                         output.accept(ECItems.KIT_VANILLA.get());
+                        output.accept(ECItems.KIT_TOGGLE.get());
                         output.accept(ECItems.KIT_HBM.get());
 
                         output.accept(ECItems.UPGRADE_RANGE.get());
