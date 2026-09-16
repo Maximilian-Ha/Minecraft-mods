@@ -2732,3 +2732,75 @@ Sie kommt mit dem ersten Satz, der sie braucht (Liquidator, Envsuit, T-51).
 bleiben am Körper unsichtbar. Statt der lilaschwarzen Ersatztextur einer fehlenden Datei liegt
 eine durchsichtige Rüstungsschicht bei. Schutzbrille und Aschebrille warten auf dieselben
 Modelle und folgen mit ihnen.
+
+---
+
+## Stufe 6 — Runde 137: der Rüstungstisch und die Module
+
+Der zweite Schritt der Schutzkleidung. Wieder einer, bei dem der Unterbau längst stand und nur
+niemand hinkam.
+
+**Ausgangslage.** `ItemArmorMod`, `ArmorModHandler` und `ItemModCladding` liegen seit langem im
+Port. Benutzbar war davon **nichts**: kein Tisch, an dem sich ein Modul einsetzen ließe, kein
+einziges registriertes Modul, und die Haken `modUpdate`, `modDamage` und `getModifiers` hat
+niemand gerufen.
+
+**Was dazugekommen ist.** Der Rüstungstisch (Block, Menü, Oberfläche) mit den neun Modulplätzen
+rings um das Rüstungsteil, sieben Auskleidungen und elf Einlagen, dazu die Anbindung an den
+Tick, an `LivingDamageEvent.Pre` und — für die Obsidianauskleidung — an
+`EntityJoinLevelEvent`.
+
+**Die eine echte Abweichung.** Das Original hängt die Eigenschaftswerte eines Moduls als
+`Multimap` an das Rüstungsteil und lässt Forge sie beim Anlegen übernehmen. In 1.21 stehen die
+Eigenschaften eines Gegenstands in einer Datenkomponente und dürfen nicht vom NBT des Stapels
+abhängen. Stattdessen sammelt `ArmorModHandler.updateMods` jeden Tick die Werte aller vier Teile
+ein und setzt sie als vorübergehende Werte am Träger; `ItemArmorMod.getModifiers` ist durch
+`addAttributes` ersetzt. Die Rechenart steht je Eigenschaft fest — Tempo anteilig, Rückstoß
+absolut, beides wie im Original.
+
+**Drei Fehler, alle auf dem Weg, den diese Runde erst begehbar macht:**
+
+* `ArmorModHandler.removeMod` hat die **innere** Modultafel als ganze Nutzdatentafel
+  zurückgeschrieben. Danach lagen die Modulplätze auf oberster Ebene und `hasMods` sah gar
+  keine Module mehr.
+* `ArmorModHandler.pryMods` hat leere Plätze als `null` zurückgegeben, während alle Aufrufer
+  reihum `isEmpty()` fragen. Das erste Rüstungsteil mit Modulen hätte den Server abgeräumt.
+* `ItemModCladding` hat den übergebenen Strahlungswert nie zugewiesen — die Auskleidung hat
+  also nichts abgehalten.
+
+**Ein CI-Durchlauf verloren**, und daraus ein neues Tor: `percent(...)` war als `Component`
+erklärt und wurde viermal mit `.withStyle(...)` aufgerufen. `api-check.sh` sammelt jetzt die
+Namen aller projekteigenen Methoden ein, die im ganzen Quelltext **nur** als `Component`
+erklärt sind, und beanstandet jede Aufrufstelle, an der direkt danach `withStyle` oder `append`
+folgt. Namen, die anderswo auch als `MutableComponent` erklärt sind, fallen heraus.
+Empfindlichkeit gemessen: mit der wiederhergestellten Fehlerstelle genau vier Meldungen, ohne
+sie keine.
+
+## Stufe 6 — Runde 138: der Fraktionierturm
+
+Erster Schritt der Erdölkette. Raffinerie, Bohrturm und Pumpe stehen seit Stufe 2 — aber aus
+Schweröl wurde danach nichts mehr, weil keine einzige Maschine es weiterverarbeitet.
+
+Dazugekommen sind `FractionRecipes` (neunzehn Umsetzungen, Eingabe immer 100 mB), der Turm
+selbst und sein Zwischenstück. Der Turm braucht keinen Strom und hat keine Oberfläche;
+angeschlossen wird am Fuß. Türme lassen sich stapeln: steht drei Blöcke darüber ein zweiter,
+schiebt der untere sein Öl hinauf und zieht die Fraktionen wieder herunter.
+
+**Nicht in dieser Runde: Krackturm und Reformer.** Der Krackturm ist im Original kein Turm,
+sondern ein großer, richtungsabhängiger Verbund mit fünf Teilkörpern (`getAllDimensions`) und
+richtungsbezogenen Anschlusspunkten; der Reformer braucht Strom, ein Inventar und eine
+Oberfläche. `ReformingRecipes` war schon geschrieben und ist wieder entfernt worden — ohne den
+Reformer wäre es toter Code.
+
+**Zwei Torwächter haben vor der CI angeschlagen**, beide zu Recht: `@Override` auf
+`getRenderBoundingBox()` (die Methode stammt aus der NeoForge-Erweiterung und gilt dem Compiler
+nicht als überschrieben), und die bekannte Scheinmeldung „types IFluidStandardSenderMK2 and
+IFluidStandardSenderMK2 are incompatible", die für zwölf andere Klassen längst in der Baseline
+steht.
+
+### Stand der Erdölkette nach Runde 138
+
+| | |
+|---|---|
+| portiert | Bohrturm, Pumpe, Frackingturm, Raffinerie, **Fraktionierturm**, Zwischenstück |
+| offen (10) | Krackturm, Reformer, Coker, Gasfackel, Hydrotreater, Verflüssiger, Pyroofen, Verfestiger, Vakuumdestille, Abstandshalter des Krackturms |
