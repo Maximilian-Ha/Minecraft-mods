@@ -44,6 +44,7 @@ public class NtmRecipeProvider extends RecipeProvider {
         this.pileDevices(recipeOutput);
         this.hazmatGear(recipeOutput);
         this.armorMods(recipeOutput);
+        this.oilChain(recipeOutput);
 
 
         /*
@@ -3440,6 +3441,33 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .define('D', NtmItems.DUCTTAPE.get())
                 .define('S', plate)
                 .unlockedBy("has_previous", has(previous))
+                .save(recipeOutput);
+    }
+
+
+    /**
+     * Runde 138: der Fraktionierturm und sein Zwischenstueck.
+     *
+     * Die Formen sind unveraendert aus CraftingManager des Originals: der Turm ist ein
+     * Gitterrost zwischen zwei geschweissten Stahlplatten, das Zwischenstueck sind zwei
+     * Eisengitter um eine Stahlhuelse.
+     */
+    private void oilChain(RecipeOutput recipeOutput) {
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.MACHINE_FRACTION_TOWER.get(), 1)
+                .pattern("H")
+                .pattern("G")
+                .pattern("H")
+                .define('H', DataComponentIngredient.of(false, NtmDataComponents.META, CastPlateItem.Type.STEEL.ordinal(), NtmItems.CAST_PLATE_WELDED.get()))
+                .define('G', NtmBlocks.STEEL_GRATE.get())
+                .unlockedBy("has_steel_grate", has(NtmBlocks.STEEL_GRATE.get()))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.FRACTION_SPACER.get(), 1)
+                .pattern("BHB")
+                .define('H', NtmItems.SHELL_STEEL.get())
+                .define('B', Blocks.IRON_BARS)
+                .unlockedBy("has_steel_shell", has(NtmItems.SHELL_STEEL.get()))
                 .save(recipeOutput);
     }
 

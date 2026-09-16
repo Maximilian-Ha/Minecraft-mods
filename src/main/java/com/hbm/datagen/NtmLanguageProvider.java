@@ -2722,6 +2722,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.MACHINE_PUMPJACK, "Pumpjack");
         this.add(NtmBlocks.MACHINE_FRACKING_TOWER, "Hydraulic Fracking Tower");
         this.add(NtmBlocks.MACHINE_REFINERY, "Oil Refinery");
+        this.add(NtmBlocks.MACHINE_FRACTION_TOWER, "Fractioning Tower");
+        this.add(NtmBlocks.FRACTION_SPACER, "Fractioning Tower Spacer");
         this.add(NtmBlocks.ORE_METEOR_IRON, "Meteor Iron Ore");
         this.add(NtmBlocks.ORE_METEOR_COBALT, "Meteor Cobalt Ore");
         this.add(NtmBlocks.ORE_METEOR_ALUMINIUM, "Meteor Aluminium Ore");

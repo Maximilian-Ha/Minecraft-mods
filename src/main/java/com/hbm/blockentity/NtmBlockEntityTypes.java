@@ -33,9 +33,11 @@ import com.hbm.blockentity.machine.rbmk.RBMKRodReaSimBlockEntity;
 import com.hbm.blockentity.machine.boiler.MachineHeatBoilerBlockEntity;
 import com.hbm.blockentity.machine.boiler.MachineIndustrialBoilerBlockEntity;
 import com.hbm.blockentity.machine.heater.*;
+import com.hbm.blockentity.machine.oil.MachineFractionTowerBlockEntity;
 import com.hbm.blockentity.machine.oil.MachineFrackingTowerBlockEntity;
 import com.hbm.blockentity.machine.oil.MachineOilWellBlockEntity;
 import com.hbm.blockentity.machine.oil.MachinePumpjackBlockEntity;
+import com.hbm.blockentity.machine.oil.SpacerBlockEntity;
 import com.hbm.blockentity.machine.oil.MachineRefineryBlockEntity;
 import com.hbm.blockentity.machine.storage.*;
 import com.hbm.blockentity.network.CableBaseBlockEntity;
@@ -261,6 +263,8 @@ public class NtmBlockEntityTypes {
     public static final Supplier<BlockEntityType<MachineOilWellBlockEntity>> MACHINE_OIL_WELL = BLOCK_ENTITY_TYPES.register("machine_oil_well", () -> BlockEntityType.Builder.of(MachineOilWellBlockEntity::new, NtmBlocks.MACHINE_WELL.get()).build(null));
     public static final Supplier<BlockEntityType<MachinePumpjackBlockEntity>> MACHINE_PUMPJACK = BLOCK_ENTITY_TYPES.register("machine_pumpjack", () -> BlockEntityType.Builder.of(MachinePumpjackBlockEntity::new, NtmBlocks.MACHINE_PUMPJACK.get()).build(null));
     public static final Supplier<BlockEntityType<MachineFrackingTowerBlockEntity>> MACHINE_FRACKING_TOWER = BLOCK_ENTITY_TYPES.register("machine_fracking_tower", () -> BlockEntityType.Builder.of(MachineFrackingTowerBlockEntity::new, NtmBlocks.MACHINE_FRACKING_TOWER.get()).build(null));
+    public static final Supplier<BlockEntityType<MachineFractionTowerBlockEntity>> MACHINE_FRACTION_TOWER = BLOCK_ENTITY_TYPES.register("machine_fraction_tower", () -> BlockEntityType.Builder.of(MachineFractionTowerBlockEntity::new, NtmBlocks.MACHINE_FRACTION_TOWER.get()).build(null));
+    public static final Supplier<BlockEntityType<SpacerBlockEntity>> FRACTION_SPACER = BLOCK_ENTITY_TYPES.register("fraction_spacer", () -> BlockEntityType.Builder.of(SpacerBlockEntity::new, NtmBlocks.FRACTION_SPACER.get()).build(null));
 
     public static final Supplier<BlockEntityType<MachineRefineryBlockEntity>> MACHINE_REFINERY = BLOCK_ENTITY_TYPES.register(
             "machine_refinery",
