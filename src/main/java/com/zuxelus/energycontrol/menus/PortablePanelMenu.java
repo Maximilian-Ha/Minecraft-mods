@@ -31,7 +31,11 @@ public class PortablePanelMenu extends ECMenuBase<ItemInventory> {
     /** Reichweite ohne Aufwertung, in Bloecken -- wie bei der Tafel an der Wand. */
     private static final int BASE_RANGE = 8;
 
+    /** Wie oft gemessen wird. Jeden Tick waere Verschwendung, die Tafel steht ja still. */
+    private static final int MEASURE_EVERY = 5;
+
     private final Player player;
+    private int ticker;
 
     public PortablePanelMenu(int id, Inventory inventory, FriendlyByteBuf extraData) {
         this(id, inventory, extraData.readEnum(InteractionHand.class));
@@ -50,7 +54,10 @@ public class PortablePanelMenu extends ECMenuBase<ItemInventory> {
 
     @Override
     public void broadcastChanges() {
-        measure();
+        if(--ticker <= 0) {
+            ticker = MEASURE_EVERY;
+            measure();
+        }
         super.broadcastChanges();
     }
 

@@ -36,10 +36,10 @@ public class ECBlocks {
             register("info_panel_extender", () -> new InfoPanelExtenderBlock(machineProperties()));
 
     public static final DeferredBlock<AdvancedInfoPanelBlock> ADVANCED_INFO_PANEL =
-            register("advanced_info_panel", () -> new AdvancedInfoPanelBlock(machineProperties()));
+            register("advanced_info_panel", () -> new AdvancedInfoPanelBlock(thinProperties()));
 
     public static final DeferredBlock<AdvancedInfoPanelExtenderBlock> ADVANCED_INFO_PANEL_EXTENDER =
-            register("advanced_info_panel_extender", () -> new AdvancedInfoPanelExtenderBlock(machineProperties()));
+            register("advanced_info_panel_extender", () -> new AdvancedInfoPanelExtenderBlock(thinProperties()));
 
     public static final DeferredBlock<ThermalMonitorBlock> THERMAL_MONITOR =
             register("thermal_monitor", () -> new ThermalMonitorBlock(machineProperties()));
@@ -69,6 +69,15 @@ public class ECBlocks {
                 .sound(SoundType.METAL)
                 .mapColor(MapColor.METAL)
                 .requiresCorrectToolForDrops();
+    }
+
+    /**
+     * Wie oben, aber fuer Bloecke, die nicht den ganzen Wuerfel fuellen. Ohne
+     * {@code noOcclusion} haelt Minecraft sie fuer undurchsichtig -- dann faellt hinter
+     * einer duennen Tafel kein Licht durch, und Nachbarflaechen verschwinden.
+     */
+    private static BlockBehaviour.Properties thinProperties() {
+        return machineProperties().noOcclusion();
     }
 
     private static <T extends Block> DeferredBlock<T> register(String name, Supplier<T> block) {
