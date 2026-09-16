@@ -53,6 +53,9 @@ public class ECCreativeTabs {
                         output.accept(ECItems.KIT_MEKANISM.get());
                         output.accept(ECItems.KIT_COUNTER.get());
 
+                        output.accept(ECItems.CARD_HOLDER.get());
+                        output.accept(ECItems.PORTABLE_PANEL.get());
+
                         output.accept(ECItems.UPGRADE_RANGE.get());
                         output.accept(ECItems.UPGRADE_COLOR.get());
                         output.accept(ECItems.UPGRADE_TOUCH.get());

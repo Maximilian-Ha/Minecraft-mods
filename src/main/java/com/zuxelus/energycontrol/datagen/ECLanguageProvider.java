@@ -44,6 +44,8 @@ public class ECLanguageProvider extends LanguageProvider {
         both("container.energycontrol.remote_thermal_monitor", "Remote Thermal Monitor", "Fernwaermeanzeige");
         both("container.energycontrol.energy_counter", "Energy Counter", "Energiezaehler");
         both("container.energycontrol.kit_assembler", "Kit Assembler", "Bausatzmontage");
+        both("container.energycontrol.card_holder", "Card Holder", "Kartenhalter");
+        both("container.energycontrol.portable_panel", "Portable Information Panel", "Tragbare Informationstafel");
 
         // ------------------------------------------------------------- Karten
         item(ECItems.CARD_ENERGY.get(), "Energy Sensor Card", "Stromsensorkarte");
@@ -67,6 +69,8 @@ public class ECLanguageProvider extends LanguageProvider {
         item(ECItems.KIT_HBM.get(), "HBM Sensor Kit", "HBM-Sensor-Bausatz");
         item(ECItems.KIT_MEKANISM.get(), "Mekanism Sensor Kit", "Mekanism-Sensor-Bausatz");
         item(ECItems.KIT_COUNTER.get(), "Counter Sensor Kit", "Zaehler-Bausatz");
+        item(ECItems.CARD_HOLDER.get(), "Card Holder", "Kartenhalter");
+        item(ECItems.PORTABLE_PANEL.get(), "Portable Information Panel", "Tragbare Informationstafel");
 
         item(ECItems.UPGRADE_RANGE.get(), "Range Upgrade", "Reichweitenaufwertung");
         item(ECItems.UPGRADE_COLOR.get(), "Color Upgrade", "Farbaufwertung");

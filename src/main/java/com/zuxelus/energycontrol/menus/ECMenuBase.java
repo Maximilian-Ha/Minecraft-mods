@@ -60,14 +60,34 @@ public abstract class ECMenuBase<T extends Container> extends AbstractContainerM
 
     /** Spielerinventar mit den Abstaenden, die Minecraft selbst benutzt. */
     protected void addPlayerInventory(Inventory inventory, int x, int y) {
+        addPlayerInventory(inventory, x, y, -1);
+    }
+
+    /**
+     * Wie oben, aber mit einem gesperrten Fach. Das braucht jede Oberflaeche, die an einem
+     * Gegenstand in der Hand haengt: waere sein eigenes Fach frei, koennte der Spieler den
+     * Gegenstand waehrend des Zusehens wegnehmen -- und schriebe danach in etwas, das er
+     * nicht mehr haelt.
+     */
+    protected void addPlayerInventory(Inventory inventory, int x, int y, int locked) {
         for(int row = 0; row < 3; row++) {
             for(int col = 0; col < 9; col++) {
-                addSlot(new Slot(inventory, col + row * 9 + 9, x + col * 18, y + row * 18));
+                int index = col + row * 9 + 9;
+                addSlot(slot(inventory, index, x + col * 18, y + row * 18, locked));
             }
         }
+        addPlayerHotbar(inventory, x, y + 58, locked);
+    }
+
+    /** Nur die Schnellleiste -- fuer Oberflaechen, die im Inventar selbst sitzen. */
+    protected void addPlayerHotbar(Inventory inventory, int x, int y, int locked) {
         for(int col = 0; col < 9; col++) {
-            addSlot(new Slot(inventory, col, x + col * 18, y + 58));
+            addSlot(slot(inventory, col, x + col * 18, y, locked));
         }
+    }
+
+    private Slot slot(Inventory inventory, int index, int x, int y, int locked) {
+        return index == locked ? new SlotLocked(inventory, index, x, y) : new Slot(inventory, index, x, y);
     }
 
     @Override

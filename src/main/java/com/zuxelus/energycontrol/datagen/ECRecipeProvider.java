@@ -269,6 +269,27 @@ public class ECRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_advanced_circuit", has(ECItems.ADVANCED_CIRCUIT.get()))
                 .save(output);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ECItems.CARD_HOLDER.get())
+                .pattern(" L ")
+                .pattern("LCL")
+                .pattern(" L ")
+                .define('L', Items.LEATHER)
+                .define('C', Items.CHEST)
+                .unlockedBy("has_leather", has(Items.LEATHER))
+                .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ECItems.PORTABLE_PANEL.get())
+                .pattern("A  ")
+                .pattern("CEC")
+                .pattern("RGG")
+                .define('A', ECItems.ADVANCED_CIRCUIT.get())
+                .define('C', ECItems.BASIC_CIRCUIT.get())
+                .define('E', ECBlocks.INFO_PANEL_EXTENDER.get())
+                .define('R', ECItems.UPGRADE_RANGE.get())
+                .define('G', Items.GLASS_PANE)
+                .unlockedBy("has_advanced_circuit", has(ECItems.ADVANCED_CIRCUIT.get()))
+                .save(output);
+
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ECItems.CARD_TEXT.get())
                 .requires(ECItems.BASIC_CIRCUIT.get())
                 .requires(Items.PAPER)

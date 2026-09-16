@@ -2,9 +2,11 @@ package com.zuxelus.energycontrol.client;
 
 import com.zuxelus.energycontrol.EnergyControl;
 import com.zuxelus.energycontrol.client.renderer.InfoPanelRenderer;
+import com.zuxelus.energycontrol.client.screens.CardHolderScreen;
 import com.zuxelus.energycontrol.client.screens.EnergyCounterScreen;
 import com.zuxelus.energycontrol.client.screens.InfoPanelScreen;
 import com.zuxelus.energycontrol.client.screens.KitAssemblerScreen;
+import com.zuxelus.energycontrol.client.screens.PortablePanelScreen;
 import com.zuxelus.energycontrol.client.screens.RangeTriggerScreen;
 import com.zuxelus.energycontrol.client.screens.ThermalMonitorScreen;
 import com.zuxelus.energycontrol.init.ECBlockEntityTypes;
@@ -26,6 +28,8 @@ public class EnergyControlClient {
         event.register(ECMenuTypes.RANGE_TRIGGER.get(), RangeTriggerScreen::new);
         event.register(ECMenuTypes.ENERGY_COUNTER.get(), EnergyCounterScreen::new);
         event.register(ECMenuTypes.KIT_ASSEMBLER.get(), KitAssemblerScreen::new);
+        event.register(ECMenuTypes.CARD_HOLDER.get(), CardHolderScreen::new);
+        event.register(ECMenuTypes.PORTABLE_PANEL.get(), PortablePanelScreen::new);
     }
 
     @SubscribeEvent

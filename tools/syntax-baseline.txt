@@ -15,3 +15,8 @@ src/main/java/com/zuxelus/energycontrol/menus/RangeTriggerMenu.java: error: recu
 src/main/java/com/zuxelus/energycontrol/menus/ThermalMonitorMenu.java: error: recursive constructor invocation
 src/main/java/com/zuxelus/energycontrol/menus/EnergyCounterMenu.java: error: recursive constructor invocation
 src/main/java/com/zuxelus/energycontrol/menus/KitAssemblerMenu.java: error: recursive constructor invocation
+# Dieselbe Ursache, nur mit InteractionHand statt einer Block-Entitaet: die Oberflaechen
+# am Gegenstand delegieren mit buf.readEnum(InteractionHand.class), und ohne die API
+# kennt javac den Rueckgabetyp nicht.
+src/main/java/com/zuxelus/energycontrol/menus/CardHolderMenu.java: error: recursive constructor invocation
+src/main/java/com/zuxelus/energycontrol/menus/PortablePanelMenu.java: error: recursive constructor invocation

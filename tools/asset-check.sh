@@ -49,7 +49,9 @@ gui_used = set()
 for dirpath, _dirs, names in os.walk('src/main/java'):
     for name in names:
         if not name.endswith('.java'): continue
-        for m in re.finditer(r'"textures/gui/([\w/]+)\.png"', read(os.path.join(dirpath, name))):
+        # Nur was ueber EnergyControl.loc(...) geht, liegt in unserem Namensraum;
+        # ein Bild von Minecraft (etwa die grosse Truhe) wird hier nicht gesucht.
+        for m in re.finditer(r'loc\(\s*"textures/gui/([\w/]+)\.png"\s*\)', read(os.path.join(dirpath, name))):
             gui_used.add(m.group(1))
 have_gui = {f[:-4] for f in os.listdir(os.path.join(ASSETS, 'textures/gui')) if f.endswith('.png')}
 for name in sorted(gui_used - have_gui):

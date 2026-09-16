@@ -3,6 +3,8 @@ package com.zuxelus.energycontrol.init;
 import com.zuxelus.energycontrol.EnergyControl;
 import com.zuxelus.energycontrol.crossmod.CrossModLoader;
 import com.zuxelus.energycontrol.crossmod.ModIDs;
+import com.zuxelus.energycontrol.items.ItemCardHolder;
+import com.zuxelus.energycontrol.items.ItemPortablePanel;
 import com.zuxelus.energycontrol.items.ItemUpgrade;
 import com.zuxelus.energycontrol.items.ItemUpgrade.UpgradeType;
 import com.zuxelus.energycontrol.items.cards.*;
@@ -54,6 +56,10 @@ public class ECItems {
     public static final DeferredItem<Item> KIT_MEKANISM = kit("kit_mekanism", CARD_MEKANISM,
             (level, pos) -> CrossModLoader.getCrossMod(ModIDs.MEKANISM).getCardData(level, pos) != null);
     public static final DeferredItem<Item> KIT_COUNTER = kit("kit_counter", CARD_COUNTER, ItemCardCounter::isCounter);
+
+    // ------------------------------------------------------- Karten in der Hand
+    public static final DeferredItem<Item> CARD_HOLDER = ITEMS.register("card_holder", () -> new ItemCardHolder(new Item.Properties()));
+    public static final DeferredItem<Item> PORTABLE_PANEL = ITEMS.register("portable_panel", () -> new ItemPortablePanel(new Item.Properties()));
 
     // -------------------------------------------------------------- Aufwertungen
     public static final DeferredItem<Item> UPGRADE_RANGE = ITEMS.register("upgrade_range", () -> new ItemUpgrade(new Item.Properties(), UpgradeType.RANGE));
