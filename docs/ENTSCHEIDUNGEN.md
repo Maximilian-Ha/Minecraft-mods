@@ -88,3 +88,70 @@ Menü noch Fächer.
 Die Anbindung greift typsicher auf HBM zu — mit einer Ausnahme: `progress`, `maxProgress`,
 `consumption`, `heat` und `isOn` gewöhnlicher Maschinen. Die Begründung steht in
 [`HBM-KOMPATIBILITAET.md`](HBM-KOMPATIBILITAET.md).
+
+## Die Mekanism-Schnittstellen kommen über ihre Namen
+
+Mekanism führt Chemikalien, Joule und Wärme über drei eigene Capabilities. Die Brücke holt sie
+nicht über Mekanisms interne Klasse `Capabilities`, sondern legt sie selbst über ihren Namen an:
+
+```java
+BlockCapability.createSided(ResourceLocation.fromNamespaceAndPath("mekanism", "chemical_handler"),
+                            IChemicalHandler.class)
+```
+
+Das Register von NeoForge gibt dieselbe Kennung zurück, wenn sie schon da ist — wer zuerst
+kommt, legt sie an. Damit hängt die Brücke an drei API-Schnittstellen statt an einer internen
+Klasse, und ihre Zugriffe stehen alle unter `mekanism.api`.
+
+## Ein richtiger Rezepttyp für die Bausatzmontage
+
+Das Original brachte für die Montage ein eigenes Rezeptregister mit, samt eigener Fabrik und
+eigener JSON-Form (`KitAssemblerRecipe`, `KitAssemblerRecipeFactory`, `_factories.json`). Auf
+1.21.1 gibt es dafür die Rezepttypen von Minecraft: ein `RecipeType`, ein `RecipeSerializer`
+mit `MapCodec` und `StreamCodec`, und die Rezepte selbst als Dateien im Datenpaket.
+
+Das kostet ein paar Zeilen mehr als eine fest verdrahtete Tabelle und bringt dafür alles mit,
+was man davon erwartet: der Server liest sie aus dem Datenpaket, schickt sie an den Client, ein
+Datenpaket kann sie ändern, und Rezeptbrowser wie JEI oder EMI finden sie ohne eigene
+Anbindung.
+
+Die Zutaten dürfen dabei liegen, wo sie wollen — im Original standen sie auf drei festen
+Fächern. Zugeordnet wird durch Durchprobieren; bei höchstens drei Zutaten auf sechs Fächern
+kostet das nichts.
+
+## Karten im Gegenstand liegen in `custom_data`, nicht in `minecraft:container`
+
+Kartenhalter und tragbare Tafel führen ein Inventar im Gegenstand. Der vorgesehene Weg dafür
+wäre der Datenbestandteil `minecraft:container` — der hat aber zwei Eigenheiten, die hier
+stören: er führt höchstens 256 Fächer, und er zeigt seinen Inhalt in der Kurzinfo des
+Gegenstands an. Beides passt zu einem Halter mit vierundfünfzig Karten schlechter als der
+eigene Beutel in `custom_data`, den der Mod für jede Karte ohnehin schon benutzt.
+
+Der Gegenstand wird bei jedem Zugriff frisch aus der Hand geholt, nicht gemerkt: der Client
+tauscht seinen `ItemStack` aus, sobald der Server ihn neu schickt. Sein Fach im
+Spielerinventar ist gesperrt, solange die Oberfläche offen steht.
+
+## Die fortgeschrittene Tafel ist ein gewöhnlicher Block
+
+Im Original zeichnete ein eigener Renderer den ganzen Block als Netz aus Vierecken
+(`RotationOffset`, rund 220 Zeilen, plus zwei Renderer). Nur deshalb war dort sowohl die Dicke
+stufenlos als auch die Neigung frei.
+
+Hier ist die Tafel ein gewöhnlicher Block mit gewöhnlichem Modell: die Dicke steht in sechzehn
+Stufen im Blockzustand, je ein Modell. Dafür sieht sie aus wie jeder andere Block — mit Licht,
+mit Schatten, und in jedem Ressourcenpaket austauschbar.
+
+Die freie Neigung fehlt deshalb ganz. Eine geneigte *Schrift* auf einem ungeneigten Block wäre
+schlechter als keine Neigung, und ein eigener Renderer für den Blockkörper lässt sich in dieser
+Arbeitsumgebung nicht ansehen — also auch nicht verantworten.
+
+## `directionalBlock` von NeoForge passt nicht zu `orientable`
+
+`models().orientable(...)` legt die Schauseite eines Modells in den **Norden** (so hält es
+`block/orientable` von Minecraft). `directionalBlock` von NeoForge dreht dagegen Modelle, deren
+Schauseite **oben** liegt — Fass, Spender-Senkrecht und so fort. Beides zusammen legt die
+Schauseite bei `facing=NORTH` auf die Unterseite.
+
+Der Port dreht deshalb selbst (`facingBlock` in `ECBlockStateProvider`), mit den Drehungen, die
+Minecraft für den Ofen (waagerecht, `toYRot + 180`) und den Endstab (senkrecht, `x = 90` bzw.
+`270`) benutzt.
