@@ -1,18 +1,18 @@
 package com.hbm.items.armor;
 
-import com.google.common.collect.Multimap;
 import com.hbm.handler.ArmorModHandler;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.neoforged.neoforge.client.event.RenderPlayerEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 
-import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Map;
 
 public class ItemArmorMod extends Item {
 
@@ -66,6 +66,15 @@ public class ItemArmorMod extends Item {
 
     public void modDamage(LivingDamageEvent.Pre event, ItemStack armor) { }
 
-    @Nullable
-    public <K, V> Multimap<K, V> getModifiers(ItemStack armor) { return null; }
+    /**
+     * Was das Modul dem Traeger an Eigenschaften gibt, solange das Teil angelegt ist.
+     *
+     * Das Original haengt dafuer eine Multimap an das Ruestungsteil und laesst Forge die
+     * Werte beim Anlegen uebernehmen. In 1.21 stehen die Eigenschaften eines Gegenstands in
+     * einer Datenkomponente fest und lassen sich nicht je nach NBT aendern, deshalb sammelt
+     * ArmorModHandler.updateAttributes die Werte hier ein und setzt sie am Traeger selbst.
+     *
+     * Der Wert ist ein Summand: 0.5 heisst "plus ein halber Punkt".
+     */
+    public void addAttributes(ItemStack armor, Map<Holder<Attribute>, Double> out) { }
 }

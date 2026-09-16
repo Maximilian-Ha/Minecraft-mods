@@ -120,6 +120,7 @@ public class NtmMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<TurretBaseMenu>> TURRET_BASE = reg("turret_base", TurretBaseMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<ReactorControlMenu>> REACTOR_CONTROL = reg("reactor_control", ReactorControlMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<WeaponTableMenu>> WEAPON_TABLE = reg("weapon_table", WeaponTableMenu::new);
+    public static final DeferredHolder<MenuType<?>, MenuType<ArmorTableMenu>> ARMOR_TABLE = reg("armor_table", ArmorTableMenu::new);
 
     public static final DeferredHolder<MenuType<?>, MenuType<MachineFluidTankMenu>> FLUID_TANK = reg("fluid_tank", MachineFluidTankMenu::new);
 

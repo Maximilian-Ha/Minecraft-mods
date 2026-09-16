@@ -626,6 +626,7 @@ public class NtmBlockLootTableProvider extends BlockLootSubProvider {
         this.dropSelf(NtmBlocks.TURRET_CHEKHOV.get());
         this.dropSelf(NtmBlocks.TURRET_FRIENDLY.get());
         this.dropSelf(NtmBlocks.WEAPON_TABLE.get());
+        this.dropSelf(NtmBlocks.ARMOR_TABLE.get());
         /* ICF_BLOCK und ICF bekommen keine Beutetabelle -- beide geben ihre Bauteile zurueck. */
         this.add(NtmBlocks.ICF_BLOCK.get(), noDrop());
         this.add(NtmBlocks.ICF.get(), noDrop());

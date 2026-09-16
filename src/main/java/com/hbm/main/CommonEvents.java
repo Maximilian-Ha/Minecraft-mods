@@ -14,6 +14,8 @@ import com.hbm.config.FalloutConfigJSON;
 import com.hbm.entity.NtmEntityTypes;
 import com.hbm.entity.mob.CreeperNuclear;
 import com.hbm.entity.mob.Duck;
+import com.hbm.handler.ArmorModHandler;
+import com.hbm.items.armor.ItemModIndestructible;
 import com.hbm.handler.EntityEffectHandler;
 import com.hbm.handler.HTTPHandler;
 import com.hbm.handler.HazmatRegistry;
@@ -58,6 +60,8 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent.BreakEvent;
@@ -141,7 +145,35 @@ public class CommonEvents {
         if (entity instanceof LivingEntity livingEntity) {
             HazardSystem.updateLivingInventory(livingEntity);
             EntityEffectHandler.tick(livingEntity);
+            ArmorModHandler.updateMods(livingEntity);
         }
+    }
+
+    /*
+     * Die Obsidianauskleidung: ein so ausgekleidetes Ruestungsteil, das am Boden liegt,
+     * verbrennt und zerfaellt nicht mehr. Geprueft wird einmal beim Erscheinen des
+     * Gegenstands, nicht in jedem Tick.
+     */
+    @SubscribeEvent
+    public static void onItemDropped(EntityJoinLevelEvent event) {
+
+        if(!(event.getEntity() instanceof ItemEntity itemEntity)) return;
+
+        ItemStack stack = itemEntity.getItem();
+        if(!ArmorModHandler.hasMods(stack)) return;
+
+        if(ArmorModHandler.pryMod(event.getLevel(), stack, ArmorModHandler.CLADDING).getItem() instanceof ItemModIndestructible) {
+            itemEntity.setInvulnerable(true);
+        }
+    }
+
+    /*
+     * Die Ruestungsmodule duerfen den Schaden verrechnen, sobald Ruestung und Verzauberungen
+     * ihn schon gemindert haben -- das ist die Stelle, an der im Original LivingHurtEvent lag.
+     */
+    @SubscribeEvent
+    public static void onLivingDamage(LivingDamageEvent.Pre event) {
+        ArmorModHandler.handleDamage(event);
     }
 
     @SubscribeEvent
@@ -294,6 +326,7 @@ public class CommonEvents {
         event.register(NtmMenuTypes.TURRET_BASE.get(), TurretBaseScreen::new);
         event.register(NtmMenuTypes.REACTOR_CONTROL.get(), ReactorControlScreen::new);
         event.register(NtmMenuTypes.WEAPON_TABLE.get(), WeaponTableScreen::new);
+        event.register(NtmMenuTypes.ARMOR_TABLE.get(), ArmorTableScreen::new);
 
         event.register(NtmMenuTypes.BATTERY_SOCKET.get(), BatterySocketScreen::new);
         event.register(NtmMenuTypes.BATTERY_REDD.get(), BatteryREDDScreen::new);

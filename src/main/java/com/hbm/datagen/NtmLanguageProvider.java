@@ -1860,6 +1860,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.GUN_CONGOLAKE, "Congo Lake");
         this.add(NtmItems.GUN_MK108, "Grenade Machinegun");
         this.add(NtmBlocks.WEAPON_TABLE, "Weapon Modification Table");
+        this.add(NtmBlocks.ARMOR_TABLE, "Armor Modification Table");
         this.add("container.weaponTable", "Weapon Modification Table");
         this.add("item.hbmsntm.gun_greasegun.refurbished", "M3");
         this.add("item.hbmsntm.gun_am180.silenced", "AM180 (Silenced)");
@@ -3512,6 +3513,35 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("armor.filter", "Installed filter:");
         this.add("armor.noFilter", "No filter installed!");
 
+        /* Die Schluessel des Ruestungs-Baukastensystems: ItemArmorMod, die Modulklassen
+         * und der Ruestungstisch. */
+        this.add("container.armorTable", "Armor Modification Table");
+        this.add("armorMod.applicableTo", "Applicable To:");
+        this.add("armorMod.all", "All");
+        this.add("armorMod.helmets", "Helmets");
+        this.add("armorMod.chestplates", "Chestplates");
+        this.add("armorMod.leggings", "Leggings");
+        this.add("armorMod.boots", "Boots");
+        this.add("armorMod.slot", "Slot:");
+        this.add("armorMod.insertHere", "Insert armor to modify...");
+        this.add("armorMod.type.helmet", "Helmet");
+        this.add("armorMod.type.chestplate", "Chestplate");
+        this.add("armorMod.type.leggings", "Leggings");
+        this.add("armorMod.type.boots", "Boots");
+        this.add("armorMod.type.servo", "Servos");
+        this.add("armorMod.type.cladding", "Cladding");
+        this.add("armorMod.type.insert", "Insert");
+        this.add("armorMod.type.special", "Special");
+        this.add("armorMod.type.battery", "Battery");
+        this.add("armorMod.radRes", "+%s radiation resistance");
+        this.add("armorMod.knockback", "+%s knockback resistance");
+        this.add("armorMod.indestructible", "Makes dropped armor indestructible");
+        this.add("armorMod.insert.damage", "%s damage");
+        this.add("armorMod.insert.projectile", "%s projectile damage");
+        this.add("armorMod.insert.explosion", "%s explosion damage");
+        this.add("armorMod.insert.speed", "%s speed");
+        this.add("armorMod.insert.rad", "+%s RAD/s");
+
         this.add("bomb.detonated", "Detonated successfully!");
         this.add("bomb.triggered", "Triggered successfully!");
         this.add("bomb.launched", "Launched successfully!");
@@ -3611,6 +3641,25 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.GAS_MASK_FILTER_COMBO, "Gas Mask Combo Filter");
         this.add(NtmItems.GAS_MASK_FILTER_RAG, "Makeshift Gas Mask Filter");
         this.add(NtmItems.GAS_MASK_FILTER_PISS, "Advanced Makeshift Gas Mask Filter");
+
+        this.add(NtmItems.CLADDING_PAINT, "Lead Paint");
+        this.add(NtmItems.CLADDING_RUBBER, "Rubber Cladding");
+        this.add(NtmItems.CLADDING_LEAD, "Lead Cladding");
+        this.add(NtmItems.CLADDING_DESH, "Desh Cladding");
+        this.add(NtmItems.CLADDING_GHIORSIUM, "Ghiorsium Cladding");
+        this.add(NtmItems.CLADDING_IRON, "Iron Cladding");
+        this.add(NtmItems.CLADDING_OBSIDIAN, "Obsidian Skin");
+        this.add(NtmItems.INSERT_KEVLAR, "Kevlar Insert");
+        this.add(NtmItems.INSERT_SAPI, "SAPI Insert");
+        this.add(NtmItems.INSERT_ESAPI, "ESAPI Insert");
+        this.add(NtmItems.INSERT_XSAPI, "XSAPI Insert");
+        this.add(NtmItems.INSERT_STEEL, "Heavy Steel Insert");
+        this.add(NtmItems.INSERT_DU, "DU Insert");
+        this.add(NtmItems.INSERT_POLONIUM, "Polonium Insert");
+        this.add(NtmItems.INSERT_GHIORSIUM, "Ghiorsium Insert");
+        this.add(NtmItems.INSERT_ERA, "Explosive Reactive Armor Insert");
+        this.add(NtmItems.INSERT_YHARONITE, "Yharonite Insert");
+        this.add(NtmItems.INSERT_DOXIUM, "Astolfium-Doped Doxium Insert");
         this.add(NtmItems.PLAN_C, "Plan C");
         this.add(NtmItems.CASSETTE, "Cassette");
         this.add(NtmItems.FLUID_ICON, "Fluid");

@@ -824,6 +824,26 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicItem(NtmItems.GAS_MASK_FILTER_COMBO.get());
         this.basicItem(NtmItems.GAS_MASK_FILTER_RAG.get());
         this.basicItem(NtmItems.GAS_MASK_FILTER_PISS.get());
+
+        /* Ruestungsmodule: Auskleidungen und Einlagen. */
+        this.basicItem(NtmItems.CLADDING_PAINT.get());
+        this.basicItem(NtmItems.CLADDING_RUBBER.get());
+        this.basicItem(NtmItems.CLADDING_LEAD.get());
+        this.basicItem(NtmItems.CLADDING_DESH.get());
+        this.basicItem(NtmItems.CLADDING_GHIORSIUM.get());
+        this.basicItem(NtmItems.CLADDING_IRON.get());
+        this.basicItem(NtmItems.CLADDING_OBSIDIAN.get());
+        this.basicItem(NtmItems.INSERT_KEVLAR.get());
+        this.basicItem(NtmItems.INSERT_SAPI.get());
+        this.basicItem(NtmItems.INSERT_ESAPI.get());
+        this.basicItem(NtmItems.INSERT_XSAPI.get());
+        this.basicItem(NtmItems.INSERT_STEEL.get());
+        this.basicItem(NtmItems.INSERT_DU.get());
+        this.basicItem(NtmItems.INSERT_POLONIUM.get());
+        this.basicItem(NtmItems.INSERT_GHIORSIUM.get());
+        this.basicItem(NtmItems.INSERT_ERA.get());
+        this.basicItem(NtmItems.INSERT_YHARONITE.get());
+        this.basicItem(NtmItems.INSERT_DOXIUM.get());
         this.basicItem(NtmItems.PLAN_C.get());
 
         this.withExistingParent("conveyor_wand", mcLoc("item/generated")).texture("layer0", modLoc("block/conveyor"));

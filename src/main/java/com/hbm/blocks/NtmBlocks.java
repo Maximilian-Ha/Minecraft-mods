@@ -842,6 +842,7 @@ public class NtmBlocks {
 
     /** Der Waffentisch, an dem Aufsaetze an- und abgebaut werden. */
     public static final DeferredBlock<Block> WEAPON_TABLE = register("weapon_table", () -> new WeaponTableBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL)));
+    public static final DeferredBlock<Block> ARMOR_TABLE = register("armor_table", () -> new ArmorTableBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL)));
     public static final DeferredBlock<Block> MACHINE_ICF_PRESS = register("machine_icf_press", () -> new MachineICFPressBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops()));
     public static final DeferredBlock<Block> ICF = register("icf", () -> new MachineICFBlock(BlockBehaviour.Properties.of().noOcclusion().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL)));
 

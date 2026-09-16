@@ -1728,6 +1728,27 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.RAG_DAMP);
                         output.accept(NtmItems.RAG_PISS);
 
+                        /* Die Module und ihr Tisch. */
+                        output.accept(NtmBlocks.ARMOR_TABLE);
+                        output.accept(NtmItems.CLADDING_PAINT);
+                        output.accept(NtmItems.CLADDING_RUBBER);
+                        output.accept(NtmItems.CLADDING_LEAD);
+                        output.accept(NtmItems.CLADDING_DESH);
+                        output.accept(NtmItems.CLADDING_GHIORSIUM);
+                        output.accept(NtmItems.CLADDING_IRON);
+                        output.accept(NtmItems.CLADDING_OBSIDIAN);
+                        output.accept(NtmItems.INSERT_KEVLAR);
+                        output.accept(NtmItems.INSERT_SAPI);
+                        output.accept(NtmItems.INSERT_ESAPI);
+                        output.accept(NtmItems.INSERT_XSAPI);
+                        output.accept(NtmItems.INSERT_STEEL);
+                        output.accept(NtmItems.INSERT_DU);
+                        output.accept(NtmItems.INSERT_POLONIUM);
+                        output.accept(NtmItems.INSERT_GHIORSIUM);
+                        output.accept(NtmItems.INSERT_ERA);
+                        output.accept(NtmItems.INSERT_YHARONITE);
+                        output.accept(NtmItems.INSERT_DOXIUM);
+
                         output.accept(NtmItems.BALEFIRE_AND_STEEL);
 
                         addMetaItems(output, NtmItems.DRINK.get());

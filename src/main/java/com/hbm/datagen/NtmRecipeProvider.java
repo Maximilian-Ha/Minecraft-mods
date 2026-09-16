@@ -43,6 +43,7 @@ public class NtmRecipeProvider extends RecipeProvider {
         this.watzParts(recipeOutput);
         this.pileDevices(recipeOutput);
         this.hazmatGear(recipeOutput);
+        this.armorMods(recipeOutput);
 
 
         /*
@@ -3293,6 +3294,152 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .define('P', body)
                 .define('F', mount)
                 .unlockedBy("has_body", has(body))
+                .save(recipeOutput);
+    }
+
+
+    /**
+     * Runde 137: der Ruestungstisch, die Auskleidungen und die Einlagen.
+     *
+     * Die Formen sind unveraendert aus ArmorRecipes und ConsumableRecipes des Originals.
+     *
+     * ABWEICHUNG: die XSAPI-Einlage braucht im Original eine Platte aus magnetisiertem
+     * Wolfram. Die gibt es im Port nicht -- hier steht der Barren an ihrer Stelle.
+     * NICHT UEBERNOMMEN: insert_doxium hat auch im Original kein Rezept.
+     */
+    private void armorMods(RecipeOutput recipeOutput) {
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.ARMOR_TABLE.get(), 1)
+                .pattern("PPP")
+                .pattern("TCT")
+                .pattern("TST")
+                .define('P', NtmItems.PLATE_STEEL.get())
+                .define('T', NtmItems.INGOT_TUNGSTEN.get())
+                .define('C', Blocks.CRAFTING_TABLE)
+                .define('S', NtmBlocks.BLOCK_STEEL.get())
+                .unlockedBy("has_steel_plate", has(NtmItems.PLATE_STEEL.get()))
+                .save(recipeOutput);
+
+        /* Die Bleifarbe ist die einzige formlose unter den Auskleidungen. */
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, NtmItems.CLADDING_PAINT.get(), 1)
+                .requires(NtmItems.NUGGET_LEAD.get(), 4)
+                .requires(Items.CLAY_BALL)
+                .requires(Items.GLASS_BOTTLE)
+                .unlockedBy("has_lead_nugget", has(NtmItems.NUGGET_LEAD.get()))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.CLADDING_RUBBER.get(), 1)
+                .pattern("RCR")
+                .pattern("CDC")
+                .pattern("RCR")
+                .define('R', NtmItems.INGOT_RUBBER.get())
+                .define('C', NtmItems.POWDER_COAL.get())
+                .define('D', NtmItems.DUCTTAPE.get())
+                .unlockedBy("has_rubber", has(NtmItems.INGOT_RUBBER.get()))
+                .save(recipeOutput);
+
+        /* Blei, Desh und Ghiorsium bauen der Reihe nach aufeinander auf. */
+        claddingUpgrade(recipeOutput, NtmItems.CLADDING_LEAD.get(), NtmItems.CLADDING_RUBBER.get(), NtmItems.PLATE_LEAD.get());
+        claddingUpgrade(recipeOutput, NtmItems.CLADDING_DESH.get(), NtmItems.CLADDING_LEAD.get(), NtmItems.PLATE_DESH.get());
+        claddingUpgrade(recipeOutput, NtmItems.CLADDING_GHIORSIUM.get(), NtmItems.CLADDING_DESH.get(), NtmItems.INGOT_GH336.get());
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.CLADDING_OBSIDIAN.get(), 1)
+                .pattern("OOO")
+                .pattern("PDP")
+                .pattern("OOO")
+                .define('O', Blocks.OBSIDIAN)
+                .define('P', NtmItems.PLATE_STEEL.get())
+                .define('D', NtmItems.DUCTTAPE.get())
+                .unlockedBy("has_obsidian", has(Blocks.OBSIDIAN))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.CLADDING_IRON.get(), 1)
+                .pattern("OOO")
+                .pattern("PDP")
+                .pattern("OOO")
+                .define('O', NtmItems.PLATE_IRON.get())
+                .define('P', NtmItems.PLATE_POLYMER.get())
+                .define('D', NtmItems.DUCTTAPE.get())
+                .unlockedBy("has_iron_plate", has(NtmItems.PLATE_IRON.get()))
+                .save(recipeOutput);
+
+        /* Die schweren Einlagen: ein Kern aus dem namengebenden Stoff, ringsherum Eisen. */
+        heavyInsert(recipeOutput, NtmItems.INSERT_STEEL.get(), NtmItems.PLATE_IRON.get(), NtmBlocks.BLOCK_STEEL.get());
+        heavyInsert(recipeOutput, NtmItems.INSERT_DU.get(), NtmItems.PLATE_IRON.get(), NtmBlocks.BLOCK_U238.get());
+        heavyInsert(recipeOutput, NtmItems.INSERT_GHIORSIUM.get(), NtmItems.INGOT_GH336.get(), NtmItems.INGOT_U238.get());
+        heavyInsert(recipeOutput, NtmItems.INSERT_POLONIUM.get(), NtmItems.PLATE_IRON.get(), NtmBlocks.BLOCK_POLONIUM.get());
+        heavyInsert(recipeOutput, NtmItems.INSERT_ERA.get(), NtmItems.PLATE_IRON.get(), NtmItems.INGOT_SEMTEX.get());
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.INSERT_KEVLAR.get(), 1)
+                .pattern("KIK")
+                .pattern("IDI")
+                .pattern("KIK")
+                .define('K', NtmItems.PLATE_KEVLAR.get())
+                .define('I', NtmItems.INGOT_RUBBER.get())
+                .define('D', NtmItems.DUCTTAPE.get())
+                .unlockedBy("has_kevlar_plate", has(NtmItems.PLATE_KEVLAR.get()))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.INSERT_SAPI.get(), 1)
+                .pattern("PKP")
+                .pattern("DPD")
+                .pattern("PKP")
+                .define('P', NtmItems.INGOT_PC.get())
+                .define('K', NtmItems.INSERT_KEVLAR.get())
+                .define('D', NtmItems.DUCTTAPE.get())
+                .unlockedBy("has_insert_kevlar", has(NtmItems.INSERT_KEVLAR.get()))
+                .save(recipeOutput);
+
+        platedInsert(recipeOutput, NtmItems.INSERT_ESAPI.get(), NtmItems.INGOT_PC.get(), NtmItems.INSERT_SAPI.get(), NtmItems.PLATE_WEAPON_STEEL.get());
+        platedInsert(recipeOutput, NtmItems.INSERT_XSAPI.get(), NtmItems.INGOT_ASBESTOS.get(), NtmItems.INSERT_ESAPI.get(), NtmItems.INGOT_MAGNETIZED_TUNGSTEN.get());
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.INSERT_YHARONITE.get(), 1)
+                .pattern("YIY")
+                .pattern("IYI")
+                .pattern("YIY")
+                .define('Y', NtmItems.BILLET_YHARONITE.get())
+                .define('I', NtmItems.INSERT_DU.get())
+                .unlockedBy("has_yharonite_billet", has(NtmItems.BILLET_YHARONITE.get()))
+                .save(recipeOutput);
+    }
+
+    /** Eine Auskleidung, die eine schwaechere umschliesst: aussen Klebeband, dazwischen Platten. */
+    private void claddingUpgrade(RecipeOutput recipeOutput, ItemLike result, ItemLike previous, ItemLike plate) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, result, 1)
+                .pattern("DPD")
+                .pattern("PRP")
+                .pattern("DPD")
+                .define('R', previous)
+                .define('P', plate)
+                .define('D', NtmItems.DUCTTAPE.get())
+                .unlockedBy("has_previous", has(previous))
+                .save(recipeOutput);
+    }
+
+    /** Eine schwere Einlage: ein Kern, ringsherum Platten und Klebeband. */
+    private void heavyInsert(RecipeOutput recipeOutput, ItemLike result, ItemLike plate, ItemLike core) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, result, 1)
+                .pattern("DPD")
+                .pattern("PSP")
+                .pattern("DPD")
+                .define('D', NtmItems.DUCTTAPE.get())
+                .define('P', plate)
+                .define('S', core)
+                .unlockedBy("has_core", has(core))
+                .save(recipeOutput);
+    }
+
+    /** Eine Einlage, die eine schwaechere um eine zusaetzliche Platte erweitert. */
+    private void platedInsert(RecipeOutput recipeOutput, ItemLike result, ItemLike shell, ItemLike previous, ItemLike plate) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, result, 1)
+                .pattern("PKP")
+                .pattern("DSD")
+                .pattern("PKP")
+                .define('P', shell)
+                .define('K', previous)
+                .define('D', NtmItems.DUCTTAPE.get())
+                .define('S', plate)
+                .unlockedBy("has_previous", has(previous))
                 .save(recipeOutput);
     }
 

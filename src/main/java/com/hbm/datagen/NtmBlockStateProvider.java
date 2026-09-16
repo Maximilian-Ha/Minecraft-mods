@@ -771,6 +771,8 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.reactorControl();
         this.simpleBlockWithItem(NtmBlocks.WEAPON_TABLE.get(), this.models().cubeBottomTop("weapon_table",
                 modLoc("block/gun_table_side"), modLoc("block/gun_table_bottom"), modLoc("block/gun_table_top")));
+        this.simpleBlockWithItem(NtmBlocks.ARMOR_TABLE.get(), this.models().cubeBottomTop("armor_table",
+                modLoc("block/armor_table_side"), modLoc("block/armor_table_bottom"), modLoc("block/armor_table_top")));
         this.simpleBlockWithItem(NtmBlocks.MACHINE_ICF_PRESS.get(), this.models().cubeBottomTop("machine_icf_press",
                 modLoc("block/machine_icf_press_side"), modLoc("block/machine_icf_press_top"), modLoc("block/machine_icf_press_top")));
         this.particleOnlyBlock(NtmBlocks.ZIRNOX_DESTROYED, modLoc("block/block_steel"));

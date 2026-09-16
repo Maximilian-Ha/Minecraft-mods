@@ -15,6 +15,10 @@ import com.hbm.items.ItemEnums.CasingType;
 import com.hbm.items.armor.ArmorNo9;
 import com.hbm.items.armor.FilterItem;
 import com.hbm.items.armor.GasMaskItem;
+import com.hbm.items.armor.ItemModCladding;
+import com.hbm.items.armor.ItemModIndestructible;
+import com.hbm.items.armor.ItemModInsert;
+import com.hbm.items.armor.ItemModKnockback;
 import com.hbm.items.armor.ModCharmItem;
 import com.hbm.items.armor.NtmArmorMaterials;
 import com.hbm.items.food.ConserveItem;
@@ -1304,6 +1308,33 @@ public class NtmItems {
     private static Item.Properties ragsProperties() {
         return new Item.Properties().stacksTo(1).durability(ArmorItem.Type.HELMET.getDurability(NtmArmorMaterials.DURABILITY_RAGS));
     }
+
+    /* ---- Ruestungsmodule: Auskleidungen und Einlagen ------------------------------- */
+
+    /* Die Auskleidung sitzt im Verkleidungsplatz und mindert die Strahlung, die durch das
+     * Teil kommt. Die Werte sind unveraendert aus dem Original. */
+    public static final DeferredItem<Item> CLADDING_PAINT = ITEMS.register("cladding_paint", () -> new ItemModCladding(new Item.Properties(), 0.025D));
+    public static final DeferredItem<Item> CLADDING_RUBBER = ITEMS.register("cladding_rubber", () -> new ItemModCladding(new Item.Properties(), 0.005D));
+    public static final DeferredItem<Item> CLADDING_LEAD = ITEMS.register("cladding_lead", () -> new ItemModCladding(new Item.Properties(), 0.1D));
+    public static final DeferredItem<Item> CLADDING_DESH = ITEMS.register("cladding_desh", () -> new ItemModCladding(new Item.Properties(), 0.2D));
+    public static final DeferredItem<Item> CLADDING_GHIORSIUM = ITEMS.register("cladding_ghiorsium", () -> new ItemModCladding(new Item.Properties(), 0.5D));
+    /* Die beiden Sonderfaelle: Eisen macht schwer, Obsidian macht das abgelegte Teil unzerstoerbar. */
+    public static final DeferredItem<Item> CLADDING_IRON = ITEMS.register("cladding_iron", () -> new ItemModKnockback(new Item.Properties(), 0.5D));
+    public static final DeferredItem<Item> CLADDING_OBSIDIAN = ITEMS.register("cladding_obsidian", () -> new ItemModIndestructible(new Item.Properties()));
+
+    /* Die Einlagen sitzen im Kevlarplatz der Brustplatte. Die Reihenfolge der Zahlen ist
+     * Haltbarkeit, Schaden, Geschoss, Sprengung, Tempo, Strahlung je Tick, Reaktivpanzerung. */
+    public static final DeferredItem<Item> INSERT_KEVLAR = ITEMS.register("insert_kevlar", () -> new ItemModInsert(new Item.Properties(), 1500, 1F, 0.9F, 1F, 1F, 0F, false));
+    public static final DeferredItem<Item> INSERT_SAPI = ITEMS.register("insert_sapi", () -> new ItemModInsert(new Item.Properties(), 1750, 1F, 0.85F, 1F, 1F, 0F, false));
+    public static final DeferredItem<Item> INSERT_ESAPI = ITEMS.register("insert_esapi", () -> new ItemModInsert(new Item.Properties(), 2000, 0.95F, 0.8F, 1F, 1F, 0F, false));
+    public static final DeferredItem<Item> INSERT_XSAPI = ITEMS.register("insert_xsapi", () -> new ItemModInsert(new Item.Properties(), 2500, 0.9F, 0.75F, 1F, 1F, 0F, false));
+    public static final DeferredItem<Item> INSERT_STEEL = ITEMS.register("insert_steel", () -> new ItemModInsert(new Item.Properties(), 1000, 1F, 0.95F, 0.75F, 0.95F, 0F, false));
+    public static final DeferredItem<Item> INSERT_DU = ITEMS.register("insert_du", () -> new ItemModInsert(new Item.Properties(), 1500, 0.9F, 0.85F, 0.5F, 0.9F, 0F, false));
+    public static final DeferredItem<Item> INSERT_POLONIUM = ITEMS.register("insert_polonium", () -> new ItemModInsert(new Item.Properties(), 500, 0.9F, 1F, 0.95F, 0.9F, 100F, false));
+    public static final DeferredItem<Item> INSERT_GHIORSIUM = ITEMS.register("insert_ghiorsium", () -> new ItemModInsert(new Item.Properties(), 2000, 0.8F, 0.75F, 0.35F, 0.9F, 0F, false));
+    public static final DeferredItem<Item> INSERT_ERA = ITEMS.register("insert_era", () -> new ItemModInsert(new Item.Properties(), 25, 0.5F, 1F, 0.25F, 1F, 0F, true));
+    public static final DeferredItem<Item> INSERT_YHARONITE = ITEMS.register("insert_yharonite", () -> new ItemModInsert(new Item.Properties(), 9999, 0.01F, 1F, 1F, 1F, 0F, false));
+    public static final DeferredItem<Item> INSERT_DOXIUM = ITEMS.register("insert_doxium", () -> new ItemModInsert(new Item.Properties(), 9999, 5.0F, 1F, 1F, 1F, 0F, false));
 
 
     public static final DeferredItem<Item> PLATE_POLYMER = ITEMS.register("plate_polymer", () -> new Item(new Item.Properties()));

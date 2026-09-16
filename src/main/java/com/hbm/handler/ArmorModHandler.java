@@ -1,12 +1,27 @@
 package com.hbm.handler;
 
 import com.hbm.items.armor.ItemArmorMod;
+import com.hbm.main.NuclearTechMod;
 import com.hbm.util.TagsUtil;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class ArmorModHandler {
@@ -82,9 +97,16 @@ public class ArmorModHandler {
         CompoundTag mods = tag.getCompound(MOD_COMPOUND_KEY);
         mods.remove(MOD_SLOT_KEY + slot);
 
-        if(mods.isEmpty()) clearMods(armor);
+        /* getCustomData liefert eine Kopie, also muss die AEUSSERE Tafel zurueckgeschrieben
+         * werden. Wurde hier frueher die innere geschrieben, landeten die Modulplaetze auf
+         * oberster Ebene und hasMods sah danach gar keine Module mehr. */
+        if(mods.isEmpty()) {
+            clearMods(armor);
+            return;
+        }
 
-        TagsUtil.putCustomData(armor, mods);
+        tag.put(MOD_COMPOUND_KEY, mods);
+        TagsUtil.putCustomData(armor, tag);
     }
 
     /**
@@ -116,7 +138,9 @@ public class ArmorModHandler {
      */
     public static ItemStack[] pryMods(Level level, ItemStack armor) {
 
+        /* Nie null: die Aufrufer fragen reihum mod.isEmpty(), ein Loch waere ein Absturz. */
         ItemStack[] slots = new ItemStack[MOD_SLOTS];
+        Arrays.fill(slots, ItemStack.EMPTY);
 
         if(!hasMods(armor)) return slots;
 
@@ -155,4 +179,92 @@ public class ArmorModHandler {
 
         return ItemStack.EMPTY;
     }
+
+    /**
+     * Der Name des Eigenschaftswerts, den die Module dem Traeger geben. Ein fester Name je
+     * Eigenschaft reicht: die Werte aller vier Ruestungsteile werden vorher aufsummiert.
+     */
+    private static ResourceLocation attributeId(Holder<Attribute> attribute) {
+        ResourceLocation key = BuiltInRegistries.ATTRIBUTE.getKey(attribute.value());
+        return NuclearTechMod.withDefaultNamespace("armor_mod/" + (key != null ? key.getPath() : "unknown"));
+    }
+
+    /**
+     * Ein Durchgang ueber alle vier Ruestungsteile: jedes Modul darf ticken, und die
+     * Eigenschaftswerte werden eingesammelt und am Traeger nachgefuehrt.
+     *
+     * Im Original haengen die Werte als Multimap am Ruestungsteil. In 1.21 ist das nicht mehr
+     * moeglich, weil die Eigenschaften eines Gegenstands in einer Datenkomponente stehen und
+     * nicht vom NBT des Stapels abhaengen duerfen. Stattdessen wird hier jeden Tick die Summe
+     * gebildet und als voruebergehender Wert gesetzt oder wieder entfernt.
+     */
+    public static void updateMods(LivingEntity entity) {
+
+        Map<Holder<Attribute>, Double> attributes = new HashMap<>();
+
+        for(EquipmentSlot slot : ARMOR_SLOTS) {
+
+            ItemStack armor = entity.getItemBySlot(slot);
+
+            if(armor.isEmpty() || !hasMods(armor)) continue;
+
+            for(ItemStack mod : pryMods(entity.level(), armor)) {
+                if(mod.isEmpty() || !(mod.getItem() instanceof ItemArmorMod armorMod)) continue;
+
+                armorMod.modUpdate(entity, armor);
+                armorMod.addAttributes(armor, attributes);
+            }
+        }
+
+        for(TrackedAttribute tracked : TRACKED_ATTRIBUTES) {
+
+            AttributeInstance instance = entity.getAttribute(tracked.attribute());
+            if(instance == null) continue;
+
+            ResourceLocation id = attributeId(tracked.attribute());
+            Double value = attributes.get(tracked.attribute());
+
+            if(value == null || value == 0D) {
+                instance.removeModifier(id);
+            } else {
+                instance.addOrUpdateTransientModifier(new AttributeModifier(id, value, tracked.operation()));
+            }
+        }
+    }
+
+    /** Jedes Modul darf den Schaden verrechnen, den der Traeger gerade abbekommt. */
+    public static void handleDamage(LivingDamageEvent.Pre event) {
+
+        LivingEntity entity = event.getEntity();
+
+        for(EquipmentSlot slot : ARMOR_SLOTS) {
+
+            ItemStack armor = entity.getItemBySlot(slot);
+
+            if(armor.isEmpty() || !hasMods(armor)) continue;
+
+            for(ItemStack mod : pryMods(entity.level(), armor)) {
+                if(mod.isEmpty() || !(mod.getItem() instanceof ItemArmorMod armorMod)) continue;
+
+                armorMod.modDamage(event, armor);
+            }
+        }
+    }
+
+    public static final EquipmentSlot[] ARMOR_SLOTS = { EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET };
+
+    /**
+     * Eine Eigenschaft, die von Modulen kommen kann, samt der Rechenart -- die entscheidet,
+     * wie der von addAttributes gelieferte Summand zu lesen ist. Beides ist unveraendert aus
+     * dem Original: das Tempo wird anteilig gerechnet, der Rueckstoss absolut.
+     */
+    private record TrackedAttribute(Holder<Attribute> attribute, AttributeModifier.Operation operation) { }
+
+    /**
+     * Nur ueber diese Eigenschaften wird jeden Tick nachgesehen -- so wird ein abgenommenes
+     * Modul auch wieder abgeraeumt.
+     */
+    private static final List<TrackedAttribute> TRACKED_ATTRIBUTES = List.of(
+            new TrackedAttribute(Attributes.MOVEMENT_SPEED, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),
+            new TrackedAttribute(Attributes.KNOCKBACK_RESISTANCE, AttributeModifier.Operation.ADD_VALUE));
 }
