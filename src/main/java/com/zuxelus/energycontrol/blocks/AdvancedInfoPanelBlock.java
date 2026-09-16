@@ -5,6 +5,7 @@ import com.zuxelus.energycontrol.blockentity.AdvancedInfoPanelBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -30,7 +31,7 @@ public class AdvancedInfoPanelBlock extends InfoPanelBlock {
     }
 
     @Override
-    public MapCodec<? extends Block> codec() {
+    public MapCodec<? extends BaseEntityBlock> codec() {
         return CODEC;
     }
 

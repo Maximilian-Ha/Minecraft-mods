@@ -42,10 +42,11 @@ public class InfoPanelBlock extends BaseEntityBlock {
     /**
      * Der Rueckgabetyp ist bewusst offen gehalten: die fortgeschrittene Tafel erbt von
      * dieser Klasse und bringt ihren eigenen Codec mit -- mit {@code MapCodec<InfoPanelBlock>}
-     * liesse sich die Methode nicht ueberschreiben.
+     * liesse sich die Methode nicht ueberschreiben. Offener als {@code BaseEntityBlock} geht
+     * nicht: dort steht genau diese Schranke.
      */
     @Override
-    public MapCodec<? extends Block> codec() {
+    public MapCodec<? extends BaseEntityBlock> codec() {
         return CODEC;
     }
 
