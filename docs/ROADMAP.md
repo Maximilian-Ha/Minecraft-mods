@@ -3096,3 +3096,31 @@ jede Umwandlung ist im Spiel nachschlagbar.
 | 146 | Verkoker, Berichtigung zu 145, sechste api-check-Regel | ✅ |
 | 147 | Krackturm | ✅ |
 | 148 | neun JEI-Ansichten | ✅ |
+
+## Runde 149: der Ladeabsturz aus dem Spielprotokoll
+
+Aus einem echten Spielprotokoll (16.09., AllTheForge10 mit 165 Mods, hbmsntm-198A):
+
+```
+Mod 'hbmsntm' encountered an error in a deferred task:
+java.lang.IllegalStateException: Duplicate client extensions registration for
+hbmsntm:turret_howard (old: com.hbm.main.ClientProxy$1@..., new: ...@...)
+```
+
+Danach war der Mod im Zustand „broken" und der Client brach beim Laden ab.
+
+**Die Ursache.** `ClientProxy.registerClientExtensions` läuft über alle
+Blockentitäten-Darsteller und gibt jedem, der `IBEWLRProvider` ist, auch einen Darsteller für
+seinen Gegenstand. **Sieben Darsteller hängen an zwei Blockentitätsarten** — Turm und
+beschädigter Turm bei Howard, Chekhov und Sentry, RBMK-Säule und ihre Zwillingsform, Radarschirm
+und Radar-Fächer, Gießerei und Becken. Der Lauf trifft sie deshalb zweimal, und ihr
+`getItemsForRenderer` nennt beide Male beide Gegenstände. NeoForge lässt eine zweite
+Registrierung für denselben Gegenstand nicht durchgehen.
+
+Der Lauf siebt jetzt: jeder Gegenstand wird höchstens einmal angemeldet, und ein Darsteller,
+dessen Gegenstände schon alle vergeben sind, wird übersprungen.
+
+**Warum kein Torwächter das finden konnte.** Es ist kein Übersetzungsfehler und keine
+Assetlücke, sondern eine Doppelanmeldung zur Laufzeit — sichtbar erst, wenn ein echter Client
+lädt. Der `runServer`-Rauchtest der CI läuft ohne Client und kommt an
+`RegisterClientExtensionsEvent` gar nicht vorbei.

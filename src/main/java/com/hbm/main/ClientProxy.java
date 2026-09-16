@@ -59,9 +59,12 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 
 public class ClientProxy extends ServerProxy {
 
@@ -76,9 +79,29 @@ public class ClientProxy extends ServerProxy {
     @Override
     public void registerClientExtensions(RegisterClientExtensionsEvent event) {
 
-        //this bit registers an item renderer for every existing block entity renderer that implements IItemRendererProvider
+        /*
+         * Hier bekommt jeder Blockentitaeten-Darsteller, der IBEWLRProvider ist, auch einen
+         * Darsteller fuer seinen Gegenstand.
+         *
+         * WARUM HIER GESIEBT WIRD
+         * Sieben Darsteller haengen an ZWEI Blockentitaetsarten (Turm und beschaedigter Turm,
+         * RBMK-Saeule und ihre Zwillingsform, Giesserei und Becken, ...). Der Lauf ueber
+         * PROVIDERS trifft sie darum zweimal, und ihr getItemsForRenderer nennt beide Male
+         * beide Gegenstaende. Ohne das Sieb meldet NeoForge beim zweiten Mal
+         * "Duplicate client extensions registration" und der Mod bricht beim Laden ab --
+         * genau so ist es im Spielprotokoll vom 16.09. passiert.
+         */
+        Set<Item> alreadyRegistered = new HashSet<>();
+
         for(Entry<BlockEntityType<?>, BlockEntityRendererProvider<?>> entry : BlockEntityRenderers.PROVIDERS.entrySet()) {
-            if(entry.getValue() instanceof IBEWLRProvider provider) registerItemRenderer(event, provider.getRenderer(), provider.getItemsForRenderer());
+
+            if(!(entry.getValue() instanceof IBEWLRProvider provider)) continue;
+
+            Item[] fresh = Arrays.stream(provider.getItemsForRenderer())
+                    .filter(alreadyRegistered::add)
+                    .toArray(Item[]::new);
+
+            if(fresh.length > 0) registerItemRenderer(event, provider.getRenderer(), fresh);
         }
 
         registerItemRenderer(event, new RenderLaserDetonator(), NtmItems.DETONATOR_LASER.get());
