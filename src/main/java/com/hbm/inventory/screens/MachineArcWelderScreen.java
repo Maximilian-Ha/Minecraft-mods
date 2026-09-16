@@ -2,16 +2,12 @@ package com.hbm.inventory.screens;
 
 import com.hbm.blockentity.machine.MachineArcWelderBlockEntity;
 import com.hbm.inventory.menus.MachineArcWelderMenu;
-import com.hbm.items.machine.MachineUpgradeItem;
 import com.hbm.main.NuclearTechMod;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.ItemStack;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class MachineArcWelderScreen extends InfoScreen<MachineArcWelderMenu> {
@@ -62,29 +58,6 @@ public class MachineArcWelderScreen extends InfoScreen<MachineArcWelderMenu> {
     }
 
     private List<Component> getUpgradeInfo() {
-        List<Component> lines = new ArrayList<>();
-        HashMap<MachineUpgradeItem.UpgradeType, Integer> levels = new HashMap<>();
-
-        for(int slot = 6; slot <= 7; slot++) {
-            ItemStack stack = this.be.getItem(slot);
-            if(stack.getItem() instanceof MachineUpgradeItem item && this.be.getValidUpgrades().containsKey(item.type)) {
-                levels.merge(item.type, item.tier, Integer::sum);
-            }
-        }
-
-        if(levels.isEmpty()) {
-            lines.add(Component.literal("No upgrades installed"));
-            return lines;
-        }
-
-        for(MachineUpgradeItem.UpgradeType type : MachineUpgradeItem.UpgradeType.values()) {
-            Integer level = levels.get(type);
-            if(level == null || level <= 0) continue;
-            List<String> raw = new ArrayList<>();
-            //this.be.provideInfo(type, level, raw, false);
-            for(String line : raw) lines.add(Component.literal(line));
-        }
-
-        return lines;
+        return upgradeInfo(this.be, this.be, 6, 7);
     }
 }

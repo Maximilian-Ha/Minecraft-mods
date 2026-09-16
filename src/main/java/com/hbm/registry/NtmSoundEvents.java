@@ -133,6 +133,7 @@ public class NtmSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> ASSEMBLER_START = reg("block.assembler_start"); // BLOCKS CATEGORY
     public static final DeferredHolder<SoundEvent, SoundEvent> ASSEMBLER_STOP = reg("block.assembler_stop"); // BLOCKS CATEGORY
     public static final DeferredHolder<SoundEvent, SoundEvent> CHEMICAL_PLANT_OPERATE = reg("block.chemical_plant_operate"); // BLOCKS CATEGORY
+    public static final DeferredHolder<SoundEvent, SoundEvent> PYRO_OVEN_OPERATE = reg("block.pyro_oven_operate"); // BLOCKS CATEGORY
     public static final DeferredHolder<SoundEvent, SoundEvent> CENTRIFUGE_OPERATE = reg("block.centrifuge_operate"); // BLOCKS CATEGORY
     public static final DeferredHolder<SoundEvent, SoundEvent> IGENERATOR_OPERATE = reg("block.igenerator_operate"); // BLOCKS CATEGORY
     public static final DeferredHolder<SoundEvent, SoundEvent> GAS_TURBINE_RUNNING = reg("block.gas_turbine_running"); // BLOCKS CATEGORY

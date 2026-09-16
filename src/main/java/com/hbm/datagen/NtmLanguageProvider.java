@@ -1224,6 +1224,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("upgrade.fortune", "Fortune %s");
         this.add("upgrade.range", "Range %s");
         this.add("upgrade.yes", "YES");
+        this.add("upgrade.none", "No upgrades installed");
         this.add(NtmItems.UPGRADE_TEMPLATE, "Machine Upgrade Template");
         this.add(NtmItems.UPGRADE_SPEED_1, "Speed Upgrade Mk.I");
         this.add(NtmItems.UPGRADE_SPEED_2, "Speed Upgrade Mk.II");
@@ -2728,6 +2729,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.MACHINE_HYDROTREATER, "Hydrotreater");
         this.add(NtmBlocks.MACHINE_VACUUM_DISTILL, "Vacuum Distillation Tower");
         this.add(NtmBlocks.MACHINE_SOLIDIFIER, "Solidifier");
+        this.add(NtmBlocks.MACHINE_PYRO_OVEN, "Pyrolysis Oven");
         this.add(NtmBlocks.ORE_METEOR_IRON, "Meteor Iron Ore");
         this.add(NtmBlocks.ORE_METEOR_COBALT, "Meteor Cobalt Ore");
         this.add(NtmBlocks.ORE_METEOR_ALUMINIUM, "Meteor Aluminium Ore");
@@ -3551,6 +3553,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("container.machine_hydrotreater", "Hydrotreater");
         this.add("container.machine_vacuum_distill", "Vacuum Distillation Tower");
         this.add("container.machine_solidifier", "Solidifier");
+        this.add("container.machine_pyro_oven", "Pyrolysis Oven");
 
         this.add("bomb.detonated", "Detonated successfully!");
         this.add("bomb.triggered", "Triggered successfully!");

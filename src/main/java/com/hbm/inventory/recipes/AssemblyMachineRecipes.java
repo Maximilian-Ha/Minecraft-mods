@@ -1198,6 +1198,19 @@ public class AssemblyMachineRecipes extends GenericRecipes<GenericRecipe> {
                         new ComparableStack(NtmItems.CIRCUIT_MICROCHIP.get(), 4)
                 ));
 
+        // ---- Runde 143 ----
+        // Original "ass.pyrooven". Die ueblichen Abbildungen: ANY_HARDPLASTIC wird
+        // Polycarbonat, der Desh-Motor wird der gewoehnliche Motor, CHIP_BISMOID wird der
+        // Mikrochip. Statt Kupferrohren stehen Stahlrohre, die einzigen des Ports.
+        this.register(new GenericRecipe("ass.pyrooven").setup(300, 100).outputItems(new ItemStack(NtmBlocks.MACHINE_PYRO_OVEN, 1))
+                .inputItems(
+                        NtmItems.castPlateWeldedIngredient(CastPlateItem.Type.STEEL, 16),
+                        new ComparableStack(NtmItems.INGOT_PC.get(), 24),
+                        new ComparableStack(NtmItems.PIPES_STEEL.get(), 12),
+                        new ComparableStack(NtmItems.MOTOR.get(), 1),
+                        new ComparableStack(NtmItems.CIRCUIT_MICROCHIP.get(), 1)
+                ));
+
         // ---- Runde 142 ----
         // Original "ass.solidifier". ANY_PLASTIC.ingot() wird das Bakelit, das im Port der
         // einzige Kunststoffbarren ist; der Kondensatorschaltkreis und die Kupferspule

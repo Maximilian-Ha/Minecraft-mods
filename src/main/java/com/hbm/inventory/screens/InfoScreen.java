@@ -1,5 +1,9 @@
 package com.hbm.inventory.screens;
 
+import com.hbm.blockentity.IUpgradeInfoProvider;
+import com.hbm.blockentity.MachineBaseBlockEntity;
+import com.hbm.items.machine.MachineUpgradeItem;
+import com.hbm.items.machine.MachineUpgradeItem.UpgradeType;
 import com.hbm.main.NuclearTechMod;
 import com.hbm.util.BobMathUtil;
 import com.hbm.util.i18n.I18nUtil;
@@ -12,6 +16,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 
 import java.util.*;
 
@@ -43,6 +49,38 @@ public abstract class InfoScreen<T extends AbstractContainerMenu> extends Abstra
 
         List<Component> components = Arrays.asList(text);
         if(x <= mouseX && x + width > mouseX && y < mouseY && y + height >= mouseY) guiGraphics.renderComponentTooltip(this.font, components, mouseX, mouseY);
+    }
+
+    /**
+     * Die Zeilen, die das kleine Infofeld neben den Aufwertungsplaetzen zeigt: fuer jede
+     * eingesetzte Aufwertung, was sie an dieser Maschine bewirkt. Die Maschine beschreibt sich
+     * dabei selbst ueber IUpgradeInfoProvider -- der Schirm weiss nichts ueber die Wirkung.
+     */
+    public static List<Component> upgradeInfo(MachineBaseBlockEntity be, IUpgradeInfoProvider provider, int firstSlot, int lastSlot) {
+
+        Map<UpgradeType, Integer> levels = new EnumMap<>(UpgradeType.class);
+
+        for(int slot = firstSlot; slot <= lastSlot; slot++) {
+            ItemStack stack = be.getItem(slot);
+            if(stack.getItem() instanceof MachineUpgradeItem item && provider.getValidUpgrades().containsKey(item.type)) {
+                levels.merge(item.type, item.tier, Integer::sum);
+            }
+        }
+
+        List<Component> lines = new ArrayList<>();
+
+        if(levels.isEmpty()) {
+            lines.add(Component.translatable("upgrade.none"));
+            return lines;
+        }
+
+        for(Map.Entry<UpgradeType, Integer> entry : levels.entrySet()) {
+            if(entry.getValue() <= 0) continue;
+            if(!provider.canProvideInfo(entry.getKey(), entry.getValue(), TooltipFlag.Default.NORMAL)) continue;
+            provider.provideInfo(entry.getKey(), entry.getValue(), lines, TooltipFlag.Default.NORMAL);
+        }
+
+        return lines;
     }
 
     public void drawInfoPanel(GuiGraphics guiGraphics, int x, int y, int type) {

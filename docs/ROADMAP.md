@@ -2886,3 +2886,40 @@ Eingabestoffs.
 bis 142 hat bisher eine — im Original gibt es für Fraktionierung, Reformierung, Hydrotreating,
 Vakuumdestillation und Verfestigung je einen NEI-Handler. Das gehört in eine eigene Runde, wenn
 die Kette vollständig ist.
+
+## Stufe 6 — Runde 143: der Pyroofen
+
+Der Pyroofen zerlegt unter Hitze und Sauerstoffabschluss. Anders als die übrigen Maschinen der
+Kette nimmt er wahlweise ein Fluid, einen Gegenstand oder beides und gibt wahlweise beides
+zurück — daher die zwei Tanks neben zwei Gegenstandsplätzen. Ein Kasten von sieben mal fünf
+Blöcken, drei hoch; die Anschlüsse liegen als Reihe an der einen Längsseite, der Schornstein
+oben auf der anderen.
+
+Er ist die erste Maschine des Ports, die **Grundgesteinserz röstet**: alle fünf Vorstufen jeder
+Sorte, jedes Mal fällt Vitriol an. Bisher gab es im Port keinen Weg zu den gerösteten Erzen,
+obwohl die Stufen seit Runde 131 existieren.
+
+Dazu die Kohlenchemie des Originals: Synthesegas aus Kohle, Koks oder Biomasse, Schweröl und
+Kohlegas aus Kohle, Ruß aus Teer, Reformgas aus Kokergas, Wasserstoff und Graphit aus Erdgas,
+und Wolframcarbid aus Wolframstaub und Synthesegas. Wie der Verfestiger presst auch er alles
+Brennbare zu Brennstoffwürfeln — nur doppelt so sparsam.
+
+**Abweichungen.** Für Kohle steht der Gegenstand selbst, für Kohlenstaub der eigene Gegenstand,
+für Koks und Teer je ein Sammeltag und für Wolframstaub der Materialtag; das Original nimmt
+überall OreDictionary-Namen. Im Montagerezept gelten die üblichen Abbildungen (Polycarbonat,
+gewöhnlicher Motor, Mikrochip) und statt Kupferrohren stehen Stahlrohre, die einzigen des Ports.
+
+**Nebenbei zwei Löcher gestopft.** Das kleine Infofeld neben den Aufwertungsplätzen war beim
+Lichtbogenschweißer und bei der Lötstation leer: beide sammelten die eingesetzten Aufwertungen
+korrekt ein, riefen dann aber `provideInfo` gar nicht auf (die Zeile stand auskommentiert, weil
+die Signatur damals noch `List<String>` nahm) und schoben eine immer leere Liste durch. Die
+Maschine beschreibt die Wirkung ihrer Aufwertungen selbst über `IUpgradeInfoProvider`; das
+Einsammeln ist für alle Maschinen dasselbe und steht jetzt einmal in `InfoScreen.upgradeInfo`.
+Beide Schirme und der neue Pyroofen benutzen es.
+
+### Stand der Erdölkette nach Runde 143
+
+| | |
+|---|---|
+| portiert (11) | Bohrturm, Pumpe, Frackingturm, Raffinerie, Fraktionierturm, Zwischenstück, Reformer, Hydrotreater, Vakuumdestille, Verfestiger, **Pyroofen** |
+| offen (4) | Krackturm, Coker, Gasfackel, Verflüssiger |

@@ -491,6 +491,9 @@ public class NtmSoundDefinitionsProvider extends SoundDefinitionsProvider {
         this.add(NtmSoundEvents.CHEMICAL_PLANT_OPERATE, SoundDefinition.definition()
                 .with(sound("hbmsntm:block/chemicalplant"))
         );
+        this.add(NtmSoundEvents.PYRO_OVEN_OPERATE, SoundDefinition.definition()
+                .with(sound("hbmsntm:block/pyrooven"))
+        );
         this.add(NtmSoundEvents.ELECTRIC_HUM, SoundDefinition.definition()
                 .with(sound("hbmsntm:block/electric_hum"))
         );

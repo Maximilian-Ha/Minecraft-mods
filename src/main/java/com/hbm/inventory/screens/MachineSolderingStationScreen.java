@@ -2,8 +2,6 @@ package com.hbm.inventory.screens;
 
 import com.hbm.blockentity.machine.MachineSolderingStationBlockEntity;
 import com.hbm.inventory.menus.MachineSolderingStationMenu;
-import com.hbm.items.machine.MachineUpgradeItem;
-import com.hbm.items.machine.MachineUpgradeItem.UpgradeType;
 import com.hbm.main.NuclearTechMod;
 import com.hbm.network.toserver.CompoundTagControl;
 import net.minecraft.ChatFormatting;
@@ -12,11 +10,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class MachineSolderingStationScreen extends InfoScreen<MachineSolderingStationMenu> {
@@ -88,33 +84,6 @@ public class MachineSolderingStationScreen extends InfoScreen<MachineSolderingSt
     }
 
     private List<Component> getUpgradeInfo() {
-        List<Component> lines = new ArrayList<>();
-        HashMap<UpgradeType, Integer> levels = new HashMap<>();
-
-        for(int slot = 9; slot <= 10; slot++) {
-            ItemStack stack = this.be.getItem(slot);
-            if(stack.getItem() instanceof MachineUpgradeItem item && this.be.getValidUpgrades().containsKey(item.type)) {
-                levels.merge(item.type, item.tier, Integer::sum);
-            }
-        }
-
-        if(levels.isEmpty()) {
-            lines.add(Component.literal("No upgrades installed"));
-            return lines;
-        }
-
-        for(UpgradeType type : UpgradeType.values()) {
-            Integer level = levels.get(type);
-            if(level == null || level <= 0) continue;
-
-            List<String> raw = new ArrayList<>();
-            //this.be.provideInfo(type, level, raw, false);
-
-            for(String line : raw) {
-                lines.add(Component.literal(line));
-            }
-        }
-
-        return lines;
+        return upgradeInfo(this.be, this.be, 9, 10);
     }
 }
