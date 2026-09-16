@@ -408,13 +408,77 @@ if component_methods:
                                                '%s(...) ist als Component erklaert, nicht als MutableComponent' % m.group(1),
                                                'die Methode als MutableComponent erklaeren oder .copy() aufrufen'))
 
+# ---------------------------------------------------------------------------------
+# Sechster Durchgang: geschachtelte Fremdtypen in uebernommenen Signaturen.
+#
+# WARUM DAS EINE EIGENE PRUEFUNG BRAUCHT
+# Runde 145 kostete genau das einen CI-Durchlauf: eine Methode uebernahm die Signatur
+# appendHoverText(ItemStack, TooltipContext, ...) von einer Nachbarklasse, aber ohne deren
+# Zeile "import net.minecraft.world.item.Item.TooltipContext;". Ein Paket-Sternimport
+# bringt geschachtelte Typen NICHT mit, also fehlt der Typ, und javac meldet nur
+# "cannot find symbol". Die anderen Torwaechter sind dagegen blind: import-check.sh kennt
+# nur Projekttypen, und syntax-check.sh muss "cannot find symbol" wegwerfen, weil ohne
+# Minecraft-Klassenpfad zehntausende davon entstehen.
+#
+# WARUM DIE REGEL EINE LISTE IST UND KEINE ALLGEMEINE SUCHE
+# Eine allgemeine Suche nach "geschachtelter Typ ohne Import" ist hier nicht zu haben:
+# geschachtelte Typen einer Oberklasse stehen ohne Import im Geltungsbereich (jeder
+# Block-Nachfahre benutzt Properties aus BlockBehaviour), und welche Minecraft-Oberklasse
+# welche davon mitbringt, laesst sich ohne den Klassenpfad nicht feststellen. Gemessen an
+# einem Probelauf waren das ueber vierzig Fehlalarme. Deshalb steht hier nur, was die CI
+# tatsaechlich einmal beanstandet hat -- dieselbe Linie wie bei PITFALLS oben.
+#
+# WARUM JEDER EINTRAG EINEN PFAD MITBRINGT
+# TooltipContext ist in Item geschachtelt. In einer Item-Unterklasse steht der Name deshalb
+# ohne Import im Geltungsbereich -- und das sind siebzig Dateien dieses Baums. In einer
+# Block-Unterklasse steht er es nicht, denn Block ist kein Item. Der Eintrag gilt deshalb nur
+# fuer Bloecke; ohne diese Eingrenzung waere die Regel eine Attrappe aus Fehlalarmen.
+#
+# Jeder Eintrag: Verzeichnis, Methodenname, geschachtelter Typ in ihrer Signatur, Importpfad.
+NESTED_IN_SIGNATURE = [
+    ('src/main/java/com/hbm/blocks', 'appendHoverText', 'TooltipContext', 'net.minecraft.world.item.Item.TooltipContext'),
+]
+
+nested_findings = []
+
+for dirpath, _, names in os.walk(ROOT):
+    for fn in sorted(names):
+        if not fn.endswith('.java'):
+            continue
+        path = os.path.join(dirpath, fn)
+        raw = open(path, encoding='utf-8', errors='replace').read()
+        src = strip(raw)
+
+        for scope, method, nested, full in NESTED_IN_SIGNATURE:
+            if not path.startswith(scope + os.sep):
+                continue
+            outer = full.rsplit('.', 2)[-2]
+            sig = re.search(r'\b%s\s*\(([^)]*)\)' % re.escape(method), src)
+            if not sig:
+                continue
+            params = sig.group(1)
+            if not re.search(r'\b%s\b' % re.escape(nested), params):
+                continue
+            # qualifiziert geschrieben, importiert, oder ueber einen Klassen-Sternimport da?
+            if re.search(r'\b%s\s*\.\s*%s\b' % (re.escape(outer), re.escape(nested)), params):
+                continue
+            if re.search(r'^\s*import\s+%s\s*;' % re.escape(full), raw, re.M):
+                continue
+            if re.search(r'^\s*import\s+%s\.\*\s*;' % re.escape(full.rsplit('.', 1)[0]), raw, re.M):
+                continue
+            line = src.count('\n', 0, sig.start()) + 1
+            nested_findings.append((path, line,
+                                    '%s benutzt den geschachtelten Typ %s, der hier weder importiert noch qualifiziert ist' % (method, nested),
+                                    'import %s; ergaenzen' % full))
+
 findings.extend(render_box_findings)
 findings.extend(codec_findings)
 findings.extend(length_findings)
 findings.extend(component_findings)
+findings.extend(nested_findings)
 
-print('Pruefe bekannte API-Fallen ... %d Dateien, %d Muster + %d Component-Zugriffe + %d Zeichenfenster + %d Codecs + %d Component-Methoden'
-      % (checked, len(PITFALLS), len(accessors), len(marked), len(parents), len(component_methods)))
+print('Pruefe bekannte API-Fallen ... %d Dateien, %d Muster + %d Component-Zugriffe + %d Zeichenfenster + %d Codecs + %d Component-Methoden + %d geschachtelte Signaturen'
+      % (checked, len(PITFALLS), len(accessors), len(marked), len(parents), len(component_methods), len(NESTED_IN_SIGNATURE)))
 
 if findings:
     print('  AUFFAELLIG: %d' % len(findings))

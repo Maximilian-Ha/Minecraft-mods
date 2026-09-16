@@ -1198,6 +1198,17 @@ public class AssemblyMachineRecipes extends GenericRecipes<GenericRecipe> {
                         new ComparableStack(NtmItems.CIRCUIT_MICROCHIP.get(), 4)
                 ));
 
+        // ---- Runde 146 ----
+        // Original "ass.coker". Alle Zutaten stehen unveraendert.
+        this.register(new GenericRecipe("ass.coker").setup(200, 100).outputItems(new ItemStack(NtmBlocks.MACHINE_COKER, 1))
+                .inputItems(
+                        NtmItems.castPlateWeldedIngredient(CastPlateItem.Type.STEEL, 8),
+                        new ComparableStack(NtmItems.SHELL_STEEL.get(), 4),
+                        new ComparableStack(NtmItems.PLATE_COPPER.get(), 8),
+                        new ComparableStack(NtmItems.INGOT_RUBBER.get(), 4),
+                        new ComparableStack(NtmItems.INGOT_NIOBIUM.get(), 4)
+                ));
+
         // ---- Runde 145 ----
         // Original "ass.flarestack". Alle Zutaten stehen unveraendert.
         this.register(new GenericRecipe("ass.flarestack").setup(100, 100).outputItems(new ItemStack(NtmBlocks.MACHINE_GAS_FLARE, 1))

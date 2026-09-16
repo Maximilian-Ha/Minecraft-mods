@@ -64,6 +64,7 @@ public class NtmMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<MachinePyroOvenMenu>> MACHINE_PYRO_OVEN = reg("machine_pyro_oven", MachinePyroOvenMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<MachineLiquefactorMenu>> MACHINE_LIQUEFACTOR = reg("machine_liquefactor", MachineLiquefactorMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<MachineGasFlareMenu>> MACHINE_GAS_FLARE = reg("machine_gas_flare", MachineGasFlareMenu::new);
+    public static final DeferredHolder<MenuType<?>, MenuType<MachineCokerMenu>> MACHINE_COKER = reg("machine_coker", MachineCokerMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<MachineFurnaceCombinationMenu>> FURNACE_COMBINATION = reg("furnace_combination", MachineFurnaceCombinationMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<MachineBlastFurnaceMenu>> MACHINE_BLAST_FURNACE = reg("machine_blast_furnace", MachineBlastFurnaceMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<MachineWoodBurnerMenu>> MACHINE_WOOD_BURNER = reg("machine_wood_burner", MachineWoodBurnerMenu::new);

@@ -2731,6 +2731,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.MACHINE_SOLIDIFIER, "Solidifier");
         this.add(NtmBlocks.MACHINE_PYRO_OVEN, "Pyrolysis Oven");
         this.add(NtmBlocks.MACHINE_LIQUEFACTOR, "Liquefactor");
+        this.add(NtmBlocks.MACHINE_COKER, "Coker");
+        this.add(NtmBlocks.MACHINE_COKER, DESC, "Turns oil into petroleum coke and lighter fractions.$Runs on heat, not power: put a heat source below it.$One operation costs 20,000TU.");
         this.add(NtmBlocks.MACHINE_GAS_FLARE, "Gas Flare");
         this.add(NtmBlocks.MACHINE_GAS_FLARE, DESC, "Can burn fluids and vent gasses.$Burns up to 10mB/t, vents up to 50mB/t.$Fuel efficiency: flammable gasses 20%, flammable liquids 10%.");
         this.add(NtmBlocks.ORE_METEOR_IRON, "Meteor Iron Ore");
@@ -3559,6 +3561,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("container.machine_pyro_oven", "Pyrolysis Oven");
         this.add("container.machine_liquefactor", "Liquefactor");
         this.add("container.machine_gas_flare", "Gas Flare");
+        this.add("container.machine_coker", "Coker");
         this.add("flare.valve", "Flow Valve");
         this.add("flare.ignition", "Ignition");
 

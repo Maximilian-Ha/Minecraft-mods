@@ -1371,6 +1371,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.MACHINE_PYRO_OVEN);
                         output.accept(NtmBlocks.MACHINE_LIQUEFACTOR);
                         output.accept(NtmBlocks.MACHINE_GAS_FLARE);
+                        output.accept(NtmBlocks.MACHINE_COKER);
                         output.accept(NtmBlocks.FURNACE_COMBINATION);
                         output.accept(NtmBlocks.MACHINE_DRAIN);
                         output.accept(NtmBlocks.MACHINE_INTAKE);

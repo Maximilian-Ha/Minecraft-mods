@@ -2983,3 +2983,44 @@ Hochofen; hier wird es zum ersten Mal in der Erdölkette benutzt.
 
 Die beiden letzten sind die aufwendigsten: beides große, richtungsabhängige Verbunde mit
 mehreren Teilkörpern (`getAllDimensions`), der Coker zusätzlich am Wärmenetz statt am Stromnetz.
+
+## Stufe 6 — Runde 146: der Verkoker und ein neuer Torwächter
+
+Die vorletzte Maschine der Kette. Der Verkoker treibt aus einem Öl den Kohlenstoff aus: es
+bleibt Petrolkoks, und was sich dabei leichter verflüchtigt, geht als Gas oder leichteres Öl
+weiter. Ein schlanker Turm von dreiundzwanzig Blöcken auf einem Sockel von drei mal drei, dazu
+ein Absatz von fünf mal fünf und vier Stützen an dessen Ecken — im Original wie hier stehen alle
+Teilkörper fest nach Norden, keiner hängt an der Blickrichtung.
+
+Er ist die einzige Maschine der Erdölkette, die **nicht am Stromnetz hängt, sondern am
+Wärmenetz**: was unter ihm an Wärme anliegt, zieht er zu einem Viertel ab; ein Durchgang kostet
+20.000 Wärmeeinheiten. Die Rauchfahne aus dem Schlot benutzt dieselbe Partikelsorte wie der
+Drehrohrofen.
+
+### Runde 145 ist in der CI gescheitert, und das hat einen Torwächter ergeben
+
+`MachineGasFlareBlock.appendHoverText` übernahm die Signatur von einer Nachbarklasse, aber ohne
+deren Zeile `import net.minecraft.world.item.Item.TooltipContext;`. Ein Paket-Sternimport bringt
+geschachtelte Typen nicht mit — der Typ fehlte also, und javac meldete nur „cannot find symbol".
+
+Die drei vorhandenen Torwächter sind dafür blind: `import-check.sh` kennt nur Projekttypen, und
+`syntax-check.sh` muss „cannot find symbol" wegwerfen, weil ohne Minecraft-Klassenpfad
+zehntausende davon entstehen. `api-check.sh` hat jetzt eine sechste Regel dafür.
+
+**Ein erster, allgemeiner Entwurf der Regel wurde verworfen.** Er suchte im ganzen Baum nach
+geschachtelten Typen ohne Import und fand über vierzig Fehlalarme: geschachtelte Typen einer
+Oberklasse stehen ohne Import im Geltungsbereich (jeder Block-Nachfahre benutzt `Properties` aus
+`BlockBehaviour`), und welche Minecraft-Oberklasse welche mitbringt, lässt sich ohne Klassenpfad
+nicht feststellen. Dieselbe Falle beim zweiten Versuch: `TooltipContext` ist in `Item`
+geschachtelt und steht in jeder Item-Unterklasse im Geltungsbereich — siebzig Dateien dieses
+Baums. Die Regel gilt deshalb nur für Blöcke, und sie steht als Liste, die mit jedem
+CI-Fehlschlag wächst, nicht als allgemeine Suche.
+
+Gemessen: mit dem wiederhergestellten Fehler zwei Funde, ohne ihn keiner.
+
+### Stand der Erdölkette nach Runde 146
+
+| | |
+|---|---|
+| portiert (14) | Bohrturm, Pumpe, Frackingturm, Raffinerie, Fraktionierturm, Zwischenstück, Reformer, Hydrotreater, Vakuumdestille, Verfestiger, Pyroofen, Verflüssiger, Gasfackel, **Verkoker** |
+| offen (1) | Krackturm |

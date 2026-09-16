@@ -73,6 +73,7 @@ public class ResourceManager {
     public static final ResourceLocation PYRO_OVEN_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/pyrooven.png");
     public static final ResourceLocation LIQUEFACTOR_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/liquefactor.png");
     public static final ResourceLocation FLARE_STACK_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/flare_stack.png");
+    public static final ResourceLocation COKER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/coker.png");
     public static final ResourceLocation FURNACE_COMBINATION_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/combination_oven.png");
     public static final ResourceLocation BLAST_FURNACE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/blast_furnace.png");
     public static final ResourceLocation WOOD_BURNER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/wood_burner.png");
@@ -467,6 +468,7 @@ public class ResourceManager {
     public static IModelCustom pyroOven;
     public static IModelCustom liquefactor;
     public static IModelCustom flareStack;
+    public static IModelCustom coker;
     public static IModelCustom furnace_combination;
     public static IModelCustom blast_furnace;
     public static IModelCustom wood_burner;
@@ -720,6 +722,7 @@ public class ResourceManager {
         pyroOven = new HFRWavefrontObject("models/obj/machines/pyrooven.obj").asVBO();
         liquefactor = new HFRWavefrontObject("models/obj/machines/liquefactor.obj").asVBO();
         flareStack = new HFRWavefrontObject("models/obj/machines/flare_stack.obj").asVBO();
+        coker = new HFRWavefrontObject("models/obj/machines/coker.obj").asVBO();
         furnace_combination = new HFRWavefrontObject("models/obj/machines/combination_oven.obj").asVBO();
         blast_furnace = new HFRWavefrontObject("models/obj/machines/blast_furnace.obj").asVBO();
         wood_burner = new HFRWavefrontObject("models/obj/machines/wood_burner.obj").asVBO();
