@@ -2684,3 +2684,51 @@ Unverändert, und seit dem Serverlauf um eine Stufe reicher:
 2. Die fünfzehn Tore lokal grün.
 3. CI: Tore → `runData` → Doppelpfadprüfung → `build` → **dedizierter Server**.
 4. Erst dann gilt die Runde als fertig — „es baut" und „es läuft" sind zwei Aussagen.
+
+---
+
+## Stufe 6 — Runde 136: Hazmat-Familie, Gasmasken und Filter
+
+Der erste Schritt der Schutzkleidung, und zugleich der, der am meisten geschlossen hat.
+
+**Ausgangslage.** Der Gefahren-Unterbau stand vollständig: `ArmorRegistry` mit neun
+Gefahrenklassen, `ArmorUtil` mit dem ganzen Filter-Schriftverkehr, `HazmatRegistry` mit der
+Strahlungsminderung, und als Verbraucher `HazardTypeCoal`, `HazardTypeAsbestos`,
+`HazardTypeBlinding`, die acht Gasblöcke und `FT_Toxin`. Nur schützte nichts davon irgendetwas:
+`ArmorUtil.register()` hat genau eine Zeile gehabt, und die hat dem **Diamanthelm** zwei
+Gefahrenklassen angehängt — ein Platzhalter aus der Zeit, als es noch keine Masken gab.
+
+**Was dazugekommen ist.**
+
+| | |
+|---|---|
+| `NtmArmorMaterials` | Hazmat gelb/rot/grau, Hazmat-PAA, Lappen, Maske |
+| `GasMaskItem` | fasst `ArmorGasMask`, `ArmorHazmat` und `ArmorHazmatMask` zusammen |
+| `FilterItem` | Filtereinsatz, einschraubbar auch in eine Maske im Helmaufsatz |
+| `RagItem` | Lappen, nasser Lappen, angepinkelter Lappen |
+| `IHelmetOverlayItem` | Helmvorsatz, weil Forges `renderHelmetOverlay` in 1.21 fehlt |
+
+Registriert sind 16 Anzugteile, drei Schutztücher, drei Lappen, vier Vollmasken, zwei
+Lappenmasken und fünf Filtereinsätze.
+
+**Warum drei Klassen des Originals zu einer geworden sind.** `ArmorGasMask`, `ArmorHazmat` und
+`ArmorHazmatMask` unterscheiden sich nur in zwei Dingen: was sie trotz eingesetztem Filter nicht
+durchlassen, und welches Bild sie über den Schirm legen. Beides kommt jetzt aus dem Bauaufruf.
+`ArmorFSB` — die Basisklasse mit den Satzboni — ist **bewusst nicht** portiert worden: kein
+einziges Teil dieser Runde benutzt einen Satzbonus, die Klasse wäre eine leere Hülle geworden.
+Sie kommt mit dem ersten Satz, der sie braucht (Liquidator, Envsuit, T-51).
+
+**Zwei Fehler auf demselben Weg.** Beide wären erst mit echten Masken sichtbar geworden:
+
+* `ArmorUtil` hat an drei Stellen `isEmpty()` statt `!isEmpty()` geprüft, bevor es einen
+  Helmaufsatz als Maske behandelt. Die Bedingung konnte nie zutreffen — der ganze Aufsatzpfad
+  war tot.
+* `ArmorRegistry.getProtectionFromItem` hat `clone()` auf dem Ergebnis von
+  `hazardClasses.get(filter)` gerufen, ohne auf `null` zu prüfen. Sobald etwas ohne eigene
+  Gefahrenklassen im Gewinde sitzt, wäre das ein Absturz gewesen.
+  `GasMaskItem.isFilterApplicable` lässt jetzt zusätzlich nur noch echte Filtereinsätze zu.
+
+**Noch offen.** Die Kopfmodelle (`ModelGasMask`, `ModelM65`) sind nicht portiert; die Masken
+bleiben am Körper unsichtbar. Statt der lilaschwarzen Ersatztextur einer fehlenden Datei liegt
+eine durchsichtige Rüstungsschicht bei. Schutzbrille und Aschebrille warten auf dieselben
+Modelle und folgen mit ihnen.
