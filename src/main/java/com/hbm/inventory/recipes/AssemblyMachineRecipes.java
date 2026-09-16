@@ -1198,6 +1198,18 @@ public class AssemblyMachineRecipes extends GenericRecipes<GenericRecipe> {
                         new ComparableStack(NtmItems.CIRCUIT_MICROCHIP.get(), 4)
                 ));
 
+        // ---- Runde 144 ----
+        // Original "ass.liquefactor". ANY_TAR wird der Sammeltag der Teersorten, sonst steht
+        // alles unveraendert.
+        this.register(new GenericRecipe("ass.liquefactor").setup(200, 100).outputItems(new ItemStack(NtmBlocks.MACHINE_LIQUEFACTOR, 1))
+                .inputItems(
+                        new ComparableStack(NtmItems.SHELL_STEEL.get(), 4),
+                        new ComparableStack(NtmItems.PLATE_COPPER.get(), 12),
+                        new TagStack(ItemTags.create(ResourceLocation.fromNamespaceAndPath("ntm", "any_tars")), 4),
+                        new ComparableStack(NtmItems.CIRCUIT_CAPACITOR.get(), 12),
+                        new ComparableStack(NtmItems.COIL_TUNGSTEN.get(), 8)
+                ));
+
         // ---- Runde 143 ----
         // Original "ass.pyrooven". Die ueblichen Abbildungen: ANY_HARDPLASTIC wird
         // Polycarbonat, der Desh-Motor wird der gewoehnliche Motor, CHIP_BISMOID wird der

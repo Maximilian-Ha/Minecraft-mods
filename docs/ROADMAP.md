@@ -2923,3 +2923,31 @@ Beide Schirme und der neue Pyroofen benutzen es.
 |---|---|
 | portiert (11) | Bohrturm, Pumpe, Frackingturm, Raffinerie, Fraktionierturm, Zwischenstück, Reformer, Hydrotreater, Vakuumdestille, Verfestiger, **Pyroofen** |
 | offen (4) | Krackturm, Coker, Gasfackel, Verflüssiger |
+
+## Stufe 6 — Runde 144: der Verflüssiger
+
+Das Gegenstück zum Verfestiger, im Aufbau bis auf einen Platz identisch: vier Blöcke hoch auf
+einem Feld, dieselben sechs Anschlüsse. Er macht aus einem festen Gegenstand eine Flüssigkeit —
+Kohle zu Kohlenöl, Teer zu Bitumen, Holz zu Holzessig, Blei und Natrium zu ihren Schmelzen,
+Eis und Schnee zu Wasser, Stein und Obsidian zu Lava. Was in keiner Liste steht, aber essbar
+ist, wird zu Nährflüssigkeit, so viel wie sein Sättigungswert hergibt.
+
+**Abweichungen.**
+
+- **Die leere Glyphidendrüse fehlt** — die gibt es im Port noch nicht.
+- **Das Original kennt zwei Blumen** (`plant_flower` mit den Metadaten 3 und 4) mit 100 und
+  50 mB. Der Port hat nur die eine; sie steht mit den 100 mB der ersten.
+- **Fischöl** kam im Original aus einem Eintrag mit Platzhalter-Metadaten. Im Port sind die vier
+  Fische eigene Gegenstände und stehen einzeln.
+- Die Rezeptliste wird über `AStack` geführt statt über gemischte Schlüssel aus Gegenstand oder
+  OreDictionary-Name; Gegenstand und Tag werden dadurch gleich behandelt.
+- Die Nährflüssigkeit rechnet der Port direkt aus `FoodProperties.saturation()`. In 1.21 steckt
+  in diesem Wert bereits Nährwert mal Faktor mal zwei, die Rechnung des Originals entfällt
+  deshalb.
+
+### Stand der Erdölkette nach Runde 144
+
+| | |
+|---|---|
+| portiert (12) | Bohrturm, Pumpe, Frackingturm, Raffinerie, Fraktionierturm, Zwischenstück, Reformer, Hydrotreater, Vakuumdestille, Verfestiger, Pyroofen, **Verflüssiger** |
+| offen (3) | Krackturm, Coker, Gasfackel |

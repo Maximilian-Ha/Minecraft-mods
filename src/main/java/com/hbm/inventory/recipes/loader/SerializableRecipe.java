@@ -29,6 +29,7 @@ import com.hbm.inventory.recipes.HydrotreatingRecipes;
 import com.hbm.inventory.recipes.VacuumRefineryRecipes;
 import com.hbm.inventory.recipes.SolidificationRecipes;
 import com.hbm.inventory.recipes.PyroOvenRecipes;
+import com.hbm.inventory.recipes.LiquefactionRecipes;
 import com.hbm.inventory.recipes.BreederRecipes;
 import com.hbm.inventory.recipes.FluidBreederRecipes;
 import com.hbm.inventory.recipes.PlasmaForgeRecipes;
@@ -119,6 +120,7 @@ public abstract class SerializableRecipe {
         recipeHandlers.add(new VacuumRefineryRecipes());
         recipeHandlers.add(new SolidificationRecipes());
         recipeHandlers.add(new PyroOvenRecipes());
+        recipeHandlers.add(new LiquefactionRecipes());
         recipeHandlers.add(new FluidBreederRecipes());
         recipeHandlers.add(new BreederRecipes());
     }

@@ -266,6 +266,7 @@ src/main/java/com/hbm/blockentity/machine/oil/MachineHydrotreaterBlockEntity.jav
 src/main/java/com/hbm/blockentity/machine/oil/MachineVacuumDistillBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
 src/main/java/com/hbm/blockentity/machine/oil/MachineFractionTowerBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
 src/main/java/com/hbm/blockentity/machine/oil/MachineSolidifierBlockEntity.java: error: types IEnergyReceiverMK2 and IFluidReceiverMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/oil/MachineLiquefactorBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
 src/main/java/com/hbm/blockentity/machine/oil/MachinePyroOvenBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
 src/main/java/com/hbm/blockentity/machine/oil/OilDrillBaseBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
 src/main/java/com/hbm/blockentity/machine/rbmk/RBMKBoilerBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
