@@ -3084,3 +3084,15 @@ er hat keine Oberfläche, also gibt es keinen. Seine Ansicht trägt den Blocknam
 
 **Damit ist die Erdölkette in jedem Sinn fertig:** jede Maschine des Originals ist portiert, und
 jede Umwandlung ist im Spiel nachschlagbar.
+
+### CI-Stand der Runden 142 bis 148
+
+| Runde | Inhalt | CI |
+|---|---|---|
+| 142 | Verfestiger | ✅ |
+| 143 | Pyroofen | ✅ |
+| 144 | Verflüssiger | ✅ |
+| 145 | Gasfackel | ❌ (fehlender Import, in 146 behoben) |
+| 146 | Verkoker, Berichtigung zu 145, sechste api-check-Regel | ✅ |
+| 147 | Krackturm | ✅ |
+| 148 | neun JEI-Ansichten | ✅ |
