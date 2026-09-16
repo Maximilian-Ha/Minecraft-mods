@@ -180,6 +180,7 @@ public class NtmSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> PIN_BREAK = reg("item.pin_break");
     public static final DeferredHolder<SoundEvent, SoundEvent> UNPACK = reg("item.unpack");
     public static final DeferredHolder<SoundEvent, SoundEvent> UPGRADE_PLUG = reg("item.upgrade_plug"); // plok
+    public static final DeferredHolder<SoundEvent, SoundEvent> FILTER_SCREW = reg("item.gasmask_screw");
     // ALARMS
     public static final DeferredHolder<SoundEvent, SoundEvent> ALARM_HATCH = reg("alarm.hatch"); // RECORDS CATEGORY
     public static final DeferredHolder<SoundEvent, SoundEvent> ALARM_SOYUZED = reg("alarm.soyuzed"); // RECORDS CATEGORY

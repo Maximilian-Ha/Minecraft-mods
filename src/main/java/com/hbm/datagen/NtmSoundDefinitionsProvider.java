@@ -433,6 +433,9 @@ public class NtmSoundDefinitionsProvider extends SoundDefinitionsProvider {
         this.add(NtmSoundEvents.BOLTGUN, SoundDefinition.definition()
                 .with(sound("hbmsntm:tool/boltgun"))
         );
+        this.add(NtmSoundEvents.FILTER_SCREW, SoundDefinition.definition()
+                .with(sound("hbmsntm:tool/gasmask_screw"))
+        );
         this.add(NtmSoundEvents.IGENERATOR_OPERATE, SoundDefinition.definition()
                 .with(sound("hbmsntm:block/igenerator_operate"))
         );

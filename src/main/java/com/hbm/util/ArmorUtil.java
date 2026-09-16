@@ -2,16 +2,20 @@ package com.hbm.util;
 
 import api.hbm.item.IGasMask;
 import com.hbm.handler.ArmorModHandler;
+import com.hbm.items.NtmItems;
 import com.hbm.util.ArmorRegistry.HazardClass;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 
+import java.util.List;
 import java.util.Optional;
 
 public class ArmorUtil {
@@ -21,7 +25,25 @@ public class ArmorUtil {
      */
 
     public static void register() {
-        ArmorRegistry.registerHazard(Items.DIAMOND_HELMET, HazardClass.PARTICLE_COARSE, HazardClass.GAS_LUNG);
+
+        /* Die Filter tragen den eigentlichen Schutz. Die Maske entscheidet nur, was sie
+         * davon durchlaesst -- siehe GasMaskItem.getBlacklist. */
+        ArmorRegistry.registerHazard(NtmItems.GAS_MASK_FILTER.get(), HazardClass.PARTICLE_COARSE, HazardClass.PARTICLE_FINE, HazardClass.GAS_LUNG, HazardClass.GAS_BLISTERING, HazardClass.BACTERIA);
+        ArmorRegistry.registerHazard(NtmItems.GAS_MASK_FILTER_MONO.get(), HazardClass.PARTICLE_COARSE, HazardClass.GAS_MONOXIDE);
+        ArmorRegistry.registerHazard(NtmItems.GAS_MASK_FILTER_COMBO.get(), HazardClass.PARTICLE_COARSE, HazardClass.PARTICLE_FINE, HazardClass.GAS_LUNG, HazardClass.GAS_BLISTERING, HazardClass.BACTERIA, HazardClass.GAS_MONOXIDE);
+        ArmorRegistry.registerHazard(NtmItems.GAS_MASK_FILTER_RAG.get(), HazardClass.PARTICLE_COARSE);
+        ArmorRegistry.registerHazard(NtmItems.GAS_MASK_FILTER_PISS.get(), HazardClass.PARTICLE_COARSE, HazardClass.GAS_LUNG);
+
+        /* Was die Maske von sich aus kann, ganz ohne Filter. */
+        ArmorRegistry.registerHazard(NtmItems.GAS_MASK.get(), HazardClass.SAND, HazardClass.LIGHT);
+        ArmorRegistry.registerHazard(NtmItems.GAS_MASK_M65.get(), HazardClass.SAND);
+        ArmorRegistry.registerHazard(NtmItems.MASK_RAG.get(), HazardClass.PARTICLE_COARSE);
+        ArmorRegistry.registerHazard(NtmItems.MASK_PISS.get(), HazardClass.PARTICLE_COARSE, HazardClass.GAS_LUNG);
+
+        ArmorRegistry.registerHazard(NtmItems.HAZMAT_HELMET.get(), HazardClass.SAND);
+        ArmorRegistry.registerHazard(NtmItems.HAZMAT_HELMET_RED.get(), HazardClass.SAND);
+        ArmorRegistry.registerHazard(NtmItems.HAZMAT_HELMET_GREY.get(), HazardClass.SAND);
+        ArmorRegistry.registerHazard(NtmItems.HAZMAT_PAA_HELMET.get(), HazardClass.LIGHT, HazardClass.SAND);
     }
 
     public static boolean checkArmor(LivingEntity entity, Item... armor) {
@@ -94,7 +116,7 @@ public class ArmorUtil {
 
             ItemStack[] mods = ArmorModHandler.pryMods(entity.level(), mask);
 
-            if (mods[ArmorModHandler.HELMET_ONLY].isEmpty() && mods[ArmorModHandler.HELMET_ONLY].getItem() instanceof IGasMask)
+            if (!mods[ArmorModHandler.HELMET_ONLY].isEmpty() && mods[ArmorModHandler.HELMET_ONLY].getItem() instanceof IGasMask)
                 filter = ((IGasMask)mods[ArmorModHandler.HELMET_ONLY].getItem()).getFilter(mods[ArmorModHandler.HELMET_ONLY], entity);
         }
 
@@ -127,7 +149,7 @@ public class ArmorUtil {
 
                 ItemStack[] mods = ArmorModHandler.pryMods(entity.level(), mask);
 
-                if (mods[ArmorModHandler.HELMET_ONLY].isEmpty() && mods[ArmorModHandler.HELMET_ONLY].getItem() instanceof IGasMask)
+                if (!mods[ArmorModHandler.HELMET_ONLY].isEmpty() && mods[ArmorModHandler.HELMET_ONLY].getItem() instanceof IGasMask)
                     mask = mods[ArmorModHandler.HELMET_ONLY];
             }
         }
@@ -141,7 +163,7 @@ public class ArmorUtil {
             if (ArmorModHandler.hasMods(mask)) {
                 ItemStack[] mods = ArmorModHandler.pryMods(level, mask);
 
-                if (mods[ArmorModHandler.HELMET_ONLY].isEmpty() && mods[ArmorModHandler.HELMET_ONLY].getItem() instanceof IGasMask)
+                if (!mods[ArmorModHandler.HELMET_ONLY].isEmpty() && mods[ArmorModHandler.HELMET_ONLY].getItem() instanceof IGasMask)
                     filter = getGasMaskFilter(level, mods[ArmorModHandler.HELMET_ONLY]);
             }
         }
@@ -158,6 +180,33 @@ public class ArmorUtil {
         }
     }
 
+
+    /**
+     * Portiert aus 1.7.10: ArmorUtil.addGasMaskTooltip.
+     *
+     * Zeigt am Kopfteil, welcher Filter steckt und wie viel von ihm noch uebrig ist.
+     */
+    public static void addGasMaskTooltip(Level level, ItemStack mask, List<Component> components) {
+
+        if(level == null) return;
+        if(!(mask.getItem() instanceof IGasMask)) return;
+
+        ItemStack filter = getGasMaskFilter(level, mask);
+
+        if(filter.isEmpty()) {
+            components.add(Component.translatable("armor.noFilter").withStyle(ChatFormatting.RED));
+            return;
+        }
+
+        components.add(Component.translatable("armor.filter").withStyle(ChatFormatting.GOLD));
+
+        MutableComponent line = Component.literal("  ").append(filter.getHoverName());
+
+        int max = filter.getMaxDamage();
+        if(max > 0) line.append(Component.literal(" (" + ((max - filter.getDamageValue()) * 100 / max) + "%)"));
+
+        components.add(line.withStyle(ChatFormatting.YELLOW));
+    }
 
     public static boolean isWearingEmptyMask(Player player) {
 

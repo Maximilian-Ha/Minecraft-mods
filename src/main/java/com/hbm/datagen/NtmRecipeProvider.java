@@ -42,6 +42,7 @@ public class NtmRecipeProvider extends RecipeProvider {
 
         this.watzParts(recipeOutput);
         this.pileDevices(recipeOutput);
+        this.hazmatGear(recipeOutput);
 
 
         /*
@@ -3087,6 +3088,212 @@ public class NtmRecipeProvider extends RecipeProvider {
 
         builder.unlockedBy("has_ducttape", has(NtmItems.DUCTTAPE.get()))
                 .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_generic_" + mod.name().toLowerCase(Locale.US)));
+    }
+
+
+    /**
+     * Runde 136: Schutzkleidung, Gasmasken und Filter.
+     *
+     * Das gelbe Schutztuch kommt aus der Montagefabrik (ass.hazcloth), alles Weitere aus der
+     * Werkbank -- die Formen sind unveraendert aus ArmorRecipes und ConsumableRecipes des
+     * Originals. KEY_ANYPANE des Originals wird zur Marke c:glass_panes.
+     */
+    private void hazmatGear(RecipeOutput recipeOutput) {
+
+        /* Die beiden besseren Tuecher bauen aufeinander auf. */
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.HAZMAT_CLOTH_RED.get(), 1)
+                .pattern("C")
+                .pattern("R")
+                .pattern("C")
+                .define('C', NtmItems.HAZMAT_CLOTH.get())
+                .define('R', Items.REDSTONE)
+                .unlockedBy("has_hazmat_cloth", has(NtmItems.HAZMAT_CLOTH.get()))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.HAZMAT_CLOTH_GREY.get(), 1)
+                .pattern(" P ")
+                .pattern("ICI")
+                .pattern(" L ")
+                .define('C', NtmItems.HAZMAT_CLOTH_RED.get())
+                .define('P', NtmItems.PLATE_IRON.get())
+                .define('L', NtmItems.PLATE_LEAD.get())
+                .define('I', NtmItems.INGOT_RUBBER.get())
+                .unlockedBy("has_hazmat_cloth_red", has(NtmItems.HAZMAT_CLOTH_RED.get()))
+                .save(recipeOutput);
+
+        /* Die drei Anzuege. Nur der Helm des gelben Anzugs hat eine andere Form als die
+         * beiden anderen -- so ist es auch im Original. */
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.HAZMAT_HELMET.get(), 1)
+                .pattern("EEE")
+                .pattern("EIE")
+                .pattern(" P ")
+                .define('E', NtmItems.HAZMAT_CLOTH.get())
+                .define('I', Tags.Items.GLASS_PANES)
+                .define('P', NtmItems.PLATE_IRON.get())
+                .unlockedBy("has_hazmat_cloth", has(NtmItems.HAZMAT_CLOTH.get()))
+                .save(recipeOutput);
+        hazmatChest(recipeOutput, NtmItems.HAZMAT_PLATE.get(), NtmItems.HAZMAT_CLOTH.get());
+        hazmatLegs(recipeOutput, NtmItems.HAZMAT_LEGS.get(), NtmItems.HAZMAT_CLOTH.get());
+        hazmatBoots(recipeOutput, NtmItems.HAZMAT_BOOTS.get(), NtmItems.HAZMAT_CLOTH.get());
+
+        hazmatHelmet(recipeOutput, NtmItems.HAZMAT_HELMET_RED.get(), NtmItems.HAZMAT_CLOTH_RED.get());
+        hazmatChest(recipeOutput, NtmItems.HAZMAT_PLATE_RED.get(), NtmItems.HAZMAT_CLOTH_RED.get());
+        hazmatLegs(recipeOutput, NtmItems.HAZMAT_LEGS_RED.get(), NtmItems.HAZMAT_CLOTH_RED.get());
+        hazmatBoots(recipeOutput, NtmItems.HAZMAT_BOOTS_RED.get(), NtmItems.HAZMAT_CLOTH_RED.get());
+
+        hazmatHelmet(recipeOutput, NtmItems.HAZMAT_HELMET_GREY.get(), NtmItems.HAZMAT_CLOTH_GREY.get());
+        hazmatChest(recipeOutput, NtmItems.HAZMAT_PLATE_GREY.get(), NtmItems.HAZMAT_CLOTH_GREY.get());
+        hazmatLegs(recipeOutput, NtmItems.HAZMAT_LEGS_GREY.get(), NtmItems.HAZMAT_CLOTH_GREY.get());
+        hazmatBoots(recipeOutput, NtmItems.HAZMAT_BOOTS_GREY.get(), NtmItems.HAZMAT_CLOTH_GREY.get());
+
+        /* Der PAA-Anzug wird aus Platten statt aus Tuch gebaut; sein Helm hat wieder die
+         * Form des gelben. */
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.HAZMAT_PAA_HELMET.get(), 1)
+                .pattern("EEE")
+                .pattern("IEI")
+                .pattern(" P ")
+                .define('E', NtmItems.PLATE_PAA.get())
+                .define('I', Tags.Items.GLASS_PANES)
+                .define('P', NtmItems.PLATE_IRON.get())
+                .unlockedBy("has_plate_paa", has(NtmItems.PLATE_PAA.get()))
+                .save(recipeOutput);
+        hazmatChest(recipeOutput, NtmItems.HAZMAT_PAA_PLATE.get(), NtmItems.PLATE_PAA.get());
+        hazmatLegs(recipeOutput, NtmItems.HAZMAT_PAA_LEGS.get(), NtmItems.PLATE_PAA.get());
+        hazmatBoots(recipeOutput, NtmItems.HAZMAT_PAA_BOOTS.get(), NtmItems.PLATE_PAA.get());
+
+        /* Die vier Masken: gleiche Form, anderes Material. Die Halbmaske hat eine eigene. */
+        gasMask(recipeOutput, NtmItems.GAS_MASK.get(), NtmItems.PLATE_STEEL.get(), NtmItems.PLATE_IRON.get());
+        gasMask(recipeOutput, NtmItems.GAS_MASK_M65.get(), NtmItems.INGOT_RUBBER.get(), NtmItems.PLATE_IRON.get());
+        gasMask(recipeOutput, NtmItems.GAS_MASK_OLDE.get(), Items.LEATHER, Items.IRON_INGOT);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.GAS_MASK_MONO.get(), 1)
+                .pattern(" P ")
+                .pattern("PPP")
+                .pattern(" F ")
+                .define('P', NtmItems.INGOT_RUBBER.get())
+                .define('F', NtmItems.PLATE_IRON.get())
+                .unlockedBy("has_rubber", has(NtmItems.INGOT_RUBBER.get()))
+                .save(recipeOutput);
+
+        /* Der Lappen und was daraus wird. */
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.RAG.get(), 4)
+                .pattern("SW")
+                .pattern("WS")
+                .define('S', Items.STRING)
+                .define('W', ItemTags.WOOL)
+                .unlockedBy("has_string", has(Items.STRING))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.MASK_RAG.get(), 1)
+                .pattern("RRR")
+                .define('R', NtmItems.RAG_DAMP.get())
+                .unlockedBy("has_rag_damp", has(NtmItems.RAG_DAMP.get()))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.MASK_PISS.get(), 1)
+                .pattern("RRR")
+                .define('R', NtmItems.RAG_PISS.get())
+                .unlockedBy("has_rag_piss", has(NtmItems.RAG_PISS.get()))
+                .save(recipeOutput);
+
+        /* Die fuenf Filtereinsaetze. */
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.GAS_MASK_FILTER.get(), 1)
+                .pattern("I")
+                .pattern("F")
+                .define('F', NtmItems.FILTER_COAL.get())
+                .define('I', NtmItems.PLATE_IRON.get())
+                .unlockedBy("has_filter_coal", has(NtmItems.FILTER_COAL.get()))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.GAS_MASK_FILTER_MONO.get(), 1)
+                .pattern("ZZZ")
+                .pattern("ZCZ")
+                .pattern("ZZZ")
+                .define('Z', NtmItems.NUGGET_ZIRCONIUM.get())
+                .define('C', NtmItems.CATALYST_CLAY.get())
+                .unlockedBy("has_catalyst_clay", has(NtmItems.CATALYST_CLAY.get()))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.GAS_MASK_FILTER_COMBO.get(), 1)
+                .pattern("ZCZ")
+                .pattern("CFC")
+                .pattern("ZCZ")
+                .define('Z', NtmItems.INGOT_ZIRCONIUM.get())
+                .define('C', NtmItems.CATALYST_CLAY.get())
+                .define('F', NtmItems.GAS_MASK_FILTER.get())
+                .unlockedBy("has_gas_mask_filter", has(NtmItems.GAS_MASK_FILTER.get()))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.GAS_MASK_FILTER_RAG.get(), 1)
+                .pattern("I")
+                .pattern("F")
+                .define('F', NtmItems.RAG_DAMP.get())
+                .define('I', Items.IRON_INGOT)
+                .unlockedBy("has_rag_damp", has(NtmItems.RAG_DAMP.get()))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.GAS_MASK_FILTER_PISS.get(), 1)
+                .pattern("I")
+                .pattern("F")
+                .define('F', NtmItems.RAG_PISS.get())
+                .define('I', Items.IRON_INGOT)
+                .unlockedBy("has_rag_piss", has(NtmItems.RAG_PISS.get()))
+                .save(recipeOutput);
+    }
+
+    /** Die Helmform der beiden besseren Anzuege: Sichtscheiben seitlich, Platte unten. */
+    private void hazmatHelmet(RecipeOutput recipeOutput, ItemLike result, ItemLike cloth) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, result, 1)
+                .pattern("EEE")
+                .pattern("IEI")
+                .pattern("EFE")
+                .define('E', cloth)
+                .define('I', Tags.Items.GLASS_PANES)
+                .define('F', NtmItems.PLATE_IRON.get())
+                .unlockedBy("has_cloth", has(cloth))
+                .save(recipeOutput);
+    }
+
+    private void hazmatChest(RecipeOutput recipeOutput, ItemLike result, ItemLike cloth) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, result, 1)
+                .pattern("E E")
+                .pattern("EEE")
+                .pattern("EEE")
+                .define('E', cloth)
+                .unlockedBy("has_cloth", has(cloth))
+                .save(recipeOutput);
+    }
+
+    private void hazmatLegs(RecipeOutput recipeOutput, ItemLike result, ItemLike cloth) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, result, 1)
+                .pattern("EEE")
+                .pattern("E E")
+                .pattern("E E")
+                .define('E', cloth)
+                .unlockedBy("has_cloth", has(cloth))
+                .save(recipeOutput);
+    }
+
+    private void hazmatBoots(RecipeOutput recipeOutput, ItemLike result, ItemLike cloth) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, result, 1)
+                .pattern("E E")
+                .pattern("E E")
+                .define('E', cloth)
+                .unlockedBy("has_cloth", has(cloth))
+                .save(recipeOutput);
+    }
+
+    /** Die gemeinsame Form der Vollmasken: Sichtscheiben seitlich, Filtergewinde unten. */
+    private void gasMask(RecipeOutput recipeOutput, ItemLike result, ItemLike body, ItemLike mount) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, result, 1)
+                .pattern("PPP")
+                .pattern("GPG")
+                .pattern(" F ")
+                .define('G', Tags.Items.GLASS_PANES)
+                .define('P', body)
+                .define('F', mount)
+                .unlockedBy("has_body", has(body))
+                .save(recipeOutput);
     }
 
 }

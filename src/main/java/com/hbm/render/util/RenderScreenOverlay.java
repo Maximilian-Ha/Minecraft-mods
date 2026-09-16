@@ -126,4 +126,21 @@ public class RenderScreenOverlay {
         RenderSystem.disableBlend();
         guiGraphics.pose().popPose();
     }
+
+    /**
+     * Portiert aus 1.7.10: der Helmvorsatz von ArmorFSB, ArmorGasMask und ArmorHazmat.
+     *
+     * Das Original zeichnet dafuer von Hand ein Viereck ueber den ganzen Schirm, mit
+     * abgeschaltetem Tiefentest und der ueblichen Alpha-Mischung. Genau das macht blit
+     * hier auch: das ganze 256x256-Bild wird auf die volle Schirmflaeche gezogen.
+     */
+    public static void renderHelmetOverlay(GuiGraphics guiGraphics, ResourceLocation texture) {
+
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+
+        guiGraphics.blit(texture, 0, 0, guiGraphics.guiWidth(), guiGraphics.guiHeight(), 0F, 0F, 256, 256, 256, 256);
+
+        RenderSystem.disableBlend();
+    }
 }

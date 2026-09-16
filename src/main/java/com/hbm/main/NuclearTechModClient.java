@@ -95,6 +95,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
@@ -104,6 +105,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
@@ -129,6 +131,7 @@ import com.hbm.inventory.screens.RBMKConsoleScreen;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent.Stage;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
@@ -322,6 +325,24 @@ public class NuclearTechModClient {
         Player player = NuclearTechMod.proxy.me();
         ItemStack stack = player.getMainHandItem();
         if(stack.getItem() instanceof IHUDItem hudItem) hudItem.renderHUD(event, player, stack);
+    }
+
+    /*
+     * Der Vorsatz des Kopfteils. Das Original haengt an Forges renderHelmetOverlay am
+     * Ruestungsteil selbst; den Aufhaenger gibt es in 1.21 nicht mehr, also wird hier
+     * nach dem Zeichnen der Kameravorsaetze (Kuerbis, Schnee, Feuer) selbst nachgesehen.
+     */
+    @SubscribeEvent
+    public static void onRenderCameraOverlays(RenderGuiLayerEvent.Post event) {
+
+        if(!event.getName().equals(VanillaGuiLayers.CAMERA_OVERLAYS)) return;
+
+        Minecraft mc = Minecraft.getInstance();
+        if(mc.player == null || mc.options.hideGui) return;
+        if(mc.gameMode != null && mc.gameMode.getPlayerMode() == GameType.SPECTATOR) return;
+
+        ItemStack helmet = mc.player.getItemBySlot(EquipmentSlot.HEAD);
+        if(helmet.getItem() instanceof IHelmetOverlayItem overlayItem) overlayItem.renderHelmetOverlay(event.getGuiGraphics(), helmet);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)

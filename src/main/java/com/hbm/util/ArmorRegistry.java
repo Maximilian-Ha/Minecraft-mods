@@ -12,7 +12,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import org.checkerframework.checker.units.qual.C;
 
 import java.util.*;
 
@@ -97,12 +96,18 @@ public class ArmorRegistry {
 
             if (!filter.isEmpty()) {
                 // add the HazardClasses from the filter, then remove the ones blacklisted by the mask
-                List<HazardClass> filProt = (List<HazardClass>) hazardClasses.get(filter.getItem()).clone();
+                // Ein Einsatz ohne eigene Gefahrenklassen schuetzt vor nichts -- das ist kein Fehler,
+                // sondern der Normalfall fuer alles, was kein Filter ist.
+                ArrayList<HazardClass> filterProt = hazardClasses.get(filter.getItem());
 
-                for (HazardClass clazz : gasMask.getBlacklist(stack, entity))
-                    filProt.remove(clazz);
+                if (filterProt != null) {
+                    List<HazardClass> filProt = new ArrayList<>(filterProt);
 
-                prot.addAll(filProt);
+                    for (HazardClass clazz : gasMask.getBlacklist(stack, entity))
+                        filProt.remove(clazz);
+
+                    prot.addAll(filProt);
+                }
             }
         }
 

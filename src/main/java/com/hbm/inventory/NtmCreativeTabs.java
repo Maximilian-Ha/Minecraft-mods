@@ -1695,6 +1695,39 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.METEOR_CHARM);
                         output.accept(NtmItems.PROTECTION_CHARM);
 
+                        /* Schutzkleidung: Anzuege, Masken und Filter. */
+                        output.accept(NtmItems.NO9);
+                        output.accept(NtmItems.HAZMAT_HELMET);
+                        output.accept(NtmItems.HAZMAT_PLATE);
+                        output.accept(NtmItems.HAZMAT_LEGS);
+                        output.accept(NtmItems.HAZMAT_BOOTS);
+                        output.accept(NtmItems.HAZMAT_HELMET_RED);
+                        output.accept(NtmItems.HAZMAT_PLATE_RED);
+                        output.accept(NtmItems.HAZMAT_LEGS_RED);
+                        output.accept(NtmItems.HAZMAT_BOOTS_RED);
+                        output.accept(NtmItems.HAZMAT_HELMET_GREY);
+                        output.accept(NtmItems.HAZMAT_PLATE_GREY);
+                        output.accept(NtmItems.HAZMAT_LEGS_GREY);
+                        output.accept(NtmItems.HAZMAT_BOOTS_GREY);
+                        output.accept(NtmItems.HAZMAT_PAA_HELMET);
+                        output.accept(NtmItems.HAZMAT_PAA_PLATE);
+                        output.accept(NtmItems.HAZMAT_PAA_LEGS);
+                        output.accept(NtmItems.HAZMAT_PAA_BOOTS);
+                        output.accept(NtmItems.GAS_MASK);
+                        output.accept(NtmItems.GAS_MASK_M65);
+                        output.accept(NtmItems.GAS_MASK_MONO);
+                        output.accept(NtmItems.GAS_MASK_OLDE);
+                        output.accept(NtmItems.MASK_RAG);
+                        output.accept(NtmItems.MASK_PISS);
+                        output.accept(NtmItems.GAS_MASK_FILTER);
+                        output.accept(NtmItems.GAS_MASK_FILTER_MONO);
+                        output.accept(NtmItems.GAS_MASK_FILTER_COMBO);
+                        output.accept(NtmItems.GAS_MASK_FILTER_RAG);
+                        output.accept(NtmItems.GAS_MASK_FILTER_PISS);
+                        output.accept(NtmItems.RAG);
+                        output.accept(NtmItems.RAG_DAMP);
+                        output.accept(NtmItems.RAG_PISS);
+
                         output.accept(NtmItems.BALEFIRE_AND_STEEL);
 
                         addMetaItems(output, NtmItems.DRINK.get());
@@ -1815,6 +1848,9 @@ public class NtmCreativeTabs {
         output.accept(NtmItems.PLATE_ARMOR_HEV);
         output.accept(NtmItems.PLATE_ARMOR_LUNAR);
         output.accept(NtmItems.PLATE_ARMOR_TITANIUM);
+        output.accept(NtmItems.HAZMAT_CLOTH);
+        output.accept(NtmItems.HAZMAT_CLOTH_RED);
+        output.accept(NtmItems.HAZMAT_CLOTH_GREY);
         output.accept(NtmItems.PLATE_DALEKANIUM);
         output.accept(NtmItems.PLATE_DESH);
         output.accept(NtmItems.PLATE_DINEUTRONIUM);

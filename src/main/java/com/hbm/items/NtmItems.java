@@ -13,7 +13,10 @@ import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.ItemEnums.CapType;
 import com.hbm.items.ItemEnums.CasingType;
 import com.hbm.items.armor.ArmorNo9;
+import com.hbm.items.armor.FilterItem;
+import com.hbm.items.armor.GasMaskItem;
 import com.hbm.items.armor.ModCharmItem;
+import com.hbm.items.armor.NtmArmorMaterials;
 import com.hbm.items.food.ConserveItem;
 import com.hbm.items.food.DrinkItem;
 import com.hbm.items.food.EnergyItem;
@@ -1229,6 +1232,79 @@ public class NtmItems {
     public static DeferredItem<Item> GUN_MK108;
 
     public static final DeferredItem<Item> NO9 = ITEMS.register("no9", () -> new ArmorNo9(ArmorMaterials.IRON));
+
+    /* ---- Schutzkleidung: Schutzanzug, Gasmasken, Filter ---------------------------- */
+
+    /* Das Tuch ist zugleich Baustoff und Reparaturmaterial des jeweiligen Anzugs. */
+    public static final DeferredItem<Item> HAZMAT_CLOTH = ITEMS.register("hazmat_cloth", () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> HAZMAT_CLOTH_RED = ITEMS.register("hazmat_cloth_red", () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> HAZMAT_CLOTH_GREY = ITEMS.register("hazmat_cloth_grey", () -> new Item(new Item.Properties()));
+
+    /* Der Lappen und seine beiden Zustaende. Nass wird er von selbst, wenn er im
+     * Wasser liegt; der andere Weg ist ein Rechtsklick. */
+    public static final DeferredItem<Item> RAG = ITEMS.register("rag", () -> new RagItem(new Item.Properties()));
+    public static final DeferredItem<Item> RAG_DAMP = ITEMS.register("rag_damp", () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> RAG_PISS = ITEMS.register("rag_piss", () -> new Item(new Item.Properties()));
+
+    /* Die Haube des gelben Anzugs traegt ein Filtergewinde und einen Sichtvorsatz.
+     * Die Haube schraenkt den Filter nicht ein -- sie sitzt ueber dem ganzen Kopf. */
+    public static final DeferredItem<Item> HAZMAT_HELMET = ITEMS.register("hazmat_helmet", () -> new GasMaskItem(NtmArmorMaterials.HAZMAT, hazmatProperties(ArmorItem.Type.HELMET), List.of(), GasMaskItem.OVERLAY_HAZMAT));
+    public static final DeferredItem<Item> HAZMAT_PLATE = ITEMS.register("hazmat_plate", () -> new ArmorItem(NtmArmorMaterials.HAZMAT, ArmorItem.Type.CHESTPLATE, hazmatProperties(ArmorItem.Type.CHESTPLATE)));
+    public static final DeferredItem<Item> HAZMAT_LEGS = ITEMS.register("hazmat_legs", () -> new ArmorItem(NtmArmorMaterials.HAZMAT, ArmorItem.Type.LEGGINGS, hazmatProperties(ArmorItem.Type.LEGGINGS)));
+    public static final DeferredItem<Item> HAZMAT_BOOTS = ITEMS.register("hazmat_boots", () -> new ArmorItem(NtmArmorMaterials.HAZMAT, ArmorItem.Type.BOOTS, hazmatProperties(ArmorItem.Type.BOOTS)));
+
+    /* Rot und grau tragen im Original ein eigenes Kopfmodell und haben deshalb
+     * keinen Sichtvorsatz. */
+    public static final DeferredItem<Item> HAZMAT_HELMET_RED = ITEMS.register("hazmat_helmet_red", () -> new GasMaskItem(NtmArmorMaterials.HAZMAT_RED, hazmatProperties(ArmorItem.Type.HELMET), List.of()));
+    public static final DeferredItem<Item> HAZMAT_PLATE_RED = ITEMS.register("hazmat_plate_red", () -> new ArmorItem(NtmArmorMaterials.HAZMAT_RED, ArmorItem.Type.CHESTPLATE, hazmatProperties(ArmorItem.Type.CHESTPLATE)));
+    public static final DeferredItem<Item> HAZMAT_LEGS_RED = ITEMS.register("hazmat_legs_red", () -> new ArmorItem(NtmArmorMaterials.HAZMAT_RED, ArmorItem.Type.LEGGINGS, hazmatProperties(ArmorItem.Type.LEGGINGS)));
+    public static final DeferredItem<Item> HAZMAT_BOOTS_RED = ITEMS.register("hazmat_boots_red", () -> new ArmorItem(NtmArmorMaterials.HAZMAT_RED, ArmorItem.Type.BOOTS, hazmatProperties(ArmorItem.Type.BOOTS)));
+
+    public static final DeferredItem<Item> HAZMAT_HELMET_GREY = ITEMS.register("hazmat_helmet_grey", () -> new GasMaskItem(NtmArmorMaterials.HAZMAT_GREY, hazmatProperties(ArmorItem.Type.HELMET), List.of()));
+    public static final DeferredItem<Item> HAZMAT_PLATE_GREY = ITEMS.register("hazmat_plate_grey", () -> new ArmorItem(NtmArmorMaterials.HAZMAT_GREY, ArmorItem.Type.CHESTPLATE, hazmatProperties(ArmorItem.Type.CHESTPLATE)));
+    public static final DeferredItem<Item> HAZMAT_LEGS_GREY = ITEMS.register("hazmat_legs_grey", () -> new ArmorItem(NtmArmorMaterials.HAZMAT_GREY, ArmorItem.Type.LEGGINGS, hazmatProperties(ArmorItem.Type.LEGGINGS)));
+    public static final DeferredItem<Item> HAZMAT_BOOTS_GREY = ITEMS.register("hazmat_boots_grey", () -> new ArmorItem(NtmArmorMaterials.HAZMAT_GREY, ArmorItem.Type.BOOTS, hazmatProperties(ArmorItem.Type.BOOTS)));
+
+    /* Der PAA-Anzug: dieselbe Haube, aber gepanzert und langlebiger. */
+    public static final DeferredItem<Item> HAZMAT_PAA_HELMET = ITEMS.register("hazmat_paa_helmet", () -> new GasMaskItem(NtmArmorMaterials.HAZMAT_PAA, paaProperties(ArmorItem.Type.HELMET), List.of(), GasMaskItem.OVERLAY_HAZMAT));
+    public static final DeferredItem<Item> HAZMAT_PAA_PLATE = ITEMS.register("hazmat_paa_plate", () -> new ArmorItem(NtmArmorMaterials.HAZMAT_PAA, ArmorItem.Type.CHESTPLATE, paaProperties(ArmorItem.Type.CHESTPLATE)));
+    public static final DeferredItem<Item> HAZMAT_PAA_LEGS = ITEMS.register("hazmat_paa_legs", () -> new ArmorItem(NtmArmorMaterials.HAZMAT_PAA, ArmorItem.Type.LEGGINGS, paaProperties(ArmorItem.Type.LEGGINGS)));
+    public static final DeferredItem<Item> HAZMAT_PAA_BOOTS = ITEMS.register("hazmat_paa_boots", () -> new ArmorItem(NtmArmorMaterials.HAZMAT_PAA, ArmorItem.Type.BOOTS, paaProperties(ArmorItem.Type.BOOTS)));
+
+    /* Die Masken. Alle bis auf die Monoxidmaske lassen aetzende Gase durch, weil die
+     * auch die Haut angreifen; die Monoxidmaske ist nur ein Kohlefilter. */
+    public static final DeferredItem<Item> GAS_MASK = ITEMS.register("gas_mask", () -> new GasMaskItem(NtmArmorMaterials.MASK, maskProperties(), GasMaskItem.standardBlacklist(), GasMaskItem.OVERLAY_GASMASK));
+    public static final DeferredItem<Item> GAS_MASK_M65 = ITEMS.register("gas_mask_m65", () -> new GasMaskItem(NtmArmorMaterials.MASK, maskProperties(), GasMaskItem.standardBlacklist(), GasMaskItem.OVERLAY_GOGGLES));
+    public static final DeferredItem<Item> GAS_MASK_MONO = ITEMS.register("gas_mask_mono", () -> new GasMaskItem(NtmArmorMaterials.MASK, maskProperties(), GasMaskItem.monoxideBlacklist()));
+    public static final DeferredItem<Item> GAS_MASK_OLDE = ITEMS.register("gas_mask_olde", () -> new GasMaskItem(NtmArmorMaterials.MASK, maskProperties(), GasMaskItem.standardBlacklist()));
+
+    /* Lappen vor dem Gesicht: kein Gewinde, kein Filter, nur der Schutz, den der
+     * Lappen selbst mitbringt. */
+    public static final DeferredItem<Item> MASK_RAG = ITEMS.register("mask_rag", () -> new ArmorItem(NtmArmorMaterials.RAGS, ArmorItem.Type.HELMET, ragsProperties()));
+    public static final DeferredItem<Item> MASK_PISS = ITEMS.register("mask_piss", () -> new ArmorItem(NtmArmorMaterials.RAGS, ArmorItem.Type.HELMET, ragsProperties()));
+
+    public static final DeferredItem<Item> GAS_MASK_FILTER = ITEMS.register("gas_mask_filter", () -> new FilterItem(new Item.Properties()));
+    public static final DeferredItem<Item> GAS_MASK_FILTER_MONO = ITEMS.register("gas_mask_filter_mono", () -> new FilterItem(new Item.Properties()));
+    public static final DeferredItem<Item> GAS_MASK_FILTER_COMBO = ITEMS.register("gas_mask_filter_combo", () -> new FilterItem(new Item.Properties()));
+    public static final DeferredItem<Item> GAS_MASK_FILTER_RAG = ITEMS.register("gas_mask_filter_rag", () -> new FilterItem(new Item.Properties()));
+    public static final DeferredItem<Item> GAS_MASK_FILTER_PISS = ITEMS.register("gas_mask_filter_piss", () -> new FilterItem(new Item.Properties()));
+
+    private static Item.Properties hazmatProperties(ArmorItem.Type type) {
+        return new Item.Properties().durability(type.getDurability(NtmArmorMaterials.DURABILITY_HAZMAT));
+    }
+
+    private static Item.Properties paaProperties(ArmorItem.Type type) {
+        return new Item.Properties().durability(type.getDurability(NtmArmorMaterials.DURABILITY_PAA));
+    }
+
+    private static Item.Properties maskProperties() {
+        return new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(NtmArmorMaterials.DURABILITY_MASK));
+    }
+
+    private static Item.Properties ragsProperties() {
+        return new Item.Properties().stacksTo(1).durability(ArmorItem.Type.HELMET.getDurability(NtmArmorMaterials.DURABILITY_RAGS));
+    }
+
 
     public static final DeferredItem<Item> PLATE_POLYMER = ITEMS.register("plate_polymer", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> INSULATOR = PLATE_POLYMER;

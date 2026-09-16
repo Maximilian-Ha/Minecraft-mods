@@ -789,6 +789,41 @@ public class NtmItemModelProvider extends ItemModelProvider {
          * Wuerfel gewesen. Ihre Bilder tragen im Original dieselben Namen. */
         this.basicItem(NtmItems.BLUEPRINTS.get());
         this.basicItem(NtmItems.NO9.get());
+
+        /* Schutzkleidung, Gasmasken und Filter. */
+        this.basicItem(NtmItems.HAZMAT_CLOTH.get());
+        this.basicItem(NtmItems.HAZMAT_CLOTH_RED.get());
+        this.basicItem(NtmItems.HAZMAT_CLOTH_GREY.get());
+        this.basicItem(NtmItems.RAG.get());
+        this.basicItem(NtmItems.RAG_DAMP.get());
+        this.basicItem(NtmItems.RAG_PISS.get());
+        this.basicItem(NtmItems.HAZMAT_HELMET.get());
+        this.basicItem(NtmItems.HAZMAT_PLATE.get());
+        this.basicItem(NtmItems.HAZMAT_LEGS.get());
+        this.basicItem(NtmItems.HAZMAT_BOOTS.get());
+        this.basicItem(NtmItems.HAZMAT_HELMET_RED.get());
+        this.basicItem(NtmItems.HAZMAT_PLATE_RED.get());
+        this.basicItem(NtmItems.HAZMAT_LEGS_RED.get());
+        this.basicItem(NtmItems.HAZMAT_BOOTS_RED.get());
+        this.basicItem(NtmItems.HAZMAT_HELMET_GREY.get());
+        this.basicItem(NtmItems.HAZMAT_PLATE_GREY.get());
+        this.basicItem(NtmItems.HAZMAT_LEGS_GREY.get());
+        this.basicItem(NtmItems.HAZMAT_BOOTS_GREY.get());
+        this.basicItem(NtmItems.HAZMAT_PAA_HELMET.get());
+        this.basicItem(NtmItems.HAZMAT_PAA_PLATE.get());
+        this.basicItem(NtmItems.HAZMAT_PAA_LEGS.get());
+        this.basicItem(NtmItems.HAZMAT_PAA_BOOTS.get());
+        this.basicItem(NtmItems.GAS_MASK.get());
+        this.basicItem(NtmItems.GAS_MASK_M65.get());
+        this.basicItem(NtmItems.GAS_MASK_MONO.get());
+        this.basicItem(NtmItems.GAS_MASK_OLDE.get());
+        this.basicItem(NtmItems.MASK_RAG.get());
+        this.basicItem(NtmItems.MASK_PISS.get());
+        this.basicItem(NtmItems.GAS_MASK_FILTER.get());
+        this.basicItem(NtmItems.GAS_MASK_FILTER_MONO.get());
+        this.basicItem(NtmItems.GAS_MASK_FILTER_COMBO.get());
+        this.basicItem(NtmItems.GAS_MASK_FILTER_RAG.get());
+        this.basicItem(NtmItems.GAS_MASK_FILTER_PISS.get());
         this.basicItem(NtmItems.PLAN_C.get());
 
         this.withExistingParent("conveyor_wand", mcLoc("item/generated")).texture("layer0", modLoc("block/conveyor"));

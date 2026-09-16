@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonWriter;
+import com.hbm.items.NtmItems;
 import com.hbm.items.armor.ItemModCladding;
 import com.hbm.lib.ModEffect;
 import com.hbm.main.NuclearTechMod;
@@ -52,6 +53,38 @@ public class HazmatRegistry {
         HazmatRegistry.registerHazmat(Items.IRON_CHESTPLATE, iron * chest);
         HazmatRegistry.registerHazmat(Items.IRON_LEGGINGS, iron * legs);
         HazmatRegistry.registerHazmat(Items.IRON_BOOTS, iron * boots);
+
+        /* Die Schutzanzuege. Die Prozentangaben stammen aus dem Original und beziehen
+         * sich auf den ganzen Satz; die Zahl davor ist der Wert, der mit dem Anteil des
+         * jeweiligen Teils multipliziert wird. */
+        double hazYellow = 0.6D;    // 50%
+        double hazRed = 1.0D;       // 90%
+        double hazGrey = 2.0D;      // 99%
+        double paa = 1.7D;          // 97%
+
+        HazmatRegistry.registerHazmat(NtmItems.HAZMAT_HELMET.get(), hazYellow * helmet);
+        HazmatRegistry.registerHazmat(NtmItems.HAZMAT_PLATE.get(), hazYellow * chest);
+        HazmatRegistry.registerHazmat(NtmItems.HAZMAT_LEGS.get(), hazYellow * legs);
+        HazmatRegistry.registerHazmat(NtmItems.HAZMAT_BOOTS.get(), hazYellow * boots);
+
+        HazmatRegistry.registerHazmat(NtmItems.HAZMAT_HELMET_RED.get(), hazRed * helmet);
+        HazmatRegistry.registerHazmat(NtmItems.HAZMAT_PLATE_RED.get(), hazRed * chest);
+        HazmatRegistry.registerHazmat(NtmItems.HAZMAT_LEGS_RED.get(), hazRed * legs);
+        HazmatRegistry.registerHazmat(NtmItems.HAZMAT_BOOTS_RED.get(), hazRed * boots);
+
+        HazmatRegistry.registerHazmat(NtmItems.HAZMAT_HELMET_GREY.get(), hazGrey * helmet);
+        HazmatRegistry.registerHazmat(NtmItems.HAZMAT_PLATE_GREY.get(), hazGrey * chest);
+        HazmatRegistry.registerHazmat(NtmItems.HAZMAT_LEGS_GREY.get(), hazGrey * legs);
+        HazmatRegistry.registerHazmat(NtmItems.HAZMAT_BOOTS_GREY.get(), hazGrey * boots);
+
+        HazmatRegistry.registerHazmat(NtmItems.HAZMAT_PAA_HELMET.get(), paa * helmet);
+        HazmatRegistry.registerHazmat(NtmItems.HAZMAT_PAA_PLATE.get(), paa * chest);
+        HazmatRegistry.registerHazmat(NtmItems.HAZMAT_PAA_LEGS.get(), paa * legs);
+        HazmatRegistry.registerHazmat(NtmItems.HAZMAT_PAA_BOOTS.get(), paa * boots);
+
+        /* Die beiden Masken schirmen auch ein wenig ab, ganz ohne Anzug. */
+        HazmatRegistry.registerHazmat(NtmItems.GAS_MASK.get(), 0.07D);
+        HazmatRegistry.registerHazmat(NtmItems.GAS_MASK_M65.get(), 0.095D);
     }
 
     private static final HashMap<Item, Double> ENTRIES = new HashMap<>();

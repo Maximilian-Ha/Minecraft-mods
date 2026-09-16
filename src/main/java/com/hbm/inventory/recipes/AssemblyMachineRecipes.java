@@ -1142,6 +1142,15 @@ public class AssemblyMachineRecipes extends GenericRecipes<GenericRecipe> {
                 new ComparableStack(NtmItems.INGOT_BISMUTH.get(), 4));
         drillbitDiamond("ass.drillferrodiamond", DrillbitItem.EnumDrillType.FERRO, DrillbitItem.EnumDrillType.FERRO_DIAMOND, 56);
 
+        // ---- Runde 136 ----
+        // Original "ass.hazcloth": Bleistaub in Faden eingewebt. Das ist der einzige Weg
+        // zum gelben Schutztuch; rot und grau werden daraus in der Werkbank weitergebaut.
+        this.register(new GenericRecipe("ass.hazcloth").setup(50, 100).outputItems(new ItemStack(NtmItems.HAZMAT_CLOTH.get(), 4))
+                .inputItems(
+                        new ComparableStack(NtmItems.POWDER_LEAD.get(), 4),
+                        new ComparableStack(Items.STRING, 8)
+                ));
+
         FluidType[] order = Fluids.getInNiceOrder();
         for(int i = 1; i < order.length; ++i) {
             FluidType type = order[i];

@@ -3495,6 +3495,23 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("trait.radioactive", "Radioactive");
         this.add("trait.radResistance", "Radiation resistance: %s");
 
+        /* Die Gefahrenklassen aus ArmorRegistry.HazardClass und die Zeilen, die
+         * ArmorRegistry.addTooltip und ArmorUtil.addGasMaskTooltip darum herum setzen. */
+        this.add("hazard.protect", "Protects against hazards:");
+        this.add("hazard.neverProtects", "Will never protect against:");
+        this.add("hazard.bacteria", "Bacteria / Aerosols");
+        this.add("hazard.corrosive", "Corrosive Fumes");
+        this.add("hazard.gas_chlorine", "Chemical Gas");
+        this.add("hazard.gas_inert", "Inert Gas / Asphyxiants");
+        this.add("hazard.gas_monoxide", "Carbon Monoxide");
+        this.add("hazard.light", "Bright Lights");
+        this.add("hazard.particle_coarse", "Airborne Particles");
+        this.add("hazard.particle_fine", "Particulates");
+        this.add("hazard.sand", "Eye Irritants");
+
+        this.add("armor.filter", "Installed filter:");
+        this.add("armor.noFilter", "No filter installed!");
+
         this.add("bomb.detonated", "Detonated successfully!");
         this.add("bomb.triggered", "Triggered successfully!");
         this.add("bomb.launched", "Launched successfully!");
@@ -3559,6 +3576,41 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.ROD_ZIRNOX_THORIUM_FUEL_DEPLETED, "Depleted ZIRNOX Thorium Fuel Rod");
         this.add(NtmItems.ROD_ZIRNOX_ZFB_MOX_DEPLETED, "Depleted ZIRNOX ZFB MOX Fuel Rod");
         this.add(NtmItems.NO9, "Mining Helmet");
+
+        this.add(NtmItems.HAZMAT_CLOTH, "Hazmat Cloth");
+        this.add(NtmItems.HAZMAT_CLOTH_RED, "Advanced Hazmat Cloth");
+        this.add(NtmItems.HAZMAT_CLOTH_GREY, "Lead-Reinforced Hazmat Cloth");
+        this.add(NtmItems.RAG, "Cloth");
+        this.add(NtmItems.RAG, ".desc", "Drop into water to make damp cloth.$Right-click to urinate on the cloth.");
+        this.add(NtmItems.RAG_DAMP, "Damp Cloth");
+        this.add(NtmItems.RAG_PISS, "Piss-Soaked Rag");
+        this.add(NtmItems.HAZMAT_HELMET, "Hazmat Helmet");
+        this.add(NtmItems.HAZMAT_PLATE, "Hazmat Chestplate");
+        this.add(NtmItems.HAZMAT_LEGS, "Hazmat Leggings");
+        this.add(NtmItems.HAZMAT_BOOTS, "Hazmat Boots");
+        this.add(NtmItems.HAZMAT_HELMET_RED, "Advanced Hazmat Helmet");
+        this.add(NtmItems.HAZMAT_PLATE_RED, "Advanced Hazmat Chestplate");
+        this.add(NtmItems.HAZMAT_LEGS_RED, "Advanced Hazmat Leggings");
+        this.add(NtmItems.HAZMAT_BOOTS_RED, "Advanced Hazmat Boots");
+        this.add(NtmItems.HAZMAT_HELMET_GREY, "High-Performance Hazmat Helmet");
+        this.add(NtmItems.HAZMAT_PLATE_GREY, "High-Performance Hazmat Chestplate");
+        this.add(NtmItems.HAZMAT_LEGS_GREY, "High-Performance Hazmat Leggings");
+        this.add(NtmItems.HAZMAT_BOOTS_GREY, "High-Performance Hazmat Boots");
+        this.add(NtmItems.HAZMAT_PAA_HELMET, "PaA Battle Hazmat Suit Helmet");
+        this.add(NtmItems.HAZMAT_PAA_PLATE, "PaA Battle Hazmat Suit Chestplate");
+        this.add(NtmItems.HAZMAT_PAA_LEGS, "PaA Battle Hazmat Suit Leggings");
+        this.add(NtmItems.HAZMAT_PAA_BOOTS, "PaA Battle Hazmat Suit Boots");
+        this.add(NtmItems.GAS_MASK, "Gas Mask");
+        this.add(NtmItems.GAS_MASK_M65, "M65 Gas Mask");
+        this.add(NtmItems.GAS_MASK_MONO, "Half Mask");
+        this.add(NtmItems.GAS_MASK_OLDE, "Leather Gas Mask");
+        this.add(NtmItems.MASK_RAG, "Crude Protective Mask");
+        this.add(NtmItems.MASK_PISS, "Trench Mask");
+        this.add(NtmItems.GAS_MASK_FILTER, "Gas Mask Filter");
+        this.add(NtmItems.GAS_MASK_FILTER_MONO, "Catalytic Mask Filter");
+        this.add(NtmItems.GAS_MASK_FILTER_COMBO, "Gas Mask Combo Filter");
+        this.add(NtmItems.GAS_MASK_FILTER_RAG, "Makeshift Gas Mask Filter");
+        this.add(NtmItems.GAS_MASK_FILTER_PISS, "Advanced Makeshift Gas Mask Filter");
         this.add(NtmItems.PLAN_C, "Plan C");
         this.add(NtmItems.CASSETTE, "Cassette");
         this.add(NtmItems.FLUID_ICON, "Fluid");
