@@ -2,6 +2,7 @@ package com.zuxelus.energycontrol.client;
 
 import com.zuxelus.energycontrol.EnergyControl;
 import com.zuxelus.energycontrol.client.renderer.InfoPanelRenderer;
+import com.zuxelus.energycontrol.client.screens.EnergyCounterScreen;
 import com.zuxelus.energycontrol.client.screens.InfoPanelScreen;
 import com.zuxelus.energycontrol.client.screens.RangeTriggerScreen;
 import com.zuxelus.energycontrol.client.screens.ThermalMonitorScreen;
@@ -22,6 +23,7 @@ public class EnergyControlClient {
         event.register(ECMenuTypes.INFO_PANEL.get(), InfoPanelScreen::new);
         event.register(ECMenuTypes.THERMAL_MONITOR.get(), ThermalMonitorScreen::new);
         event.register(ECMenuTypes.RANGE_TRIGGER.get(), RangeTriggerScreen::new);
+        event.register(ECMenuTypes.ENERGY_COUNTER.get(), EnergyCounterScreen::new);
     }
 
     @SubscribeEvent

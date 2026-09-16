@@ -16,5 +16,10 @@ public class ECCapabilities {
                 (be, side) -> be.getEnergyStorage());
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ECBlockEntityTypes.RANGE_TRIGGER.get(),
                 (be, side) -> be.getEnergyStorage());
+
+        // Der Zaehler nimmt auf allen Seiten ausser der Schauseite an; abgeben laesst er
+        // sich nirgends -- er schiebt selbst weiter.
+        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ECBlockEntityTypes.ENERGY_COUNTER.get(),
+                (be, side) -> be.getEnergyStorage(side));
     }
 }

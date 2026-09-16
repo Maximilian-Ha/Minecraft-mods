@@ -2,7 +2,7 @@
 # Nachweislich unschaedliche javac-Folgefehler aus der fehlenden Minecraft-/NeoForge-API.
 # JEDE Zeile hier wurde manuell geprueft. Nichts ungeprueft hinzufuegen.
 #
-# "recursive constructor invocation" in den drei Menue-Klassen:
+# "recursive constructor invocation" in den Menue-Klassen:
 # Jede hat zwei Konstruktoren -- (int, Inventory, FriendlyByteBuf) fuer den Aufruf durch
 # NeoForge und (int, Inventory, XBlockEntity) fuer den Aufruf durch die Block-Entitaet.
 # Der erste delegiert an den zweiten. Ohne die Minecraft-API kennt javac den Typ des
@@ -13,3 +13,4 @@
 src/main/java/com/zuxelus/energycontrol/menus/InfoPanelMenu.java: error: recursive constructor invocation
 src/main/java/com/zuxelus/energycontrol/menus/RangeTriggerMenu.java: error: recursive constructor invocation
 src/main/java/com/zuxelus/energycontrol/menus/ThermalMonitorMenu.java: error: recursive constructor invocation
+src/main/java/com/zuxelus/energycontrol/menus/EnergyCounterMenu.java: error: recursive constructor invocation

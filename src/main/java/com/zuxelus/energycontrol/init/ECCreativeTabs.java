@@ -24,7 +24,9 @@ public class ECCreativeTabs {
                         output.accept(ECBlocks.INFO_PANEL.get());
                         output.accept(ECBlocks.INFO_PANEL_EXTENDER.get());
                         output.accept(ECBlocks.THERMAL_MONITOR.get());
+                        output.accept(ECBlocks.REMOTE_THERMAL_MONITOR.get());
                         output.accept(ECBlocks.RANGE_TRIGGER.get());
+                        output.accept(ECBlocks.ENERGY_COUNTER.get());
                         output.accept(ECBlocks.HOWLER_ALARM.get());
                         output.accept(ECBlocks.INDUSTRIAL_ALARM.get());
 
@@ -38,6 +40,7 @@ public class ECCreativeTabs {
                         output.accept(ECItems.CARD_TOGGLE.get());
                         output.accept(ECItems.CARD_HBM.get());
                         output.accept(ECItems.CARD_MEKANISM.get());
+                        output.accept(ECItems.CARD_COUNTER.get());
 
                         output.accept(ECItems.KIT_ENERGY.get());
                         output.accept(ECItems.KIT_LIQUID.get());
@@ -47,6 +50,7 @@ public class ECCreativeTabs {
                         output.accept(ECItems.KIT_TOGGLE.get());
                         output.accept(ECItems.KIT_HBM.get());
                         output.accept(ECItems.KIT_MEKANISM.get());
+                        output.accept(ECItems.KIT_COUNTER.get());
 
                         output.accept(ECItems.UPGRADE_RANGE.get());
                         output.accept(ECItems.UPGRADE_COLOR.get());

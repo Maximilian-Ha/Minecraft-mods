@@ -29,7 +29,9 @@ public class ECBlockStateProvider extends BlockStateProvider {
     protected void registerStatesAndModels() {
         infoPanel();
         thermalMonitor();
+        remoteThermalMonitor();
         rangeTrigger();
+        energyCounter();
 
         alarm(ECBlocks.HOWLER_ALARM.get(), "howler_alarm",
                 block("howler_alarm_side"), block("howler_alarm_face"), block("howler_alarm_back"));
@@ -66,6 +68,25 @@ public class ECBlockStateProvider extends BlockStateProvider {
                         .build());
 
         simpleBlockItem(ECBlocks.THERMAL_MONITOR.get(), models[0]);
+    }
+
+    /**
+     * Die Fernwaermeanzeige traegt ihren Zustand nicht in der Textur -- das Original hat
+     * dafuer nur zwei Bilder. Die Schauseite zeigt dorthin, wo der Block gesetzt wurde.
+     */
+    private void remoteThermalMonitor() {
+        ModelFile model = models().orientable("remote_thermal_monitor",
+                block("remote_thermal_monitor_all"), block("remote_thermal_monitor_face"), block("remote_thermal_monitor_all"));
+        directionalBlock(ECBlocks.REMOTE_THERMAL_MONITOR.get(), state -> model);
+        simpleBlockItem(ECBlocks.REMOTE_THERMAL_MONITOR.get(), model);
+    }
+
+    /** Der Zaehler gibt auf der Schauseite ab; dort steht "output", sonst "input". */
+    private void energyCounter() {
+        ModelFile model = models().orientable("energy_counter",
+                block("energy_counter_input"), block("energy_counter_output"), block("energy_counter_input"));
+        directionalBlock(ECBlocks.ENERGY_COUNTER.get(), state -> model);
+        simpleBlockItem(ECBlocks.ENERGY_COUNTER.get(), model);
     }
 
     private void rangeTrigger() {

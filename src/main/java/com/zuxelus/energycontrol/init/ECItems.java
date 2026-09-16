@@ -34,6 +34,7 @@ public class ECItems {
     public static final DeferredItem<Item> CARD_TOGGLE = ITEMS.register("card_toggle", () -> new ItemCardToggle(new Item.Properties()));
     public static final DeferredItem<Item> CARD_HBM = ITEMS.register("card_hbm", () -> new ItemCardHBM(new Item.Properties()));
     public static final DeferredItem<Item> CARD_MEKANISM = ITEMS.register("card_mekanism", () -> new ItemCardMekanism(new Item.Properties()));
+    public static final DeferredItem<Item> CARD_COUNTER = ITEMS.register("card_counter", () -> new ItemCardCounter(new Item.Properties()));
 
     // ---------------------------------------------------------------- Bausaetze
     public static final DeferredItem<Item> KIT_ENERGY = kit("kit_energy", CARD_ENERGY,
@@ -52,6 +53,7 @@ public class ECItems {
             (level, pos) -> CrossModLoader.getCrossMod(ModIDs.HBM).getCardData(level, pos) != null);
     public static final DeferredItem<Item> KIT_MEKANISM = kit("kit_mekanism", CARD_MEKANISM,
             (level, pos) -> CrossModLoader.getCrossMod(ModIDs.MEKANISM).getCardData(level, pos) != null);
+    public static final DeferredItem<Item> KIT_COUNTER = kit("kit_counter", CARD_COUNTER, ItemCardCounter::isCounter);
 
     // -------------------------------------------------------------- Aufwertungen
     public static final DeferredItem<Item> UPGRADE_RANGE = ITEMS.register("upgrade_range", () -> new ItemUpgrade(new Item.Properties(), UpgradeType.RANGE));

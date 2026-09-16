@@ -116,6 +116,28 @@ public class ECRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_thermometer", has(ECItems.THERMOMETER.get()))
                 .save(output);
 
+        // Die Fernwaermeanzeige ist ein Waermemelder, der seinen Reaktor ueber eine Karte
+        // findet -- sie kostet deshalb den Melder und die bessere Schaltung.
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, ECBlocks.REMOTE_THERMAL_MONITOR.get())
+                .pattern(" T ")
+                .pattern("ATA")
+                .pattern(" R ")
+                .define('T', ECBlocks.THERMAL_MONITOR.get())
+                .define('A', ECItems.ADVANCED_CIRCUIT.get())
+                .define('R', Items.REDSTONE)
+                .unlockedBy("has_thermal_monitor", has(ECBlocks.THERMAL_MONITOR.get()))
+                .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, ECBlocks.ENERGY_COUNTER.get())
+                .pattern("III")
+                .pattern("CMC")
+                .pattern("III")
+                .define('I', Items.IRON_INGOT)
+                .define('C', ECItems.ADVANCED_CIRCUIT.get())
+                .define('M', ECItems.MACHINE_CASING.get())
+                .unlockedBy("has_advanced_circuit", has(ECItems.ADVANCED_CIRCUIT.get()))
+                .save(output);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, ECBlocks.RANGE_TRIGGER.get())
                 .pattern(" P ")
                 .pattern("CMC")
@@ -185,6 +207,7 @@ public class ECRecipeProvider extends RecipeProvider {
         kit(output, ECItems.KIT_REDSTONE.get(), Items.REDSTONE_TORCH);
         kit(output, ECItems.KIT_VANILLA.get(), Items.FURNACE);
         kit(output, ECItems.KIT_TOGGLE.get(), Items.LEVER);
+        kit(output, ECItems.KIT_COUNTER.get(), Items.CLOCK);
 
         // Der HBM-Bausatz misst Reaktoren aus und braucht deshalb die bessere Schaltung.
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ECItems.KIT_HBM.get())

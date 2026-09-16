@@ -1,11 +1,13 @@
 package com.zuxelus.energycontrol.init;
 
 import com.zuxelus.energycontrol.EnergyControl;
+import com.zuxelus.energycontrol.blocks.EnergyCounterBlock;
 import com.zuxelus.energycontrol.blocks.HowlerAlarmBlock;
 import com.zuxelus.energycontrol.blocks.IndustrialAlarmBlock;
 import com.zuxelus.energycontrol.blocks.InfoPanelBlock;
 import com.zuxelus.energycontrol.blocks.InfoPanelExtenderBlock;
 import com.zuxelus.energycontrol.blocks.RangeTriggerBlock;
+import com.zuxelus.energycontrol.blocks.RemoteThermalMonitorBlock;
 import com.zuxelus.energycontrol.blocks.ThermalMonitorBlock;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -33,8 +35,14 @@ public class ECBlocks {
     public static final DeferredBlock<ThermalMonitorBlock> THERMAL_MONITOR =
             register("thermal_monitor", () -> new ThermalMonitorBlock(machineProperties()));
 
+    public static final DeferredBlock<RemoteThermalMonitorBlock> REMOTE_THERMAL_MONITOR =
+            register("remote_thermal_monitor", () -> new RemoteThermalMonitorBlock(machineProperties()));
+
     public static final DeferredBlock<RangeTriggerBlock> RANGE_TRIGGER =
             register("range_trigger", () -> new RangeTriggerBlock(machineProperties()));
+
+    public static final DeferredBlock<EnergyCounterBlock> ENERGY_COUNTER =
+            register("energy_counter", () -> new EnergyCounterBlock(machineProperties()));
 
     public static final DeferredBlock<HowlerAlarmBlock> HOWLER_ALARM =
             register("howler_alarm", () -> new HowlerAlarmBlock(machineProperties()));

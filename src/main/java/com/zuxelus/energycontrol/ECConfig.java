@@ -57,6 +57,15 @@ public final class ECConfig {
     /** Fassungsvermoegen des eingebauten Stromspeichers in FE. */
     public static int energyCapacity() { return value(COMMON.ENERGY_CAPACITY, 10000); }
 
+    /** Wieviel FE je Tick der Energiezaehler hoechstens durchleitet. */
+    public static int counterTransferRate() { return value(COMMON.COUNTER_TRANSFER_RATE, 32000); }
+
+    /** Was die Bausatzmontage je Tick verbraucht, solange sie arbeitet. */
+    public static int assemblerConsumption() { return value(COMMON.ASSEMBLER_CONSUMPTION, 20); }
+
+    /** Fassungsvermoegen des Stromspeichers der Bausatzmontage in FE. */
+    public static int assemblerCapacity() { return value(COMMON.ASSEMBLER_CAPACITY, 20000); }
+
     public static class Common {
 
         public final ModConfigSpec.IntValue INFO_PANEL_REFRESH_PERIOD;
@@ -65,6 +74,9 @@ public final class ECConfig {
         public final ModConfigSpec.BooleanValue REQUIRE_POWER;
         public final ModConfigSpec.IntValue ENERGY_CONSUMPTION;
         public final ModConfigSpec.IntValue ENERGY_CAPACITY;
+        public final ModConfigSpec.IntValue COUNTER_TRANSFER_RATE;
+        public final ModConfigSpec.IntValue ASSEMBLER_CONSUMPTION;
+        public final ModConfigSpec.IntValue ASSEMBLER_CAPACITY;
 
         Common(ModConfigSpec.Builder builder) {
             builder.push("general");
@@ -96,6 +108,19 @@ public final class ECConfig {
             ENERGY_CAPACITY = builder
                     .comment("Fassungsvermoegen des eingebauten Stromspeichers in FE.")
                     .defineInRange("energyCapacity", 10000, 1, 100000000);
+
+            COUNTER_TRANSFER_RATE = builder
+                    .comment("Wieviel FE je Tick der Energiezaehler hoechstens durchleitet.",
+                             "Hoeher heisst nur, dass er nicht bremst -- gezaehlt wird, was wirklich durchgeht.")
+                    .defineInRange("counterTransferRate", 32000, 1, 100000000);
+
+            ASSEMBLER_CONSUMPTION = builder
+                    .comment("Verbrauch der Bausatzmontage in FE je Tick, solange sie arbeitet.")
+                    .defineInRange("assemblerConsumption", 20, 0, 100000);
+
+            ASSEMBLER_CAPACITY = builder
+                    .comment("Fassungsvermoegen des Stromspeichers der Bausatzmontage in FE.")
+                    .defineInRange("assemblerCapacity", 20000, 1, 100000000);
 
             builder.pop();
         }

@@ -31,13 +31,17 @@ public class ECLanguageProvider extends LanguageProvider {
         block(ECBlocks.INFO_PANEL.get(), "Industrial Information Panel", "Industrielle Informationstafel");
         block(ECBlocks.INFO_PANEL_EXTENDER.get(), "Information Panel Extender", "Tafelerweiterung");
         block(ECBlocks.THERMAL_MONITOR.get(), "Thermal Monitor", "Waermemelder");
+        block(ECBlocks.REMOTE_THERMAL_MONITOR.get(), "Remote Thermal Monitor", "Fernwaermeanzeige");
         block(ECBlocks.RANGE_TRIGGER.get(), "Range Trigger", "Bereichsmelder");
+        block(ECBlocks.ENERGY_COUNTER.get(), "Energy Counter", "Energiezaehler");
         block(ECBlocks.HOWLER_ALARM.get(), "Howler Alarm", "Heulalarm");
         block(ECBlocks.INDUSTRIAL_ALARM.get(), "Industrial Alarm", "Warnleuchte");
 
         both("container.energycontrol.info_panel", "Information Panel", "Informationstafel");
         both("container.energycontrol.thermal_monitor", "Thermal Monitor", "Waermemelder");
         both("container.energycontrol.range_trigger", "Range Trigger", "Bereichsmelder");
+        both("container.energycontrol.remote_thermal_monitor", "Remote Thermal Monitor", "Fernwaermeanzeige");
+        both("container.energycontrol.energy_counter", "Energy Counter", "Energiezaehler");
 
         // ------------------------------------------------------------- Karten
         item(ECItems.CARD_ENERGY.get(), "Energy Sensor Card", "Stromsensorkarte");
@@ -50,6 +54,7 @@ public class ECLanguageProvider extends LanguageProvider {
         item(ECItems.CARD_TOGGLE.get(), "Remote Toggle Card", "Fernschaltkarte");
         item(ECItems.CARD_HBM.get(), "HBM Sensor Card", "HBM-Sensorkarte");
         item(ECItems.CARD_MEKANISM.get(), "Mekanism Sensor Card", "Mekanism-Sensorkarte");
+        item(ECItems.CARD_COUNTER.get(), "Counter Sensor Card", "Zaehlerkarte");
 
         item(ECItems.KIT_ENERGY.get(), "Energy Sensor Kit", "Stromsensor-Bausatz");
         item(ECItems.KIT_LIQUID.get(), "Liquid Sensor Kit", "Fluessigkeitssensor-Bausatz");
@@ -59,6 +64,7 @@ public class ECLanguageProvider extends LanguageProvider {
         item(ECItems.KIT_TOGGLE.get(), "Remote Toggle Kit", "Fernschalt-Bausatz");
         item(ECItems.KIT_HBM.get(), "HBM Sensor Kit", "HBM-Sensor-Bausatz");
         item(ECItems.KIT_MEKANISM.get(), "Mekanism Sensor Kit", "Mekanism-Sensor-Bausatz");
+        item(ECItems.KIT_COUNTER.get(), "Counter Sensor Kit", "Zaehler-Bausatz");
 
         item(ECItems.UPGRADE_RANGE.get(), "Range Upgrade", "Reichweitenaufwertung");
         item(ECItems.UPGRADE_COLOR.get(), "Color Upgrade", "Farbaufwertung");
@@ -145,6 +151,10 @@ public class ECLanguageProvider extends LanguageProvider {
         both("msg.ec.InfoPanelRadius", "Radius: %s", "Radius: %s");
         both("msg.ec.InfoPanelMinY", "Lowest layer: %s", "Unterste Schicht: %s");
         both("msg.ec.InfoPanelMaxY", "Highest layer: %s", "Oberste Schicht: %s");
+        both("msg.ec.InfoPanelCounter", "Counter: %s", "Zaehlerstand: %s");
+        both("msg.ec.CounterTotal", "Counter: %s FE", "Zaehlerstand: %s FE");
+        both("msg.ec.CounterRate", "Throughput: %s FE/t", "Durchsatz: %s FE/t");
+        both("msg.ec.CounterReset", "Reset counter", "Zaehler zuruecksetzen");
         both("msg.ec.InfoPanelOutOfRange", "Out of range", "Ausser Reichweite");
         both("msg.ec.InfoPanelInvalidCard", "Invalid card", "Ungueltige Karte");
         both("msg.ec.InfoPanelNoTarget", "Target not found", "Ziel nicht gefunden");
@@ -166,6 +176,7 @@ public class ECLanguageProvider extends LanguageProvider {
         both("msg.ec.cbInfoPanelTurbine", "Turbine", "Turbine");
         both("msg.ec.cbInfoPanelMatrix", "Induction matrix", "Induktionsmatrix");
         both("msg.ec.cbInfoPanelMiner", "Digital miner", "Digitaler Bergmann");
+        both("msg.ec.cbInfoPanelCounter", "Counter", "Zaehlerstand");
         both("msg.ec.cbInfoPanelSlots", "Slots", "Faecher");
         both("msg.ec.cbInfoPanelTotalItems", "Item count", "Anzahl");
         both("msg.ec.cbInfoPanelItemList", "Item list", "Bestandsliste");

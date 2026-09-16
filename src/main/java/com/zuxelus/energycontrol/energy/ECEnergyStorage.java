@@ -12,6 +12,10 @@ import net.neoforged.neoforge.energy.EnergyStorage;
  * Entnommen wird nichts: ein Kartenleser gibt keinen Strom ab, er verbraucht ihn. maxExtract
  * ist deshalb null, und {@link #canExtract()} sagt nein. Der eigene Verbrauch geht ueber
  * {@link #consume(int)} an der Schnittstelle vorbei.
+ *
+ * Dasselbe gilt fuer den Energiezaehler: er nimmt Strom auf einer Seite an und schiebt ihn
+ * auf der anderen weiter, aber er laesst sich nicht leersaugen. Was er weitergibt, nimmt er
+ * selbst ueber {@link #drain(int)} heraus.
  */
 public class ECEnergyStorage extends EnergyStorage {
 
@@ -33,5 +37,12 @@ public class ECEnergyStorage extends EnergyStorage {
 
     public boolean has(int amount) {
         return this.energy >= amount;
+    }
+
+    /** Nimmt bis zu {@code max} heraus und gibt zurueck, wieviel es wirklich war. */
+    public int drain(int max) {
+        int taken = Math.min(Math.max(0, max), this.energy);
+        this.energy -= taken;
+        return taken;
     }
 }

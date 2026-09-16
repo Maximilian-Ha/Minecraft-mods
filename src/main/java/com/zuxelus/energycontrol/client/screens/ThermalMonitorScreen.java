@@ -1,6 +1,7 @@
 package com.zuxelus.energycontrol.client.screens;
 
 import com.zuxelus.energycontrol.EnergyControl;
+import com.zuxelus.energycontrol.blockentity.RemoteThermalMonitorBlockEntity;
 import com.zuxelus.energycontrol.blockentity.ThermalMonitorBlockEntity;
 import com.zuxelus.energycontrol.menus.ThermalMonitorMenu;
 import net.minecraft.client.gui.GuiGraphics;
@@ -17,10 +18,14 @@ import net.minecraft.world.entity.player.Inventory;
  * Zeigt die gemessene Temperatur und laesst die Schwelle eintippen. Die erste Fassung dieses
  * Ports schaltete mit zwei Knoepfen durch feste Stufen, weil es noch kein Steuerpaket gab;
  * seit Stufe 4 gibt es eines, und damit ist die freie Eingabe des Originals wieder da.
+ *
+ * Dieselbe Oberflaeche dient der Fernwaermeanzeige: sie hat zwei Faecher mehr, ihr eigenes
+ * Hintergrundbild und sonst genau denselben Inhalt.
  */
 public class ThermalMonitorScreen extends AbstractContainerScreen<ThermalMonitorMenu> {
 
     private static final ResourceLocation TEXTURE = EnergyControl.loc("textures/gui/gui_thermal_monitor.png");
+    private static final ResourceLocation TEXTURE_REMOTE = EnergyControl.loc("textures/gui/gui_remote_thermo.png");
 
     private EditBox heatLevel;
 
@@ -43,9 +48,11 @@ public class ThermalMonitorScreen extends AbstractContainerScreen<ThermalMonitor
         addRenderableWidget(Button.builder(Component.translatable("gui.done"), button -> apply())
                 .bounds(leftPos + 134, topPos + 34, 34, 16).build());
 
+        // Bei der Fernwaermeanzeige liegen links zwei Faecher; der Schalter rueckt daneben.
+        boolean remote = isRemote();
         addRenderableWidget(Button.builder(Component.translatable("msg.ec.InvertRedstone"),
                         button -> send(ThermalMonitorMenu.BUTTON_INVERT))
-                .bounds(leftPos + 8, topPos + 54, 160, 16).build());
+                .bounds(leftPos + (remote ? 52 : 8), topPos + (remote ? 53 : 54), remote ? 116 : 160, 16).build());
     }
 
     private void apply() {
@@ -56,6 +63,10 @@ public class ThermalMonitorScreen extends AbstractContainerScreen<ThermalMonitor
         } catch(NumberFormatException ignored) {
             // Das Feld laesst nur Ziffern zu; laenger als neun Stellen kann es nicht werden.
         }
+    }
+
+    private boolean isRemote() {
+        return menu.be instanceof RemoteThermalMonitorBlockEntity;
     }
 
     private void send(int id) {
@@ -73,7 +84,7 @@ public class ThermalMonitorScreen extends AbstractContainerScreen<ThermalMonitor
 
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
-        guiGraphics.blit(TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
+        guiGraphics.blit(isRemote() ? TEXTURE_REMOTE : TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
     }
 
     @Override

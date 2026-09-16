@@ -1,9 +1,11 @@
 package com.zuxelus.energycontrol.init;
 
 import com.zuxelus.energycontrol.EnergyControl;
+import com.zuxelus.energycontrol.blockentity.EnergyCounterBlockEntity;
 import com.zuxelus.energycontrol.blockentity.HowlerAlarmBlockEntity;
 import com.zuxelus.energycontrol.blockentity.InfoPanelBlockEntity;
 import com.zuxelus.energycontrol.blockentity.RangeTriggerBlockEntity;
+import com.zuxelus.energycontrol.blockentity.RemoteThermalMonitorBlockEntity;
 import com.zuxelus.energycontrol.blockentity.ThermalMonitorBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -23,6 +25,12 @@ public class ECBlockEntityTypes {
 
     public static final Supplier<BlockEntityType<ThermalMonitorBlockEntity>> THERMAL_MONITOR = BLOCK_ENTITY_TYPES.register(
             "thermal_monitor", () -> BlockEntityType.Builder.of(ThermalMonitorBlockEntity::new, ECBlocks.THERMAL_MONITOR.get()).build(null));
+
+    public static final Supplier<BlockEntityType<RemoteThermalMonitorBlockEntity>> REMOTE_THERMAL_MONITOR = BLOCK_ENTITY_TYPES.register(
+            "remote_thermal_monitor", () -> BlockEntityType.Builder.of(RemoteThermalMonitorBlockEntity::new, ECBlocks.REMOTE_THERMAL_MONITOR.get()).build(null));
+
+    public static final Supplier<BlockEntityType<EnergyCounterBlockEntity>> ENERGY_COUNTER = BLOCK_ENTITY_TYPES.register(
+            "energy_counter", () -> BlockEntityType.Builder.of(EnergyCounterBlockEntity::new, ECBlocks.ENERGY_COUNTER.get()).build(null));
 
     public static final Supplier<BlockEntityType<RangeTriggerBlockEntity>> RANGE_TRIGGER = BLOCK_ENTITY_TYPES.register(
             "range_trigger", () -> BlockEntityType.Builder.of(RangeTriggerBlockEntity::new, ECBlocks.RANGE_TRIGGER.get()).build(null));

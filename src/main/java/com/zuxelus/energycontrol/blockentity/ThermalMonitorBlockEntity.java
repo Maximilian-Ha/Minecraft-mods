@@ -13,6 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -21,7 +22,11 @@ import net.minecraft.world.level.block.state.BlockState;
  * Der Waermemelder sucht in seiner Nachbarschaft einen Reaktor und gibt ein
  * Redstone-Signal, sobald dessen Temperatur die eingestellte Schwelle erreicht. Welche
  * Bloecke als Reaktor zaehlen, weiss die jeweilige Anbindung -- fuer HBM sind das die
- * RBMK-Saeulen, der ZIRNOX, der Forschungsreaktor und der Watz.
+ * RBMK-Saeulen, der ZIRNOX, der Forschungsreaktor und der Watz, fuer Mekanism der
+ * Spaltreaktor.
+ *
+ * Wo gemessen wird, steht in {@link #findHeat()}. Die Fernwaermeanzeige erbt alles
+ * uebrige von hier und tauscht nur diese eine Methode aus.
  */
 public class ThermalMonitorBlockEntity extends ECContainerBlockEntity {
 
@@ -38,12 +43,16 @@ public class ThermalMonitorBlockEntity extends ECContainerBlockEntity {
         super(ECBlockEntityTypes.THERMAL_MONITOR.get(), pos, state, 0);
     }
 
+    protected ThermalMonitorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, int size) {
+        super(type, pos, state, size);
+    }
+
     public void tick() {
         if(level == null || level.isClientSide) return;
         // Einmal je Sekunde genuegt; die Suche geht ueber gut 150 Bloecke.
         if(level.getGameTime() % 20L != 0L) return;
 
-        int newHeat = CrossModLoader.getHeat(level, worldPosition);
+        int newHeat = findHeat();
         int newStatus = newHeat < 0 ? STATUS_NO_REACTOR : newHeat >= heatLevel ? STATUS_ALARM : STATUS_OK;
         // Der Zustand haengt am Blockzustand, die Temperatur nur am Abgleich -- die
         // Oberflaeche zeigt sie an und soll nicht auf den naechsten Zustandswechsel warten.
@@ -57,6 +66,11 @@ public class ThermalMonitorBlockEntity extends ECContainerBlockEntity {
             notifyNeighbours();
         }
         sync();
+    }
+
+    /** Die Temperatur, auf die dieser Melder schaut. Negativ heisst: kein Reaktor da. */
+    protected int findHeat() {
+        return CrossModLoader.getHeat(level, worldPosition);
     }
 
     private void updateBlockState() {
