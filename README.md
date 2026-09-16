@@ -19,8 +19,10 @@ Energy Control zeigt Messwerte anderer Maschinen auf Informationstafeln an. Die 
 > - **Karten**: Strom, Flüssigkeit, Inventar, Redstone, Vanilla, Zeit, Text und **HBM**
 > - **Bausätze** zu allen Karten mit Ziel, dazu Reichweiten-, Farb- und Berührungsaufwertung
 >
-> Was noch fehlt und warum, steht in [`docs/ROADMAP.md`](docs/ROADMAP.md); was gegenüber dem
-> Original bewusst anders ist, in [`docs/ENTSCHEIDUNGEN.md`](docs/ENTSCHEIDUNGEN.md).
+> Die Tafeln arbeiten in diesem Stand noch **ohne Strom**; der Anschluss an Forge Energy ist
+> als Stufe 1 geplant. Die offenen Schritte sind als Stufenplan in
+> [`docs/ROADMAP.md`](docs/ROADMAP.md) beschrieben, was gegenüber dem Original bewusst anders
+> ist, in [`docs/ENTSCHEIDUNGEN.md`](docs/ENTSCHEIDUNGEN.md).
 >
 > **Zum Bauen:** `./gradlew build` übersetzt nur. Blockmodelle, Sprachdateien, Rezepte und
 > Loot-Tabellen entstehen erst durch `./gradlew runData` — das gehört einmal vor dem Packen

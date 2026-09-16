@@ -1,6 +1,6 @@
-# Arbeitsstand
+# Arbeitsstand und Stufenplan
 
-## Fertig
+## Fertig (Stufe 0)
 
 | Teil | Bemerkung |
 | --- | --- |
@@ -15,25 +15,162 @@
 | HBM-Anbindung | siehe [`HBM-KOMPATIBILITAET.md`](HBM-KOMPATIBILITAET.md) |
 | Datengeneratoren | Blockzustände, Modelle, Sprache (en/de), Rezepte, Loot, Tags |
 
-## Als Nächstes
+---
 
-| Teil | Warum es fehlt | Aufwand |
-| --- | --- | --- |
-| **Tafelerweiterungen** (`info_panel_extender`) | Große Schirme aus mehreren Blöcken. Braucht die Flächenerkennung (`ScreenManager` im Original, rund 430 Zeilen) und einen Renderer, der die Schrift über das Rechteck streckt. Die Texturen dafür liegen im Original bereit. | mittel |
-| **Berührungsbetrieb** (`ITouchAction`, Umschaltkarte) | Rechtsklick auf den Schirm schaltet etwas am Ziel. Braucht einen Strahlentest auf die Schauseite und ein eigenes Netzwerkpaket. Die Berührungsaufwertung gibt es schon, sie tut nur noch nichts. | mittel |
-| **Fernwärmeanzeige** | Wärmemelder, der seinen Reaktor über eine Karte findet statt über Nachbarschaft. | klein |
-| **Zählerkarte und Energiezähler** | Durchsatzmessung. Braucht einen Block im Leitungsweg; bei HBM wäre das ein Anschluss ans Fernleitungsnetz. | mittel |
-| **Bausatzmontage** (`kit_assembler`) | Im Original entstehen Bausätze in einer eigenen Maschine mit Strom und Rezeptbuch. Hier werden sie vorerst an der Werkbank gebaut. | mittel |
-| **Textkarte mit Textfeld** | Zurzeit kommt der Text aus dem Namen der Karte (Amboss). Ein richtiges Textfeld braucht ein eigenes Netzwerkpaket. | klein |
-| **Farbwahl mit Farbtafel** | Zurzeit schalten zwei Knöpfe durch sechzehn feste Farben. Das Original hat eine Farbtafel mit freier Wahl. | klein |
-| **Kartenhalter, tragbare Tafel** | Gegenstände, die mehrere Karten führen bzw. eine Tafel in der Hand sind. | mittel |
-| **Saatgutanalyse und -bibliothek** | Hängt im Original an IC2-Saatgut und hat auf 1.21.1 keine Entsprechung. | offen |
+# Die Stufen
+
+Jede Stufe ist für sich lauffähig, wird für sich gebaut, geprüft und übergeben. Die
+Reihenfolge ist keine Willkür: Stufe 1 und 2 sind ausdrücklich gewünscht, Stufe 3 ist das
+Kennzeichen des Mods, und Stufe 4 bündelt drei Dinge, die alle dasselbe fehlende Stück
+brauchen.
+
+## Stufe 1 — Die Tafeln brauchen Strom
+
+**Ziel:** Eine Informationstafel ohne Strom bleibt dunkel, wie im Original. Der Strom kommt
+über die Energie-Schnittstelle von NeoForge, also aus jeder Mod, die Forge Energy abgibt.
+
+**Warum so:** Das Original zog EU aus einem IC2-Netz. IC2 gibt es auf 1.21.1 nicht. Forge
+Energy ist auf dieser Fassung der gemeinsame Nenner — sie steckt in NeoForge selbst, nicht in
+einer fremden Mod. Der Mod bekommt damit **keine neue Abhängigkeit**: eine Tafel ohne
+angeschlossenes Kabel verhält sich einfach wie eine Tafel ohne Strom.
+
+**Inhalt:**
+
+- Ein Stromspeicher in der Block-Entität der Tafel, angemeldet als
+  `Capabilities.EnergyStorage.BLOCK`. Damit schieben Mekanisms Universalkabel, Thermals
+  Leitungen, Immersive Engineerings Seile und alles andere mit Forge Energy hinein, ohne dass
+  hier eine Zeile je Mod steht.
+- `powered` wieder wie im Original: reicht der Puffer für den Verbrauch dieser Runde, misst die
+  Tafel und zeigt an; sonst bleibt der Schirm leer. Der Renderer fragt das ab.
+- Ein Energiebalken in der Oberfläche der Tafel.
+- Einstellungen: Verbrauch je Tick, Puffergröße, und ein Schalter, der den Strombedarf ganz
+  abschaltet (für Spielstände ohne Energie-Mod).
+- Der Bereichsmelder liest ebenfalls Karten aus und bekommt denselben Bedarf; Wärmemelder,
+  Heuler und Warnleuchte bleiben stromlos — so hält es auch das Original.
+
+**Für HBM-Spieler:** HBMs Stromnetz (HE) ist bewusst von Forge Energy getrennt; im ganzen Port
+gibt es genau zwei Übergänge, `machine_converter_he_rf` und `machine_converter_rf_he`. Eine
+Tafel an einem HBM-Netz hängt also hinter dem HE→RF-Wandler. Das ist kein Umweg dieses Ports,
+sondern die Bauweise des Originals, und es wird in `HBM-KOMPATIBILITAET.md` dokumentiert.
+
+*Später denkbar:* ein eigener HE-Anschlussblock, der die Tafel ohne Wandler direkt ans
+HBM-Netz hängt. Der müsste `IEnergyReceiverMK2` umsetzen und damit im Paket `crossmod/hbm`
+liegen, das ohne HBM gar nicht übersetzt wird — die Anmeldung des Blocks müsste ihn deshalb
+über seinen Namen laden und ohne HBM auf eine leere Block-Entität zurückfallen. Machbar, aber
+umständlich; der Wandler tut es zunächst auch.
+
+**Aufwand:** klein. **Risiko:** gering — eine Capability, ein Feld, ein Balken.
+
+## Stufe 2 — Was die Karten von anderen Mods sehen
+
+**Ziel:** Die vorhandenen Karten sollen bei jeder gängigen Mod etwas anzeigen, ohne dass es je
+Mod eine eigene Anbindung braucht.
+
+**Inhalt:**
+
+- **Lücke schließen:** Die Inventarkarte und ihr Bausatz prüfen heute nur auf `Container` —
+  also auf das alte Inventar am Block. Viele neuere Mods bieten ausschließlich
+  `Capabilities.ItemHandler.BLOCK` an und werden deshalb gar nicht erkannt. Beide bekommen den
+  Weg über die Capability als Rückfall. (Bei HBM fällt das nicht auf: dessen Maschinen führen
+  beides.)
+- **Durchsatz statt nur Füllstand:** Die Stromkarte zeigt heute Stand und Fassung. Dazu kommt
+  die Änderung je Tick, aus einem kleinen Ringpuffer über die letzten zwanzig Messungen — also
+  das, was die HBM-Karte aus `delta` schon zeigt, nur mod-unabhängig. Das ist die Zahl, wegen
+  der man eine Tafel an einen Akku hängt.
+- **Bausätze großzügiger:** `kit_energy` greift schon über die Capability, `kit_liquid` auch.
+  Nach der Änderung oben gilt das für `kit_inventory` ebenso.
+- Eine Prüfung im Torwächter-Satz, die eine Karte ohne Rückfall auf die Capability meldet.
+
+**Was das für Mekanism heißt:** Stromstand, Durchsatz, Flüssigkeitstanks und Inventar einer
+Mekanism-Maschine sind damit lesbar, ohne eine Zeile Mekanism-Code — die Mod bietet all das
+über die Standard-Schnittstellen an. **Nicht** erfasst sind Mekanisms eigene Chemikalien (Gase,
+Schlämme, Pigmente) und die Kennzahlen von Reaktor, Fusionsanlage und Digital Miner; die
+hängen an Mekanisms eigener API und stehen in Stufe 5.
+
+**Aufwand:** klein. **Risiko:** gering.
+
+## Stufe 3 — Große Schirme (Tafelerweiterungen)
+
+**Ziel:** Mehrere Tafeln zu einer Fläche zusammenschalten, wie im Original.
+
+**Inhalt:** Erweiterungsblock, Flächenerkennung (welche Blöcke bilden ein sauberes Rechteck mit
+gleicher Blickrichtung?), Weiterleitung von Klick und Oberfläche an die Haupttafel, und ein
+Renderer, der die Schrift über das ganze Rechteck streckt statt über einen Block. Die Texturen
+dafür liegen im Original bereit (`extender_all`, `extender_face`) und sind bis dahin aus diesem
+Zweig entfernt, damit der Texturen-Torwächter nicht über ungenutzte Dateien stolpert.
+
+Im Original steckt das in `ScreenManager` (rund 430 Zeilen) plus zwei Renderern. Der Port kann
+es kürzer, weil er die Fläche aus dem Blockzustand herleiten kann statt sie zu verwalten.
+
+**Aufwand:** mittel. **Risiko:** mittel — die Flächenerkennung muss beim Abbauen, Drehen und
+Chunk-Laden sauber zerfallen.
+
+## Stufe 4 — Bedienung: Textfeld, Farbwahl, Berührung
+
+**Ziel:** Die drei Stellen, an denen der Port heute mit Knöpfen behilft, bekommen ihre richtige
+Bedienung.
+
+**Warum zusammen:** Alle drei brauchen dasselbe fehlende Stück — ein eigenes Netzwerkpaket vom
+Client zum Server. Der Port kommt bisher mit `clickMenuButton` aus (siehe
+[`ENTSCHEIDUNGEN.md`](ENTSCHEIDUNGEN.md)); sobald es das Paket gibt, sind alle drei billig.
+
+**Inhalt:**
+
+- Ein Steuerpaket (`CustomPacketPayload` mit `CompoundTag` und Blockposition), nach dem Muster,
+  das der HBM-Port fährt.
+- **Textkarte** mit echtem Textfeld statt Amboss-Name; mehrere Zeilen mit eigener Farbe.
+- **Farbwahl** über die Farbtafel des Originals (`gui_colors`, `gui_color_picker`) statt
+  sechzehn fester Farben.
+- **Berührungsbetrieb**: Rechtsklick auf den Schirm wirkt aufs Ziel. Dazu die Umschaltkarte
+  (`card_toggle`) und die Vanilla-Umschaltung. Die Berührungsaufwertung gibt es schon, sie tut
+  bis dahin nichts.
+- Freie Zahleneingabe im Bereichs- und Wärmemelder statt der Schrittknöpfe.
+
+**Aufwand:** mittel. **Risiko:** mittel — Eingaben vom Client sind der Ort, an dem man
+Rechteprüfung und Wertebereiche nicht vergessen darf.
+
+## Stufe 5 — Benannte Anbindungen (Mekanism und andere)
+
+**Ziel:** Für eine Mod, die mehr hergibt als die Standard-Schnittstellen, eine eigene Karte —
+so, wie es `crossmod/hbm` für HBM vormacht.
+
+**Inhalt je Mod:** eine Klasse unter `crossmod/<mod>`, gegen deren API mit `compileOnly`
+übersetzt, über `CrossModLoader` per Namen geladen, und aus dem Quelltextsatz genommen, wenn
+die API beim Bauen fehlt — dasselbe Muster, dieselbe Torwächter-Prüfung (`hbm-api-check.sh`
+lässt sich dafür verallgemeinern).
+
+Für **Mekanism** wären das: Chemikalientanks (Gas, Schlamm, Pigment, Infusion), Spaltreaktor
+und Fusionsanlage, Wärmespeicher, Digital Miner, Boiler und Turbine — im Original rund 430
+Zeilen, die sich zu großen Teilen übertragen lassen.
+
+Weitere Kandidaten in der Reihenfolge, in der sie auf 1.21.1 verfügbar sind: Thermal
+Expansion, Immersive Engineering, Applied Energistics, Ad Astra.
+
+**Aufwand:** je Mod mittel. **Risiko:** gering für den Rest des Mods — jede Anbindung ist
+gekapselt und fällt bei fehlender API einfach weg.
+
+## Stufe 6 — Der Rest aus dem Original
+
+Kleinteile, die keinen eigenen Unterbau brauchen:
+
+| Teil | Was es ist |
+| --- | --- |
+| Fernwärmeanzeige | Wärmemelder, der seinen Reaktor über eine Karte findet statt über Nachbarschaft |
+| Zählerkarte und Energiezähler | Durchsatzmessung mit einem Block in der Leitung |
+| Bausatzmontage (`kit_assembler`) | Maschine, in der Bausätze entstehen, statt an der Werkbank |
+| Kartenhalter, tragbare Tafel | Gegenstände, die Karten führen bzw. eine Tafel in der Hand sind |
+| Fortgeschrittene Tafel | Größere Bauform des Originals mit Neigung und eigener Oberfläche |
+
+**Aufwand:** je Teil klein bis mittel.
+
+---
 
 ## Nicht vorgesehen
 
 | Teil | Warum |
 | --- | --- |
-| Anbindungen an IC2, Mekanism, Thermal Expansion, Draconic Evolution, GregTech, AE2, EnderIO, PneumaticCraft, NuclearCraft, Galacticraft, Railcraft, Extreme Reactors | Keine dieser Mods ist auf 1.21.1 verfügbar. Wer eine davon portiert, kann eine Anbindung nach dem Muster von `crossmod/hbm` nachrüsten — dafür ist `CrossModBase` da. Was Forge-Energie und die Fluid-Schnittstelle von NeoForge anbietet, liest der Port ohnehin schon ohne eigene Anbindung. |
-| ComputerCraft- und OpenComputers-Anbindung | Beide brauchen die jeweilige Mod; nachrüstbar, sobald sie da sind. |
-| WebSocket-Server | Das Original schickt Tafelinhalte an eine Webseite. Steht keinem Spielinhalt im Weg und ist der Aufwand vorerst nicht wert. |
+| Anbindungen an IC2, Draconic Evolution, GregTech, EnderIO, PneumaticCraft, NuclearCraft, Galacticraft, Railcraft, Extreme Reactors | Diese Mods gibt es auf 1.21.1 nicht. Kommt eine davon, ist Stufe 5 das Muster. |
+| ComputerCraft- und OpenComputers-Anbindung | Brauchen die jeweilige Mod; nachrüstbar, sobald sie da sind. |
+| WebSocket-Server | Das Original schickt Tafelinhalte an eine Webseite. Steht keinem Spielinhalt im Weg und ist den Aufwand vorerst nicht wert. |
 | `com.zuxelus.hooklib` | Ein eigener Bytecode-Weber aus 1.12.2-Zeiten. Auf 1.21.1 gibt es dafür Mixins, und der Port braucht ihn an keiner Stelle. |
+| Saatgutanalyse und -bibliothek | Hängt im Original an IC2-Saatgut und hat auf 1.21.1 keine Entsprechung. |

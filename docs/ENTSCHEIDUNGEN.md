@@ -2,18 +2,25 @@
 
 Was dieser Port bewusst anders macht als das Original, und warum.
 
-## Die Tafeln brauchen keinen Strom
+## Die Tafeln brauchen keinen Strom — **überholt**
+
+> **Diese Entscheidung ist zurückgenommen.** Die Tafeln sollen Strom brauchen; umgesetzt wird
+> das über die Energie-Schnittstelle von NeoForge (Forge Energy) als
+> [Stufe 1 der Roadmap](ROADMAP.md#stufe-1--die-tafeln-brauchen-strom). Bis dahin gilt im Code
+> noch, was hier steht.
 
 Im Original zog jede Informationstafel EU aus einem IC2-Netz und blieb ohne Strom dunkel.
 
 IC2 gibt es auf 1.21.1 nicht. Die Tafel stattdessen an HBMs Stromnetz zu hängen, hätte den
 **Kern** des Mods von HBM abhängig gemacht — dann ließe er sich ohne HBM nicht mehr laden, und
-die weiche Anbindung wäre hinfällig. Eine eigene Energie über die Forge-Energie-Schnittstelle
-wäre möglich, hätte aber in einer Welt mit HBM zwei Stromsysteme nebeneinander gestellt.
+die weiche Anbindung wäre hinfällig.
 
-Die Tafeln arbeiten deshalb ohne Strom. Sollte sich das als zu billig erweisen, ist der
-naheliegende Weg eine optionale Stromaufnahme über die NeoForge-Schnittstelle, abschaltbar in
-der Konfiguration.
+Der Fehler im ursprünglichen Schluss war der nächste Satz: eine eigene Stromaufnahme über die
+NeoForge-Schnittstelle stelle in einer Welt mit HBM zwei Systeme nebeneinander. Das tut sie,
+aber das ist kein Einwand — HBM stellt selbst zwei Systeme nebeneinander und hält dafür genau
+zwei Wandlerblöcke bereit. Forge Energy steckt zudem in NeoForge, nicht in einer fremden Mod;
+sie zu benutzen schafft also keine neue Abhängigkeit, und jede Energie-Mod dieser Fassung kann
+eine Tafel versorgen, ohne dass hier eine Zeile je Mod steht.
 
 ## Eine Kartenart ist ein eigener Gegenstand
 
