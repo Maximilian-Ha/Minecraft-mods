@@ -342,12 +342,79 @@ if accessors:
                                  'getName() liefert hier Component, nicht MutableComponent',
                                  'erst .copy() aufrufen'))
 
+
+# Fuenfte, BERECHNETE Pruefung: eine projekteigene Methode, die als Component erklaert ist,
+# liefert kein MutableComponent -- withStyle und append gibt es darauf nicht. Der Compiler
+# sagt dazu nur "cannot find symbol", und genau das filtert syntax-check.sh heraus.
+# In Runde 137 kostete das einen CI-Durchlauf: ItemModInsert.percent war als Component
+# erklaert und wurde viermal mit .withStyle(...) aufgerufen.
+#
+# Gemessen wird nur, was eindeutig ist: Namen, die im ganzen Projekt NUR als Component
+# erklaert sind. Wer denselben Namen anderswo als MutableComponent erklaert, faellt heraus --
+# dann ist am Aufrufort nicht zu entscheiden, welche der beiden gemeint ist.
+COMPONENT_DECL_RE = re.compile(r'\b(?<!Mutable)Component\s+(\w+)\s*\(')
+MUTABLE_DECL_RE = re.compile(r'\bMutableComponent\s+(\w+)\s*\(')
+
+def collect_component_methods(root):
+    plain, mutable = set(), set()
+    for dirpath, _, names in os.walk(root):
+        for fn in names:
+            if not fn.endswith('.java'):
+                continue
+            src = strip(open(os.path.join(dirpath, fn), encoding='utf-8', errors='replace').read())
+            plain |= {m.group(1) for m in COMPONENT_DECL_RE.finditer(src)}
+            mutable |= {m.group(1) for m in MUTABLE_DECL_RE.finditer(src)}
+    return sorted(plain - mutable)
+
+def call_end(src, open_paren):
+    """Der Index hinter der schliessenden Klammer eines Aufrufs, oder -1."""
+    depth = 0
+    i = open_paren
+    while i < len(src):
+        c = src[i]
+        if c == '"':
+            i += 1
+            while i < len(src) and src[i] != '"':
+                i += 2 if src[i] == '\\' else 1
+        elif c == '(':
+            depth += 1
+        elif c == ')':
+            depth -= 1
+            if depth == 0:
+                return i + 1
+        i += 1
+    return -1
+
+component_methods = collect_component_methods(ROOT)
+component_findings = []
+
+if component_methods:
+    call_re = re.compile(r'\b(%s)\s*\(' % '|'.join(re.escape(n) for n in component_methods))
+    after_re = re.compile(r'\s*\.\s*(withStyle|append)\s*\(')
+
+    for dirpath, _, names in os.walk(ROOT):
+        for fn in sorted(names):
+            if not fn.endswith('.java'):
+                continue
+            path = os.path.join(dirpath, fn)
+            src = strip(open(path, encoding='utf-8', errors='replace').read())
+            for m in call_re.finditer(src):
+                end = call_end(src, m.end() - 1)
+                if end < 0:
+                    continue
+                if after_re.match(src, end):
+                    line = src.count('\n', 0, m.start()) + 1
+                    component_findings.append((path, line,
+                                               '%s(...) ist als Component erklaert, nicht als MutableComponent' % m.group(1),
+                                               'die Methode als MutableComponent erklaeren oder .copy() aufrufen'))
+
 findings.extend(render_box_findings)
 findings.extend(codec_findings)
 findings.extend(length_findings)
+findings.extend(component_findings)
 
-print('Pruefe bekannte API-Fallen ... %d Dateien, %d Muster + %d Component-Zugriffe + %d Zeichenfenster + %d Codecs'
-      % (checked, len(PITFALLS), len(accessors), len(marked), len(parents)))
+print('Pruefe bekannte API-Fallen ... %d Dateien, %d Muster + %d Component-Zugriffe + %d Zeichenfenster + %d Codecs + %d Component-Methoden'
+      % (checked, len(PITFALLS), len(accessors), len(marked), len(parents), len(component_methods)))
 
 if findings:
     print('  AUFFAELLIG: %d' % len(findings))

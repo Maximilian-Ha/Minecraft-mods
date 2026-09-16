@@ -5,6 +5,7 @@ import com.hbm.handler.ArmorModHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -130,7 +131,7 @@ public class ItemModInsert extends ItemArmorMod {
         out.merge(Attributes.MOVEMENT_SPEED, (double) (this.speed - 1F), Double::sum);
     }
 
-    private static Component percent(String key, float factor) {
+    private static MutableComponent percent(String key, float factor) {
         return Component.translatable(key, signedPercent(factor));
     }
 
