@@ -1,0 +1,188 @@
+name: Build
+
+on: [push, pull_request]
+
+env:
+  # Der Zweig dieses Repos, der den HBM-Port traegt. Gegen ihn wird die Anbindung
+  # geprueft und uebersetzt.
+  HBM_BRANCH: claude/intelligent-meitner-ashog3
+
+jobs:
+  # ---------------------------------------------------------------------------------
+  # Torwaechter auf dem Quelltext. Brauchen kein Gradle und kein Netz ausser dem
+  # Auschecken -- laufen deshalb in einem eigenen, schnellen Auftrag.
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Check syntax
+        run: |
+          chmod +x ./tools/syntax-check.sh
+          ./tools/syntax-check.sh
+
+      - name: Check project-internal imports
+        run: |
+          chmod +x ./tools/import-check.sh
+          ./tools/import-check.sh
+
+      - name: Check textures and sounds
+        run: |
+          chmod +x ./tools/asset-check.sh
+          ./tools/asset-check.sh
+
+      - name: Check translation keys
+        run: |
+          chmod +x ./tools/lang-check.sh
+          ./tools/lang-check.sh
+
+      # Die Quellen des HBM-Ports, nur zum Nachschlagen -- gebaut wird hier nichts.
+      - name: Checkout HBM port (sources only)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.HBM_BRANCH }}
+          path: hbm
+
+      - name: Check HBM bridge against the HBM port
+        run: |
+          chmod +x ./tools/hbm-api-check.sh
+          ./tools/hbm-api-check.sh
+
+  # ---------------------------------------------------------------------------------
+  # Der eigentliche Bau. Zweimal, mit Absicht:
+  #   ohne HBM-JAR -> beweist, dass der Kern den HBM-Port nicht braucht
+  #   mit HBM-JAR  -> beweist, dass die Anbindung gegen den echten Port uebersetzt
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Make Gradle wrapper executable
+        run: chmod +x ./gradlew
+
+      # Erst ohne die Anbindung: so faellt auf, wenn sich in den Kern versehentlich ein
+      # Verweis auf eine HBM-Klasse schleicht. Der Mod muss ohne HBM uebersetzen und laufen.
+      - name: Build without the HBM port
+        run: ./gradlew build
+
+      - name: Checkout HBM port
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.HBM_BRANCH }}
+          path: hbm
+
+      # Der HBM-Port benutzt dieselbe NeoForge-Fassung; sein Bau waermt damit zugleich
+      # den Zwischenspeicher fuer den zweiten Lauf hier.
+      - name: Build the HBM port
+        run: |
+          chmod +x ./hbm/gradlew
+          (cd hbm && ./gradlew build --console=plain)
+
+      - name: Build with the HBM bridge
+        run: |
+          JAR=$(ls hbm/build/libs/*.jar | grep -v sources | head -n 1)
+          echo "HBM-JAR: $JAR"
+          ./gradlew build -Phbm_jar="$PWD/$JAR" --console=plain
+          if ! unzip -l build/libs/*.jar | grep -q 'crossmod/hbm/CrossHbm.class'; then
+            echo "FEHLER: Die JAR enthaelt die HBM-Anbindung nicht."
+            exit 1
+          fi
+          echo "OK - die Anbindung liegt in der JAR."
+
+      # Die Datengenerierung ist der beste Ersatz fuer einen Client-Start, den CI leisten
+      # kann: sie faehrt den Mod-Konstruktor hoch und feuert saemtliche Registrierungen.
+      # Ausserdem ist die JAR ohne sie unvollstaendig -- src/generated/resources liegt nicht
+      # im Baum, wird aber von sourceSets.main.resources eingezogen.
+      - name: Run data generation
+        run: ./gradlew runData --console=plain
+
+      - name: Check for duplicate resource paths
+        run: |
+          comm -12 \
+            <(cd src/main/resources && find . -type f | sort) \
+            <(cd src/generated/resources && find . -type f | sort) > doppelte-pfade.txt
+          if [ -s doppelte-pfade.txt ]; then
+            echo "Diese Dateien liegen handgeschrieben UND erzeugt vor:"
+            cat doppelte-pfade.txt
+            exit 1
+          fi
+          echo "OK - keine Datei liegt doppelt vor."
+
+      - name: Build packable jar
+        run: ./gradlew build --console=plain
+
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: energycontrol
+          path: build/libs/*.jar
+
+      # Der Server laedt die erzeugten Daten wirklich, baut eine Welt und tickt sie.
+      # Beurteilt wird das Protokoll, nicht der Rueckgabewert -- beendet wird ueber die
+      # eigene Standardeingabe, mit hartem Abbruch nach Zeitablauf als Rueckfall.
+      - name: Run dedicated server (world load smoke test)
+        run: |
+          mkdir -p run/server
+          echo "eula=true" > run/server/eula.txt
+          {
+            echo "max-tick-time=-1"
+            echo "level-name=ci-world"
+            echo "online-mode=false"
+            echo "sync-chunk-writes=false"
+          } > run/server/server.properties
+
+          ( sleep 180; echo stop; sleep 120 ) | timeout 900 ./gradlew runServer --console=plain > server.log 2>&1 || true
+
+          echo "----- letzte 80 Zeilen -----"
+          tail -80 server.log
+
+          if ! grep -q 'Done (' server.log; then
+            echo
+            echo "FEHLER: Der Server hat die Welt nie fertig geladen ('Done (' fehlt im Protokoll)."
+            grep -n -m 5 -A 12 'Exception\|Caused by:' server.log || true
+            exit 1
+          fi
+
+          FEHLER=$(grep -c '/ERROR\]' server.log || true)
+          echo "Fehlerzeilen im Protokoll: $FEHLER"
+          if [ "$FEHLER" -gt 0 ]; then
+            grep -m 10 '/ERROR\]' server.log | cut -c1-200
+          fi
+
+      - name: Upload server log tail
+        if: always()
+        run: |
+          if [ -f server.log ]; then
+            tail -n 5000 server.log > server-tail.log
+            grep -n -B 2 -A 30 'Exception\|Caused by:\|ERROR\]' server.log | head -n 4000 > server-errors.log || true
+          fi
+        continue-on-error: true
+
+      - name: Upload server log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-log
+          path: |
+            server-tail.log
+            server-errors.log
+          if-no-files-found: ignore

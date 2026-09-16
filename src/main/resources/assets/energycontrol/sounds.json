@@ -1,0 +1,5 @@
+{
+  "alarm_default": { "category": "block", "sounds": [ { "name": "energycontrol:alarm_default", "stream": true } ] },
+  "alarm_sci_fi": { "category": "block", "sounds": [ { "name": "energycontrol:alarm_sci_fi", "stream": true } ] },
+  "alarm_siren": { "category": "block", "sounds": [ { "name": "energycontrol:alarm_siren", "stream": true } ] }
+}

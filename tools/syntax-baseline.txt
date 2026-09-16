@@ -1,0 +1,15 @@
+# Baseline fuer tools/syntax-check.sh
+# Nachweislich unschaedliche javac-Folgefehler aus der fehlenden Minecraft-/NeoForge-API.
+# JEDE Zeile hier wurde manuell geprueft. Nichts ungeprueft hinzufuegen.
+#
+# "recursive constructor invocation" in den drei Menue-Klassen:
+# Jede hat zwei Konstruktoren -- (int, Inventory, FriendlyByteBuf) fuer den Aufruf durch
+# NeoForge und (int, Inventory, XBlockEntity) fuer den Aufruf durch die Block-Entitaet.
+# Der erste delegiert an den zweiten. Ohne die Minecraft-API kennt javac den Typ des
+# gecasteten Arguments nicht, waehlt bei der Ueberladungsaufloesung deshalb den
+# Konstruktor mit FriendlyByteBuf -- also sich selbst -- und meldet Rekursion. Mit
+# vorhandener API loest derselbe Aufruf korrekt auf. Dasselbe Muster steht im
+# HBM-Port und faellt dort in der CI nicht auf.
+src/main/java/com/zuxelus/energycontrol/menus/InfoPanelMenu.java: error: recursive constructor invocation
+src/main/java/com/zuxelus/energycontrol/menus/RangeTriggerMenu.java: error: recursive constructor invocation
+src/main/java/com/zuxelus/energycontrol/menus/ThermalMonitorMenu.java: error: recursive constructor invocation

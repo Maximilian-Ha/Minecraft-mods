@@ -1,0 +1,174 @@
+//file:noinspection GroovyAssignabilityCheck -> ignore
+plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'maven-publish'
+    id 'net.neoforged.moddev' version '2.0.107'
+}
+
+tasks.named('wrapper', Wrapper).configure {
+    distributionType = Wrapper.DistributionType.BIN
+}
+
+version = mod_version
+group = mod_group
+
+base {
+    archivesName = mod_id
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+/*
+ * Die HBM-Anbindung wird gegen die Klassen des HBM-Ports uebersetzt, nicht ueber
+ * Reflexion angesprochen. Die JAR dafuer wird hier gesucht, in dieser Reihenfolge:
+ *
+ *   1. -Phbm_jar=/pfad/zur/hbmsntm-198A.jar
+ *   2. libs/*.jar                        (haendisch abgelegt)
+ *   3. hbm/build/libs/hbmsntm-*.jar      (Nachbar-Auscheckung des HBM-Zweigs)
+ *
+ * Findet sich keine, wird das Paket crossmod/hbm aus dem Quelltextsatz genommen.
+ * Der Kern kennt die HBM-Klassen nicht -- CrossModLoader laedt die Bruecke ueber
+ * ihren Namen --, der Rest der Mod uebersetzt und laeuft also auch ohne sie.
+ * Zur Laufzeit ist die Bruecke nur aktiv, wenn der HBM-Port geladen ist.
+ */
+def resolveHbmJar() {
+    if(project.hasProperty('hbm_jar')) {
+        File explicit = file(project.property('hbm_jar'))
+        if(!explicit.isFile()) throw new GradleException("hbm_jar zeigt auf keine Datei: ${explicit}")
+        return explicit
+    }
+    File[] candidates = [
+            file('libs'),
+            file('hbm/build/libs')
+    ].findAll { it.isDirectory() }
+     .collect { it.listFiles({ File f -> f.name.endsWith('.jar') && !f.name.endsWith('-sources.jar') } as FileFilter) ?: new File[0] }
+     .flatten() as File[]
+    return candidates.find { it.name.startsWith(hbm_mod_id) } ?: candidates.find { true }
+}
+
+ext.hbmJar = resolveHbmJar()
+
+if(ext.hbmJar == null) {
+    logger.lifecycle("Energy Control: keine HBM-JAR gefunden, die Anbindung crossmod/hbm wird nicht uebersetzt.")
+    sourceSets.main.java.exclude 'com/zuxelus/energycontrol/crossmod/hbm/**'
+} else {
+    logger.lifecycle("Energy Control: HBM-Anbindung wird gegen ${ext.hbmJar} uebersetzt.")
+}
+
+neoForge {
+    version = project.neo_version
+
+    parchment {
+        mappingsVersion = project.parchment_mappings_version
+        minecraftVersion = project.parchment_minecraft_version
+    }
+
+    runs {
+        client {
+            client()
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        server {
+            server()
+            programArgument '--nogui'
+            // Eigenes Spielverzeichnis, damit CI weiss, wohin eula.txt gehoert, und damit
+            // die erzeugte Welt nicht neben den Daten des Clients liegt.
+            gameDirectory = project.file('run/server')
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        data {
+            data()
+            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        }
+
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
+    }
+}
+
+// Der Server liest Befehle von der Standardeingabe. Ohne diese Zeile bekommt er einen
+// leeren Strom, und "stop" von aussen erreicht ihn nie.
+tasks.withType(JavaExec).matching { it.name == 'runServer' }.configureEach {
+    standardInput = System.in
+}
+
+// Vom Datengenerator erzeugte Dateien gehoeren in die JAR; .cache enthaelt nur
+// Pruefsummen des Erzeugers.
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
+    exclude '.cache'
+}
+
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    if(project.ext.hbmJar != null) {
+        compileOnly files(project.ext.hbmJar)
+    }
+}
+
+tasks.withType(ProcessResources).configureEach {
+    var replaceProperties = [
+            minecraft_version       : minecraft_version,
+            mod_description         : mod_description,
+            minecraft_version_range : minecraft_version_range,
+            neo_version             : neo_version,
+            neo_version_range       : neo_version_range,
+            loader_version_range    : loader_version_range,
+            mod_id                  : mod_id,
+            mod_name                : mod_name,
+            mod_license             : mod_license,
+            mod_version             : mod_version,
+            mod_authors             : mod_authors,
+            hbm_mod_id              : hbm_mod_id,
+    ]
+
+    duplicatesStrategy = DuplicatesStrategy.WARN
+
+    inputs.properties replaceProperties
+
+    filesMatching("META-INF/neoforge.mods.toml") {
+        expand replaceProperties
+    }
+}
+
+publishing {
+    publications {
+        register('mavenJava', MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            url "file://${project.projectDir}/repo"
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}

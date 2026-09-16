@@ -1,0 +1,39 @@
+modLoader="javafml"
+
+loaderVersion="${loader_version_range}"
+
+license="${mod_license}"
+
+displayURL="https://github.com/Maximilian-Ha/Minecraft-mods"
+issueTrackerURL="https://github.com/Maximilian-Ha/Minecraft-mods/issues"
+
+[[mods]]
+    modId="${mod_id}"
+    version="${mod_version}"
+    displayName="${mod_name}"
+    authors="${mod_authors}"
+    description='''${mod_description}'''
+
+[[dependencies.${mod_id}]]
+    modId="neoforge"
+    type="required"
+    versionRange="[${neo_version},)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="minecraft"
+    type="required"
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+# HBM's Nuclear Tech Mod. Nicht erforderlich: fehlt der Port, bleiben nur die
+# HBM-Karten ohne Wirkung, alles andere laeuft unveraendert weiter. "AFTER" sorgt
+# dafuer, dass HBM zuerst geladen ist, wenn die Bruecke sich anmeldet.
+[[dependencies.${mod_id}]]
+    modId="${hbm_mod_id}"
+    type="optional"
+    versionRange="[0,)"
+    ordering="AFTER"
+    side="BOTH"
