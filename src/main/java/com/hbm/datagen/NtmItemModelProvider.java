@@ -579,6 +579,11 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicItem(NtmItems.REACTOR_SENSOR.get());
         this.basicItem(NtmItems.TURRET_CHIP.get());
         this.basicItem(NtmItems.AMMO_DGK.get());
+        /* Beide sind EnumMultiItem ohne eigene Textur je Wert -- sie tragen viele Namen, aber
+         * ein Bild. EnumMultiItem.registerItemModel legt fuer sie nichts an, und hier wurden
+         * sie vergessen; im Spielprotokoll vom 16.09. zeigten sie den fehlenden-Modell-Wuerfel. */
+        this.basicItem(NtmItems.PWR_FUEL_HOT.get());
+        this.basicItem(NtmItems.PWR_FUEL_DEPLETED.get());
         /* Der Debugmunition fehlt eine Textur -- auch das Original hat keine. Damit sie nicht
          * als fehlendes Modell erscheint, laeuft sie auf den Platzhalter. */
         this.withExistingParent("ammo_debug", mcLoc("item/generated")).texture("layer0", modLoc("item/nothing"));

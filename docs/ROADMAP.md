@@ -3157,3 +3157,22 @@ Gegenstandsmodell? Das hätte alle neun gefunden.
 in einem Temp-Verzeichnis und besteht nur, wenn die Regel genau ein fehlendes Elternmodell und
 drei Gegenstände ohne Modell meldet. Die CI führt erst die Selbstprobe aus, dann die Prüfung —
 ein Tor, dessen Empfindlichkeit niemand misst, ist eine Attrappe.
+
+**Neun Blöcke sind ausgenommen.** `balefire`, `barricade`, `corium`, `fire_digamma`,
+`icf_block`, `mud`, `pile_block`, `rad_lava` und `volcanic_lava` stehen mit dem blanken
+`BLOCKS.register` im Quelltext statt mit einem der `register`-Helfer, die sonst jedem Block
+einen `BlockItem` mitgeben — Flüssigkeiten, Feuer und Wrapper sollen nicht in der Hand liegen.
+Eine Namenszeile haben sie trotzdem, also müssen sie in der Liste stehen; kommt einer hinzu,
+fällt er auf und gehört mit Begründung dazu.
+
+### Nachtrag: der erste Lauf des neuen Tors hat einen eigenen Fehler aufgedeckt
+
+`runData` brach ab mit `Texture hbmsntm:item/battery_pack does not exist in any known resource
+pack`. Ursache war die Änderung an `EnumMultiItem.registerItemModel` aus dieser Runde: sie
+schrieb für **jedes** `multiTexture == false` ein flaches Modell auf `item/<name>` — auch für
+`battery_pack`, das gar keine Textur hat, weil ein eigener Darsteller es zeichnet.
+
+Die Änderung ist zurückgenommen. Richtig ist die Aufteilung, die der Port ohnehin verwendet:
+`NtmItemModelProvider` nennt jeden Gegenstand einzeln — `basicItem`, wo es eine Textur gibt,
+`entityItem`, wo ein Darsteller zeichnet. Die beiden PWR-Brennstoffe waren dort schlicht
+vergessen worden und stehen jetzt drin.

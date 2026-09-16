@@ -107,6 +107,16 @@ for key in sorted(models):
 # Die erzeugte Sprachdatei ist die einzige vollstaendige Liste der Registrierungsnamen, die
 # nach runData vorliegt. lang-check.sh stellt sicher, dass jeder Eintrag darin eine Namenszeile
 # hat -- damit ist sie hier als Verzeichnis brauchbar.
+# Neun Bloecke bekommen absichtlich KEINEN Gegenstand: sie stehen mit dem blanken
+# BLOCKS.register im Quelltext statt mit einem der register-Helfer, die sonst jedem Block
+# einen BlockItem mitgeben. Fluessigkeiten, Feuer, Wrapper -- nichts davon soll in der Hand
+# liegen. Eine Namenszeile haben sie trotzdem, deshalb muessen sie hier ausgenommen werden.
+# Kommt einer hinzu, faellt er auf und gehoert mit Begruendung in diese Liste.
+OHNE_GEGENSTAND = {
+    'balefire', 'barricade', 'corium', 'fire_digamma', 'icf_block',
+    'mud', 'pile_block', 'rad_lava', 'volcanic_lava',
+}
+
 ohne_modell = []
 lang = None
 for root in roots:
@@ -121,6 +131,7 @@ if lang:
         if len(teile) != 3: continue
         art, ns, name = teile
         if ns != MOD or art not in ('item', 'block'): continue
+        if art == 'block' and name in OHNE_GEGENSTAND: continue
         if ('item/' + name) not in models:
             ohne_modell.append((art, name))
 

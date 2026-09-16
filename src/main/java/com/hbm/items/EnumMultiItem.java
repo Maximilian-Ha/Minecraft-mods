@@ -48,19 +48,13 @@ public class EnumMultiItem extends Item implements IMetaItem, ICustomItemModelRe
     public void registerItemModel(ItemModelProvider provider, ResourceLocation modelLocation) {
 
         /*
-         * Ohne eigene Textur je Wert gibt es nur ein flaches Modell auf der Textur des
-         * Gegenstands selbst. Diese Zeile fehlte: fuer multiTexture == false schrieb die
-         * Methode gar nichts, und der Gegenstand zeigte im Spiel den fehlenden-Modell-Wuerfel.
-         * So gesehen im Spielprotokoll vom 16.09. bei pwr_fuel_hot und pwr_fuel_depleted.
+         * Nur Gegenstaende mit eigener Textur je Wert bekommen hier ein Modell. Alle anderen
+         * nennt NtmItemModelProvider einzeln -- entweder mit basicItem, wenn es eine Textur
+         * gibt, oder mit entityItem, wenn ein eigener Darsteller sie zeichnet. Ein Modell an
+         * dieser Stelle waere fuer die zweite Gruppe falsch: battery_pack etwa hat gar keine
+         * Textur, und der Datenerzeuger bricht ab, sobald eines auf sie zeigt.
          */
-        if(!multiTexture) {
-            provider.getBuilder(modelLocation.toString())
-                    .parent(new ModelFile.UncheckedModelFile("item/generated"))
-                    .texture("layer0", ResourceLocation.fromNamespaceAndPath(modelLocation.getNamespace(), "item/" + modelLocation.getPath()));
-            return;
-        }
-
-        {
+        if(multiTexture) {
             Enum<?>[] enums = theEnum.getEnumConstants();
 
             ItemModelBuilder builder = provider.getBuilder(modelLocation.toString());
