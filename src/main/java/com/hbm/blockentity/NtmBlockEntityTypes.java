@@ -36,6 +36,7 @@ import com.hbm.blockentity.machine.heater.*;
 import com.hbm.blockentity.machine.oil.MachineFractionTowerBlockEntity;
 import com.hbm.blockentity.machine.oil.MachineCatalyticReformerBlockEntity;
 import com.hbm.blockentity.machine.oil.MachineHydrotreaterBlockEntity;
+import com.hbm.blockentity.machine.oil.MachineCatalyticCrackerBlockEntity;
 import com.hbm.blockentity.machine.oil.MachineCokerBlockEntity;
 import com.hbm.blockentity.machine.oil.MachineGasFlareBlockEntity;
 import com.hbm.blockentity.machine.oil.MachineLiquefactorBlockEntity;
@@ -276,6 +277,7 @@ public class NtmBlockEntityTypes {
     public static final Supplier<BlockEntityType<MachineCatalyticReformerBlockEntity>> MACHINE_CATALYTIC_REFORMER = BLOCK_ENTITY_TYPES.register("machine_catalytic_reformer", () -> BlockEntityType.Builder.of(MachineCatalyticReformerBlockEntity::new, NtmBlocks.MACHINE_CATALYTIC_REFORMER.get()).build(null));
     public static final Supplier<BlockEntityType<MachineHydrotreaterBlockEntity>> MACHINE_HYDROTREATER = BLOCK_ENTITY_TYPES.register("machine_hydrotreater", () -> BlockEntityType.Builder.of(MachineHydrotreaterBlockEntity::new, NtmBlocks.MACHINE_HYDROTREATER.get()).build(null));
     public static final Supplier<BlockEntityType<MachineVacuumDistillBlockEntity>> MACHINE_VACUUM_DISTILL = BLOCK_ENTITY_TYPES.register("machine_vacuum_distill", () -> BlockEntityType.Builder.of(MachineVacuumDistillBlockEntity::new, NtmBlocks.MACHINE_VACUUM_DISTILL.get()).build(null));
+    public static final Supplier<BlockEntityType<MachineCatalyticCrackerBlockEntity>> MACHINE_CATALYTIC_CRACKER = BLOCK_ENTITY_TYPES.register("machine_catalytic_cracker", () -> BlockEntityType.Builder.of(MachineCatalyticCrackerBlockEntity::new, NtmBlocks.MACHINE_CATALYTIC_CRACKER.get()).build(null));
     public static final Supplier<BlockEntityType<MachineCokerBlockEntity>> MACHINE_COKER = BLOCK_ENTITY_TYPES.register("machine_coker", () -> BlockEntityType.Builder.of(MachineCokerBlockEntity::new, NtmBlocks.MACHINE_COKER.get()).build(null));
     public static final Supplier<BlockEntityType<MachineGasFlareBlockEntity>> MACHINE_GAS_FLARE = BLOCK_ENTITY_TYPES.register("machine_gas_flare", () -> BlockEntityType.Builder.of(MachineGasFlareBlockEntity::new, NtmBlocks.MACHINE_GAS_FLARE.get()).build(null));
     public static final Supplier<BlockEntityType<MachineLiquefactorBlockEntity>> MACHINE_LIQUEFACTOR = BLOCK_ENTITY_TYPES.register("machine_liquefactor", () -> BlockEntityType.Builder.of(MachineLiquefactorBlockEntity::new, NtmBlocks.MACHINE_LIQUEFACTOR.get()).build(null));

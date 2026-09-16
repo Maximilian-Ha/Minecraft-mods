@@ -2731,6 +2731,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.MACHINE_SOLIDIFIER, "Solidifier");
         this.add(NtmBlocks.MACHINE_PYRO_OVEN, "Pyrolysis Oven");
         this.add(NtmBlocks.MACHINE_LIQUEFACTOR, "Liquefactor");
+        this.add(NtmBlocks.MACHINE_CATALYTIC_CRACKER, "Catalytic Cracking Tower");
         this.add(NtmBlocks.MACHINE_COKER, "Coker");
         this.add(NtmBlocks.MACHINE_COKER, DESC, "Turns oil into petroleum coke and lighter fractions.$Runs on heat, not power: put a heat source below it.$One operation costs 20,000TU.");
         this.add(NtmBlocks.MACHINE_GAS_FLARE, "Gas Flare");

@@ -3024,3 +3024,37 @@ Gemessen: mit dem wiederhergestellten Fehler zwei Funde, ohne ihn keiner.
 |---|---|
 | portiert (14) | Bohrturm, Pumpe, Frackingturm, Raffinerie, Fraktionierturm, Zwischenstück, Reformer, Hydrotreater, Vakuumdestille, Verfestiger, Pyroofen, Verflüssiger, Gasfackel, **Verkoker** |
 | offen (1) | Krackturm |
+
+## Stufe 6 — Runde 147: der Krackturm, und die Erdölkette ist vollständig
+
+Die letzte und größte Maschine der Kette. Der Krackturm spaltet ein schweres Öl unter Dampf in
+ein leichteres und ein Gas; was woraus wird, steht in `CrackingRecipes`, die es im Port schon
+gab. Fünf Tanks: schweres Öl und Dampf hinein, leichteres Öl, Gas und Altdampf hinaus.
+
+Er hat als einzige Maschine der Kette **keine Oberfläche**: eingestellt wird er mit einem
+Fluidkennzeichner in der Hand, abgelesen über die Einblendung beim Hinsehen (`ILookOverlay`).
+
+Sein Verbund ist der größte des Ports: **fünf Teilkörper**, alle an der Blickrichtung
+ausgerichtet, dazu acht Anschlussblöcke rings um den Sockel. Die Maße sind unverändert aus dem
+Original übernommen.
+
+**Zwei Torwächter haben vor der CI angeschlagen**, beide zu Recht. Die bekannte Scheinmeldung zu
+`IFluidStandardSenderMK2` ist wie üblich in der Baseline gelandet. Der zweite Fund war echt:
+`dist-check.sh` hat gemerkt, dass `printHook` die Client-Klasse `RenderGuiEvent` im Rumpf hat,
+ohne `@OnlyIn(Dist.CLIENT)` davor — der Server wäre beim Laden der Klasse abgebrochen.
+
+### Stand der Erdölkette nach Runde 147
+
+| | |
+|---|---|
+| portiert (15) | Bohrturm, Pumpe, Frackingturm, Raffinerie, Fraktionierturm, Zwischenstück, Reformer, Hydrotreater, Vakuumdestille, Verfestiger, Pyroofen, Verflüssiger, Gasfackel, Verkoker, **Krackturm** |
+| offen | — |
+
+**Die Kette ist vollständig.** Vom Bohrturm bis zum Brennstoffwürfel ist jede Maschine des
+Originals im Port; damit ist auch die zweite Hälfte des Ziels „der nächste Schutzkleidungsblock
+und die Erdölkette" erfüllt (die erste war die Hazmat-Familie in den Runden 136/137).
+
+**Was für die ganze Kette noch offen ist: die JEI-Ansichten.** Keine der Maschinen aus den
+Runden 138 bis 147 hat eine — im Original gibt es für Fraktionierung, Reformierung,
+Hydrotreating, Vakuumdestillation, Verfestigung, Verflüssigung, Pyrolyse, Verkokung und Kracken
+je einen NEI-Handler. Das ist die nächste sinnvolle Runde.
