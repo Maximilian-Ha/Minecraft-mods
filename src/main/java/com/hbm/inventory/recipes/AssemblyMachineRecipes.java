@@ -1151,6 +1151,23 @@ public class AssemblyMachineRecipes extends GenericRecipes<GenericRecipe> {
                         new ComparableStack(Items.STRING, 8)
                 ));
 
+        // ---- Runde 139 ----
+        // Original "ass.reformer".
+        // ABWEICHUNGEN, wie in allen Runden davor: ANY_RESISTANTALLOY ist im Port derselbe
+        // Gegenstand wie DURA, und der Bismoid-Schaltkreis wird der integrierte.
+        // Die inputItemsEx-Variante entfaellt wie ueberall.
+        this.register(new GenericRecipe("ass.reformer").setup(200, 100).outputItems(new ItemStack(NtmBlocks.MACHINE_CATALYTIC_REFORMER, 1))
+                .inputItems(
+                        NtmItems.castPlateIngredient(CastPlateItem.Type.STEEL, 12),
+                        new ComparableStack(NtmItems.PLATE_COPPER.get(), 8),
+                        new ComparableStack(NtmItems.INGOT_NIOBIUM.get(), 8),
+                        new ComparableStack(NtmItems.INGOT_DURA_STEEL.get(), 4),
+                        new ComparableStack(NtmItems.SHELL_STEEL.get(), 3),
+                        new ComparableStack(NtmItems.PIPES_STEEL.get(), 8),
+                        new ComparableStack(NtmItems.MOTOR.get(), 1),
+                        new ComparableStack(NtmItems.CIRCUIT_INTEGRATED_BOARD.get(), 1)
+                ));
+
         FluidType[] order = Fluids.getInNiceOrder();
         for(int i = 1; i < order.length; ++i) {
             FluidType type = order[i];

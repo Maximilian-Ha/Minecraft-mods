@@ -432,6 +432,7 @@ public class NtmItems {
     public static final DeferredItem<Item> RING_STARMETAL = ITEMS.register("ring_starmetal", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> TANK_STEEL = ITEMS.register("tank_steel", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> CATALYST_CLAY = ITEMS.register("catalyst_clay", () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> CATALYTIC_CONVERTER = ITEMS.register("catalytic_converter", () -> new Item(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> DEUTERIUM_FILTER = ITEMS.register("deuterium_filter", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> FINS_FLAT = ITEMS.register("fins_flat", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> FINS_SMALL_STEEL = ITEMS.register("fins_small_steel", () -> new Item(new Item.Properties()));

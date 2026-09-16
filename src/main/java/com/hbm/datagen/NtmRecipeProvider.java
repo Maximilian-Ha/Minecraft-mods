@@ -3469,6 +3469,19 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .define('B', Blocks.IRON_BARS)
                 .unlockedBy("has_steel_shell", has(NtmItems.SHELL_STEEL.get()))
                 .save(recipeOutput);
+
+        /* Runde 139: der Katalysator des Reformers. Er wird nicht verbraucht.
+         * ABWEICHUNG: ANY_HARDPLASTIC wird Polycarbonat und ANY_BISMOID Wismutbronze,
+         * wie in allen Runden davor. */
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.CATALYTIC_CONVERTER.get(), 1)
+                .pattern("PCP")
+                .pattern("PBP")
+                .pattern("PCP")
+                .define('P', NtmItems.INGOT_PC.get())
+                .define('C', NtmItems.POWDER_COBALT.get())
+                .define('B', NtmItems.INGOT_BISMUTH_BRONZE.get())
+                .unlockedBy("has_cobalt_powder", has(NtmItems.POWDER_COBALT.get()))
+                .save(recipeOutput);
     }
 
 }

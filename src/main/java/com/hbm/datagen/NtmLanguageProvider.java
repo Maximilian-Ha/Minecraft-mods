@@ -2724,6 +2724,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.MACHINE_REFINERY, "Oil Refinery");
         this.add(NtmBlocks.MACHINE_FRACTION_TOWER, "Fractioning Tower");
         this.add(NtmBlocks.FRACTION_SPACER, "Fractioning Tower Spacer");
+        this.add(NtmBlocks.MACHINE_CATALYTIC_REFORMER, "Catalytic Reformer");
         this.add(NtmBlocks.ORE_METEOR_IRON, "Meteor Iron Ore");
         this.add(NtmBlocks.ORE_METEOR_COBALT, "Meteor Cobalt Ore");
         this.add(NtmBlocks.ORE_METEOR_ALUMINIUM, "Meteor Aluminium Ore");
@@ -3543,6 +3544,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("armorMod.insert.explosion", "%s explosion damage");
         this.add("armorMod.insert.speed", "%s speed");
         this.add("armorMod.insert.rad", "+%s RAD/s");
+        this.add("container.machine_catalytic_reformer", "Catalytic Reformer");
 
         this.add("bomb.detonated", "Detonated successfully!");
         this.add("bomb.triggered", "Triggered successfully!");
@@ -3662,6 +3664,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.INSERT_ERA, "Explosive Reactive Armor Insert");
         this.add(NtmItems.INSERT_YHARONITE, "Yharonite Insert");
         this.add(NtmItems.INSERT_DOXIUM, "Astolfium-Doped Doxium Insert");
+        this.add(NtmItems.CATALYTIC_CONVERTER, "Catalytic Converter");
         this.add(NtmItems.PLAN_C, "Plan C");
         this.add(NtmItems.CASSETTE, "Cassette");
         this.add(NtmItems.FLUID_ICON, "Fluid");

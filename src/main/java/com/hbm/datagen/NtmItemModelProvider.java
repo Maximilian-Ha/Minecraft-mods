@@ -844,6 +844,7 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicItem(NtmItems.INSERT_ERA.get());
         this.basicItem(NtmItems.INSERT_YHARONITE.get());
         this.basicItem(NtmItems.INSERT_DOXIUM.get());
+        this.basicItem(NtmItems.CATALYTIC_CONVERTER.get());
         this.basicItem(NtmItems.PLAN_C.get());
 
         this.withExistingParent("conveyor_wand", mcLoc("item/generated")).texture("layer0", modLoc("block/conveyor"));

@@ -35,6 +35,10 @@
 # selbst KEINE Schnittstelle; die Meldung ist wortgleich die ihrer jeweiligen
 # Basisklasse, die bereits in dieser Liste steht und in der CI fehlerfrei uebersetzt.
 #
+# Runde 139: MachineCatalyticReformerBlockEntity ist derselbe Fall wie die Raffinerie --
+# MachineBaseBlockEntity plus IEnergyReceiverMK2 und IFluidStandardTransceiverMK2. Die
+# Raffinerie steht seit Stufe 2 in der CI und uebersetzt dort fehlerfrei.
+#
 # Runde 138: MachineFractionTowerBlockEntity implementiert IFluidStandardTransceiverMK2 in
 # genau derselben Form wie TurbineBaseBlockEntity, die bereits in dieser Liste steht und in
 # der CI fehlerfrei uebersetzt. Die Meldung erscheint im Rohlauf an
@@ -252,6 +256,7 @@ src/main/java/com/hbm/blockentity/machine/oil/MachineFrackingTowerBlockEntity.ja
 src/main/java/com/hbm/blockentity/machine/oil/MachineOilWellBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
 src/main/java/com/hbm/blockentity/machine/oil/MachinePumpjackBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
 src/main/java/com/hbm/blockentity/machine/oil/MachineRefineryBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/oil/MachineCatalyticReformerBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
 src/main/java/com/hbm/blockentity/machine/oil/MachineFractionTowerBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
 src/main/java/com/hbm/blockentity/machine/oil/OilDrillBaseBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
 src/main/java/com/hbm/blockentity/machine/rbmk/RBMKBoilerBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;

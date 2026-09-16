@@ -57,6 +57,7 @@ public class NtmMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<MachineRockMillMenu>> MACHINE_ROCK_MILL = reg("machine_rock_mill", MachineRockMillMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<MachineOilWellMenu<?>>> MACHINE_OIL_WELL = reg("machine_oil_well", MachineOilWellMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<MachineRefineryMenu>> MACHINE_REFINERY = reg("machine_refinery", MachineRefineryMenu::new);
+    public static final DeferredHolder<MenuType<?>, MenuType<MachineCatalyticReformerMenu>> MACHINE_CATALYTIC_REFORMER = reg("machine_catalytic_reformer", MachineCatalyticReformerMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<MachineFurnaceCombinationMenu>> FURNACE_COMBINATION = reg("furnace_combination", MachineFurnaceCombinationMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<MachineBlastFurnaceMenu>> MACHINE_BLAST_FURNACE = reg("machine_blast_furnace", MachineBlastFurnaceMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<MachineWoodBurnerMenu>> MACHINE_WOOD_BURNER = reg("machine_wood_burner", MachineWoodBurnerMenu::new);

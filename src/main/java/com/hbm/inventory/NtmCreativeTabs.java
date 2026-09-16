@@ -323,6 +323,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.RING_STARMETAL.get());
                         output.accept(NtmItems.TANK_STEEL.get());
                         output.accept(NtmItems.CATALYST_CLAY.get());
+                        output.accept(NtmItems.CATALYTIC_CONVERTER.get());
                         output.accept(NtmItems.DEUTERIUM_FILTER.get());
                         output.accept(NtmItems.FINS_FLAT.get());
                         output.accept(NtmItems.FINS_SMALL_STEEL.get());
@@ -1360,6 +1361,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.MACHINE_REFINERY);
                         output.accept(NtmBlocks.MACHINE_FRACTION_TOWER);
                         output.accept(NtmBlocks.FRACTION_SPACER);
+                        output.accept(NtmBlocks.MACHINE_CATALYTIC_REFORMER);
                         output.accept(NtmBlocks.FURNACE_COMBINATION);
                         output.accept(NtmBlocks.MACHINE_DRAIN);
                         output.accept(NtmBlocks.MACHINE_INTAKE);

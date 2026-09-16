@@ -644,6 +644,7 @@ public class NtmBlocks {
     public static final DeferredBlock<Block> MACHINE_REFINERY = register("machine_refinery", () -> new MachineRefineryBlock(BlockBehaviour.Properties.of().strength(0.6F, 10F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops().noOcclusion()));
     public static final DeferredBlock<Block> MACHINE_FRACTION_TOWER = register("machine_fraction_tower", () -> new MachineFractionTowerBlock(BlockBehaviour.Properties.of().strength(5.0F, 10F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops().noOcclusion()));
     public static final DeferredBlock<Block> FRACTION_SPACER = register("fraction_spacer", () -> new FractionSpacerBlock(BlockBehaviour.Properties.of().strength(5.0F, 10F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops().noOcclusion()));
+    public static final DeferredBlock<Block> MACHINE_CATALYTIC_REFORMER = register("machine_catalytic_reformer", () -> new MachineCatalyticReformerBlock(BlockBehaviour.Properties.of().strength(5.0F, 10F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops().noOcclusion()));
     public static final DeferredBlock<Block> FURNACE_COMBINATION = register("furnace_combination", () -> new MachineFurnaceCombinationBlock(BlockBehaviour.Properties.of().strength(0.6F, 100.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops().noOcclusion()));
 
     /* Runde 105: die drei Anschluesse an die Welt. */
