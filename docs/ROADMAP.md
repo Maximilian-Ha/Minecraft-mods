@@ -2546,3 +2546,141 @@ entfernten Kennzeichnung genau ein Fund.
 | Die .jar lässt sich packen | |
 
 Elf Läufe, elf Ursachen — und keine davon hätte ein Übersetzungsfehler sein können.
+
+## Stufe 6 — das Ziel: Schutzkleidung, Erdöl, Lagerung, RBMK-Reste, Einzelstücke, Welt
+
+> **Ziel dieser Stufe:** Schutzkleidung, Erdölkette, Lagerung, RBMK-Reste, Einzelstücke und
+> Weltgenerierung zu Ende portieren.
+
+Nicht in dieser Stufe, damit die Abgrenzung festgehalten ist: Geschütze und Bomben, der
+Dunkelfusionskern, Drohnen, Rohrpost, Deko und die 142 Entitätsklassen. Die bleiben für später.
+
+### Der gemessene Ausgangsstand
+
+Die Zahlen rechnet [`tools/port-gap.py`](../tools/port-gap.py) jedes Mal neu aus, die Bauwerke
+[`tools/structure-gap.py`](../tools/structure-gap.py). Abgeschriebene Zahlen veralten —
+genau das ist dem Maschinenstand passiert (siehe die Berichtigung unten).
+
+| Klassenvergleich — belastbar | Original | Port | fehlend |
+|---|---:|---:|---:|
+| Blockentitäten (`TileEntity*`) | 370 | 269 | **153** |
+| Entitätsklassen | 185 | 51 | **142** |
+| Rüstungsklassen | 83 | 4 | **80** |
+| Weltgenerierungsklassen | 86 | 14 | **84** |
+
+| Namensvergleich — nur eine obere Schranke | Original | Port | höchstens |
+|---|---:|---:|---:|
+| Blocknamen | 977 | 608 | 489 |
+| Gegenstandsnamen | 1597 | 1169 | 619 |
+
+Die Namenszahlen sind **keine Ist-Werte**. Der Port faltet zusammen, was das Original über
+Metadaten trennt: aus sechzehn Metadaten-Werten wird eine Blockzustands-Eigenschaft, aus einem
+Metadaten-Gegenstand ein `EnumMultiItem`. `can_smart` heißt hier `drink.smart` und zählt im rohen
+Vergleich als fehlend, obwohl es da ist.
+
+**Berichtigung zum Maschinenstand der Runde 135.** Dort standen „68 Maschinen, davon der Sache
+nach 0 fehlend". Das galt für eine *enge* Zählung — `TileEntityMachine*.java` direkt im Ordner
+`/machine/`, ohne Unterordner. Die breite Aufnahme zählt 370 Blockentitäten, davon 153 ohne
+Entsprechung. Beide Zahlen sind richtig, sie messen nur nicht dasselbe. Für die Planung zählt die
+breite.
+
+### 1. Schutzkleidung — 80 Klassen
+
+Die größte inhaltliche Lücke, und für einen Mod, dessen Kern Strahlung ist, die wichtigste: **im
+Port gibt es keinen einzigen Schutzanzug.** Vorhanden sind nur `ArmorNo9`, `ItemArmorMod`,
+`ItemModCladding` und `ModCharmItem`.
+
+Die 80 Klassen zerfallen in drei Gruppen:
+
+* **Anzüge (~30)** — Hazmat und Hazmat-Maske, Liquidator, Envsuit, Gasmaske, Asbest, HEV, T51,
+  Desh, Bismut, Euphemium, Digamma, AJR, FSB in drei Spielarten, RPA und NCRPA je mit Nah- und
+  Fernkampfvariante, Taurun, Trenchmaster, Maske der Schande.
+* **Rüstungsmodule (~35 `ItemMod*`)** — das Baukastensystem: Batterie, Gasmaske, Nachtsicht,
+  Servos, Schild, Tesla, Lodestone, Serum, Pads und so fort.
+* **Jetpacks und Schnittstellen (~15)** — `JetpackBase` und vier Spielarten, dazu
+  `IArmorDisableModel`, `IAttackHandler`, `IDamageHandler`, `IPAMelee`, `IPARanged`.
+
+Das Gerüst steht schon: `ArmorRegistry`, `HazmatRegistry`, `ArmorUtil` und `ItemModCladding`
+laufen im Port und werden in `commonSetup` aufgerufen. Was fehlt, sind die Träger.
+
+**Vorschlag für die Reihenfolge:** erst Hazmat und Gasmaske (sie schließen den Kreis mit dem
+Strahlungssystem, das längst läuft), dann das Modulsystem, dann die Kraftanzüge mit ihren
+Schnittstellen, zuletzt die Jetpacks.
+
+### 2. Erdölkette — 11 Blockentitäten
+
+`MachineCatalyticCracker`, `MachineCatalyticReformer`, `MachineCoker`, `MachineFractionTower`,
+`MachineGasFlare`, `MachineHydrotreater`, `MachineLiquefactor`, `MachinePyroOven` und drei
+weitere aus `tileentity/machine/oil`.
+
+Die Grundlagen liegen: Fluidsystem, `FluidTrait`, Bohrturm und Pumpe sind portiert, die
+Raffinerie selbst nicht. Damit wird aus Rohöl bis heute nichts.
+
+### 3. Lagerung — 10 Blockentitäten
+
+`MachineBigAssTank`, `MachineBAT9000`, `MachineFENSU`, `MachineOrbus`, `MachineUF6Tank`,
+`MachinePuF6Tank`, `MassStorage`, `Safe`, `FileCabinet`, `SoyuzCapsule`.
+
+Mechanisch die einfachste der sechs Gruppen: Behälter mit Fassungsvermögen und Oberfläche, ohne
+eigene Rechnung. Die beiden Hexafluorid-Tanks hängen an der Gaszentrifuge, die steht.
+
+### 4. RBMK-Reste — 6 Blockentitäten
+
+`RBMKAbsorber`, `RBMKBlank`, `RBMKControlManual`, `RBMKModerator`, `RBMKReflector`,
+`RBMKActiveBase`.
+
+Der Reaktor selbst läuft seit Stufe 3; was fehlt, sind die passiven Säulen — die Blöcke sind
+angelegt (`rbmk_absorber`, `rbmk_blank`, `rbmk_moderator`, `rbmk_reflector`, `rbmk_control`), ihre
+Blockentitäten nicht. Eine Säule ohne Blockentität nimmt am Wärme- und Flussaustausch nicht teil,
+der Reaktor rechnet also mit Löchern.
+
+### 5. Einzelstücke — rund 20 Blockentitäten
+
+Was in keine Familie gehört, aber je für sich zählt:
+
+* **SILEX** — schließt die Lücke aus Runde 135: die beiden Abfallfamilien und der radioaktive
+  Edelstein haben im Port bis heute keinen Erzeuger.
+* **Türen** — `BlastDoor`, `VaultDoorMigration`, `Hatch`.
+* **Funk** — `Broadcaster`, `Radiobox`, `RadioRec`, dazu der Telex-Block.
+* **Gießerei** — `FoundryOutlet`, `FoundrySlagtap`, `FoundryTank`; Becken, Form und Kanal stehen
+  schon.
+* **Wärme** — `FireboxBase`, `FurnaceBrick`, `HeatBoilerIndustrial`.
+* **Startrampen** — `LaunchpadLambda`, `LaunchpadSoyuz`.
+* **Rest** — `Electrolyser`, `Microwave`, `Tesla`, `ForceField`/`FF`, `Charger`,
+  `CargoElevator`, `ConveyorPress`, `Refueler`, `StorageDrum`, `Decon`, `ChlorineSeal`,
+  `DemonLamp`.
+
+### 6. Weltgenerierung — 84 Klassen, 56 Blöcke, 79 Bauwerke
+
+Die größte und die einzige, die nicht mechanisch ist. Drei Teile:
+
+1. **56 Bauwerksblöcke** (`tools/structure-gap.py --list`) — Kisten und Vorräte, Scheinwerfer in
+   vier Spielarten, Stahlbau, Deko-Rechner, Funkgeräte, Amboss aus Blei, Jigsaw- und Loot-Stäbe.
+   Mechanisch, aber Voraussetzung für alles Weitere: ohne sie lassen sich die Bauwerke nicht
+   setzen.
+2. **Die Erzeuger** — 13 Features (`OreLayer`, `OreLayer3D`, `OreCave`, `BiomeCave`,
+   `DepthDeposit`, `SchistStratum`, `Geyser`, `HugeMush`, `GlyphidHive`, `Meteorite`, `Dud`),
+   drei Biome (`NoMansLand`, `CraterBase`), die Höhlen- und Erdölschichten.
+3. **Die Bauwerke** — 13 Verliese (`AncientTomb`, `ArcticVault`, `Silo`, `Spaceship`,
+   `LibraryDungeon`, `DesertAtom`, `Ruin`), 16 Räume des Dschungelverlieses, die
+   Jigsaw-Maschinerie (`NBTStructure`, `JigsawPiece`, `JigsawPool`, `SpawnCondition`) und die
+   Auswahlregeln für Biome und Baustoffe.
+
+**Der Bruch liegt hier, nicht in der Menge.** Das Original erzeugt seine Welt mit
+`IWorldGenerator` und `MapGen*`-Klassen, die es auf 1.21 nicht mehr gibt. Die Entsprechung sind
+`ConfiguredFeature`/`PlacedFeature` (steht im Port bereits für die Erzadern) und
+`Structure`/`StructureTemplate`/`JigsawStructure` für die Bauwerke. Die 79 `.nbt`-Dateien des
+Originals liegen in dessen eigenem Format vor — sie müssen gelesen und in Vorlagen für 1.21
+umgeschrieben werden, wozu `structure-gap.py` den Leser bereits mitbringt.
+
+**Vorschlag:** erst die 56 Blöcke (mechanisch, gut prüfbar), dann die Features (sie brauchen nur
+Blöcke und haben im Port schon ein Vorbild), zuletzt die Bauwerke mitsamt Umschreiber.
+
+### Wie jede Runde abläuft
+
+Unverändert, und seit dem Serverlauf um eine Stufe reicher:
+
+1. Original lesen, portieren, Abweichungen im Quelltext begründen.
+2. Die fünfzehn Tore lokal grün.
+3. CI: Tore → `runData` → Doppelpfadprüfung → `build` → **dedizierter Server**.
+4. Erst dann gilt die Runde als fertig — „es baut" und „es läuft" sind zwei Aussagen.
