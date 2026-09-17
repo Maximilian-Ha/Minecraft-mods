@@ -601,7 +601,57 @@ public class NtmBlockTagProvider extends BlockTagsProvider {
                         NtmBlocks.RADAR_SCREEN.get(),
                         NtmBlocks.MACHINE_SIREN.get(),
                         NtmBlocks.MACHINE_ANNIHILATOR.get(),
-                        NtmBlocks.ANVIL.get()
+                        NtmBlocks.ANVIL.get(),
+
+                        /*
+                         * Runde 156. Diese einundvierzig Bloecke sind mit requiresCorrectToolForDrops
+                         * angemeldet und standen in keinem mineable-Tag. In 1.21 entscheidet allein der
+                         * Tag darueber, ob ein Werkzeug als das richtige gilt: passt keine Regel des
+                         * Werkzeugs, liefert Tool.isCorrectForDrops falsch, und der Block faellt mit
+                         * KEINEM Werkzeug. Alle einundvierzig haben eine dropSelf-Tabelle, waren also
+                         * sehr wohl zum Abbauen gedacht -- die ganze RBMK-Saeule eingeschlossen.
+                         */
+                        NtmBlocks.MACHINE_ARC_WELDER.get(),
+                        NtmBlocks.MACHINE_FRACTION_TOWER.get(),
+                        NtmBlocks.FRACTION_SPACER.get(),
+                        NtmBlocks.MACHINE_CATALYTIC_REFORMER.get(),
+                        NtmBlocks.MACHINE_HYDROTREATER.get(),
+                        NtmBlocks.MACHINE_VACUUM_DISTILL.get(),
+                        NtmBlocks.MACHINE_PYRO_OVEN.get(),
+                        NtmBlocks.MACHINE_CATALYTIC_CRACKER.get(),
+                        NtmBlocks.MACHINE_COKER.get(),
+                        NtmBlocks.MACHINE_GAS_FLARE.get(),
+                        NtmBlocks.MACHINE_LIQUEFACTOR.get(),
+                        NtmBlocks.MACHINE_SOLIDIFIER.get(),
+                        NtmBlocks.RBMK_BLANK.get(),
+                        NtmBlocks.RBMK_MODERATOR.get(),
+                        NtmBlocks.RBMK_ABSORBER.get(),
+                        NtmBlocks.RBMK_REFLECTOR.get(),
+                        NtmBlocks.RBMK_ROD.get(),
+                        NtmBlocks.RBMK_ROD_MOD.get(),
+                        NtmBlocks.RBMK_CONTROL.get(),
+                        NtmBlocks.RBMK_CONTROL_MOD.get(),
+                        NtmBlocks.RBMK_CONTROL_AUTO.get(),
+                        NtmBlocks.RBMK_CONTROL_REASIM.get(),
+                        NtmBlocks.RBMK_CONTROL_REASIM_AUTO.get(),
+                        NtmBlocks.RBMK_ROD_REASIM.get(),
+                        NtmBlocks.RBMK_ROD_REASIM_MOD.get(),
+                        NtmBlocks.RBMK_BOILER.get(),
+                        NtmBlocks.RBMK_COOLER.get(),
+                        NtmBlocks.RBMK_STORAGE.get(),
+                        NtmBlocks.RBMK_HEATER.get(),
+                        NtmBlocks.RBMK_STEAM_INLET.get(),
+                        NtmBlocks.RBMK_STEAM_OUTLET.get(),
+                        NtmBlocks.RBMK_OUTGASSER.get(),
+                        NtmBlocks.RBMK_CONSOLE.get(),
+                        NtmBlocks.RBMK_CRANE_CONSOLE.get(),
+                        NtmBlocks.RBMK_AUTOLOADER.get(),
+                        NtmBlocks.RBMK_DEBRIS.get(),
+                        NtmBlocks.RBMK_DEBRIS_BURNING.get(),
+                        NtmBlocks.RBMK_DEBRIS_DIGAMMA.get(),
+                        NtmBlocks.RBMK_DEBRIS_RADIATING.get(),
+                        NtmBlocks.MACHINE_WASTE_DRUM.get(),
+                        NtmBlocks.EMP_BOMB.get()
                 );
 
         this.tag(BlockTags.ANVIL).add(NtmBlocks.ANVIL.get());

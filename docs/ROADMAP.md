@@ -3410,3 +3410,47 @@ eingezogen (`gui/processing/`, `blocks/rbmk/`) und Ordner umbenannt
 CE-Überarbeitungen** nie verglichen worden — darunter die sechs Hazmat-Anzüge, `gui_centrifuge`
 und drei RBMK-Partikel. Die brauchen eine Zuordnung über den Inhalt statt über den Pfad und
 sind damit eine eigene Runde.
+
+## Runde 156: einundvierzig Blöcke, die man gar nicht abbauen konnte
+
+Beim Portieren des Big-Ass Tanks fiel im Vorbeigehen auf, dass `machine_coker` mit
+`requiresCorrectToolForDrops()` angemeldet ist, aber in keinem `mineable`-Tag steht.
+Nachgezählt: **einundvierzig Blöcke** sind so angemeldet — und alle einundvierzig haben eine
+`dropSelf`-Tabelle, waren also sehr wohl zum Abbauen gedacht.
+
+### Warum das nichts fallen lässt
+
+In 1.21 entscheidet nicht mehr das Material über das richtige Werkzeug, sondern die
+`Tool`-Komponente des Werkzeugs. Deren Regeln hängen ausnahmslos an einem `mineable`-Tag:
+
+```
+Player.hasCorrectToolForDrops(state)
+  -> !state.requiresCorrectToolForDrops() || stack.isCorrectToolForDrops(state)
+  -> Tool.isCorrectForDrops(state)   // geht die Regeln durch
+```
+
+Steht der Block in **keinem** dieser Tags, passt keine Regel, und die Methode liefert falsch —
+mit jedem Werkzeug, auch mit der Netheritspitzhacke. `ServerPlayerGameMode.destroyBlock` ruft
+`playerDestroy` dann gar nicht erst auf, und die Beutetabelle bleibt tote Ladung.
+
+Betroffen waren: die **ganze RBMK-Säule** (Brennstoffkanäle, Steuerstäbe, Moderator,
+Reflektor, Absorber, Kessel, Kühler, Speicher, Heizer, Ein- und Auslass, Ausgaser, Konsolen,
+Kran, Lader, alle vier Trümmersorten), **die halbe Erdölkette** (Fraktionierturm und
+Abstandhalter, Reformer, Hydrotreater, Vakuumdestillation, Pyrolyseofen, Kracker, Verkoker,
+Gasfackel, Verflüssiger, Verfestiger), dazu das Lichtbogenschweissgerät, die Mülltonne und die
+EMP-Bombe.
+
+### Das Tor dazu
+
+`tools/loot-check.sh` prüfte bisher zwei Dinge — dass jeder Block ohne `noLootTable()` eine
+Tabelle bekommt, und dass keiner mit `noLootTable()` eine bekommt. Jetzt prüft es ein drittes:
+**wer `requiresCorrectToolForDrops()` sagt und eine Tabelle hat, muss in mindestens einem
+`mineable`-Tag stehen.**
+
+Die Prüfung sitzt hier richtig, weil sie genau dieselbe Frage stellt wie die beiden anderen:
+passen Blockeigenschaft und Beutetabelle zusammen? Die Eigenschaft steht in `NtmBlocks`, der
+Tag in `NtmBlockTagProvider`, die Tabelle in `NtmBlockLootTableProvider` — drei Dateien, die
+niemand beim Anmelden eines Blocks alle drei im Kopf hat.
+
+**Nachgemessen:** einundvierzig Funde vorher, null nachher. Nimmt man einen Tag-Eintrag wieder
+heraus, meldet das Tor genau ihn (Exit-Code 1, direkt geprüft, nicht durch eine Pipe).
