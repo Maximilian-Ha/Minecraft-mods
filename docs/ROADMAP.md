@@ -3575,3 +3575,73 @@ er weg, meldet das Tor die Ausnahme als grundlos. Sonst bliebe eine Attrappe ste
 
 **Nachgemessen:** 612 Blöcke, 1085 Gegenstände, 25 Ausnahmen, null Funde. Nimmt man eine
 beliebige `accept`-Zeile heraus, meldet das Tor genau sie (Exit-Code direkt geprüft).
+
+## Runde 159: die 40 Texturen, die der Pfadvergleich übersehen hatte
+
+Der Dreifachvergleich aus Runde 155 ordnet Dateien über **Pfadregeln** zu (`items/`→`item/`,
+`blocks/`→`block/`). Umbenannt haben aber beide Seiten: CE hat Unterordner eingezogen
+(`gui/processing/`, `blocks/rbmk/`) und Ordner umbenannt (`models/weapon`→`models/weapons`),
+und der Port hat seinerseits Dateien umbenannt (`igniter`←`trigger`,
+`drink.fritz`←`bottle2_fritz`, `ivy_mike_core`←`mike_core`).
+
+Die richtige Zuordnung geht über den **Inhalt**: Port-Datei → gleiche git-Blob-Prüfsumme im
+Original → deren Originalpfad → CEs Fassung desselben Pfades. Das findet **40 weitere**
+Überarbeitungen, alle bei gleicher Bildgrösse, keine mit `.mcmeta`.
+
+**31 sind übernommen, 9 nicht.**
+
+### Diesmal wurde nach *allen* Lesern gesucht
+
+Das ist die Lehre aus dem Meteoriten (Runde 157): dort war nur der naheliegende Leser geprüft
+worden, und der zweite — ein Partikel, der die Datei roh lädt — ging kaputt. Jede der 40
+Dateien ist deshalb daraufhin abgesucht worden, wer sie liest: Atlas, `ResourceManager`,
+Bildschirm, JEI-Handler, Partikelklasse, Rüstungsschicht. Das hat sich zweimal ausgezahlt:
+
+- `gui/gui_centrifuge.png` hat **zwei** Leser — den Bildschirm und den JEI-Handler.
+- `models/explosion/tom_blast.png` wird nicht als Modellhaut gelesen, sondern von
+  `CloudTomParticle` roh über einen 16-teiligen Zylindermantel.
+
+### Neun bleiben draussen
+
+**Zwei, weil CE die Oberfläche umgebaut hat.** Beim Bagger hat CE die fünf Funktionsschalter
+umsortiert — CEs Reihenfolge ist Bohrer/Seide/Brecher/Adern/Mauern, der Port hat
+Bohrer/Brecher/Mauern/Adern/Seide. Die drei geänderten Bildflächen liegen genau über den
+Schaltern 2, 3 und 5. Mit CEs Bild trüge der Port falsche Sinnbilder auf den Schaltern. Beim
+Abfallfass hat CE die Oberfläche um 5 px verlängert und das Spielerinventar nach unten
+geschoben (`ySize` 194 statt 189, Fächer bei y 112/130/148/170 statt 107/125/143/165); der Port
+hält am alten Raster fest.
+
+**Sechs Hazmat-Schichten, weil CE den Zuschnitt geändert hat.** Bei den Kopfschichten wandert
+deckende Fläche: `hazmat_layer_1` **füllt** das offene Sichtfenster mit Alpha 128 — und der
+Rüstungs-Rendertyp `armorCutoutNoCull` schneidet nur unter Alpha 0,1 ab und mischt nicht, das
+Fenster wäre also zu. Bei den grauen und roten Fassungen vergrössert CE es umgekehrt. Bei den
+Beinschichten löscht CE die komplette Unterseite des Rumpfquaders (32 Pixel bei x28–35/y16–19),
+was als Loch zwischen Gürtel und Beinen auftauchen kann. Alles vermutlich CE-Absicht, aber
+kein Neuanstrich.
+
+**Eine, weil CE die Deckkraft halbiert.** `tom_blast.png` hat im Port durchgehend Alpha 255,
+in CE durchgehend Alpha 128 — bei gleicher Mischung wird die Wolkenwand halb so dicht. Eine
+Gestaltungsentscheidung, keine Texturübernahme.
+
+### Dabei aufgefallen: die Zentrifuge war seit dem Portieren verrutscht
+
+Beim Prüfen von `gui_centrifuge.png` kam heraus, dass **der Port die Datei schon vorher an den
+falschen Stellen liest** — unabhängig von CE. Das Original arbeitet mit 182×189 und holt die
+Füllbalken bei u = 182; der Port stand auf 176×186 und u = 176, also überall auf den
+gewöhnlichen Werten.
+
+| | Original | Port (falsch) |
+|---|---|---|
+| Oberflächengrösse | 182×189 | 176×186 |
+| Strombalken | (8, 55−i), Quelle 182 | (9, 48−p), Quelle 176 |
+| Fortschritt | (72+i·20, 57−h), Quelle 182 | (65+i·20, 50−h), Quelle 176 |
+| Maschinenfächer | 44/8/70/90/110/130 bei y 57 | −8 x, −7 y |
+| Spielerinventar | 11, 107 / 11, 165 | 8, 104 / 8, 162 |
+
+Sichtbar war das als abgeschnittener rechter und unterer Rand, als Fächer, die sieben Pixel
+über ihren gemalten Rahmen sassen, und als Balken, die sechs Pixel neben ihrer Mulde liefen.
+Alles auf die Werte des Originals gesetzt. Dabei sind zwei weitere Lücken derselben
+Abschrift mitgeschlossen worden: der **Maschinenname** wurde gar nicht gezeichnet, und die
+**Aufwertungsanzeige** fehlte — die Blockentität gibt `IUpgradeInfoProvider` an und die beiden
+Schächte sind da, nur sagte es niemand. Beides nutzt jetzt den `upgradeInfo`-Helfer aus
+Runde 148.
