@@ -19,7 +19,9 @@ import java.util.Locale;
 
 /**
  * Portiert aus 1.7.10: com.hbm.inventory.gui.GUIPASource.
- * Blit- und Trefferkoordinaten unveraendert uebernommen.
+ * Blit- und Trefferkoordinaten aus dem Original uebernommen, mit den Verschiebungen aus
+ * der CE-Abspaltung (Runde 155): deren ueberarbeitetes Oberflaechenbild hat die Lampen
+ * und Schaechte um wenige Pixel versetzt, und die Texturen liegen jetzt hier.
  *
  * Die eine Anzeige, die den ganzen Ring beschreibt: ein farbiges Band in der Mitte, das sagt, was
  * mit dem Strahl los ist. Daneben ein Knopf, der ihn abbricht -- ein steckengebliebenes Teilchen
@@ -53,8 +55,8 @@ public class MachinePASourceScreen extends InfoScreen<MachinePASourceMenu> {
         for(String line : I18nUtil.resolveKeyArray("pa." + this.be.state.name().toLowerCase(Locale.US) + ".desc")) {
             info.add(Component.literal(line).withStyle(ChatFormatting.YELLOW));
         }
-        this.drawCustomInfoStat(guiGraphics, mouseX, mouseY, this.leftPos + 105, this.topPos + 16, 10, 10, mouseX, mouseY, info);
-        this.drawCustomInfoStat(guiGraphics, mouseX, mouseY, this.leftPos + 105, this.topPos + 28, 10, 10, mouseX, mouseY,
+        this.drawCustomInfoStat(guiGraphics, mouseX, mouseY, this.leftPos + 105, this.topPos + 18, 10, 10, mouseX, mouseY, info);
+        this.drawCustomInfoStat(guiGraphics, mouseX, mouseY, this.leftPos + 105, this.topPos + 30, 10, 10, mouseX, mouseY,
                 Component.literal("Cancel operation").withStyle(ChatFormatting.RED));
 
         this.renderTooltip(guiGraphics, mouseX, mouseY);
@@ -63,7 +65,7 @@ public class MachinePASourceScreen extends InfoScreen<MachinePASourceMenu> {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
 
-        if(this.isHovered(mouseX, mouseY, 105, 28, 10, 10)) {
+        if(this.isHovered(mouseX, mouseY, 105, 30, 10, 10)) {
             this.click();
             CompoundTag tag = new CompoundTag();
             tag.putBoolean("cancel", true);
@@ -98,8 +100,8 @@ public class MachinePASourceScreen extends InfoScreen<MachinePASourceMenu> {
         if(power > 0) guiGraphics.blit(TEXTURE, this.leftPos + 8, this.topPos + 70 - power, 184, 52 - power, 16, power);
 
         int heat = (int) Math.ceil(this.be.temperature);
-        if(heat <= 123) guiGraphics.blit(TEXTURE, this.leftPos + 44, this.topPos + 16, 176, 8, 8, 8);
-        if(this.be.power >= MachinePASourceBlockEntity.usage) guiGraphics.blit(TEXTURE, this.leftPos + 44, this.topPos + 41, 176, 8, 8, 8);
+        if(heat <= 123) guiGraphics.blit(TEXTURE, this.leftPos + 44, this.topPos + 18, 176, 8, 8, 8);
+        if(this.be.power >= MachinePASourceBlockEntity.usage) guiGraphics.blit(TEXTURE, this.leftPos + 44, this.topPos + 43, 176, 8, 8, 8);
 
         /* Das Zustandsband wird eingefaerbt statt neu gezeichnet -- eine Textur je Zustand waeren
          * dreizehn. */

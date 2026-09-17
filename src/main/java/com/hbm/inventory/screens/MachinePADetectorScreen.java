@@ -11,7 +11,9 @@ import net.minecraft.world.entity.player.Inventory;
 
 /**
  * Portiert aus 1.7.10: com.hbm.inventory.gui.GUIPADetector.
- * Blit- und Trefferkoordinaten unveraendert uebernommen.
+ * Blit- und Trefferkoordinaten aus dem Original uebernommen, mit den Verschiebungen aus
+ * der CE-Abspaltung (Runde 155): deren ueberarbeitetes Oberflaechenbild hat die Lampen
+ * und Schaechte um wenige Pixel versetzt, und die Texturen liegen jetzt hier.
  */
 public class MachinePADetectorScreen extends InfoScreen<MachinePADetectorMenu> {
 
@@ -60,8 +62,8 @@ public class MachinePADetectorScreen extends InfoScreen<MachinePADetectorMenu> {
         if(power > 0) guiGraphics.blit(TEXTURE, this.leftPos + 8, this.topPos + 70 - power, 184, 52 - power, 16, power);
 
         int heat = (int) Math.ceil(this.be.temperature);
-        if(heat <= 123) guiGraphics.blit(TEXTURE, this.leftPos + 43, this.topPos + 18, 176, 8, 8, 8);
-        if(this.be.power >= MachinePADetectorBlockEntity.usage) guiGraphics.blit(TEXTURE, this.leftPos + 43, this.topPos + 43, 176, 8, 8, 8);
+        if(heat <= 123) guiGraphics.blit(TEXTURE, this.leftPos + 44, this.topPos + 18, 176, 8, 8, 8);
+        if(this.be.power >= MachinePADetectorBlockEntity.usage) guiGraphics.blit(TEXTURE, this.leftPos + 44, this.topPos + 43, 176, 8, 8, 8);
 
         this.be.coolantTanks[0].renderTank(this.leftPos + 134, this.topPos + 88, 0, 16, 52);
         this.be.coolantTanks[1].renderTank(this.leftPos + 152, this.topPos + 88, 0, 16, 52);

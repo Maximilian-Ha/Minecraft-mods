@@ -31,11 +31,11 @@ public class MachinePASourceMenu extends MenuBase<MachinePASourceBlockEntity> {
 
         this.addSlot(new SlotNonRetarded(be, MachinePASourceBlockEntity.SLOT_BATTERY, 8, 72));
 
-        this.addSlot(new SlotNonRetarded(be, MachinePASourceBlockEntity.SLOT_INPUT_1, 62, 16));
-        this.addSlot(new SlotNonRetarded(be, MachinePASourceBlockEntity.SLOT_INPUT_2, 80, 16));
+        this.addSlot(new SlotNonRetarded(be, MachinePASourceBlockEntity.SLOT_INPUT_1, 62, 18));
+        this.addSlot(new SlotNonRetarded(be, MachinePASourceBlockEntity.SLOT_INPUT_2, 80, 18));
 
-        this.addSlot(new SlotTakeOnly(be, MachinePASourceBlockEntity.SLOT_CONTAINER_1, 62, 43));
-        this.addSlot(new SlotTakeOnly(be, MachinePASourceBlockEntity.SLOT_CONTAINER_2, 80, 43));
+        this.addSlot(new SlotTakeOnly(be, MachinePASourceBlockEntity.SLOT_CONTAINER_1, 62, 45));
+        this.addSlot(new SlotTakeOnly(be, MachinePASourceBlockEntity.SLOT_CONTAINER_2, 80, 45));
 
         this.playerInv(inventory, 8, 122);
     }

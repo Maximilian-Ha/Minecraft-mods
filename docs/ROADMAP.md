@@ -3330,3 +3330,83 @@ zusammen mit `ass.bigasstank`.
 
 OpenComputers und Redstone-over-Radio hängen im Original an `TileEntityBarrel`. Der Port hat
 beides bei den Fässern schon weggelassen; hier ebenso, im Klassenkommentar vermerkt.
+
+## Runde 155: die überarbeiteten Texturen aus der CE-Abspaltung
+
+> „in diesem hbm port wurde einige Texturen überarbeitet, diese hätte ich auch gerne:
+> Warfactory-Official/Hbm-s-Nuclear-Tech-CE"
+
+### Erst messen, dann kopieren
+
+Blindes Überkopieren wäre falsch gewesen: CE ist eine eigenständige Abspaltung mit über
+zweitausend *neuen* Dateien und mehr als tausend gelöschten, und der Port hat seinerseits
+Texturen für 1.21 angepasst. Deshalb ein **Dreifachvergleich** über die git-Blob-Prüfsummen
+von Port, Original (`hbm-upstream/master`) und CE, mit Pfadumrechnung `items/`→`item/` und
+`blocks/`→`block/`:
+
+| Klasse | Zahl | Bedeutung |
+|---|---|---|
+| gleich | 2388 | CE hat nichts geändert |
+| **CE überarbeitet** | **214** | Port trägt das Original, CE eine neue Fassung |
+| Port weicht schon ab | 35 | der Port hat selbst geändert |
+| nicht in CE | 704 | Pfad existiert dort nicht |
+| nicht im Original | 5 | |
+
+Die 214 sind die Antwort auf die Frage. **208 davon sind übernommen**, 6 nicht.
+
+### Warum die Oberflächenbilder einzeln geprüft wurden
+
+Ein Gegenstands- oder Blockbild ist ein Sprite: derselbe Name, dieselbe Grösse, fertig. Ein
+Oberflächenbild ist ein **Atlas** — der Bildschirm liest daraus feste Rechtecke. Malt CE nur
+neu, ist die Übernahme harmlos; verschiebt CE etwas, zeichnet der Port danach ins Leere.
+
+Jede der 60 betroffenen Oberflächen wurde deshalb gegen ihre 1.7.10-Java-Klasse in beiden
+Bäumen gehalten und die gelesenen Rechtecke pixelweise verglichen. Ergebnis: 52 sind reines
+Neumalen (meist nur der Energiebalken samt Mulde umgefärbt, Deckungsmaske Pixel für Pixel
+identisch).
+
+**Zwei weitere sind mitgenommen worden, samt Verschiebung.** Beim Detektor des
+Teilchenbeschleunigers wandern die beiden Lämpchen um einen Pixel nach rechts, bei der Quelle
+die obere Hälfte um zwei Pixel nach unten — dort ziehen vier Schächte und zwei Trefferfelder
+mit. Beides ist ein reiner Versatz ohne Umbau, aus CEs eigenem Quelltext Zeile für Zeile
+abgelesen.
+
+### Die sechs, die draussen bleiben
+
+**Drei, weil CE Anzeigen ersatzlos gestrichen hat.** Bei `gui_dipole` und `gui_quadrupole`
+sind die vier 28×28-Felder der Spulenanzeige im Atlas leer (der Port hat dort je 784 deckende
+Pixel, CE null), bei `gui_rbmk_heater` die beiden 10×10-Felder der Flüsseanzeige. Der Port
+zeichnet diese Anzeigen weiterhin — mit CEs Bild blieben sie unsichtbar.
+
+**Drei, weil CE die Oberfläche umgebaut hat.** `gui_mixer` verschiebt Strombalken,
+Fortschrittsbalken, alle drei Tanks und alle fünf Schächte und lässt die Aufwertungsanzeige
+ganz weg; `gui_rbmk_outgasser` verschiebt beide Balkenquellen und zwei Schächte;
+`gui_battery` verschmälert den Ladebalken von 52 auf 34 Pixel und versetzt Symbole und
+Schächte. Diese drei zu übernehmen hiesse, die Bildschirme des Ports auf CEs Entwurf
+umzubauen — dabei verlöre der Mischer eine Anzeige, die er hat. Das ist eine eigene
+Entscheidung und keine Texturübernahme; deshalb bleiben sie vorerst, wie sie sind.
+
+### Zwei Sonderfälle
+
+`block/block_meteor_molten.png` wächst von 16×16 auf 16×48. Der Port hatte die `.mcmeta` mit
+`frametime: 4` von CE bereits übernommen, aber das einbildrige Original-PNG behalten — er
+erklärte also eine Lauftextur mit genau einem Bild. Jetzt sind es die drei, für die die
+`.mcmeta` gedacht war.
+
+`block/solar_mirror.png` schrumpft von 36×36 auf 16×16. 36 ist keine Blockgrösse; der Port
+liest die Datei nur als Partikeltextur aus dem Blockatlas (die Modellhaut des Spiegels ist
+eine andere Datei unter `models/machines/`). CEs 16×16 passt dort besser.
+
+**`.mcmeta`-Dateien werden grundsätzlich nicht mitkopiert** — die des Ports sind an 1.21
+angepasst. Geprüft: bei allen vier übernommenen Lauftexturen stimmen beide Fassungen ohnehin
+überein.
+
+### Was noch offen ist
+
+Der Dreifachvergleich ordnet über Pfadregeln zu. CE hat aber zusätzlich Unterordner
+eingezogen (`gui/processing/`, `blocks/rbmk/`) und Ordner umbenannt
+(`models/weapon`→`models/weapons`), und der Port hat seinerseits Dateien umbenannt
+(`igniter`←`trigger`, `drink.fritz`←`bottle2_fritz`). Dadurch sind **41 weitere
+CE-Überarbeitungen** nie verglichen worden — darunter die sechs Hazmat-Anzüge, `gui_centrifuge`
+und drei RBMK-Partikel. Die brauchen eine Zuordnung über den Inhalt statt über den Pfad und
+sind damit eine eigene Runde.
