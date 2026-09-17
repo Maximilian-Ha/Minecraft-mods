@@ -69,20 +69,17 @@ public class RenderCombustionEngine extends BlockEntityRendererNT<MachineCombust
         ResourceManager.combustion_engine.renderPart("Hatch");
     }
 
-    private AABB bb = null;
-
+    // Kein Zwischenspeichern in einem Feld: BlockEntityRenderers legt pro BlockEntityType
+    // genau EINEN Darsteller an, den sich alle Motoren teilen. Ein gemerkter Kasten in
+    // Weltkoordinaten waere ab dem zweiten Motor der des ersten -- der zweite verschwaende.
     @Override
     public AABB getRenderBoundingBox(MachineCombustionEngineBlockEntity be) {
 
-        if(bb == null) {
-            int x = be.getBlockPos().getX();
-            int y = be.getBlockPos().getY();
-            int z = be.getBlockPos().getZ();
+        int x = be.getBlockPos().getX();
+        int y = be.getBlockPos().getY();
+        int z = be.getBlockPos().getZ();
 
-            bb = new AABB(x - 3, y, z - 3, x + 4, y + 2, z + 4);
-        }
-
-        return bb;
+        return new AABB(x - 3, y, z - 3, x + 4, y + 2, z + 4);
     }
 
     @Override

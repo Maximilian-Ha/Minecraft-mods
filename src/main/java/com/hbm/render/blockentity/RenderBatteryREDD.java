@@ -210,7 +210,10 @@ public class RenderBatteryREDD extends BlockEntityRendererNT<BatteryREDDBlockEnt
         int y = be.getBlockPos().getY();
         int z = be.getBlockPos().getZ();
 
-        return new AABB(x - 2, y, z - 2, x + 2, y + 10, z + 2);
+        /* Masse aus dem Original (TileEntityBatteryREDD): fensu2.obj misst X +-3,38 und
+         * Z +-4,5 bei 10,25 Hoehe, der Mehrblockbau selbst {9,0,2,2,4,4}. Der vorherige
+         * Kasten von 4x10x4 schnitt das Modell auf beiden Seiten an. */
+        return new AABB(x - 4, y, z - 4, x + 5, y + 11, z + 5);
     }
 
     @Override

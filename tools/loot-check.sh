@@ -41,6 +41,11 @@
 # halbe Erdoelkette, das Lichtbogenschweissgeraet und die EMP-Bombe, alle mit dropSelf. Nach dem
 # Nachtragen der Tag-Eintraege meldet die Pruefung null. Nimmt man einen Eintrag wieder heraus,
 # meldet sie genau ihn.
+#
+# Absichtliche Grenze: erkannt wird nur das woertliche requiresCorrectToolForDrops() in der
+# Anmeldezeile. Wer die Eigenschaft ueber eine gemeinsame Properties-Vorlage hereinholt, faellt
+# aus der Pruefung heraus, statt eine Falschmeldung zu erzeugen. Im Baum kommt das derzeit
+# nicht vor -- alle Anmeldungen schreiben die Kette selbst aus.
 
 set -uo pipefail
 cd "$(dirname "$0")/.."

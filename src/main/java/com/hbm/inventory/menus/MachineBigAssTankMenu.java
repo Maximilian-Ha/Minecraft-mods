@@ -7,6 +7,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.level.Level;
 
 /**
  * Portiert aus 1.7.10: com.hbm.inventory.container.ContainerBarrel -- der Big-Ass Tank
@@ -39,6 +40,11 @@ public class MachineBigAssTankMenu extends MenuBase<MachineBigAssTankBlockEntity
      */
     @Override
     public boolean stillValid(Player player) {
+        Level level = this.be.getLevel();
+        /* Die Entfernungspruefung allein genuegt nicht: Container.stillValidBlockEntity prueft
+         * auch, dass die Blockentitaet ueberhaupt noch an ihrer Stelle steht. Fehlt das, bleibt
+         * die Oberflaeche nach dem Abriss offen und ihr Inhalt laesst sich vervielfachen. */
+        if(level == null || level.getBlockEntity(this.be.getBlockPos()) != this.be) return false;
         return this.be.hasPermission(player);
     }
 }

@@ -1,5 +1,6 @@
 package com.hbm.blockentity.machine.storage;
 
+import api.hbm.energymk2.IEnergyReceiverMK2.ConnectionPriority;
 import api.hbm.fluidmk2.FluidNode;
 import api.hbm.fluidmk2.IFluidStandardTransceiverMK2;
 import com.hbm.blockentity.IFluidCopiable;
@@ -282,6 +283,17 @@ public class MachineBigAssTankBlockEntity extends MachineBaseBlockEntity impleme
     @Override
     public FluidTank[] getAllTanks() {
         return new FluidTank[] { this.tank };
+    }
+
+    /*
+     * Im Puffermodus haengt der Tank als Teil des Netzes darin und darf den Verbrauchern nichts
+     * wegnehmen: LOW ist ein eigener, spaeter bedienter Topf. Ohne diese Zeile stuende er mit
+     * seinem Bedarf von 160.000 mB je Tick im selben Topf wie eine Maschine mit 24.000 und
+     * bekaeme vier Fuenftel des Durchsatzes. Das Original hat es an TileEntityBarrel.
+     */
+    @Override
+    public ConnectionPriority getFluidPriority() {
+        return this.mode == 1 ? ConnectionPriority.LOW : ConnectionPriority.NORMAL;
     }
 
     @Override

@@ -75,10 +75,15 @@ public class MachineMiningLaserScreen extends InfoScreen<MachineMiningLaserMenu>
         int power = (int) (this.be.power * 88 / MachineMiningLaserBlockEntity.maxPower);
         if(power > 0) guiGraphics.blit(TEXTURE, this.leftPos + 8, this.topPos + 106 - power, 176, 88 - power, 16, power, 256, 256);
 
+        /* Der Balken laeuft senkrecht, nicht quer: das Original nimmt (66, 36) und zieht
+         * 8 Pixel breit nach unten. Quer gezogen las er ausserdem in das Nachbarsymbol hinein. */
         int progress = (int) (this.be.clientBreakProgress * 34);
-        if(progress > 0) guiGraphics.blit(TEXTURE, this.leftPos + 61, this.topPos + 41, 192, 0, progress, 8, 256, 256);
+        if(progress > 0) guiGraphics.blit(TEXTURE, this.leftPos + 66, this.topPos + 36, 192, 0, 8, progress, 256, 256);
 
-        if(this.be.isOn) guiGraphics.blit(TEXTURE, this.leftPos + 61, this.topPos + 17, 176, 88, 18, 18, 256, 256);
+        /* Die Betriebslampe liegt bei (200, 0). Bei (176, 88) stand die Quelle des
+         * Strombalkens -- dort ist die Textur vollstaendig durchsichtig, die Lampe blieb also
+         * unsichtbar, egal ob der Laser lief. */
+        if(this.be.isOn) guiGraphics.blit(TEXTURE, this.leftPos + 61, this.topPos + 17, 200, 0, 18, 18, 256, 256);
 
         this.drawInfoPanel(guiGraphics, this.leftPos + 87, this.topPos + 31, 8);
 

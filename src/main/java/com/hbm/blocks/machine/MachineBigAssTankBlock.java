@@ -41,7 +41,8 @@ import java.util.List;
  *
  * Ein Mehrblockbau aus sieben Teilkoerpern: der 9x9-Rumpf um den Kern, vier Ausbuchtungen
  * an den Seiten und zwei Stutzen auf der Blickachse. Der Kern liegt sechs Bloecke vor der
- * angeklickten Stelle, der Bau braucht also 13x13x6 freien Raum.
+ * angeklickten Stelle. Der Bau misst dreizehn Bloecke auf der Blickachse (die beiden
+ * Stutzen bei +-6), elf quer dazu (die Ausbuchtungen bei +-5) und sechs in der Hoehe.
  *
  * getAllDimensions des Originals faellt weg: es dient dort allein der gruen/roten
  * Bauvorschau (BlockDummyable.drawPlacementHighlight), die der Port nicht kennt. Die

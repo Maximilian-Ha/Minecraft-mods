@@ -16,6 +16,14 @@ public class RenderMeteor extends EntityRenderer<Meteor> {
 
     private static final ResourceLocation METEOR_LOCATION = NuclearTechMod.withDefaultNamespace("textures/block/block_meteor_molten.png");
 
+    /*
+     * Die Datei ist eine Lauftextur mit drei Einzelbildern untereinander (16x48, .mcmeta mit
+     * frametime 4). Der Blockatlas wertet die .mcmeta aus, setShaderTexture nicht -- es laedt
+     * die Datei roh. Wer hier ueber die volle Hoehe abbildet, legt alle drei Bilder
+     * uebereinandergestaucht auf den Wuerfel. Deshalb nur das erste.
+     */
+    private static final float BILD = 1F / 3F;
+
     public RenderMeteor(EntityRendererProvider.Context context) { super(context); }
 
     @Override
@@ -50,33 +58,33 @@ public class RenderMeteor extends EntityRenderer<Meteor> {
         BufferBuilder buffer = tess.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         buffer.addVertex(matrix, -0.5F, -0.5F, -0.5F).setUv(1, 0);
         buffer.addVertex(matrix, +0.5F, -0.5F, -0.5F).setUv(0, 0);
-        buffer.addVertex(matrix, +0.5F, +0.5F, -0.5F).setUv(0, 1);
-        buffer.addVertex(matrix, -0.5F, +0.5F, -0.5F).setUv(1, 1);
+        buffer.addVertex(matrix, +0.5F, +0.5F, -0.5F).setUv(0, BILD);
+        buffer.addVertex(matrix, -0.5F, +0.5F, -0.5F).setUv(1, BILD);
 
         buffer.addVertex(matrix, -0.5F, -0.5F, +0.5F).setUv(1, 0);
         buffer.addVertex(matrix, -0.5F, -0.5F, -0.5F).setUv(0, 0);
-        buffer.addVertex(matrix, -0.5F, +0.5F, -0.5F).setUv(0, 1);
-        buffer.addVertex(matrix, -0.5F, +0.5F, +0.5F).setUv(1, 1);
+        buffer.addVertex(matrix, -0.5F, +0.5F, -0.5F).setUv(0, BILD);
+        buffer.addVertex(matrix, -0.5F, +0.5F, +0.5F).setUv(1, BILD);
 
         buffer.addVertex(matrix, +0.5F, -0.5F, +0.5F).setUv(1, 0);
         buffer.addVertex(matrix, -0.5F, -0.5F, +0.5F).setUv(0, 0);
-        buffer.addVertex(matrix, -0.5F, +0.5F, +0.5F).setUv(0, 1);
-        buffer.addVertex(matrix, +0.5F, +0.5F, +0.5F).setUv(1, 1);
+        buffer.addVertex(matrix, -0.5F, +0.5F, +0.5F).setUv(0, BILD);
+        buffer.addVertex(matrix, +0.5F, +0.5F, +0.5F).setUv(1, BILD);
 
         buffer.addVertex(matrix, +0.5F, -0.5F, -0.5F).setUv(1, 0);
         buffer.addVertex(matrix, +0.5F, -0.5F, +0.5F).setUv(0, 0);
-        buffer.addVertex(matrix, +0.5F, +0.5F, +0.5F).setUv(0, 1);
-        buffer.addVertex(matrix, +0.5F, +0.5F, -0.5F).setUv(1, 1);
+        buffer.addVertex(matrix, +0.5F, +0.5F, +0.5F).setUv(0, BILD);
+        buffer.addVertex(matrix, +0.5F, +0.5F, -0.5F).setUv(1, BILD);
 
         buffer.addVertex(matrix, -0.5F, -0.5F, +0.5F).setUv(1, 0);
         buffer.addVertex(matrix, +0.5F, -0.5F, +0.5F).setUv(0, 0);
-        buffer.addVertex(matrix, +0.5F, -0.5F, -0.5F).setUv(0, 1);
-        buffer.addVertex(matrix, -0.5F, -0.5F, -0.5F).setUv(1, 1);
+        buffer.addVertex(matrix, +0.5F, -0.5F, -0.5F).setUv(0, BILD);
+        buffer.addVertex(matrix, -0.5F, -0.5F, -0.5F).setUv(1, BILD);
 
         buffer.addVertex(matrix, +0.5F, +0.5F, +0.5F).setUv(1, 0);
         buffer.addVertex(matrix, -0.5F, +0.5F, +0.5F).setUv(0, 0);
-        buffer.addVertex(matrix, -0.5F, +0.5F, -0.5F).setUv(0, 1);
-        buffer.addVertex(matrix, +0.5F, +0.5F, -0.5F).setUv(1, 1);
+        buffer.addVertex(matrix, -0.5F, +0.5F, -0.5F).setUv(0, BILD);
+        buffer.addVertex(matrix, +0.5F, +0.5F, -0.5F).setUv(1, BILD);
         BufferUploader.drawWithShader(buffer.buildOrThrow());
 
         RenderSystem.enableCull();

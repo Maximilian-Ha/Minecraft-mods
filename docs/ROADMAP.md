@@ -3304,7 +3304,7 @@ gleichen Fall schon einmal entschieden: `MachineFluidTankBlockEntity` ist ein Ge
 
 `getDimensions() = {5, 0, 4, 4, 4, 4}`, `getOffset() = 6` — ein 9×9-Rumpf, sechs Blöcke hoch.
 Dazu sechs weitere Teilkörper: vier Ausbuchtungen an den Seiten und zwei Stutzen auf der
-Blickachse. Insgesamt braucht der Tank **13×13×6 freien Raum**, und der Kern liegt sechs
+Blickachse. Insgesamt misst der Tank **dreizehn Blöcke auf der Blickachse, elf quer dazu und sechs in der Höhe**, und der Kern liegt sechs
 Blöcke vor der angeklickten Stelle.
 
 `getAllDimensions()` des Originals fällt weg: es dient dort allein der grün/roten Bauvorschau
@@ -3454,3 +3454,70 @@ niemand beim Anmelden eines Blocks alle drei im Kopf hat.
 
 **Nachgemessen:** einundvierzig Funde vorher, null nachher. Nimmt man einen Tag-Eintrag wieder
 heraus, meldet das Tor genau ihn (Exit-Code 1, direkt geprüft, nicht durch eine Pipe).
+
+## Runde 157: was die adversariale Durchsicht der Runden 153–156 gefunden hat
+
+Sechs unabhängige Durchsichten des Unterschieds `44fc7735..HEAD`, jede anschliessend von einer
+zweiten Instanz **angegriffen** statt bestätigt. Von fünfzehn gemeldeten Befunden haben neun
+die Widerlegung überstanden. Sechs sind gefallen — darunter drei angebliche Lücken im neuen
+Torwächter, von denen sich eine bei eigener Nachprüfung doch als echt erwies (siehe unten).
+
+### Ein Rückschlag, den ich selbst verursacht habe
+
+**Der fliegende Meteorit.** `block/block_meteor_molten.png` ist in Runde 155 von 16×16 auf
+16×48 gewachsen — drei Einzelbilder untereinander. Der Blockatlas wertet die `.mcmeta` aus und
+animiert sauber. `RenderMeteor` aber lädt dieselbe Datei **roh** über `setShaderTexture` und
+legt sie mit UV 0…1 auf einen Würfel: seit Runde 155 trug das Wurfgeschoss alle drei Bilder
+übereinandergestaucht. Der Darsteller bildet jetzt nur noch das erste Einzelbild ab
+(`BILD = 1F/3F`).
+
+Das ist genau die Art Folgeschaden, nach der ich beim Übernehmen der Texturen gesucht habe —
+und die Suche lief nur über die *Oberflächen*bilder, nicht über die Blocktexturen. Zwei der
+208 Bilder haben die Grösse geändert; eins davon hatte einen zweiten Leser.
+
+### Drei Fehler, die schon vorher im Baum lagen
+
+**Der Verbrennungsmotor merkt sich seinen Sichtkasten.** `RenderCombustionEngine` hielt den
+Kasten in einem Feld. `BlockEntityRenderers` legt aber je `BlockEntityType` **einen**
+Darsteller an, den sich alle Motoren teilen: ab dem zweiten Motor bekam jeder den Kasten des
+ersten — und verschwand, sobald der Spieler nicht zufällig auch in dessen Richtung schaute.
+Dieselbe Fehlerklasse wie Runde 153, nur von der anderen Seite. Er war der einzige im Baum.
+
+**Der Sichtkasten der FEnSU** war 4×10×4 gross, `fensu2.obj` misst aber ±3,38 / ±4,5 bei 10,25
+Höhe, und der Mehrblockbau selbst ist `{9,0,2,2,4,4}`. Jetzt die Masse des Originals.
+
+**Der Bergbaulaser** las seine Betriebslampe aus (176, 88) — dort liegt die Quelle des
+Strombalkens, und die Textur ist an dieser Stelle zu 100 % durchsichtig (324 von 324 Pixeln,
+nachgemessen). Die Lampe war also unsichtbar, egal ob der Laser lief. Das Original nimmt
+(200, 0). Dazu wurde der Fortschrittsbalken quer statt senkrecht gezogen und las dabei in das
+Nachbarsymbol hinein.
+
+### Drei am Big-Ass Tank
+
+**`getFluidPriority()` fehlte.** Im Puffermodus meldet sich der Tank als `NORMAL`-Empfänger am
+Netz an statt als `LOW` — mit einem Bedarf von 160.000 mB/t steht er dann im selben Topf wie
+eine Maschine mit 24.000 und nimmt ihr vier Fünftel des Durchsatzes weg. Das Original hat es an
+`TileEntityBarrel`. **Dem Fass im Port fehlte es ebenso** — auch nachgetragen.
+
+**`stillValid` prüfte nur noch die Entfernung.** Meine grosszügigere Fassung (16 statt 8 Blöcke,
+weil der Bau dreizehn breit ist) hatte die zweite Hälfte von `Container.stillValidBlockEntity`
+verloren: dass die Blockentität überhaupt noch dasteht. Die Oberfläche wäre nach dem Abriss
+offen geblieben und ihr Inhalt vervielfachbar gewesen.
+
+**Der Klassenkopf** gab den Platzbedarf mit 13×13×6 an; quer zur Blickachse sind es elf.
+
+### Das Tor hatte zwei Löcher
+
+**Neun Darsteller fielen still heraus.** `renderbox-check.sh` suchte nur nach
+`extends BlockEntityRendererNT<X>`. Die sechs Masten und Verbinder erben über `RenderPylonBase`,
+die drei Geschütze über `RenderTurretBase` — sie standen nie in der Prüfung. Die Typangabe wird
+jetzt durch die Oberklassenkette verfolgt: **130 Darsteller statt 120, 92 Mehrblockbauten statt
+84.** (Alle neun hatten ihren Kasten; das Loch hätte nur den nächsten Fall verschluckt.)
+
+**Eine zweite Regel ist dazugekommen:** kein Darsteller darf einen Sichtkasten in einem Feld
+merken. Nachgemessen: `RenderCombustionEngine` war der einzige; nach dem Ausbau null Funde,
+mit wieder eingesetztem Feld genau einer (Exit-Code direkt geprüft).
+
+Die Widerlegung hatte beide Löcher als „kein Befund" verworfen. Nachgezählt waren sie echt —
+das ist der Grund, warum ich jeden Befund selbst nachmesse, bevor ich ihn annehme **oder**
+verwerfe.

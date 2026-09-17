@@ -1,5 +1,6 @@
 package com.hbm.blockentity.machine.storage;
 
+import api.hbm.energymk2.IEnergyReceiverMK2.ConnectionPriority;
 import api.hbm.fluidmk2.FluidNode;
 import api.hbm.fluidmk2.IFluidStandardTransceiverMK2;
 import com.hbm.blockentity.IFluidCopiable;
@@ -243,6 +244,16 @@ public class BarrelBlockEntity extends MachineBaseBlockEntity implements IFluidS
     @Override
     public FluidTank[] getAllTanks() {
         return new FluidTank[] { this.tank };
+    }
+
+    /*
+     * Runde 157 nachgetragen: das Original hat das an TileEntityBarrel, der Port hatte es nur
+     * am Tank. Im Puffermodus gehoert das Fass in den spaeter bedienten Topf, sonst nimmt es
+     * den Verbrauchern am selben Netz das Fluid weg.
+     */
+    @Override
+    public ConnectionPriority getFluidPriority() {
+        return this.mode == 1 ? ConnectionPriority.LOW : ConnectionPriority.NORMAL;
     }
 
     @Override
