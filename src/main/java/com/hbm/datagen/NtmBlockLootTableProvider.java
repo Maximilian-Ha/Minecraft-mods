@@ -456,6 +456,7 @@ public class NtmBlockLootTableProvider extends BlockLootSubProvider {
         this.add(NtmBlocks.ORE_BEDROCK.get(), noDrop());
         this.add(NtmBlocks.STONE_DEPTH.get(), noDrop());
         this.dropSelf(NtmBlocks.MACHINE_FLUID_TANK.get());
+        this.dropSelf(NtmBlocks.MACHINE_BIGASSTANK.get());
         this.dropSelf(NtmBlocks.MACHINE_CHUNGUS.get());
         this.dropSelf(NtmBlocks.MACHINE_INDUSTRIAL_TURBINE.get());
         this.dropSelf(NtmBlocks.MACHINE_STRAND_CASTER.get());

@@ -85,6 +85,7 @@ public class NtmMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<MachineSirenMenu>> SIREN = reg("siren", MachineSirenMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<MachineAnnihilatorMenu>> ANNIHILATOR = reg("annihilator", MachineAnnihilatorMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<BarrelMenu>> BARREL = reg("barrel", BarrelMenu::new);
+    public static final DeferredHolder<MenuType<?>, MenuType<MachineBigAssTankMenu>> MACHINE_BIGASSTANK = reg("machine_bigasstank", MachineBigAssTankMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<CrateMenu>> CRATE = reg("crate", CrateMenu::new);
 
     public static final DeferredHolder<MenuType<?>, MenuType<HeaterFireboxMenu>> HEATER_FIREBOX = reg("heater_firebox", HeaterFireboxMenu::new);

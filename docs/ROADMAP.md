@@ -3271,3 +3271,62 @@ Mehrblockbau. Nach dieser Runde meldet das Tor davon null. Nimmt man
 Kasten": achtzehn Fehlalarme — Wackelkopf, Geigerzähler, Plüschtier, die neun RBMK-Anzeigen
 und die drei Teile des Reaktorstapels zeichnen alle innerhalb ihres Blocks. Eine
 Ausnahmeliste dafür wäre eine Attrappe gewesen.
+
+## Runde 154: der Big-Ass Tank
+
+> „ich kann den big ass tank noch nicht in JEI finden und platzieren"
+
+Er war nicht versteckt, sondern **gar nicht portiert**: `machine_bigasstank` kam im ganzen
+Port kein einziges Mal vor. Kein Block, keine Blockentität, kein Darsteller, kein Modell,
+keine Textur, kein Rezept. JEI zeigt nur, was in einem Kreativreiter steht — und dort stand
+nichts, weil es nichts gab.
+
+Die übrige Fassfamilie ist vollständig da (`barrel_plastic/steel/corroded/tcalloy`,
+`machine_fluid_tank`); es fehlen nur der Big-Ass Tank und der schon im Original als veraltet
+markierte `machine_bat9000`.
+
+### Eigene Klasse statt Ableitung
+
+Im Original erbt `TileEntityMachineBigAssTank` von `TileEntityBarrel`. Im Port geht das
+nicht, und zwar an vier Stellen gleichzeitig: `BarrelBlockEntity` meldet im Konstruktor fest
+`NtmBlockEntityTypes.BARREL` an, holt das Fassungsvermögen aus `BarrelBlock`, trägt die
+Fassregeln (Kunststoff, Sprengstärke 5) in einer **privaten** Methode und kippt nur nach
+Einstellung. Der Tank braucht an allen vier Stellen etwas anderes — und steht zusätzlich auf
+einem Mehrblockbau statt auf einem einzelnen Block.
+
+Man hätte `BarrelBlockEntity` aufbohren können. Das hätte eine ausgelieferte Klasse geändert,
+an der vier Fässer hängen, für einen Bau, der sich in Fassungsvermögen, Anschlüssen,
+Kippverhalten, Zerstörung, Darstellung und Beute ohnehin unterscheidet. Der Port hat den
+gleichen Fall schon einmal entschieden: `MachineFluidTankBlockEntity` ist ein Geschwister von
+`BarrelBlockEntity`, kein Nachfahre. Dieser Bau folgt dem.
+
+### Die Masse
+
+`getDimensions() = {5, 0, 4, 4, 4, 4}`, `getOffset() = 6` — ein 9×9-Rumpf, sechs Blöcke hoch.
+Dazu sechs weitere Teilkörper: vier Ausbuchtungen an den Seiten und zwei Stutzen auf der
+Blickachse. Insgesamt braucht der Tank **13×13×6 freien Raum**, und der Kern liegt sechs
+Blöcke vor der angeklickten Stelle.
+
+`getAllDimensions()` des Originals fällt weg: es dient dort allein der grün/roten Bauvorschau
+(`BlockDummyable.drawPlacementHighlight`), die der Port nicht kennt. Die Zusatzgrundrisse
+stehen deshalb als Konstanten da, wie beim Reformer und beim Bagger.
+
+Das Original hat in `fillSpace` einen Tippfehler — in der Z-Komponente der beiden
+`makeExtra`-Aufrufe steht `o` statt `6`. Nachgerechnet ist er folgenlos: bei Ost/West ist
+`offsetZ` null, bei Nord/Süd `offsetX`, die beiden Zeilen tauschen dann nur die Plätze.
+Hier steht die saubere Form, verhaltensgleich.
+
+### Zwei Kleinigkeiten, die dabei auffielen
+
+**Der Sichtkasten des Originals ist zu klein.** Es nimmt `x−6 … x+7, y+5`; das Modell reicht
+aber bis ±6,5 und y 6,5 — die Kuppel würde abgeschnitten, und der Tank verschwände, sobald nur
+noch sie im Bild ist. Genau die Fehlerklasse aus Runde 153. Hier steht ein Kasten, der passt.
+
+**Der gewöhnliche Tank hatte kein Rezept.** `machine_fluid_tank` ist seit Runde 1 im Port, aber
+`ass.tank` fehlte — in der Überlebensrunde war er damit unerreichbar. Steht jetzt drin,
+zusammen mit `ass.bigasstank`.
+
+### Was der Port bewusst weglässt
+
+OpenComputers und Redstone-over-Radio hängen im Original an `TileEntityBarrel`. Der Port hat
+beides bei den Fässern schon weggelassen; hier ebenso, im Klassenkommentar vermerkt.

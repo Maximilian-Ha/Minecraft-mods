@@ -1348,6 +1348,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.MACHINE_STIRLING);
                         output.accept(NtmBlocks.MACHINE_SHREDDER);
                         output.accept(NtmBlocks.MACHINE_FLUID_TANK);
+                        output.accept(NtmBlocks.MACHINE_BIGASSTANK);
                         output.accept(NtmBlocks.MACHINE_INDUSTRIAL_TURBINE);
                         output.accept(NtmBlocks.MACHINE_STRAND_CASTER);
                         output.accept(NtmBlocks.MACHINE_HEPHAESTUS);

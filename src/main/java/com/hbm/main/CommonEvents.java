@@ -305,6 +305,7 @@ public class CommonEvents {
         event.register(NtmMenuTypes.SIREN.get(), MachineSirenScreen::new);
         event.register(NtmMenuTypes.ANNIHILATOR.get(), MachineAnnihilatorScreen::new);
         event.register(NtmMenuTypes.BARREL.get(), BarrelScreen::new);
+        event.register(NtmMenuTypes.MACHINE_BIGASSTANK.get(), MachineBigAssTankScreen::new);
         event.register(NtmMenuTypes.CRATE.get(), CrateScreen::new);
         event.register(NtmMenuTypes.ANVIL.get(), AnvilMenuScreen::new);
         event.register(NtmMenuTypes.HEATER_FIREBOX.get(), HeaterFireboxScreen::new);

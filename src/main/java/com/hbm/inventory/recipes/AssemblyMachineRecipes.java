@@ -1267,6 +1267,31 @@ public class AssemblyMachineRecipes extends GenericRecipes<GenericRecipe> {
                         new ComparableStack(NtmItems.COIL_COPPER.get(), 4)
                 ));
 
+        // ---- Runde 154 ----
+        /*
+         * Original "ass.tank". Der gewoehnliche Tank ist seit Runde 1 im Port, hatte aber
+         * kein Rezept -- in der Ueberlebensrunde war er damit unerreichbar. STEEL.plate()
+         * wird die Stahlplatte, STEEL.shell() die Stahlhuelle. Die inputItemsEx-Fassung
+         * entfaellt wie ueberall im Port.
+         */
+        this.register(new GenericRecipe("ass.tank").setup(200, 100).outputItems(new ItemStack(NtmBlocks.MACHINE_FLUID_TANK, 1))
+                .inputItems(
+                        new ComparableStack(NtmItems.PLATE_STEEL.get(), 8),
+                        new ComparableStack(NtmItems.SHELL_STEEL.get(), 4)
+                ));
+
+        /*
+         * Original "ass.bigasstank". ANY_RESISTANTALLOY.plateWelded() wird die geschweisste
+         * Schnellarbeitsstahlplatte -- im Port ist der Schnellarbeitsstahl der einzige
+         * Vertreter dieser Gruppe, wie bei der Chemie- und der Montagefabrik.
+         */
+        this.register(new GenericRecipe("ass.bigasstank").setup(200, 100).outputItems(new ItemStack(NtmBlocks.MACHINE_BIGASSTANK, 1))
+                .inputItems(
+                        new ComparableStack(NtmItems.PLATE_STEEL.get(), 16),
+                        NtmItems.castPlateWeldedIngredient(CastPlateItem.Type.DURA_STEEL, 4),
+                        new ComparableStack(NtmBlocks.STEEL_SCAFFOLD.get(), 16)
+                ));
+
         FluidType[] order = Fluids.getInNiceOrder();
         for(int i = 1; i < order.length; ++i) {
             FluidType type = order[i];

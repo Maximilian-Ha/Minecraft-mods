@@ -653,6 +653,7 @@ public class NtmBlockStateProvider extends BlockStateProvider {
                 ConfiguredModel.builder().modelFile(state.getValue(MachineDetectorBlock.POWERED) ? detectorOn : detectorOff).build());
         this.simpleBlockItem(NtmBlocks.MACHINE_DETECTOR.get(), detectorOff);
         this.particleOnlyBlock(NtmBlocks.MACHINE_FLUID_TANK, modLoc("block/block_steel"));
+        this.particleOnlyBlock(NtmBlocks.MACHINE_BIGASSTANK, modLoc("block/block_steel"));
         this.particleOnlyBlock(NtmBlocks.MACHINE_SOLDERING_STATION, modLoc("block/block_steel"));
         this.particleOnlyBlock(NtmBlocks.MACHINE_REFINERY, modLoc("block/block_steel"));
         this.particleOnlyBlock(NtmBlocks.MACHINE_FRACTION_TOWER, modLoc("block/block_steel"));

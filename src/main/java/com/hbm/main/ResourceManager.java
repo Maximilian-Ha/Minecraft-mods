@@ -38,6 +38,7 @@ public class ResourceManager {
     public static final ResourceLocation DUD_SALTED_TEX = NuclearTechMod.withDefaultNamespace("textures/models/bombs/dud_salted.png");
 
     public static final ResourceLocation TANK_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/tank.png");
+    public static final ResourceLocation BIGASSTANK_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/bigasstank.png");
     public static final ResourceLocation TANK_INNER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/tank_inner.png");
 
     //Large Turbine
@@ -379,6 +380,7 @@ public class ResourceManager {
     public static IModelCustom mine_fat;
 
     // Tank
+    public static IModelCustom bigasstank;
     public static IModelCustom fluid_tank;
     public static IModelCustom fluid_tank_exploded;
 
@@ -638,6 +640,7 @@ public class ResourceManager {
         mine_naval = new HFRWavefrontObject("models/obj/bomb/mine_naval.obj").asVBO();
         mine_fat = new HFRWavefrontObject("models/obj/bomb/mine_fat.obj").asVBO();
 
+        bigasstank = new HFRWavefrontObject("models/obj/machines/bigasstank.obj").asVBO();
         fluid_tank = new HFRWavefrontObject("models/obj/machines/fluid_tank.obj").asVBO();
         fluid_tank_exploded = new HFRWavefrontObject("models/obj/machines/fluid_tank_exploded.obj").asVBO();
 

@@ -570,6 +570,7 @@ public class NtmBlockTagProvider extends BlockTagsProvider {
                         NtmBlocks.TRANSFORMER.get(),
 
                         NtmBlocks.MACHINE_FLUID_TANK.get(),
+                        NtmBlocks.MACHINE_BIGASSTANK.get(),
                         NtmBlocks.MACHINE_CHUNGUS.get(),
                         NtmBlocks.MACHINE_INDUSTRIAL_TURBINE.get(),
                         NtmBlocks.MACHINE_STRAND_CASTER.get(),

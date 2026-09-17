@@ -2249,6 +2249,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.BARREL_LOX, "LOX Barrel");
         this.add(NtmBlocks.BARREL_TAINT, "IMP Residue Barrel");
         this.add("container.barrel", "Barrel");
+        this.add("container.bigasstank", "Big-Ass Tank");
         this.add("desc.capacity", "Capacity: %s mB");
         this.add("desc.canhot", "Can contain hot fluids");
         this.add("desc.cannothot", "Cannot contain hot fluids");
@@ -2673,6 +2674,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.MACHINE_STIRLING, "Stirling Engine");
         this.add(NtmBlocks.MACHINE_STIRLING, DESC, "Turns heat into energy. Requires external heat source.$Heat transfer rate: T*0.1 TU/t$Max intake: 300 TU/t$Efficiency: 50%%");
         this.add(NtmBlocks.MACHINE_FLUID_TANK, "Tank");
+        this.add(NtmBlocks.MACHINE_BIGASSTANK, "Big-Ass Tank");
+        this.add(NtmBlocks.MACHINE_BIGASSTANK, DESC, "Stores 16,000,000mB of any fluid.$Needs a solid, heavy floor -- it tilts$and stops working on soft ground.$The ports sit seven blocks to either$side along the facing axis.");
         this.add(NtmBlocks.MACHINE_ASSEMBLY_FACTORY, "Assembly Factory");
         this.add(NtmBlocks.MACHINE_ASSEMBLY_FACTORY, DESC, "Four assembly machines in one 5x5 structure.$Twelve input slots per field.$Needs water for cooling; the coolant ports are separate.");
         this.add("container.machineAssemblyFactory", "Assembly Factory");
