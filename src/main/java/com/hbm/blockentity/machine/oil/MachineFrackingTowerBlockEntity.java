@@ -232,9 +232,10 @@ public class MachineFrackingTowerBlockEntity extends OilDrillBaseBlockEntity {
             int y = this.worldPosition.getY();
             int z = this.worldPosition.getZ();
             /*
-             * Das Original hat hier nichts -- dort steckt derselbe Fehler. fracking_tower.obj ist
-             * 24,5 Bloecke hoch bei einem Radius von 3,55; der Mehrblockbau selbst misst nur einen
-             * Block in der Flaeche. Masse also aus dem Modell hergeleitet.
+             * Das Original nimmt hier INFINITE_EXTENT_AABB, geerbt von TileEntityOilDrillBase,
+             * und hilft mit einer Zahl also nicht weiter. fracking_tower.obj ist 24,5 Bloecke
+             * hoch bei einem Radius von 3,55; der Mehrblockbau selbst misst nur einen Block in
+             * der Flaeche. Masse deshalb aus dem Modell hergeleitet.
              */
             this.renderBox = new AABB(x - 4, y, z - 4, x + 5, y + 25, z + 5);
         }

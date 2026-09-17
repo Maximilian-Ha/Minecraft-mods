@@ -3230,7 +3230,7 @@ Alle 122 Darsteller wurden durchgesehen. Ergänzt wurde der Sichtkasten bei:
 |---|---|---|
 | `ChungusBlockEntity` | 23×7×23 | Original: unendlich |
 | `FusionTorusBlockEntity` | 17×5×17 | Original wörtlich |
-| `MachineFrackingTowerBlockEntity` | 9×25×9 | aus dem Modell hergeleitet |
+| `MachineFrackingTowerBlockEntity` | 9×25×9 | Original: unendlich, Masse aus dem Modell |
 | `MachineVacuumDistillBlockEntity` | 3×9×3 | Original wörtlich |
 | `MachineRefineryBlockEntity` | 3×10×3 | Original: unendlich |
 | `MachineHydrotreaterBlockEntity` | 3×7×3 | Original wörtlich |
