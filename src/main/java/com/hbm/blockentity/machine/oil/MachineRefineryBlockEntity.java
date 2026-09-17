@@ -38,8 +38,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
+import net.minecraft.world.phys.AABB;
 
 public class MachineRefineryBlockEntity extends MachineBaseBlockEntity implements IEnergyReceiverMK2, IFluidStandardTransceiverMK2, IPersistentNBT, IOverpressurable {
+
+    private AABB renderBox;
 
     public static final int MAX_SULFUR = 100;
     public static final long MAX_POWER = 1_000L;
@@ -452,5 +455,21 @@ public class MachineRefineryBlockEntity extends MachineBaseBlockEntity implement
     @Override
     public AudioWrapper createAudioLoop() {
         return AudioWrapper.getLoopedSound(NtmSoundEvents.ELECTRIC_MOTOR_LOOP.get(), SoundSource.BLOCKS, this, 0.25F, 15F, 1.0F, 20);
+    }
+
+    /* Ohne @Override: die Methode stammt aus der NeoForge-Erweiterung, nicht aus BlockEntity. */
+    public AABB getRenderBoundingBox() {
+        if(this.renderBox == null) {
+            int x = this.worldPosition.getX();
+            int y = this.worldPosition.getY();
+            int z = this.worldPosition.getZ();
+            /*
+             * Das Original nimmt INFINITE_EXTENT_AABB und hilft damit nicht weiter. refinery.obj ist
+             * 9,5 Bloecke hoch, aufgerundet auf 10 -- dieselbe Form wie bei den Geschwistern der
+             * Erdoelkette.
+             */
+            this.renderBox = new AABB(x - 1, y, z - 1, x + 2, y + 10, z + 2);
+        }
+        return this.renderBox;
     }
 }

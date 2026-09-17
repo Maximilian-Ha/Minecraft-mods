@@ -3196,3 +3196,78 @@ Fundstellen bleiben drin, die sechsundzwanzig Metawerte fallen heraus.
 Die Selbstprobe deckt den Fehlalarm jetzt mit ab: ihre Nachbildung enthält eine
 `canned_asbestos`-Zeile, die **nicht** gemeldet werden darf. Entfernt man das Sieb, meldet sie
 vier statt drei Fundstellen und schlägt fehl — gegengeprüft.
+
+## Runde 153: die Leviathan-Turbine verschwindet beim Wegschauen
+
+> „die Leviathan Turbine wird nach dem platzieren unsichtbar, wenn man zur Seite schaut"
+
+Der Befund ist eindeutig und die Klasse gross: **`ChungusBlockEntity` hat kein
+`getRenderBoundingBox`** — und siebzehn weitere Blockentitäten auch nicht.
+
+### Warum das ein Block-Entity-Problem ist und kein Modellproblem
+
+Minecraft schneidet Blockentitäten zweimal gegen den Sichtstumpf: einmal grob über den
+16×16×16-Abschnitt, in dem sie stehen, und einmal fein über einen Kasten je Blockentität.
+Diesen Kasten liefert die NeoForge-Erweiterung `getRenderBoundingBox()`; ohne eigene Angabe
+ist er **genau ein Block gross**.
+
+Bei einer Ein-Block-Maschine stimmt das. Bei einem Mehrblockbau steht der Kern irgendwo im
+Bauwerk, und das Modell reicht weit darüber hinaus. `chungus.obj` misst in Z −7,5 bis 7,49,
+und `RenderChungus` schiebt es zusätzlich um drei Blöcke — die Turbine ist rund fünfzehn
+Blöcke lang, ihr Sichtkasten war einer. Dreht der Spieler den Kopf so, dass dieser eine Block
+aus dem Bild fällt, verschwindet das ganze Modell schlagartig, obwohl es noch zur Hälfte vor
+ihm steht. Genau das hat der Spieler beschrieben.
+
+Das Original löst es mit `TileEntity.INFINITE_EXTENT_AABB` — die Turbine wird also immer
+gezeichnet. Hier steht stattdessen ein fester Kasten von 23×7×23 um den Kern: das deckt jede
+der vier Aufstellrichtungen ab und lässt das Aussortieren auf Entfernung intakt.
+
+### Siebzehn Klassen, nicht eine
+
+Alle 122 Darsteller wurden durchgesehen. Ergänzt wurde der Sichtkasten bei:
+
+| Klasse | Kasten | Herkunft |
+|---|---|---|
+| `ChungusBlockEntity` | 23×7×23 | Original: unendlich |
+| `FusionTorusBlockEntity` | 17×5×17 | Original wörtlich |
+| `MachineFrackingTowerBlockEntity` | 9×25×9 | aus dem Modell hergeleitet |
+| `MachineVacuumDistillBlockEntity` | 3×9×3 | Original wörtlich |
+| `MachineRefineryBlockEntity` | 3×10×3 | Original: unendlich |
+| `MachineHydrotreaterBlockEntity` | 3×7×3 | Original wörtlich |
+| `MachineCatalyticReformerBlockEntity` | 5×7×5 | Original wörtlich |
+| `MachineBlastFurnaceBlockEntity` | 3×7×3 | Original wörtlich |
+| `ReactorZirnoxBlockEntity` | 5×5×5 | Original wörtlich |
+| `ZirnoxDestroyedBlockEntity` | 7×3×7 | Original wörtlich |
+| `MachineArcWelderBlockEntity` | 3×3×3 | Original wörtlich |
+| `MachineSolderingStationBlockEntity` | 3×3×3 | Original wörtlich |
+| `MachineReactorBreedingBlockEntity` | 1×4×1 | Original +1, Modell ist 3,25 hoch |
+| `BatterySocketBlockEntity` | 3×2×3 | Original wörtlich |
+| `MachineFurnaceCombinationBlockEntity` | 3×2,125×3 | Original wörtlich |
+| `PlushieBlockEntity` | 3×2×3 | Hundun ragt 0,7 Blöcke heraus |
+| `LandmineBlockEntity` | 3×3×3 | Seemine ragt 0,7 Blöcke heraus |
+
+Der **Torwächter hat sich zweimal geirrt**, und beide Male in dieselbe Richtung: er sah nur
+die Blockentität und übersah, dass der Port den Kasten auch im **Darsteller** setzen kann
+(`getRenderBoundingBox(be)`). Zwölf der neunundzwanzig gemeldeten Klassen — darunter der
+Tank, die Presse, der Bagger, das Radar — hatten ihn längst, nur an der anderen Stelle.
+Nachgezählt statt geglaubt.
+
+### Das sechzehnte Tor: `tools/renderbox-check.sh`
+
+**Die Regel.** Eine Blockentität braucht einen Sichtkasten, wenn sie einen eigenen Darsteller
+hat **und** mindestens einer ihrer Blöcke von `DummyableBlock` erbt. Der Kasten darf an drei
+Stellen stehen: an der Blockentität, im Darsteller, oder als `shouldRenderOffScreen` — der
+Port benutzt alle drei.
+
+**Warum die zweite Bedingung.** Ein Mehrblockbau ist per Definition grösser als ein Block,
+der voreingestellte Kasten also immer zu klein. Das ist keine Faustregel, sondern die Grenze,
+ab der die Aussage sicher gilt.
+
+**Nachgemessen.** 120 Blockentitäten haben einen eigenen Darsteller, 84 hängen an einem
+Mehrblockbau. Nach dieser Runde meldet das Tor davon null. Nimmt man
+`ChungusBlockEntity.getRenderBoundingBox` wieder heraus, meldet es genau diese eine Klasse.
+
+**Verworfen** ist die naheliegendere Fassung „jede Blockentität mit Darsteller braucht einen
+Kasten": achtzehn Fehlalarme — Wackelkopf, Geigerzähler, Plüschtier, die neun RBMK-Anzeigen
+und die drei Teile des Reaktorstapels zeichnen alle innerhalb ihres Blocks. Eine
+Ausnahmeliste dafür wäre eine Attrappe gewesen.

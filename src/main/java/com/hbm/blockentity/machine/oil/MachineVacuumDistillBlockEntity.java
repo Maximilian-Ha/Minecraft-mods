@@ -27,6 +27,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 /**
  * Portiert aus 1.7.10: com.hbm.tileentity.machine.oil.TileEntityMachineVacuumDistill.
@@ -40,6 +41,8 @@ import net.minecraft.world.level.block.state.BlockState;
  * ihn ab.
  */
 public class MachineVacuumDistillBlockEntity extends MachineBaseBlockEntity implements IEnergyReceiverMK2, IFluidStandardTransceiverMK2 {
+
+    private AABB renderBox;
 
     public static final long MAX_POWER = 1_000_000L;
     public static final long POWER_PER_BATCH = 10_000L;
@@ -226,5 +229,19 @@ public class MachineVacuumDistillBlockEntity extends MachineBaseBlockEntity impl
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new MachineVacuumDistillMenu(id, inventory, this);
+    }
+
+    /* Ohne @Override: die Methode stammt aus der NeoForge-Erweiterung, nicht aus BlockEntity. */
+    public AABB getRenderBoundingBox() {
+        if(this.renderBox == null) {
+            int x = this.worldPosition.getX();
+            int y = this.worldPosition.getY();
+            int z = this.worldPosition.getZ();
+            /*
+             * Masse aus dem Original uebernommen. vacuum_distill.obj ist 9 Bloecke hoch.
+             */
+            this.renderBox = new AABB(x - 1, y, z - 1, x + 2, y + 9, z + 2);
+        }
+        return this.renderBox;
     }
 }

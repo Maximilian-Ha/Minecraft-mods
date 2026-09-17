@@ -37,6 +37,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 /**
  * Portiert aus 1.7.10: com.hbm.tileentity.machine.fusion.TileEntityFusionTorus.
@@ -61,6 +62,8 @@ import net.minecraft.world.level.block.state.BlockState;
  *   (ENTSCHEIDUNGEN.md).
  */
 public class FusionTorusBlockEntity extends CooledBaseBlockEntity implements IControlReceiver {
+
+    private AABB renderBox;
 
     public static final int SLOT_BATTERY = 0;
     public static final int SLOT_BLUEPRINT = 1;
@@ -471,5 +474,19 @@ public class FusionTorusBlockEntity extends CooledBaseBlockEntity implements ICo
                 this.setChanged();
             }
         }
+    }
+
+    /* Ohne @Override: die Methode stammt aus der NeoForge-Erweiterung, nicht aus BlockEntity. */
+    public AABB getRenderBoundingBox() {
+        if(this.renderBox == null) {
+            int x = this.worldPosition.getX();
+            int y = this.worldPosition.getY();
+            int z = this.worldPosition.getZ();
+            /*
+             * Masse aus dem Original uebernommen. torus.obj misst X/Z +-7,88 und Y 0 bis 5.
+             */
+            this.renderBox = new AABB(x - 8, y, z - 8, x + 9, y + 5, z + 9);
+        }
+        return this.renderBox;
     }
 }

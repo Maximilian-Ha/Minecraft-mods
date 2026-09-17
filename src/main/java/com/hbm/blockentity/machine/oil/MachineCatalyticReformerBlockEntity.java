@@ -27,6 +27,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 /**
  * Portiert aus 1.7.10: com.hbm.tileentity.machine.oil.TileEntityMachineCatalyticReformer.
@@ -39,6 +40,8 @@ import net.minecraft.world.level.block.state.BlockState;
  * Tanks, der Fluidkennzeichner und ganz oben der Katalysator.
  */
 public class MachineCatalyticReformerBlockEntity extends MachineBaseBlockEntity implements IEnergyReceiverMK2, IFluidStandardTransceiverMK2 {
+
+    private AABB renderBox;
 
     public static final long MAX_POWER = 1_000_000L;
     /** Was ein Durchgang kostet und verbraucht -- unveraendert aus dem Original. */
@@ -217,5 +220,19 @@ public class MachineCatalyticReformerBlockEntity extends MachineBaseBlockEntity 
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new MachineCatalyticReformerMenu(id, inventory, this);
+    }
+
+    /* Ohne @Override: die Methode stammt aus der NeoForge-Erweiterung, nicht aus BlockEntity. */
+    public AABB getRenderBoundingBox() {
+        if(this.renderBox == null) {
+            int x = this.worldPosition.getX();
+            int y = this.worldPosition.getY();
+            int z = this.worldPosition.getZ();
+            /*
+             * Masse aus dem Original uebernommen. catalytic_reformer.obj misst X +-1,5, Z +-2,5, Y 0 bis 7.
+             */
+            this.renderBox = new AABB(x - 2, y, z - 2, x + 3, y + 7, z + 3);
+        }
+        return this.renderBox;
     }
 }

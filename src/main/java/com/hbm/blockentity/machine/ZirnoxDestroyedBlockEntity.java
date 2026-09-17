@@ -14,8 +14,11 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.AABB;
 
 public class ZirnoxDestroyedBlockEntity extends BlockEntity implements ITickable {
+
+    private AABB renderBox;
 
     public boolean onFire = true;
 
@@ -53,5 +56,19 @@ public class ZirnoxDestroyedBlockEntity extends BlockEntity implements ITickable
         super.saveAdditional(tag, registries);
 
         tag.putBoolean("onFire", this.onFire);
+    }
+
+    /* Ohne @Override: die Methode stammt aus der NeoForge-Erweiterung, nicht aus BlockEntity. */
+    public AABB getRenderBoundingBox() {
+        if(this.renderBox == null) {
+            int x = this.worldPosition.getX();
+            int y = this.worldPosition.getY();
+            int z = this.worldPosition.getZ();
+            /*
+             * Masse aus dem Original uebernommen. zirnox_destroyed.obj liegt schief im Gelaende.
+             */
+            this.renderBox = new AABB(x - 3, y, z - 3, x + 4, y + 3, z + 4);
+        }
+        return this.renderBox;
     }
 }

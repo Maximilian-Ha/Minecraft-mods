@@ -17,8 +17,11 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 public class BatterySocketBlockEntity extends BatteryBaseBlockEntity {
+
+    private AABB renderBox;
 
     public boolean frame = false;
 
@@ -176,5 +179,20 @@ public class BatterySocketBlockEntity extends BatteryBaseBlockEntity {
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new BatterySocketMenu(id, inventory, this);
+    }
+
+    /* Ohne @Override: die Methode stammt aus der NeoForge-Erweiterung, nicht aus BlockEntity. */
+    public AABB getRenderBoundingBox() {
+        if(this.renderBox == null) {
+            int x = this.worldPosition.getX();
+            int y = this.worldPosition.getY();
+            int z = this.worldPosition.getZ();
+            /*
+             * Masse aus dem Original uebernommen. Der Darsteller schiebt das Modell um einen halben
+             * Block und zeichnet bei der Schoepferbatterie zusaetzlich Strahlen.
+             */
+            this.renderBox = new AABB(x - 1, y, z - 1, x + 2, y + 2, z + 2);
+        }
+        return this.renderBox;
     }
 }

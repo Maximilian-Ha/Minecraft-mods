@@ -28,8 +28,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 public class MachineBlastFurnaceBlockEntity extends MachineBaseBlockEntity implements IFluidStandardTransceiverMK2 {
+
+    private AABB renderBox;
 
     public static final int MAX_FUEL = 25_600;
     public static final int FUEL_RATE = 800;
@@ -300,5 +303,19 @@ public class MachineBlastFurnaceBlockEntity extends MachineBaseBlockEntity imple
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new MachineBlastFurnaceMenu(id, inventory, this);
+    }
+
+    /* Ohne @Override: die Methode stammt aus der NeoForge-Erweiterung, nicht aus BlockEntity. */
+    public AABB getRenderBoundingBox() {
+        if(this.renderBox == null) {
+            int x = this.worldPosition.getX();
+            int y = this.worldPosition.getY();
+            int z = this.worldPosition.getZ();
+            /*
+             * Masse aus dem Original uebernommen. blast_furnace.obj ist 7 Bloecke hoch.
+             */
+            this.renderBox = new AABB(x - 1, y, z - 1, x + 2, y + 7, z + 2);
+        }
+        return this.renderBox;
     }
 }

@@ -25,8 +25,11 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
 import java.io.IOException;
+import net.minecraft.world.phys.AABB;
 
 public class MachineFrackingTowerBlockEntity extends OilDrillBaseBlockEntity {
+
+    private AABB renderBox;
 
     // todo config
     protected static int maxPower = 5_000_000;
@@ -220,5 +223,21 @@ public class MachineFrackingTowerBlockEntity extends OilDrillBaseBlockEntity {
         writer.name("I:gasPerBedrockDepositMin").value(gasPerBedrockDepositMin);
         writer.name("I:gasPerBedrockDepositMax").value(gasPerBedrockDepositMax);
         writer.name("I:destructionRange").value(destructionRange);
+    }
+
+    /* Ohne @Override: die Methode stammt aus der NeoForge-Erweiterung, nicht aus BlockEntity. */
+    public AABB getRenderBoundingBox() {
+        if(this.renderBox == null) {
+            int x = this.worldPosition.getX();
+            int y = this.worldPosition.getY();
+            int z = this.worldPosition.getZ();
+            /*
+             * Das Original hat hier nichts -- dort steckt derselbe Fehler. fracking_tower.obj ist
+             * 24,5 Bloecke hoch bei einem Radius von 3,55; der Mehrblockbau selbst misst nur einen
+             * Block in der Flaeche. Masse also aus dem Modell hergeleitet.
+             */
+            this.renderBox = new AABB(x - 4, y, z - 4, x + 5, y + 25, z + 5);
+        }
+        return this.renderBox;
     }
 }

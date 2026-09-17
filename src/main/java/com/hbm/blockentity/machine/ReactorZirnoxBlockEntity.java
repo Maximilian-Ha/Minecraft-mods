@@ -41,8 +41,11 @@ import net.minecraft.world.phys.Vec3;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
+import net.minecraft.world.phys.AABB;
 
 public class ReactorZirnoxBlockEntity extends MachineBaseBlockEntity implements IControlReceiver, IFluidStandardTransceiverMK2 {
+
+    private AABB renderBox;
 
     public int heat;
     public static final int maxHeat = 100000;
@@ -442,5 +445,19 @@ public class ReactorZirnoxBlockEntity extends MachineBaseBlockEntity implements 
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new ReactorZirnoxMenu(id, inventory, this);
+    }
+
+    /* Ohne @Override: die Methode stammt aus der NeoForge-Erweiterung, nicht aus BlockEntity. */
+    public AABB getRenderBoundingBox() {
+        if(this.renderBox == null) {
+            int x = this.worldPosition.getX();
+            int y = this.worldPosition.getY();
+            int z = this.worldPosition.getZ();
+            /*
+             * Masse aus dem Original uebernommen. zirnox.obj misst X/Z +-2,5 und Y 0 bis 5.
+             */
+            this.renderBox = new AABB(x - 2, y, z - 2, x + 3, y + 5, z + 3);
+        }
+        return this.renderBox;
     }
 }

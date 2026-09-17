@@ -39,8 +39,11 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.HashMap;
 import java.util.List;
+import net.minecraft.world.phys.AABB;
 
 public class MachineArcWelderBlockEntity extends MachineBaseBlockEntity implements IEnergyReceiverMK2, IFluidStandardTransceiverMK2, IControlReceiver, IUpgradeInfoProvider, IFluidCopiable {
+
+    private AABB renderBox;
 
     private static final int INV_SIZE = 8;
 
@@ -313,5 +316,20 @@ public class MachineArcWelderBlockEntity extends MachineBaseBlockEntity implemen
         if(!this.display.isEmpty()) {
             tag.put("display", this.display.save(registries));
         }
+    }
+
+    /* Ohne @Override: die Methode stammt aus der NeoForge-Erweiterung, nicht aus BlockEntity. */
+    public AABB getRenderBoundingBox() {
+        if(this.renderBox == null) {
+            int x = this.worldPosition.getX();
+            int y = this.worldPosition.getY();
+            int z = this.worldPosition.getZ();
+            /*
+             * Masse aus dem Original uebernommen. arc_welder.obj misst Z +-1,5, und der Darsteller
+             * schiebt es zusaetzlich einen halben Block zur Seite.
+             */
+            this.renderBox = new AABB(x - 1, y, z - 1, x + 2, y + 3, z + 2);
+        }
+        return this.renderBox;
     }
 }

@@ -19,8 +19,11 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import java.io.IOException;
+import net.minecraft.world.phys.AABB;
 
 public class ChungusBlockEntity extends TurbineBaseBlockEntity {
+
+    private AABB renderBox;
 
     private int turnTimer;
     public float rotor;
@@ -178,5 +181,23 @@ public class ChungusBlockEntity extends TurbineBaseBlockEntity {
         writer.name("I:inputTankSize").value(inputTankSize);
         writer.name("I:outputTankSize").value(outputTankSize);
         writer.name("D:efficiency").value(efficiency);
+    }
+
+    /* Ohne @Override: die Methode stammt aus der NeoForge-Erweiterung, nicht aus BlockEntity. */
+    public AABB getRenderBoundingBox() {
+        if(this.renderBox == null) {
+            int x = this.worldPosition.getX();
+            int y = this.worldPosition.getY();
+            int z = this.worldPosition.getZ();
+            /*
+             * Das Modell ist 15 Bloecke lang, der Kern sitzt an einem Ende: chungus.obj reicht von
+             * Z -7,5 bis 7,49, und RenderChungus schiebt es zusaetzlich um drei Bloecke. Die Blaetter
+             * drehen um y = 2,5 und schwenken dabei von y - 0,7 bis y + 5,7. Die Blickrichtung steht
+             * hier nicht fest, darum rundum gleich weit. Das Original nimmt an dieser Stelle
+             * INFINITE_EXTENT_AABB.
+             */
+            this.renderBox = new AABB(x - 11, y - 1, z - 11, x + 12, y + 6, z + 12);
+        }
+        return this.renderBox;
     }
 }

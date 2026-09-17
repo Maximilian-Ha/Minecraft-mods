@@ -29,8 +29,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 public class MachineFurnaceCombinationBlockEntity extends MachineBaseBlockEntity implements IFluidStandardTransceiverMK2 {
+
+    private AABB renderBox;
 
     public static final int PROCESS_TIME = 20_000;
     public static final int MAX_HEAT = 100_000;
@@ -265,5 +268,19 @@ public class MachineFurnaceCombinationBlockEntity extends MachineBaseBlockEntity
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new MachineFurnaceCombinationMenu(id, inventory, this);
+    }
+
+    /* Ohne @Override: die Methode stammt aus der NeoForge-Erweiterung, nicht aus BlockEntity. */
+    public AABB getRenderBoundingBox() {
+        if(this.renderBox == null) {
+            int x = this.worldPosition.getX();
+            int y = this.worldPosition.getY();
+            int z = this.worldPosition.getZ();
+            /*
+             * Masse aus dem Original uebernommen, die krumme Hoehe eingeschlossen.
+             */
+            this.renderBox = new AABB(x - 1, y, z - 1, x + 2, y + 2.125D, z + 2);
+        }
+        return this.renderBox;
     }
 }

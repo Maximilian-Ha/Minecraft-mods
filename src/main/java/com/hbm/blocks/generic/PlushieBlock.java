@@ -34,6 +34,7 @@ import net.minecraft.world.phys.BlockHitResult;
 
 import java.util.List;
 import java.util.Locale;
+import net.minecraft.world.phys.AABB;
 
 public class PlushieBlock extends MultiBlock implements EntityBlock, ITooltipProvider {
 
@@ -116,6 +117,8 @@ public class PlushieBlock extends MultiBlock implements EntityBlock, ITooltipPro
 
     public static class PlushieBlockEntity extends BlockEntityNT implements ITickable {
 
+        private AABB renderBox;
+
         public int squishTimer;
 
         public PlushieBlockEntity(BlockPos pos, BlockState state) {
@@ -125,6 +128,22 @@ public class PlushieBlock extends MultiBlock implements EntityBlock, ITooltipPro
         @Override
         public void updateEntity() {
             if(squishTimer > 0) squishTimer--;
+        }
+
+        /* Ohne @Override: die Methode stammt aus der NeoForge-Erweiterung, nicht aus BlockEntity. */
+        public AABB getRenderBoundingBox() {
+            if(this.renderBox == null) {
+                int x = this.worldPosition.getX();
+                int y = this.worldPosition.getY();
+                int z = this.worldPosition.getZ();
+                /*
+                 * Nur der Hundun faellt hier ins Gewicht: sein Teil aus hundun.obj wird ohne
+                 * Verkleinerung gezeichnet und ragt rund 0,7 Bloecke ueber den Block hinaus.
+                 * Die uebrigen Sorten sind verkleinert und bleiben darin.
+                 */
+                this.renderBox = new AABB(x - 1, y, z - 1, x + 2, y + 2, z + 2);
+            }
+            return this.renderBox;
         }
     }
 

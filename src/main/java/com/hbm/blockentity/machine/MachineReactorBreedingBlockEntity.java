@@ -17,6 +17,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 /**
  * Portiert aus 1.7.10: com.hbm.tileentity.machine.TileEntityMachineReactorBreeding.
@@ -31,6 +32,8 @@ import net.minecraft.world.level.block.state.BlockState;
  * ABWEICHUNG: NICHT UEBERNOMMEN ist die OpenComputers-Anbindung (ENTSCHEIDUNGEN.md).
  */
 public class MachineReactorBreedingBlockEntity extends MachineBaseBlockEntity {
+
+    private AABB renderBox;
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 1;
@@ -168,5 +171,20 @@ public class MachineReactorBreedingBlockEntity extends MachineBaseBlockEntity {
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new MachineReactorBreedingMenu(id, inventory, this);
+    }
+
+    /* Ohne @Override: die Methode stammt aus der NeoForge-Erweiterung, nicht aus BlockEntity. */
+    public AABB getRenderBoundingBox() {
+        if(this.renderBox == null) {
+            int x = this.worldPosition.getX();
+            int y = this.worldPosition.getY();
+            int z = this.worldPosition.getZ();
+            /*
+             * breeder.obj ist 3,25 Bloecke hoch. Das Original schneidet bei y + 3 ab; hier einen
+             * Block mehr, damit die Kuppel nicht wegfaellt.
+             */
+            this.renderBox = new AABB(x, y, z, x + 1, y + 4, z + 1);
+        }
+        return this.renderBox;
     }
 }

@@ -20,6 +20,8 @@ import java.util.List;
 
 public class LandmineBlockEntity extends BlockEntity implements ITickable {
 
+    private AABB renderBox;
+
     public boolean isPrimed = false;
     public boolean waitingForPlayer = false;
 
@@ -92,5 +94,20 @@ public class LandmineBlockEntity extends BlockEntity implements ITickable {
 
         tag.putBoolean("Primed", isPrimed);
         tag.putBoolean("Waiting", waitingForPlayer);
+    }
+
+    /* Ohne @Override: die Methode stammt aus der NeoForge-Erweiterung, nicht aus BlockEntity. */
+    public AABB getRenderBoundingBox() {
+        if(this.renderBox == null) {
+            int x = this.worldPosition.getX();
+            int y = this.worldPosition.getY();
+            int z = this.worldPosition.getZ();
+            /*
+             * Nur die Seemine faellt hier ins Gewicht: mine_naval.obj ragt rund 0,7 Bloecke ueber
+             * den Block hinaus, die uebrigen Minen bleiben darin. Das Original hat nichts dergleichen.
+             */
+            this.renderBox = new AABB(x - 1, y - 1, z - 1, x + 2, y + 2, z + 2);
+        }
+        return this.renderBox;
     }
 }
