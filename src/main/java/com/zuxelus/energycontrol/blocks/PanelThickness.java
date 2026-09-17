@@ -1,7 +1,6 @@
 package com.zuxelus.energycontrol.blocks;
 
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -35,14 +34,6 @@ public final class PanelThickness {
      * der Gegenseite ihrer Schauseite.
      */
     public static VoxelShape shape(Direction facing, int thickness) {
-        double d = thickness;
-        return switch(facing) {
-            case NORTH -> Block.box(0, 0, 16 - d, 16, 16, 16);
-            case SOUTH -> Block.box(0, 0, 0, 16, 16, d);
-            case EAST -> Block.box(0, 0, 0, d, 16, 16);
-            case WEST -> Block.box(16 - d, 0, 0, 16, 16, 16);
-            case UP -> Block.box(0, 0, 0, 16, d, 16);
-            case DOWN -> Block.box(0, 16 - d, 0, 16, 16, 16);
-        };
+        return BoxShape.slab(facing, 0, thickness);
     }
 }

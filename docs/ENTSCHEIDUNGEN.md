@@ -145,13 +145,33 @@ Die freie Neigung fehlt deshalb ganz. Eine geneigte *Schrift* auf einem ungeneig
 schlechter als keine Neigung, und ein eigener Renderer für den Blockkörper lässt sich in dieser
 Arbeitsumgebung nicht ansehen — also auch nicht verantworten.
 
-## `directionalBlock` von NeoForge passt nicht zu `orientable`
+## Die Blockmodelle sind Kästen mit Bildausschnitten, keine Würfel mit Kacheln
 
-`models().orientable(...)` legt die Schauseite eines Modells in den **Norden** (so hält es
-`block/orientable` von Minecraft). `directionalBlock` von NeoForge dreht dagegen Modelle, deren
-Schauseite **oben** liegt — Fass, Spender-Senkrecht und so fort. Beides zusammen legt die
-Schauseite bei `facing=NORTH` auf die Unterseite.
+Die Dateien `*_all.png` des Originals sehen aus wie Blocktexturen, sind aber keine: sie sind
+**Abwicklungen** eines Würfels, 128 × 128 groß, mit fünf Kacheln zu je 32 × 32 in Kreuzform.
+Das Feld in der Mitte bleibt frei — dort sitzt die Schauseite, die als eigene Datei
+`*_face.png` danebenliegt.
 
-Der Port dreht deshalb selbst (`facingBlock` in `ECBlockStateProvider`), mit den Drehungen, die
-Minecraft für den Ofen (waagerecht, `toYRot + 180`) und den Endstab (senkrecht, `x = 90` bzw.
-`270`) benutzt.
+Die erste Fassung dieses Ports hat sie wie gewöhnliche Kacheln benutzt
+(`models().orientable(...)`, `cubeAll(...)`). Das quetscht das ganze Kreuz auf jede Fläche:
+im Spiel stehen dann schwarz-weiße Karos statt eines Geräts.
+
+Die Modelle stehen deshalb als eigene Kästen im Datengenerator, mit denselben
+Bildausschnitten wie im Original — `full_box`, `medium_box`, `small_box`. Die Texturen
+bleiben unverändert; geändert hat sich nur, wie sie gelesen werden.
+
+Daraus folgen zwei Bauformen mit zwei Drehkonventionen:
+
+- **Schauseite im Norden** (`full_box`): Informationstafel, Erweiterungen, Bereichsmelder,
+  Bausatzmontage, Fernwärmeanzeige. Waagerecht ist die Drehung `toYRot + 180` — dieselbe,
+  die Minecraft für den Ofen benutzt und die NeoForge als Vorgabewinkel führt. Senkrecht
+  dreht `facingBlock` um die X-Achse: `x = 270` hebt die Nordfläche nach oben, `x = 90` legt
+  sie nach unten.
+- **Schauseite oben** (`medium_box`, `small_box`, Energiezähler): Wärmemelder, Heuler,
+  Warnleuchte. Das sind flache Kästen, die auf dem Boden liegen. Für sie passt
+  `directionalBlock` von NeoForge unverändert — seine Drehungen sind Zeichen für Zeichen die
+  Blockzustände des Originals.
+
+Dass diese drei Blöcke flach sind, sagt jetzt auch ihr Körper (`BoxShape.slab`) und ihre
+Blockeigenschaft `noOcclusion` — ein flacher Block, den Minecraft für einen vollen Würfel
+hält, wirft Schatten, wo keine hingehören.

@@ -42,7 +42,7 @@ public class ECBlocks {
             register("advanced_info_panel_extender", () -> new AdvancedInfoPanelExtenderBlock(thinProperties()));
 
     public static final DeferredBlock<ThermalMonitorBlock> THERMAL_MONITOR =
-            register("thermal_monitor", () -> new ThermalMonitorBlock(machineProperties()));
+            register("thermal_monitor", () -> new ThermalMonitorBlock(thinProperties()));
 
     public static final DeferredBlock<RemoteThermalMonitorBlock> REMOTE_THERMAL_MONITOR =
             register("remote_thermal_monitor", () -> new RemoteThermalMonitorBlock(machineProperties()));
@@ -57,10 +57,10 @@ public class ECBlocks {
             register("kit_assembler", () -> new KitAssemblerBlock(machineProperties()));
 
     public static final DeferredBlock<HowlerAlarmBlock> HOWLER_ALARM =
-            register("howler_alarm", () -> new HowlerAlarmBlock(machineProperties()));
+            register("howler_alarm", () -> new HowlerAlarmBlock(thinProperties()));
 
     public static final DeferredBlock<IndustrialAlarmBlock> INDUSTRIAL_ALARM =
-            register("industrial_alarm", () -> new IndustrialAlarmBlock(machineProperties()));
+            register("industrial_alarm", () -> new IndustrialAlarmBlock(thinProperties()));
 
     /** Haerte und Klang wie im Original: Metallgehaeuse, mit der Spitzhacke abzubauen. */
     private static BlockBehaviour.Properties machineProperties() {
@@ -72,7 +72,8 @@ public class ECBlocks {
     }
 
     /**
-     * Wie oben, aber fuer Bloecke, die nicht den ganzen Wuerfel fuellen. Ohne
+     * Wie oben, aber fuer Bloecke, die nicht den ganzen Wuerfel fuellen -- die duennen
+     * Tafeln, der Waermemelder und die beiden Alarme. Ohne
      * {@code noOcclusion} haelt Minecraft sie fuer undurchsichtig -- dann faellt hinter
      * einer duennen Tafel kein Licht durch, und Nachbarflaechen verschwinden.
      */
