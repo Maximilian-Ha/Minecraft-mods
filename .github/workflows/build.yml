@@ -84,6 +84,11 @@ jobs:
           chmod +x ./tools/renderbox-check.sh
           ./tools/renderbox-check.sh
 
+      - name: Check creative tabs
+        run: |
+          chmod +x ./tools/tab-check.sh
+          ./tools/tab-check.sh
+
       # Die Datengenerierung laeuft VOR dem Bau, und zwar aus zwei Gruenden:
       #
       # 1. Sie ist der beste Ersatz fuer einen Client-Start, den CI leisten kann. Sie faehrt den

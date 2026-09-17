@@ -3521,3 +3521,57 @@ mit wieder eingesetztem Feld genau einer (Exit-Code direkt geprüft).
 Die Widerlegung hatte beide Löcher als „kein Befund" verworfen. Nachgezählt waren sie echt —
 das ist der Grund, warum ich jeden Befund selbst nachmesse, bevor ich ihn annehme **oder**
 verwerfe.
+
+## Runde 158: 30 Blöcke und 44 Gegenstände, die in keinem Kreativreiter standen
+
+In diesem Port sind die Reiter **handgepflegte Listen** in `NtmCreativeTabs`. Wer einen Block
+anmeldet und die Zeile dort vergisst, bekommt kein Fehlerbild — der Block ist einfach nirgends
+zu finden. JEI zeigt ebenfalls nur, was in einem Reiter steht. Genau das war die Beschwerde
+beim Big-Ass Tank, nur dass dort der ganze Block fehlte.
+
+Nachgezählt standen **29 Blöcke und 44 Gegenstände** in keinem Reiter, obwohl vollständig
+portiert.
+
+### Die Entscheidung je Eintrag kam aus dem Original
+
+Nicht geraten: für jeden der 73 Einträge steht im Original, auf welchem Reiter er liegt
+(`setCreativeTab(...)`) oder dass er auf keinem liegen soll (`null` oder gar kein Aufruf).
+Danach sind 49 aufgenommen worden und 24 bleiben absichtlich verborgen.
+
+**Aufgenommen** — je nach Vorlage auf dem passenden Reiter:
+
+| Reiter | Einträge |
+|---|---|
+| Blöcke | Schrott, Tiefenstein, 3 Gneis-Erze, 4 Nether-Erze, Schrabidium-, Tikit- und verbranntes Uranerz, Braunkohle im Tiefenschiefer, beide ölige Sande |
+| Maschinen | ICF, Sender und Empfänger der Funkfackel |
+| Kernwaffen | EMP-Bombe, Entschärfer |
+| Bauteile | Gehäuse |
+| Steuerung | 12 ZIRNOX-Stäbe, beide PWR-Brennstoffe, zwei Schraubendreher, Lötlampe, Schweissbrenner, drei Sägeblätter, Universal-Fluidkennzeichner |
+| Verbrauch | Schlüssel, Schlüsselrohling, Falschschlüssel, Stift, Plan C |
+
+Die ZIRNOX-Stäbe sind der grösste Einzelposten: der Reaktor stand längst im Maschinenreiter,
+seine zwölf Brennstäbe in keinem.
+
+**Verborgen geblieben** sind die 24, die auch das Original nicht zeigt. Darunter — anders als
+ich zunächst vermutet hatte — die **fünf Batterieblöcke**: sie tragen im Namen selbst das
+Wort `LEGACY` und sind durch den Batteriesockel abgelöst. Das Original setzt sie ausdrücklich
+auf `null`; sie zu zeigen wäre kein Fehlerausgleich gewesen, sondern eine Abweichung. Ebenso
+`ore_bedrock` und `stone_depth`-Verwandte, die nur der Tiefbohrer abbaut, die Taint-Ausbreitung,
+die ZIRNOX-Ruine, die PWR-Hülle, sieben Abbrandrückstände und die reinen Anzeigehilfen
+(`nothing`, `fluid_icon`).
+
+### Das siebzehnte Tor: `tools/tab-check.sh`
+
+Jeder Name aus `NtmBlocks` und `NtmItems` muss in `NtmCreativeTabs` in einer Zeile mit
+`output.accept` oder `addMetaItems` vorkommen. **Ein blosses Vorkommen genügt nicht** — das
+Reitersymbol nennt ebenfalls einen Block, und ein Block, den nur das Symbol nennt, ist trotzdem
+nirgends abzuholen. Diese Verschärfung hat sofort einen dreissigsten Fall gefunden: das
+ICF-Kügelchen kommt in der Datei vor, aber nur als Bauteil von `icfPellet()` — der Reiter legt
+fünf fertig bestückte Kügelchen ab, ein leeres wäre sinnlos. Das steht jetzt als begründete
+Ausnahme da statt als stiller Zufallstreffer.
+
+**Die Ausnahmeliste ist selbst geprüft:** wandert ein Eintrag später in einen Reiter oder fällt
+er weg, meldet das Tor die Ausnahme als grundlos. Sonst bliebe eine Attrappe stehen.
+
+**Nachgemessen:** 612 Blöcke, 1085 Gegenstände, 25 Ausnahmen, null Funde. Nimmt man eine
+beliebige `accept`-Zeile heraus, meldet das Tor genau sie (Exit-Code direkt geprüft).

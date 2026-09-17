@@ -269,6 +269,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.SHELL_COPPER.get());
                         output.accept(NtmItems.SHELL_STEEL.get());
                         output.accept(NtmItems.SHELL_WEAPON_STEEL.get());
+                        output.accept(NtmItems.CASING.get());
                         output.accept(NtmItems.SHELL_SATURNITE.get());
                         output.accept(NtmItems.PIPE_IRON.get());
                         output.accept(NtmItems.PIPE_COPPER.get());
@@ -646,6 +647,8 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.PARTICLE_MUON);
                         /* Nachgetragen: seit Runde 54 im Spiel, aber in keinem Reiter. */
                         addMetaItems(output, NtmItems.PWR_FUEL.get());
+                        output.accept(NtmItems.PWR_FUEL_HOT);
+                        output.accept(NtmItems.PWR_FUEL_DEPLETED);
                         output.accept(NtmItems.THERMO_ELEMENT);
                         output.accept(NtmItems.RTG_UNIT);
                         output.accept(NtmItems.SAWBLADE);
@@ -724,6 +727,33 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.RBMK_FUEL_ZFB_AM_MIX);
                         output.accept(NtmItems.RBMK_FUEL_DRX);
                         output.accept(NtmItems.RBMK_FUEL_TEST);
+
+                        /* ZIRNOX: der Reaktor stand schon im Maschinenreiter, seine Staebe
+                         * in keinem. Im Original liegen sie alle auf dem Steuerreiter. */
+                        output.accept(NtmItems.ROD_ZIRNOX_EMPTY);
+                        output.accept(NtmItems.ROD_ZIRNOX);
+                        output.accept(NtmItems.ROD_ZIRNOX_TRITIUM);
+                        output.accept(NtmItems.ROD_ZIRNOX_NATURAL_URANIUM_FUEL_DEPLETED);
+                        output.accept(NtmItems.ROD_ZIRNOX_URANIUM_FUEL_DEPLETED);
+                        output.accept(NtmItems.ROD_ZIRNOX_U233_FUEL_DEPLETED);
+                        output.accept(NtmItems.ROD_ZIRNOX_U235_FUEL_DEPLETED);
+                        output.accept(NtmItems.ROD_ZIRNOX_THORIUM_FUEL_DEPLETED);
+                        output.accept(NtmItems.ROD_ZIRNOX_PLUTONIUM_FUEL_DEPLETED);
+                        output.accept(NtmItems.ROD_ZIRNOX_MOX_FUEL_DEPLETED);
+                        output.accept(NtmItems.ROD_ZIRNOX_LES_FUEL_DEPLETED);
+                        output.accept(NtmItems.ROD_ZIRNOX_ZFB_MOX_DEPLETED);
+
+                        /* Werkzeuge und der Fluidkennzeichner. Im Original stehen sie auf dem
+                         * Steuer- bzw. Vorlagenreiter; der Port hat keinen Vorlagenreiter, seine
+                         * Blaupausen liegen ebenfalls hier. */
+                        output.accept(NtmItems.SCREWDRIVER);
+                        output.accept(NtmItems.SCREWDRIVER_DESH);
+                        output.accept(NtmItems.BLOWTORCH);
+                        output.accept(NtmItems.ACETYLENE_TORCH);
+                        output.accept(NtmItems.BLADES_STEEL);
+                        output.accept(NtmItems.BLADES_TITANIUM);
+                        output.accept(NtmItems.BLADES_DESH);
+                        output.accept(NtmItems.FLUID_IDENTIFIER_MULTI);
                         addMetaItems(output, NtmItems.RBMK_PELLET_UEU.get());
                         addMetaItems(output, NtmItems.RBMK_PELLET_MEU.get());
                         addMetaItems(output, NtmItems.RBMK_PELLET_HEU233.get());
@@ -966,9 +996,14 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.ORE_OIL);
                         output.accept(NtmBlocks.ORE_OIL_EMPTY);
                         output.accept(NtmBlocks.ORE_OIL_SAND);
+                        output.accept(NtmBlocks.SAND_OILY);
+                        output.accept(NtmBlocks.SAND_RED_OILY);
                         output.accept(NtmBlocks.ORE_BEDROCK_OIL);
                         output.accept(NtmBlocks.ORE_URANIUM);
                         output.accept(NtmBlocks.ORE_URANIUM_DEEPSLATE);
+                        output.accept(NtmBlocks.ORE_URANIUM_SCORCHED);
+                        output.accept(NtmBlocks.ORE_SCHRABIDIUM);
+                        output.accept(NtmBlocks.ORE_TIKITE);
                         output.accept(NtmBlocks.ORE_BERYLLIUM);
                         output.accept(NtmBlocks.ORE_BERYLLIUM_DEEPSLATE);
                         output.accept(NtmBlocks.ORE_TUNGSTEN);
@@ -1001,6 +1036,20 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.ORE_SULFUR);
                         output.accept(NtmBlocks.ORE_SULFUR_DEEPSLATE);
                         output.accept(NtmBlocks.ORE_LIGNITE);
+                        output.accept(NtmBlocks.ORE_DEEPSLATE_LIGNITE);
+
+                        /* Die Erze der fremden Gesteine: Gneis im Ueberwelt-Tiefenstein,
+                         * Netherrack im Nether. Im Original stehen sie alle auf dem Blockreiter. */
+                        output.accept(NtmBlocks.ORE_GNEISS_URANIUM);
+                        output.accept(NtmBlocks.ORE_GNEISS_URANIUM_SCORCHED);
+                        output.accept(NtmBlocks.ORE_GNEISS_SCHRABIDIUM);
+                        output.accept(NtmBlocks.ORE_NETHER_URANIUM);
+                        output.accept(NtmBlocks.ORE_NETHER_URANIUM_SCORCHED);
+                        output.accept(NtmBlocks.ORE_NETHER_PLUTONIUM);
+                        output.accept(NtmBlocks.ORE_NETHER_SCHRABIDIUM);
+
+                        output.accept(NtmBlocks.STONE_DEPTH);
+                        output.accept(NtmBlocks.BLOCK_SCRAP);
                         output.accept(NtmBlocks.RESOURCE_LIMESTONE);
                         output.accept(NtmBlocks.RESOURCE_BAUXITE);
                         output.accept(NtmBlocks.RESOURCE_HEMATITE);
@@ -1092,6 +1141,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.GEIGER);
 
                         output.accept(NtmBlocks.REACTOR_ZIRNOX);
+                        output.accept(NtmBlocks.ICF);
                         output.accept(NtmBlocks.RED_CABLE);
                         output.accept(NtmBlocks.RED_WIRE_COATED);
                         output.accept(NtmBlocks.STEEL_BEAM);
@@ -1355,6 +1405,8 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.MACHINE_TELEPORTER);
                         output.accept(NtmBlocks.MACHINE_KEY_FORGE);
                         output.accept(NtmBlocks.MACHINE_DETECTOR);
+                        output.accept(NtmBlocks.RADIO_TORCH_SENDER);
+                        output.accept(NtmBlocks.RADIO_TORCH_RECEIVER);
                         output.accept(NtmBlocks.MACHINE_CHEMICAL_FACTORY);
                         output.accept(NtmBlocks.MACHINE_ASSEMBLY_FACTORY);
                         output.accept(NtmBlocks.MACHINE_CHUNGUS);
@@ -1466,6 +1518,8 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.NUKE_SOLINIUM);
                         output.accept(NtmBlocks.NUKE_N2);
                         output.accept(NtmBlocks.NUKE_FSTBMB);
+                        output.accept(NtmBlocks.EMP_BOMB);
+                        output.accept(NtmItems.DEFUSER);
 
                         addMetaItems(output, NtmBlocks.CRASHED_BOMB.asItem());
 
@@ -1821,6 +1875,15 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.SCHRABIDIUM_SHOVEL);
                         output.accept(NtmItems.SCHRABIDIUM_HOE);
                         output.accept(NtmItems.POLAROID);
+
+                        /* Schluessel und Kleinkram. Im Original stehen sie auf dem
+                         * Verbrauchsreiter; die Schluesselschmiede steht schon im Maschinenreiter,
+                         * ihre Erzeugnisse standen bisher nirgends. */
+                        output.accept(NtmItems.KEY);
+                        output.accept(NtmItems.KEY_KIT);
+                        output.accept(NtmItems.KEY_FAKE);
+                        output.accept(NtmItems.PIN);
+                        output.accept(NtmItems.PLAN_C);
                     }).build());
 
     /** Ein fertig bestuecktes ICF-Kuegelchen fuer den Kreativreiter. */
