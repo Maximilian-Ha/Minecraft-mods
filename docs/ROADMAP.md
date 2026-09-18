@@ -4254,3 +4254,62 @@ Offen und ausdrücklich nicht übernommen: die Material-Abfragen des Originals (
 `cloth`, `ground`) stehen im Port als `// todo materials`. In der Sache ändert das hier nichts
 — Sand fällt schon über die Sprengfestigkeit durch —, aber es macht den Port an anderer
 Stelle nachgiebiger als das Original.
+
+## Runde 167: der Brennstoffkanal ist ein Rohr, kein Würfel
+
+Der letzte offene Punkt aus Runde 165. Das Original zeichnet die Brennstoffkanäle so:
+
+```java
+rod.overrideOnlyRenderSides = true;
+renderer.renderStandardBlock(block, x, y, z);          // NUR die vier Seiten
+rod.overrideOnlyRenderSides = false;
+ObjUtil.renderPartWithIcon(rbmk_element, "Cap",   block.getIcon(0, meta), ...);
+ObjUtil.renderPartWithIcon(rbmk_element, "Inner", rod.inner, ...);
+```
+
+Der Block selbst hat also **keine Deck- und keine Bodenfläche**; dort liegen Kappe und
+Innenrohr aus `rbmk_element.obj`. Genau das macht aus dem Kanal ein Rohr statt eines
+Klotzes — und genau das fehlte, weshalb die Kanäle oben flach und dunkel aussahen.
+
+### Beides gehört zusammen
+
+Das Blockmodell des Kanals (`rbmkTube`) hat jetzt nur noch die vier Seitenflächen, und
+`RenderRBMKFuelChannel` legt Kappe und Innenrohr über die ganze Säulenhöhe darüber. Eines ohne
+das andere wäre schlimmer als vorher: ohne Auflage sähe man in den Block hinein, ohne die
+entfernte Deckfläche stießen Fläche und Kappe auf derselben Höhe zusammen. Deshalb prüft das
+Tor beides.
+
+Der Darsteller zeichnet die Auflage jetzt **immer**. Vorher stieg er gleich zu Beginn aus,
+wenn kein Brennstab steckte und der Fluss klein war — für das Stabbündel und das Tscherenkow-
+Leuchten ist das richtig, für die Kappe nicht.
+
+Jeder Kanal bringt seine eigenen Bilder mit, über `getTextureBase()` am Block: `rbmk_element`,
+`rbmk_element_mod`, `rbmk_element_reasim`, `rbmk_element_reasim_mod` — davon abgeleitet `_top`
+für die Kappe und `_inner` für das Rohr, wie im Original `block.getIcon(0, meta)` und
+`RBMKRod.inner`.
+
+Auch der Deckel sitzt beim Kanal auf dem Rohrkörper, nicht auf einem Würfel: sonst stieße
+seine Deckfläche mit der Kappe zusammen, die auf genau derselben Höhe endet (der OBJ-Teil
+„Cap" reicht von y 0 bis 1).
+
+### Übernommen
+
+`rbmk_element.obj` (Teile Cap, Inner, Rods) und acht Texturen. Das Modell und die beiden
+`rbmk_element`-Bilder sind byteweise gleich mit der CE-Abspaltung; die sechs übrigen
+(`_mod_fuel`, `_mod_inner`, `_reasim_*`) **gibt es in CE gar nicht**, dort stand also nichts
+zum Vergleichen — sie kommen unverändert aus dem Original.
+
+### Das Tor mitgewachsen
+
+`tools/rbmk-check.sh` prüft jetzt zusätzlich, dass jede der vier Kanalsorten ihr Kappen- und
+ihr Innenbild hat.
+
+**Nachgemessen:** 7 Rohrsäulen, 4 Kanalsorten, 0 Befunde. Nimmt man `rbmk_element_inner.png`
+weg, meldet das Tor genau dieses Bild und endet mit 1.
+
+### Damit ist die RBMK-Säule vollständig
+
+Rohrstutzen (Runde 165), Deckelplatte (165) und Rohrform der Kanäle (167) sind da. Von den 25
+RBMK-Texturen, die dem Port fehlten, sind jetzt 22 übernommen; übrig bleiben drei
+(`rbmk_control_base`, `rbmk_control_reasim_bottom`, `rbmk_control_reasim_auto_bottom`), die im
+Original zur Bodenplatte der Steuerstäbe gehören — ein eigener, kleiner Schritt.

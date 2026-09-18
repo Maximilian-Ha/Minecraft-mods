@@ -2,6 +2,7 @@ package com.hbm.render.blockentity;
 
 import com.hbm.blockentity.machine.rbmk.RBMKRodBlockEntity;
 import com.hbm.blocks.machine.rbmk.RBMKBaseBlock;
+import com.hbm.blocks.machine.rbmk.RBMKRodBlock;
 import com.hbm.main.NuclearTechMod;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.NtmRenderTypes;
@@ -38,11 +39,14 @@ public class RenderRBMKFuelChannel extends BlockEntityRendererNT<RBMKRodBlockEnt
     public void render(RBMKRodBlockEntity rod, MultiBufferSource buffer, float partialTicks) {
 
         if(rod.getLevel() == null) return;
-        if(!rod.hasRod && rod.fluxQuantity <= 5) return;
 
         int offset = RBMKBaseBlock.columnHeight(rod.getLevel(), rod.getBlockPos(), rod.getBlockState().getBlock());
 
         RenderContext.translate(0.5F, 0F, 0.5F);
+
+        this.renderTube(rod, offset);
+
+        if(!rod.hasRod && rod.fluxQuantity <= 5) return;
 
         if(rod.hasRod) {
             RenderContext.pushPose();
@@ -59,6 +63,37 @@ public class RenderRBMKFuelChannel extends BlockEntityRendererNT<RBMKRodBlockEnt
         }
 
         if(rod.fluxQuantity > 5) this.renderCherenkov(buffer, offset);
+    }
+
+    /**
+     * Kappe und Innenrohr, ueber die ganze Saeule.
+     *
+     * Im Original macht das der Blockzeichner RenderRBMKRod: er zeichnet den Block selbst nur
+     * an den Seiten (overrideOnlyRenderSides) und legt Deckel und Innenleben als OBJ darueber
+     *
+     *   ObjUtil.renderPartWithIcon(rbmk_element, "Cap",   block.getIcon(0, meta), ...);
+     *   ObjUtil.renderPartWithIcon(rbmk_element, "Inner", rod.inner, ...);
+     *
+     * Deshalb hat das Blockmodell des Kanals hier keine Deck- und keine Bodenflaeche -- ohne
+     * diese Auflage saehe man in den Block hinein. Beides gehoert zusammen.
+     */
+    private void renderTube(RBMKRodBlockEntity rod, int offset) {
+
+        String basis = rod.getBlockState().getBlock() instanceof RBMKRodBlock block
+                ? block.getTextureBase()
+                : "rbmk_element";
+        ResourceLocation cap = NuclearTechMod.withDefaultNamespace("textures/block/" + basis + "_top.png");
+        ResourceLocation inner = NuclearTechMod.withDefaultNamespace("textures/block/" + basis + "_inner.png");
+
+        RenderContext.pushPose();
+        for(int i = 0; i <= offset; i++) {
+            bindTexture(cap);
+            ResourceManager.rbmk_element.renderPart("Cap");
+            bindTexture(inner);
+            ResourceManager.rbmk_element.renderPart("Inner");
+            RenderContext.translate(0F, 1F, 0F);
+        }
+        RenderContext.popPose();
     }
 
     /** Waagerechte Scheiben alle Viertelbloecke, additiv gemischt -- das ergibt den Schimmer. */

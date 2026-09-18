@@ -17,6 +17,11 @@ import javax.annotation.Nullable;
  */
 public class RBMKRodReaSimBlock extends RBMKRodBlock {
 
+    @Override
+    public String getTextureBase() {
+        return this.moderated ? "rbmk_element_reasim_mod" : "rbmk_element_reasim";
+    }
+
     public static final MapCodec<RBMKRodReaSimBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.BOOL.fieldOf("moderated").forGetter(block -> block.moderated),
             propertiesCodec()

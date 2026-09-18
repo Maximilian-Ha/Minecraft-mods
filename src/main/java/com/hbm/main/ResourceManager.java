@@ -538,6 +538,8 @@ public class ResourceManager {
     public static IModelCustom rbmk_autoloader;
     public static IModelCustom rbmk_rods;
     public static IModelCustom rbmk_element_rods;
+    /** Kappe und Innenrohr eines Brennstoffkanals -- im Original ueber ObjUtil gezeichnet. */
+    public static IModelCustom rbmk_element;
     public static IModelCustom rbmk_crane;
     public static IModelCustom rbmk_crane_console;
     public static IModelCustom heater_oilburner;
@@ -808,6 +810,7 @@ public class ResourceManager {
         rbmk_autoloader = new HFRWavefrontObject("models/obj/machines/rbmk_autoloader.obj").asVBO();
         rbmk_rods = new HFRWavefrontObject("models/obj/machines/rbmk_rods.obj").asVBO();
         rbmk_element_rods = new HFRWavefrontObject("models/obj/machines/rbmk_element_rods.obj").asVBO();
+        rbmk_element = new HFRWavefrontObject("models/obj/machines/rbmk_element.obj").asVBO();
         rbmk_crane = new HFRWavefrontObject("models/obj/machines/rbmk_crane.obj").asVBO();
         rbmk_crane_console = new HFRWavefrontObject("models/obj/machines/rbmk_crane_console.obj").asVBO();
         heater_oilburner = new HFRWavefrontObject("models/obj/machines/oilburner.obj").asVBO();

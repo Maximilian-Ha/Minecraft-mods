@@ -17,9 +17,16 @@
 # Die Vergleichsliste steht in tools/rbmk-list.txt, weil die CI den Fernzweig
 # hbm-upstream/master nicht hat; wie sie erzeugt wurde, steht in ihrem Kopf.
 #
-# NACHGEMESSEN (Runde 165): 7 Rohrsaeulen im Original, alle sieben tragen im Port hasPipes()
-# und haben ihre beiden Rohrbilder, 0 Befunde. Nimmt man hasPipes() aus RBMKHeaterBlock
-# heraus, meldet das Tor genau rbmk_heater und endet mit 1 (Exit-Code direkt geprueft).
+# ZWEITER TEIL (Runde 167): der Brennstoffkanal ist ein Rohr, kein Wuerfel. Sein Blockmodell
+# hat weder Deck- noch Bodenflaeche -- dort legt RenderRBMKFuelChannel Kappe und Innenrohr aus
+# rbmk_element darueber, so wie das Original ueber overrideOnlyRenderSides. Fehlt eines der
+# beiden Bilder, saehe man in den Block hinein; das prueft dieses Tor mit.
+#
+# NACHGEMESSEN (Runden 165/167): 7 Rohrsaeulen im Original, alle sieben tragen im Port
+# hasPipes() und haben ihre beiden Rohrbilder; alle vier Kanalsorten haben Kappe und
+# Innenrohr. 0 Befunde. Nimmt man hasPipes() aus RBMKHeaterBlock heraus, meldet das Tor genau
+# rbmk_heater; nimmt man rbmk_element_inner.png weg, meldet es genau dieses Bild. Beide Male
+# Exit-Code 1, direkt geprueft.
 
 set -uo pipefail
 cd "$(dirname "$0")/.."

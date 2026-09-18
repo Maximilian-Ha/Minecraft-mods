@@ -86,18 +86,34 @@ def main():
             if not os.path.exists(os.path.join(TEXTUREN, '%s_%s.png' % (textur, seite))):
                 fehlt_textur.append('%s_%s.png' % (textur, seite))
 
+    # Brennstoffkanaele zeichnen Kappe und Innenrohr aus rbmk_element; ihr Blockmodell hat
+    # dafuer keine Deckflaeche. Ohne das _inner-Bild saehe man in den Block hinein.
+    fehlt_innen = []
+    for f in sorted(os.listdir(KLASSEN)):
+        if not f.endswith('.java'):
+            continue
+        quelle = ohne(open(os.path.join(KLASSEN, f), encoding='utf-8').read())
+        for m in re.finditer(r'return\s+this\.moderated\s*\?\s*"([a-z0-9_]+)"\s*:\s*"([a-z0-9_]+)"', quelle):
+            for basis in m.groups():
+                for teil in ('top', 'inner'):
+                    bild = '%s_%s.png' % (basis, teil)
+                    if not os.path.exists(os.path.join(TEXTUREN, bild)):
+                        fehlt_innen.append(bild)
+
     print('Pruefe RBMK-Saeulen ... %d Rohrsaeulen im Original' % len(soll))
     print('  ohne hasPipes() im Port : %d' % len(fehlt_rohre))
     print('  mit hasPipes() zu viel  : %d' % len(ueberzaehlig))
     print('  ohne Rohrbild           : %d' % len(fehlt_textur))
+    print('  Kanal ohne Kappenbild   : %d' % len(fehlt_innen))
 
-    if not fehlt_rohre and not ueberzaehlig and not fehlt_textur:
+    if not fehlt_rohre and not ueberzaehlig and not fehlt_textur and not fehlt_innen:
         print('OK - jede Rohrsaeule des Originals traegt auch hier ihre Stutzen.')
         return 0
 
     for titel, liste in (('OHNE ROHRSTUTZEN -- oben bleibt eine glatte Flaeche', fehlt_rohre),
                          ('ROHRSTUTZEN, DIE DAS ORIGINAL NICHT HAT', ueberzaehlig),
-                         ('FEHLENDE ROHRBILDER', fehlt_textur)):
+                         ('FEHLENDE ROHRBILDER', fehlt_textur),
+                         ('FEHLENDE BILDER FUER KAPPE ODER INNENROHR', fehlt_innen)):
         if not liste:
             continue
         print()

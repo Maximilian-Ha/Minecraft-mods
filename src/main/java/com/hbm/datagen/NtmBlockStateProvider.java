@@ -16,6 +16,7 @@ import com.hbm.blocks.generic.OreBasaltBlock.BasaltOreType;
 import com.hbm.blocks.generic.SellafieldSlakedBlock;
 import com.hbm.blocks.generic.UberConcreteBlock;
 import com.hbm.blocks.machine.rbmk.RBMKBaseBlock;
+import com.hbm.blocks.machine.rbmk.RBMKRodBlock;
 import com.hbm.blocks.network.ConveyorBaseBlock;
 import com.hbm.blocks.network.CraneBaseBlock;
 import com.hbm.blocks.network.ConveyorBendableBlock;
@@ -927,10 +928,14 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         String name = this.name(block);
         boolean pipes = block instanceof RBMKBaseBlock rbmk && rbmk.hasPipes();
 
-        ModelFile plain = this.models().cubeBottomTop(name, modLoc("block/" + texture + "_side"), modLoc("block/" + texture + "_top"), modLoc("block/" + texture + "_top"));
+        boolean tube = block instanceof RBMKRodBlock;
+
+        ModelFile plain = tube
+                ? this.rbmkTube(name, texture)
+                : this.models().cubeBottomTop(name, modLoc("block/" + texture + "_side"), modLoc("block/" + texture + "_top"), modLoc("block/" + texture + "_top"));
         ModelFile piped = pipes ? this.rbmkPipes(name, texture) : plain;
-        ModelFile cover = hasLids ? this.rbmkLid(name + "_cover", texture, texture + "_cover") : piped;
-        ModelFile glass = hasLids ? this.rbmkLid(name + "_glass", texture, texture + "_glass") : piped;
+        ModelFile cover = hasLids ? this.rbmkLid(name + "_cover", texture, texture + "_cover", tube) : piped;
+        ModelFile glass = hasLids ? this.rbmkLid(name + "_glass", texture, texture + "_glass", tube) : piped;
 
         this.getVariantBuilder(block).forAllStatesExcept(state -> {
             ModelFile model = plain;
@@ -972,16 +977,24 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         return model;
     }
 
-    /** Saeulenwuerfel plus die Deckelplatte darueber, vier Pixel hoch. */
-    private ModelFile rbmkLid(String name, String texture, String lidTexture) {
+    /**
+     * Saeulenwuerfel plus die Deckelplatte darueber, vier Pixel hoch. Beim Brennstoffkanal
+     * bleibt der Koerper auch hier ein Rohr -- sonst stiesse seine Deckflaeche mit der Kappe
+     * aus rbmk_element zusammen, die genau auf derselben Hoehe sitzt.
+     */
+    private ModelFile rbmkLid(String name, String texture, String lidTexture, boolean tube) {
         BlockModelBuilder model = this.models().getBuilder(name)
                 .parent(new ModelFile.UncheckedModelFile("block/block"))
                 .texture("side", modLoc("block/" + texture + "_side"))
-                .texture("top", modLoc("block/" + texture + "_top"))
                 .texture("lid_side", modLoc("block/" + lidTexture + "_side"))
                 .texture("lid_top", modLoc("block/" + lidTexture + "_top"))
                 .texture("particle", modLoc("block/" + texture + "_side"));
-        this.rbmkBody(model);
+        if(tube) {
+            this.rbmkTubeBody(model);
+        } else {
+            model.texture("top", modLoc("block/" + texture + "_top"));
+            this.rbmkBody(model);
+        }
         model.element()
                 .from(0, 16, 0).to(16, 20, 16)
                 .face(Direction.UP).texture("#lid_top").end()
@@ -992,6 +1005,31 @@ public class NtmBlockStateProvider extends BlockStateProvider {
                 .face(Direction.EAST).texture("#lid_side").end()
                 .end();
         return model;
+    }
+
+    /**
+     * Der Brennstoffkanal ist ein Rohr, kein Wuerfel: Deck- und Bodenflaeche fehlen, denn
+     * RenderRBMKFuelChannel legt dort Kappe und Innenrohr aus rbmk_element darueber -- so
+     * haelt es auch das Original ueber overrideOnlyRenderSides.
+     */
+    private ModelFile rbmkTube(String name, String texture) {
+        BlockModelBuilder model = this.models().getBuilder(name)
+                .parent(new ModelFile.UncheckedModelFile("block/block"))
+                .texture("side", modLoc("block/" + texture + "_side"))
+                .texture("particle", modLoc("block/" + texture + "_side"));
+        this.rbmkTubeBody(model);
+        return model;
+    }
+
+    /** Nur die vier Seitenflaechen -- Deckel und Boden liefert der Darsteller. */
+    private void rbmkTubeBody(BlockModelBuilder model) {
+        model.element()
+                .from(0, 0, 0).to(16, 16, 16)
+                .face(Direction.NORTH).texture("#side").cullface(Direction.NORTH).end()
+                .face(Direction.SOUTH).texture("#side").cullface(Direction.SOUTH).end()
+                .face(Direction.WEST).texture("#side").cullface(Direction.WEST).end()
+                .face(Direction.EAST).texture("#side").cullface(Direction.EAST).end()
+                .end();
     }
 
     /** Der Saeulenwuerfel selbst: Seiten aus _side, Deckel und Boden aus _top. */

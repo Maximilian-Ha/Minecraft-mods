@@ -23,6 +23,15 @@ import javax.annotation.Nullable;
  */
 public class RBMKRodBlock extends RBMKBaseBlock {
 
+    /**
+     * Die Texturbasis dieses Kanals. Der Darsteller leitet daraus die Bilder fuer Kappe
+     * (_top) und Innenrohr (_inner) ab -- im Original sind das block.getIcon(0, meta) und
+     * RBMKRod.inner, beide aus derselben Basis.
+     */
+    public String getTextureBase() {
+        return this.moderated ? "rbmk_element_mod" : "rbmk_element";
+    }
+
     public static final MapCodec<RBMKRodBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.BOOL.fieldOf("moderated").forGetter(block -> block.moderated),
             propertiesCodec()
