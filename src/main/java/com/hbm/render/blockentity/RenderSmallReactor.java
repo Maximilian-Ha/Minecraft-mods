@@ -69,4 +69,21 @@ public class RenderSmallReactor extends BlockEntityRendererNT<ReactorResearchBlo
             }
         };
     }
+
+    /*
+     * Vorlage: INFINITE_EXTENT_AABB.
+     *
+     * Runde 160: ein grosser getRenderBoundingBox reicht dafuer NICHT. Minecraft sammelt die
+     * Blockentitaeten aus den SICHTBAREN Chunk-Abschnitten ein; faellt der Abschnitt des Kerns
+     * aus dem Sichtstumpf, wird die Blockentitaet gar nicht erst angefasst, und ein noch so
+     * grosser Kasten kann daran nichts aendern -- er kann nur zusaetzlich wegschneiden.
+     * shouldRenderOffScreen haengt sie stattdessen in die Liste der immer gezeichneten.
+     * Das ist die Entsprechung zu INFINITE_EXTENT_AABB aus 1.7.10; die Entfernung bleibt
+     * ueber getViewDistance() auf 256 Bloecke begrenzt.
+     */
+    @Override
+    public boolean shouldRenderOffScreen(ReactorResearchBlockEntity be) {
+        return true;
+    }
+
 }

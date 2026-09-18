@@ -6,7 +6,6 @@ import com.hbm.blocks.NtmBlocks;
 import com.hbm.main.NuclearTechMod;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.NtmRenderTypes;
-import com.hbm.render.item.ItemRenderBase;
 import com.hbm.render.util.FullBright;
 import com.hbm.render.util.RenderContext;
 import com.hbm.util.BobMathUtil;
@@ -14,13 +13,10 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.joml.Matrix4f;
 
@@ -31,7 +27,9 @@ import org.joml.Matrix4f;
  * einzelne Vierecke, deren Bildausschnitt auf das jeweilige Zeichen zeigt -- eine Zeichentafel
  * mit zehn Ziffern in der oberen und den Vorsatzzeichen in der unteren Haelfte.
  */
-public class RenderRBMKNumitron extends BlockEntityRendererNT<RBMKNumitronBlockEntity> implements IBEWLRProvider {
+/* Kein IBEWLRProvider: die Tafel traegt wie im Original ein flaches Sinnbild
+ * (rbmk/rbmk_display) als Gegenstandsmodell, keinen eigenen Darsteller. */
+public class RenderRBMKNumitron extends BlockEntityRendererNT<RBMKNumitronBlockEntity> {
 
     public static final ResourceLocation TEXTURE = NuclearTechMod.withDefaultNamespace("textures/models/network/numitron.png");
     public static final ResourceLocation LIGHTS_TEXTURE = NuclearTechMod.withDefaultNamespace("textures/models/network/numitron_lights.png");
@@ -191,31 +189,5 @@ public class RenderRBMKNumitron extends BlockEntityRendererNT<RBMKNumitronBlockE
         font.drawInBatch(unit.label, -width / 2F, -font.lineHeight / 2F, 0x00ff00, false,
                 RenderContext.poseStack().last().pose(), buffer, Font.DisplayMode.NORMAL, 0, RenderContext.light());
         FullBright.disable();
-    }
-
-    @Override
-    public Item getItemForRenderer() {
-        return NtmBlocks.RBMK_NUMITRON.asItem();
-    }
-
-    @Override
-    public BlockEntityWithoutLevelRenderer getRenderer() {
-        return new ItemRenderBase() {
-            @Override
-            public void renderCommon(ItemStack stack, MultiBufferSource buffer) {
-                bindTexture(TEXTURE);
-
-                /* Ausrichtung wie im Original, damit die Tafel im Inventar nicht schief liegt. */
-                RenderContext.translate(0F, -0.5F, 0F);
-                RenderContext.mulPose(Axis.YP.rotationDegrees(-90F));
-
-                for(int i = 0; i < RBMKNumitronBlockEntity.DISPLAYS; i++) {
-                    RenderContext.pushPose();
-                    RenderContext.translate(0.25F, i * -0.5F + 0.25F, 0F);
-                    ResourceManager.rbmk_numitron.renderAll();
-                    RenderContext.popPose();
-                }
-            }
-        };
     }
 }

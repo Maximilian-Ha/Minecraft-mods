@@ -5,20 +5,16 @@ import com.hbm.blocks.NtmBlocks;
 import com.hbm.inventory.screens.RBMKTerminalScreen;
 import com.hbm.main.NuclearTechMod;
 import com.hbm.main.ResourceManager;
-import com.hbm.render.item.ItemRenderBase;
 import com.hbm.render.util.FullBright;
 import com.hbm.render.util.RenderContext;
 import com.hbm.util.BobMathUtil;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 /**
@@ -30,7 +26,9 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
  * Zeilen werden nicht umgebrochen, sondern Zeichen fuer Zeichen gesetzt und abgeschnitten, sobald
  * die Tafel voll ist -- so wie im Original.
  */
-public class RenderRBMKTerminal extends BlockEntityRendererNT<RBMKTerminalBlockEntity> implements IBEWLRProvider {
+/* Kein IBEWLRProvider: die Tafel traegt wie im Original ein flaches Sinnbild
+ * (rbmk/rbmk_display) als Gegenstandsmodell, keinen eigenen Darsteller. */
+public class RenderRBMKTerminal extends BlockEntityRendererNT<RBMKTerminalBlockEntity> {
 
     public static final ResourceLocation TEXTURE = NuclearTechMod.withDefaultNamespace("textures/models/network/terminal.png");
 
@@ -106,27 +104,5 @@ public class RenderRBMKTerminal extends BlockEntityRendererNT<RBMKTerminalBlockE
         }
 
         FullBright.disable();
-    }
-
-    @Override
-    public Item getItemForRenderer() {
-        return NtmBlocks.RBMK_TERMINAL.asItem();
-    }
-
-    @Override
-    public BlockEntityWithoutLevelRenderer getRenderer() {
-        return new ItemRenderBase() {
-            @Override
-            public void renderCommon(ItemStack stack, MultiBufferSource buffer) {
-                bindTexture(TEXTURE);
-
-                /* Ausrichtung wie im Original, damit die Tafel im Inventar nicht schief liegt. */
-                RenderContext.translate(0F, -0.5F, 0F);
-                RenderContext.mulPose(Axis.YP.rotationDegrees(-90F));
-                RenderContext.translate(0.25F, 0F, 0F);
-
-                ResourceManager.rbmk_terminal.renderAll();
-            }
-        };
     }
 }

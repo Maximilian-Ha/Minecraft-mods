@@ -3645,3 +3645,99 @@ Abschrift mitgeschlossen worden: der **Maschinenname** wurde gar nicht gezeichne
 **Aufwertungsanzeige** fehlte — die Blockentität gibt `IUpgradeInfoProvider` an und die beiden
 Schächte sind da, nur sagte es niemand. Beides nutzt jetzt den `upgradeInfo`-Helfer aus
 Runde 148.
+
+## Runde 160: die Turbine verschwindet weiter — Runde 153 hat an der falschen Stelle repariert
+
+> „die Leviathan Turbine wird immer noch unsichtbar, wenn man zu Seite schaut"
+
+**Der Sichtkasten war die falsche Stelle.** Die Annahme aus Runde 153 lautete: Minecraft
+prüft je Blockentität einen Kasten gegen den Sichtstumpf, also hilft ein grösserer Kasten.
+Der erste Teil stimmt, der Schluss nicht.
+
+Minecraft sammelt die Blockentitäten **aus den sichtbaren Chunk-Abschnitten** ein
+(`LevelRenderer` läuft über `visibleSections` und zeichnet deren
+`getRenderableBlockEntities()`). Fällt der Abschnitt, in dem der **Kern** steht, aus dem
+Sichtstumpf, wird die Blockentität gar nicht erst angefasst. Der Kasten aus Runde 153 kommt
+danach und kann nur **zusätzlich wegschneiden** — er kann nichts sichtbar machen, was die
+Abschnittsprüfung schon verworfen hat.
+
+Bei der Leviathan ist genau das der Fall: das Modell ist fünfzehn Blöcke lang und der Kern
+sitzt an einem Ende. Dreht der Spieler den Kopf, liegt der Kern schnell in einem Abschnitt
+ausserhalb des Bildes, während die halbe Turbine noch vor ihm steht.
+
+### Die richtige Entsprechung heisst `shouldRenderOffScreen`
+
+Das Original nimmt für die Turbine `TileEntity.INFINITE_EXTENT_AABB`. In 1.7.10 **war** der
+Kasten der einzige Mechanismus, „unendlich" hiess dort also schlicht „immer zeichnen". Das
+Gegenstück auf 1.21 ist nicht ein grosser Kasten, sondern
+`BlockEntityRenderer.shouldRenderOffScreen` — damit landet die Blockentität in der Liste der
+immer gezeichneten, unabhängig von der Abschnittssichtbarkeit. Genau so hält es der Port
+schon bei zwölf Darstellern (den zehn Kernwaffen, dem Bombenwrack und der Sojus-Rampe) —
+und deren Vorlagen sind ausnahmslos die mit `INFINITE_EXTENT_AABB`.
+
+**Die Zuordnung lautet also: 1.7.10 `INFINITE_EXTENT_AABB` → 1.21 `shouldRenderOffScreen`.**
+Das hätte schon in Runde 153 dastehen müssen.
+
+Ergänzt bei dreizehn Darstellern: Leviathan, Raffinerie, Frackingturm, Bohrturm, Pumpjack,
+Bagger, FEnSU, Dampfmaschine, Kranpult, Gasfackel, Forschungsreaktor, Turbofan und
+Fusionstorus. Die Entfernung bleibt über `getViewDistance() = 256` begrenzt, wie im Original
+(dort `65536`, also 256²). Die Kästen aus Runde 153 bleiben stehen: sie sind richtig portiert
+und schaden nicht.
+
+## Runde 160, zweiter Teil: unsichtbare Geräte in JEI
+
+> „Diverse Geräte sind in JEI unsichtbar: z.B. das RBMK Terminal"
+
+`particleOnlyBlock` gibt einem Block ein Gegenstandsmodell mit dem Elternteil
+`builtin/entity`. Ein solches Modell hat **keine eigene Geometrie** — es sagt Minecraft nur:
+frag den `BlockEntityWithoutLevelRenderer`. Gibt es keinen, wird nichts gezeichnet: das Feld
+im Inventar ist belegt, aber leer.
+
+Nachgezählt waren **einundzwanzig Blöcke** betroffen, aus drei verschiedenen Gründen.
+
+### Acht RBMK-Tafeln: das Original zeichnet sie gar nicht
+
+Terminal, Anzeige, Messuhr, Numitron, Kurvenschreiber, Hebel, Tastenfeld und Lämpchen hatten
+zwar einen Gegenstandsdarsteller, aber keiner von ihnen setzte `renderInventory`.
+`ItemRenderBase` verkleinert im Inventar auf **ein Sechzehntel** (`scale(0.062)`) und erwartet,
+dass der Darsteller wieder hochskaliert — 114 der 121 tun das. Ohne die Zeile bleibt ein
+Punkt übrig; im Bildschirmfoto sind genau solche Pünktchen zu sehen.
+
+Statt eine Grösse zu erraten, die ich nicht nachprüfen kann: **das Original hat für diese acht
+gar keinen Gegenstandsdarsteller.** Es gibt ihnen schlicht ein flaches Sinnbild —
+`setBlockTextureName(":rbmk/rbmk_display")`. Genau das steht jetzt hier, über einen neuen
+Helfer `particleOnlyBlockFlatItem`. Der tote BEWLR-Pfad in den sieben Darstellern ist
+ausgebaut. Dasselbe gilt für die ZIRNOX-Ruine, die im Original `block_steel` als Sinnbild
+trägt.
+
+### Der grosse Radarschirm: eine vergessene Zeile
+
+`RenderRadar` hängt an **beiden** Radaren und zeichnet für beide dasselbe Modell, nannte in
+`getItemForRenderer` aber nur den kleinen. Der grosse hatte damit ein `builtin/entity`-Modell
+ohne Zeichner.
+
+### Achtzehn Maschinen haben überhaupt keinen Darsteller
+
+Das ist der eigentliche Befund. Für diese achtzehn wurde in den Runden 115–135 der Block, die
+Blockentität, das Menü und die Oberfläche portiert — **der Darsteller aber nie geschrieben**:
+
+`machine_ammo_press`, `machine_annihilator`, `machine_autosaw`, `machine_cyclotron`,
+`machine_exposure_chamber`, `machine_gas_cent`, `machine_mining_laser`, `radar_screen`,
+`machine_rad_gen`, `machine_sat_link`, `machine_super_computer`, `machine_tape_drive` und die
+sechs Teile des Teilchenbeschleunigers.
+
+Sie sind deshalb **nicht nur im Inventar unsichtbar, sondern auch in der Welt**: ihr
+Blockmodell trägt nur eine Partikeltextur, und `DummyableBlock` zeichnet über
+`ENTITYBLOCK_ANIMATED` ausschliesslich durch den Darsteller. Wer eine davon setzt, sieht
+nichts. Das ist offene Portierungsarbeit, keine Fehlbedienung.
+
+### Das achtzehnte Tor: `tools/bewlr-check.sh`
+
+Jedes `builtin/entity`-Modell muss jemanden haben, der es zeichnet. Die Ausnahmeliste ist hier
+ausdrücklich eine **Schuldenliste**: sie nennt die achtzehn fehlenden Darsteller mit der Runde,
+in der die Maschine portiert wurde. Wer einen nachreicht, streicht die Zeile — und das Tor
+schlägt an, wenn eine Zeile stehen bleibt, die nicht mehr nötig ist.
+
+**Nachgemessen:** 208 `builtin/entity`-Modelle, achtzehn auf der Schuldenliste, null
+unerklärte. Nimmt man die neue Zeile aus `RenderRadar` wieder heraus, meldet das Tor genau
+`MACHINE_RADAR_LARGE`.

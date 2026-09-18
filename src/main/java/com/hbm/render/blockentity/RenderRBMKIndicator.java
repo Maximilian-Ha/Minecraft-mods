@@ -5,19 +5,15 @@ import com.hbm.blockentity.machine.rbmk.RBMKIndicatorBlockEntity.IndicatorUnit;
 import com.hbm.blocks.NtmBlocks;
 import com.hbm.main.NuclearTechMod;
 import com.hbm.main.ResourceManager;
-import com.hbm.render.item.ItemRenderBase;
 import com.hbm.render.util.RenderContext;
 import com.hbm.util.ColorUtil;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 /**
@@ -29,7 +25,9 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
  * ABWEICHUNG wie bei der Zeigertafel: das Original schaltet fuer die leuchtende Lampe die volle
  * Helligkeit ein. Hier uebernimmt das die Farbe des RenderContext.
  */
-public class RenderRBMKIndicator extends BlockEntityRendererNT<RBMKIndicatorBlockEntity> implements IBEWLRProvider {
+/* Kein IBEWLRProvider: die Tafel traegt wie im Original ein flaches Sinnbild
+ * (rbmk/rbmk_display) als Gegenstandsmodell, keinen eigenen Darsteller. */
+public class RenderRBMKIndicator extends BlockEntityRendererNT<RBMKIndicatorBlockEntity> {
 
     public static final ResourceLocation TEXTURE = NuclearTechMod.withDefaultNamespace("textures/models/network/indicator.png");
 
@@ -90,22 +88,5 @@ public class RenderRBMKIndicator extends BlockEntityRendererNT<RBMKIndicatorBloc
 
         font.drawInBatch(unit.label, -width / 2F, -font.lineHeight / 2F, 0x000000, false,
                 RenderContext.poseStack().last().pose(), buffer, Font.DisplayMode.NORMAL, 0, RenderContext.light());
-    }
-
-    @Override
-    public Item getItemForRenderer() {
-        return NtmBlocks.RBMK_INDICATOR.asItem();
-    }
-
-    @Override
-    public BlockEntityWithoutLevelRenderer getRenderer() {
-        return new ItemRenderBase() {
-            @Override
-            public void renderCommon(ItemStack stack, MultiBufferSource buffer) {
-                bindTexture(TEXTURE);
-                ResourceManager.rbmk_indicator.renderPart("Base");
-                ResourceManager.rbmk_indicator.renderPart("Light");
-            }
-        };
     }
 }

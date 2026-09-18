@@ -4,7 +4,6 @@ import com.hbm.blockentity.machine.rbmk.RBMKGraphBlockEntity;
 import com.hbm.blockentity.machine.rbmk.RBMKGraphBlockEntity.GraphUnit;
 import com.hbm.blocks.NtmBlocks;
 import com.hbm.main.ResourceManager;
-import com.hbm.render.item.ItemRenderBase;
 import com.hbm.render.util.FullBright;
 import com.hbm.render.util.RenderContext;
 import com.hbm.util.BobMathUtil;
@@ -12,13 +11,10 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.joml.Matrix4f;
 
@@ -32,7 +28,9 @@ import org.joml.Matrix4f;
  * ABWEICHUNG: das Original zieht die Linie als GL_LINES mit fester Breite und selbst
  * abgeschalteter Textur. Hier uebernimmt RenderType.lines() beides.
  */
-public class RenderRBMKGraph extends BlockEntityRendererNT<RBMKGraphBlockEntity> implements IBEWLRProvider {
+/* Kein IBEWLRProvider: die Tafel traegt wie im Original ein flaches Sinnbild
+ * (rbmk/rbmk_display) als Gegenstandsmodell, keinen eigenen Darsteller. */
+public class RenderRBMKGraph extends BlockEntityRendererNT<RBMKGraphBlockEntity> {
 
     /** Wo die Kurve auf der Scheibe liegt -- Zahlen aus dem Original. */
     private static final float PLOT_DEPTH = 0.03225F;
@@ -164,31 +162,5 @@ public class RenderRBMKGraph extends BlockEntityRendererNT<RBMKGraphBlockEntity>
         font.drawInBatch(unit.label, -width / 2F, -font.lineHeight / 2F, 0x00ff00, false,
                 RenderContext.poseStack().last().pose(), buffer, Font.DisplayMode.NORMAL, 0, RenderContext.light());
         FullBright.disable();
-    }
-
-    @Override
-    public Item getItemForRenderer() {
-        return NtmBlocks.RBMK_GRAPH.asItem();
-    }
-
-    @Override
-    public BlockEntityWithoutLevelRenderer getRenderer() {
-        return new ItemRenderBase() {
-            @Override
-            public void renderCommon(ItemStack stack, MultiBufferSource buffer) {
-                bindTexture(RenderRBMKNumitron.TEXTURE);
-
-                /* Ausrichtung wie im Original, damit die Tafel im Inventar nicht schief liegt. */
-                RenderContext.translate(0F, -0.5F, 0F);
-                RenderContext.mulPose(Axis.YP.rotationDegrees(-90F));
-
-                for(int i = 0; i < RBMKGraphBlockEntity.GRAPHS; i++) {
-                    RenderContext.pushPose();
-                    RenderContext.translate(0.25F, i * -0.5F + 0.25F, 0F);
-                    ResourceManager.rbmk_numitron.renderAll();
-                    RenderContext.popPose();
-                }
-            }
-        };
     }
 }

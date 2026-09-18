@@ -4,20 +4,16 @@ import com.hbm.blockentity.machine.rbmk.RBMKGaugeBlockEntity;
 import com.hbm.blockentity.machine.rbmk.RBMKGaugeBlockEntity.GaugeUnit;
 import com.hbm.blocks.NtmBlocks;
 import com.hbm.main.ResourceManager;
-import com.hbm.render.item.ItemRenderBase;
 import com.hbm.render.util.RenderContext;
 import com.hbm.util.BobMathUtil;
 import com.hbm.util.ColorUtil;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 /**
@@ -31,7 +27,9 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
  * RenderArcFurnace.fullbright ist im Port nicht noetig, weil die Beleuchtung ohnehin am
  * Lichtwert des Blocks haengt.
  */
-public class RenderRBMKGauge extends BlockEntityRendererNT<RBMKGaugeBlockEntity> implements IBEWLRProvider {
+/* Kein IBEWLRProvider: die Tafel traegt wie im Original ein flaches Sinnbild
+ * (rbmk/rbmk_display) als Gegenstandsmodell, keinen eigenen Darsteller. */
+public class RenderRBMKGauge extends BlockEntityRendererNT<RBMKGaugeBlockEntity> {
 
     @Override
     public BlockEntityRenderer<RBMKGaugeBlockEntity> create(Context context) {
@@ -124,21 +122,5 @@ public class RenderRBMKGauge extends BlockEntityRendererNT<RBMKGaugeBlockEntity>
         if(unit.min > unit.max) angle = 50D - angle;
 
         return Mth.clamp(angle, 0D, 80D) - 85D;
-    }
-
-    @Override
-    public Item getItemForRenderer() {
-        return NtmBlocks.RBMK_GAUGE.asItem();
-    }
-
-    @Override
-    public BlockEntityWithoutLevelRenderer getRenderer() {
-        return new ItemRenderBase() {
-            @Override
-            public void renderCommon(ItemStack stack, MultiBufferSource buffer) {
-                bindTexture(ResourceManager.RBMK_GAUGE_TEX);
-                ResourceManager.rbmk_gauge.renderPart("Gauge");
-            }
-        };
     }
 }

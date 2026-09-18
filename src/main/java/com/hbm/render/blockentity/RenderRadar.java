@@ -54,6 +54,14 @@ public class RenderRadar extends BlockEntityRendererNT<MachineRadarBlockEntity> 
         return NtmBlocks.MACHINE_RADAR.asItem();
     }
 
+    /* Derselbe Darsteller haengt an BEIDEN Radaren (ClientProxy 336/337) und zeichnet fuer
+     * beide dasselbe Modell. Ohne diese Zeile blieb der grosse Radarschirm im Inventar leer:
+     * sein Gegenstandsmodell steht auf builtin/entity und hatte niemanden, der es zeichnet. */
+    @Override
+    public Item[] getItemsForRenderer() {
+        return new Item[] { NtmBlocks.MACHINE_RADAR.asItem(), NtmBlocks.MACHINE_RADAR_LARGE.asItem() };
+    }
+
     @Override
     public BlockEntityWithoutLevelRenderer getRenderer() {
         return new ItemRenderBase() {

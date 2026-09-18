@@ -695,14 +695,14 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.particleOnlyBlock(NtmBlocks.MACHINE_ARC_FURNACE, modLoc("block/block_steel"));
         this.particleOnlyBlock(NtmBlocks.MACHINE_CRUCIBLE, modLoc("block/brick_fire"));
         this.particleOnlyBlock(NtmBlocks.MACHINE_ROTARY_FURNACE, modLoc("block/block_steel"));
-        this.particleOnlyBlock(NtmBlocks.RBMK_GAUGE, modLoc("block/rbmk_blank_side"));
-        this.particleOnlyBlock(NtmBlocks.RBMK_INDICATOR, modLoc("block/rbmk_blank_side"));
-        this.particleOnlyBlock(NtmBlocks.RBMK_NUMITRON, modLoc("block/rbmk_blank_side"));
-        this.particleOnlyBlock(NtmBlocks.RBMK_LEVER, modLoc("block/rbmk_blank_side"));
-        this.particleOnlyBlock(NtmBlocks.RBMK_KEYPAD, modLoc("block/rbmk_blank_side"));
-        this.particleOnlyBlock(NtmBlocks.RBMK_GRAPH, modLoc("block/rbmk_blank_side"));
-        this.particleOnlyBlock(NtmBlocks.RBMK_DISPLAY, modLoc("block/rbmk_blank_side"));
-        this.particleOnlyBlock(NtmBlocks.RBMK_TERMINAL, modLoc("block/rbmk_blank_side"));
+        this.particleOnlyBlockFlatItem(NtmBlocks.RBMK_GAUGE, modLoc("block/rbmk_blank_side"), modLoc("block/rbmk_display"));
+        this.particleOnlyBlockFlatItem(NtmBlocks.RBMK_INDICATOR, modLoc("block/rbmk_blank_side"), modLoc("block/rbmk_display"));
+        this.particleOnlyBlockFlatItem(NtmBlocks.RBMK_NUMITRON, modLoc("block/rbmk_blank_side"), modLoc("block/rbmk_display"));
+        this.particleOnlyBlockFlatItem(NtmBlocks.RBMK_LEVER, modLoc("block/rbmk_blank_side"), modLoc("block/rbmk_display"));
+        this.particleOnlyBlockFlatItem(NtmBlocks.RBMK_KEYPAD, modLoc("block/rbmk_blank_side"), modLoc("block/rbmk_display"));
+        this.particleOnlyBlockFlatItem(NtmBlocks.RBMK_GRAPH, modLoc("block/rbmk_blank_side"), modLoc("block/rbmk_display"));
+        this.particleOnlyBlockFlatItem(NtmBlocks.RBMK_DISPLAY, modLoc("block/rbmk_blank_side"), modLoc("block/rbmk_display"));
+        this.particleOnlyBlockFlatItem(NtmBlocks.RBMK_TERMINAL, modLoc("block/rbmk_blank_side"), modLoc("block/rbmk_display"));
 
         /*
          * Die Blankotafel als einziger der neun Tafelbloecke ohne eigenen Renderer -- sie braucht
@@ -796,7 +796,7 @@ public class NtmBlockStateProvider extends BlockStateProvider {
                 modLoc("block/armor_table_side"), modLoc("block/armor_table_bottom"), modLoc("block/armor_table_top")));
         this.simpleBlockWithItem(NtmBlocks.MACHINE_ICF_PRESS.get(), this.models().cubeBottomTop("machine_icf_press",
                 modLoc("block/machine_icf_press_side"), modLoc("block/machine_icf_press_top"), modLoc("block/machine_icf_press_top")));
-        this.particleOnlyBlock(NtmBlocks.ZIRNOX_DESTROYED, modLoc("block/block_steel"));
+        this.particleOnlyBlockFlatItem(NtmBlocks.ZIRNOX_DESTROYED, modLoc("block/block_steel"), modLoc("block/block_steel"));
         this.simpleBlockWithItem(
                 NtmBlocks.EMP_BOMB,
                 this.models().cubeColumn(
@@ -1705,6 +1705,22 @@ public class NtmBlockStateProvider extends BlockStateProvider {
     private void particleOnlyBlock(DeferredBlock<? extends Block> block, ResourceLocation particleTexture, boolean frontLight) {
         this.simpleBlock(block.get(), this.models().getBuilder(name(block) + "_particle").texture("particle", particleTexture));
         this.entityBlockItem(block.get(), frontLight);
+    }
+
+    /**
+     * Wie particleOnlyBlock, aber mit einem FLACHEN Gegenstandsmodell statt builtin/entity.
+     *
+     * Runde 160: die acht RBMK-Tafeln hatten ein builtin/entity-Modell, dessen Darsteller die
+     * Groesse fuer das Inventar nie gesetzt hat -- ItemRenderBase verkleinert dort auf ein
+     * Sechzehntel, und ohne renderInventory blieb davon ein Punkt uebrig. Das Original loest es
+     * gar nicht ueber einen Gegenstandsdarsteller: es gibt den acht Bloecken schlicht das
+     * Sinnbild rbmk/rbmk_display. Genau das steht jetzt hier.
+     */
+    private void particleOnlyBlockFlatItem(DeferredBlock<? extends Block> block, ResourceLocation particleTexture, ResourceLocation itemTexture) {
+        this.simpleBlock(block.get(), this.models().getBuilder(name(block) + "_particle").texture("particle", particleTexture));
+        this.itemModels().getBuilder(this.key(block.get()).getPath())
+                .parent(new ModelFile.UncheckedModelFile("item/generated"))
+                .texture("layer0", itemTexture);
     }
 
     private void entityBlockItem(Block block, boolean frontLight) {

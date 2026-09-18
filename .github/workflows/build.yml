@@ -89,6 +89,11 @@ jobs:
           chmod +x ./tools/tab-check.sh
           ./tools/tab-check.sh
 
+      - name: Check item renderers
+        run: |
+          chmod +x ./tools/bewlr-check.sh
+          ./tools/bewlr-check.sh
+
       # Die Datengenerierung laeuft VOR dem Bau, und zwar aus zwei Gruenden:
       #
       # 1. Sie ist der beste Ersatz fuer einen Client-Start, den CI leisten kann. Sie faehrt den
