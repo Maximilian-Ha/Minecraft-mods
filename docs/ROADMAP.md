@@ -3741,3 +3741,85 @@ schlägt an, wenn eine Zeile stehen bleibt, die nicht mehr nötig ist.
 **Nachgemessen:** 208 `builtin/entity`-Modelle, achtzehn auf der Schuldenliste, null
 unerklärte. Nimmt man die neue Zeile aus `RenderRadar` wieder heraus, meldet das Tor genau
 `MACHINE_RADAR_LARGE`.
+
+## Runde 161: sechs der achtzehn nachgereichten Darsteller
+
+Runde 160 hat die Schuldenliste aufgestellt: achtzehn Maschinen, für die Block, Blockentität,
+Menü und Oberfläche stehen, deren Darsteller aber nie geschrieben wurde. Sie sind nicht nur in
+JEI unsichtbar, sondern auch in der Welt — ihr Blockmodell trägt nur eine Partikeltextur.
+
+Diese Runde reicht sechs davon nach:
+
+| Maschine | portiert in | Modell | Besonderheit |
+| --- | --- | --- | --- |
+| `radar_screen` | Runde 126 | `radar_screen.obj` | Suchstrahl, Blips, Bildrauschen — alles in rohen Quads |
+| `machine_satlink` | Runde 122 | `satlink.obj` | Schüssel dreht (`rot`) und kippt (`lift`) |
+| `machine_tape_drive` | Runde 123 | `tape_drive.obj` | zwölf Schächte, Lämpchen je nach Bandsorte |
+| `machine_supercomputer` | Runde 124 | `supercomputer.obj` | Leuchtband, schwarz solange nichts läuft |
+| `machine_ammo_press` | Runde 125 | `ammo_press.obj` | Stempel senkt sich, Hülsenteller hebt |
+| `machine_autosaw` | Runde 119 | `autosaw.obj` | dreigliedriger Arm, Sägeblatt dreht |
+
+Das Modell des Radarschirms lag schon seit Runde 126 im Ordner; die fünf übrigen OBJ-Dateien
+und ihre Texturen stammen aus `hbm-upstream/master`. Ich habe sie vorher gegen die
+CE-Abspaltung gehalten: **byteweise identisch** in allen drei Bäumen (Port, Original, CE), also
+gab es hier nichts zu entscheiden.
+
+### Was aus dem Original wörtlich übernommen wurde
+
+Die Ausrichtung, die Drehachsen, die Verschiebungen und die Werte in `renderInventory` sind
+Zeile für Zeile aus 1.7.10 übertragen. Das ist wichtiger, als es klingt: `ItemRenderBase`
+verkleinert im Inventar auf ein Sechzehntel und erwartet, dass der Darsteller wieder
+hochskaliert — die Zahl dafür steht im Original und lässt sich hier ohne Spielstart nicht
+erraten. Zwei Entwürfe dieser Runde hatten eigene Zahlen; beide sind auf die Werte des
+Originals zurückgesetzt worden (SatLink `-5 / 3,5` statt `-4 / 1,5`, Bandlaufwerk `-3 / 5`
+statt `-0,5 / 2,5`).
+
+### Eine bewusste Abweichung: das Leuchtband des Grossrechners
+
+Im Original läuft das Band `Lights` über die **GL-Texturmatrix** durch das Bild:
+`glMatrixMode(GL_TEXTURE)` und dann `glTranslatef(-scroll, 0, 0)`. 1.21 kennt keine
+Texturmatrix mehr; für dieselbe Wirkung müssten die Zwischenbilder einzeln erzeugt werden.
+Das Band wird darum unbewegt gezeichnet — weiterhin voll erhellt und weiterhin schwarz,
+solange der Rechner nichts verarbeitet, sodass der Betriebszustand am Block ablesbar bleibt.
+Die Abweichung steht als Kommentar im Darsteller.
+
+### Kein `shouldRenderOffScreen` für diese sechs
+
+Runde 160 hat die Regel aufgestellt: `INFINITE_EXTENT_AABB` aus 1.7.10 entspricht
+`shouldRenderOffScreen`, ein grosser Kasten reicht nicht. Umgekehrt gilt sie genauso — keine
+der sechs Blockentitäten nimmt im Original `INFINITE_EXTENT_AABB`, alle sechs geben einen
+konkreten Kasten an. Sie bekommen darum auch hier nur ihren Kasten, der bereits in den Runden
+119–126 mitportiert wurde.
+
+### Nachgemessen
+
+`tools/bewlr-check.sh`: 208 `builtin/entity`-Modelle, **zwölf** auf der Schuldenliste (vorher
+achtzehn), null unerklärte. Nimmt man die Anmeldung von `RenderSatLink` aus `ClientProxy`
+wieder heraus, meldet das Tor genau `MACHINE_SAT_LINK` und endet mit 1 — Exit-Code direkt
+geprüft, nicht durch eine Pipe.
+
+Offen bleiben: Annihilator, Zyklotron, Bestrahlungskammer, Gaszentrifuge, Bergbaulaser,
+Radiothermalgenerator und die sechs Teile des Teilchenbeschleunigers.
+
+### Die Leviathan-Turbine, noch einmal nachgeprüft
+
+Ohne Client lässt sich der Fehler nicht nachstellen, prüfbar ist aber die Kette:
+
+1. `NtmLangProvider` gibt `MACHINE_CHUNGUS` den Namen „Leviathan Steam Turbine“ — es geht also
+   wirklich um diesen Block.
+2. `ClientProxy` meldet für `MACHINE_CHUNGUS` `new RenderChungus()` an. Weil
+   `BlockEntityRenderers.register` einen Erzeuger nimmt, ist der tatsächlich benutzte
+   Darsteller das Ergebnis von `create(Context)` — ebenfalls ein `RenderChungus`, also **mit**
+   `shouldRenderOffScreen`.
+3. Das Original nimmt in `TileEntityChungus.getRenderBoundingBox()` tatsächlich
+   `TileEntity.INFINITE_EXTENT_AABB`. Die Entsprechung in 1.21 ist `shouldRenderOffScreen`,
+   nicht ein grosser Kasten: Minecraft sammelt die Blockentitäten beim Übersetzen eines
+   Chunk-Abschnitts ein und legt die mit `shouldRenderOffScreen` zusätzlich in die Liste der
+   immer gezeichneten, die den Sichtbarkeitstest des Abschnitts gar nicht durchläuft.
+4. Der Grund, warum es überhaupt auffällt: der Vielblock belegt nur `{3,0,0,3,2,2}`, das Modell
+   ist aber **15 Blöcke lang**. Blickt man zur Seite, fällt der Abschnitt des Kerns aus dem
+   Sichtstumpf, während die Blätter noch mitten im Bild stehen.
+5. Die Entfernung bleibt über `getViewDistance() = 256` begrenzt, der Kasten der Blockentität
+   (± 11 Blöcke) bleibt als zweite Absicherung stehen.
+
+Was hier nicht geprüft werden kann, ist das Bild selbst. Das bleibt beim Spieltest.

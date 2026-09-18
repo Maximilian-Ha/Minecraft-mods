@@ -25,9 +25,9 @@
 # ENTITYBLOCK_ANIMATED ausschliesslich durch den Darsteller. Wer einen davon nachreicht,
 # streicht die Zeile hier.
 #
-# NACHGEMESSEN (Runde 160): 208 builtin/entity-Modelle, achtzehn davon auf der Schuldenliste,
-# null unerklaerte. Nimmt man die getItemsForRenderer-Zeile aus RenderRadar wieder heraus,
-# meldet die Pruefung genau MACHINE_RADAR_LARGE (Exit-Code direkt geprueft).
+# NACHGEMESSEN (Runde 161): 208 builtin/entity-Modelle, zwoelf davon auf der Schuldenliste,
+# null unerklaerte. Nimmt man die Anmeldung von RenderSatLink aus ClientProxy wieder heraus,
+# meldet die Pruefung genau MACHINE_SAT_LINK und endet mit 1 (Exit-Code direkt geprueft).
 
 set -uo pipefail
 cd "$(dirname "$0")/.."
@@ -76,9 +76,7 @@ for quelle in (proxy, gunfactory):
 # UND in der Welt unsichtbar. Jede Zeile hier ist eine offene Aufgabe, keine Ausnahme.
 # ---------------------------------------------------------------------------------------
 OHNE_DARSTELLER = {
-    'MACHINE_AMMO_PRESS':       'Runde 125 portiert, Darsteller fehlt',
     'MACHINE_ANNIHILATOR':      'Runde 128 portiert, Darsteller fehlt',
-    'MACHINE_AUTOSAW':          'Runde 119 portiert, Darsteller fehlt',
     'MACHINE_CYCLOTRON':        'Runde 116 portiert, Darsteller fehlt',
     'MACHINE_EXPOSURE_CHAMBER': 'Runde 134 portiert, Darsteller fehlt',
     'MACHINE_GAS_CENT':         'Runde 115 portiert, Darsteller fehlt',
@@ -90,10 +88,6 @@ OHNE_DARSTELLER = {
     'MACHINE_PA_RFC':           'Runde 133 portiert, Darsteller fehlt',
     'MACHINE_PA_SOURCE':        'Runde 133 portiert, Darsteller fehlt',
     'MACHINE_RAD_GEN':          'Runde 135 portiert, Darsteller fehlt',
-    'MACHINE_SAT_LINK':         'Runde 122 portiert, Darsteller fehlt',
-    'MACHINE_SUPER_COMPUTER':   'Runde 124 portiert, Darsteller fehlt',
-    'MACHINE_TAPE_DRIVE':       'Runde 123 portiert, Darsteller fehlt',
-    'RADAR_SCREEN':             'Runde 126 portiert, Darsteller fehlt',
 }
 
 fehlend_b = sorted(f for f in braucht_b if f not in gezeichnet and f not in OHNE_DARSTELLER)

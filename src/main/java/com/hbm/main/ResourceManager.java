@@ -107,6 +107,14 @@ public class ResourceManager {
     public static final ResourceLocation RADAR_LARGE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/radar_large.png");
     public static final ResourceLocation RADAR_SCREEN_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/radar_screen.png");
 
+    // Nachgereichte Geraete (Runde 161)
+    public static final ResourceLocation SATLINK_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/satlink.png");
+    public static final ResourceLocation TAPE_DRIVE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/tape_drive.png");
+    public static final ResourceLocation SUPERCOMPUTER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/supercomputer.png");
+    public static final ResourceLocation SUPERCOMPUTER_SCAN_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/supercomputer_scan.png");
+    public static final ResourceLocation AMMO_PRESS_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/ammo_press.png");
+    public static final ResourceLocation AUTOSAW_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/autosaw.png");
+
     //Press
     public static final ResourceLocation PRESS_BODY_TEX = NuclearTechMod.withDefaultNamespace("textures/models/press_body.png");
     public static final ResourceLocation PRESS_HEAD_TEX = NuclearTechMod.withDefaultNamespace("textures/models/press_head.png");
@@ -521,6 +529,13 @@ public class ResourceManager {
     public static IModelCustom radar_large;
     public static IModelCustom radar_screen;
 
+    // Nachgereichte Geraete (Runde 161)
+    public static IModelCustom satlink;
+    public static IModelCustom tape_drive;
+    public static IModelCustom supercomputer;
+    public static IModelCustom ammo_press;
+    public static IModelCustom autosaw;
+
     // Boxcar
     public static IModelCustom tom_main;
     public static IModelCustom tom_flame;
@@ -774,6 +789,12 @@ public class ResourceManager {
         radar = new HFRWavefrontObject("models/obj/machines/radar.obj").noSmooth().asVBO();
         radar_large = new HFRWavefrontObject("models/obj/machines/radar_large.obj").noSmooth().asVBO();
         radar_screen = new HFRWavefrontObject("models/obj/machines/radar_screen.obj").noSmooth().asVBO();
+
+        satlink = new HFRWavefrontObject("models/obj/machines/satlink.obj").noSmooth().asVBO();
+        tape_drive = new HFRWavefrontObject("models/obj/machines/tape_drive.obj").noSmooth().asVBO();
+        supercomputer = new HFRWavefrontObject("models/obj/machines/supercomputer.obj").asVBO();
+        ammo_press = new HFRWavefrontObject("models/obj/machines/ammo_press.obj").asVBO();
+        autosaw = new HFRWavefrontObject("models/obj/machines/autosaw.obj").noSmooth().asVBO();
 
         tom_main = new HFRWavefrontObject("models/obj/weapons/tom_main.obj").asVBO();
         tom_flame = new HFRWavefrontObject("models/obj/weapons/tom_flame.obj").asVBO();
