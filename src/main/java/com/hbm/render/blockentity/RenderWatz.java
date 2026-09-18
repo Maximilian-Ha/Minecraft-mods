@@ -51,8 +51,8 @@ public class RenderWatz extends BlockEntityRendererNT<WatzBlockEntity> implement
         return new ItemRenderBase() {
             @Override
             public void renderInventory(ItemStack stack, MultiBufferSource buffer) {
-                RenderContext.translate(0F, -1.5F, 0F);
-                RenderContext.scale(2.5F, 2.5F, 2.5F);
+                RenderContext.translate(0F, -1F, 0F);
+                RenderContext.scale(2F, 2F, 2F);
             }
 
             @Override

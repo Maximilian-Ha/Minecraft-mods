@@ -1,6 +1,8 @@
 package com.hbm.render.blockentity;
 
 import com.hbm.blockentity.machine.MachineCyclotronBlockEntity;
+import com.hbm.blocks.NtmBlocks;
+import com.hbm.render.item.ItemRenderBase;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.util.FullBright;
 import com.hbm.render.util.RenderContext;
@@ -11,11 +13,14 @@ import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Font.DisplayMode;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 
 /**
@@ -25,14 +30,14 @@ import net.minecraft.world.phys.AABB;
  * liest vier Sockel ueber getPlug(), und die gab es im Port noch gar nicht. Das Steckersystem
  * ist jetzt nachgezogen, damit auch dieses Bild.
  *
- * Kein Gegenstandsdarsteller: das Original hat fuer das Zyklotron keinen, es traegt im
- * Inventar ein flaches Sinnbild (cyclotron).
+ * Der Gegenstandsdarsteller zeigt die Maschine mit LEEREN Sockeln -- so steht es im Original
+ * (ItemRenderLibrary), und ein Stecker im Inventarbild waere ohnehin irrefuehrend.
  *
  * Jeder der vier Sockel zeigt zwei Zustaende -- leer oder gefuellt -- ueber eine eigene
  * Textur. Stecken alle vier, dreht sich ein Ring aus Standard-Galactic-Schrift um die
  * Maschine: "plures necat crapula quam gladius", mehr toetet der Rausch als das Schwert.
  */
-public class RenderCyclotron extends BlockEntityRendererNT<MachineCyclotronBlockEntity> {
+public class RenderCyclotron extends BlockEntityRendererNT<MachineCyclotronBlockEntity> implements IBEWLRProvider {
 
     /** Die Schrift der Verzauberungstafel; im Original der standardGalacticFontRenderer. */
     private static final Style GALAKTISCH = Style.EMPTY.withFont(ResourceLocation.withDefaultNamespace("alt"));
@@ -113,5 +118,35 @@ public class RenderCyclotron extends BlockEntityRendererNT<MachineCyclotronBlock
     @Override
     public AABB getRenderBoundingBox(MachineCyclotronBlockEntity be) {
         return be.getRenderBoundingBox();
+    }
+
+    @Override
+    public Item getItemForRenderer() {
+        return NtmBlocks.MACHINE_CYCLOTRON.asItem();
+    }
+
+    @Override
+    public BlockEntityWithoutLevelRenderer getRenderer() {
+        return new ItemRenderBase() {
+            @Override
+            public void renderInventory(ItemStack stack, MultiBufferSource buffer) {
+                RenderContext.translate(0F, -1F, 0F);
+                RenderContext.scale(2.75F, 2.75F, 2.75F);
+            }
+
+            @Override
+            public void renderCommon(ItemStack stack, MultiBufferSource buffer) {
+                bindTexture(ResourceManager.CYCLOTRON_TEX);
+                ResourceManager.cyclotron.renderPart("Body");
+                bindTexture(ResourceManager.CYCLOTRON_ASHES_TEX);
+                ResourceManager.cyclotron.renderPart("B1");
+                bindTexture(ResourceManager.CYCLOTRON_BOOK_TEX);
+                ResourceManager.cyclotron.renderPart("B2");
+                bindTexture(ResourceManager.CYCLOTRON_GAVEL_TEX);
+                ResourceManager.cyclotron.renderPart("B3");
+                bindTexture(ResourceManager.CYCLOTRON_COIN_TEX);
+                ResourceManager.cyclotron.renderPart("B4");
+            }
+        };
     }
 }

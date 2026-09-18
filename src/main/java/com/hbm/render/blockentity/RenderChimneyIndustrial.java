@@ -53,7 +53,7 @@ public class RenderChimneyIndustrial extends BlockEntityRendererNT<ChimneyIndust
             @Override
             public void renderInventory(ItemStack stack, MultiBufferSource buffer) {
                 RenderContext.translate(0F, -5F, 0F);
-                RenderContext.scale(2.25F, 2.25F, 2.25F);
+                RenderContext.scale(2.75F, 2.75F, 2.75F);
             }
 
             @Override

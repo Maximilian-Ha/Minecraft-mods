@@ -81,7 +81,7 @@ public class RenderCompressorCompact extends BlockEntityRendererNT<MachineCompre
             @Override
             public void renderInventory(ItemStack stack, MultiBufferSource buffer) {
                 // Original: translate(-1, -1, 0); der X-Versatz stammt aus dem alten GUI-Bezugssystem und entfaellt
-                RenderContext.translate(0F, -1F, 0F);
+                RenderContext.translate(-1F, -1F, 0F);
                 RenderContext.scale(2.75F, 2.75F, 2.75F);
             }
 

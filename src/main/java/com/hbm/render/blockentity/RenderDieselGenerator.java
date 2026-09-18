@@ -51,8 +51,8 @@ public class RenderDieselGenerator extends BlockEntityRendererNT<MachineDieselBl
         return new ItemRenderBase() {
             @Override
             public void renderInventory(ItemStack stack, MultiBufferSource buffer) {
-                RenderContext.translate(0.0F, -0.5F, 0.0F);
-                RenderContext.scale(2.5F, 2.5F, 2.5F);
+                RenderContext.translate(0F, -2.5F, 0F);
+                RenderContext.scale(5F, 5F, 5F);
             }
 
             @Override

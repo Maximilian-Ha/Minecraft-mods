@@ -66,8 +66,8 @@ public class RenderArcWelder extends BlockEntityRendererNT<MachineArcWelderBlock
         return new ItemRenderBase() {
             @Override
             public void renderInventory(ItemStack stack, MultiBufferSource buffer) {
-                RenderContext.translate(0.0F, -0.85F, 0.0F);
-                RenderContext.scale(4.0F, 4.0F, 4.0F);
+                RenderContext.translate(0F, -2F, 0F);
+                RenderContext.scale(4F, 4F, 4F);
             }
 
             @Override

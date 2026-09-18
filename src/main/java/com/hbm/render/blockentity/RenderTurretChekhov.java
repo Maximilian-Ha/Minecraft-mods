@@ -79,8 +79,8 @@ public class RenderTurretChekhov extends RenderTurretBase<TurretChekhovBlockEnti
 
             @Override
             public void renderInventory(ItemStack stack, MultiBufferSource buffer) {
-                RenderContext.translate(0F, -0.5F, 0F);
-                RenderContext.scale(0.3125F, 0.3125F, 0.3125F);
+                RenderContext.translate(0F, -3F, 0F);
+                RenderContext.scale(4F, 4F, 4F);
             }
 
             @Override

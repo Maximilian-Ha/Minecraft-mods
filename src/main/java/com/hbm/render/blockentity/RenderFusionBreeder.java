@@ -46,8 +46,8 @@ public class RenderFusionBreeder extends BlockEntityRendererNT<FusionBreederBloc
         return new ItemRenderBase() {
             @Override
             public void renderInventory(ItemStack stack, MultiBufferSource buffer) {
-                RenderContext.translate(0F, -2F, 0F);
-                RenderContext.scale(2.5F, 2.5F, 2.5F);
+                RenderContext.translate(0F, -3F, 0F);
+                RenderContext.scale(5F, 5F, 5F);
                 RenderContext.mulPose(Axis.YP.rotationDegrees(90F));
             }
 

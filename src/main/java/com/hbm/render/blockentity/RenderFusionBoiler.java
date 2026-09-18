@@ -46,8 +46,8 @@ public class RenderFusionBoiler extends BlockEntityRendererNT<FusionBoilerBlockE
         return new ItemRenderBase() {
             @Override
             public void renderInventory(ItemStack stack, MultiBufferSource buffer) {
-                RenderContext.translate(0F, -2F, 0F);
-                RenderContext.scale(1.5F, 1.5F, 1.5F);
+                RenderContext.translate(0F, -1F, 0F);
+                RenderContext.scale(3.5F, 3.5F, 3.5F);
                 RenderContext.mulPose(Axis.YP.rotationDegrees(90F));
             }
 

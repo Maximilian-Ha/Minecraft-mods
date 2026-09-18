@@ -81,8 +81,8 @@ public class RenderTurretSentry extends BlockEntityRendererNT<TurretSentryBlockE
 
             @Override
             public void renderInventory(ItemStack stack, MultiBufferSource buffer) {
-                RenderContext.translate(0F, -0.25F, 0F);
-                RenderContext.scale(0.4375F, 0.4375F, 0.4375F);
+                RenderContext.translate(0F, -4F, 0F);
+                RenderContext.scale(7F, 7F, 7F);
             }
 
             @Override

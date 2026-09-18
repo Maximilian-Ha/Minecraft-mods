@@ -59,8 +59,8 @@ public class RenderTurretJeremy extends RenderTurretBase<TurretJeremyBlockEntity
 
             @Override
             public void renderInventory(ItemStack stack, MultiBufferSource buffer) {
-                RenderContext.translate(0F, -0.5F, 0F);
-                RenderContext.scale(0.3125F, 0.3125F, 0.3125F);
+                RenderContext.translate(0F, -2F, 0F);
+                RenderContext.scale(2.5F, 2.5F, 2.5F);
             }
 
             @Override

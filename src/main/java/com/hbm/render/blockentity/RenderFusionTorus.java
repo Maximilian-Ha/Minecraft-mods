@@ -133,8 +133,8 @@ public class RenderFusionTorus extends BlockEntityRendererNT<FusionTorusBlockEnt
         return new ItemRenderBase() {
             @Override
             public void renderInventory(ItemStack stack, MultiBufferSource buffer) {
-                RenderContext.translate(0F, -1.5F, 0F);
-                RenderContext.scale(0.75F, 0.75F, 0.75F);
+                RenderContext.translate(0F, 0F, 0F);
+                RenderContext.scale(2F, 2F, 2F);
             }
 
             @Override

@@ -48,8 +48,8 @@ public class RenderFusionCoupler extends BlockEntityRendererNT<FusionCouplerBloc
         return new ItemRenderBase() {
             @Override
             public void renderInventory(ItemStack stack, MultiBufferSource buffer) {
-                RenderContext.translate(0F, -1F, 0F);
-                RenderContext.scale(3.0F, 3.0F, 3.0F);
+                RenderContext.translate(0F, -3F, 0F);
+                RenderContext.scale(6F, 6F, 6F);
                 RenderContext.mulPose(Axis.YP.rotationDegrees(90F));
             }
 

@@ -62,8 +62,8 @@ public class RenderBreeder extends BlockEntityRendererNT<MachineReactorBreedingB
         return new ItemRenderBase() {
             @Override
             public void renderInventory(ItemStack stack, MultiBufferSource buffer) {
-                RenderContext.translate(0F, -1F, 0F);
-                RenderContext.scale(2F, 2F, 2F);
+                RenderContext.translate(0F, -4.5F, 0F);
+                RenderContext.scale(4.5F, 4.5F, 4.5F);
                 RenderContext.mulPose(Axis.YP.rotationDegrees(90F));
             }
 

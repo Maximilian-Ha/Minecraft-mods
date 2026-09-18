@@ -51,8 +51,8 @@ public class RenderHydrotreater extends BlockEntityRendererNT<MachineHydrotreate
         return new ItemRenderBase() {
             @Override
             public void renderInventory(ItemStack stack, MultiBufferSource buffer) {
-                RenderContext.translate(0F, -3F, 0F);
-                RenderContext.scale(2.5F, 2.5F, 2.5F);
+                RenderContext.translate(0F, -4F, 0F);
+                RenderContext.scale(4F, 4F, 4F);
             }
 
             @Override

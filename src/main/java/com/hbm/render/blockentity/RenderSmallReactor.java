@@ -55,8 +55,8 @@ public class RenderSmallReactor extends BlockEntityRendererNT<ReactorResearchBlo
         return new ItemRenderBase() {
             @Override
             public void renderInventory(ItemStack stack, MultiBufferSource buffer) {
-                RenderContext.translate(0F, -1F, 0F);
-                RenderContext.scale(2F, 2F, 2F);
+                RenderContext.translate(0F, -4F, 0F);
+                RenderContext.scale(4F, 4F, 4F);
             }
 
             @Override

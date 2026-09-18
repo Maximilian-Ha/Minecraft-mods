@@ -59,8 +59,8 @@ public class RenderHeaterElectric extends BlockEntityRendererNT<HeaterElectricBl
         return new ItemRenderBase() {
             @Override
             public void renderInventory(ItemStack stack, MultiBufferSource buffer) {
-                RenderContext.translate(0.0F, -1.0F, 0.0F);
-                RenderContext.scale(2.75F, 2.75F, 2.75F);
+                RenderContext.translate(0F, 0F, 0F);
+                RenderContext.scale(3F, 3F, 3F);
             }
 
             @Override

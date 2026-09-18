@@ -67,8 +67,14 @@ public class RenderRadar extends BlockEntityRendererNT<MachineRadarBlockEntity> 
         return new ItemRenderBase() {
             @Override
             public void renderInventory(ItemStack stack, MultiBufferSource buffer) {
-                RenderContext.translate(0F, -4F, 0F);
-                RenderContext.scale(5F, 5F, 5F);
+                // Das Original hat je Radar einen eigenen Eintrag mit eigenen Zahlen.
+                if(stack.is(NtmBlocks.MACHINE_RADAR_LARGE.asItem())) {
+                    RenderContext.translate(0F, -5F, 0F);
+                    RenderContext.scale(3F, 3F, 3F);
+                } else {
+                    RenderContext.translate(0F, -4F, 0F);
+                    RenderContext.scale(5F, 5F, 5F);
+                }
             }
 
             @Override

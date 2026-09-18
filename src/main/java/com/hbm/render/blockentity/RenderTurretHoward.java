@@ -84,8 +84,8 @@ public class RenderTurretHoward extends RenderTurretBase<TurretHowardBlockEntity
 
             @Override
             public void renderInventory(ItemStack stack, MultiBufferSource buffer) {
-                RenderContext.translate(0F, -0.75F, 0F);
-                RenderContext.scale(0.25F, 0.25F, 0.25F);
+                RenderContext.translate(0F, -4.5F, 0F);
+                RenderContext.scale(4F, 4F, 4F);
             }
 
             @Override

@@ -4036,3 +4036,78 @@ Ausnahmen dort nicht als „alles in Ordnung" gelesen werden.
 
 Damit ist die Schuldenliste aus Runde 160 von achtzehn auf **sechs** geschrumpft; übrig sind
 nur noch die sechs Teile des Teilchenbeschleunigers.
+
+## Runde 164: die RBMK-Konsole war ein Pünktchen — und einundvierzig andere Bilder stimmten auch nicht
+
+Gemeldet wurde: *„die RBMK Konsole ist in JEI als sehr kleines Vorschaubild vorhanden."*
+
+Die Ursache ist die aus Runde 160 bekannte: `ItemRenderBase` verkleinert im Inventar auf ein
+Sechzehntel (`scale(0.062)`) und erwartet, dass der Darsteller wieder hochskaliert. Die
+Konsole stand auf `scale(0.35)` statt auf den **2,5** des Originals — also bei rund zwei
+Prozent. Das ist kein Bild mehr, das ist ein Punkt.
+
+### Der eigentliche Fund: es waren einundvierzig
+
+Statt die eine Zahl zu berichtigen, habe ich **alle** Inventarbilder gegen das Original
+gehalten. Von 117 vergleichbaren Paaren wichen **41** ab. Sieben davon waren so klein, dass
+man sie nicht sehen konnte:
+
+| Darsteller | war | Original |
+| --- | --- | --- |
+| RBMK-Konsole | 0,35 | 2,5 |
+| Chekhov-Geschütz, Freundliches Geschütz | 0,3125 | 4 |
+| Howard-Geschütz, beschädigt | 0,25 | 4 |
+| Jeremy-Geschütz | 0,3125 | 2,5 |
+| Wachgeschütz | 0,4375 | 7 |
+
+Die übrigen 34 waren milder — um 20 bis 100 % zu klein, zu groß oder verschoben. Alle 41
+tragen jetzt die Zahl des Originals.
+
+### Warum kein Tor das gefunden hat, und warum ich zweimal falsch gemessen habe
+
+Das Tor aus Runde 160 (`bewlr-check`) prüft nur, *ob* ein `builtin/entity`-Modell einen
+Zeichner hat — nicht, *womit* er zeichnet. Die Zahl war nie geprüft.
+
+Beim Nachmessen bin ich zweimal in dieselbe Falle gelaufen, und beide Male hat die Messung
+selbst es gezeigt:
+
+1. **Erster Versuch:** ich habe nur nach `IItemRendererProvider` gesucht und kam auf 31
+   Darsteller, die der Port „erfunden" habe. Das war falsch — das Original hat einen
+   **zweiten** Anmeldeweg, `ItemRenderLibrary`, eine Tabelle mit 79 Einträgen. Nach dem
+   Einrechnen blieben statt 31 nur noch drei.
+2. **Vier vermeintliche Befunde** (`RED_CONNECTOR`, `RED_CONNECTOR_SUPER`, Bandlaufwerk,
+   Watz-Pumpe) waren Auslesefehler: das Original schreibt die Größe dort über eine
+   Hilfsvariable (`double scale = 5; glScaled(scale, scale, scale)`), die mein Muster nicht
+   traf. Eine Liste mit falschen Sollwerten wäre schlimmer als keine — das Auslesen kann das
+   jetzt.
+3. **Fünf weitere** waren Fehlalarme an `RenderLandmine`: der Darsteller bedient fünf Minen
+   und verzweigt korrekt je Gegenstand, mein Auslesen las nur den ersten Zweig. Das Tor liest
+   jetzt Verzweigungen.
+
+### Eine Regression von mir, aus den Runden 162 und 163
+
+Derselbe erste Denkfehler hat mich in Runde 162/163 dazu gebracht, **Zyklotron, Bergbaulaser
+und Radiothermalgenerator** für darstellerlos zu halten und ihnen ein flaches Sinnbild zu
+geben. Sie stehen alle drei in `ItemRenderLibrary`. Zurückgenommen: alle drei haben wieder
+einen Gegenstandsdarsteller, mit den Zahlen und dem Aufbau des Originals — beim
+Radiothermalgenerator leuchtet das Lämpchen im Inventarbild grün, beim Zyklotron sind die
+vier Sockel leer, beim Bergbaulaser liegt der Kopf waagerecht.
+
+### Das einundzwanzigste Tor: `tools/inventory-check.sh`
+
+`tools/inventory-list.txt` nennt für jeden Block die `renderInventory`-Werte des Originals,
+aus **beiden** Anmeldewegen erzeugt. Das Tor rechnet die des Ports nach und weist auf zu
+kleine (`winziges Pünktchen`) und zu große (`läuft aus dem Rahmen`) Bilder eigens hin.
+
+**Nachgemessen:** 199 Einträge im Original, 117 Paare vergleichbar, vorher 41 abweichend,
+jetzt 0. Setzt man die Konsole wieder auf `scale(0.35)`, meldet das Tor genau `RBMK_CONSOLE`
+mit dem Zusatz „winziges Pünktchen" und endet mit 1.
+
+### Zur Unschärfe im selben Bericht
+
+Das Bildschirmfoto zeigt die Oberfläche weich gezeichnet. Die Textur ist es nicht: sie ist
+byteweise die der CE-Abspaltung, palettiert und damit verlustfrei, 256×256 wie das Original.
+Auffällig ist, dass der Fenstertitel „Display 1: none" genauso weich ist — den zeichnet
+Minecraft selbst, nicht unsere Textur. Das spricht dafür, dass das Bild vergrößert wurde und
+nicht das Spiel unscharf zeichnet. Falls es im Spiel wirklich weich aussieht, wäre es ein
+eigener Fund; dann bitte noch einmal melden.

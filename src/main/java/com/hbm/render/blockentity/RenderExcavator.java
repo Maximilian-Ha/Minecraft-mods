@@ -114,8 +114,8 @@ public class RenderExcavator extends BlockEntityRendererNT<MachineExcavatorBlock
         return new ItemRenderBase() {
             @Override
             public void renderInventory(ItemStack stack, MultiBufferSource buffer) {
-                RenderContext.translate(0F, -2.5F, 0F);
-                RenderContext.scale(3.5F, 3.5F, 3.5F);
+                RenderContext.translate(0F, -2F, 0F);
+                RenderContext.scale(3F, 3F, 3F);
             }
 
             @Override

@@ -41,8 +41,8 @@ public class RenderFractionSpacer extends BlockEntityRendererNT<SpacerBlockEntit
         return new ItemRenderBase() {
             @Override
             public void renderInventory(ItemStack stack, MultiBufferSource buffer) {
-                RenderContext.translate(0F, -1F, 0F);
-                RenderContext.scale(2.5F, 2.5F, 2.5F);
+                RenderContext.translate(0F, 0F, 0F);
+                RenderContext.scale(3.25F, 3.25F, 3.25F);
             }
 
             @Override

@@ -52,7 +52,7 @@ public class RenderCatalyticReformer extends BlockEntityRendererNT<MachineCataly
             @Override
             public void renderInventory(ItemStack stack, MultiBufferSource buffer) {
                 RenderContext.translate(0F, -3F, 0F);
-                RenderContext.scale(2.5F, 2.5F, 2.5F);
+                RenderContext.scale(3.5F, 3.5F, 3.5F);
             }
 
             @Override

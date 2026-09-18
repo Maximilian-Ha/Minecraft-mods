@@ -1,6 +1,8 @@
 package com.hbm.render.blockentity;
 
 import com.hbm.blockentity.machine.MachineMiningLaserBlockEntity;
+import com.hbm.blocks.NtmBlocks;
+import com.hbm.render.item.ItemRenderBase;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.util.BeamPronter;
 import com.hbm.render.util.BeamPronter.BeamType;
@@ -8,10 +10,13 @@ import com.hbm.render.util.BeamPronter.WaveType;
 import com.hbm.render.util.RenderContext;
 import com.hbm.util.Vec3NT;
 import com.mojang.math.Axis;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 
 /**
@@ -20,14 +25,11 @@ import net.minecraft.world.phys.AABB;
  * Runde 162 nachgereicht: der Bergbaulaser steht seit Runde 118, hatte aber keinen Darsteller
  * und war daher in der Welt unsichtbar.
  *
- * Kein Gegenstandsdarsteller: das Original hat fuer diese Maschine keinen, sie traegt ein
- * flaches Sinnbild (machine_mining_laser) -- genau wie beim Radiothermalgenerator.
- *
  * Der Kopf zielt nicht nach der Blockausrichtung, sondern auf den Zielblock: aus dem Vektor
  * zum Ziel fallen Gier- und Nickwinkel. Der Nickwinkel kommt ueber atan2(y, Grundlaenge),
  * nicht ueber die Gesamtlaenge -- sonst zeigt der Kopf beim Blick nach unten am Strahl vorbei.
  */
-public class RenderLaserMiner extends BlockEntityRendererNT<MachineMiningLaserBlockEntity> {
+public class RenderLaserMiner extends BlockEntityRendererNT<MachineMiningLaserBlockEntity> implements IBEWLRProvider {
 
     @Override public BlockEntityRenderer<MachineMiningLaserBlockEntity> create(Context context) { return new RenderLaserMiner(); }
 
@@ -106,5 +108,34 @@ public class RenderLaserMiner extends BlockEntityRendererNT<MachineMiningLaserBl
     @Override
     public AABB getRenderBoundingBox(MachineMiningLaserBlockEntity be) {
         return be.getRenderBoundingBox();
+    }
+
+    @Override
+    public Item getItemForRenderer() {
+        return NtmBlocks.MACHINE_MINING_LASER.asItem();
+    }
+
+    @Override
+    public BlockEntityWithoutLevelRenderer getRenderer() {
+        return new ItemRenderBase() {
+            @Override
+            public void renderInventory(ItemStack stack, MultiBufferSource buffer) {
+                RenderContext.translate(0F, -0.5F, 0F);
+                RenderContext.scale(3F, 3F, 3F);
+            }
+
+            @Override
+            public void renderCommon(ItemStack stack, MultiBufferSource buffer) {
+                bindTexture(ResourceManager.MINING_LASER_BASE_TEX);
+                ResourceManager.mining_laser.renderPart("Base");
+                bindTexture(ResourceManager.MINING_LASER_PIVOT_TEX);
+                ResourceManager.mining_laser.renderPart("Pivot");
+                // Im Inventar liegt der Kopf waagerecht -- woertlich aus dem Original.
+                RenderContext.translate(0F, -1F, 0.75F);
+                RenderContext.mulPose(Axis.XP.rotationDegrees(90F));
+                bindTexture(ResourceManager.MINING_LASER_LASER_TEX);
+                ResourceManager.mining_laser.renderPart("Laser");
+            }
+        };
     }
 }

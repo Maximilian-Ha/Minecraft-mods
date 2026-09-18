@@ -1,15 +1,20 @@
 package com.hbm.render.blockentity;
 
 import com.hbm.blockentity.machine.MachineRadGenBlockEntity;
+import com.hbm.blocks.NtmBlocks;
+import com.hbm.render.item.ItemRenderBase;
 import com.hbm.blocks.DummyableBlock;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.util.FullBright;
 import com.hbm.render.util.RenderContext;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.math.Axis;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.Direction;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 
 /**
@@ -18,14 +23,11 @@ import net.minecraft.world.phys.AABB;
  * Runde 162 nachgereicht: der Radiothermalgenerator steht seit Runde 135, hatte aber keinen
  * Darsteller und war daher in der Welt unsichtbar.
  *
- * Kein Gegenstandsdarsteller: das Original hat fuer diese Maschine keinen, sie traegt ein
- * flaches Sinnbild (machine_radgen).
- *
  * Die Glashaube wird zweimal gezeichnet -- erst blaeulich und durchscheinend ohne
  * Tiefenschreiben, dann noch einmal mit ihrer Textur. So steht sie vor dem Rotor, ohne ihn
  * zu verdecken.
  */
-public class RenderRadGen extends BlockEntityRendererNT<MachineRadGenBlockEntity> {
+public class RenderRadGen extends BlockEntityRendererNT<MachineRadGenBlockEntity> implements IBEWLRProvider {
 
     @Override public BlockEntityRenderer<MachineRadGenBlockEntity> create(Context context) { return new RenderRadGen(); }
 
@@ -95,5 +97,37 @@ public class RenderRadGen extends BlockEntityRendererNT<MachineRadGenBlockEntity
     @Override
     public AABB getRenderBoundingBox(MachineRadGenBlockEntity be) {
         return be.getRenderBoundingBox();
+    }
+
+    @Override
+    public Item getItemForRenderer() {
+        return NtmBlocks.MACHINE_RAD_GEN.asItem();
+    }
+
+    @Override
+    public BlockEntityWithoutLevelRenderer getRenderer() {
+        return new ItemRenderBase() {
+            @Override
+            public void renderInventory(ItemStack stack, MultiBufferSource buffer) {
+                RenderContext.translate(0F, -1F, 0F);
+                RenderContext.scale(4.5F, 4.5F, 4.5F);
+            }
+
+            @Override
+            public void renderCommon(ItemStack stack, MultiBufferSource buffer) {
+                RenderContext.scale(0.5F, 0.5F, 0.5F);
+                RenderContext.translate(0.5F, 0F, 0F);
+                bindTexture(ResourceManager.RADGEN_TEX);
+                ResourceManager.radgen.renderPart("Base");
+                ResourceManager.radgen.renderPart("Rotor");
+                // Im Inventarbild leuchtet das Laempchen immer gruen -- wie im Original.
+                FullBright.enable();
+                bindTexture(ResourceManager.WHITE_TEX);
+                RenderContext.setColor(0F, 1F, 0F, 1F);
+                ResourceManager.radgen.renderPart("Light");
+                RenderContext.setColor(1F, 1F, 1F, 1F);
+                FullBright.disable();
+            }
+        };
     }
 }

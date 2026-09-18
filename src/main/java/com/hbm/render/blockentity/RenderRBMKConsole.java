@@ -144,8 +144,8 @@ public class RenderRBMKConsole extends BlockEntityRendererNT<RBMKConsoleBlockEnt
         return new ItemRenderBase() {
             @Override
             public void renderInventory(ItemStack stack, MultiBufferSource buffer) {
-                RenderContext.translate(0F, -2F, 0F);
-                RenderContext.scale(0.35F, 0.35F, 0.35F);
+                RenderContext.translate(0F, -3F, 0F);
+                RenderContext.scale(2.5F, 2.5F, 2.5F);
             }
 
             @Override
