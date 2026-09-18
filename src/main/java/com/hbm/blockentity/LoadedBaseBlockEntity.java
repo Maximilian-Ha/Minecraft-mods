@@ -1,6 +1,7 @@
 package com.hbm.blockentity;
 
 import api.hbm.blockentity.ILoadedBE;
+import com.hbm.blocks.NtmBlocks;
 import com.hbm.config.NtmConfig;
 import com.hbm.network.toclient.BufPacket;
 import com.hbm.registry.NtmSoundEvents;
@@ -15,6 +16,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -161,7 +163,7 @@ public class LoadedBaseBlockEntity extends BlockEntity implements ILoadedBE, IBu
         if(extraHeavy) {
             if(!groundState.isFaceSturdy(level, pos, Direction.UP)) return;
             if(!groundState.isCollisionShapeFullBlock(level, pos)) return;
-            // todo materials
+            if(istWeicherGrund(groundState)) return;
             if(ground.getExplosionResistance() < Blocks.STONE.getExplosionResistance()) return;
             this.tiltBlocksValid++;
         // for standard machines, the ground needs to:
@@ -169,10 +171,25 @@ public class LoadedBaseBlockEntity extends BlockEntity implements ILoadedBE, IBu
         // * NOT be sand
         } else {
             if(!groundState.isFaceSturdy(level, pos, Direction.UP)) return;
-            // todo materials
-            //if(ground == ModBlocks.dirt_dead || ground == ModBlocks.dirt_oily || ground == ModBlocks.stone_cracked) return;
+            if(groundState.is(BlockTags.SAND)) return;
+            if(groundState.is(NtmBlocks.DIRT_DEAD.get()) || groundState.is(NtmBlocks.DIRT_OILY.get())
+                    || groundState.is(NtmBlocks.STONE_CRACKED.get())) return;
             this.tiltBlocksValid++;
         }
+    }
+
+    /**
+     * Sand, Wolle und lockerer Boden taugen nicht als Fundament.
+     *
+     * Das Original fragt hier Material.sand, Material.cloth und Material.ground ab. Materialien
+     * gibt es in 1.21 nicht mehr; die Entsprechung sind die Sammelbegriffe. Fuer "ground"
+     * stehen Erde und Kies, die in 1.7.10 dieses Material tragen.
+     */
+    private static boolean istWeicherGrund(BlockState state) {
+        return state.is(BlockTags.SAND)
+                || state.is(BlockTags.WOOL)
+                || state.is(BlockTags.DIRT)
+                || state.is(Blocks.GRAVEL);
     }
 
     public int getFloorCount() { return 0; }

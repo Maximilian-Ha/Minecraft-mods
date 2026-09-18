@@ -2590,6 +2590,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.MACHINE_DIESEL, "Diesel Generator");
         this.add(NtmBlocks.MACHINE_COMPRESSOR, "Compressor");
         this.add(NtmBlocks.MACHINE_GAS_CENT, "Gas Centrifuge");
+        this.add(NtmBlocks.MACHINE_TOWER_SMALL, "Cooling Tower");
+        this.add(NtmBlocks.MACHINE_TOWER_LARGE, "Large Cooling Tower");
         this.add(NtmBlocks.MACHINE_CYCLOTRON, "Cyclotron");
         this.add(NtmBlocks.MACHINE_MINING_LASER, "Mining Laser");
 

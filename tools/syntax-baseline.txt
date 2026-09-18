@@ -194,6 +194,8 @@ src/main/java/com/hbm/blockentity/machine/ChungusBlockEntity.java: error: types 
 src/main/java/com/hbm/blockentity/machine/CondenserBaseBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
 src/main/java/com/hbm/blockentity/machine/CondenserBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
 src/main/java/com/hbm/blockentity/machine/CondenserPoweredBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/TowerLargeBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
+src/main/java/com/hbm/blockentity/machine/TowerSmallBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
 src/main/java/com/hbm/blockentity/machine/DiFurnaceExtensionBlockEntity.java: error: types IEnergyReceiverMK2 and IFluidReceiverMK2 are incompatible;
 src/main/java/com/hbm/blockentity/machine/MachineArcWelderBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
 src/main/java/com/hbm/blockentity/machine/MachineAssemblyFactoryBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
@@ -237,7 +239,6 @@ src/main/java/com/hbm/blockentity/machine/PWRBlockEntity.java: error: types IFlu
 src/main/java/com/hbm/blockentity/machine/ReactorZirnoxBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
 src/main/java/com/hbm/blockentity/machine/SolarBoilerBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
 src/main/java/com/hbm/blockentity/machine/SoyuzLauncherBlockEntity.java: error: types IEnergyReceiverMK2 and IFluidReceiverMK2 are incompatible;
-src/main/java/com/hbm/blockentity/machine/TowerSmallBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
 src/main/java/com/hbm/blockentity/machine/TurbineBaseBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
 src/main/java/com/hbm/blockentity/machine/WatzBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;
 src/main/java/com/hbm/blockentity/machine/albion/MachinePADetectorBlockEntity.java: error: types IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible;

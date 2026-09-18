@@ -4373,3 +4373,64 @@ null unerklärte.** Die Liste selbst bleibt als Gestell stehen: wer künftig ein
 portiert und ihren Darsteller schuldig bleibt, trägt sie dort mit Rundennummer ein, statt das
 Tor abzuschalten. Nimmt man die Anmeldung von `RenderSatLink` heraus, meldet das Tor weiterhin
 genau `MACHINE_SAT_LINK`.
+
+## Runde 169: die beiden Kühltürme
+
+### Vorweg: zwei `// todo materials` in der Standprüfung
+
+Beim Nachrechnen des einsinkenden Big-Ass Tanks fielen in `LoadedBaseBlockEntity.checkTilt`
+zwei offene Stellen auf. Das Original prüft dort die 1.7.10-Materialien `Material.sand`,
+`Material.cloth` und `Material.ground`; die gibt es in 1.21 nicht mehr, und der Port hatte die
+Prüfung schlicht ausgelassen. Ein Fundament aus Wolle oder Erde trug damit eine schwere
+Maschine, was es im Original nicht tut.
+
+Die Entsprechung sind die Sammelbegriffe: `BlockTags.SAND`, `BlockTags.WOOL`, `BlockTags.DIRT`
+und Kies. Für die leichteren Maschinen kam zusätzlich die im Original auskommentiert
+mitgelieferte Zeile dazu — toter Boden, öliger Boden und rissiger Stein taugen nicht.
+
+Am gemeldeten Verhalten des Tanks ändert das nichts: der sank auf Sand ein, und Sand war schon
+vorher ausgeschlossen. Das ist so gewollt, siehe Runde 167.
+
+
+Auf die Frage, ob es die Kühltürme schon gibt, lautete die Antwort: nein. Jetzt gibt es sie —
+`machine_tower_small` und `machine_tower_large`. Beide rechnen dasselbe wie der Kondensator
+(Abdampf zurück zu Wasser), brauchen aber keinen Strom; die Rechnung steht unverändert in
+`CondenserBaseBlockEntity`, die Türme setzen nur Tankgröße, Bauform und Anschlüsse.
+
+| | kleiner Turm | großer Turm |
+| --- | --- | --- |
+| Höhe / Grundriss | 18 hoch, 5×5 | 12 hoch, 9×9 |
+| Tanks | 1.000 / 1.000 | 10.000 / 10.000 |
+| Anschlüsse | 4, drei Blöcke vom Kern | 12, fünf Blöcke vom Kern |
+| Dampffahne | oben aus dem Schlot, y+18 | aus dem offenen Becken, y+1 |
+
+**Die zwölf Anschlüsse des großen Turms** waren beim ersten Anlauf vier — ich hatte die Form
+des kleinen Turms übernommen. Das Original legt sie anders: je Himmelsrichtung drei Stellen,
+fünf Blöcke vom Kern entfernt und dort mittig sowie je drei Blöcke nach beiden Seiten versetzt.
+Dazu gehört, dass `fillSpace` die Hülle an denselben zwölf Stellen vier Blöcke vom Kern setzt
+und `getOffset()` **4** ist, nicht 2 — mit 2 wäre der Turm beim Aufstellen um zwei Blöcke
+verrutscht. Alle drei Zahlen stehen jetzt so wie im Original.
+
+**Die Dampffahne** fehlte zunächst ganz. Sie hängt an `waterTimer`, den die Basis schon
+synchronisiert, und braucht einen clientseitigen Zweig — den hat `CondenserBaseBlockEntity`
+nicht, weil `updateEntity` dort vollständig im Server-Zweig liegt. Beide Türme überschreiben
+`updateEntity` jetzt und setzen den Effekt nach den Werten des Originals: der kleine alle zwei
+Ticks vom Schlot aus (`lift` 1, `base` 0.5, `max` 4, Lebensdauer 250–500), der große alle vier
+Ticks aus dem Becken, über drei Blöcke Breite gestreut (`lift` 0.5, `base` 1, `max` 10,
+Lebensdauer 750–1000). Die Partikelsorte heißt im Port `COOLING_TOWER` statt `"tower"`; dazu
+kam die Einstellung `coolingTowerParticles`, die das Original als `COOLING_TOWER_PARTICLES`
+führt.
+
+**Eine Texturvorlage stammt aus der CE-Abspaltung:** `tower_small.png` ist dort eine echte
+Überarbeitung, `tower_large.png` und beide `.obj` sind in Port, Original und CE identisch.
+
+### Zwei Tore haben dabei zugeschlagen
+
+`tools/dist-check.sh` fand `printHook` in beiden Turmblöcken ohne `@OnlyIn(Dist.CLIENT)` —
+`RenderGuiEvent` gibt es auf dem Server nicht, das Laden der Klasse wäre dort abgebrochen.
+
+`tools/inventory-check.sh` meldete am großen Turm `ist 3.8 | soll 4`. Das war **kein Fehler im
+Port, sondern in der Liste**: das Original schreibt `glScaled(4 * 0.95, …)`, und der Generator
+der Sollwerte las nur die erste Zahl. Er wertet solche Produkte jetzt aus; `tools/inventory-list.txt`
+ändert sich dadurch in genau einer Zeile. Eine Liste mit einem Wert, von dem ich weiß, dass er
+falsch ist, wird nicht ausgeliefert — dieselbe Regel wie in Runde 164.

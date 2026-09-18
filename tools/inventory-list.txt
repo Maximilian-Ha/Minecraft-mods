@@ -142,7 +142,7 @@ machinestrandcaster 2,0,2 2
 machinesupercomputer 0,-2.5,0 2.5
 machinetapedrive 0,-3,0 5
 machinethresher 0,4,-8 4.5
-machinetowerlarge 0,-3,0 4
+machinetowerlarge 0,-3,0 3.8
 machinetowersmall 0,-4,0 3
 machineturbinegas 0,-1,1.5 2.5
 machineturbofan 0,0,0 2.25

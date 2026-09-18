@@ -481,6 +481,8 @@ public class NtmBlockTagProvider extends BlockTagsProvider {
                         NtmBlocks.MACHINE_DIESEL.get(),
                         NtmBlocks.MACHINE_COMPRESSOR.get(),
                         NtmBlocks.MACHINE_GAS_CENT.get(),
+                        NtmBlocks.MACHINE_TOWER_SMALL.get(),
+                        NtmBlocks.MACHINE_TOWER_LARGE.get(),
                         NtmBlocks.MACHINE_CYCLOTRON.get(),
                         NtmBlocks.MACHINE_PA_SOURCE.get(),
                         NtmBlocks.MACHINE_PA_BEAMLINE.get(),

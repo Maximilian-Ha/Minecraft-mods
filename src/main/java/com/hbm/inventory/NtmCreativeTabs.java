@@ -1361,6 +1361,8 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.MACHINE_COMBUSTION_ENGINE);
                         output.accept(NtmBlocks.MACHINE_COMPRESSOR);
                         output.accept(NtmBlocks.MACHINE_GAS_CENT);
+                        output.accept(NtmBlocks.MACHINE_TOWER_SMALL);
+                        output.accept(NtmBlocks.MACHINE_TOWER_LARGE);
                         output.accept(NtmBlocks.MACHINE_CYCLOTRON);
                         output.accept(NtmBlocks.MACHINE_PA_SOURCE);
                         output.accept(NtmBlocks.MACHINE_PA_BEAMLINE);

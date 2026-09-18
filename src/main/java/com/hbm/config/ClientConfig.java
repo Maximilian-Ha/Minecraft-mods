@@ -21,6 +21,8 @@ public class ClientConfig {
 
     public final ModConfigSpec.DoubleValue GUN_ANIMATION_SPEED;
 
+    public final ModConfigSpec.BooleanValue COOLING_TOWER_PARTICLES;
+
     ClientConfig(ModConfigSpec.Builder builder) {
 
         ENABLE_NTM_SKYBOX = builder
@@ -72,5 +74,10 @@ public class ClientConfig {
                 .comment("Animation sped")
                 .translation("hbmsntm.configuration.gunAnimationSpeed")
                 .defineInRange("gunAnimationSpeed", 1.0, Double.MIN_VALUE, Double.MAX_VALUE);
+
+        COOLING_TOWER_PARTICLES = builder
+                .comment("Toggles the steam plume rising from cooling towers")
+                .translation("hbmsntm.configuration.coolingTowerParticles")
+                .define("coolingTowerParticles", true);
     }
 }

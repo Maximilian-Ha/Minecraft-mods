@@ -144,6 +144,10 @@ public class ResourceManager {
     public static final ResourceLocation PA_DIPOLE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/particleaccelerator/dipole.png");
     public static final ResourceLocation PA_DETECTOR_TEX = NuclearTechMod.withDefaultNamespace("textures/models/particleaccelerator/detector.png");
 
+    // Kuehltuerme (Runde 169)
+    public static final ResourceLocation TOWER_SMALL_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/tower_small.png");
+    public static final ResourceLocation TOWER_LARGE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/tower_large.png");
+
     //Press
     public static final ResourceLocation PRESS_BODY_TEX = NuclearTechMod.withDefaultNamespace("textures/models/press_body.png");
     public static final ResourceLocation PRESS_HEAD_TEX = NuclearTechMod.withDefaultNamespace("textures/models/press_head.png");
@@ -583,6 +587,10 @@ public class ResourceManager {
     public static IModelCustom pa_dipole;
     public static IModelCustom pa_detector;
 
+    // Kuehltuerme (Runde 169)
+    public static IModelCustom tower_small;
+    public static IModelCustom tower_large;
+
     // Boxcar
     public static IModelCustom tom_main;
     public static IModelCustom tom_flame;
@@ -860,6 +868,9 @@ public class ResourceManager {
         pa_quadrupole = new HFRWavefrontObject("models/obj/particleaccelerator/quadrupole.obj").asVBO();
         pa_dipole = new HFRWavefrontObject("models/obj/particleaccelerator/dipole.obj").asVBO();
         pa_detector = new HFRWavefrontObject("models/obj/particleaccelerator/detector.obj").asVBO();
+
+        tower_small = new HFRWavefrontObject("models/obj/machines/tower_small.obj").asVBO();
+        tower_large = new HFRWavefrontObject("models/obj/machines/tower_large.obj").asVBO();
 
         tom_main = new HFRWavefrontObject("models/obj/weapons/tom_main.obj").asVBO();
         tom_flame = new HFRWavefrontObject("models/obj/weapons/tom_flame.obj").asVBO();
