@@ -4185,3 +4185,72 @@ Die Brennstoffkanäle bekommen im Original zusätzlich eine OBJ-Auflage (`rbmk_e
 ihr elf weitere Texturen (`rbmk_element*`, `rbmk_control_base`, die beiden
 `rbmk_control_reasim*_bottom`). Das ist ein eigener Schritt — er braucht den OBJ-Pfad im
 Blockmodell, nicht nur ein paar Kästchen mehr.
+
+## Runde 166: der Leviathan-Hebel las die Ausrichtung am falschen Block
+
+Gemeldet waren zwei Dinge. Eines ist ein Fehler, eines nicht — und das getrennt zu halten war
+der eigentliche Teil der Arbeit.
+
+### Die Turbine liess sich nicht auf ultradichten Dampf umstellen — Fehler, behoben
+
+Der Verdichter wird über einen Hebel weitergeschaltet, und der Hebel ist kein eigener Block:
+`MachineChungusBlock` rechnet aus der Aufstellrichtung aus, **welche** Stelle der Säule als
+Hebel gilt. Diese Richtung las der Port aus dem **angeklickten** Block:
+
+```java
+Direction dir = state.getValue(FACING);        // falsch
+```
+
+Die Hilfsblöcke eines Vielblocks tragen in `FACING` aber die Richtung **zum Kern hin**
+(`MultiblockHandlerXR.fillSpace` setzt sie je nach Lage auf UP/DOWN/NORTH/…), nicht die
+Aufstellrichtung der Maschine. Nur der Kern trägt die. Damit lag die errechnete Hebelstelle
+fast immer daneben; je nachdem, welchen Block man erwischte, ging mal ein Schritt und dann
+nichts mehr — genau das Bild, das gemeldet wurde. Das Original nimmt hier die Metadaten des
+Kerns (`entity.getBlockMetadata()`), und die Industrieturbine im Port macht es auch richtig.
+
+```java
+Direction dir = be.getBlockState().getValue(FACING);   // richtig, be ist der Kern
+```
+
+Die Schaltkette selbst (Dampf → heiss → überhitzt → ultradicht → zurück) stimmt mit dem
+Original Zeile für Zeile überein und war nie das Problem.
+
+### Das dreiundzwanzigste Tor: `tools/dummyfacing-check.sh`
+
+Das ist eine Fehlerart, kein Einzelfall: jeder Vielblock, der beim Anklicken etwas aus der
+Aufstellrichtung berechnet, kann sie am falschen Block holen. Das Tor durchsucht alle Blöcke,
+die von `DummyableBlock` erben, nach `state.getValue(FACING)` innerhalb einer
+`use…`-Methode.
+
+**Nachgemessen:** 109 Vielblock-Blöcke, **1 Befund** vor der Berichtigung
+(`MachineChungusBlock`), **0** danach. Gegen die Fassung aus dem vorigen Commit gehalten
+meldet die Erkennung genau diese eine Datei.
+
+### Der Big-Ass Tank sinkt ein — kein Fehler, sondern der Untergrund
+
+Der Tank hat einen Kipp-Zustand: `checkTilt(TiltType.UNAVOIDABLE, true)`. `UNAVOIDABLE` heisst,
+dass er **unabhängig von jeder Einstellung** prüft, worauf er steht — so steht es auch im
+Original. Geprüft werden sechzehn Blöcke unter der Grundfläche, einer alle 20 Ticks; nach rund
+sechzehn Sekunden ist die Runde durch. Fallen mehr als fünf Prozent durch, kippt er: zehn Grad
+Neigung und einen Block tiefer. Das sieht aus, als sänke er in den Boden.
+
+Für „extra schwere" Maschinen verlangt die Prüfung einen Untergrund mit mindestens der
+Sprengfestigkeit von Stein. **Sand hat 0,5, Stein hat 6.** Auf dem Strand im Bildschirmfoto
+kippt der Tank also zu Recht — im Original genauso, dort zusätzlich über eine ausdrückliche
+Abfrage auf `Material.sand`.
+
+Ich habe die Prüfung Zeile für Zeile gegen das Original gehalten: Kipp-Bedingung,
+Zähl-Takt, Fünf-Prozent-Schwelle, die sechzehn Bodenstellen (`standardFloor7x7`) und die
+beiden Einstellungen `enableMachineGravity` (Standard aus) und `enable528MachineGravity`
+(Standard an, aber 528 selbst ist aus) — alles deckungsgleich. **Der Tank braucht ein
+Fundament aus Stein, Beton oder Ähnlichem.**
+
+Eine Kleinigkeit ist dabei doch aufgefallen und behoben: der Einstellungsschlüssel hiess
+`"enableMachineGravity "` — mit einem Leerzeichen am Ende, auch im Übersetzungsschlüssel. In
+der Konfigurationsdatei steht er damit als `"enableMachineGravity " = false` und ist schwer zu
+finden. Wer ihn schon angefasst hat, muss ihn nach diesem Update einmal neu setzen.
+
+Offen und ausdrücklich nicht übernommen: die Material-Abfragen des Originals (`Material.sand`,
+`cloth`, `ground`) stehen im Port als `// todo materials`. In der Sache ändert das hier nichts
+— Sand fällt schon über die Sprengfestigkeit durch —, aber es macht den Port an anderer
+Stelle nachgiebiger als das Original.

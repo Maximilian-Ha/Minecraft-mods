@@ -81,7 +81,15 @@ public class MachineChungusBlock extends DummyableBlock implements ITooltipProvi
             BlockEntity blockEntity = level.getBlockEntity(corePos);
             if(blockEntity instanceof ChungusBlockEntity be) {
 
-                Direction dir = state.getValue(FACING);
+                /*
+                 * Die Ausrichtung steht NUR am Kern. Die Hilfsbloecke der Saeule tragen in
+                 * FACING die Richtung zum Kern hin (siehe MultiblockHandlerXR.fillSpace), nicht
+                 * die Aufstellrichtung der Maschine. Wer sie vom angeklickten Block liest,
+                 * rechnet die Hebelstelle falsch aus -- dann laesst sich der Verdichter nicht
+                 * mehr umschalten. Das Original nimmt hier ebenfalls den Kern
+                 * (entity.getBlockMetadata()).
+                 */
+                Direction dir = be.getBlockState().getValue(FACING);
                 Direction turn = dir.getCounterClockWise(Axis.Y);
 
                 BlockPos bePos = be.getBlockPos();
