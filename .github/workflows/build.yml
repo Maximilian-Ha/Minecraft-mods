@@ -94,6 +94,11 @@ jobs:
           chmod +x ./tools/bewlr-check.sh
           ./tools/bewlr-check.sh
 
+      - name: Check off-screen rendering
+        run: |
+          chmod +x ./tools/offscreen-check.sh
+          ./tools/offscreen-check.sh
+
       # Die Datengenerierung laeuft VOR dem Bau, und zwar aus zwei Gruenden:
       #
       # 1. Sie ist der beste Ersatz fuer einen Client-Start, den CI leisten kann. Sie faehrt den

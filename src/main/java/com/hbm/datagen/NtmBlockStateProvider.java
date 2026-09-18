@@ -729,8 +729,12 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.particleOnlyBlock(NtmBlocks.MACHINE_PA_DIPOLE, modLoc("block/block_steel"));
         this.particleOnlyBlock(NtmBlocks.MACHINE_PA_DETECTOR, modLoc("block/block_steel"));
         this.particleOnlyBlock(NtmBlocks.MACHINE_EXPOSURE_CHAMBER, modLoc("block/block_steel"));
-        this.particleOnlyBlock(NtmBlocks.MACHINE_RAD_GEN, modLoc("block/block_steel"));
-        this.particleOnlyBlock(NtmBlocks.MACHINE_MINING_LASER, modLoc("block/block_steel"));
+        /* Kein Gegenstandsdarsteller: das Original zeichnet den Radiothermalgenerator nur in der
+         * Welt und gibt ihm im Inventar ein flaches Sinnbild (machine_radgen). */
+        this.particleOnlyBlockFlatItem(NtmBlocks.MACHINE_RAD_GEN, modLoc("block/block_steel"), modLoc("block/machine_radgen"));
+        /* Wie beim Radiothermalgenerator: im Original kein Gegenstandsdarsteller, sondern das
+         * flache Sinnbild machine_mining_laser. */
+        this.particleOnlyBlockFlatItem(NtmBlocks.MACHINE_MINING_LASER, modLoc("block/block_steel"), modLoc("block/machine_mining_laser"));
         this.simpleBlock(NtmBlocks.BARRICADE.get(), this.models().cubeAll("barricade", modLoc("block/barricade")));
         this.particleOnlyBlock(NtmBlocks.MACHINE_COMPRESSOR_COMPACT, modLoc("block/block_steel"));
         this.simpleBlockWithItem(NtmBlocks.MACHINE_TURBINE.get(), this.models().cubeBottomTop("machine_turbine", modLoc("block/machine_turbine_base"), modLoc("block/machine_turbine_top"), modLoc("block/machine_turbine_top")));

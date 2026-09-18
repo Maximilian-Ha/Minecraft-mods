@@ -1,0 +1,74 @@
+# Darsteller, deren Vorlage in 1.7.10 INFINITE_EXTENT_AABB nimmt.
+#
+# WOZU: die 1.21-Entsprechung von INFINITE_EXTENT_AABB ist shouldRenderOffScreen, NICHT ein
+# grosser getRenderBoundingBox. Minecraft sammelt die Blockentitaeten aus den SICHTBAREN
+# Chunk-Abschnitten ein; faellt der Abschnitt des Kerns aus dem Sichtstumpf, wird die
+# Blockentitaet gar nicht angefasst, und der Sichtkasten danach kann nur zusaetzlich
+# wegschneiden. Genau daran ist die Leviathan-Turbine zweimal verschwunden (Runden 153/160).
+#
+# ERZEUGT AUS DEM ORIGINAL mit (Fernzweig hbm-upstream/master noetig, in der CI nicht da --
+# darum liegt die Liste hier als Datei):
+#   git grep -l INFINITE_EXTENT_AABB hbm-upstream/master -- 'src/main/java/com/hbm/tileentity/*'
+# dazu die Bindungen aus dem ClientProxy des Originals.
+#
+# Je Zeile: <Darstellerklasse> <Blockentitaet des Originals>. Ein Darsteller kann mehrfach
+# vorkommen, wenn im Original mehrere Blockentitaeten an ihm haengen. Darsteller, die es im
+# Port noch nicht gibt, stehen hier trotzdem -- das Tor greift automatisch, sobald einer
+# geschrieben wird.
+#
+# Ohne Bindung im ClientProxy des Originals (kein eigener Darsteller):
+#   TileEntityOilDrillBase
+#   TileEntityPipelineBase
+#   TileEntityPylonBase
+#   TileEntityTurretBaseNT
+
+RenderBlastDoor TileEntityBlastDoor
+RenderBombMulti TileEntityBombMulti
+RenderChungus TileEntityChungus
+RenderCompactLauncher TileEntityCompactLauncher
+RenderCoreComponent TileEntityCoreEmitter
+RenderCoreComponent TileEntityCoreInjector
+RenderCoreComponent TileEntityCoreReceiver
+RenderCoreComponent TileEntityCoreStabilizer
+RenderCraneConsole TileEntityCraneConsole
+RenderCrashedBomb TileEntityCrashedBomb
+RenderDecoBlock TileEntityDecoBlock
+RenderDecoBlockAlt TileEntityDecoBlockAlt
+RenderDecoBlockAlt TileEntityDecoBlockAltF
+RenderDecoBlockAlt TileEntityDecoBlockAltG
+RenderDecoBlockAlt TileEntityDecoBlockAltW
+RenderDemonLamp TileEntityDemonLamp
+RenderDoorGeneric TileEntityDoorGeneric
+RenderFEL TileEntityFEL
+RenderForceField TileEntityFF
+RenderMachineForceField TileEntityForceField
+RenderICFMultiblock TileEntityICFStruct
+RenderLaunchTable TileEntityLaunchTable
+RenderLaunchpadSoyuz TileEntityLaunchpadSoyuz
+RenderFENSU TileEntityMachineFENSU
+RenderGasFlare TileEntityMachineGasFlare
+RenderBigTurbine TileEntityMachineLargeTurbine
+RenderLaserMiner TileEntityMachineMiningLaser
+RenderMissileAssembly TileEntityMachineMissileAssembly
+RenderRadGen TileEntityMachineRadGen
+RenderRefinery TileEntityMachineRefinery
+RenderTurbofan TileEntityMachineTurbofan
+RenderMicrowave TileEntityMicrowave
+RenderMultiblock TileEntityMultiblock
+RenderNukeFstbmb TileEntityNukeBalefire
+RenderNukeBoy TileEntityNukeBoy
+RenderNukeCustom TileEntityNukeCustom
+RenderNukeFleija TileEntityNukeFleija
+RenderNukeGadget TileEntityNukeGadget
+RenderNukeMan TileEntityNukeMan
+RenderNukeMike TileEntityNukeMike
+RenderNukeN2 TileEntityNukeN2
+RenderNukePrototype TileEntityNukePrototype
+RenderNukeSolinium TileEntityNukeSolinium
+RenderNukeTsar TileEntityNukeTsar
+RendererObjTester TileEntityObjTester
+RenderSmallReactor TileEntityReactorResearch
+RenderSoyuzLauncher TileEntitySoyuzLauncher
+RenderSoyuzMultiblock TileEntitySoyuzStruct
+RenderSteamEngine TileEntitySteamEngine
+RenderTesla TileEntityTesla

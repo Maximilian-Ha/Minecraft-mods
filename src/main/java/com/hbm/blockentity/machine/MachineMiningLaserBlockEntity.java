@@ -111,9 +111,9 @@ public class MachineMiningLaserBlockEntity extends MachineBaseBlockEntity
     public int targetX;
     public int targetY;
     public int targetZ;
-    private int lastTargetX;
-    private int lastTargetY;
-    private int lastTargetZ;
+    public int lastTargetX;
+    public int lastTargetY;
+    public int lastTargetZ;
 
     public boolean beam;
     private double breakProgress;

@@ -3823,3 +3823,99 @@ Ohne Client lässt sich der Fehler nicht nachstellen, prüfbar ist aber die Kett
    (± 11 Blöcke) bleibt als zweite Absicherung stehen.
 
 Was hier nicht geprüft werden kann, ist das Bild selbst. Das bleibt beim Spieltest.
+
+## Runde 162: fünf weitere Darsteller, ein neues Tor, zwei Befunde
+
+Nach Runde 161 standen noch zwölf Maschinen auf der Schuldenliste. Diese Runde reicht fünf
+davon nach und klärt, warum eine sechste noch nicht geht.
+
+| Maschine | portiert in | Besonderheit |
+| --- | --- | --- |
+| `machine_gascent` | Runde 115 | eigener Zweig des Zentrifugen-Darstellers, halbe Drehung versetzt |
+| `machine_annihilator` | Runde 128 | drehende Rolle, Förderband |
+| `machine_exposure_chamber` | Runde 134 | Magnetring, schwebender Kern, sechs Blitze |
+| `machine_mining_laser` | Runde 118 | Kopf zielt auf den Zielblock, dreifacher Spiralstrahl |
+| `machine_rad_gen` | Runde 135 | drehender Rotor, Lämpchen, durchscheinende Glashaube |
+
+Der Bergbaulaser und der Radiothermalgenerator haben im Original **keinen**
+Gegenstandsdarsteller — sie tragen im Inventar ein flaches Sinnbild. Ihre Blöcke sind darum
+von `particleOnlyBlock` auf `particleOnlyBlockFlatItem` umgestellt, genau wie die RBMK-Tafeln
+in Runde 160.
+
+### Zwei, bei denen der Sichtkasten nicht reicht
+
+`TileEntityMachineMiningLaser` und `TileEntityMachineRadGen` nehmen im Original
+`INFINITE_EXTENT_AABB`. Nach der Regel aus Runde 160 heisst das in 1.21
+`shouldRenderOffScreen`, nicht ein grosser Kasten — beide Darsteller haben es bekommen.
+
+### Das neunzehnte Tor: `tools/offscreen-check.sh`
+
+Genau hier ist die Leviathan-Turbine zweimal verschwunden. Bisher stand die Regel nur als
+Kommentar in `RenderChungus`. Jetzt prüft ein Tor sie: `tools/offscreen-list.txt` nennt jeden
+Darsteller, dessen Vorlage in 1.7.10 `INFINITE_EXTENT_AABB` nimmt (aus dem Original erzeugt,
+der Befehl steht im Kopf der Liste — die CI hat den Fernzweig nicht, darum liegt sie als
+Datei). Wer davon im Port existiert, muss `shouldRenderOffScreen` setzen.
+
+**Nachgemessen:** 44 verschiedene Darsteller in der Liste, 17 davon gibt es im Port, alle 17
+setzen die Methode — 0 Befunde. Nimmt man sie aus `RenderChungus` wieder heraus, meldet das
+Tor genau `RenderChungus` und endet mit 1. Die 27 Darsteller, die es im Port noch nicht gibt,
+stehen trotzdem in der Liste: das Tor greift von selbst, sobald einer geschrieben wird.
+
+### Befund 1: das Zyklotron braucht erst seine Stecker
+
+Der Darsteller des Zyklotrons zeichnet vier Sockel (`B1` bis `B4`) und wählt je Sockel
+zwischen leerer und gefüllter Textur — `cyc.getPlug(0..3)`. Wenn alle vier stecken, dreht
+sich ein Ring aus Standard-Galactic-Schrift um die Maschine.
+
+**Diese Zustände gibt es im Port nicht.** `MachineCyclotronBlockEntity` hat weder das
+`plugs`-Byte noch `setPlug`/`getPlug`, und von den vier Steckern ist nur `powder_balefire`
+portiert; `book_of_`, `diamond_gavel` und `coin_maskman` fehlen. Das ist keine fehlende
+Darstellung, sondern ein nicht portiertes Spielsystem aus Runde 116. Die Zeile bleibt darum
+auf der Schuldenliste stehen, mit geändertem Grund.
+
+### Befund 2: vierzehn Darsteller stehen anders herum als im Original
+
+Beim Blick auf `RenderCentrifuge` ist mir eine abweichende Ausrichtung aufgefallen. Ich habe
+daraufhin für **jeden** Darsteller mit Ausrichtungsschalter die Gesamtdrehung ausgerechnet
+(Vordrehung vor dem Schalter plus Schalterwert) und gegen das Original gehalten.
+
+**68 Paare vergleichbar: 54 stimmen überein, 14 weichen ab**, in zwei sauber getrennten
+Mustern:
+
+- **Osten und Westen vertauscht**, Norden und Süden richtig — die Maschine steht gespiegelt:
+  `RenderArcFurnace`, `RenderBatteryREDD`, `RenderBlastFurnace`, `RenderCrucible`,
+  `RenderExcavator`, `RenderOreSlopper`, `RenderRotaryFurnace`.
+- **die ganze Zuordnung um genau −90° verdreht**: `RenderCentrifuge`, `RenderDerrick`,
+  `RenderNukeFleija`, `RenderNukeGadget`, `RenderNukeN2`, `RenderNukePrototype`,
+  `RenderNukeSolinium`.
+
+Dass beide Muster so regelmässig sind — siebenmal dieselbe Spiegelung, siebenmal dieselben
+−90° — spricht für zwei übernommene Fehlmuster, nicht für vierzehn Einzelfehler.
+
+Zwei Kandidaten habe ich dabei **entlastet**: `RenderRockMill` und `RenderSolarBoiler` sehen
+auf den ersten Blick abweichend aus, aber das Original dreht dort vor dem Schalter um 90°,
+und der Port hat diese Drehung in den Schalter hineingerechnet. Beide sind richtig.
+
+Dass die Zuordnung überhaupt vergleichbar ist, hängt an einem Punkt, den ich geprüft habe:
+das Original setzt die Ausrichtung über `i = floor(yaw*4/360 + 0.5) & 3` auf die Gegenrichtung
+des Spielers, der Port über `context.getHorizontalDirection().getOpposite()` — dasselbe. Und
+keiner der vierzehn Blöcke überschreibt `getDirModified`.
+
+Repariert ist davon **nichts** — das gehört in eine eigene Runde mit eigenem Tor, nicht
+nebenbei. Für die neue Gaszentrifuge habe ich bewusst denselben Schalter genommen wie die
+Schwester `RenderCentrifuge`, damit die beiden gleich stehen; bei quadratischem Grundriss von
+einem Block fällt es dort ohnehin kaum auf.
+
+### Bewusste Abweichungen
+
+- **Annihilator:** das Förderband läuft im Original über die GL-Texturmatrix. 1.21 hat keine
+  mehr (dieselbe Lage wie beim Grossrechner in Runde 161), das Band steht darum still. Die
+  Rolle dreht sich weiter, man sieht der Maschine ihren Lauf also an.
+- **Bergbaulaser-Textur:** die CE-Abspaltung hat `mining_laser_laser.png` überarbeitet und
+  dazu eine Leuchtschicht `mining_laser_laser_e.png` samt Darstelleränderung eingeführt. Nur
+  die Textur zu übernehmen wäre falsch — hier steht die Fassung des Originals. Alle anderen
+  Modelle und Modelltexturen dieser Runde sind in Port, Original und CE byteweise identisch;
+  `gascent.png` und `radgen.obj`/`radgen.png` heissen in CE nur anders
+  (`centrifuge_gas.png`, `models/radgen.obj`, `rad_gen_body.png`), der Inhalt stimmt überein.
+  Die beiden flachen Sinnbilder `machine_mining_laser.png` und `machine_radgen.png` gibt es in
+  CE unter keinem Namen und mit keinem Inhalt — für sie gab es also nichts zu vergleichen.

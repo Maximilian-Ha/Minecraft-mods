@@ -76,18 +76,13 @@ for quelle in (proxy, gunfactory):
 # UND in der Welt unsichtbar. Jede Zeile hier ist eine offene Aufgabe, keine Ausnahme.
 # ---------------------------------------------------------------------------------------
 OHNE_DARSTELLER = {
-    'MACHINE_ANNIHILATOR':      'Runde 128 portiert, Darsteller fehlt',
-    'MACHINE_CYCLOTRON':        'Runde 116 portiert, Darsteller fehlt',
-    'MACHINE_EXPOSURE_CHAMBER': 'Runde 134 portiert, Darsteller fehlt',
-    'MACHINE_GAS_CENT':         'Runde 115 portiert, Darsteller fehlt',
-    'MACHINE_MINING_LASER':     'Runde 118 portiert, Darsteller fehlt',
+    'MACHINE_CYCLOTRON':        'Runde 116 portiert; Darsteller braucht die noch fehlenden Stecker (siehe Runde 162)',
     'MACHINE_PA_BEAMLINE':      'Runde 133 portiert, Darsteller fehlt',
     'MACHINE_PA_DETECTOR':      'Runde 133 portiert, Darsteller fehlt',
     'MACHINE_PA_DIPOLE':        'Runde 133 portiert, Darsteller fehlt',
     'MACHINE_PA_QUADRUPOLE':    'Runde 133 portiert, Darsteller fehlt',
     'MACHINE_PA_RFC':           'Runde 133 portiert, Darsteller fehlt',
     'MACHINE_PA_SOURCE':        'Runde 133 portiert, Darsteller fehlt',
-    'MACHINE_RAD_GEN':          'Runde 135 portiert, Darsteller fehlt',
 }
 
 fehlend_b = sorted(f for f in braucht_b if f not in gezeichnet and f not in OHNE_DARSTELLER)

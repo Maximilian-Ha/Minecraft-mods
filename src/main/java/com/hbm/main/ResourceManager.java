@@ -115,6 +115,16 @@ public class ResourceManager {
     public static final ResourceLocation AMMO_PRESS_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/ammo_press.png");
     public static final ResourceLocation AUTOSAW_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/autosaw.png");
 
+    // Nachgereichte Geraete (Runde 162)
+    public static final ResourceLocation GASCENT_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/gascent.png");
+    public static final ResourceLocation ANNIHILATOR_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/annihilator.png");
+    public static final ResourceLocation ANNIHILATOR_BELT_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/annihilator_belt.png");
+    public static final ResourceLocation EXPOSURE_CHAMBER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/exposure_chamber.png");
+    public static final ResourceLocation MINING_LASER_BASE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/mining_laser_base.png");
+    public static final ResourceLocation MINING_LASER_PIVOT_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/mining_laser_pivot.png");
+    public static final ResourceLocation MINING_LASER_LASER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/mining_laser_laser.png");
+    public static final ResourceLocation RADGEN_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/radgen.png");
+
     //Press
     public static final ResourceLocation PRESS_BODY_TEX = NuclearTechMod.withDefaultNamespace("textures/models/press_body.png");
     public static final ResourceLocation PRESS_HEAD_TEX = NuclearTechMod.withDefaultNamespace("textures/models/press_head.png");
@@ -536,6 +546,13 @@ public class ResourceManager {
     public static IModelCustom ammo_press;
     public static IModelCustom autosaw;
 
+    // Nachgereichte Geraete (Runde 162)
+    public static IModelCustom gascent;
+    public static IModelCustom annihilator;
+    public static IModelCustom exposure_chamber;
+    public static IModelCustom mining_laser;
+    public static IModelCustom radgen;
+
     // Boxcar
     public static IModelCustom tom_main;
     public static IModelCustom tom_flame;
@@ -795,6 +812,13 @@ public class ResourceManager {
         supercomputer = new HFRWavefrontObject("models/obj/machines/supercomputer.obj").asVBO();
         ammo_press = new HFRWavefrontObject("models/obj/machines/ammo_press.obj").asVBO();
         autosaw = new HFRWavefrontObject("models/obj/machines/autosaw.obj").noSmooth().asVBO();
+
+        gascent = new HFRWavefrontObject("models/obj/machines/gascent.obj").asVBO();
+        annihilator = new HFRWavefrontObject("models/obj/machines/annihilator.obj").asVBO();
+        exposure_chamber = new HFRWavefrontObject("models/obj/machines/exposure_chamber.obj").asVBO();
+        mining_laser = new HFRWavefrontObject("models/obj/machines/mining_laser.obj").asVBO();
+        // Das Original laedt den Radiothermalgenerator ohne asVBO -- hier genauso belassen.
+        radgen = new HFRWavefrontObject("models/obj/machines/radgen.obj");
 
         tom_main = new HFRWavefrontObject("models/obj/weapons/tom_main.obj").asVBO();
         tom_flame = new HFRWavefrontObject("models/obj/weapons/tom_flame.obj").asVBO();
