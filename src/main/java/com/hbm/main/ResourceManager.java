@@ -136,6 +136,14 @@ public class ResourceManager {
     public static final ResourceLocation CYCLOTRON_COIN_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/cyclotron_coin.png");
     public static final ResourceLocation CYCLOTRON_COIN_FILLED_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/cyclotron_coin_filled.png");
 
+    // Teilchenbeschleuniger (Runde 168)
+    public static final ResourceLocation PA_SOURCE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/particleaccelerator/source.png");
+    public static final ResourceLocation PA_BEAMLINE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/particleaccelerator/beamline.png");
+    public static final ResourceLocation PA_RFC_TEX = NuclearTechMod.withDefaultNamespace("textures/models/particleaccelerator/rfc.png");
+    public static final ResourceLocation PA_QUADRUPOLE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/particleaccelerator/quadrupole.png");
+    public static final ResourceLocation PA_DIPOLE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/particleaccelerator/dipole.png");
+    public static final ResourceLocation PA_DETECTOR_TEX = NuclearTechMod.withDefaultNamespace("textures/models/particleaccelerator/detector.png");
+
     //Press
     public static final ResourceLocation PRESS_BODY_TEX = NuclearTechMod.withDefaultNamespace("textures/models/press_body.png");
     public static final ResourceLocation PRESS_HEAD_TEX = NuclearTechMod.withDefaultNamespace("textures/models/press_head.png");
@@ -567,6 +575,14 @@ public class ResourceManager {
     public static IModelCustom radgen;
     public static IModelCustom cyclotron;
 
+    // Teilchenbeschleuniger (Runde 168)
+    public static IModelCustom pa_source;
+    public static IModelCustom pa_beamline;
+    public static IModelCustom pa_rfc;
+    public static IModelCustom pa_quadrupole;
+    public static IModelCustom pa_dipole;
+    public static IModelCustom pa_detector;
+
     // Boxcar
     public static IModelCustom tom_main;
     public static IModelCustom tom_flame;
@@ -837,6 +853,13 @@ public class ResourceManager {
          * erst asVBO() eines. Die Unterscheidung existiert also gar nicht. */
         radgen = new HFRWavefrontObject("models/obj/machines/radgen.obj").asVBO();
         cyclotron = new HFRWavefrontObject("models/obj/machines/cyclotron.obj").asVBO();
+
+        pa_source = new HFRWavefrontObject("models/obj/particleaccelerator/source.obj").asVBO();
+        pa_beamline = new HFRWavefrontObject("models/obj/particleaccelerator/beamline.obj").asVBO();
+        pa_rfc = new HFRWavefrontObject("models/obj/particleaccelerator/rfc.obj").asVBO();
+        pa_quadrupole = new HFRWavefrontObject("models/obj/particleaccelerator/quadrupole.obj").asVBO();
+        pa_dipole = new HFRWavefrontObject("models/obj/particleaccelerator/dipole.obj").asVBO();
+        pa_detector = new HFRWavefrontObject("models/obj/particleaccelerator/detector.obj").asVBO();
 
         tom_main = new HFRWavefrontObject("models/obj/weapons/tom_main.obj").asVBO();
         tom_flame = new HFRWavefrontObject("models/obj/weapons/tom_flame.obj").asVBO();

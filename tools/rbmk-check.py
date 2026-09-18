@@ -100,20 +100,40 @@ def main():
                     if not os.path.exists(os.path.join(TEXTUREN, bild)):
                         fehlt_innen.append(bild)
 
+    # Die ReaSim-Steuerstaebe zeigen unten ihren Stromanschluss statt der Deckflaeche.
+    fehlt_boden = []
+    zust_quelle = ohne(open(ZUSTAENDE, encoding='utf-8').read())
+    eigener_boden = set()
+    for f in sorted(os.listdir(KLASSEN)):
+        if not f.endswith('.java'):
+            continue
+        quelle = ohne(open(os.path.join(KLASSEN, f), encoding='utf-8').read())
+        if re.search(r'boolean\s+hasOwnBottom\(\)\s*\{\s*return\s+this\.powered', quelle):
+            eigener_boden.add(f[:-5])
+    if eigener_boden:
+        for m in re.finditer(r'rbmkColumn\(NtmBlocks\.(\w+)\.get\(\)\s*,\s*"([a-z0-9_]+)"', zust_quelle):
+            if 'reasim' not in m.group(2) or 'control' not in m.group(2):
+                continue
+            bild = '%s_bottom.png' % m.group(2)
+            if not os.path.exists(os.path.join(TEXTUREN, bild)):
+                fehlt_boden.append(bild)
+
     print('Pruefe RBMK-Saeulen ... %d Rohrsaeulen im Original' % len(soll))
     print('  ohne hasPipes() im Port : %d' % len(fehlt_rohre))
     print('  mit hasPipes() zu viel  : %d' % len(ueberzaehlig))
     print('  ohne Rohrbild           : %d' % len(fehlt_textur))
     print('  Kanal ohne Kappenbild   : %d' % len(fehlt_innen))
+    print('  ReaSim ohne Bodenbild   : %d' % len(fehlt_boden))
 
-    if not fehlt_rohre and not ueberzaehlig and not fehlt_textur and not fehlt_innen:
+    if not fehlt_rohre and not ueberzaehlig and not fehlt_textur and not fehlt_innen and not fehlt_boden:
         print('OK - jede Rohrsaeule des Originals traegt auch hier ihre Stutzen.')
         return 0
 
     for titel, liste in (('OHNE ROHRSTUTZEN -- oben bleibt eine glatte Flaeche', fehlt_rohre),
                          ('ROHRSTUTZEN, DIE DAS ORIGINAL NICHT HAT', ueberzaehlig),
                          ('FEHLENDE ROHRBILDER', fehlt_textur),
-                         ('FEHLENDE BILDER FUER KAPPE ODER INNENROHR', fehlt_innen)):
+                         ('FEHLENDE BILDER FUER KAPPE ODER INNENROHR', fehlt_innen),
+                         ('FEHLENDE BODENBILDER DER REASIM-STEUERSTAEBE', fehlt_boden)):
         if not liste:
             continue
         print()

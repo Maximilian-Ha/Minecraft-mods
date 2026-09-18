@@ -26,6 +26,7 @@ public class RBMKControlBlock extends RBMKBaseBlock {
      * zugleich in RBMKBase.hasOwnLid(): er nimmt keinen Deckel an und zeigt nie eine
      * Deckeltextur. Das gilt ueber RBMKControlAutoBlock auch fuer die selbsttaetigen Staebe. */
     @Override public boolean hasPipes() { return true; }
+    @Override public boolean hasOwnBottom() { return this.powered; }
     @Override public boolean hasOwnLid() { return true; }
 
     public static final MapCodec<RBMKControlBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

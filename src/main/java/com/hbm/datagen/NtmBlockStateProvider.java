@@ -929,11 +929,15 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         boolean pipes = block instanceof RBMKBaseBlock rbmk && rbmk.hasPipes();
 
         boolean tube = block instanceof RBMKRodBlock;
+        /* Die ReaSim-Steuerstaebe zeigen unten ihren Stromanschluss statt der Deckflaeche. */
+        ResourceLocation bottom = block instanceof RBMKBaseBlock rb && rb.hasOwnBottom()
+                ? modLoc("block/" + texture + "_bottom")
+                : modLoc("block/" + texture + "_top");
 
         ModelFile plain = tube
                 ? this.rbmkTube(name, texture)
-                : this.models().cubeBottomTop(name, modLoc("block/" + texture + "_side"), modLoc("block/" + texture + "_top"), modLoc("block/" + texture + "_top"));
-        ModelFile piped = pipes ? this.rbmkPipes(name, texture) : plain;
+                : this.models().cubeBottomTop(name, modLoc("block/" + texture + "_side"), bottom, modLoc("block/" + texture + "_top"));
+        ModelFile piped = pipes ? this.rbmkPipes(name, texture, bottom) : plain;
         ModelFile cover = hasLids ? this.rbmkLid(name + "_cover", texture, texture + "_cover", tube) : piped;
         ModelFile glass = hasLids ? this.rbmkLid(name + "_glass", texture, texture + "_glass", tube) : piped;
 
@@ -953,11 +957,12 @@ public class NtmBlockStateProvider extends BlockStateProvider {
     }
 
     /** Saeulenwuerfel plus die vier Rohrstutzen darueber. */
-    private ModelFile rbmkPipes(String name, String texture) {
+    private ModelFile rbmkPipes(String name, String texture, ResourceLocation bottom) {
         BlockModelBuilder model = this.models().getBuilder(name + "_pipes")
                 .parent(new ModelFile.UncheckedModelFile("block/block"))
                 .texture("side", modLoc("block/" + texture + "_side"))
                 .texture("top", modLoc("block/" + texture + "_top"))
+                .texture("bottom", bottom)
                 .texture("pipe_side", modLoc("block/" + texture + "_pipe_side"))
                 .texture("pipe_top", modLoc("block/" + texture + "_pipe_top"))
                 .texture("particle", modLoc("block/" + texture + "_side"));
@@ -993,6 +998,7 @@ public class NtmBlockStateProvider extends BlockStateProvider {
             this.rbmkTubeBody(model);
         } else {
             model.texture("top", modLoc("block/" + texture + "_top"));
+            model.texture("bottom", modLoc("block/" + texture + "_top"));
             this.rbmkBody(model);
         }
         model.element()
@@ -1037,7 +1043,7 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         model.element()
                 .from(0, 0, 0).to(16, 16, 16)
                 .face(Direction.UP).texture("#top").cullface(Direction.UP).end()
-                .face(Direction.DOWN).texture("#top").cullface(Direction.DOWN).end()
+                .face(Direction.DOWN).texture("#bottom").cullface(Direction.DOWN).end()
                 .face(Direction.NORTH).texture("#side").cullface(Direction.NORTH).end()
                 .face(Direction.SOUTH).texture("#side").cullface(Direction.SOUTH).end()
                 .face(Direction.WEST).texture("#side").cullface(Direction.WEST).end()

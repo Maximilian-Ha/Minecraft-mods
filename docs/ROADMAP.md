@@ -4313,3 +4313,63 @@ Rohrstutzen (Runde 165), Deckelplatte (165) und Rohrform der Kanäle (167) sind 
 RBMK-Texturen, die dem Port fehlten, sind jetzt 22 übernommen; übrig bleiben drei
 (`rbmk_control_base`, `rbmk_control_reasim_bottom`, `rbmk_control_reasim_auto_bottom`), die im
 Original zur Bodenplatte der Steuerstäbe gehören — ein eigener, kleiner Schritt.
+
+## Runde 168: die Schuldenliste ist leer
+
+Zwei offene Punkte auf einmal — der Rest der RBMK-Säule und die sechs Teile des
+Teilchenbeschleunigers.
+
+### Der RBMK-Rest: die Bodenplatte der ReaSim-Steuerstäbe
+
+Von den drei übrig gebliebenen Texturen ist **eine gar keine Aufgabe**: `rbmk_control_base.png`
+liegt im Original im Ordner, wird aber von keiner einzigen Stelle im Quelltext benutzt — eine
+verwaiste Datei. Sie ist auch hier nicht übernommen.
+
+Die anderen beiden gehören zusammen. Im Original zeigen **nur** die beiden ReaSim-Steuerstäbe
+auf ihrer **Unterseite** ein eigenes Bild statt der üblichen Deckfläche — dort sitzt ihr
+Stromanschluss, denn diese Bauform fährt mit Strom von unten:
+
+```java
+if(this.renderLid == LID_NONE && this == ModBlocks.rbmk_control_reasim && side == 0)
+    return textureBottom;
+```
+
+Im Port ist das jetzt `hasOwnBottom()` am Basisblock, wahr genau dann, wenn der Steuerstab
+`powered` ist — das ist im Port schon die Kennzeichnung der ReaSim-Bauformen. Die Modelle
+nehmen die Unterseite entsprechend.
+
+Zwei Kleinigkeiten dabei: `RBMKControlAutoBlock` hatte die Abfrage doppelt, die Oberklasse
+deckt sie ab — raus damit. Und das Tor prüft jetzt mit, dass jede so gekennzeichnete Säule ihr
+`_bottom`-Bild hat.
+
+### Die sechs Teile des Teilchenbeschleunigers
+
+| Teil | Besonderheit |
+| --- | --- |
+| Teilchenquelle | — |
+| Strahlrohr | zwei Bauformen; mit Fenster leuchtet die Scheibe auf, wenn ein Teilchen durchfliegt |
+| Hohlraumresonator | — |
+| Quadrupolmagnet | — |
+| Dipolmagnet | wird als einziger **nicht** nach der Aufstellrichtung gedreht — er steht rund |
+| Detektor | sitzt zwei Blöcke tiefer als sein Kern |
+
+Alle sechs standen seit Runde 133 mit Block, Blockentität und Oberfläche, aber ohne
+Darsteller — sie waren in der Welt wie im Inventar unsichtbar.
+
+**Eine Vorlage weicht ab:** `beamline.obj` ist in der CE-Abspaltung ein Rumpf von 44 Zeilen mit
+einem einzigen Teil `Cube_Cube.001`; im Original sind es 184 Zeilen mit `Beamline`,
+`BeamlineWindow` und `BeamlineGlass`. CE hat die Teile also verloren, nicht überarbeitet — hier
+steht die Fassung des Originals. Die übrigen elf Dateien sind in Port, Original und CE
+byteweise identisch.
+
+### Damit ist die Schuldenliste aus Runde 160 leer
+
+Achtzehn Maschinen standen darauf, für die Block, Blockentität, Menü und Oberfläche portiert
+waren, der Darsteller aber nie geschrieben wurde. Über die Runden 161, 162, 163 und 168 sind
+alle achtzehn nachgereicht.
+
+`tools/bewlr-check.sh` misst jetzt **208 `builtin/entity`-Modelle, null auf der Schuldenliste,
+null unerklärte.** Die Liste selbst bleibt als Gestell stehen: wer künftig eine Maschine
+portiert und ihren Darsteller schuldig bleibt, trägt sie dort mit Rundennummer ein, statt das
+Tor abzuschalten. Nimmt man die Anmeldung von `RenderSatLink` heraus, meldet das Tor weiterhin
+genau `MACHINE_SAT_LINK`.

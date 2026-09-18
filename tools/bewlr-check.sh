@@ -25,8 +25,12 @@
 # ENTITYBLOCK_ANIMATED ausschliesslich durch den Darsteller. Wer einen davon nachreicht,
 # streicht die Zeile hier.
 #
-# NACHGEMESSEN (Runde 161): 208 builtin/entity-Modelle, zwoelf davon auf der Schuldenliste,
-# null unerklaerte. Nimmt man die Anmeldung von RenderSatLink aus ClientProxy wieder heraus,
+# DIE SCHULDENLISTE IST SEIT RUNDE 168 LEER. Sie bleibt als Gestell stehen: wer eine Maschine
+# portiert und ihren Darsteller schuldig bleibt, traegt sie hier mit Rundennummer ein, statt
+# das Tor abzuschalten.
+#
+# NACHGEMESSEN (Runde 168): 208 builtin/entity-Modelle, null auf der Schuldenliste, null
+# unerklaerte. Nimmt man die Anmeldung von RenderSatLink aus ClientProxy wieder heraus,
 # meldet die Pruefung genau MACHINE_SAT_LINK und endet mit 1 (Exit-Code direkt geprueft).
 
 set -uo pipefail
@@ -76,12 +80,6 @@ for quelle in (proxy, gunfactory):
 # UND in der Welt unsichtbar. Jede Zeile hier ist eine offene Aufgabe, keine Ausnahme.
 # ---------------------------------------------------------------------------------------
 OHNE_DARSTELLER = {
-    'MACHINE_PA_BEAMLINE':      'Runde 133 portiert, Darsteller fehlt',
-    'MACHINE_PA_DETECTOR':      'Runde 133 portiert, Darsteller fehlt',
-    'MACHINE_PA_DIPOLE':        'Runde 133 portiert, Darsteller fehlt',
-    'MACHINE_PA_QUADRUPOLE':    'Runde 133 portiert, Darsteller fehlt',
-    'MACHINE_PA_RFC':           'Runde 133 portiert, Darsteller fehlt',
-    'MACHINE_PA_SOURCE':        'Runde 133 portiert, Darsteller fehlt',
 }
 
 fehlend_b = sorted(f for f in braucht_b if f not in gezeichnet and f not in OHNE_DARSTELLER)

@@ -147,6 +147,15 @@ public abstract class RBMKBaseBlock extends DummyableBlock implements IToolable,
         return false;
     }
 
+    /**
+     * Traegt diese Saeule ein eigenes Bild fuer die Unterseite? Im Original gilt das nur fuer
+     * die beiden ReaSim-Steuerstaebe: sie fahren mit Strom von unten und zeigen dort einen
+     * Anschluss statt der ueblichen Deckflaeche (RBMKControl.getIcon, side == 0).
+     */
+    public boolean hasOwnBottom() {
+        return false;
+    }
+
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         if(state.getValue(TYPE) != DummyBlockType.CORE) return null;
