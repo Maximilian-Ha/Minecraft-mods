@@ -3919,3 +3919,39 @@ einem Block fällt es dort ohnehin kaum auf.
   (`centrifuge_gas.png`, `models/radgen.obj`, `rad_gen_body.png`), der Inhalt stimmt überein.
   Die beiden flachen Sinnbilder `machine_mining_laser.png` und `machine_radgen.png` gibt es in
   CE unter keinem Namen und mit keinem Inhalt — für sie gab es also nichts zu vergleichen.
+
+### Nachtrag zu Runde 162: ein Compile-Fehler in der CI, und warum kein Tor ihn fand
+
+Der erste Anlauf ist rot geworden — eine Zeile:
+
+```
+ResourceManager.java:821: error: incompatible types:
+    HFRWavefrontObject cannot be converted to IModelCustom
+```
+
+Ich hatte das Laden des Radiothermalgenerators wörtlich aus dem Original übernommen. Dort
+steht es als einziges Modell ohne `asVBO()`, und das ist dort auch richtig: in 1.7.10
+implementiert die Laderklasse `IModelCustom` selbst. In diesem Port tut sie das nicht — erst
+`asVBO()` liefert ein `IModelCustom`, `getRenderer()` einen `IObjRenderer`. Die
+Unterscheidung, die ich treu übertragen wollte, gibt es hier also gar nicht. Behoben mit
+`.asVBO()` und einem Kommentar, der genau das festhält.
+
+**Interessanter ist, warum alle neunzehn Tore grün waren.** `syntax-check.sh` führt
+`incompatible types` in seiner Ausnahmeliste — pauschal, weil solche Meldungen normalerweise
+Folge der fehlenden Minecraft-API sind. Mein erster Reparaturversuch war deshalb, die Regel
+zu verfeinern: melden, wenn **beide** genannten Typen aus `src/main/java` stammen, denn dann
+kann die fehlende Fremd-API nichts damit zu tun haben.
+
+Das habe ich gemessen, und es half nicht: mit dem Fehler im Baum erzeugt der Offline-javac zu
+dieser Zeile **überhaupt keine Meldung**, und im ganzen Baum steht `cannot be converted to`
+null mal. Sobald ein Typ wegen der fehlenden API fehlerhaft ist, unterdrückt javac die
+Folgeprüfungen — dieselbe Mechanik, an der in Runde 121 schon die doppelt erklärten
+Konstanten vorbeikamen. Eine Regel, die in beiden Richtungen 0 misst, darf nicht ausgeliefert
+werden; der Versuch ist wieder raus.
+
+Stattdessen, wie damals, ein **Textdurchgang**: für jedes Feld in `ResourceManager` vom Typ
+`IModelCustom` oder `IObjRenderer` muss eine Zuweisung aus `new HFRWavefrontObject(...)` auf
+`.asVBO()` beziehungsweise `.getRenderer()` enden.
+
+**Nachgemessen:** 0 Befunde im sauberen Baum; setzt man das `.asVBO()` hinter `radgen` wieder
+ab, meldet das Tor genau diese Zeile und endet mit 1 — Exit-Code direkt geprüft.

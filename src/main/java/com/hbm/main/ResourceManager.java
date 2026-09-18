@@ -817,8 +817,10 @@ public class ResourceManager {
         annihilator = new HFRWavefrontObject("models/obj/machines/annihilator.obj").asVBO();
         exposure_chamber = new HFRWavefrontObject("models/obj/machines/exposure_chamber.obj").asVBO();
         mining_laser = new HFRWavefrontObject("models/obj/machines/mining_laser.obj").asVBO();
-        // Das Original laedt den Radiothermalgenerator ohne asVBO -- hier genauso belassen.
-        radgen = new HFRWavefrontObject("models/obj/machines/radgen.obj");
+        /* Das Original laedt den Radiothermalgenerator als einziges Modell ohne asVBO -- das
+         * geht hier nicht: dort ist der Lader selbst ein IModelCustom, in diesem Port liefert
+         * erst asVBO() eines. Die Unterscheidung existiert also gar nicht. */
+        radgen = new HFRWavefrontObject("models/obj/machines/radgen.obj").asVBO();
 
         tom_main = new HFRWavefrontObject("models/obj/weapons/tom_main.obj").asVBO();
         tom_flame = new HFRWavefrontObject("models/obj/weapons/tom_flame.obj").asVBO();

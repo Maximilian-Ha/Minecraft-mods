@@ -129,6 +129,31 @@ RESOLUTION='package [A-Za-z0-9_.]+ does not exist|cannot find symbol|cannot acce
 grep -E '^[^ ].*:[0-9]+: error:|^error:' "$RAW" | grep -Ev "$RESOLUTION" \
   | sed -E 's/^([^ ]+):[0-9]+: error:/\1: error:/' | sort -u > "$OUT/flagged.txt" || true
 
+# ---------------------------------------------------------------------------
+# Durchgang 3: Modelle im ResourceManager, die keinen Darstellertyp liefern.
+#
+# WARUM DAS EIN EIGENER, TEXTUELLER DURCHGANG IST
+# In Runde 162 ging
+#   radgen = new HFRWavefrontObject("models/obj/machines/radgen.obj");
+# in die CI. Der Lader ist in diesem Port KEIN IModelCustom -- erst asVBO() liefert eines,
+# getRenderer() liefert einen IObjRenderer. Im Original implementiert die Laderklasse das
+# IModelCustom selbst, darum steht die Zeile dort ohne Zusatz und liest sich richtig.
+#
+# javac kann das hier nicht melden -- nachgemessen: mit dem Fehler im Baum erzeugt der
+# Offline-Lauf zu dieser Zeile KEINE Meldung, und im ganzen Baum steht null mal
+# "cannot be converted to". Sobald ein Typ wegen der fehlenden Fremd-API fehlerhaft ist,
+# unterdrueckt javac die Folgepruefungen -- dieselbe Mechanik wie bei den doppelt
+# erklaerten Konstanten aus Runde 121. Also wieder ein Textdurchgang.
+#
+# Geprueft wird nur ResourceManager.java: dort werden alle Modelle geladen.
+#
+# NACHGEMESSEN (Runde 162): 0 Befunde im sauberen Baum; setzt man das .asVBO() hinter
+# radgen wieder ab, meldet das Tor genau diese Zeile und endet mit 1.
+MISMATCH="$OUT/mismatch.txt"
+python3 tools/rm-model-check.py > "$MISMATCH" 2>/dev/null || true
+MISCOUNT=$(grep -c . "$MISMATCH" || true)
+echo "  Modelle ohne Darstellertyp  : $MISCOUNT"
+
 TOTAL=$(grep -cE ': error:|^error:' "$RAW" || true)
 FLAGGED=$(grep -c . "$OUT/flagged.txt" || true)
 
@@ -170,6 +195,14 @@ if [ "$NEW" -gt 0 ]; then
   echo
   echo "Wenn eine Meldung nachweislich nur an der fehlenden API liegt, mit"
   echo "Begruendung in $BASELINE eintragen."
+  exit 1
+fi
+
+if [ "$MISCOUNT" -gt 0 ]; then
+  echo
+  echo "MODELLE OHNE DARSTELLERTYP -- der Lader ist selbst kein IModelCustom,"
+  echo "erst asVBO() bzw. getRenderer() liefert einen (javac meldet das offline nicht):"
+  sed 's/^/  /' "$MISMATCH"
   exit 1
 fi
 
