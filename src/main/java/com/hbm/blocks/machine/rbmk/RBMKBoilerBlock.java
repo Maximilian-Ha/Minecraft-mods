@@ -20,6 +20,10 @@ import javax.annotation.Nullable;
  */
 public class RBMKBoilerBlock extends RBMKBaseBlock {
 
+    /* Im Original eine RBMKPipedBase: ohne Deckel sitzen oben vier Rohrstutzen, mit Deckel
+     * stattdessen die Platte. Beides schliesst sich aus. */
+    @Override public boolean hasPipes() { return true; }
+
     public RBMKBoilerBlock(Properties properties) {
         super(properties);
     }

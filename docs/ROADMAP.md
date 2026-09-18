@@ -4111,3 +4111,77 @@ Auffällig ist, dass der Fenstertitel „Display 1: none" genauso weich ist — 
 Minecraft selbst, nicht unsere Textur. Das spricht dafür, dass das Bild vergrößert wurde und
 nicht das Spiel unscharf zeichnet. Falls es im Spiel wirklich weich aussieht, wäre es ein
 eigener Fund; dann bitte noch einmal melden.
+
+## Runde 165: die RBMK-Säulen — Rohrstutzen und Deckelplatte
+
+Zwei Meldungen, eine Wurzel:
+
+> *„Die automatic control rods sind teilweise schwarz und teilweise oben einfach flach"*
+> *„die Abdeckplatten für den Reaktor werden nicht oben drauf platziert sondern ersetzen nur die obere Textur"*
+
+Beide stimmen, und beide kommen daher, dass das Original die RBMK-Säulen **nicht** mit
+gewöhnlichen Würfelmodellen zeichnet, sondern mit drei eigenen Blockzeichnern
+(`RenderRBMKRod`, `RenderRBMKControl`, `RenderRBMKReflector`). Die setzen auf den **obersten**
+Block einer Säule etwas in den Blockraum **darüber** — jenseits des eigenen Würfels:
+
+```java
+if(!hasLid) {                                     // Rohrsäule ohne Deckel
+    renderer.setRenderBounds(0.0625, 0, 0.0625, 0.4375, 0.125, 0.4375);
+    renderer.renderStandardBlock(block, x, y + 1, z);   // viermal, in den vier Ecken
+}
+```
+
+```java
+if(lid != RBMKBase.LID_NONE) {                    // mit Deckel
+    renderer.setRenderBounds(0, 0, 0, 1, 0.25, 1);
+    renderer.renderStandardBlock(block, x, y + 1, z);
+}
+```
+
+Also: **vier Stutzen zu je 6×2×6 in den Ecken**, oder **eine Platte über die volle Fläche,
+vier Pixel hoch** — beides einen Block höher als die Säule selbst, und beides schließt
+einander aus.
+
+Der Port hatte weder das eine noch das andere. Oben blieb eine glatte Fläche (daher „einfach
+flach"; das Schwarze ist das nackte `_top`-Bild ohne die Aufbauten drumherum), und der Deckel
+war eine Umtexturierung der obersten Säulenscheibe statt einer Platte darüber.
+
+### Was jetzt da ist
+
+In 1.21 braucht das keinen eigenen Blockzeichner: ein Blockmodell darf über seinen Würfel
+hinausragen. Die Modelle sind entsprechend neu gebaut — `rbmkPipes` für die Stutzen,
+`rbmkLid` für die Platte, beide über dem Würfel bei y = 16.
+
+Damit ein Modell überhaupt weiß, dass es oben sitzt, hat `RBMKBaseBlock` eine neue Eigenschaft
+**`TOP`** bekommen. Im Original entscheidet das die Metadaten-Spanne (`meta >= 6 && meta < 12`)
+zur Zeichenzeit; in 1.21 muss es am Blockzustand hängen, weil die Modelle datengetrieben sind.
+Gesetzt wird sie beim Bauen der Säule — und zusätzlich in `updateShape`, damit **Säulen aus
+bestehenden Spielständen sich selbst richten**, sobald sich über ihnen etwas rührt, statt neu
+gebaut werden zu müssen.
+
+Dazu zwei Abfragen, die die Klassenhierarchie des Originals abbilden:
+
+- **`hasPipes()`** — die vier `RBMKPipedBase`-Klassen: Steuerstab, selbsttätiger Steuerstab,
+  Boiler, Heizer. Das sind sieben Blöcke.
+- **`hasOwnLid()`** — die fünf Steuerstab-Säulen. Sie nehmen keinen Deckel an und zeigen nie
+  eine Deckeltextur; sie tragen also immer ihre Stutzen. Das hatte der Port schon richtig.
+
+Die **vierzehn fehlenden `_pipe_*`-Texturen** sind aus dem Original übernommen, alle vierzehn
+byteweise identisch mit der CE-Abspaltung.
+
+### Das zweiundzwanzigste Tor: `tools/rbmk-check.sh`
+
+`tools/rbmk-list.txt` nennt die sieben Rohrsäulen des Originals. Das Tor prüft, dass jede im
+Port `hasPipes()` meldet, dass keine es meldet, die es im Original nicht ist, und dass jede
+ihre beiden Rohrbilder hat.
+
+**Nachgemessen:** 7 Rohrsäulen, 0 Befunde. Nimmt man `hasPipes()` aus `RBMKHeaterBlock`
+heraus, meldet das Tor genau `rbmk_heater` und endet mit 1.
+
+### Was hier noch offen bleibt
+
+Die Brennstoffkanäle bekommen im Original zusätzlich eine OBJ-Auflage (`rbmk_element`, Teile
+„Cap" und „Inner", gezeichnet über `ObjUtil.renderPartWithIcon`). Die fehlt weiterhin, und mit
+ihr elf weitere Texturen (`rbmk_element*`, `rbmk_control_base`, die beiden
+`rbmk_control_reasim*_bottom`). Das ist ein eigener Schritt — er braucht den OBJ-Pfad im
+Blockmodell, nicht nur ein paar Kästchen mehr.

@@ -109,6 +109,11 @@ jobs:
           chmod +x ./tools/inventory-check.sh
           ./tools/inventory-check.sh
 
+      - name: Check RBMK columns
+        run: |
+          chmod +x ./tools/rbmk-check.sh
+          ./tools/rbmk-check.sh
+
       # Die Datengenerierung laeuft VOR dem Bau, und zwar aus zwei Gruenden:
       #
       # 1. Sie ist der beste Ersatz fuer einen Client-Start, den CI leisten kann. Sie faehrt den

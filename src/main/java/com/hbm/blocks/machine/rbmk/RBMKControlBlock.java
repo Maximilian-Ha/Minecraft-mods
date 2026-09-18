@@ -22,6 +22,12 @@ import javax.annotation.Nullable;
  */
 public class RBMKControlBlock extends RBMKBaseBlock {
 
+    /* Im Original ist der Steuerstab eine RBMKPipedBase -- vier Rohrstutzen oben -- und steht
+     * zugleich in RBMKBase.hasOwnLid(): er nimmt keinen Deckel an und zeigt nie eine
+     * Deckeltextur. Das gilt ueber RBMKControlAutoBlock auch fuer die selbsttaetigen Staebe. */
+    @Override public boolean hasPipes() { return true; }
+    @Override public boolean hasOwnLid() { return true; }
+
     public static final MapCodec<RBMKControlBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.BOOL.fieldOf("moderated").forGetter(block -> block.moderated),
             Codec.BOOL.optionalFieldOf("powered", false).forGetter(block -> block.powered),

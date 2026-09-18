@@ -1,0 +1,20 @@
+# RBMK-Saeulen mit Rohrstutzen, aus dem Original uebernommen.
+#
+# WOZU: das Original zeichnet die Saeulen mit eigenen Blockzeichnern. Auf dem OBERSTEN Block
+# sitzen -- im Blockraum darueber, also jenseits des eigenen Wuerfels -- entweder vier
+# Rohrstutzen oder die Deckelplatte. Wer nur einen gewoehnlichen Wuerfel baut, bekommt oben
+# eine glatte Flaeche; genau das wurde gemeldet.
+#
+# ERZEUGT AUS DEM ORIGINAL (Fernzweig hbm-upstream/master noetig, in der CI nicht da --
+# darum liegt die Liste hier als Datei):
+#   git grep -l 'extends RBMKPipedBase' hbm-upstream/master -- src/main/java
+# dazu die Zuordnung Block -> Klasse aus ModBlocks.java.
+#
+# Je Zeile: der Blockname im Original.
+rbmk_boiler
+rbmk_control
+rbmk_control_auto
+rbmk_control_mod
+rbmk_control_reasim
+rbmk_control_reasim_auto
+rbmk_heater

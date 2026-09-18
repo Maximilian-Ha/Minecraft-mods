@@ -16,6 +16,10 @@ import javax.annotation.Nullable;
 /** Portiert aus 1.7.10: com.hbm.blocks.machine.rbmk.RBMKHeater. Die Waermetauschersaeule. */
 public class RBMKHeaterBlock extends RBMKBaseBlock {
 
+    /* Im Original eine RBMKPipedBase: ohne Deckel sitzen oben vier Rohrstutzen, mit Deckel
+     * stattdessen die Platte. Beides schliesst sich aus. */
+    @Override public boolean hasPipes() { return true; }
+
     public RBMKHeaterBlock(Properties properties) {
         super(properties);
     }

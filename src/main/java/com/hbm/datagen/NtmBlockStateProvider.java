@@ -905,24 +905,106 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.simpleBlockWithItem(NtmBlocks.RBMK_DEBRIS_DIGAMMA.get(), this.models().cubeAll(this.name(NtmBlocks.RBMK_DEBRIS_DIGAMMA.get()), modLoc("block/rbmk_debris_digamma")));
     }
 
+    /**
+     * Die Modelle einer RBMK-Saeule.
+     *
+     * Das Original zeichnet die Saeulen nicht mit gewoehnlichen Wuerfeln, sondern mit eigenen
+     * Blockzeichnern (RenderRBMKRod, RenderRBMKControl, RenderRBMKReflector). Auf den OBERSTEN
+     * Block der Saeule setzen die -- im Blockraum DARUEBER, also jenseits des eigenen Wuerfels:
+     *
+     *   ohne Deckel, Rohrsaeule : vier Stutzen, je 6x2x6, in den Ecken mit einem Pixel Rand
+     *                             (setRenderBounds(0.0625, 0, 0.0625, 0.4375, 0.125, 0.4375) usw.)
+     *   mit Deckel              : eine Platte ueber die volle Flaeche, vier Pixel hoch
+     *                             (setRenderBounds(0, 0, 0, 1, 0.25, 1))
+     *
+     * Beides schliesst sich aus; Steuerstaebe haben einen eingebauten Deckel und zeigen immer
+     * die Stutzen. In 1.21 braucht es dafuer keinen eigenen Zeichner: ein Blockmodell darf ueber
+     * seinen Wuerfel hinausragen. Der Deckel wird also NICHT mehr als Umtexturierung der
+     * Oberseite gebaut, wie es die erste Fassung tat -- er sitzt jetzt da, wo er hingehoert.
+     */
     private void rbmkColumn(Block block, String texture, boolean hasLids) {
 
         String name = this.name(block);
+        boolean pipes = block instanceof RBMKBaseBlock rbmk && rbmk.hasPipes();
 
         ModelFile plain = this.models().cubeBottomTop(name, modLoc("block/" + texture + "_side"), modLoc("block/" + texture + "_top"), modLoc("block/" + texture + "_top"));
-        ModelFile cover = hasLids ? this.models().cubeBottomTop(name + "_cover", modLoc("block/" + texture + "_cover_side"), modLoc("block/" + texture + "_cover_top"), modLoc("block/" + texture + "_cover_top")) : plain;
-        ModelFile glass = hasLids ? this.models().cubeBottomTop(name + "_glass", modLoc("block/" + texture + "_glass_side"), modLoc("block/" + texture + "_glass_top"), modLoc("block/" + texture + "_glass_top")) : plain;
+        ModelFile piped = pipes ? this.rbmkPipes(name, texture) : plain;
+        ModelFile cover = hasLids ? this.rbmkLid(name + "_cover", texture, texture + "_cover") : piped;
+        ModelFile glass = hasLids ? this.rbmkLid(name + "_glass", texture, texture + "_glass") : piped;
 
         this.getVariantBuilder(block).forAllStatesExcept(state -> {
-            ModelFile model = switch(state.getValue(RBMKBaseBlock.LID)) {
-                case CONCRETE -> cover;
-                case GLASS -> glass;
-                default -> plain;
-            };
+            ModelFile model = plain;
+            if(state.getValue(RBMKBaseBlock.TOP)) {
+                model = switch(state.getValue(RBMKBaseBlock.LID)) {
+                    case CONCRETE -> cover;
+                    case GLASS -> glass;
+                    default -> piped;
+                };
+            }
             return ConfiguredModel.builder().modelFile(model).build();
         }, DummyableBlock.FACING, DummyableBlock.TYPE);
 
         this.simpleBlockItem(block, plain);
+    }
+
+    /** Saeulenwuerfel plus die vier Rohrstutzen darueber. */
+    private ModelFile rbmkPipes(String name, String texture) {
+        BlockModelBuilder model = this.models().getBuilder(name + "_pipes")
+                .parent(new ModelFile.UncheckedModelFile("block/block"))
+                .texture("side", modLoc("block/" + texture + "_side"))
+                .texture("top", modLoc("block/" + texture + "_top"))
+                .texture("pipe_side", modLoc("block/" + texture + "_pipe_side"))
+                .texture("pipe_top", modLoc("block/" + texture + "_pipe_top"))
+                .texture("particle", modLoc("block/" + texture + "_side"));
+        this.rbmkBody(model);
+        // Vier Stutzen, 6x2x6, in den Ecken mit einem Pixel Rand -- Masse aus dem Original.
+        for(int[] ecke : new int[][] { {1, 1}, {1, 9}, {9, 9}, {9, 1} }) {
+            model.element()
+                    .from(ecke[0], 16, ecke[1]).to(ecke[0] + 6, 18, ecke[1] + 6)
+                    .face(Direction.UP).texture("#pipe_top").end()
+                    .face(Direction.DOWN).texture("#pipe_top").end()
+                    .face(Direction.NORTH).texture("#pipe_side").end()
+                    .face(Direction.SOUTH).texture("#pipe_side").end()
+                    .face(Direction.WEST).texture("#pipe_side").end()
+                    .face(Direction.EAST).texture("#pipe_side").end()
+                    .end();
+        }
+        return model;
+    }
+
+    /** Saeulenwuerfel plus die Deckelplatte darueber, vier Pixel hoch. */
+    private ModelFile rbmkLid(String name, String texture, String lidTexture) {
+        BlockModelBuilder model = this.models().getBuilder(name)
+                .parent(new ModelFile.UncheckedModelFile("block/block"))
+                .texture("side", modLoc("block/" + texture + "_side"))
+                .texture("top", modLoc("block/" + texture + "_top"))
+                .texture("lid_side", modLoc("block/" + lidTexture + "_side"))
+                .texture("lid_top", modLoc("block/" + lidTexture + "_top"))
+                .texture("particle", modLoc("block/" + texture + "_side"));
+        this.rbmkBody(model);
+        model.element()
+                .from(0, 16, 0).to(16, 20, 16)
+                .face(Direction.UP).texture("#lid_top").end()
+                .face(Direction.DOWN).texture("#lid_top").end()
+                .face(Direction.NORTH).texture("#lid_side").end()
+                .face(Direction.SOUTH).texture("#lid_side").end()
+                .face(Direction.WEST).texture("#lid_side").end()
+                .face(Direction.EAST).texture("#lid_side").end()
+                .end();
+        return model;
+    }
+
+    /** Der Saeulenwuerfel selbst: Seiten aus _side, Deckel und Boden aus _top. */
+    private void rbmkBody(BlockModelBuilder model) {
+        model.element()
+                .from(0, 0, 0).to(16, 16, 16)
+                .face(Direction.UP).texture("#top").cullface(Direction.UP).end()
+                .face(Direction.DOWN).texture("#top").cullface(Direction.DOWN).end()
+                .face(Direction.NORTH).texture("#side").cullface(Direction.NORTH).end()
+                .face(Direction.SOUTH).texture("#side").cullface(Direction.SOUTH).end()
+                .face(Direction.WEST).texture("#side").cullface(Direction.WEST).end()
+                .face(Direction.EAST).texture("#side").cullface(Direction.EAST).end()
+                .end();
     }
 
     /** Die vier Modelle der Blankotafel, eins je Blickrichtung. */

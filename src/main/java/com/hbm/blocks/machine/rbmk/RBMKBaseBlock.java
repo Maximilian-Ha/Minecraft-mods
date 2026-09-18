@@ -28,7 +28,9 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
@@ -51,17 +53,27 @@ public abstract class RBMKBaseBlock extends DummyableBlock implements IToolable,
     /** Der Deckel der Saeule. Liegt auf allen Bloecken der Saeule, damit die Textur durchgehend passt. */
     public static final EnumProperty<RBMKLid> LID = EnumProperty.create("lid", RBMKLid.class);
 
+    /**
+     * Ist dieser Block das obere Ende seiner Saeule?
+     *
+     * Nur dort sitzen die Aufbauten: die vier Rohrstutzen der Rohrsaeulen und die Deckelplatte.
+     * Im Original entscheidet das die Metadaten-Spanne (meta >= 6 && meta < 12) zur Zeichenzeit;
+     * in 1.21 muss es am Blockzustand haengen, weil die Modelle datengetrieben sind.
+     */
+    public static final BooleanProperty TOP = BooleanProperty.create("top");
+
     protected RBMKBaseBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(TYPE, DummyBlockType.CORE)
-                .setValue(LID, RBMKLid.NONE));
+                .setValue(LID, RBMKLid.NONE)
+                .setValue(TOP, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, TYPE, LID);
+        builder.add(FACING, TYPE, LID, TOP);
     }
 
     @Override
@@ -89,7 +101,50 @@ public abstract class RBMKBaseBlock extends DummyableBlock implements IToolable,
 
     @Override
     protected void fillSpace(Level level, BlockPos pos, Direction dir, int offset) {
-        MultiblockHandlerXR.fillSpace(level, pos.relative(dir, offset), this.getDimensions(level), this, dir);
+        BlockPos core = pos.relative(dir, offset);
+        MultiblockHandlerXR.fillSpace(level, core, this.getDimensions(level), this, dir);
+        this.markTop(level, core);
+    }
+
+    /** Setzt TOP auf den obersten Block der Saeule. */
+    private void markTop(Level level, BlockPos corePos) {
+        BlockPos top = corePos.above(RBMKDials.getColumnHeight(level));
+        BlockState state = level.getBlockState(top);
+        if(state.getBlock() != this) return;
+        safeRem = true;
+        level.setBlock(top, state.setValue(TOP, true), 3);
+        safeRem = false;
+    }
+
+    /**
+     * Saeulen aus aelteren Spielstaenden tragen TOP noch nicht -- sie haben die Eigenschaft beim
+     * Laden auf ihrem Standardwert bekommen. Sobald sich oben etwas ruehrt, richtet sich der
+     * Block hier selbst, ohne dass die Saeule neu gebaut werden muesste.
+     */
+    @Override
+    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
+                                     LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+        if(direction == Direction.UP) {
+            boolean top = neighborState.getBlock() != this;
+            if(state.getValue(TOP) != top) state = state.setValue(TOP, top);
+        }
+        return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
+    }
+
+    /**
+     * Traegt diese Saeule oben vier Rohrstutzen? Im Original sind das die Klassen unter
+     * RBMKPipedBase: Steuerstaebe, Boiler und Heizer.
+     */
+    public boolean hasPipes() {
+        return false;
+    }
+
+    /**
+     * Saeulen mit eingebautem Deckel nehmen keinen Deckel an und zeigen nie eine Deckeltextur.
+     * Im Original sind das die fuenf Steuerstab-Saeulen (RBMKBase.hasOwnLid).
+     */
+    public boolean hasOwnLid() {
+        return false;
     }
 
     @Override
