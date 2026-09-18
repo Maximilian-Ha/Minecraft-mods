@@ -201,3 +201,33 @@ Das Original rechnet stattdessen einen Maßstab aus: die breiteste Zeile und die
 Zeilen gegen die Fläche, das Kleinere von beiden gewinnt. Dieselbe Rechnung steht jetzt hier
 — mit der Folge, dass die Schrift auf einem großen Schirm größer wird statt bloß mehr Platz
 zu haben.
+
+## Den Schirm zeichnet der Renderer, nicht die Blocktextur
+
+Die Schauseiten von Tafel und Erweiterung (`*_face.png`) sind ein zwei Pixel breiter
+dunkelgrüner Rahmen um eine hellgrüne Füllung. Ließe man es dabei, sähe eine Tafel mit
+Erweiterungen aus wie eine Mauer aus einzeln eingerahmten Kästen — und genau so sah es im
+Spiel aus, solange dieser Port den Schirm der Blocktextur überließ.
+
+Das Original legt über jede Blockfläche des Schirms ein Viereck aus `panel_screen.png`. Das
+ist eine Kachelkarte aus vier mal vier Feldern: jedes Feld trägt an null bis vier Kanten
+einen ein Pixel breiten Rahmen. Jeder Block bekommt das Feld, dessen Rahmen zu seiner Lage
+im Schirm passt (`TileEntityInfoPanel#findTexture`), innen liegen die Felder rahmenlos
+aneinander. Erst dadurch wird aus mehreren Blöcken ein Bildschirm.
+
+Dasselbe macht jetzt `InfoPanelRenderer#drawScreen`. Die Kachelnummern des Originals sind
+übernommen: 1 rechter Rand, 2 linker, 4 oberer, 8 unterer; die waagerechten Ränder wählen
+die Spalte der Karte, die senkrechten die Zeile. Ohne Erweiterung ergibt das die 15, also
+das Feld mit allen vier Rändern.
+
+Das Viereck bekommt die Hintergrundfarbe der Tafel (die weißen Felder der Kachelkarte nehmen
+sie voll an, die grauen Ränder als dunklere Abstufung) und, solange Strom da ist, volles
+Licht. Das Original schaltete an dieser Stelle die Beleuchtung ab (`GlStateManager
+.disableLighting()`); auf 1.21.1 gibt es keinen festen Beleuchtungsschalter mehr, wohl aber
+`LightTexture.FULL_BRIGHT` — das Ergebnis ist dasselbe: die Tafel ist auch nachts lesbar.
+Ohne Strom bekommt sie die Helligkeit ihres Platzes, ist also eine Fläche wie jede andere.
+
+Gezeichnet wird über `RenderType.text(...)`, denn dessen Format
+(`POSITION_COLOR_TEX_LIGHTMAP`) ist genau das, was hier gebraucht wird: eingefärbte Textur
+mit Lichtkarte, aber ohne die richtungsabhängige Schattierung der Entity-Typen — sonst wäre
+ein Schirm an der Wand dunkler als einer an der Decke.

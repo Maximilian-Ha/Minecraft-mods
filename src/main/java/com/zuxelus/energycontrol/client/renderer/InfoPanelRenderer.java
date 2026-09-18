@@ -1,13 +1,17 @@
 package com.zuxelus.energycontrol.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import com.zuxelus.energycontrol.EnergyControl;
 import com.zuxelus.energycontrol.api.PanelString;
 import com.zuxelus.energycontrol.blockentity.InfoPanelBlockEntity;
 import com.zuxelus.energycontrol.blocks.InfoPanelBlock;
 import com.zuxelus.energycontrol.blocks.PanelThickness;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
@@ -15,24 +19,40 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
+import org.joml.Matrix4f;
 
 import java.util.List;
 
 /**
  * Portiert aus 1.12.2: com.zuxelus.energycontrol.renderers.TileEntityInfoPanelRenderer.
  *
- * Zeichnet die Zeilen der Karte auf die Schauseite der Tafel -- und, wenn Erweiterungen
- * angebaut sind, ueber die ganze Flaeche. Das Original zeichnete zusaetzlich den farbigen
- * Hintergrund; hier ist der Hintergrund die Blocktextur selbst, der Renderer kuemmert sich
- * nur um die Schrift.
+ * Zeichnet den Schirm der Tafel -- und, wenn Erweiterungen angebaut sind, ueber die ganze
+ * Flaeche, so dass aus mehreren Bloecken ein Bildschirm wird.
  *
- * Die Schrift wird auf die Flaeche **eingepasst**, wie im Original: die breiteste Zeile und
- * die Zahl der Zeilen ergeben einen Massstab, und der gilt fuer alle Zeilen. Ohne das steht
- * die Schrift in fester Groesse da und laeuft bei langen Zahlen ueber den Rand hinaus --
- * genau das war der Fehler der ersten Fassung dieses Ports.
+ * Zwei Dinge macht dieser Renderer, beides wie das Original:
+ *
+ * 1. Er legt ueber jede Blockflaeche des Schirms ein Viereck aus {@code panel_screen.png}.
+ *    Das ist eine Kachelkarte aus vier mal vier Feldern: jedes Feld hat an null bis vier
+ *    Kanten einen Rahmen, und jeder Block bekommt das Feld, dessen Rahmen zu seiner Lage
+ *    im Schirm passt. Innen liegen die Felder rahmenlos aneinander -- erst dadurch wird
+ *    aus der Tafel samt Erweiterungen eine durchgehende Flaeche statt einer Mauer aus
+ *    eingerahmten Kaesten. Das Viereck bekommt die Hintergrundfarbe der Tafel und, solange
+ *    Strom da ist, volles Licht; genau so schaltete das Original hier die Beleuchtung ab.
+ * 2. Er schreibt die Zeilen der Karte darauf, **eingepasst** in die Flaeche: die breiteste
+ *    Zeile und die Zahl der Zeilen ergeben einen Massstab, und der gilt fuer alle Zeilen.
  */
 public class InfoPanelRenderer implements BlockEntityRenderer<InfoPanelBlockEntity> {
+
+    /** Die Kachelkarte des Schirms: vier mal vier Felder zu je einem Viertel. */
+    private static final ResourceLocation SCREEN = EnergyControl.loc("textures/block/info_panel_panel_screen.png");
+
+    /** Welche Kante eines Feldes einen Rahmen traegt -- die Nummern des Originals. */
+    private static final int BORDER_RIGHT = 1;
+    private static final int BORDER_LEFT = 2;
+    private static final int BORDER_TOP = 4;
+    private static final int BORDER_BOTTOM = 8;
 
     /** Rand ringsum, in Blockeinheiten -- ein Sechzehntel je Seite, wie im Original. */
     private static final float MARGIN = 2F / 16F;
@@ -59,24 +79,28 @@ public class InfoPanelRenderer implements BlockEntityRenderer<InfoPanelBlockEnti
         return be.hasLargeScreen();
     }
 
+    /**
+     * Eine Tafel soll man auch von weitem ablesen koennen -- das Original erlaubte
+     * 256 Bloecke, die ueblichen 64 sind fuer eine Anzeigetafel zu wenig.
+     */
+    @Override
+    public int getViewDistance() {
+        return 256;
+    }
+
     @Override
     public void render(InfoPanelBlockEntity be, float partialTick, PoseStack pose, MultiBufferSource buffers, int light, int overlay) {
-        // Ohne Strom bleibt der Schirm leer, wie im Original.
-        if(!be.isPowered()) return;
-
-        List<PanelString> lines = be.getPanelStringList(be.getShowLabels());
-        if(lines == null || lines.isEmpty()) return;
-
         BlockState state = be.getBlockState();
         Direction facing = state.getValue(InfoPanelBlock.FACING);
         // Die fortgeschrittene Tafel ist duenner als ein voller Block; ihre Schauseite
-        // liegt entsprechend weiter hinten, und die Schrift gehoert genau davor.
+        // liegt entsprechend weiter hinten, und der Schirm gehoert genau davor.
         float depth = state.hasProperty(PanelThickness.THICKNESS)
                 ? -0.5F + state.getValue(PanelThickness.THICKNESS) / 16F
                 : 0.5F;
 
-        // Die Flaeche in Blockeinheiten des oertlichen Achsenkreuzes: wo ihre Mitte
-        // gegenueber dieser Tafel liegt und wie gross sie ist.
+        // Die Flaeche in Blockeinheiten des oertlichen Achsenkreuzes: wo ihre Raender
+        // gegenueber dieser Tafel liegen. Nach alignToFace zeigt die oertliche X-Achse
+        // nach rechts und die Y-Achse nach oben, von vorn gesehen.
         BlockPos self = be.getBlockPos();
         Vec3i right = right(facing);
         Vec3i up = up(facing);
@@ -86,10 +110,76 @@ public class InfoPanelRenderer implements BlockEntityRenderer<InfoPanelBlockEnti
         int y1 = dot(be.getScreenMin(), self, up);
         int y2 = dot(be.getScreenMax(), self, up);
 
-        float centerX = (Math.min(x1, x2) + Math.max(x1, x2)) / 2F;
-        float centerY = (Math.min(y1, y2) + Math.max(y1, y2)) / 2F;
-        float displayWidth = Math.abs(x2 - x1) + 1 - MARGIN;
-        float displayHeight = Math.abs(y2 - y1) + 1 - MARGIN;
+        int xMin = Math.min(x1, x2);
+        int xMax = Math.max(x1, x2);
+        int yMin = Math.min(y1, y2);
+        int yMax = Math.max(y1, y2);
+
+        // Unter Strom leuchtet der Schirm aus sich selbst; ohne Strom ist er eine
+        // Blockflaeche wie jede andere. So hielt es auch das Original.
+        boolean powered = be.isPowered();
+        int screenLight = powered ? LightTexture.FULL_BRIGHT : light;
+
+        pose.pushPose();
+        pose.translate(0.5F, 0.5F, 0.5F);
+        alignToFace(pose, facing);
+
+        drawScreen(pose, buffers, screenLight, be.getColorBackground(), xMin, xMax, yMin, yMax, depth);
+
+        if(powered) drawLines(be, pose, buffers, screenLight, xMin, xMax, yMin, yMax, depth);
+
+        pose.popPose();
+    }
+
+    /**
+     * Legt ueber jede Blockflaeche des Schirms ein Viereck aus der Kachelkarte. Der
+     * Nullpunkt des Achsenkreuzes sitzt in der Mitte der Tafel selbst, darum laeuft die
+     * Schleife von den Raendern des Schirms aus, die gegenueber der Tafel gezaehlt sind.
+     */
+    private void drawScreen(PoseStack pose, MultiBufferSource buffers, int light, int color,
+                            int xMin, int xMax, int yMin, int yMax, float depth) {
+        VertexConsumer consumer = buffers.getBuffer(RenderType.text(SCREEN));
+        Matrix4f matrix = pose.last().pose();
+
+        float r = ((color >> 16) & 0xFF) / 255F;
+        float g = ((color >> 8) & 0xFF) / 255F;
+        float b = (color & 0xFF) / 255F;
+        // Ein Hauch vor der Blockflaeche, damit nichts flimmert.
+        float z = depth + 0.002F;
+
+        for(int x = xMin; x <= xMax; x++) {
+            for(int y = yMin; y <= yMax; y++) {
+                int tile = (x == xMin ? BORDER_LEFT : 0) | (x == xMax ? BORDER_RIGHT : 0)
+                        | (y == yMax ? BORDER_TOP : 0) | (y == yMin ? BORDER_BOTTOM : 0);
+                // Waagerechte Rahmen waehlen die Spalte, senkrechte die Zeile der Karte.
+                float u0 = (tile / 4) * 0.25F;
+                float v0 = (tile % 4) * 0.25F;
+
+                float left = x - 0.5F;
+                float rightEdge = x + 0.5F;
+                float bottom = y - 0.5F;
+                float top = y + 0.5F;
+
+                // Gegen den Uhrzeigersinn, von vorn gesehen; oben auf dem Schirm ist das
+                // kleine V der Kachel, denn Bildzeilen zaehlen von oben nach unten.
+                consumer.addVertex(matrix, left, bottom, z).setColor(r, g, b, 1F).setUv(u0, v0 + 0.25F).setLight(light);
+                consumer.addVertex(matrix, rightEdge, bottom, z).setColor(r, g, b, 1F).setUv(u0 + 0.25F, v0 + 0.25F).setLight(light);
+                consumer.addVertex(matrix, rightEdge, top, z).setColor(r, g, b, 1F).setUv(u0 + 0.25F, v0).setLight(light);
+                consumer.addVertex(matrix, left, top, z).setColor(r, g, b, 1F).setUv(u0, v0).setLight(light);
+            }
+        }
+    }
+
+    /** Die Zeilen der Karte, auf die Flaeche eingepasst. */
+    private void drawLines(InfoPanelBlockEntity be, PoseStack pose, MultiBufferSource buffers, int light,
+                           int xMin, int xMax, int yMin, int yMax, float depth) {
+        List<PanelString> lines = be.getPanelStringList(be.getShowLabels());
+        if(lines == null || lines.isEmpty()) return;
+
+        float centerX = (xMin + xMax) / 2F;
+        float centerY = (yMin + yMax) / 2F;
+        float displayWidth = xMax - xMin + 1 - MARGIN;
+        float displayHeight = yMax - yMin + 1 - MARGIN;
 
         // Massstab: die breiteste Zeile und alle Zeilen zusammen muessen hineinpassen.
         int maxWidth = TEXT_PADDING;
@@ -103,10 +193,7 @@ public class InfoPanelRenderer implements BlockEntityRenderer<InfoPanelBlockEnti
         float scale = Math.min(scaleX, scaleY);
 
         pose.pushPose();
-        pose.translate(0.5F, 0.5F, 0.5F);
-        alignToFace(pose, facing);
-        // Erst in die Mitte der Flaeche, dann nach vorn -- plus ein Hauch, damit die
-        // Schrift nicht in der Blockflaeche steckt und flimmert.
+        // Erst in die Mitte der Flaeche, dann nach vorn -- vor den Schirm, nicht hinein.
         pose.translate(centerX, centerY, depth + 0.005F);
         // Negatives Y, weil die Schriftart nach unten laeuft, die Welt aber nach oben.
         pose.scale(scale, -scale, scale);

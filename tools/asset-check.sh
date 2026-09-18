@@ -25,6 +25,14 @@ def read(path):
 state = read(os.path.join(DATAGEN, 'ECBlockStateProvider.java'))
 wanted_blocks = set(re.findall(r'block\(\s*"([^"]+)"', state))
 
+# Nicht jede Blocktextur haengt an einem Modell: den Schirm der Tafel bindet der
+# Renderer selbst, ueber EnergyControl.loc("textures/block/....png").
+for dirpath, _dirs, names in os.walk('src/main/java'):
+    for name in names:
+        if not name.endswith('.java'): continue
+        for m in re.finditer(r'loc\(\s*"textures/block/([\w/]+)\.png"\s*\)', read(os.path.join(dirpath, name))):
+            wanted_blocks.add(m.group(1))
+
 have_blocks = {f[:-4] for f in os.listdir(os.path.join(ASSETS, 'textures/block')) if f.endswith('.png')}
 
 # --- Gegenstandstexturen: jeder registrierte Gegenstand ausser Blockgegenstaenden ------
