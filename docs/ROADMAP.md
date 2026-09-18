@@ -3955,3 +3955,84 @@ Stattdessen, wie damals, ein **Textdurchgang**: für jedes Feld in `ResourceMana
 
 **Nachgemessen:** 0 Befunde im sauberen Baum; setzt man das `.asVBO()` hinter `radgen` wieder
 ab, meldet das Tor genau diese Zeile und endet mit 1 — Exit-Code direkt geprüft.
+
+## Runde 163: die zwei offenen Punkte aus Runde 162
+
+### Punkt 1: fünfzehn Darsteller standen anders herum als im Original
+
+Runde 162 hatte den Befund gemessen, aber nichts repariert. Jetzt ist er zu — mit einem Tor,
+das ihn festhält.
+
+**`tools/facing-check.sh`, das zwanzigste Tor.** `tools/facing-list.txt` nennt für jeden
+Darsteller die erwartete **Gesamtdrehung** je Blickrichtung, aus dem Original erzeugt. Das Tor
+rechnet die des Ports nach und vergleicht. Gesamtdrehung heisst: eine Y-Drehung *vor* dem
+Schalter zählt mit — manche Darsteller haben die Vordrehung des Originals in den Schalter
+hineingerechnet (`RenderRockMill`, `RenderSolarBoiler`), und das ist richtig.
+
+**Das Tor hat sich selbst einen Fehler nachgewiesen.** Seine erste Fassung las nur eine von
+drei Schreibweisen des Schalters — die mit vier ausgeschriebenen Fällen. Der Port schreibt ihn
+aber auch mit drei Fällen plus `default`, und als *Ausdruck*, der die Gradzahl liefert; der
+Schalterkopf ist mal eine Variable, mal ein Ruf (`switch(getFacing(be))`). 15 Darsteller
+wurden dadurch **stillschweigend übersprungen** — der schlimmste Fehler, den ein Torwächter
+machen kann, weil er falsche Sicherheit gibt. Nach der Erweiterung waren es 81 von 81
+vergleichbar, und darunter kam ein **fünfzehnter** Fall zum Vorschein: `RenderFusionCoupler`,
+dem der Port die 90°-Vordrehung des Originals schlicht unterschlagen hatte. Das Tor meldet
+seither jeden Schalter, den es nicht lesen kann, als eigenen Befund.
+
+Begradigt wurden damit:
+
+- **Osten und Westen vertauscht** (die Maschine stand gespiegelt): `RenderArcFurnace`,
+  `RenderBatteryREDD`, `RenderBlastFurnace`, `RenderCrucible`, `RenderExcavator`,
+  `RenderOreSlopper`, `RenderRotaryFurnace`
+- **um genau −90° verdreht**: `RenderCentrifuge`, `RenderDerrick`, `RenderNukeFleija`,
+  `RenderNukeGadget`, `RenderNukeN2`, `RenderNukePrototype`, `RenderNukeSolinium`
+- **Vordrehung fehlte**: `RenderFusionCoupler`
+
+Geändert haben sich nur Zahlen — 42 Zeilen in 14 Dateien, plus der Fusionskoppler.
+
+**Nachgemessen:** vor der Begradigung genau 15 Befunde, danach 0, 0 unlesbar. Dreht man
+`RenderCentrifuge` wieder zurück, meldet das Tor genau `RenderCentrifuge` und endet mit 1.
+
+### Punkt 2: das Zyklotron und seine vier Stecker
+
+Runde 162 musste es zurückstellen: sein Darsteller liest vier Sockel über `getPlug()`, und das
+Steckersystem gab es im Port gar nicht. Jetzt ist beides da.
+
+**Das Spielsystem.** `MachineCyclotronBlockEntity` bekommt das `plugs`-Byte samt NBT und
+Synchronisierung, dazu `setPlug`, `getPlug` und `getItemForPlug`. `MachineCyclotronBlock`
+bekommt ein `useItemOn`: hält der Spieler den passenden Gegenstand, wandert er in den Sockel
+und die Oberfläche geht **nicht** auf — so steht es im Original. Einmal gesteckt, bleibt er
+drin; ein Herausnehmen kennt auch das Original nicht.
+
+**Die drei fehlenden Stecker** sind nachgezogen — `powder_balefire` stand schon:
+
+| Gegenstand | im Original | im Port |
+| --- | --- | --- |
+| `book_of_` | `ItemBook`, öffnet eine Lesemaske | einfacher Gegenstand mit seinem Spruch |
+| `diamond_gavel` | `WeaponSpecial`, nimmt ein Drittel der Höchst-LP | eigenes `SpecialSwordItem`-Lambda, gleiche Wirkung |
+| `coin_maskman` | `ItemCustomLore`, selten | einfacher Gegenstand, Seltenheit *uncommon* |
+
+Der Schlag des Hammers braucht den Klang `weapon.whack`; er ist aus dem Original übernommen
+und als `NtmSoundEvents.WEAPON_WHACK` angemeldet. Die Lesemaske des Buchs (`GUIBook`,
+`ContainerBook`) ist **nicht** portiert — für den Sockel wird sie nicht gebraucht, und sie ist
+ein eigenes Stück Arbeit.
+
+**Der Darsteller.** `RenderCyclotron` zeichnet den Körper und je Sockel eine von zwei Texturen,
+leer oder gefüllt. Stecken alle vier, dreht sich ein Ring aus Standard-Galactic-Schrift um die
+Maschine: *plures necat crapula quam gladius*. Im Original macht das der
+`standardGalacticFontRenderer`; in 1.21 ist es dieselbe Schrift über
+`Style.withFont(minecraft:alt)` und `Font.drawInBatch`. Kein Gegenstandsdarsteller — das
+Zyklotron trägt im Inventar wie im Original ein flaches Sinnbild.
+
+### Was dabei offen bleibt, und ehrlich benannt
+
+`book_of_` und `diamond_gavel` stehen wie im Original **in keinem Kreativreiter**. Im Original
+macht das nichts: das Buch gibt es über ein verstecktes Bobmazon-Angebot, den Hammer über
+`MagicRecipes`. **Beide Bezugswege sind im Port nicht portiert** — und damit sind diese zwei
+Gegenstände im Überleben derzeit unerreichbar, und mit ihnen zwei der vier Sockel. Das
+Steckersystem selbst ist vollständig und nimmt jeden der vier Gegenstände an, woher auch immer
+er kommt. Der Hinweis steht als Warnung im Kopf von `tools/tab-check.sh`, damit die beiden
+Ausnahmen dort nicht als „alles in Ordnung" gelesen werden.
+
+Damit ist die Schuldenliste aus Runde 160 von achtzehn auf **sechs** geschrumpft; übrig sind
+nur noch die sechs Teile des Teilchenbeschleunigers.

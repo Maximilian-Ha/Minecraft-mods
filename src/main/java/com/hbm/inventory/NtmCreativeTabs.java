@@ -1823,6 +1823,7 @@ public class NtmCreativeTabs {
 
                         addMetaItems(output, NtmItems.DRINK.get());
                         output.accept(NtmItems.BOTTLE_OPENER);
+                        output.accept(NtmItems.COIN_MASKMAN);
                         addMetaItems(output, NtmItems.CANNED_CONSERVE.get());
                         addMetaItems(output, NtmItems.CAP.get());
                         output.accept(NtmItems.RING_PULL);

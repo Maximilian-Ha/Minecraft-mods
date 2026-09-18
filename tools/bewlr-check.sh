@@ -76,7 +76,6 @@ for quelle in (proxy, gunfactory):
 # UND in der Welt unsichtbar. Jede Zeile hier ist eine offene Aufgabe, keine Ausnahme.
 # ---------------------------------------------------------------------------------------
 OHNE_DARSTELLER = {
-    'MACHINE_CYCLOTRON':        'Runde 116 portiert; Darsteller braucht die noch fehlenden Stecker (siehe Runde 162)',
     'MACHINE_PA_BEAMLINE':      'Runde 133 portiert, Darsteller fehlt',
     'MACHINE_PA_DETECTOR':      'Runde 133 portiert, Darsteller fehlt',
     'MACHINE_PA_DIPOLE':        'Runde 133 portiert, Darsteller fehlt',

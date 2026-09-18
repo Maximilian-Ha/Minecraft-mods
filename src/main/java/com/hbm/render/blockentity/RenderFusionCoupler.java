@@ -25,11 +25,13 @@ public class RenderFusionCoupler extends BlockEntityRendererNT<FusionCouplerBloc
         RenderContext.translate(0.5F, 0F, 0.5F);
 
         Direction facing = be.getBlockState().getValue(DummyableBlock.FACING);
+        /* Die Werte enthalten die 90-Grad-Vordrehung, die im Original vor dem Schalter steht
+         * (glRotatef(90, 0F, 1F, 0F)); so halten es auch RenderRockMill und RenderSolarBoiler. */
         RenderContext.mulPose(Axis.YP.rotationDegrees(switch(facing) {
-            case NORTH -> 90F;
-            case WEST -> 180F;
-            case SOUTH -> 270F;
-            default -> 0F;
+            case NORTH -> 180F;
+            case WEST -> 270F;
+            case SOUTH -> 0F;
+            default -> 90F;
         }));
 
         bindTexture(ResourceManager.FUSION_COUPLER_TEX);

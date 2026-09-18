@@ -6,11 +6,15 @@ import com.hbm.blockentity.machine.MachineCyclotronBlockEntity;
 import com.hbm.blocks.DummyBlockType;
 import com.hbm.blocks.DummyableBlock;
 import com.hbm.blocks.ITooltipProvider;
+import com.hbm.registry.NtmSoundEvents;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item.TooltipContext;
 import net.minecraft.world.item.ItemStack;
@@ -65,6 +69,35 @@ public class MachineCyclotronBlock extends DummyableBlock implements ITooltipPro
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         return this.standardOpenBehavior(level, pos, player);
+    }
+
+    /**
+     * Die vier Sockel. Haelt der Spieler den passenden Gegenstand, wandert er in den Sockel und
+     * die Maske geht NICHT auf -- so steht es im Original. Einmal gesteckt, bleibt er drin.
+     */
+    @Override
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+
+        if(player.isShiftKeyDown()) return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
+
+        BlockPos corePos = this.findCore(level, pos);
+        if(corePos == null) return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
+        if(!(level.getBlockEntity(corePos) instanceof MachineCyclotronBlockEntity cyclotron)) {
+            return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
+        }
+
+        for(int i = 0; i < 4; i++) {
+            if(stack.getItem() != MachineCyclotronBlockEntity.getItemForPlug(i) || cyclotron.getPlug(i)) continue;
+
+            if(level.isClientSide) return ItemInteractionResult.SUCCESS;
+
+            stack.consume(1, player);
+            cyclotron.setPlug(i);
+            level.playSound(null, pos, NtmSoundEvents.UPGRADE_PLUG.get(), SoundSource.BLOCKS, 1.5F, 1.0F);
+            return ItemInteractionResult.CONSUME;
+        }
+
+        return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }
 
     @Override

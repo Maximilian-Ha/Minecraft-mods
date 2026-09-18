@@ -951,6 +951,11 @@ public class NtmItemModelProvider extends ItemModelProvider {
 
         // DRINK uses ICustomItemModelRegister
         this.handheldItem(NtmItems.BOTTLE_OPENER.get());
+
+        // Die vier Stecker des Zyklotrons (Runde 163); der Hammer haelt sich wie ein Werkzeug.
+        this.basicItem(NtmItems.BOOK_OF_.get());
+        this.handheldItem(NtmItems.DIAMOND_GAVEL.get());
+        this.basicItem(NtmItems.COIN_MASKMAN.get());
         this.handheldItem(NtmItems.STEEL_PICKAXE.get());
         this.handheldItem(NtmItems.STEEL_AXE.get());
         this.handheldItem(NtmItems.STEEL_SHOVEL.get());

@@ -40,9 +40,9 @@ public class RenderExcavator extends BlockEntityRendererNT<MachineExcavatorBlock
         Direction facing = be.getBlockState().getValue(DummyableBlock.FACING);
         switch(facing) {
             case SOUTH -> RenderContext.mulPose(Axis.YP.rotationDegrees(0F));
-            case WEST ->  RenderContext.mulPose(Axis.YP.rotationDegrees(90F));
+            case WEST ->  RenderContext.mulPose(Axis.YP.rotationDegrees(270F));
             case NORTH -> RenderContext.mulPose(Axis.YP.rotationDegrees(180F));
-            case EAST ->  RenderContext.mulPose(Axis.YP.rotationDegrees(270F));
+            case EAST ->  RenderContext.mulPose(Axis.YP.rotationDegrees(90F));
         }
 
         /* Der Kern liegt drei Bloecke hoch; das Modell rechnet ab dem Boden. */

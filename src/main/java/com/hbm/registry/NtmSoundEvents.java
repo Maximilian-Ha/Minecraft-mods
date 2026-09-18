@@ -57,6 +57,8 @@ public class NtmSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_IMPACT = reg("weapon.reload.impact");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SPAS_FIRE = reg("weapon.shotgun_shoot");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_WHACK = reg("weapon.foley.gun_whack");
+    /** Der Schlag des Hammers -- im Original NTMSounds.GAVEL = "hbm:weapon.whack". */
+    public static final DeferredHolder<SoundEvent, SoundEvent> WEAPON_WHACK = reg("weapon.whack");
     public static final DeferredHolder<SoundEvent, SoundEvent> PLINK_SHELL = reg("weapon.casing.shell");
     public static final DeferredHolder<SoundEvent, SoundEvent> PLINK_SMALL = reg("weapon.casing.small");
     public static final DeferredHolder<SoundEvent, SoundEvent> PLINK_MEDIUM = reg("weapon.casing.medium");

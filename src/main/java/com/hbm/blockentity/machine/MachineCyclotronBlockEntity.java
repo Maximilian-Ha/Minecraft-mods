@@ -14,6 +14,7 @@ import com.hbm.inventory.fluid.tank.FluidTank;
 import com.hbm.inventory.menus.MachineCyclotronMenu;
 import com.hbm.inventory.recipes.CyclotronRecipes;
 import com.hbm.inventory.recipes.CyclotronRecipes.Result;
+import com.hbm.items.NtmItems;
 import com.hbm.items.machine.MachineUpgradeItem;
 import com.hbm.items.machine.MachineUpgradeItem.UpgradeType;
 import com.hbm.lib.Library;
@@ -30,6 +31,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.block.state.BlockState;
@@ -88,6 +90,10 @@ public class MachineCyclotronBlockEntity extends MachineBaseBlockEntity
 
     public long power;
     public int progress;
+
+    /* Die vier Sockel als Bitmuster. Einmal gesteckt, bleibt ein Stecker drin -- das Original
+     * kennt kein Herausnehmen. Der Darsteller liest das ueber getPlug(). */
+    private byte plugs;
 
     public final FluidTank[] tanks = new FluidTank[3];
 
@@ -350,6 +356,7 @@ public class MachineCyclotronBlockEntity extends MachineBaseBlockEntity
         super.serialize(buf);
         buf.writeLong(this.power);
         buf.writeInt(this.progress);
+        buf.writeByte(this.plugs);
         for(FluidTank tank : this.tanks) tank.serialize(buf);
     }
 
@@ -358,6 +365,7 @@ public class MachineCyclotronBlockEntity extends MachineBaseBlockEntity
         super.deserialize(buf);
         this.power = buf.readLong();
         this.progress = buf.readInt();
+        this.plugs = buf.readByte();
         for(FluidTank tank : this.tanks) tank.deserialize(buf);
     }
 
@@ -367,6 +375,7 @@ public class MachineCyclotronBlockEntity extends MachineBaseBlockEntity
         for(int i = 0; i < this.tanks.length; i++) this.tanks[i].readFromNBT(tag, "t" + i);
         this.progress = tag.getInt("progress");
         this.power = tag.getLong("power");
+        this.plugs = tag.getByte("plugs");
     }
 
     @Override
@@ -375,6 +384,29 @@ public class MachineCyclotronBlockEntity extends MachineBaseBlockEntity
         for(int i = 0; i < this.tanks.length; i++) this.tanks[i].writeToNBT(tag, "t" + i);
         tag.putInt("progress", this.progress);
         tag.putLong("power", this.power);
+        tag.putByte("plugs", this.plugs);
+    }
+
+    /* --- Die vier Sockel --- */
+
+    public void setPlug(int index) {
+        this.plugs |= (byte) (1 << index);
+        this.setChanged();
+    }
+
+    public boolean getPlug(int index) {
+        return (this.plugs & (1 << index)) > 0;
+    }
+
+    /** Was in welchen Sockel gehoert. Reihenfolge wie im Original. */
+    public static Item getItemForPlug(int index) {
+        return switch(index) {
+            case 0 -> NtmItems.POWDER_BALEFIRE.get();
+            case 1 -> NtmItems.BOOK_OF_.get();
+            case 2 -> NtmItems.DIAMOND_GAVEL.get();
+            case 3 -> NtmItems.COIN_MASKMAN.get();
+            default -> null;
+        };
     }
 
     public AABB getRenderBoundingBox() {

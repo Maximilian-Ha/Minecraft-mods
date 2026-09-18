@@ -721,7 +721,9 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.particleOnlyBlock(NtmBlocks.MACHINE_DIESEL, modLoc("block/block_steel"));
         this.particleOnlyBlock(NtmBlocks.MACHINE_COMPRESSOR, modLoc("block/block_steel"));
         this.particleOnlyBlock(NtmBlocks.MACHINE_GAS_CENT, modLoc("block/block_steel"));
-        this.particleOnlyBlock(NtmBlocks.MACHINE_CYCLOTRON, modLoc("block/block_steel"));
+        /* Kein Gegenstandsdarsteller: das Original zeichnet das Zyklotron nur in der Welt und
+         * gibt ihm im Inventar ein flaches Sinnbild (cyclotron). */
+        this.particleOnlyBlockFlatItem(NtmBlocks.MACHINE_CYCLOTRON, modLoc("block/block_steel"), modLoc("block/cyclotron"));
         this.particleOnlyBlock(NtmBlocks.MACHINE_PA_SOURCE, modLoc("block/block_steel"));
         this.particleOnlyBlock(NtmBlocks.MACHINE_PA_BEAMLINE, modLoc("block/block_steel"));
         this.particleOnlyBlock(NtmBlocks.MACHINE_PA_RFC, modLoc("block/block_steel"));

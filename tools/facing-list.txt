@@ -1,0 +1,99 @@
+# Erwartete Gesamtdrehung je Blickrichtung, aus dem Original uebernommen.
+#
+# WOZU: die Ausrichtung eines Darstellers ist im Original ein Schalter ueber die
+# Metadaten (2=NORD, 3=SUED, 4=WEST, 5=OST, jeweils plus BlockDummyable.offset). Im Port
+# steht dafuer ein Schalter ueber DummyableBlock.FACING. Beide bedeuten dasselbe: das
+# Original setzt die Ausrichtung ueber i = floor(yaw*4/360 + 0.5) & 3 auf die
+# Gegenrichtung des Spielers, der Port ueber getHorizontalDirection().getOpposite().
+# Weicht der Schalter ab, steht die Maschine im Spiel verdreht oder gespiegelt.
+#
+# GEMESSEN wird die GESAMTDREHUNG: eine Y-Drehung, die vor dem Schalter steht, zaehlt
+# mit. Manche Darsteller des Ports haben die Vordrehung des Originals in den Schalter
+# hineingerechnet (RenderRockMill, RenderSolarBoiler) -- das ist richtig und faellt bei
+# einem Vergleich der Summen nicht negativ auf.
+#
+# ERZEUGT AUS DEM ORIGINAL (Fernzweig hbm-upstream/master noetig, in der CI nicht da --
+# darum liegt die Liste hier als Datei): siehe tools/facing-check.sh, Kopfkommentar.
+#
+# Je Zeile: <Darstellerklasse> NORD OST SUED WEST
+RenderAmmoPress 90 0 270 180
+RenderAnnihilator 90 0 270 180
+RenderArcFurnace 90 0 270 180
+RenderArcWelder 90 0 270 180
+RenderAshpit 180 90 0 270
+RenderAssemblyMachine 90 0 270 180
+RenderBatteryREDD 270 180 90 0
+RenderBatterySocket 90 0 270 180
+RenderBigAssTank 275 185 95 5
+RenderBlastFurnace 90 0 270 180
+RenderBreeder 90 0 270 180
+RenderCatalyticCracker 90 0 270 180
+RenderCatalyticReformer 90 0 270 180
+RenderCentrifuge 90 0 270 180
+RenderChemicalPlant 90 0 270 180
+RenderChungus 180 90 0 270
+RenderCombustionEngine 90 0 270 180
+RenderCompressor 90 0 270 180
+RenderCompressorCompact 90 0 270 180
+RenderCondenser 90 0 270 180
+RenderCrucible 90 0 270 180
+RenderCrystallizer 90 0 270 180
+RenderDerrick 180 90 0 270
+RenderExcavator 180 90 0 270
+RenderExposureChamber 90 0 270 180
+RenderFluidTank 180 90 0 270
+RenderFurnaceIron 180 90 0 270
+RenderFurnaceSteel 180 90 0 270
+RenderFusionBoiler 90 0 270 180
+RenderFusionBreeder 90 0 270 180
+RenderFusionCollector 90 0 270 180
+RenderFusionCoupler 180 90 0 270
+RenderFusionKlystron 90 0 270 180
+RenderFusionMHDT 90 0 270 180
+RenderFusionPlasmaForge 180 90 0 270
+RenderHeaterHeatex 90 0 270 180
+RenderHeatingOven 180 90 0 270
+RenderICF 90 0 270 180
+RenderLaunchPad 90 0 270 180
+RenderLaunchPadLarge 90 0 270 180
+RenderNukeFleija 180 90 0 270
+RenderNukeFstbmb 90 0 270 180
+RenderNukeGadget 0 270 180 90
+RenderNukeN2 180 90 0 270
+RenderNukePrototype 180 90 0 270
+RenderNukeSolinium 180 90 0 270
+RenderOreSlopper 0 270 180 90
+RenderPUREX 90 0 270 180
+RenderPrecAss 90 0 270 180
+RenderPumpjack 90 0 270 180
+RenderPylonLarge 90 45 0 135
+RenderPylonMedium 180 90 0 270
+RenderPyroOven 180 90 0 270
+RenderRBMKConsole 90 0 270 180
+RenderRBMKDisplay 90 0 270 180
+RenderRBMKGauge 90 0 270 180
+RenderRBMKGraph 90 0 270 180
+RenderRBMKIndicator 90 0 270 180
+RenderRBMKKeyPad 90 0 270 180
+RenderRBMKLever 90 0 270 180
+RenderRBMKNumitron 90 0 270 180
+RenderRBMKTerminal 90 0 270 180
+RenderRadGen 90 0 270 180
+RenderRadarScreen 90 0 270 180
+RenderRadiolysis 180 270 0 90
+RenderRockMill 90 0 270 180
+RenderRotaryFurnace 90 0 270 180
+RenderSawmill 180 90 0 270
+RenderSolarBoiler 90 0 270 180
+RenderSolderingStation 90 0 270 180
+RenderSolidifier 90 0 270 180
+RenderSteamEngine 270 180 90 0
+RenderStirling 180 90 0 270
+RenderSuperComputer 180 90 0 270
+RenderTapeDrive 90 0 270 180
+RenderThresher 0 270 180 90
+RenderTurbineGas 90 0 270 180
+RenderTurbofan 90 0 270 180
+RenderWoodBurner 180 90 0 270
+RenderZirnox 95 5 275 185
+RenderZirnoxDestroyed 90 0 270 180

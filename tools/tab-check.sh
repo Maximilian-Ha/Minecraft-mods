@@ -23,7 +23,12 @@
 # setCreativeTab. Kommt ein neuer Eintrag hinzu, muss er entweder in einen Reiter oder mit
 # einem Satz hierher -- geraten wird nichts.
 #
-# NACHGEMESSEN (Runde 158): 612 Bloecke, 1085 Gegenstaende, null Funde. Nimmt man eine
+# ACHTUNG bei BOOK_OF_ und DIAMOND_GAVEL (Runde 163): sie sind wie im Original in keinem
+# Reiter -- ihre Bezugswege (Bobmazon, MagicRecipes) sind aber noch nicht portiert. Sie sind
+# damit im Ueberleben derzeit UNERREICHBAR, und zwei der vier Zyklotron-Sockel mit ihnen.
+# Das ist keine Ausnahme im Sinne von "alles in Ordnung", sondern eine offene Aufgabe.
+#
+# NACHGEMESSEN (Runde 163): 612 Bloecke, 1088 Gegenstaende, null Funde. Nimmt man eine
 # beliebige accept-Zeile aus NtmCreativeTabs heraus, meldet die Pruefung genau sie.
 
 set -uo pipefail
@@ -86,6 +91,8 @@ VERBORGENE_ITEMS = {
     'WASTE_PLATE_SA326':   'Abbrandrueckstand, nur aus dem Reaktor (Original: null)',
     'WASTE_PLATE_U233':    'Abbrandrueckstand, nur aus dem Reaktor (Original: null)',
     'WASTE_PLATE_U235':    'Abbrandrueckstand, nur aus dem Reaktor (Original: null)',
+    'BOOK_OF_':            'Stecker des Zyklotrons; im Original ueber ein verstecktes Bobmazon-Angebot zu haben, nicht aus einem Reiter (Original: setCreativeTab(null))',
+    'DIAMOND_GAVEL':       'Stecker des Zyklotrons; im Original nur ueber MagicRecipes herzustellen (Original: kein setCreativeTab)',
 }
 
 fehlend_b = sorted(f for f in bloecke if f not in im_reiter_b and f not in VERBORGENE_BLOECKE)

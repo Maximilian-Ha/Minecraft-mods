@@ -31,10 +31,10 @@ public class RenderNukeGadget extends BlockEntityRendererNT<NukeGadgetBlockEntit
 
         Direction facing = be.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
         switch(facing) {
-            case WEST ->  RenderContext.mulPose(Axis.YP.rotationDegrees(0F));
-            case SOUTH -> RenderContext.mulPose(Axis.YP.rotationDegrees(90F));
-            case EAST ->  RenderContext.mulPose(Axis.YP.rotationDegrees(180));
-            case NORTH -> RenderContext.mulPose(Axis.YP.rotationDegrees(270F));
+            case WEST ->  RenderContext.mulPose(Axis.YP.rotationDegrees(90F));
+            case SOUTH -> RenderContext.mulPose(Axis.YP.rotationDegrees(180F));
+            case EAST ->  RenderContext.mulPose(Axis.YP.rotationDegrees(270));
+            case NORTH -> RenderContext.mulPose(Axis.YP.rotationDegrees(0F));
         }
 
         bindTexture(ResourceManager.NUKE_GADGET_TEX);

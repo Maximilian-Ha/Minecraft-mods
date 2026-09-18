@@ -1,6 +1,7 @@
 package com.hbm.items.tools;
 
 import com.hbm.blocks.ITooltipProvider;
+import com.hbm.registry.NtmSoundEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -30,6 +31,21 @@ public class SpecialSwordItem extends SwordItem {
             if(i == 2) target.addEffect(new MobEffectInstance(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 5 * 60 * 20, 2)));
             if(i == 3) target.addEffect(new MobEffectInstance(new MobEffectInstance(MobEffects.CONFUSION, 1 * 60 * 20, 0)));
             level.playSound(null, target.getX(), target.getY(), target.getZ(), SoundEvents.ANVIL_LAND, SoundSource.AMBIENT, 3.0F, 1.0F);
+        }
+    };
+
+    /**
+     * Der Diamanthammer aus dem Original: er nimmt dem Ziel ein Drittel seiner HOECHSTEN
+     * Lebenspunkte ab, unabhaengig von Ruestung und Schadensberechnung. Daher der Spruch im
+     * Original -- "Deals as much damage as it needs to".
+     */
+    public static final Consumer<LivingEntity> LAMBDA_GAVEL_HURT_ENEMY = (target) -> {
+        Level level = target.level;
+
+        if(!level.isClientSide) {
+            target.setHealth(target.getHealth() - target.getMaxHealth() / 3F);
+            level.playSound(null, target.getX(), target.getY(), target.getZ(),
+                    NtmSoundEvents.WEAPON_WHACK.get(), SoundSource.PLAYERS, 3.0F, 1.0F);
         }
     };
 

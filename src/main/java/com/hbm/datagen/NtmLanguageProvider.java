@@ -1624,6 +1624,11 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.DRINK, this.getName(DrinkType.KORL) + DESC, "Contains actual orange juice!");
         this.add(NtmItems.DRINK, this.getName(DrinkType.FRITZ), "Fritz Cola");
         this.add(NtmItems.DRINK, this.getName(DrinkType.FRITZ) + DESC, "moremore caffeine");
+        this.add(NtmItems.BOOK_OF_, "Book of ");
+        this.add(NtmItems.BOOK_OF_, DESC, "Edition 4, gold lined pages");
+        this.add(NtmItems.DIAMOND_GAVEL, "Diamond Gavel");
+        this.add(NtmItems.DIAMOND_GAVEL, DESC, "The joke! It makes sense now!!$$Deals as much damage as it needs to.");
+        this.add(NtmItems.COIN_MASKMAN, "Maskman Coin");
         this.add(NtmItems.BOTTLE_OPENER, "Hbm's Own Self-Made Bottle Opener");
         this.add(NtmItems.BOTTLE_OPENER, DESC, "My very own bottle opener.$Use with caution!");
 

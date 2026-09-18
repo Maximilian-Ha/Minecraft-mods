@@ -1100,6 +1100,32 @@ public class NtmItems {
             ).setHurtEnemy(SpecialSwordItem.LAMBDA_OPENER_HURT_ENEMY)
     );
 
+    /* ------------------------------------------------------------------------------------
+     * Die vier Stecker des Zyklotrons (Runde 163).
+     *
+     * Das Zyklotron hat vier Sockel; steckt in jedem der passende Gegenstand, laeuft es mit
+     * vollem Zierat. Balefire-Pulver stand schon, die drei anderen kommen hier dazu.
+     * ---------------------------------------------------------------------------------- */
+
+    /* Im Original ein ItemBook, das beim Rechtsklick eine Lesemaske oeffnet. Die Maske
+     * (GUIBook/ContainerBook) ist noch nicht portiert -- fuer den Zyklotron-Sockel wird sie
+     * nicht gebraucht. Das Buch traegt hier nur seinen Spruch. */
+    public static final DeferredItem<Item> BOOK_OF_ = ITEMS.register("book_of_", () -> new Item(new Item.Properties().stacksTo(1)));
+
+    /* "Deals as much damage as it needs to": der Hammer nimmt dem Ziel ein Drittel seiner
+     * hoechsten Lebenspunkte ab, egal wie viel das ist. */
+    public static final DeferredItem<Item> DIAMOND_GAVEL = ITEMS.register(
+            "diamond_gavel",
+            () -> new SpecialSwordItem(
+                    Tiers.DIAMOND,
+                    new Item.Properties()
+                            .stacksTo(1)
+                            .attributes(SwordItem.createAttributes(Tiers.DIAMOND, 3, -2.4F))
+            ).setHurtEnemy(SpecialSwordItem.LAMBDA_GAVEL_HURT_ENEMY)
+    );
+
+    public static final DeferredItem<Item> COIN_MASKMAN = ITEMS.register("coin_maskman", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON)));
+
     // Canned Food
     public static final DeferredItem<Item> CANNED_CONSERVE = ITEMS.register("canned_conserve", () -> new ConserveItem(new Item.Properties()));
 

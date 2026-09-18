@@ -99,6 +99,11 @@ jobs:
           chmod +x ./tools/offscreen-check.sh
           ./tools/offscreen-check.sh
 
+      - name: Check renderer facing
+        run: |
+          chmod +x ./tools/facing-check.sh
+          ./tools/facing-check.sh
+
       # Die Datengenerierung laeuft VOR dem Bau, und zwar aus zwei Gruenden:
       #
       # 1. Sie ist der beste Ersatz fuer einen Client-Start, den CI leisten kann. Sie faehrt den

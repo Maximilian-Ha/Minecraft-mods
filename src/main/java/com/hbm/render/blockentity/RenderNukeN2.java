@@ -29,10 +29,10 @@ public class RenderNukeN2 extends BlockEntityRendererNT<NukeN2BlockEntity> imple
 
         Direction facing = be.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
         switch(facing) {
-            case WEST ->  RenderContext.mulPose(Axis.YP.rotationDegrees(90F));
-            case SOUTH -> RenderContext.mulPose(Axis.YP.rotationDegrees(180F));
-            case EAST ->  RenderContext.mulPose(Axis.YP.rotationDegrees(270F));
-            case NORTH -> RenderContext.mulPose(Axis.YP.rotationDegrees(0F));
+            case WEST ->  RenderContext.mulPose(Axis.YP.rotationDegrees(180F));
+            case SOUTH -> RenderContext.mulPose(Axis.YP.rotationDegrees(270F));
+            case EAST ->  RenderContext.mulPose(Axis.YP.rotationDegrees(0F));
+            case NORTH -> RenderContext.mulPose(Axis.YP.rotationDegrees(90F));
         }
 
         bindTexture(ResourceManager.NUKE_N2_TEX);

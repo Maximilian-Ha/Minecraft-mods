@@ -125,6 +125,17 @@ public class ResourceManager {
     public static final ResourceLocation MINING_LASER_LASER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/mining_laser_laser.png");
     public static final ResourceLocation RADGEN_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/radgen.png");
 
+    // Zyklotron (Runde 163): je Sockel ein Bild fuer leer und eines fuer gesteckt
+    public static final ResourceLocation CYCLOTRON_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/cyclotron.png");
+    public static final ResourceLocation CYCLOTRON_ASHES_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/cyclotron_ashes.png");
+    public static final ResourceLocation CYCLOTRON_ASHES_FILLED_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/cyclotron_ashes_filled.png");
+    public static final ResourceLocation CYCLOTRON_BOOK_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/cyclotron_book.png");
+    public static final ResourceLocation CYCLOTRON_BOOK_FILLED_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/cyclotron_book_filled.png");
+    public static final ResourceLocation CYCLOTRON_GAVEL_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/cyclotron_gavel.png");
+    public static final ResourceLocation CYCLOTRON_GAVEL_FILLED_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/cyclotron_gavel_filled.png");
+    public static final ResourceLocation CYCLOTRON_COIN_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/cyclotron_coin.png");
+    public static final ResourceLocation CYCLOTRON_COIN_FILLED_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/cyclotron_coin_filled.png");
+
     //Press
     public static final ResourceLocation PRESS_BODY_TEX = NuclearTechMod.withDefaultNamespace("textures/models/press_body.png");
     public static final ResourceLocation PRESS_HEAD_TEX = NuclearTechMod.withDefaultNamespace("textures/models/press_head.png");
@@ -552,6 +563,7 @@ public class ResourceManager {
     public static IModelCustom exposure_chamber;
     public static IModelCustom mining_laser;
     public static IModelCustom radgen;
+    public static IModelCustom cyclotron;
 
     // Boxcar
     public static IModelCustom tom_main;
@@ -821,6 +833,7 @@ public class ResourceManager {
          * geht hier nicht: dort ist der Lader selbst ein IModelCustom, in diesem Port liefert
          * erst asVBO() eines. Die Unterscheidung existiert also gar nicht. */
         radgen = new HFRWavefrontObject("models/obj/machines/radgen.obj").asVBO();
+        cyclotron = new HFRWavefrontObject("models/obj/machines/cyclotron.obj").asVBO();
 
         tom_main = new HFRWavefrontObject("models/obj/weapons/tom_main.obj").asVBO();
         tom_flame = new HFRWavefrontObject("models/obj/weapons/tom_flame.obj").asVBO();
