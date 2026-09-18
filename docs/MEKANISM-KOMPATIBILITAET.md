@@ -20,9 +20,11 @@ Drei Dinge gibt es dort aber nicht:
 1. **Chemikalien.** Gas, Schlamm, Pigment und Infusion sind bei Mekanism kein Fluid,
    sondern ein eigenes Register. Seit 10.7 sind die vier zu einem Typ `Chemical`
    verschmolzen — die vier getrennten Tankarten des Originals von 1.12.2 gibt es nicht mehr.
-2. **Joule statt FE.** Mekanism rechnet intern in Joule und zeigt sie auch so an. Über die
-   Forge-Energie-Schnittstelle käme eine umgerechnete Zahl heraus, die im Spiel nirgends
-   steht.
+2. **Große Energiemengen.** Forge Energy zählt in `int`; `getEnergyStored()` kann nicht mehr
+   als etwa 2,1 Milliarden melden und klemmt darüber ab. Eine Induktionsmatrix speichert
+   leicht ein Vielfaches davon, und ihre Anzeige stünde dann fest am Anschlag. Mekanisms
+   eigene Schnittstelle `IStrictEnergyHandler` rechnet in `long`, deshalb liest die Brücke
+   dort — und rechnet die Joule anschließend selbst in FE um (siehe unten).
 3. **Die Mehrblockbauten.** Spaltreaktor, Fusionsanlage, Turbine, Kessel, Induktionsmatrix,
    Verdunstungsanlage und SPS führen ihre Zahlen im Kern des Baus, nicht am angeklickten
    Block.
@@ -44,6 +46,7 @@ internen Klasse.
 | Was | Woher |
 | --- | --- |
 | Strom aller Maschinen, in Joule | `IStrictEnergyHandler` (`mekanism:strict_energy_handler`) |
+| Umrechnungsfaktor Joule → FE | `IEnergyConversionHelper.INSTANCE.feConversion()` |
 | Chemikalientanks aller Maschinen | `IChemicalHandler` (`mekanism:chemical_handler`) |
 | Flüssigkeitstanks | `IFluidHandler` von NeoForge |
 | Wärmespeicher | `IHeatHandler` (`mekanism:heat_handler`) |
@@ -61,6 +64,27 @@ internen Klasse.
 Der **Wärmemelder** findet zusätzlich einen Spaltreaktor in der Nachbarschaft und meldet
 dessen Hüllentemperatur — dieselbe Suche wie bei den HBM-Reaktoren (sechs angrenzende
 Blöcke, dann ein Kasten von 7 × 3 × 7).
+
+## Die Tafel zeigt FE, nicht Joule
+
+Mekanism zählt intern in Joule. Auf der Tafel steht diese Zahl aber neben denen anderer
+Mods, und die rechnen in FE — die Kabel, die Speicher, die Maschinen. Eine Tafel, die „J"
+schreibt, wo das Kabel daneben FE führt, nennt zwei verschiedene Dinge gleich.
+
+`MekEnergy` rechnet deshalb jede Energiezahl der Brücke um, bevor sie in den Beutel der
+Karte geht: Ladung, Kapazität, Differenz, Ein- und Ausgang der Matrix, Durchsatzgrenze,
+aufgenommene Energie der SPS, passive Erzeugung der Fusionsanlage, Erzeugung der Turbine.
+Die Zahlen sind Gleitkommazahlen, denn bei 2,5 J je FE geht jede zweite nicht glatt auf.
+Was keine Energie ist — Dampf, Brennrate, Temperatur —, bleibt unverändert.
+
+Der Faktor steht **nicht** im Quelltext. Er ist bei Mekanism einstellbar
+(`feConversionRate`, Vorgabe 2,5 J je FE), und `IEnergyConversionHelper` ist Mekanisms
+öffentlicher Zugang zu genau diesem Wert — dieselbe Einstellung, mit der Mekanisms eigene
+Kabel rechnen. Wer die Forge-Energie bei Mekanism ganz abschaltet (`blacklistForge`),
+bekommt weiter Joule zu sehen; dann gibt es im Spiel keine FE, in die umzurechnen wäre.
+
+Welche Einheit gilt, steht als `euType` im Beutel. `ItemCardMekanism` kennt Mekanism nicht
+und darf sie nicht raten — sie kommt mit den Zahlen zusammen an.
 
 ## Zwei Mods, eine Brücke
 

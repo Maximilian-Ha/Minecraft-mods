@@ -61,12 +61,12 @@ public final class MekGenerators {
             tag.putDouble(MekanismFields.CASE_TEMPERATURE, fusion.getLastCaseTemp());
             tag.putDouble(MekanismFields.TEMPERATURE, fusion.getLastCaseTemp());
             tag.putLong(MekanismFields.INJECTION_RATE, fusion.getInjectionRate());
-            tag.putLong(MekanismFields.PASSIVE_GENERATION, fusion.getPassiveGeneration(false, true));
+            MekEnergy.put(tag, MekanismFields.PASSIVE_GENERATION, fusion.getPassiveGeneration(false, true));
             tag.putLong(MekanismFields.STEAM_PER_TICK, fusion.getSteamPerTick(true));
             tag.putDouble(MekanismFields.ENV_LOSS, fusion.lastEnvironmentLoss);
             tag.putBoolean(DataHelper.ACTIVE, fusion.isBurning());
-            tag.putLong(DataHelper.ENERGY, fusion.energyContainer.getEnergy());
-            tag.putLong(DataHelper.CAPACITY, fusion.energyContainer.getMaxEnergy());
+            MekEnergy.put(tag, DataHelper.ENERGY, fusion.energyContainer.getEnergy());
+            MekEnergy.put(tag, DataHelper.CAPACITY, fusion.energyContainer.getMaxEnergy());
 
             CrossMekanism.writeTanks(tag,
                     MekTanks.of(fusion.deuteriumTank),
@@ -81,8 +81,8 @@ public final class MekGenerators {
             TurbineMultiblockData turbine = casing.getMultiblock();
             if(!turbine.isFormed()) return false;
 
-            tag.putLong(MekanismFields.PRODUCTION, turbine.getProductionRate());
-            tag.putLong(MekanismFields.MAX_PRODUCTION, turbine.getMaxProduction());
+            MekEnergy.put(tag, MekanismFields.PRODUCTION, turbine.getProductionRate());
+            MekEnergy.put(tag, MekanismFields.MAX_PRODUCTION, turbine.getMaxProduction());
             tag.putLong(MekanismFields.FLOW, turbine.lastSteamInput);
             tag.putLong(MekanismFields.MAX_FLOW, turbine.getMaxFlowRate());
             tag.putLong(MekanismFields.BLADES, turbine.blades);
@@ -90,8 +90,8 @@ public final class MekGenerators {
             tag.putLong(MekanismFields.VENTS, turbine.vents);
             tag.putLong(MekanismFields.CONDENSERS, turbine.condensers);
             tag.putLong(MekanismFields.DISPERSERS, turbine.getDispersers());
-            tag.putLong(DataHelper.ENERGY, turbine.energyContainer.getEnergy());
-            tag.putLong(DataHelper.CAPACITY, turbine.energyContainer.getMaxEnergy());
+            MekEnergy.put(tag, DataHelper.ENERGY, turbine.energyContainer.getEnergy());
+            MekEnergy.put(tag, DataHelper.CAPACITY, turbine.energyContainer.getMaxEnergy());
 
             CrossMekanism.writeTanks(tag,
                     MekTanks.of(turbine.chemicalTank),

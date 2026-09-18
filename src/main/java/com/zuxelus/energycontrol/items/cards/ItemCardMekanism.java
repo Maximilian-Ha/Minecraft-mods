@@ -37,6 +37,13 @@ public class ItemCardMekanism extends ItemCardBase {
     private static final int SHOW_PROGRESS = 64;
     private static final int SHOW_MINER = 128;
 
+    /**
+     * Die Einheit, wenn der Beutel keine nennt -- eine alte Karte, die noch aus der Zeit
+     * stammt, in der die Anbindung Joule schrieb. Deren Zahlen sind dann zwar Joule, aber
+     * eine Runde spaeter schreibt die Anbindung neu und es stimmt wieder.
+     */
+    private static final String UNIT = "FE";
+
     public ItemCardMekanism(Properties properties) {
         super(properties);
     }
@@ -59,15 +66,20 @@ public class ItemCardMekanism extends ItemCardBase {
     public List<PanelString> getStringData(int settings, ICardReader reader, boolean showLabels) {
         List<PanelString> result = reader.getTitleList();
 
+        // Die Anbindung rechnet Mekanisms Joule in Forge-Energie um und legt das Kuerzel
+        // dazu; diese Karte kennt Mekanism nicht und nimmt es, wie es kommt.
+        String unit = reader.hasField(DataHelper.EUTYPE) ? reader.getString(DataHelper.EUTYPE) : UNIT;
+        String rate = unit + "/t";
+
         if((settings & SHOW_ENERGY) > 0) {
             if(reader.hasField(DataHelper.ENERGY))
-                result.add(PanelString.of("msg.ec.InfoPanelEnergy", reader.getLong(DataHelper.ENERGY), "J", showLabels));
+                result.add(PanelString.of("msg.ec.InfoPanelEnergy", reader.getDouble(DataHelper.ENERGY), unit, showLabels));
             if(reader.hasField(DataHelper.CAPACITY))
-                result.add(PanelString.of("msg.ec.InfoPanelCapacity", reader.getLong(DataHelper.CAPACITY), "J", showLabels));
+                result.add(PanelString.of("msg.ec.InfoPanelCapacity", reader.getDouble(DataHelper.CAPACITY), unit, showLabels));
             if(reader.hasField(DataHelper.DIFF))
-                result.add(PanelString.of("msg.ec.InfoPanelDifference", reader.getLong(DataHelper.DIFF), "J/t", showLabels));
+                result.add(PanelString.of("msg.ec.InfoPanelDifference", reader.getDouble(DataHelper.DIFF), rate, showLabels));
             if(reader.hasField(MekanismFields.RECEIVED_ENERGY))
-                result.add(PanelString.of("msg.ec.InfoPanelReceivedEnergy", reader.getLong(MekanismFields.RECEIVED_ENERGY), "J/t", showLabels));
+                result.add(PanelString.of("msg.ec.InfoPanelReceivedEnergy", reader.getDouble(MekanismFields.RECEIVED_ENERGY), rate, showLabels));
         }
 
         if((settings & SHOW_TANKS) > 0) {
@@ -113,16 +125,16 @@ public class ItemCardMekanism extends ItemCardBase {
             if(reader.hasField(MekanismFields.INJECTION_RATE))
                 result.add(PanelString.of("msg.ec.InfoPanelInjectionRate", reader.getLong(MekanismFields.INJECTION_RATE), "mB/t", showLabels));
             if(reader.hasField(MekanismFields.PASSIVE_GENERATION))
-                result.add(PanelString.of("msg.ec.InfoPanelPassiveGeneration", reader.getLong(MekanismFields.PASSIVE_GENERATION), "J/t", showLabels));
+                result.add(PanelString.of("msg.ec.InfoPanelPassiveGeneration", reader.getDouble(MekanismFields.PASSIVE_GENERATION), rate, showLabels));
             if(reader.hasField(MekanismFields.STEAM_PER_TICK))
                 result.add(PanelString.of("msg.ec.InfoPanelSteamPerTick", reader.getLong(MekanismFields.STEAM_PER_TICK), "mB/t", showLabels));
         }
 
         if((settings & SHOW_TURBINE) > 0) {
             if(reader.hasField(MekanismFields.PRODUCTION))
-                result.add(PanelString.of("msg.ec.InfoPanelProduction", reader.getLong(MekanismFields.PRODUCTION), "J/t", showLabels));
+                result.add(PanelString.of("msg.ec.InfoPanelProduction", reader.getDouble(MekanismFields.PRODUCTION), rate, showLabels));
             if(reader.hasField(MekanismFields.MAX_PRODUCTION))
-                result.add(PanelString.of("msg.ec.InfoPanelMaxProduction", reader.getLong(MekanismFields.MAX_PRODUCTION), "J/t", showLabels));
+                result.add(PanelString.of("msg.ec.InfoPanelMaxProduction", reader.getDouble(MekanismFields.MAX_PRODUCTION), rate, showLabels));
             if(reader.hasField(MekanismFields.FLOW))
                 result.add(PanelString.of("msg.ec.InfoPanelFlow", reader.getLong(MekanismFields.FLOW), "mB/t", showLabels));
             if(reader.hasField(MekanismFields.MAX_FLOW))
@@ -141,11 +153,11 @@ public class ItemCardMekanism extends ItemCardBase {
 
         if((settings & SHOW_MATRIX) > 0) {
             if(reader.hasField(MekanismFields.LAST_INPUT))
-                result.add(PanelString.of("msg.ec.InfoPanelInput", reader.getLong(MekanismFields.LAST_INPUT), "J/t", showLabels));
+                result.add(PanelString.of("msg.ec.InfoPanelInput", reader.getDouble(MekanismFields.LAST_INPUT), rate, showLabels));
             if(reader.hasField(MekanismFields.LAST_OUTPUT))
-                result.add(PanelString.of("msg.ec.InfoPanelOutput", reader.getLong(MekanismFields.LAST_OUTPUT), "J/t", showLabels));
+                result.add(PanelString.of("msg.ec.InfoPanelOutput", reader.getDouble(MekanismFields.LAST_OUTPUT), rate, showLabels));
             if(reader.hasField(MekanismFields.TRANSFER_CAP))
-                result.add(PanelString.of("msg.ec.InfoPanelTransferCap", reader.getLong(MekanismFields.TRANSFER_CAP), "J/t", showLabels));
+                result.add(PanelString.of("msg.ec.InfoPanelTransferCap", reader.getDouble(MekanismFields.TRANSFER_CAP), rate, showLabels));
             if(reader.hasField(MekanismFields.CELLS))
                 result.add(PanelString.of("msg.ec.InfoPanelCells", reader.getLong(MekanismFields.CELLS), showLabels));
             if(reader.hasField(MekanismFields.PROVIDERS))

@@ -231,3 +231,26 @@ Gezeichnet wird über `RenderType.text(...)`, denn dessen Format
 (`POSITION_COLOR_TEX_LIGHTMAP`) ist genau das, was hier gebraucht wird: eingefärbte Textur
 mit Lichtkarte, aber ohne die richtungsabhängige Schattierung der Entity-Typen — sonst wäre
 ein Schirm an der Wand dunkler als einer an der Decke.
+
+## Mekanism-Werte stehen in FE, und der Faktor kommt von Mekanism
+
+Mekanism zählt intern in Joule. Die erste Fassung der Anbindung schrieb diese Zahl samt
+Einheit „J" auf die Tafel — richtig gegenüber Mekanisms eigener Anzeige, aber auf einer Tafel
+irreführend: dort steht sie neben den Zahlen anderer Mods, und die rechnen in FE. Zwei
+verschiedene Einheiten unter demselben Wort „Energie" sind eine Zahl, die man nicht
+vergleichen kann.
+
+`MekEnergy` rechnet deshalb um, bevor etwas in den Beutel der Karte geht. Der Faktor steht
+nicht im Quelltext: er ist bei Mekanism einstellbar (Vorgabe 2,5 J je FE), und
+`IEnergyConversionHelper.INSTANCE.feConversion()` ist Mekanisms öffentlicher Zugang zu genau
+dem Wert, mit dem auch seine eigenen Kabel rechnen. Ist die Forge-Energie dort abgeschaltet,
+bleibt es bei Joule — dann gibt es im Spiel nichts, worin umzurechnen wäre.
+
+Die Einheit reist als `euType` im Beutel mit. `ItemCardMekanism` wird immer übersetzt, auch
+ohne Mekanism-JARs, und darf deshalb keine Mekanism-Klasse anfassen; raten darf sie die
+Einheit auch nicht.
+
+Nicht behoben wird damit, warum die Brücke überhaupt in Joule liest statt über Forge Energy:
+Forges `IEnergyStorage` zählt in `int` und klemmt bei gut zwei Milliarden ab. Eine
+Induktionsmatrix speichert ein Vielfaches davon und stünde fest am Anschlag. Deshalb liest
+die Brücke `IStrictEnergyHandler` (`long`) und rechnet selbst um.

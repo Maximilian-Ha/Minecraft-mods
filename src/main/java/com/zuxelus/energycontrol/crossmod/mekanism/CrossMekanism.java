@@ -92,9 +92,9 @@ public class CrossMekanism extends CrossModBase {
         if(capacity <= 0L) return null;
 
         CompoundTag tag = new CompoundTag();
-        tag.putString(DataHelper.EUTYPE, "J");
-        tag.putDouble(DataHelper.ENERGY, energy);
-        tag.putDouble(DataHelper.CAPACITY, capacity);
+        tag.putString(DataHelper.EUTYPE, MekEnergy.unit());
+        MekEnergy.put(tag, DataHelper.ENERGY, energy);
+        MekEnergy.put(tag, DataHelper.CAPACITY, capacity);
         return tag;
     }
 
@@ -119,6 +119,10 @@ public class CrossMekanism extends CrossModBase {
         CompoundTag tag = new CompoundTag();
         boolean any = false;
 
+        // Die Karte selbst kennt Mekanism nicht und darf die Einheit nicht raten; sie
+        // steht deshalb im Beutel, wie bei jeder anderen Anbindung.
+        tag.putString(DataHelper.EUTYPE, MekEnergy.unit());
+
         any |= writeEnergy(tag, level, pos);
         any |= MekTanks.writeTanks(tag, MekTanks.around(level, pos));
         any |= writeHeat(tag, level, pos);
@@ -142,8 +146,8 @@ public class CrossMekanism extends CrossModBase {
         }
         if(capacity <= 0L) return false;
 
-        tag.putLong(DataHelper.ENERGY, energy);
-        tag.putLong(DataHelper.CAPACITY, capacity);
+        MekEnergy.put(tag, DataHelper.ENERGY, energy);
+        MekEnergy.put(tag, DataHelper.CAPACITY, capacity);
         return true;
     }
 
@@ -174,16 +178,16 @@ public class CrossMekanism extends CrossModBase {
         if(be instanceof TileEntityInductionCasing casing) {
             MatrixMultiblockData matrix = casing.getMultiblock();
             if(!matrix.isFormed()) return false;
-            tag.putLong(DataHelper.ENERGY, matrix.getEnergy());
-            tag.putLong(DataHelper.CAPACITY, matrix.getStorageCap());
-            tag.putLong(MekanismFields.LAST_INPUT, matrix.getLastInput());
-            tag.putLong(MekanismFields.LAST_OUTPUT, matrix.getLastOutput());
-            tag.putLong(MekanismFields.TRANSFER_CAP, matrix.getTransferCap());
+            MekEnergy.put(tag, DataHelper.ENERGY, matrix.getEnergy());
+            MekEnergy.put(tag, DataHelper.CAPACITY, matrix.getStorageCap());
+            MekEnergy.put(tag, MekanismFields.LAST_INPUT, matrix.getLastInput());
+            MekEnergy.put(tag, MekanismFields.LAST_OUTPUT, matrix.getLastOutput());
+            MekEnergy.put(tag, MekanismFields.TRANSFER_CAP, matrix.getTransferCap());
             tag.putLong(MekanismFields.CELLS, matrix.getCellCount());
             tag.putLong(MekanismFields.PROVIDERS, matrix.getProviderCount());
             // Was hereinkommt minus was hinausgeht: die Zahl, wegen der man eine Tafel
             // an eine Matrix haengt.
-            tag.putLong(DataHelper.DIFF, matrix.getLastInput() - matrix.getLastOutput());
+            MekEnergy.put(tag, DataHelper.DIFF, matrix.getLastInput() - matrix.getLastOutput());
             return true;
         }
 
@@ -204,7 +208,7 @@ public class CrossMekanism extends CrossModBase {
             tag.putInt(DataHelper.MAXPROGRESS, 100);
             tag.putDouble(MekanismFields.PROCESS_RATE, sps.getProcessRate());
             tag.putLong(MekanismFields.PROCESSED, sps.inputProcessed);
-            tag.putLong(MekanismFields.RECEIVED_ENERGY, sps.lastReceivedEnergy);
+            MekEnergy.put(tag, MekanismFields.RECEIVED_ENERGY, sps.lastReceivedEnergy);
             writeTanks(tag, MekTanks.of(sps.inputTank), MekTanks.of(sps.outputTank));
             return true;
         }
