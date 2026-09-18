@@ -175,3 +175,29 @@ Daraus folgen zwei Bauformen mit zwei Drehkonventionen:
 Dass diese drei Blöcke flach sind, sagt jetzt auch ihr Körper (`BoxShape.slab`) und ihre
 Blockeigenschaft `noOcclusion` — ein flacher Block, den Minecraft für einen vollen Würfel
 hält, wirft Schatten, wo keine hingehören.
+
+
+## Ein gesetzter Block schaut zum Spieler, nicht auf die angeklickte Fläche
+
+Das Original richtet seine Blöcke nach dem **Blick des Spielers** aus: wer steil nach unten
+schaut (ab 65 Grad), bekommt eine Tafel, die nach oben zeigt, sonst zeigt die Schauseite dem
+Spieler entgegen (`FacingBlock#getStateForPlacement`).
+
+Die erste Fassung dieses Ports nahm stattdessen die angeklickte Fläche. Das klingt
+naheliegend und macht große Schirme unbaubar: wer eine Erweiterung oben auf die vorige setzt,
+klickt deren Deckfläche an — der neue Block schaut dann nach oben und gehört nicht mehr zum
+Schirm, der zur Seite zeigt. Genau so sah es im Spiel aus: die untere Reihe bildete einen
+Schirm, die obere nicht.
+
+Wer einen Block doch einmal falsch gesetzt hat, dreht ihn mit dem Tafelwerkzeug, statt ihn
+abbauen zu müssen.
+
+## Die Schrift wird auf den Schirm eingepasst
+
+Der Renderer der ersten Fassung zeichnete in fester Größe (ein Block = 64 Schriftpunkte) und
+brach die Zeilen nach Platz ab. Lange Zahlen liefen damit über den Rand der Tafel hinaus.
+
+Das Original rechnet stattdessen einen Maßstab aus: die breiteste Zeile und die Zahl der
+Zeilen gegen die Fläche, das Kleinere von beiden gewinnt. Dieselbe Rechnung steht jetzt hier
+— mit der Folge, dass die Schrift auf einem großen Schirm größer wird statt bloß mehr Platz
+zu haben.

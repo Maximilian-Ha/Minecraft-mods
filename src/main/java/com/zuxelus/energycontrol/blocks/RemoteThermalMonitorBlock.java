@@ -55,7 +55,7 @@ public class RemoteThermalMonitorBlock extends BaseEntityBlock {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState().setValue(FACING, context.getClickedFace());
+        return this.defaultBlockState().setValue(FACING, Facings.towardsPlayer(context));
     }
 
     @Override

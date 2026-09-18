@@ -14,6 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
@@ -23,17 +24,24 @@ import java.util.List;
  *
  * Zeichnet die Zeilen der Karte auf die Schauseite der Tafel -- und, wenn Erweiterungen
  * angebaut sind, ueber die ganze Flaeche. Das Original zeichnete zusaetzlich den farbigen
- * Hintergrund; hier ist der Hintergrund die Blocktextur selbst, der Renderer kuemmert sich nur
- * um die Schrift.
+ * Hintergrund; hier ist der Hintergrund die Blocktextur selbst, der Renderer kuemmert sich
+ * nur um die Schrift.
+ *
+ * Die Schrift wird auf die Flaeche **eingepasst**, wie im Original: die breiteste Zeile und
+ * die Zahl der Zeilen ergeben einen Massstab, und der gilt fuer alle Zeilen. Ohne das steht
+ * die Schrift in fester Groesse da und laeuft bei langen Zahlen ueber den Rand hinaus --
+ * genau das war der Fehler der ersten Fassung dieses Ports.
  */
 public class InfoPanelRenderer implements BlockEntityRenderer<InfoPanelBlockEntity> {
 
-    /** Ein Block der Schauseite ist ein Feld von 64 mal 64 Schriftpunkten. */
-    private static final float SCALE = 1F / 64F;
-    private static final int BLOCK_UNITS = 64;
-    private static final int LINE_HEIGHT = 9;
-    /** Abstand zum Rand, damit die Schrift nicht an der Fuge klebt. */
-    private static final int MARGIN = 3;
+    /** Rand ringsum, in Blockeinheiten -- ein Sechzehntel je Seite, wie im Original. */
+    private static final float MARGIN = 2F / 16F;
+
+    /** Zeilenabstand in Schriftpunkten: Zeilenhoehe plus zwei, wie im Original. */
+    private static final int LINE_SPACING = 2;
+
+    /** Etwas Luft vor der ersten und hinter der letzten Spalte. */
+    private static final int TEXT_PADDING = 4;
 
     private final Font font;
 
@@ -45,10 +53,6 @@ public class InfoPanelRenderer implements BlockEntityRenderer<InfoPanelBlockEnti
      * Ein grosser Schirm reicht ueber den Block hinaus, an dem die Tafel haengt. Bliebe es
      * bei der ueblichen Sichtpruefung, verschwaende seine Schrift, sobald dieser eine Block
      * aus dem Bild laeuft. Einzelne Tafeln behalten die uebliche Pruefung.
-     *
-     * Der Weg ueber getRenderBoundingBox der Block-Entitaet fuehrt nicht zum Ziel: die
-     * Methode gibt es auf 1.21.1 dort nicht (im HBM-Port steht sie ohne @Override und wird
-     * nie aufgerufen).
      */
     @Override
     public boolean shouldRenderOffScreen(InfoPanelBlockEntity be) {
@@ -84,51 +88,75 @@ public class InfoPanelRenderer implements BlockEntityRenderer<InfoPanelBlockEnti
 
         float centerX = (Math.min(x1, x2) + Math.max(x1, x2)) / 2F;
         float centerY = (Math.min(y1, y2) + Math.max(y1, y2)) / 2F;
-        int width = Math.abs(x2 - x1) + 1;
-        int height = Math.abs(y2 - y1) + 1;
+        float displayWidth = Math.abs(x2 - x1) + 1 - MARGIN;
+        float displayHeight = Math.abs(y2 - y1) + 1 - MARGIN;
+
+        // Massstab: die breiteste Zeile und alle Zeilen zusammen muessen hineinpassen.
+        int maxWidth = TEXT_PADDING;
+        for(PanelString line : lines) maxWidth = Math.max(maxWidth, font.width(joined(line)) + TEXT_PADDING);
+
+        int lineHeight = font.lineHeight + LINE_SPACING;
+        int requiredHeight = lineHeight * lines.size();
+
+        float scaleX = displayWidth / maxWidth;
+        float scaleY = displayHeight / requiredHeight;
+        float scale = Math.min(scaleX, scaleY);
 
         pose.pushPose();
         pose.translate(0.5F, 0.5F, 0.5F);
         alignToFace(pose, facing);
-        // Erst in die Mitte der Flaeche, dann einen halben Block nach vorn -- plus ein Hauch,
-        // damit die Schrift nicht in der Blockflaeche steckt und flimmert.
+        // Erst in die Mitte der Flaeche, dann nach vorn -- plus ein Hauch, damit die
+        // Schrift nicht in der Blockflaeche steckt und flimmert.
         pose.translate(centerX, centerY, depth + 0.005F);
         // Negatives Y, weil die Schriftart nach unten laeuft, die Welt aber nach oben.
-        pose.scale(SCALE, -SCALE, SCALE);
+        pose.scale(scale, -scale, scale);
 
-        int drawWidth = BLOCK_UNITS * width;
-        int drawHeight = BLOCK_UNITS * height;
-        int maxLines = Math.max(1, (drawHeight - 2 * MARGIN) / LINE_HEIGHT);
+        // Die Flaeche in Schriftpunkten, nachdem der Massstab feststeht.
+        float realWidth = displayWidth / scale;
+        float realHeight = displayHeight / scale;
 
-        int count = Math.min(lines.size(), maxLines);
-        float top = -(count * LINE_HEIGHT) / 2F;
+        // Begrenzt die Breite, bleibt die Schrift links stehen und sitzt senkrecht mittig;
+        // begrenzt die Hoehe, ist es umgekehrt. So haelt es auch das Original.
+        float offsetX = scaleX < scaleY ? TEXT_PADDING / 2F : (realWidth - maxWidth) / 2F + TEXT_PADDING / 2F;
+        float offsetY = scaleX < scaleY ? (realHeight - requiredHeight) / 2F : 0F;
+
         int color = be.getColorText();
-        float edge = drawWidth / 2F - MARGIN;
 
-        for(int i = 0; i < count; i++) {
-            PanelString line = lines.get(i);
-            float y = top + i * LINE_HEIGHT;
-            draw(pose, buffers, light, line.textLeft, colorOr(line.colorLeft, color), -edge, y, Align.LEFT);
-            draw(pose, buffers, light, line.textCenter, colorOr(line.colorCenter, color), 0F, y, Align.CENTER);
-            draw(pose, buffers, light, line.textRight, colorOr(line.colorRight, color), edge, y, Align.RIGHT);
+        for(int row = 0; row < lines.size(); row++) {
+            PanelString line = lines.get(row);
+            float y = offsetY - realHeight / 2F + row * lineHeight;
+
+            draw(pose, buffers, light, line.textLeft, colorOr(line.colorLeft, color),
+                    offsetX - realWidth / 2F, y);
+            if(line.textCenter != null) {
+                draw(pose, buffers, light, line.textCenter, colorOr(line.colorCenter, color),
+                        -font.width(line.textCenter) / 2F, y);
+            }
+            if(line.textRight != null) {
+                draw(pose, buffers, light, line.textRight, colorOr(line.colorRight, color),
+                        realWidth / 2F - font.width(line.textRight), y);
+            }
         }
 
         pose.popPose();
     }
 
-    private enum Align { LEFT, CENTER, RIGHT }
+    /** Die ganze Zeile am Stueck -- nur zum Ausmessen, gezeichnet wird sie in drei Teilen. */
+    private Component joined(PanelString line) {
+        MutableComponent result = Component.empty();
+        boolean first = true;
+        for(Component part : new Component[] { line.textLeft, line.textCenter, line.textRight }) {
+            if(part == null || part.getString().isEmpty()) continue;
+            if(!first) result.append(" ");
+            result.append(part);
+            first = false;
+        }
+        return result;
+    }
 
-    private void draw(PoseStack pose, MultiBufferSource buffers, int light, Component text, int color, float x, float y, Align align) {
+    private void draw(PoseStack pose, MultiBufferSource buffers, int light, Component text, int color, float x, float y) {
         if(text == null) return;
-
-        float width = font.width(text);
-        float drawX = switch(align) {
-            case LEFT -> x;
-            case CENTER -> x - width / 2F;
-            case RIGHT -> x - width;
-        };
-
-        font.drawInBatch(text, drawX, y, 0xFF000000 | color, false, pose.last().pose(), buffers,
+        font.drawInBatch(text, x, y, 0xFF000000 | color, false, pose.last().pose(), buffers,
                 Font.DisplayMode.POLYGON_OFFSET, 0, light);
     }
 

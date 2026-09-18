@@ -53,9 +53,7 @@ public class EnergyCounterBlock extends BaseEntityBlock {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        // Die angeklickte Flaeche ist die, an der der neue Block anliegt; der Ausgang zeigt
-        // von ihr weg -- wie die Schauseite der Tafel.
-        return this.defaultBlockState().setValue(FACING, context.getClickedFace());
+        return this.defaultBlockState().setValue(FACING, Facings.towardsPlayer(context));
     }
 
     @Override

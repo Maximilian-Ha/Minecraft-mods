@@ -46,7 +46,7 @@ public class IndustrialAlarmBlock extends Block {
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.defaultBlockState()
-                .setValue(FACING, context.getClickedFace())
+                .setValue(FACING, Facings.towardsPlayer(context))
                 .setValue(POWERED, context.getLevel().hasNeighborSignal(context.getClickedPos()));
     }
 
