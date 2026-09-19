@@ -1924,6 +1924,16 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_ingot_steel", has(NtmItems.INGOT_STEEL.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "pole_satellite_receiver"));
 
+        // Original CraftingManager Z. 847: "G" / "S" / "C". Die Grossfassung von Z. 848
+        // braucht coil_copper_torus, das es im Port noch nicht gibt.
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, NtmBlocks.CHARGER.get(), 1)
+                .pattern("G").pattern("S").pattern("C")
+                .define('G', Items.GLOWSTONE_DUST)
+                .define('S', NtmItems.INGOT_STEEL.get())
+                .define('C', NtmItems.COIL_COPPER.get())
+                .unlockedBy("has_coil_copper", has(NtmItems.COIL_COPPER.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "charger"));
+
         // Original CraftingManager Z. 293. Bisher fehlte dem Heliostatspiegel das Rezept,
         // weil steel_beam im Port nicht existierte.
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.SOLAR_MIRROR.get(), 3)

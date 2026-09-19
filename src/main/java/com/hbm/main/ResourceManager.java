@@ -147,6 +147,7 @@ public class ResourceManager {
     // Kuehltuerme (Runde 169)
     public static final ResourceLocation TOWER_SMALL_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/tower_small.png");
     public static final ResourceLocation FLOODLIGHT_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/floodlight.png");
+    public static final ResourceLocation CHARGER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/charger.png");
     public static final ResourceLocation TOWER_LARGE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/tower_large.png");
 
     //Press
@@ -591,6 +592,7 @@ public class ResourceManager {
     // Kuehltuerme (Runde 169)
     public static IModelCustom tower_small;
     public static IModelCustom floodlight;
+    public static IModelCustom charger;
     public static IModelCustom tower_large;
 
     // Boxcar
@@ -873,6 +875,7 @@ public class ResourceManager {
 
         tower_small = new HFRWavefrontObject("models/obj/machines/tower_small.obj").asVBO();
         floodlight = new HFRWavefrontObject("models/obj/block/floodlight.obj").asVBO();
+        charger = new HFRWavefrontObject("models/obj/block/charger.obj").asVBO();
         tower_large = new HFRWavefrontObject("models/obj/machines/tower_large.obj").asVBO();
 
         tom_main = new HFRWavefrontObject("models/obj/weapons/tom_main.obj").asVBO();

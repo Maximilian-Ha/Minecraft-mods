@@ -1214,6 +1214,7 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         // Teilchenfarbe.
         this.particleOnlyBlock(NtmBlocks.FLOODLIGHT, modLoc("block/block_steel"));
         this.particleOnlyBlock(NtmBlocks.POLE_SATELLITE_RECEIVER, modLoc("block/deco_satellite_receiver"));
+        this.particleOnlyBlock(NtmBlocks.CHARGER, modLoc("block/block_steel"));
     }
 
     /**

@@ -24,6 +24,7 @@ import com.hbm.blocks.generic.SteelRoofBlock;
 import com.hbm.blocks.generic.DecoPoleSatelliteReceiverBlock;
 import com.hbm.blocks.generic.LootCrateBlock;
 import com.hbm.blocks.machine.FloodlightBlock;
+import com.hbm.blocks.machine.ChargerBlock;
 import com.hbm.blocks.machine.FloodlightBeamBlock;
 import com.hbm.blocks.fluids.CoriumLiquidBlock;
 import com.hbm.blocks.fluids.MudLiquidBlock;
@@ -346,6 +347,8 @@ public class NtmBlocks {
      * aus dem Block dahinter und wirft fuenfzehn Strahlen nach vorn. Werte aus
      * ModBlocks.java:1490. */
     public static final DeferredBlock<Block> FLOODLIGHT = register("floodlight", () -> new FloodlightBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion()));
+    /* Stufe 5: die Ladestation an der Wand. Werte aus ModBlocks.java:2071. */
+    public static final DeferredBlock<Block> CHARGER = register("charger", () -> new ChargerBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion()));
     /* Sein Lichtfleck: unsichtbar, nicht anfassbar, nur hell -- aber mit eigener
      * Blockentitaet, weil er sich Quelle und Strahlnummer merken muss. */
     public static final DeferredBlock<Block> FLOODLIGHT_BEAM = BLOCKS.register("floodlight_beam", () -> new FloodlightBeamBlock(BlockBehaviour.Properties.of().replaceable().noCollission().noOcclusion().noLootTable().air().lightLevel(state -> 15).pushReaction(PushReaction.DESTROY)));

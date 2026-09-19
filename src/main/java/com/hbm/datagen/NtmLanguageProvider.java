@@ -2332,6 +2332,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         /* Der Lichtkegel ist unsichtbar, braucht aber eine Namenszeile. */
         this.add(NtmBlocks.SPOTLIGHT_BEAM, "Light Beam");
         this.add(NtmBlocks.POLE_SATELLITE_RECEIVER, "Satellite Receiver Pole");
+        this.add(NtmBlocks.CHARGER, "Charging Station");
+        this.add(NtmBlocks.CHARGER, DESC, "Stand in front of it to charge$the batteries you carry.");
         this.add(NtmBlocks.FLOODLIGHT, "Floodlight");
         this.add(NtmBlocks.FLOODLIGHT, DESC, "Aim it with a screwdriver.$Needs 100HE/t to stay lit.");
         this.add(NtmBlocks.FLOODLIGHT_BEAM, "Light Beam");

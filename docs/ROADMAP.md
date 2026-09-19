@@ -5127,3 +5127,27 @@ schlicht unsichtbar ist. Das achtzehnte Tor (`bewlr-check`) hat den fehlenden Da
 CI überhaupt lief.
 
 Die Lücke steht bei **21**.
+
+### Die Ladestation
+
+`charger` hängt an der Wand und lädt die Batterien dessen, der davortritt. Mechanisch ist sie
+eine Merkwürdigkeit: **sie hat keinen eigenen Speicher**. `getPower()` gibt null zurück,
+`setPower()` tut nichts, und `getMaxPower()` meldet genau so viel, wie die Batterien der
+davorstehenden Spieler in diesem Tick aufnehmen können. Das Netz sieht also einen Verbraucher,
+dessen Fassungsvermögen sich jeden Tick neu ergibt, und `transferPower` reicht den Strom
+unmittelbar an die Batterien weiter. Das ist nicht hübsch, aber es ist das Original, und es
+funktioniert.
+
+Der Arm braucht zwanzig Ticks: in der ersten Hälfte fährt er heraus, in der zweiten schwenken
+die beiden Backen auf. Geladen wird erst, wenn er ganz draußen ist — deshalb die Abfrage
+`ausfahrt < DAUER` gleich am Anfang von `transferPower`.
+
+Eine Abweichung, bewusst: das Original ruft `playSoundEffect` in `updateEntity`, und
+`updateEntity` läuft auf beiden Seiten. Der Kolbenton kommt dort also doppelt — einmal lokal
+vom Client, einmal vom Server verteilt. Hier hängen die Töne an `!isClientSide`, die Bewegung
+selbst läuft weiter auf beiden Seiten mit.
+
+**Nicht mitportiert:** die Großfassung des Rezepts (16 Stück aus Glowstone-Block, Stahlblock
+und Toroidspule). `coil_copper_torus` gibt es im Port noch nicht.
+
+Die Lücke steht bei **20**.
