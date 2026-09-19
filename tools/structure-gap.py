@@ -39,6 +39,8 @@ KEIN_BLOCK = {
     "brick_double_slab", "concrete_brick_double_slab", "concrete_double_slab",
     # Der Port benennt sie anders herum; sie sind da.
     "concrete_brick_slab", "lox_barrel", "pink_barrel", "red_barrel",
+    # Im Port heisst der Waffentisch weapon_table, ohne das machine_ davor.
+    "machine_weapon_table",
     # Das Original selbst kennt sie nicht mehr: sie stehen dort in ignoreMappings,
     # der Liste der Altnamen, die beim Laden alter Welten stillschweigend wegfallen.
     "barrel_iron", "ladder_tungsten", "ore_coal_oil",
@@ -53,6 +55,7 @@ FAMILIEN = {
     "concrete_colored_ext": "concrete_ext_machine ... concrete_ext_bronze (acht Toene)",
     "reinforced_lamp_off":  "reinforced_lamp mit lit=false",
     "wood_structure":       "wood_structure_roof, wood_structure_scaffold, wood_structure_ceiling",
+    "machine_electric_furnace_off": "machine_electric_furnace mit lit=false",
 }
 
 

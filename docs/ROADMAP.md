@@ -4608,6 +4608,19 @@ Drei weitere Blöcke, alle ohne Sondermodell:
 
 Die Lücke steht bei **48**.
 
+### Zwei Scheinlücken in der Messung
+
+Beim Durchgehen der restlichen Namen waren zwei gar keine Arbeit, sondern Messfehler:
+
+- **`machine_weapon_table`** heißt im Port `weapon_table`, ohne das `machine_` davor — der
+  Block ist seit Runde 74 da. Er steht jetzt bei den Namen, die der Port anders schreibt.
+- **`machine_electric_furnace_off`** ist im Original ein eigener Block für den ausgeschalteten
+  Ofen. Im Port ist das `machine_electric_furnace` mit `lit=false`, also ein Familienfall.
+
+Damit steht die Lücke bei **46** — ohne dass eine Zeile Code dazugekommen wäre. Solche Einträge
+gehören aufgelöst, sobald sie auffallen: eine Messung, die Erledigtes als fehlend führt, macht
+die Zahl wertlos.
+
 ### Ein Fund nebenbei: `steel_beam` stimmt nicht
 
 Beim Durchsehen der Bauteile ist aufgefallen, dass die Roadmap-Zeile aus Runde 9 —
