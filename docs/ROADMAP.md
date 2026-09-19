@@ -5190,3 +5190,32 @@ eine feste Fläche?" — in 1.21 heißt das `isFaceSturdy`. Und `quantityDropped
 Gleichverteilung von −7 bis 2 in der Beutetabelle.
 
 Die Lücke steht bei **19**.
+
+### Wo die restlichen neunzehn stehen
+
+Damit nicht jede Sitzung von vorn anfängt, hier der Stand der Lücke — sortiert danach, was
+sie blockiert, nicht danach, wie sie heißen:
+
+**Wartet auf fehlende Gegenstände** (sechs Blöcke): `crate`, `crate_weapon`, `crate_red`,
+`crate_can`, `crate_ammo`, `crate_supply`. Die Zählung steht weiter oben; es fehlen die
+Spritzen, die Granaten, die Dosen und ein gutes Dutzend Sonderwaffen. `crate_can` braucht
+zusätzlich `conservecrate.obj` als eigenen Modelltyp, `crate_supply` eine Blockentität mit
+NBT am abgeworfenen Gegenstand.
+
+**Wartet auf das FSB-Rüstungssystem** (zwei Blöcke): `tesla` und `hev_battery`. Beide fragen
+Rüstung ab, die es im Port nicht gibt — `ArmorUtil.checkForFaraday` beziehungsweise
+`ArmorFSB.hasFSBArmorIgnoreCharge`. Bei der Teslaspule ist das kein Schönheitsfehler: ohne
+den Faraday-Schutz würde sie Spieler töten, die im Original geschützt wären. Der Spule fehlen
+außerdem `ModDamageSource.electricity` und zwei der drei Krabbenarten.
+
+**Braucht eine eigene Oberfläche** (drei Blöcke): `machine_microwave` (drei Plätze, Tempo\-
+regler, Explosion bei Vollgas), `radiorec` und `radio_telex` (Kanaleingabe). Die
+Funkgrundlage — `RTTYSystem`, `RTTYChannel`, `NoteBuilder` — steht im Port bereits.
+
+**Gehört zur Weltgenerierung** (sechs Blöcke): `wand_jigsaw`, `wand_logic`, `wand_loot`,
+`wand_tandem`, `dungeon_spawner`, `meteor_spawner`. Das sind die Werkzeuge, mit denen das
+Original seine Bauwerke zusammensetzt; sie sinnvoll zu portieren heißt, die Bauwerksgenerierung
+selbst zu portieren.
+
+**Steht für sich, aber ohne Kreativreiter** (zwei Blöcke): `deco_loot` und `skeleton_holder`.
+Beide setzt im Original nur die Weltgenerierung; im Kreativmodus sind sie nicht zu bekommen.
