@@ -86,7 +86,6 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicItem(NtmItems.INGOT_U233.get());
         this.basicItem(NtmItems.INGOT_U235.get());
         this.basicItem(NtmItems.INGOT_U238.get());
-        this.basicItem(NtmItems.INGOT_U238M2.get());
         this.basicItem(NtmItems.INGOT_PLUTONIUM.get());
         this.basicItem(NtmItems.INGOT_PU238.get());
         this.basicItem(NtmItems.INGOT_PU239.get());
@@ -1024,6 +1023,8 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicItem(NtmItems.PUDDING.get());
         this.basicItem(NtmItems.GRENADE_UNIVERSAL.get());
         this.basicItem(NtmItems.SYRINGE_ANTIDOTE.get());
+        this.basicItem(NtmItems.MYSTERYSHOVEL.get());
+        this.basicItem(NtmItems.FLAME_PONY.get());
         this.basicItem(NtmItems.CHOCOLATE_MILK.get());
         this.handheldItem(NtmItems.CIGARETTE.get());
         this.handheldItem(NtmItems.CRACKPIPE.get());

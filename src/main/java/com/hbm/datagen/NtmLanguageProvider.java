@@ -14,6 +14,7 @@ import com.hbm.items.machine.PileRodItem.EnumPileRod;
 import com.hbm.items.machine.WatzPelletItem.EnumWatzType;
 import com.hbm.items.NtmItems;
 import com.hbm.items.food.ConserveItem.ConserveType;
+import com.hbm.items.ItemEnums.U238M2Type;
 import com.hbm.items.tools.AmmoContainerItem.AmmoContainerType;
 import com.hbm.items.weapon.grenade.GrenadeExtraItem.GrenadeExtra;
 import com.hbm.items.weapon.grenade.GrenadeFillingItem.GrenadeFilling;
@@ -61,7 +62,10 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.INGOT_U233, "Uranium-233 Ingot");
         this.add(NtmItems.INGOT_U235, "Uranium-235 Ingot");
         this.add(NtmItems.INGOT_U238, "Uranium-238 Ingot");
-        this.add(NtmItems.INGOT_U238M2, "Metastable Uranium-238M2 Ingot");
+        this.add(NtmItems.INGOT_U238M2, this.getName(U238M2Type.U238M2), "Metastable Uranium-238M2 Ingot");
+        this.add(NtmItems.INGOT_U238M2, this.getName(U238M2Type.ELEMENTS), "Elements");
+        this.add(NtmItems.INGOT_U238M2, this.getName(U238M2Type.ARSENIC), "Arsenic");
+        this.add(NtmItems.INGOT_U238M2, this.getName(U238M2Type.VAULT), "Vault");
         this.add(NtmItems.INGOT_PLUTONIUM, "Plutonium Ingot");
         this.add(NtmItems.INGOT_PU238, "Plutonium-238 Ingot");
         this.add(NtmItems.INGOT_PU239, "Plutonium-239 Ingot");
@@ -1776,6 +1780,10 @@ public class NtmLanguageProvider extends LanguageProvider {
         /* Die Granaten: vier Bauteile und die zusammengesetzte Granate. */
         this.add(NtmItems.GRENADE_UNIVERSAL, "Grenade");
         this.add(NtmItems.SYRINGE_ANTIDOTE, "Antidote Syringe");
+        this.add(NtmItems.MYSTERYSHOVEL, "Brittle Spade");
+        this.add("desc.item.mysteryshovel", "Lost but not forgotten");
+        this.add(NtmItems.FLAME_PONY, "Painting of a Cartoon Pony");
+        this.add(NtmItems.FLAME_PONY, DESC, "Yellow horse beats blue horse, that's a proven fact!");
         this.add("desc.item.syringe.antidote", "Removes all potion effects");
         this.add(NtmItems.AMMO_CONTAINER, this.getName(AmmoContainerType.STANDARD), "Ammo Container");
         this.add(NtmItems.AMMO_CONTAINER, this.getName(AmmoContainerType.MAKESHIFT), "Makeshift Ammo Container");

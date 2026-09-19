@@ -6997,3 +6997,65 @@ Stand der Beutekisten: `crate_ammo`, `crate_can`, `crate`, `crate_weapon`, `crat
 die C-130).
 
 Alle 30 Tore grün.
+
+## Rote Kiste, erster Teil: Spaten, Pony und drei Ostereier
+
+Aufgabe #105 zählt zehn Sonderstücke auf. Nachgemessen sind es weniger, als die Liste vermuten
+lässt — und zugleich mehr Arbeit an anderer Stelle.
+
+### Was gar nicht fehlte
+
+`bottle_sparkle` und `bottle_rad` stehen längst im Port: die Flaschen sind Spielarten von
+`DrinkType` (`SPARKLE`, `RAD`). Ebenso vorhanden: die drei `EQUESTRIAN`-Patronen,
+`gun_maresleg_broken`, `battery_spark`, `ring_starmetal`, `ntm_dirt` und `broadcaster_pc`. Von
+den zehn Einträgen fehlten also nur vier.
+
+### Der brüchige Spaten und seine drei Funde
+
+`mysteryshovel` taugt zu genau einer Sache: auf die Erde der Bauwerke geschlagen lässt er den
+Block verschwinden und wirft drei Gegenstände aus. Welche drei, war der interessante Teil.
+
+Im Original sind es die Metadaten eins bis drei von `ingot_u238m2`. Der Gegenstand ist dort ein
+`ItemUnstable` mit Untertypen: Metadatum null ist der zerfallende Barren, eins bis drei sind
+drei Ostereier mit eigenen Bildern (`hs-elements`, `hs-arsenic`, `hs-vault`). Der Port hatte
+`ingot_u238m2` als schlichten Einzelgegenstand angemeldet — richtig für seine Rolle als
+Zwischenstufe, aber die drei Funde gab es damit nicht.
+
+`ingot_u238m2` ist jetzt ein `EnumMultiItem` mit vier Spielarten, deren Ordnungszahlen die
+Metadaten des Originals sind. Die beiden Nuggetrezepte bleiben unberührt: sie erzeugen den
+Gegenstand ohne Angabe einer Spielart, und das ist die nullte — neun Nuggets geben weiterhin
+einen Barren, kein Osterei.
+
+**Nicht nachgeholt:** der Zerfall. Im Original tickt Metadatum null herunter und geht am Ende
+als `EntityNukeExplosionMK5` hoch; der Port hat den Barren seit jeher ohne dieses Verhalten,
+und diese Runde ändert daran nichts. Das gehört in die Runde des instabilen Barrens, nicht in
+die der roten Kiste.
+
+Der Spaten selbst steht in keinem Kreativreiter — so wie im Original, das ihm keinen gibt. Er
+liegt nur in der roten Kiste. Das Reiter-Tor weiß das jetzt, mit Begründung.
+
+### Was noch fehlt
+
+Zwei der zehn bleiben, und beide hängen an etwas Größerem:
+
+* **`gun_heavy_revolver_lilmac`** — seine Signaturpatrone `m44_equestrian_pip` lässt beim
+  Aufschlag einen `EntityBoxcar` aus fünfzig Blocken Höhe auf das Ziel fallen. Diese Entität
+  gibt es im Port nicht. Ohne sie wäre der Lilmac ein umlackierter schwerer Revolver, und damit
+  wäre der ganze Witz der Waffe weg.
+* **`gun_autoshotgun_sexy`** — die Grundwaffe, die Autoschrotflinte, fehlt dem Port vollständig;
+  eine Sonderfassung braucht erst ihre Grundform.
+
+Die rote Kiste kippt im Gegensatz zu den übrigen **alle** ihre Einträge aus, nicht einen
+gezogenen. Sie kann deshalb erst kommen, wenn beide Waffen stehen.
+
+### Eine Lücke, die stehen bleibt — vorerst
+
+Beim Nachprüfen kam heraus: die Einzeltexturen einer Metafamilie prüft kein Tor. `asset-check`
+verfolgt Verweise aus dem Java-Quelltext und aus handgeschriebenen Modelldateien; die Modelle
+einer `EnumMultiItem` entstehen aber im Datengenerator, und ihre Texturnamen stehen nirgends
+als Zeichenkette. Eine fehlende `ingot_u238m2.vault.png` fällt deshalb erst im Spiel auf.
+
+Das ist keine falsche Zusage — `asset-check` behauptet nichts über sie —, aber eine echte
+Lücke. Sie ist hier vermerkt und gehört geschlossen, sobald die roten Kiste durch ist.
+
+Alle 30 Tore grün.

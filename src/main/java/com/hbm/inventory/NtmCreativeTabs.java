@@ -1925,6 +1925,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.CROWBAR);
                         output.accept(NtmItems.BOTTLE_OPENER);
                         output.accept(NtmItems.COIN_MASKMAN);
+                        output.accept(NtmItems.FLAME_PONY);
                         addMetaItems(output, NtmItems.CANNED_CONSERVE.get());
                         output.accept(NtmItems.PUDDING);
                         output.accept(NtmItems.SYRINGE_ANTIDOTE);

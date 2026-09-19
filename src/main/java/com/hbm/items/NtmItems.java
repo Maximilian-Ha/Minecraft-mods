@@ -11,6 +11,7 @@ import com.hbm.inventory.NtmTiers;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.ItemEnums.CapType;
+import com.hbm.items.ItemEnums.U238M2Type;
 import com.hbm.items.ItemEnums.CasingType;
 import com.hbm.items.armor.ArmorFSBItem;
 import com.hbm.items.special.SyringeItem;
@@ -26,6 +27,7 @@ import com.hbm.items.armor.ModCharmItem;
 import com.hbm.items.armor.NtmArmorMaterials;
 import com.hbm.items.food.ConserveItem;
 import com.hbm.items.tools.AmmoContainerItem;
+import com.hbm.items.tools.MysteryShovelItem;
 import com.hbm.items.weapon.grenade.GrenadeExtraItem;
 import com.hbm.items.weapon.grenade.GrenadeFillingItem;
 import com.hbm.items.weapon.grenade.GrenadeFuzeItem;
@@ -106,7 +108,9 @@ public class NtmItems {
     public static final DeferredItem<Item> INGOT_U233 = ITEMS.register("ingot_u233", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> INGOT_U235 = ITEMS.register("ingot_u235", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> INGOT_U238 = ITEMS.register("ingot_u238", () -> new Item(new Item.Properties()));
-    public static final DeferredItem<Item> INGOT_U238M2 = ITEMS.register("ingot_u238m2", () -> new Item(new Item.Properties()));
+    /* Vier Spielarten: der Barren und die drei Ostereier des bruechigen Spatens. Die
+     * Ordnungszahlen sind die Metadaten des Originals. */
+    public static final DeferredItem<Item> INGOT_U238M2 = ITEMS.register("ingot_u238m2", () -> new EnumMultiItem(new Item.Properties(), U238M2Type.class, true, true));
     public static final DeferredItem<Item> INGOT_PLUTONIUM = ITEMS.register("ingot_plutonium", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> INGOT_PU238 = ITEMS.register("ingot_pu238", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> INGOT_PU239 = ITEMS.register("ingot_pu239", () -> new Item(new Item.Properties()));
@@ -1205,6 +1209,10 @@ public class NtmItems {
 
     /* Der Munitionsbehaelter der Nachschubkiste. */
     public static final DeferredItem<Item> AMMO_CONTAINER = ITEMS.register("ammo_container", () -> new AmmoContainerItem(new Item.Properties()));
+
+    /* Zwei Sonderstuecke der roten Kiste. */
+    public static final DeferredItem<Item> MYSTERYSHOVEL = ITEMS.register("mysteryshovel", () -> new MysteryShovelItem(new Item.Properties()));
+    public static final DeferredItem<Item> FLAME_PONY = ITEMS.register("flame_pony", () -> new LoreItem(new Item.Properties()));
 
     // Money
     public static final DeferredItem<Item> CAP = ITEMS.register("cap", () -> new EnumMultiItem(new Item.Properties(), CapType.class, true, true));
