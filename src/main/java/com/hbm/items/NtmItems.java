@@ -13,6 +13,7 @@ import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.ItemEnums.CapType;
 import com.hbm.items.ItemEnums.CasingType;
 import com.hbm.items.armor.ArmorFSBItem;
+import com.hbm.items.special.SyringeItem;
 import com.hbm.items.armor.ArmorHEVItem;
 import com.hbm.items.armor.ArmorNo9;
 import com.hbm.items.armor.FilterItem;
@@ -1414,6 +1415,20 @@ public class NtmItems {
                 .setHasGeigerSound(true)
                 .setHasCustomGeiger(true);
     }
+
+    /*
+     * Die Metallspritzen. Jede traegt ihre Wirkung selbst, statt wie im Original von einer
+     * Kette aus Identitaetsabfragen bedient zu werden -- siehe SyringeItem.
+     */
+    public static final DeferredItem<Item> SYRINGE_EMPTY = ITEMS.register("syringe_empty", () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> SYRINGE_METAL_EMPTY = ITEMS.register("syringe_metal_empty", () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> SYRINGE_METAL_STIMPAK = ITEMS.register("syringe_metal_stimpak", () -> SyringeItem.stimpak(new Item.Properties()));
+    public static final DeferredItem<Item> SYRINGE_METAL_MEDX = ITEMS.register("syringe_metal_medx", () -> SyringeItem.medx(new Item.Properties()));
+    public static final DeferredItem<Item> SYRINGE_METAL_PSYCHO = ITEMS.register("syringe_metal_psycho", () -> SyringeItem.psycho(new Item.Properties()));
+    public static final DeferredItem<Item> SYRINGE_METAL_SUPER = ITEMS.register("syringe_metal_super", () -> SyringeItem.superStimpak(new Item.Properties()));
+
+    /** Der Kronkorken. Im Original das Zahlungsmittel des Oedlands, hier vorerst nur Beute. */
+    public static final DeferredItem<Item> CAP_NUKA = ITEMS.register("cap_nuka", () -> new Item(new Item.Properties()));
 
     private static Item.Properties hazmatProperties(ArmorItem.Type type) {
         return new Item.Properties().durability(type.getDurability(NtmArmorMaterials.DURABILITY_HAZMAT));

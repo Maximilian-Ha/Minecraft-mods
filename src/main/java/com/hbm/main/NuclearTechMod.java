@@ -17,6 +17,7 @@ import com.hbm.lib.ModAttachments;
 import com.hbm.lib.ModEffect;
 import com.hbm.particle.NtmParticleTypes;
 import com.hbm.registry.NtmRecipeSerializers;
+import com.hbm.registry.NtmMobEffects;
 import com.hbm.registry.NtmSoundEvents;
 import com.hbm.world.feature.NtmFeatures;
 import net.minecraft.resources.ResourceLocation;
@@ -64,6 +65,7 @@ public class NuclearTechMod {
         NtmDataComponents.register(eventBus);
         NtmEntityTypes.register(eventBus);
         NtmSoundEvents.register(eventBus);
+        NtmMobEffects.register(eventBus);
         NtmCreativeTabs.register(eventBus);
         ModAttachments.register(eventBus);
         ModEffect.register(eventBus);

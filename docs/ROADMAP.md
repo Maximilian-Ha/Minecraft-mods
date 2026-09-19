@@ -6321,3 +6321,74 @@ Damit sind Blei- und Metallkiste **vollständig**: 23 und 17 Einträge, genau di
 Die sechs blockierten Kisten hängen weiter an Spritzen, Granaten, `ammo_container`, drei Waffen
 (`gun_heavy_revolver`, `gun_liberator`, `gun_panzerschreck`) und den zehn Sonderstücken der
 roten Kiste.
+
+## Die Spritzen, die Kronkorken und die Munitionskiste
+
+Erster echter Fortschritt an Aufgabe #80. Die sechs blockierten Kisten hängen an sehr
+unterschiedlich großen Brocken; `crate_ammo` war der kleinste, und er ist jetzt weg.
+
+### Was die Munitionskiste brauchte
+
+Anders als die Beute- und Metallkiste zieht sie nicht aus einer gewichteten Liste: ihr Inhalt
+steht fest und wird nur ausgewürfelt. Kronkorken und Stimpaks liegen immer drin, zwölf Sorten
+Handfeuermunition je mit halber Wahrscheinlichkeit, zwei schwere ebenso, und mit einem Zehntel
+noch zwei Superstimpaks.
+
+Von alldem fehlte im Port genau dreierlei: `cap_nuka`, die Stimpaks und die Kiste selbst. Die
+vierzehn Munitionssorten gibt es längst — `ammo_standard` steht seit der Waffenrunde als
+Metadaten-Gegenstand da.
+
+### Die Trankübelkeit — die erste eigene Zustandswirkung des Ports
+
+Eine Spritze wirkt nur, wenn keine Übelkeit anliegt; ohne diese Sperre ließe sich mit einem
+Stapel Stimpaks jede Verletzung wegklicken. Im Original ist das `HbmPotion.potionsickness`,
+eines von elf eigenen Tränken, die sich ihre Kennungen **per Reflexion** ins Vanille-Feld
+`potionTypes` schreiben und ihre Symbole aus einem einzigen Blatt schneiden.
+
+Auf 1.21 ist `MobEffect` ein gewöhnliches Register. `NtmMobEffects` ist damit die erste
+Registrierung dieser Art im Port, und vorerst steht nur dieser eine Eintrag darin — die
+übrigen zehn des Originals löst der Port anders (Strahlung etwa steht in
+`HbmLivingAttachments`, nicht als Zustandswirkung).
+
+Zwei Kleinigkeiten:
+
+*Die Kategorie.* Das Original kennt nur „gut" und „böse" und trägt hier „gut" ein. Auf 1.21
+gibt es `NEUTRAL`, und das trifft es besser — die Übelkeit hilft nicht, sie schadet aber auch
+nicht, sie sperrt nur.
+
+*Das Symbol.* Jede Wirkung braucht auf 1.21 eine eigene Datei unter `textures/mob_effect/`.
+Das Bild ist aus dem Trankblatt des Originals geschnitten. Die Fundstelle war nicht offensichtlich:
+`registerPotion(..., x, y)` schreibt den Index `x + y*8`, und der Zeichner liest ihn als
+`((i % 8) * 18, 198 + (i / 8) * 18)` — die Symbole liegen also **unten** im 256×256-Blatt, nicht
+oben. Der erste Schnitt bei (54, 18) ergab ein leeres Feld; richtig ist (54, 216).
+
+### Die Spritzen
+
+`ItemSyringe` ist im Original **eine** Klasse mit einer Kette aus `if(this == ModItems.xyz)`,
+eine Abfrage je Spritze — der Quelltext trägt dort nicht umsonst die Marke `@Spaghetti`. Der
+Port hängt die Wirkung stattdessen an den Gegenstand: jede Spritze bekommt bei der Anmeldung
+ihre eigene. Die Zahlen sind unverändert (Stimpak 5 Leben, Med-X Resistenz III vier Minuten,
+Psycho Resistenz I und Stärke I je zwei Minuten, Superstimpak 25 Leben und Langsamkeit I).
+
+Portiert sind die vier Metallspritzen und die beiden leeren Hülsen. Nicht portiert: `syringe_taint`
+und `syringe_mkunicorn` (beide brauchen die Verseuchung), die Blutbeutel und der Sanitätsbeutel
+(`ItemSimpleConsumable`, ein eigenes Teilsystem).
+
+Beim Rezept fehlen zwei Wege: das formlose Stimpak aus drei Nitra-Krumen (`nitra_small` fehlt)
+und das **Superstimpak** (braucht `bottle_nuka` oder `bottle_cherry`). Das Superstimpak bleibt
+darum vorerst reine Beute aus der Munitionskiste.
+
+### Ein Tor, das an einem Namen anschlug
+
+`api-check` meldete auf einmal fünf Funde in `RadioTelexScreen` — einer Datei, die diese Runde
+gar nicht anfasst. Der Grund: das Tor leitet den Typ eines Bezeichners aus **allen**
+Erklärungen im Projekt her, und `inhalt` war bis dahin überall eine Zeichenkette. Meine neue
+Methode `inhalt(RandomSource)` gab eine Liste zurück — damit galt `inhalt` als Sammlung, und
+jedes `inhalt.length()` im Fernschreiber sah nach einem Fehler aus.
+
+Der Fund war falsch, der Anlass nicht: zwei Bedeutungen desselben Namens im selben Projekt sind
+genau das, wovor das Tor warnt. Die Methode heißt jetzt `wuerfleInhalt`.
+
+Stand danach: fünf der sechs Kisten bleiben blockiert. `crate` und `crate_supply` an Spritzen
+(teilweise da), Granaten und `ammo_container`; `crate_weapon` an drei Waffen; `crate_red` an
+zehn Sonderstücken; `crate_can` an der ganzen Dosen- und Nahrungsfamilie.

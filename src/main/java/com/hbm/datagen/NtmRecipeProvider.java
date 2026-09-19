@@ -1058,6 +1058,52 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "upgrade_shredder"));
 
         /*
+         * Die Spritzen, ConsumableRecipes Z. 97 bis 111. Beide leeren Huellen stehen senkrecht:
+         * Platte, Behaelter, Eisengitter. Die gefuellten entstehen aus der Metallhuelle mit vier
+         * Kranz-Zutaten.
+         *
+         * NICHT PORTIERT: das formlose Stimpak-Rezept aus drei Nitra-Krumen (nitra_small fehlt)
+         * und das Superstimpak (braucht bottle_nuka oder bottle_cherry, beide fehlen). Das
+         * Superstimpak bleibt darum vorerst Beute aus der Munitionskiste.
+         */
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.SYRINGE_EMPTY.get(), 6)
+                .pattern("P").pattern("C").pattern("B")
+                .define('P', NtmItems.PLATE_IRON.get())
+                .define('C', NtmItems.CELL_EMPTY.get())
+                .define('B', Blocks.IRON_BARS)
+                .unlockedBy("has_plate_iron", has(NtmItems.PLATE_IRON.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "syringe_empty"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.SYRINGE_METAL_EMPTY.get(), 6)
+                .pattern("P").pattern("C").pattern("B")
+                .define('P', NtmItems.PLATE_IRON.get())
+                .define('C', NtmItems.ROD_EMPTY.get())
+                .define('B', Blocks.IRON_BARS)
+                .unlockedBy("has_rod_empty", has(NtmItems.ROD_EMPTY.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "syringe_metal_empty"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.SYRINGE_METAL_STIMPAK.get(), 1)
+                .pattern(" N ").pattern("NSN").pattern(" N ")
+                .define('N', Items.NETHER_WART)
+                .define('S', NtmItems.SYRINGE_METAL_EMPTY.get())
+                .unlockedBy("has_syringe_metal_empty", has(NtmItems.SYRINGE_METAL_EMPTY.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "syringe_metal_stimpak"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.SYRINGE_METAL_MEDX.get(), 1)
+                .pattern(" N ").pattern("NSN").pattern(" N ")
+                .define('N', Items.QUARTZ)
+                .define('S', NtmItems.SYRINGE_METAL_EMPTY.get())
+                .unlockedBy("has_syringe_metal_empty", has(NtmItems.SYRINGE_METAL_EMPTY.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "syringe_metal_medx"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.SYRINGE_METAL_PSYCHO.get(), 1)
+                .pattern(" N ").pattern("NSN").pattern(" N ")
+                .define('N', Items.GLOWSTONE_DUST)
+                .define('S', NtmItems.SYRINGE_METAL_EMPTY.get())
+                .unlockedBy("has_syringe_metal_empty", has(NtmItems.SYRINGE_METAL_EMPTY.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "syringe_metal_psycho"));
+
+        /*
          * Der Selenkolben, CraftingManager Z. 596: "SSS" / "STS" / " D " aus Stahlplatte,
          * Wolframbarren und einem Durastahlbolzen.
          */

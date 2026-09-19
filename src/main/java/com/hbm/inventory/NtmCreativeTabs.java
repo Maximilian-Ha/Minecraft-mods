@@ -318,6 +318,13 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.COIL_TUNGSTEN.get());
                         output.accept(NtmItems.MOTOR.get());
                         output.accept(NtmItems.CENTRIFUGE_ELEMENT.get());
+                        output.accept(NtmItems.CAP_NUKA.get());
+                        output.accept(NtmItems.SYRINGE_EMPTY.get());
+                        output.accept(NtmItems.SYRINGE_METAL_EMPTY.get());
+                        output.accept(NtmItems.SYRINGE_METAL_STIMPAK.get());
+                        output.accept(NtmItems.SYRINGE_METAL_MEDX.get());
+                        output.accept(NtmItems.SYRINGE_METAL_PSYCHO.get());
+                        output.accept(NtmItems.SYRINGE_METAL_SUPER.get());
                         output.accept(NtmItems.PISTON_SELENIUM.get());
                         addMetaItems(output, NtmItems.CAST_PLATE_WELDED.get());
                         addMetaItems(output, NtmItems.CAST_PLATE.get());
@@ -1529,6 +1536,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.FOUNDRY_OUTLET);
                         output.accept(NtmBlocks.FOUNDRY_SLAGTAP);
                         output.accept(NtmBlocks.HEV_BATTERY);
+                        output.accept(NtmBlocks.CRATE_AMMO);
                         output.accept(NtmBlocks.FOUNDRY_TANK);
                         output.accept(NtmBlocks.TRANSFORMER);
 

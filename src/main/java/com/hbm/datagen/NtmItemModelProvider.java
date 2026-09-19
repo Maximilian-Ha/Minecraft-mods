@@ -433,6 +433,13 @@ public class NtmItemModelProvider extends ItemModelProvider {
 
         this.basicItem(NtmItems.MOTOR.get());
         this.basicItem(NtmItems.CENTRIFUGE_ELEMENT.get());
+        this.basicItem(NtmItems.CAP_NUKA.get());
+        this.basicItem(NtmItems.SYRINGE_EMPTY.get());
+        this.basicItem(NtmItems.SYRINGE_METAL_EMPTY.get());
+        this.basicItem(NtmItems.SYRINGE_METAL_STIMPAK.get());
+        this.basicItem(NtmItems.SYRINGE_METAL_MEDX.get());
+        this.basicItem(NtmItems.SYRINGE_METAL_PSYCHO.get());
+        this.basicItem(NtmItems.SYRINGE_METAL_SUPER.get());
         this.basicItem(NtmItems.PISTON_SELENIUM.get());
         this.basicItem(NtmItems.CAST_PLATE_WELDED.get());
         this.basicItem(NtmItems.CAST_PLATE.get());

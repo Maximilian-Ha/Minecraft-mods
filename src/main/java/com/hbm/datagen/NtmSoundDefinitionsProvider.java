@@ -591,6 +591,7 @@ public class NtmSoundDefinitionsProvider extends SoundDefinitionsProvider {
                 .with(sound("hbmsntm:tool/tech_boop"))
         );
         this.add(NtmSoundEvents.SUIT_BATTERY, SoundDefinition.definition().with(sound("hbmsntm:tool/battery")));
+        this.add(NtmSoundEvents.SYRINGE, SoundDefinition.definition().with(sound("hbmsntm:tool/stim")));
         this.add(NtmSoundEvents.GEIGER1, SoundDefinition.definition().with(sound("hbmsntm:tool/geiger1")));
         this.add(NtmSoundEvents.GEIGER2, SoundDefinition.definition().with(sound("hbmsntm:tool/geiger2")));
         this.add(NtmSoundEvents.GEIGER3, SoundDefinition.definition().with(sound("hbmsntm:tool/geiger3")));

@@ -636,6 +636,14 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.RBMK_PELLET_DRX, "Digamma Fuel Pellet");
         /* Die Zeilen des Vollsatzbonus -- ArmorFSBItem baut seinen Hinweis daraus. */
         this.add("armor.fullSetBonus", "Full Set Bonus:");
+        /* Die Hinweiszeilen der Spritzen, wortgleich aus ItemSyringe.addInformation. */
+        this.add("desc.item.syringe.stimpak", "Heals 2.5 hearts");
+        this.add("desc.item.syringe.medx", "Resistance III for 4 minutes");
+        this.add("desc.item.syringe.psycho.resistance", "Resistance I for 2 minutes");
+        this.add("desc.item.syringe.psycho.strength", "Strength I for 2 minutes");
+        this.add("desc.item.syringe.super.heal", "Heals 25 hearts");
+        this.add("desc.item.syringe.super.slow", "Slowness I for 10 seconds");
+        this.add("effect.hbmsntm.potion_sickness", "Potion Sickness");
         this.add("desc.item.hevBattery.charge", "Charges all worn armor pieces by %sHE");
         this.add("desc.item.hevBattery.requires", "[Requires full electric set to be worn]");
         this.add("armor.geigerSound", "  Auditory Geiger Counter");
@@ -1056,6 +1064,13 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.COIL_TUNGSTEN, "Heating Coil");
         this.add(NtmItems.MOTOR, "Motor");
         this.add(NtmItems.CENTRIFUGE_ELEMENT, "Centrifuge Element");
+        this.add(NtmItems.CAP_NUKA, "Nuka Cola Bottle Cap");
+        this.add(NtmItems.SYRINGE_EMPTY, "Empty Syringe");
+        this.add(NtmItems.SYRINGE_METAL_EMPTY, "Metal Syringe");
+        this.add(NtmItems.SYRINGE_METAL_STIMPAK, "Stimpak");
+        this.add(NtmItems.SYRINGE_METAL_MEDX, "Med-X");
+        this.add(NtmItems.SYRINGE_METAL_PSYCHO, "Psycho");
+        this.add(NtmItems.SYRINGE_METAL_SUPER, "Super Stimpak");
         this.add(NtmItems.PISTON_SELENIUM, "Combustion Engine Piston");
         this.add(NtmItems.CAST_PLATE_WELDED, "Welded Plate");
         this.add(NtmItems.CAST_PLATE, "Cast Plate");
@@ -1103,6 +1118,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.FOUNDRY_OUTLET, "Casting Outlet");
         this.add(NtmBlocks.FOUNDRY_SLAGTAP, "Slag Tap");
         this.add(NtmBlocks.HEV_BATTERY, "HEV Suit Battery");
+        this.add(NtmBlocks.CRATE_AMMO, "Starmetal Crate");
         /* Die Pfuetze hat im Original gar keinen Namen -- sie ist in keinem Reiter und
          * traegt keinen Gegenstand. Einen braucht sie trotzdem, sonst steht der rohe
          * Schluessel in der Anzeige beim Hinsehen. */

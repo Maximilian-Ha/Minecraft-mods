@@ -193,6 +193,7 @@ public class NtmSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> UPGRADE_PLUG = reg("item.upgrade_plug"); // plok
     public static final DeferredHolder<SoundEvent, SoundEvent> FILTER_SCREW = reg("item.gasmask_screw");
     public static final DeferredHolder<SoundEvent, SoundEvent> SUIT_BATTERY = reg("item.battery");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SYRINGE = reg("item.syringe");
     // ALARMS
     public static final DeferredHolder<SoundEvent, SoundEvent> ALARM_HATCH = reg("alarm.hatch"); // RECORDS CATEGORY
     public static final DeferredHolder<SoundEvent, SoundEvent> ALARM_SOYUZED = reg("alarm.soyuzed"); // RECORDS CATEGORY

@@ -581,6 +581,8 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.crateBlock(NtmBlocks.CRATE_TEMPLATE.get(), "crate_template", "crate_template");
 
         // Die Beutekisten tragen im Original ein einziges Bild auf allen sechs Seiten.
+        /* Die Munitionskiste hat oben, unten und an den Seiten je ein eigenes Bild. */
+        this.simpleBlockWithItem(NtmBlocks.CRATE_AMMO.get(), this.models().cubeBottomTop(this.name(NtmBlocks.CRATE_AMMO.get()), modLoc("block/crate_ammo_side"), modLoc("block/crate_ammo_bottom"), modLoc("block/crate_ammo_top")));
         this.simpleCubeAllBlock(NtmBlocks.CRATE_LEAD);
         this.simpleCubeAllBlock(NtmBlocks.CRATE_METAL);
 
