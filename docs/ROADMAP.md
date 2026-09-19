@@ -8225,3 +8225,25 @@ zusammengesetzte Zutaten (`CompoundIngredient`) über die jeweiligen Metadaten �
 ohne Erzwörterbuch.
 
 Alle 34 Tore grün.
+
+## Runde 183 — Der Deshmotor, und damit der 29. Bauplan
+
+In der Bauplanrunde stand als gemessener Grund: *„gun_minigun braucht `motor_desh`, den
+Deshmotor. Den kennt der Port nicht."* Das war richtig — und ein Gegenstand, der aus vier
+vorhandenen Zutaten besteht.
+
+`motor_desh` ist im Original ein schlichter `Item` ohne eigene Klasse. Sein Werkbankmuster
+(`CraftingManager` Z. 174) ist `PCP`/`DMD`/`PCP` aus Kunststoff, dichtem Golddraht,
+Deshbarren und einem gewöhnlichen Motor; dazu gibt es ein Ambossrezept der Stufe 3. Alle vier
+Zutaten hat der Port seit Langem. Es fehlte nur der Motor selbst.
+
+Damit ist die Minigun baubar — Bauplan 29 von 46. Übrig bleibt aus dieser Gruppe nur noch der
+Heilige Drache, und dessen Zutat ist eine ganze Familie (`item_secret`), keine Einzelheit.
+
+**Eine Abweichung, benannt:** das Ambossrezept nennt im Original `AnyPlastic`, also Polymer
+*oder* Bakelit. Die Ambossrezepte des Ports arbeiten mit `ComparableStack`, und der kann nur
+einen Gegenstand nennen — dort steht deshalb Polymer. Das Werkbankrezept kann beides und
+nennt auch beides.
+
+Alle 34 Tore grün.
+

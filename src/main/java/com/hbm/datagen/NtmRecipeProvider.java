@@ -124,6 +124,19 @@ public class NtmRecipeProvider extends RecipeProvider {
         weaponModShapeless(recipeOutput, GunFactory.ModGeneric.BRONZE_DURA,
                 Ingredient.of(NtmItems.PLATE_SATURNITE.get()), anyBismoidBronzeCastPlate(), Ingredient.of(NtmItems.DUCTTAPE.get()));
 
+        /*
+         * Der Deshmotor. Er stand als einzige fehlende Zutat zwischen dem Port und dem
+         * Bauplan der Minigun. Muster wie im Original (CraftingManager Z. 174).
+         */
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.MOTOR_DESH.get(), 1)
+                .pattern("PCP").pattern("DMD").pattern("PCP")
+                .define('P', anyPlasticIngot())
+                .define('C', wireDense(WireDenseItem.Type.GOLD))
+                .define('D', NtmItems.INGOT_DESH.get())
+                .define('M', NtmItems.MOTOR.get())
+                .unlockedBy("has_motor", has(NtmItems.MOTOR.get()))
+                .save(recipeOutput);
+
         this.gunPartRecipes(recipeOutput);
         this.specialWeaponMods(recipeOutput);
         this.gunRecipes(recipeOutput);
@@ -4087,6 +4100,8 @@ public class NtmRecipeProvider extends RecipeProvider {
     private static Ingredient anyPlasticGrip() { return CompoundIngredient.of(grip(Mats.MAT_POLYMER), grip(Mats.MAT_BAKELITE)); }
     private static Ingredient anyHardPlasticStock() { return CompoundIngredient.of(stock(Mats.MAT_HARDPLASTIC), stock(Mats.MAT_PVC)); }
     private static Ingredient anyHardPlasticGrip() { return CompoundIngredient.of(grip(Mats.MAT_HARDPLASTIC), grip(Mats.MAT_PVC)); }
+    private static Ingredient anyResistantAlloyLightBarrel() { return CompoundIngredient.of(lightBarrel(Mats.MAT_TCALLOY), lightBarrel(Mats.MAT_CDALLOY)); }
+    private static Ingredient anyResistantAlloyHeavyReceiver() { return CompoundIngredient.of(heavyReceiver(Mats.MAT_TCALLOY), heavyReceiver(Mats.MAT_CDALLOY)); }
     private static Ingredient anyResistantAlloyCastPlate() { return CompoundIngredient.of(castPlate(CastPlateItem.Type.TCALLOY), castPlate(CastPlateItem.Type.CDALLOY)); }
     private static Ingredient anyBismoidBronzeCastPlate() { return CompoundIngredient.of(castPlate(CastPlateItem.Type.BISMUTH_BRONZE), castPlate(CastPlateItem.Type.ARSENIC_BRONZE)); }
 
@@ -4281,7 +4296,7 @@ public class NtmRecipeProvider extends RecipeProvider {
      * Die Waffenbauplaene.
      *
      * Wortgetreu aus WeaponRecipes des Originals, in der Reihenfolge des Originals. Von den
-     * 46 Bauplaenen dort bleiben hier 28 uebrig; der Rest faellt aus zwei gemessenen Gruenden
+     * 46 Bauplaenen dort bleiben hier 29 uebrig; der Rest faellt aus zwei gemessenen Gruenden
      * weg:
      *
      * ES GIBT DIE WAFFE NICHT: Flammenwerfer und Topaz, Stinger, Chemiewerfer, Quadro, LAG,
@@ -4289,10 +4304,9 @@ public class NtmRecipeProvider extends RecipeProvider {
      * Ladungswerfer, Bohrer und die beiden Panzerruestungswaffen. Sie sind im Port nicht
      * angelegt; ein Bauplan auf ein nicht vorhandenes Erzeugnis waere kein Rezept.
      *
-     * ES GIBT DIE ZUTAT NICHT:
-     * - gun_minigun braucht motor_desh, den Deshmotor. Den kennt der Port nicht.
-     * - gun_double_barrel_sacred_dragon braucht item_secret in der Ausfuehrung SELENIUM_STEEL.
-     *   Die ganze Familie der Geheimstuecke fehlt im Port; die Waffe selbst gibt es.
+     * ES GIBT DIE ZUTAT NICHT: gun_double_barrel_sacred_dragon braucht item_secret in der
+     * Ausfuehrung SELENIUM_STEEL. Die ganze Familie der Geheimstuecke fehlt im Port; die
+     * Waffe selbst gibt es.
      *
      * NICHT UEBERNOMMEN, WEIL SIE ZU EINER NICHT PORTIERTEN WAFFE GEHOEREN: die Aufsaetze
      * LAS_SHOTGUN, LAS_CAPACITOR und LAS_AUTO (Lasergewehr), DRILL_*, ENGINE_*, MAGNET,
@@ -4516,6 +4530,15 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .define('M', mechanism(Mats.MAT_SATURN))
                 .define('A', NtmItems.GUN_AUTOSHOTGUN.get())
                 .unlockedBy("has_autoshotgun", has(NtmItems.GUN_AUTOSHOTGUN.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_MINIGUN, "BMG", "BRE", "BGM")
+                .define('B', anyResistantAlloyLightBarrel())
+                .define('M', mechanism(Mats.MAT_WEAPONSTEEL))
+                .define('G', anyPlasticGrip())
+                .define('R', anyResistantAlloyHeavyReceiver())
+                .define('E', NtmItems.MOTOR_DESH.get())
+                .unlockedBy("has_motor_desh", has(NtmItems.MOTOR_DESH.get()))
                 .save(recipeOutput);
 
         gun(NtmItems.GUN_STG77, " D ", "BRS", "GGM")

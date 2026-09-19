@@ -9,6 +9,7 @@ import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.items.BoltItem;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.CastPlateItem;
+import com.hbm.items.WireDenseItem;
 import com.hbm.items.NtmItems;
 import com.hbm.items.machine.GearItem;
 import com.hbm.util.InventoryUtil;
@@ -473,6 +474,22 @@ public class AnvilRecipes {
                 new AnvilOutput(new ItemStack(NtmItems.MOTOR.asItem(), 2))
 
         ).setTier(2).setOverlay(OverlayType.CONSTRUCTION));
+
+        /*
+         * Der Deshmotor, Stufe 3 wie im Original. Das Original kennt AnyPlastic hier als
+         * Erzverzeichniseintrag; ComparableStack kann nur einen Gegenstand nennen, deshalb
+         * steht hier Polymer -- der erste der beiden, die AnyPlastic meint.
+         */
+        CONSTRUCTION_RECIPES.add(new AnvilConstructionRecipe(
+                new AStack[] {
+                        new ComparableStack(NtmItems.MOTOR.get(), 1),
+                        new ComparableStack(NtmItems.INGOT_POLYMER.get(), 2),
+                        new ComparableStack(NtmItems.INGOT_DESH.get(), 2),
+                        new ComparableStack(NtmItems.WIRE_DENSE.get(), 1, WireDenseItem.Type.GOLD.meta),
+                },
+                new AnvilOutput(new ItemStack(NtmItems.MOTOR_DESH.asItem(), 1))
+
+        ).setTier(3));
         addAnvilRecipe(NtmItems.PLATE_TITANIUM.get(), 4, NtmItems.SHELL_TITANIUM.get(), 1, 1);
         addAnvilRecipe(NtmItems.PLATE_ALUMINIUM.get(), 4, NtmItems.SHELL_ALUMINIUM.get(), 1, 1);
         addAnvilRecipe(NtmItems.PLATE_COPPER.get(), 4, NtmItems.SHELL_COPPER.get(), 1, 1);

@@ -1072,6 +1072,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.COIL_MAGNETIZED_TUNGSTEN, "4000K High Temperature Super Conducting Coil");
         this.add(NtmItems.COIL_TUNGSTEN, "Heating Coil");
         this.add(NtmItems.MOTOR, "Motor");
+        this.add(NtmItems.MOTOR_DESH, "Desh Motor");
         this.add(NtmItems.CENTRIFUGE_ELEMENT, "Centrifuge Element");
         this.add(NtmItems.CAP_NUKA, "Nuka Cola Bottle Cap");
         this.add(NtmItems.SYRINGE_EMPTY, "Empty Syringe");
