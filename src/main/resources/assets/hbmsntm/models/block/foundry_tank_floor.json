@@ -1,0 +1,30 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "particle": "hbmsntm:block/foundry_tank_side",
+    "top": "hbmsntm:block/foundry_tank_top"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        2,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#bottom",
+          "cullface": "down"
+        },
+        "up": {
+          "texture": "#bottom"
+        }
+      }
+    }
+  ]
+}

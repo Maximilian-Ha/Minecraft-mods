@@ -1,0 +1,952 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "down": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_floor_plain"
+      }
+    },
+    {
+      "when": {
+        "north": "false",
+        "down": "false",
+        "up": "false",
+        "outlet_north": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_lower_closed"
+      }
+    },
+    {
+      "when": {
+        "north": "false",
+        "down": "false",
+        "up": "false",
+        "outlet_north": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_lower_closed_outlet"
+      }
+    },
+    {
+      "when": {
+        "north": "false",
+        "down": "false",
+        "up": "true",
+        "outlet_north": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_lower_open"
+      }
+    },
+    {
+      "when": {
+        "north": "false",
+        "down": "false",
+        "up": "true",
+        "outlet_north": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_lower_open_outlet"
+      }
+    },
+    {
+      "when": {
+        "north": "false",
+        "down": "true",
+        "up": "false",
+        "outlet_north": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_upper_closed"
+      }
+    },
+    {
+      "when": {
+        "north": "false",
+        "down": "true",
+        "up": "false",
+        "outlet_north": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_upper_closed_outlet"
+      }
+    },
+    {
+      "when": {
+        "north": "false",
+        "down": "true",
+        "up": "true",
+        "outlet_north": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_upper_open"
+      }
+    },
+    {
+      "when": {
+        "north": "false",
+        "down": "true",
+        "up": "true",
+        "outlet_north": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_upper_open_outlet"
+      }
+    },
+    {
+      "when": {
+        "east": "false",
+        "down": "false",
+        "up": "false",
+        "outlet_east": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_lower_closed",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "false",
+        "down": "false",
+        "up": "false",
+        "outlet_east": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_lower_closed_outlet",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "false",
+        "down": "false",
+        "up": "true",
+        "outlet_east": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_lower_open",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "false",
+        "down": "false",
+        "up": "true",
+        "outlet_east": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_lower_open_outlet",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "false",
+        "down": "true",
+        "up": "false",
+        "outlet_east": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_upper_closed",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "false",
+        "down": "true",
+        "up": "false",
+        "outlet_east": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_upper_closed_outlet",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "false",
+        "down": "true",
+        "up": "true",
+        "outlet_east": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_upper_open",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "false",
+        "down": "true",
+        "up": "true",
+        "outlet_east": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_upper_open_outlet",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "false",
+        "down": "false",
+        "up": "false",
+        "outlet_south": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_lower_closed",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "south": "false",
+        "down": "false",
+        "up": "false",
+        "outlet_south": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_lower_closed_outlet",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "south": "false",
+        "down": "false",
+        "up": "true",
+        "outlet_south": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_lower_open",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "south": "false",
+        "down": "false",
+        "up": "true",
+        "outlet_south": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_lower_open_outlet",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "south": "false",
+        "down": "true",
+        "up": "false",
+        "outlet_south": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_upper_closed",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "south": "false",
+        "down": "true",
+        "up": "false",
+        "outlet_south": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_upper_closed_outlet",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "south": "false",
+        "down": "true",
+        "up": "true",
+        "outlet_south": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_upper_open",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "south": "false",
+        "down": "true",
+        "up": "true",
+        "outlet_south": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_upper_open_outlet",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "false",
+        "down": "false",
+        "up": "false",
+        "outlet_west": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_lower_closed",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "false",
+        "down": "false",
+        "up": "false",
+        "outlet_west": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_lower_closed_outlet",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "false",
+        "down": "false",
+        "up": "true",
+        "outlet_west": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_lower_open",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "false",
+        "down": "false",
+        "up": "true",
+        "outlet_west": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_lower_open_outlet",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "false",
+        "down": "true",
+        "up": "false",
+        "outlet_west": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_upper_closed",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "false",
+        "down": "true",
+        "up": "false",
+        "outlet_west": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_upper_closed_outlet",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "false",
+        "down": "true",
+        "up": "true",
+        "outlet_west": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_upper_open",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "false",
+        "down": "true",
+        "up": "true",
+        "outlet_west": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_wall_upper_open_outlet",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "north": "false",
+        "east": "false",
+        "down": "false",
+        "up": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oo_lower_closed"
+      }
+    },
+    {
+      "when": {
+        "north": "false",
+        "east": "false",
+        "down": "false",
+        "up": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oo_lower_open"
+      }
+    },
+    {
+      "when": {
+        "north": "false",
+        "east": "false",
+        "down": "true",
+        "up": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oo_upper_closed"
+      }
+    },
+    {
+      "when": {
+        "north": "false",
+        "east": "false",
+        "down": "true",
+        "up": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oo_upper_open"
+      }
+    },
+    {
+      "when": {
+        "north": "false",
+        "east": "true",
+        "down": "false",
+        "up": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oi_lower_closed"
+      }
+    },
+    {
+      "when": {
+        "north": "false",
+        "east": "true",
+        "down": "false",
+        "up": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oi_lower_open"
+      }
+    },
+    {
+      "when": {
+        "north": "false",
+        "east": "true",
+        "down": "true",
+        "up": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oi_upper_closed"
+      }
+    },
+    {
+      "when": {
+        "north": "false",
+        "east": "true",
+        "down": "true",
+        "up": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oi_upper_open"
+      }
+    },
+    {
+      "when": {
+        "north": "true",
+        "east": "false",
+        "down": "false",
+        "up": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_io_lower_closed"
+      }
+    },
+    {
+      "when": {
+        "north": "true",
+        "east": "false",
+        "down": "false",
+        "up": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_io_lower_open"
+      }
+    },
+    {
+      "when": {
+        "north": "true",
+        "east": "false",
+        "down": "true",
+        "up": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_io_upper_closed"
+      }
+    },
+    {
+      "when": {
+        "north": "true",
+        "east": "false",
+        "down": "true",
+        "up": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_io_upper_open"
+      }
+    },
+    {
+      "when": {
+        "east": "false",
+        "south": "false",
+        "down": "false",
+        "up": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oo_lower_closed",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "false",
+        "south": "false",
+        "down": "false",
+        "up": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oo_lower_open",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "false",
+        "south": "false",
+        "down": "true",
+        "up": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oo_upper_closed",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "false",
+        "south": "false",
+        "down": "true",
+        "up": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oo_upper_open",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "false",
+        "south": "true",
+        "down": "false",
+        "up": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oi_lower_closed",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "false",
+        "south": "true",
+        "down": "false",
+        "up": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oi_lower_open",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "false",
+        "south": "true",
+        "down": "true",
+        "up": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oi_upper_closed",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "false",
+        "south": "true",
+        "down": "true",
+        "up": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oi_upper_open",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "true",
+        "south": "false",
+        "down": "false",
+        "up": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_io_lower_closed",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "true",
+        "south": "false",
+        "down": "false",
+        "up": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_io_lower_open",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "true",
+        "south": "false",
+        "down": "true",
+        "up": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_io_upper_closed",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "true",
+        "south": "false",
+        "down": "true",
+        "up": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_io_upper_open",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "false",
+        "west": "false",
+        "down": "false",
+        "up": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oo_lower_closed",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "south": "false",
+        "west": "false",
+        "down": "false",
+        "up": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oo_lower_open",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "south": "false",
+        "west": "false",
+        "down": "true",
+        "up": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oo_upper_closed",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "south": "false",
+        "west": "false",
+        "down": "true",
+        "up": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oo_upper_open",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "south": "false",
+        "west": "true",
+        "down": "false",
+        "up": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oi_lower_closed",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "south": "false",
+        "west": "true",
+        "down": "false",
+        "up": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oi_lower_open",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "south": "false",
+        "west": "true",
+        "down": "true",
+        "up": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oi_upper_closed",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "south": "false",
+        "west": "true",
+        "down": "true",
+        "up": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oi_upper_open",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "south": "true",
+        "west": "false",
+        "down": "false",
+        "up": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_io_lower_closed",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "south": "true",
+        "west": "false",
+        "down": "false",
+        "up": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_io_lower_open",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "south": "true",
+        "west": "false",
+        "down": "true",
+        "up": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_io_upper_closed",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "south": "true",
+        "west": "false",
+        "down": "true",
+        "up": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_io_upper_open",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "false",
+        "north": "false",
+        "down": "false",
+        "up": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oo_lower_closed",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "false",
+        "north": "false",
+        "down": "false",
+        "up": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oo_lower_open",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "false",
+        "north": "false",
+        "down": "true",
+        "up": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oo_upper_closed",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "false",
+        "north": "false",
+        "down": "true",
+        "up": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oo_upper_open",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "false",
+        "north": "true",
+        "down": "false",
+        "up": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oi_lower_closed",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "false",
+        "north": "true",
+        "down": "false",
+        "up": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oi_lower_open",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "false",
+        "north": "true",
+        "down": "true",
+        "up": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oi_upper_closed",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "false",
+        "north": "true",
+        "down": "true",
+        "up": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_oi_upper_open",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "true",
+        "north": "false",
+        "down": "false",
+        "up": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_io_lower_closed",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "true",
+        "north": "false",
+        "down": "false",
+        "up": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_io_lower_open",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "true",
+        "north": "false",
+        "down": "true",
+        "up": "false"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_io_upper_closed",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "true",
+        "north": "false",
+        "down": "true",
+        "up": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_tank_corner_io_upper_open",
+        "y": 270
+      }
+    }
+  ]
+}

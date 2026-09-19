@@ -5808,3 +5808,50 @@ weglässt, wo ein Nachbartank steht, und den Füllstand über Blockgrenzen laufe
 Schlackenabstich, der weiter an `BlockDynamicSlag` hängt.
 
 Stand danach: fehlende Blockentitäten 117.
+
+### Der Gießereitank — 81 Multipart-Zeilen, und warum es keine 129 sind
+
+`foundry_tank` lagert vier Blöcke Schmelze und gibt sie in drei Stufen weiter: erst nach unten,
+dann waagerecht an alles, was den Guss annimmt, zuletzt an die Nachbartanks, deren Füllstand er
+dabei angleicht. Jeder fünfte Ausgleich **tauscht** die Stände statt sie zu halbieren — sonst
+bliebe ein langer Strang auf halber Strecke stehen, weil die Hälfte der Hälfte irgendwann null
+ist. Steht ein Tank neben einem anderen, fällt die Wand dazwischen weg: beide sind ein Behälter,
+und die Oberfläche läuft über die Blockgrenze.
+
+Das Aussehen hängt an vier unabhängigen Dingen, und das ist der ganze Aufwand:
+
+| hängt ab von | was sich ändert |
+|---|---|
+| Tank an einer der sechs Seiten | die Wand dort fällt weg |
+| Tank **unten** | die Außenwand trägt das Bild ohne Sockel (`_upper`) |
+| Tank **oben** | die Innenflächen tragen `_bottom` statt `_inner` |
+| Ausguss seitlich, der hierher zeigt | die Wand bekommt ein Loch (`_outlet`) |
+
+Zusammen zehn Wahrheitswerte, also **1024 Blockzustände** — im Rahmen dessen, was Vanilla
+selbst tut (Redstone-Staub hat 1296). Die Zustandsdatei erzeugt
+`tools/gen-foundry-tank-models.py`: 81 Multipart-Zeilen und 23 Modelle.
+
+Der interessante Teil war die **Zerlegung**. Das Original lässt seine vier Wände über die volle
+Breite laufen und regelt die Ecken über bedingte Flächen — in einer Modelldatei geht das nicht,
+weil zwei deckungsgleiche Flächen **mit gleicher Normalen** flackern. Ein Aufbau aus vier
+Wandstücken (je 12 Pixel breit) und vier Ecken (je 2×2) ist überschneidungsfrei: dort, wo
+Stücke aneinanderstoßen, zeigen die Normalen **auseinander**, und die Rückseitenaussonderung
+nimmt jeweils eine weg. Jede Ecke hat dafür drei Fälle statt eines — sie steht, sobald
+mindestens eine der beiden Wände neben ihr steht, und ihre beiden äußeren Flächen tragen je
+nachdem das Außen- oder das Innenbild.
+
+Die naive Rechnung wären 129 Zeilen gewesen. Dass es 81 sind, liegt an einer Messung: das Loch
+für den Ausguss sitzt in `foundry_tank_side_outlet` genau in der Mitte (u 6–10, v 10–14),
+also im 12 Pixel breiten Wandstück und **nie** in einer Ecke. Die Ecken brauchen die
+Ausguss-Spielart daher nicht.
+
+Vom Renderer blieb nur die Schmelze übrig: eine Fläche auf Höhe
+`0.75 + je ein Achtel für einen Tank oben und unten`, mal dem Füllgrad, dazu die Seitenflächen
+**dort, wo ein Tank steht**. Das klingt verkehrt herum, ist aber richtig: an einer geschlossenen
+Wand sieht sie ohnehin niemand, und zwischen zwei Tanks mit ungleichem Stand wäre sonst eine
+Lücke zu sehen.
+
+Damit ist Aufgabe #90 bis auf den Schlackenabstich abgearbeitet; der hängt weiter an
+`BlockDynamicSlag` mit `TileEntitySlag`, das der Port nicht hat.
+
+Stand danach: fehlende Blockentitäten 116.

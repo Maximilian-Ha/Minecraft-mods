@@ -850,6 +850,9 @@ public class NtmBlocks {
     /* Der Ausguss: dieselben Werte wie die uebrige Giesserei, er ist ja aus derselben Rinne
      * gebaut. */
     public static final DeferredBlock<Block> FOUNDRY_OUTLET = register("foundry_outlet", () -> new FoundryOutletBlock(BlockBehaviour.Properties.of().strength(2.0F, 10.0F).sound(SoundType.STONE).mapColor(MapColor.STONE).requiresCorrectToolForDrops().noOcclusion()));
+    /* Der Lagerbehaelter. Mehrere nebeneinander laufen ineinander -- was die tausend
+     * Blockzustaende erklaert, die er dafuer braucht. */
+    public static final DeferredBlock<Block> FOUNDRY_TANK = register("foundry_tank", () -> new FoundryTankBlock(BlockBehaviour.Properties.of().strength(2.0F, 10.0F).sound(SoundType.STONE).mapColor(MapColor.STONE).requiresCorrectToolForDrops().noOcclusion()));
     public static final DeferredBlock<Block> MACHINE_ARC_FURNACE = register("machine_arc_furnace", () -> new MachineArcFurnaceLargeBlock(BlockBehaviour.Properties.of().strength(0.6F, 100.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops().noOcclusion()));
     /* RBMK: die Saeulen des Reaktors, dazu der Schutt, der von ihnen uebrig bleibt. */
     public static final DeferredBlock<Block> RBMK_BLANK = register("rbmk_blank", () -> new RBMKPassiveBlock(RBMKType.OTHER, BlockBehaviour.Properties.of().strength(3.0F, 30.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops()));

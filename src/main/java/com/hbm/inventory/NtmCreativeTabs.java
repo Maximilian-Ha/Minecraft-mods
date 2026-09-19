@@ -1522,6 +1522,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.FOUNDRY_MOLD);
                         output.accept(NtmBlocks.FOUNDRY_BASIN);
                         output.accept(NtmBlocks.FOUNDRY_OUTLET);
+                        output.accept(NtmBlocks.FOUNDRY_TANK);
                         output.accept(NtmBlocks.TRANSFORMER);
 
                         addMetaItems(output, NtmBlocks.ANVIL.asItem());

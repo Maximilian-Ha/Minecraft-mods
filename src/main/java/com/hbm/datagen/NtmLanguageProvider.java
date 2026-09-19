@@ -1093,6 +1093,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.FOUNDRY_MOLD, "Casting Mold");
         this.add(NtmBlocks.FOUNDRY_BASIN, "Casting Basin");
         this.add(NtmBlocks.FOUNDRY_OUTLET, "Casting Outlet");
+        this.add(NtmBlocks.FOUNDRY_TANK, "Casting Tank");
         this.add(NtmBlocks.RBMK_GAUGE, "RBMK Gauge Panel");
         this.add(NtmBlocks.RBMK_INDICATOR, "RBMK Indicator Panel");
         this.add(NtmBlocks.RBMK_NUMITRON, "RBMK Numitron Panel");

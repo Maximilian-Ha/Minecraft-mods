@@ -1,0 +1,7 @@
+{
+  "parent": "hbmsntm:block/foundry_tank_wall",
+  "textures": {
+    "outer": "hbmsntm:block/foundry_tank_side",
+    "inner": "hbmsntm:block/foundry_tank_bottom"
+  }
+}

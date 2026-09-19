@@ -553,6 +553,7 @@ public class NtmBlockTagProvider extends BlockTagsProvider {
                         NtmBlocks.FOUNDRY_MOLD.get(),
                         NtmBlocks.FOUNDRY_BASIN.get(),
                         NtmBlocks.FOUNDRY_OUTLET.get(),
+                        NtmBlocks.FOUNDRY_TANK.get(),
                         NtmBlocks.RBMK_GAUGE.get(),
                         NtmBlocks.RBMK_INDICATOR.get(),
                         NtmBlocks.RBMK_NUMITRON.get(),

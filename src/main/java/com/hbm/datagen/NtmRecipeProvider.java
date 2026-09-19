@@ -2011,8 +2011,8 @@ public class NtmRecipeProvider extends RecipeProvider {
          * CraftingManager Z. 920 bis 924.
          *
          * Blocks.stone_slab des Originals ist die Steinstufe mit Metadatum 0, auf 1.21 also
-         * SMOOTH_STONE_SLAB. Der Tank (Z. 923) und der Schlackenabstich (Z. 925) fehlen, weil
-         * es die beiden Bloecke im Port noch nicht gibt.
+         * SMOOTH_STONE_SLAB. Der Schlackenabstich (Z. 925) fehlt, weil es den Block im Port
+         * noch nicht gibt.
          */
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.FOUNDRY_BASIN.get(), 1)
                 .pattern("B B").pattern("B B").pattern("BSB")
@@ -2034,6 +2034,14 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .define('S', Blocks.SMOOTH_STONE_SLAB)
                 .unlockedBy("has_ingot_firebrick", has(NtmItems.INGOT_FIREBRICK.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "foundry_channel"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.FOUNDRY_TANK.get(), 1)
+                .pattern("B B").pattern("I I").pattern("BSB")
+                .define('B', NtmItems.INGOT_FIREBRICK.get())
+                .define('I', NtmItems.INGOT_STEEL.get())
+                .define('S', Blocks.SMOOTH_STONE_SLAB)
+                .unlockedBy("has_ingot_firebrick", has(NtmItems.INGOT_FIREBRICK.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "foundry_tank"));
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, NtmBlocks.FOUNDRY_OUTLET.get(), 1)
                 .requires(NtmBlocks.FOUNDRY_CHANNEL.get())
