@@ -89,6 +89,11 @@ jobs:
           chmod +x ./tools/import-cover-check.sh
           ./tools/import-cover-check.sh
 
+      - name: Check block entity types
+        run: |
+          chmod +x ./tools/betype-check.sh
+          ./tools/betype-check.sh
+
       - name: Check render bounding boxes
         run: |
           chmod +x ./tools/renderbox-check.sh

@@ -42,6 +42,8 @@ KEIN_BLOCK = {
     # Im Port heisst der Waffentisch weapon_table, ohne das machine_ davor,
     # und das TNT schlicht tnt.
     "machine_weapon_table", "tnt_ntm",
+    # Der Port schreibt den Tank mit Unterstrich: machine_fluid_tank.
+    "machine_fluidtank",
     # Das Original selbst kennt sie nicht mehr: sie stehen dort in ignoreMappings,
     # der Liste der Altnamen, die beim Laden alter Welten stillschweigend wegfallen.
     "barrel_iron", "ladder_tungsten", "ore_coal_oil",

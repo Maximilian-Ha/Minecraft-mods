@@ -887,8 +887,6 @@ public class NtmBlockEntityTypes {
     public static final Supplier<BlockEntityType<DiFurnaceExtensionBlockEntity>> MACHINE_DIFURNACE_EXTENSION = BLOCK_ENTITY_TYPES.register("machine_difurnace_extension", () -> BlockEntityType.Builder.of(DiFurnaceExtensionBlockEntity::new, NtmBlocks.MACHINE_DIFURNACE_EXTENSION.get()).build(null));
     public static final Supplier<BlockEntityType<PipeBaseBlockEntity>> FLUID_DUCT = BLOCK_ENTITY_TYPES.register("fluid_duct", () -> BlockEntityType.Builder.of(PipeBaseBlockEntity::new, NtmBlocks.FLUID_DUCT_NEO.get()).build(null));
 
-    public static final Supplier<BlockEntityType<TowerSmallBlockEntity>> TOWER_SMALL = BLOCK_ENTITY_TYPES.register("tower_small", () -> BlockEntityType.Builder.of(TowerSmallBlockEntity::new, NtmBlocks.FLUID_DUCT_NEO.get()).build(null));
-
     public static final Supplier<BlockEntityType<DecontaminatorBlockEntity>> DECONTAMINATOR = BLOCK_ENTITY_TYPES.register(
             "decontaminator",
             () -> BlockEntityType.Builder.of(

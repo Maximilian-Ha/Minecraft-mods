@@ -4917,3 +4917,41 @@ Zwei weitere Einträge waren wieder keine Arbeit, sondern Messfehler:
   `addMetaItems` legt alle Varianten in den Kreativreiter — nachgesehen, nicht angenommen.
 
 Die Lücke steht bei **28**.
+
+### Zwei Registrierungen für denselben Kühlturm
+
+Auf dem Weg zum Messrohr bin ich in `NtmBlockEntityTypes` über etwas gestolpert, das mit dem
+Messrohr nichts zu tun hatte:
+
+```java
+// Zeile 876
+MACHINE_TOWER_SMALL = ... BlockEntityType.Builder.of(TowerSmallBlockEntity::new, NtmBlocks.MACHINE_TOWER_SMALL.get())
+// Zeile 890
+TOWER_SMALL        = ... BlockEntityType.Builder.of(TowerSmallBlockEntity::new, NtmBlocks.FLUID_DUCT_NEO.get())
+```
+
+Dieselbe Blockentität, zweimal registriert — und die zweite Registrierung an den **Rohrblock**
+gebunden statt an den Kühlturm. Mein erster Verdacht war, dass ich das in Runde 169 selbst
+hineingeschrieben habe. `git log -S` sagt etwas anderes: die Zeile stammt aus `aa7cc6cc`
+(»Absturz beim Start: camelCase in einer ResourceLocation«, 15. September) — sie ist älter als
+alles, was ich hier gemacht habe.
+
+Der Kühlturm funktioniert trotzdem, weil `TowerSmallBlockEntity` und `ClientProxy` beide
+`MACHINE_TOWER_SMALL` benutzen; `TOWER_SMALL` ruft niemand ab. Das ist der unangenehme Teil:
+toter Code, der sauber übersetzt, sauber startet und sich durch nichts bemerkbar macht — bis
+jemand ihn irgendwann versehentlich benutzt und sich wundert, warum seine Blockentität am
+Rohr hängt. Also weg damit.
+
+Und danach ein Tor, damit es nicht wiederkommt. **Tor 27: jede in `NtmBlockEntityTypes`
+deklarierte Art muss anderswo im Quelltext benutzt werden.** Gemessen in beide Richtungen:
+sauber 230 Arten, 0 ohne Verwendung, rc=0; mit der wieder eingesetzten Zeile 231 Arten, genau
+ein Fund (`TOWER_SMALL`), rc=1. Exit-Codes direkt abgefragt, nicht durch eine Pipe.
+
+Das Tor hat noch eine zweite Hälfte, die nichts findet, sondern sich selbst prüft: es zählt
+alle `BLOCK_ENTITY_TYPES.register(`-Aufrufe (231) und vergleicht sie mit den erkannten
+Deklarationen (230) plus dem einen Bus-Anschluss. Passt das nicht auf, bricht es mit »Muster
+greift nicht« ab, statt stillschweigend blind zu werden. Ein Torwächter, der die Hälfte der
+Tür nicht sieht, ist schlimmer als keiner.
+
+Nebenbei noch eine Scheinlücke weniger: **`machine_fluidtank`** heißt im Port
+`machine_fluid_tank`, mit Unterstrich. Die Lücke steht bei **27**.
