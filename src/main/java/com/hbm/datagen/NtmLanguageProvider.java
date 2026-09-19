@@ -1993,6 +1993,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.GUN_LASER_PISTOL_PEW_PEW, "Pew Pew");
         this.add(NtmItems.GUN_LASER_PISTOL_MORNING_GLORY, "Morning Glory");
         this.add(NtmItems.GUN_LASRIFLE, "Laser Rifle");
+        this.add(NtmItems.GUN_CHEMTHROWER, "Chemthrower");
         this.add(NtmItems.GUN_FLAMER, "Flamethrower");
         this.add(NtmItems.GUN_FLAMER_TOPAZ, "Mister Topaz");
         this.add(NtmItems.GUN_FLAMER_DAYBREAKER, "Daybreaker");

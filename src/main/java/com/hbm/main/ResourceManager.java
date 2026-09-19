@@ -353,6 +353,7 @@ public class ResourceManager {
     public static final ResourceLocation CONGOLAKE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/congolake.png");
     public static final ResourceLocation FLAMETHROWER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/flamethrower.png");
     public static final ResourceLocation DRILL_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/drill.png");
+    public static final ResourceLocation CHEMTHROWER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/chemthrower.png");
     public static final ResourceLocation LASER_PISTOL_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/laser_pistol.png");
     public static final ResourceLocation LASER_PISTOL_PEW_PEW_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/laser_pistol_pew_pew.png");
     public static final ResourceLocation LASER_PISTOL_MORNING_GLORY_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/laser_pistol_morning_glory.png");
@@ -696,6 +697,7 @@ public class ResourceManager {
     public static IModelCustom congolake;
     public static IModelCustom flamethrower;
     public static IModelCustom drill;
+    public static IModelCustom chemthrower;
     public static IModelCustom laser_pistol;
     public static IModelCustom lasrifle;
     public static IModelCustom flaregun;
@@ -994,6 +996,7 @@ public class ResourceManager {
         congolake = new HFRWavefrontObject("models/obj/weapons/congolake.obj").asVBO();
         flamethrower = new HFRWavefrontObject("models/obj/weapons/flamethrower.obj").asVBO();
         drill = new HFRWavefrontObject("models/obj/weapons/drill.obj").asVBO();
+        chemthrower = new HFRWavefrontObject("models/obj/weapons/chemthrower.obj").asVBO();
         laser_pistol = new HFRWavefrontObject("models/obj/weapons/laser_pistol.obj").asVBO();
         lasrifle = new HFRWavefrontObject("models/obj/weapons/lasrifle.obj").asVBO();
         flaregun = new HFRWavefrontObject("models/obj/weapons/flaregun.obj").asVBO();

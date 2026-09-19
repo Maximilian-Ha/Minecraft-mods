@@ -11,6 +11,8 @@ import com.hbm.items.weapon.sedna.GunBaseNTItem.WeaponQuality;
 import com.hbm.items.weapon.sedna.GunConfig;
 import com.hbm.items.weapon.sedna.Receiver;
 import com.hbm.items.weapon.sedna.factory.GunFactory.Ammo;
+import com.hbm.items.weapon.sedna.impl.GunChemthrowerItem;
+import com.hbm.items.weapon.sedna.mags.MagazineFluid;
 import com.hbm.items.weapon.sedna.mags.MagazineFullReload;
 import com.hbm.main.ResourceManager;
 import com.hbm.particle.helper.FlameCreator;
@@ -52,9 +54,9 @@ import java.util.function.Consumer;
  * sich her (onUpdate), zuendet an, was es trifft (onImpact), und laesst dort, wo es auf einen
  * Block schlaegt, eine Lache stehenden Feuers zurueck (onRicochet).
  *
- * NICHT IN DIESER RUNDE: der Chemiewerfer aus derselben Fabrik des Originals. Er schiesst
- * keine Geschosse, sondern Fluessigkeit aus einem Tank, und braucht dafuer MagazineFluid und
- * eine eigene Waffenklasse -- das ist eine Stufe fuer sich.
+ * DER CHEMIEWERFER gehoert im Original in dieselbe Fabrik und steht seit Runde 188 auch hier.
+ * Er schiesst keine Geschosse, sondern den Inhalt seines Tanks; was dabei herauskommt,
+ * entscheidet das Fluid.
  *
  * DER DAYBREAKER BLEIBT VORERST OHNE QUELLE. Im Original kommt er aus dem Sockel
  * (PedestalRecipes); den gibt es im Port nicht, und damit auch keinen Weg zu ihm ausser dem
@@ -259,7 +261,30 @@ public class XFactoryFlamer {
                 .setupStandardConfiguration()
                 .anim(LAMBDA_FLAMER_ANIMS).orchestra(Orchestras.ORCHESTRA_FLAMER_DAYBREAKER)
         ).setDefaultAmmo(Ammo.FLAME_DIESEL, 1));
+
+        /*
+         * Der Chemiewerfer. Kein Magazin mit Patronen, sondern ein Tank mit drei Litern; was
+         * er verschiesst, haengt daran, was drin ist. Er hat deshalb auch kein Nachladen --
+         * pr und reload fehlen im Original ebenso.
+         */
+        NtmItems.GUN_CHEMTHROWER = registry.register("gun_chemthrower", () -> new GunChemthrowerItem(WeaponQuality.A_SIDE, new GunConfig()
+                .dura(90_000).draw(10).inspect(17).crosshair(Crosshair.L_CIRCLE).smoke(Lego.LAMBDA_STANDARD_SMOKE)
+                .rec(new Receiver(0)
+                        .delay(1).spreadHipfire(0F).auto(true)
+                        .mag(new MagazineFluid(0, 3_000))
+                        .offset(0.75, -0.0625, -0.25D)
+                        .canFire(GunChemthrowerItem.LAMBDA_CAN_FIRE).fire(GunChemthrowerItem.LAMBDA_FIRE))
+                .pp(Lego.LAMBDA_STANDARD_CLICK_PRIMARY).decider(GunStateDecider.LAMBDA_STANDARD_DECIDER)
+                .anim(LAMBDA_CHEMTHROWER_ANIMS).orchestra(Orchestras.ORCHESTRA_CHEMTHROWER)
+        ));
     }
+
+    /** Der Chemiewerfer hat nur eine einzige Bewegung: das Anlegen. */
+    public static BiFunction<ItemStack, GunAnimation, BusAnimation> LAMBDA_CHEMTHROWER_ANIMS = (stack, type) -> {
+        if(type == GunAnimation.EQUIP) return new BusAnimation()
+                .addBus("EQUIP", new BusAnimationSequence().addPos(-45, 0, 0, 0).addPos(0, 0, 0, 500, IType.SIN_DOWN));
+        return null;
+    };
 
     /** Dieselbe Lache, aber aus einem Treffer, der auch ein Wesen gewesen sein kann. */
     private static void setzeFeuerBeiBlock(BulletBaseMK4 geschoss, HitResult treffer, float breite, float hoehe, int dauer, int art) {

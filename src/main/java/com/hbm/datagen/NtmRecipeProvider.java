@@ -4303,14 +4303,18 @@ public class NtmRecipeProvider extends RecipeProvider {
      * 46 Bauplaenen dort bleiben hier 35 uebrig; der Rest faellt aus zwei gemessenen Gruenden
      * weg:
      *
-     * ES GIBT DIE WAFFE NICHT: Stinger, Chemiewerfer, Quadro, LAG, Raketenwerfer,
-     * Teslakanone, Fat Man, Tau, Ladungswerfer und die beiden Panzerruestungswaffen. Sie
-     * sind im Port nicht angelegt; ein Bauplan auf ein nicht vorhandenes Erzeugnis waere
-     * kein Rezept.
+     * ES GIBT DIE WAFFE NICHT: Stinger, Quadro, LAG, Raketenwerfer, Teslakanone, Fat Man,
+     * Tau, Ladungswerfer und die beiden Panzerruestungswaffen. Sie sind im Port nicht
+     * angelegt; ein Bauplan auf ein nicht vorhandenes Erzeugnis waere kein Rezept.
      *
-     * ES GIBT DIE ZUTAT NICHT: gun_double_barrel_sacred_dragon braucht item_secret in der
-     * Ausfuehrung SELENIUM_STEEL. Die ganze Familie der Geheimstuecke fehlt im Port; die
-     * Waffe selbst gibt es.
+     * ES GIBT DIE ZUTAT NICHT:
+     * - gun_double_barrel_sacred_dragon braucht item_secret in der Ausfuehrung
+     *   SELENIUM_STEEL. Die ganze Familie der Geheimstuecke fehlt im Port; die Waffe selbst
+     *   gibt es seit Runde 84.
+     * - gun_chemthrower braucht ein Gummirohr und einen Schraubenschluessel. RUBBER traegt
+     *   zwar PIPE in seinem autogen, aber ein pipes_rubber gibt es im Port nicht, und einen
+     *   wrench ebenso wenig. Zwei Ersatzzutaten waeren kein Port mehr, sondern ein eigener
+     *   Bauplan; die Waffe selbst steht seit Runde 188.
      *
      * NICHT UEBERNOMMEN, WEIL DER AUFSATZ SELBST FEHLT: LAS_SHOTGUN, LAS_CAPACITOR,
      * LAS_AUTO, DRILL_*, ENGINE_*, MAGNET, SIFTER und CANISTERS. Sie stehen zwar in der

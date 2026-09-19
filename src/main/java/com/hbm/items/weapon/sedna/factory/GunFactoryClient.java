@@ -34,6 +34,7 @@ public class GunFactoryClient {
         registerGunItemRenderer(event, new ItemRenderNI4NI(), NtmItems.GUN_N_I_4_N_I.get());
         registerGunItemRenderer(event, new ItemRenderHenry(ResourceManager.HENRY_TEX), NtmItems.GUN_HENRY.get());
         registerGunItemRenderer(event, new ItemRenderDrill(), NtmItems.GUN_DRILL.get());
+        registerGunItemRenderer(event, new ItemRenderChemthrower(), NtmItems.GUN_CHEMTHROWER.get());
         registerGunItemRenderer(event, new ItemRenderLaserPistol(ResourceManager.LASER_PISTOL_TEX), NtmItems.GUN_LASER_PISTOL.get());
         registerGunItemRenderer(event, new ItemRenderLaserPistol(ResourceManager.LASER_PISTOL_PEW_PEW_TEX), NtmItems.GUN_LASER_PISTOL_PEW_PEW.get());
         registerGunItemRenderer(event, new ItemRenderLaserPistol(ResourceManager.LASER_PISTOL_MORNING_GLORY_TEX), NtmItems.GUN_LASER_PISTOL_MORNING_GLORY.get());
@@ -130,6 +131,7 @@ public class GunFactoryClient {
         ((GunBaseNTItem) NtmItems.GUN_MARESLEG.get())					.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_HENRY.get())						.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_DRILL.get())						.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
+        ((GunBaseNTItem) NtmItems.GUN_CHEMTHROWER.get())				.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_LASER_PISTOL.get())				.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_LASER_PISTOL_PEW_PEW.get())		.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_LASER_PISTOL_MORNING_GLORY.get()).getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);

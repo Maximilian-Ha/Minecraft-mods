@@ -5,6 +5,7 @@ import com.hbm.entity.grenade.GrenadeUniversal;
 import com.hbm.entity.projectile.Boxcar;
 import com.hbm.entity.item.ParachuteCrate;
 import com.hbm.entity.projectile.DuchessGambit;
+import com.hbm.entity.projectile.Chemical;
 import com.hbm.entity.projectile.CoinEntity;
 import com.hbm.entity.projectile.Torpedo;
 import com.hbm.entity.projectile.Sawblade;
@@ -158,6 +159,11 @@ public class NtmEntityTypes {
 
     /* Die Muenze der NI4NI. Einen Block gross, obwohl das Modell viel kleiner ist -- der
      * Strahl muss sie im Flug treffen koennen, und die Trefferflaeche ist es, die zaehlt. */
+    /* Die Chemikalienwolke des Chemiewerfers. Winzig, aber sehr zahlreich -- ein Viertel
+     * Block gross, wie die Granate, und feuerfest, weil sie selbst brennen kann. */
+    public static final DeferredHolder<EntityType<?>, EntityType<Chemical>> CHEMICAL = ENTITY_TYPES.register("chemical",
+            () -> EntityType.Builder.<Chemical>of(Chemical::new, MobCategory.MISC).noSummon().setTrackingRange(100).sized(0.25F, 0.25F).fireImmune().build("chemical"));
+
     public static final DeferredHolder<EntityType<?>, EntityType<CoinEntity>> COIN = ENTITY_TYPES.register("coin",
             () -> EntityType.Builder.<CoinEntity>of(CoinEntity::new, MobCategory.MISC).noSummon().setTrackingRange(100).sized(1.0F, 1.0F).build("coin"));
 

@@ -8394,3 +8394,34 @@ bereit, sobald das nachgezogen ist.
 
 Alle 34 Tore grün.
 
+## Runde 188 — Der Chemiewerfer und die Chemikalienwolke
+
+Damit ist `XFactoryFlamer` vollständig. Der Chemiewerfer ist die eigenartigste Waffe des
+Systems: er verschießt keine Munition, sondern den Inhalt seines Tanks — und **was dabei
+herauskommt, entscheidet nicht die Waffe, sondern das Fluid**.
+
+Das Herzstück ist `Chemical`, die Wolke selbst. Sie liest die Eigenschaften des Fluids und
+wird danach zu einem von sechs Dingen: Gammastrahl (Antimaterie), Blitz (Iongel), Spritzer,
+Gasschwall, Stichflamme oder brennende Flüssigkeit. Daran hängen Flugbahn, Lebensdauer,
+Luftwiderstand und Wirkung. Säure ätzt die Rüstung, strahlende Fluide verseuchen Getroffenen
+*und* Boden, brennbare Flüssigkeit tränkt statt anzuzünden, Saatbrühe macht aus totem Boden
+wieder Gras.
+
+**Drei benannte Auslassungen:**
+
+* Der Glyphid-Zweig des Pheromons — Glyphiden gibt es im Port nicht. Die Wirkung auf Spieler
+  und alle übrigen Lebewesen bleibt.
+* Die Blockumwandlungen der Saatbrühe für Stufen und Platten: sie hängen im Original an
+  Metadaten, die es in 1.21 nicht mehr gibt. Erde, Kopfstein, Steinziegel, Brachland und
+  Betonziegel werden umgewandelt wie dort.
+* Der Strahl für Antimaterie und Iongel im Zeichner — dasselbe fehlende `BeamPronter`-
+  Gegenstück wie bei den Lasern; beide Sorten sind ohnehin nur über den Kreativreiter in
+  einen Tank zu bekommen.
+
+**Kein Bauplan, und das ist keine Nachlässigkeit:** das Original verlangt ein Gummirohr und
+einen Schraubenschlüssel. `RUBBER` trägt zwar `PIPE` in seinem `autogen`, aber ein
+`pipes_rubber` gibt es im Port nicht — und einen `wrench` ebenso wenig. Zwei Ersatzzutaten
+wären kein Port mehr, sondern ein eigener Bauplan.
+
+Alle 34 Tore grün.
+

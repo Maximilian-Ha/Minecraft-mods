@@ -1659,4 +1659,36 @@ public class Orchestras {
             if(timer == 38) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_CLOSE.get(), entity.getSoundSource());
         }
     };
+
+    /**
+     * Der Chemiewerfer. Wie der Flammenwerfer ein Dauerton, solange gefeuert wird, und sonst
+     * nichts -- er hat kein Nachladen.
+     */
+    public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_CHEMTHROWER = (stack, ctx) -> {
+
+        LivingEntity entity = ctx.entity;
+        if(!entity.level.isClientSide) return;
+
+        GunAnimation type = GunBaseNTItem.getLastAnim(stack, ctx.configIndex);
+        int timer = GunBaseNTItem.getAnimTimer(stack, ctx.configIndex);
+
+        AudioWrapper laufend = GunBaseNTItem.loopedSounds.get(entity);
+
+        if(type == GunAnimation.CYCLE && timer < 5) {
+
+            if(laufend == null || !laufend.isPlaying()) {
+                AudioWrapper ton = AudioWrapper.getLoopedSound(NtmSoundEvents.GUN_FLAMER_LOOP.get(), entity.getSoundSource(),
+                        (float) entity.getX(), (float) entity.getY(), (float) entity.getZ(), 1F, 15F, 1F, 10);
+                GunBaseNTItem.loopedSounds.put(entity, ton);
+                ton.startSound();
+                ton.attachTo(entity);
+            } else {
+                laufend.keepAlive();
+                laufend.attachTo(entity);
+            }
+
+        } else if(laufend != null && laufend.isPlaying()) {
+            laufend.stopSound();
+        }
+    };
 }
