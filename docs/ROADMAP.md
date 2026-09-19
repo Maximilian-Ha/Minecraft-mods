@@ -5855,3 +5855,36 @@ Damit ist Aufgabe #90 bis auf den Schlackenabstich abgearbeitet; der hängt weit
 `BlockDynamicSlag` mit `TileEntitySlag`, das der Port nicht hat.
 
 Stand danach: fehlende Blockentitäten 116.
+
+### Zwölf Blockentitäten, die im Port gar keine sind
+
+`tools/be-blocker.py` hat bisher eine Gruppe mitgezählt, die es nicht gibt. Auf 1.7.10 gibt es
+Blockentitäten, deren ganzer Inhalt so aussieht:
+
+```java
+public class TileEntityDecoBlock extends TileEntity {
+    @Override public AxisAlignedBB getRenderBoundingBox() { return TileEntity.INFINITE_EXTENT_AABB; }
+    @Override public double getMaxRenderDistanceSquared() { return 65536.0D; }
+}
+```
+
+Sie existieren **nur**, damit ein TESR überhaupt zeichnen darf und nicht weggeschnitten wird.
+Auf 1.21 zeichnet dort ein gebackenes Blockmodell, das weder Zeichengrenze noch Sichtweite
+braucht — die Entität hat schlicht kein Gegenstück und soll auch keines bekommen.
+
+Das Werkzeug erkennt sie jetzt mechanisch: kein Feld im Rumpf, und außer
+`getRenderBoundingBox`, `getMaxRenderDistanceSquared`, `shouldRenderInPass` und
+`getBlockMetadata` keine Methode. Kommentare zählen nicht mit, und das ist kein Detail — das
+gelbe Fass hat sein ganzes `updateEntity` auskommentiert stehen. Gemessen in beiden Richtungen:
+reine Zeichenhilfe wird erkannt, dieselbe Klasse mit einem `updateEntity` oder einem einzigen
+Feld nicht mehr, eine leere Klasse ebenfalls nicht.
+
+Dazu drei namentlich geführte Fälle, die der Port anders löst: `TileEntityData` (im Original
+eine ganze Entität für zwei zusätzliche Metadatenbits — auf 1.21 trägt der Blockzustand
+beliebig viele), `TileEntityDummy` (Platzhalter eines Mehrblockbaus, im Port macht das
+`DummyableBlock` ohne Entität) und `TileEntityInventoryBase` (abstrakte Grundklasse, im Port
+`MachineBaseBlockEntity`).
+
+Damit sind von den 115 fehlenden Blockentitäten **zwölf gar keine Lücke**. Die Liste der sofort
+Portierbaren schrumpft von 39 auf 27 — und die verbleibenden 27 sind echte Arbeit statt
+Buchhaltung.

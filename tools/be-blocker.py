@@ -29,6 +29,16 @@ FluidDuctBox -- ein Kastenrohr, das seine Textur aus der Nachbarschaft waehlt, u
 Familie fehlt im Port noch. Wer einen Eintrag aufgreift, sieht also zuerst nach, welcher Block
 die Entitaet traegt.
 
+EINE DRITTE GRUPPE braucht im Port GAR KEINE Blockentitaet, und die zaehlte bisher mit. Auf
+1.7.10 gibt es Blockentitaeten, die ausser getRenderBoundingBox und getMaxRenderDistanceSquared
+nichts enthalten -- sie existieren nur, damit ein TESR zeichnen darf und nicht weggeschnitten
+wird. Auf 1.21 zeichnet dort ein Blockmodell, das weder das eine noch das andere braucht. Das
+Werkzeug erkennt sie daran, dass der Rumpf KEIN Feld und ausser diesen Zeichenhilfen keine
+Methode enthaelt; Kommentare zaehlen nicht mit (der gelbe Fass-Block hat sein updateEntity
+auskommentiert). Gemessen in beiden Richtungen: reine Zeichenhilfe wird erkannt, dieselbe
+Klasse mit einem updateEntity oder einem einzigen Feld nicht mehr. Dazu drei namentlich
+gefuehrte Faelle, die der Port anders loest -- nachgesehen, nicht geraten.
+
 Aufruf:
     tools/be-blocker.py           -- Uebersicht
     tools/be-blocker.py --list    -- dazu die vollstaendige Liste der Blockierten
@@ -77,6 +87,47 @@ def port_typen():
     return typen
 
 
+# Methoden, die auf 1.7.10 NUR dazu da sind, einem TESR das Zeichnen zu erlauben. Eine
+# Blockentitaet, die nichts anderes enthaelt, hat im Port kein Gegenstueck und braucht auch
+# keines: dort zeichnet ein Blockmodell, und das braucht weder Zeichengrenze noch Sichtweite.
+NUR_ZUM_ZEICHNEN = {
+    'getRenderBoundingBox',
+    'getMaxRenderDistanceSquared',
+    'shouldRenderInPass',
+    'getBlockMetadata',
+}
+
+# Was der Port anders loest, statt es zu portieren -- nachgesehen, nicht geraten.
+OHNE_ENTSPRECHUNG = {
+    'TileEntityData':          'zwei Zusatzbits fuers Metadatum; auf 1.21 traegt der Blockzustand beliebig viele',
+    'TileEntityDummy':         'Platzhalter eines Mehrblockbaus; im Port macht das DummyableBlock ohne Blockentitaet',
+    'TileEntityInventoryBase': 'abstrakte Grundklasse; im Port heisst sie MachineBaseBlockEntity',
+}
+
+
+def nur_zeichenhilfe(text):
+    """Enthaelt diese Blockentitaet NUR Zeichenhilfen und kein einziges Feld?"""
+
+    rumpf = text[text.index('{') + 1:text.rindex('}')] if '{' in text and '}' in text else ''
+    rumpf = re.sub(r'/\*.*?\*/', '', rumpf, flags=re.S)
+    rumpf = re.sub(r'//[^\n]*', '', rumpf)
+    rumpf = re.sub(r'@\w+(\([^)]*\))?', '', rumpf)
+
+    # Alles auf der aeussersten Ebene, was mit Semikolon endet, ist ein Feld.
+    tiefe = 0
+    aussen = []
+    for zeichen in rumpf:
+        if zeichen == '{': tiefe += 1
+        elif zeichen == '}': tiefe -= 1
+        elif tiefe == 0: aussen.append(zeichen)
+    if ';' in ''.join(aussen): return False
+
+    methoden = re.findall(r'\b(?:public|protected|private)\s+[\w<>\[\], .]+?\s+(\w+)\s*\(', rumpf)
+    if not methoden: return False
+
+    return all(m in NUR_ZUM_ZEICHNEN for m in methoden)
+
+
 def main():
     up = up_dateien()
     be_up = [p for p in up if '/com/hbm/tileentity/' in p and os.path.basename(p).startswith('TileEntity')]
@@ -90,13 +141,22 @@ def main():
         k = kern(name)
         return k in kerne or ('machine' + k) in kerne or k.replace('machine', '') in kerne
 
-    frei, blockiert = [], {}
+    frei, blockiert, unnoetig = [], {}, {}
 
     for p in be_up:
         name = os.path.basename(p)[:-5]
         if vorhanden(name): continue
 
         text = subprocess.run(['git', 'show', UP + ':' + p], capture_output=True, text=True).stdout
+
+        if name in OHNE_ENTSPRECHUNG:
+            unnoetig[name] = OHNE_ENTSPRECHUNG[name]
+            continue
+
+        if nur_zeichenhilfe(text):
+            unnoetig[name] = 'nur Zeichengrenze und Sichtweite fuer den TESR'
+            continue
+
         importe = re.findall(r'^import (?:static )?(com\.hbm\.[\w.]+)\.(\w+);', text, re.M)
         fehlt = sorted({k for _, k in importe if not vorhanden(k)})
 
@@ -105,9 +165,13 @@ def main():
 
     print("Fehlende Blockentitaeten und was sie aufhaelt")
     print()
-    print("  fehlend gesamt          : %d" % (len(frei) + len(blockiert)))
+    print("  fehlend gesamt          : %d" % (len(frei) + len(blockiert) + len(unnoetig)))
+    print("  braucht keine im Port   : %d" % len(unnoetig))
     print("  ohne fehlende Vorlage   : %d" % len(frei))
     print("  mit fehlender Vorlage   : %d" % len(blockiert))
+    print()
+    print("BRAUCHT IM PORT GAR KEINE BLOCKENTITAET:")
+    for n in sorted(unnoetig): print("   %-30s %s" % (n, unnoetig[n]))
     print()
     print("SOFORT PORTIERBAR -- kein com.hbm-Import fehlt:")
     for n in sorted(frei): print("   " + n)
