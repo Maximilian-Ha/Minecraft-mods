@@ -35,9 +35,11 @@ nichts enthalten -- sie existieren nur, damit ein TESR zeichnen darf und nicht w
 wird. Auf 1.21 zeichnet dort ein Blockmodell, das weder das eine noch das andere braucht. Das
 Werkzeug erkennt sie daran, dass der Rumpf KEIN Feld und ausser diesen Zeichenhilfen keine
 Methode enthaelt; Kommentare zaehlen nicht mit (der gelbe Fass-Block hat sein updateEntity
-auskommentiert). Gemessen in beiden Richtungen: reine Zeichenhilfe wird erkannt, dieselbe
-Klasse mit einem updateEntity oder einem einzigen Feld nicht mehr. Dazu drei namentlich
-gefuehrte Faelle, die der Port anders loest -- nachgesehen, nicht geraten.
+auskommentiert). Ein ganz leerer Rumpf zaehlt ebenso mit -- eine Blockentitaet ohne Feld und
+ohne Methode kann nichts anderes sein als ein Aufhaenger. Gemessen in beiden Richtungen: reine
+Zeichenhilfe und leerer Rumpf werden erkannt, dieselbe Klasse mit einem updateEntity oder einem
+einzigen Feld nicht mehr. Dazu drei namentlich gefuehrte Faelle, die der Port anders loest --
+nachgesehen, nicht geraten.
 
 Aufruf:
     tools/be-blocker.py           -- Uebersicht
@@ -105,13 +107,22 @@ OHNE_ENTSPRECHUNG = {
 }
 
 
-def nur_zeichenhilfe(text):
-    """Enthaelt diese Blockentitaet NUR Zeichenhilfen und kein einziges Feld?"""
-
+def rumpf_von(text):
+    """Der Klassenrumpf ohne Kommentare und ohne Annotationen."""
     rumpf = text[text.index('{') + 1:text.rindex('}')] if '{' in text and '}' in text else ''
     rumpf = re.sub(r'/\*.*?\*/', '', rumpf, flags=re.S)
     rumpf = re.sub(r'//[^\n]*', '', rumpf)
-    rumpf = re.sub(r'@\w+(\([^)]*\))?', '', rumpf)
+    return re.sub(r'@\w+(\([^)]*\))?', '', rumpf)
+
+
+def leerer_rumpf(text):
+    return not rumpf_von(text).strip()
+
+
+def nur_zeichenhilfe(text):
+    """Enthaelt diese Blockentitaet NUR Zeichenhilfen und kein einziges Feld?"""
+
+    rumpf = rumpf_von(text)
 
     # Alles auf der aeussersten Ebene, was mit Semikolon endet, ist ein Feld.
     tiefe = 0
@@ -122,9 +133,15 @@ def nur_zeichenhilfe(text):
         elif tiefe == 0: aussen.append(zeichen)
     if ';' in ''.join(aussen): return False
 
+    # Ein leerer Rumpf zaehlt mit: eine Blockentitaet ohne Feld und ohne Methode kann nichts
+    # anderes sein als ein Aufhaenger fuer den TESR. Gemessen: genau zwei der fehlenden sind so
+    # (machine_uf6_tank und machine_puf6_tank), beide nachgesehen.
+    #
+    # Ein blosser Konstruktor zaehlt ebenfalls mit -- das Muster unten hat keinen Rueckgabetyp
+    # zu fassen und geht daran vorbei. Auf 1.7.10 ist das richtig so: dort hat ein Konstruktor
+    # nichts zu tun, was nicht ueber ein Feld liefe, und ein Feld schliesst die Pruefung oben
+    # ohnehin aus.
     methoden = re.findall(r'\b(?:public|protected|private)\s+[\w<>\[\], .]+?\s+(\w+)\s*\(', rumpf)
-    if not methoden: return False
-
     return all(m in NUR_ZUM_ZEICHNEN for m in methoden)
 
 
@@ -154,7 +171,8 @@ def main():
             continue
 
         if nur_zeichenhilfe(text):
-            unnoetig[name] = 'nur Zeichengrenze und Sichtweite fuer den TESR'
+            unnoetig[name] = 'leerer Rumpf, nur Aufhaenger fuer den TESR' if leerer_rumpf(text) \
+                else 'nur Zeichengrenze und Sichtweite fuer den TESR'
             continue
 
         importe = re.findall(r'^import (?:static )?(com\.hbm\.[\w.]+)\.(\w+);', text, re.M)

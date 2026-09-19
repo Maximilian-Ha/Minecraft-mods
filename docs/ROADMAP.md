@@ -5888,3 +5888,20 @@ beliebig viele), `TileEntityDummy` (Platzhalter eines Mehrblockbaus, im Port mac
 Damit sind von den 115 fehlenden Blockentitäten **zwölf gar keine Lücke**. Die Liste der sofort
 Portierbaren schrumpft von 39 auf 27 — und die verbleibenden 27 sind echte Arbeit statt
 Buchhaltung.
+
+**Nachtrag, gleich beim ersten Gebrauch:** die Zahl ist nicht zwölf, sondern **vierzehn**. Der
+nächste Blick auf die Liste fiel auf `TileEntityMachineUF6Tank`, und die Klasse ist *ganz leer*:
+
+```java
+public class TileEntityMachineUF6Tank extends TileEntity { }
+```
+
+Auch das ist ein reiner Aufhänger — der Block dazu hat `getRenderType() == -1`, wird also
+ausschließlich vom TESR gezeichnet. Die Prüfung verlangte bisher mindestens eine Methode und
+ließ genau diesen Fall durch. Gemessen: in der ganzen Liste gibt es zwei solche Klassen
+(`machine_uf6_tank` und `machine_puf6_tank`), beide nachgesehen. Damit sind es 14 von 115, und
+die Liste der sofort Portierbaren steht bei 25.
+
+Dass die *Blöcke* `machine_uf6_tank` und `machine_puf6_tank` weiter fehlen, bleibt davon
+unberührt — die Lücke ist ein Block, keine Blockentität. Genau dafür steht der Hinweis im Kopf
+des Werkzeugs.
