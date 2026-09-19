@@ -10,6 +10,7 @@ import com.hbm.network.toclient.MuzzleFlashPacket;
 import com.hbm.particle.SpentCasing;
 import com.hbm.particle.helper.CasingCreator;
 import com.hbm.registry.NtmSoundEvents;
+import com.hbm.sound.AudioWrapper;
 import com.hbm.render.anim.AnimationEnums.GunAnimation;
 import com.hbm.util.EntityDamageUtil;
 import com.hbm.util.SoundUtils;
@@ -1476,6 +1477,78 @@ public class Orchestras {
 
             /* Der Gurt wird in der Mitte der Bewegung nachgelegt, nicht am Ende. */
             if(timer == 55) ctx.config.getReceivers(stack)[0].getMagazine(stack).reloadAction(stack, ctx.container);
+        }
+    };
+
+    /**
+     * Der Flammenwerfer. Anders als alle uebrigen Orchester hier macht dieses das Meiste auf
+     * der Seite des Zuschauers: ein Flammenwerfer feuert jeden Tick, ein Schussgeraeusch je
+     * Schuss waere ein Presslufthammer. Stattdessen laeuft ein Dauerton, solange der
+     * Abschussvorgang laeuft, und verstummt, sobald er stockt.
+     *
+     * DER TON HAELT SICH SELBST AM LEBEN. keepAlive(10) heisst: er verstummt von allein zehn
+     * Ticks nach dem letzten Lebenszeichen. Solange der Abschussvorgang laeuft, kommt alle
+     * paar Ticks eines; hoert der Spieler auf zu schiessen, hoert auch der Ton auf -- ohne
+     * dass irgendwer ihn ausdruecklich abstellen muesste.
+     */
+    public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_FLAMER = (stack, ctx) -> {
+
+        LivingEntity entity = ctx.entity;
+        Level level = entity.level;
+        GunAnimation type = GunBaseNTItem.getLastAnim(stack, ctx.configIndex);
+        int timer = GunBaseNTItem.getAnimTimer(stack, ctx.configIndex);
+
+        if(level.isClientSide) {
+
+            AudioWrapper laufend = GunBaseNTItem.loopedSounds.get(entity);
+
+            if(type == GunAnimation.CYCLE && timer < 5) {
+
+                if(laufend == null || !laufend.isPlaying()) {
+                    AudioWrapper ton = AudioWrapper.getLoopedSound(NtmSoundEvents.GUN_FLAMER_LOOP.get(), entity.getSoundSource(),
+                            (float) entity.getX(), (float) entity.getY(), (float) entity.getZ(), 1F, 15F, 1F, 10);
+                    GunBaseNTItem.loopedSounds.put(entity, ton);
+                    ton.startSound();
+                    ton.attachTo(entity);
+                } else {
+                    laufend.keepAlive();
+                }
+
+            } else if(laufend != null && laufend.isPlaying()) {
+                laufend.stopSound();
+            }
+
+            return;
+        }
+
+        if(type == GunAnimation.RELOAD) {
+            if(timer == 15) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_LATCH_OPEN.get(), entity.getSoundSource());
+            if(timer == 35) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_IMPACT.get(), entity.getSoundSource(), 0.5F, 1F);
+            if(timer == 60) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_CLOSE.get(), entity.getSoundSource(), 1F, 0.75F);
+            if(timer == 70) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_CANISTER_INSERT.get(), entity.getSoundSource());
+            if(timer == 85) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_VALVE.get(), entity.getSoundSource());
+        }
+    };
+
+    /**
+     * Der Daybreaker. Er wirft Brandbomben statt eines Strahls und hat deshalb keinen
+     * Dauerton -- nur die fuenf Griffe des Nachladens.
+     */
+    public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_FLAMER_DAYBREAKER = (stack, ctx) -> {
+
+        LivingEntity entity = ctx.entity;
+        Level level = entity.level;
+        if(level.isClientSide) return;
+
+        GunAnimation type = GunBaseNTItem.getLastAnim(stack, ctx.configIndex);
+        int timer = GunBaseNTItem.getAnimTimer(stack, ctx.configIndex);
+
+        if(type == GunAnimation.RELOAD) {
+            if(timer == 15) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_LATCH_OPEN.get(), entity.getSoundSource());
+            if(timer == 35) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_IMPACT.get(), entity.getSoundSource(), 0.5F, 1F);
+            if(timer == 60) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_CLOSE.get(), entity.getSoundSource(), 1F, 0.75F);
+            if(timer == 70) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_CANISTER_INSERT.get(), entity.getSoundSource());
+            if(timer == 85) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_VALVE.get(), entity.getSoundSource());
         }
     };
 }

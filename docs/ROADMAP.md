@@ -8247,3 +8247,49 @@ nennt auch beides.
 
 Alle 34 Tore grün.
 
+## Runde 184 — Die Flammenwerfer, und Munition, die niemand verschießen konnte
+
+Der Port kannte seit Langem vier Brennstoffe — Diesel, Gas, Napalm, Bannfeuer — als fertige
+Munitionsgegenstände. Keine einzige Waffe konnte sie verschießen. Das ist der umgekehrte Fall
+von „Wirkung ohne Ursache": hier lag die Ursache herum, und die Wirkung fehlte.
+
+`XFactoryFlamer` ist eine von **sechs** Waffenfabriken des Originals, die der Port nicht hat.
+Gemessen, nicht geschätzt — die anderen fünf sind `XFactoryDrill`, `XFactoryEnergy`,
+`XFactoryFolly`, `XFactoryPA` und `XFactoryTool`.
+
+### Wie ein Flammenwerfer in diesem System arbeitet
+
+Er verschießt gewöhnliche Geschosse, nur sehr viele, sehr langsame und sehr kurzlebige. Jedes
+zieht auf seinem Weg eine Flamme hinter sich her, zündet an, was es trifft, und lässt dort, wo
+es auf einen Block schlägt, eine Lache stehenden Feuers zurück. Gas lässt nichts stehen,
+Bannfeuer brennt immer.
+
+### Der Schütze war bisher gegen sich selbst nicht geschützt
+
+Die Geschosse des Ports kannten keine Sperre gegen den eigenen Schützen — `canHitEntity` fragte
+nur, ob das Ziel getroffen werden *kann*. Bei schnellen Geschossen fällt das nicht auf; ein
+Flammenwerfer, dessen Flammen eine Handbreit vor dem Gesicht entstehen, hätte den Spieler bei
+jedem Zug selbst angezündet.
+
+Das Original löst das mit `selfDamageDelay` — zwei Ticks für gewöhnliche Geschosse, zwanzig für
+Flammen. Diese Zahl gibt es jetzt auch im Port, und `canHitEntity` hält sich daran. Die
+Voreinstellung ist dieselbe wie im Original, die Änderung bringt den Port also näher heran,
+statt ihn zu verstellen.
+
+### Was mitkommt und was nicht
+
+Neu: die drei Waffen, ihr Modell, ihre drei Texturen, die Nachladeanimation, der Dauerton des
+Strahls und das Ventilgeräusch beim Nachladen. Flammenwerfer und Mister Topaz haben ihre
+Baupläne aus `WeaponRecipes` — damit sind es **31 von 46**.
+
+**Nicht übernommen:** der Chemiewerfer aus derselben Fabrik. Er schießt keine Geschosse,
+sondern Flüssigkeit aus einem Tank, und braucht dafür `MagazineFluid` und eine eigene
+Waffenklasse. Ebenso `flame_nograv` und `flame_nograv_bf`: das Original legt sie hier an,
+benutzt sie hier aber nicht — sie gehören zum Chemiewerfer und zur Panzerrüstung.
+
+**Der Daybreaker bleibt ohne Fundort.** Im Original kommt er aus dem Sockel
+(`PedestalRecipes`); den gibt es im Port nicht. Die Waffe ist fertig, ihr Weg zum Spieler fehlt
+— derselbe Stand wie beim Lilmac und beim Protégé.
+
+Alle 34 Tore grün.
+

@@ -1797,6 +1797,9 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.GUN_HANGMAN);
                         output.accept(NtmItems.GUN_N_I_4_N_I);
                         output.accept(NtmItems.GUN_HENRY);
+                        output.accept(NtmItems.GUN_FLAMER);
+                        output.accept(NtmItems.GUN_FLAMER_TOPAZ);
+                        output.accept(NtmItems.GUN_FLAMER_DAYBREAKER);
                         output.accept(NtmItems.GUN_HENRY_LINCOLN);
                         output.accept(NtmItems.GUN_HEAVY_REVOLVER);
                         output.accept(NtmItems.GUN_LIBERATOR);

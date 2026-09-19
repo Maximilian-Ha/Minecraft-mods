@@ -190,12 +190,20 @@ public class BulletBaseMK4 extends ProjectileLerping {
     @Override public boolean doesPenetrate() { return this.config.doesPenetrate; }
     @Override public boolean isSpectral() { return this.config.isSpectral; }
 
+    /**
+     * DER SCHUETZE IST FUER DIE ERSTEN TICKS UNVERWUNDBAR. Das Geschoss entsteht eine
+     * Handbreit vor ihm und liegt damit noch in seinem eigenen Umriss; ohne diese Sperre
+     * traefe sich jeder Schuetze selbst. Wie lange, sagt die Geschossart -- zwei Ticks
+     * gewoehnlich, zwanzig beim Flammenwerfer, dessen Flammen langsam und dicht am Lauf
+     * entstehen.
+     *
+     * Das Original macht dieselbe Pruefung eine Ebene tiefer, beim Austeilen des Schadens
+     * (EntityBulletBaseNT Z. 227).
+     */
     @Override
     protected boolean canHitEntity(Entity target) {
-        if(!target.canBeHitByProjectile()) {
-            return false;
-        } else {
-            return this.config.impactsEntities;
-        }
+        if(!target.canBeHitByProjectile()) return false;
+        if(target == this.getOwner() && this.tickCount < this.config.selfDamageDelay) return false;
+        return this.config.impactsEntities;
     }
 }

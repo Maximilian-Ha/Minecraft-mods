@@ -351,6 +351,9 @@ public class ResourceManager {
     public static final ResourceLocation BOLTER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/bolter.png");
     public static final ResourceLocation ABERRATOR_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/aberrator.png");
     public static final ResourceLocation CONGOLAKE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/congolake.png");
+    public static final ResourceLocation FLAMETHROWER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/flamethrower.png");
+    public static final ResourceLocation FLAMETHROWER_TOPAZ_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/flamethrower_topaz.png");
+    public static final ResourceLocation FLAMETHROWER_DAYBREAKER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/flamethrower_daybreaker.png");
     public static final ResourceLocation FLAREGUN_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/flaregun.png");
     public static final ResourceLocation MK108_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/mk108.png");
     public static final ResourceLocation M2_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/m2_browning.png");
@@ -683,6 +686,7 @@ public class ResourceManager {
     public static IModelCustom bolter;
     public static IModelCustom aberrator;
     public static IModelCustom congolake;
+    public static IModelCustom flamethrower;
     public static IModelCustom flaregun;
     public static IModelCustom mk108;
     public static IModelCustom turret_sentry;
@@ -708,6 +712,7 @@ public class ResourceManager {
     public static HashMap<String, BusAnimation> am180_anim;
     public static HashMap<String, BusAnimation> stg77_anim;
     public static HashMap<String, BusAnimation> congolake_anim;
+    public static HashMap<String, BusAnimation> flamethrower_anim;
 
     public static IModelCustom armor_hev;
     public static IModelCustom armor_hat;
@@ -976,6 +981,7 @@ public class ResourceManager {
         bolter = new HFRWavefrontObject("models/obj/weapons/bolter.obj").asVBO();
         aberrator = new HFRWavefrontObject("models/obj/weapons/aberrator.obj").asVBO();
         congolake = new HFRWavefrontObject("models/obj/weapons/congolake.obj").asVBO();
+        flamethrower = new HFRWavefrontObject("models/obj/weapons/flamethrower.obj").asVBO();
         flaregun = new HFRWavefrontObject("models/obj/weapons/flaregun.obj").asVBO();
         mk108 = new HFRWavefrontObject("models/obj/weapons/mk108.obj").asVBO();
         turret_sentry = new HFRWavefrontObject("models/obj/turrets/turret_sentry.obj").asVBO();
@@ -1001,6 +1007,7 @@ public class ResourceManager {
         am180_anim = AnimationLoader.load(NuclearTechMod.withDefaultNamespace("models/animations/am180.json"));
         stg77_anim = AnimationLoader.load(NuclearTechMod.withDefaultNamespace("models/animations/stg77.json"));
         congolake_anim = AnimationLoader.load(NuclearTechMod.withDefaultNamespace("models/animations/congolake.json"));
+        flamethrower_anim = AnimationLoader.load(NuclearTechMod.withDefaultNamespace("models/animations/flamethrower.json"));
 
         armor_hev = new HFRWavefrontObject("models/obj/armor/hev.obj").asVBO();
         armor_hat = new HFRWavefrontObject("models/obj/armor/hat.obj").asVBO();

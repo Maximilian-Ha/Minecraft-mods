@@ -90,6 +90,12 @@ public class BulletConfig implements Cloneable {
     public boolean doesPenetrate = false;
     /** Whether projectiles ignore blocks entirely */
     public boolean isSpectral = false;
+    /**
+     * Wieviele Ticks lang das Geschoss seinen eigenen Schuetzen nicht trifft. Zwei reichen
+     * fuer gewoehnliche Geschosse; wer sehr langsame Geschosse dicht vor sich entstehen
+     * laesst -- der Flammenwerfer -- braucht deutlich mehr.
+     */
+    public int selfDamageDelay = 2;
 
     public boolean blackPowder = false;
     public boolean renderRotations = true;
@@ -137,6 +143,7 @@ public class BulletConfig implements Cloneable {
     public BulletConfig setLife(int expires) {											this.expires = expires; return this; }
     public BulletConfig setImpactsEntities(boolean impact) {							this.impactsEntities = impact; return this; }
     public BulletConfig setDoesPenetrate(boolean pen) {									this.doesPenetrate = pen; return this; }
+    public BulletConfig setSelfDamageDelay(int delay) {                                 this.selfDamageDelay = delay; return this; }
     public BulletConfig setSpectral(boolean spectral) {									this.isSpectral = spectral; return this; }
     public BulletConfig setBlackPowder(boolean bp) {									this.blackPowder = bp; return this; }
     public BulletConfig setRenderRotations(boolean rot) {								this.renderRotations = rot; return this; }

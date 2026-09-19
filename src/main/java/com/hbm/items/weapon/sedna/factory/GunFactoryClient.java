@@ -33,6 +33,9 @@ public class GunFactoryClient {
         registerGunItemRenderer(event, new ItemRenderHangman(), NtmItems.GUN_HANGMAN.get());
         registerGunItemRenderer(event, new ItemRenderNI4NI(), NtmItems.GUN_N_I_4_N_I.get());
         registerGunItemRenderer(event, new ItemRenderHenry(ResourceManager.HENRY_TEX), NtmItems.GUN_HENRY.get());
+        registerGunItemRenderer(event, new ItemRenderFlamer(ResourceManager.FLAMETHROWER_TEX), NtmItems.GUN_FLAMER.get());
+        registerGunItemRenderer(event, new ItemRenderFlamer(ResourceManager.FLAMETHROWER_TOPAZ_TEX), NtmItems.GUN_FLAMER_TOPAZ.get());
+        registerGunItemRenderer(event, new ItemRenderFlamer(ResourceManager.FLAMETHROWER_DAYBREAKER_TEX), NtmItems.GUN_FLAMER_DAYBREAKER.get());
         registerGunItemRenderer(event, new ItemRenderHenry(ResourceManager.HENRY_LINCOLN_TEX), NtmItems.GUN_HENRY_LINCOLN.get());
         registerGunItemRenderer(event, new ItemRenderHeavyRevolver(ResourceManager.HEAVY_REVOLVER_TEX), NtmItems.GUN_HEAVY_REVOLVER.get());
         registerGunItemRenderer(event, new ItemRenderLiberator(), NtmItems.GUN_LIBERATOR.get());
@@ -115,6 +118,9 @@ public class GunFactoryClient {
         ((GunBaseNTItem) NtmItems.GUN_DEBUG.get())						.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO, LegoClient.HUD_COMPONENT_AMMO_SECOND);
         ((GunBaseNTItem) NtmItems.GUN_MARESLEG.get())					.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_HENRY.get())						.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
+        ((GunBaseNTItem) NtmItems.GUN_FLAMER.get())						.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO_NOCOUNTER);
+        ((GunBaseNTItem) NtmItems.GUN_FLAMER_TOPAZ.get())				.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO_NOCOUNTER);
+        ((GunBaseNTItem) NtmItems.GUN_FLAMER_DAYBREAKER.get())			.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO_NOCOUNTER);
         ((GunBaseNTItem) NtmItems.GUN_N_I_4_N_I.get())					.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_HENRY_LINCOLN.get())				.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_SPAS12.get())						.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);

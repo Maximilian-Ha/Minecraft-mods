@@ -4296,13 +4296,13 @@ public class NtmRecipeProvider extends RecipeProvider {
      * Die Waffenbauplaene.
      *
      * Wortgetreu aus WeaponRecipes des Originals, in der Reihenfolge des Originals. Von den
-     * 46 Bauplaenen dort bleiben hier 29 uebrig; der Rest faellt aus zwei gemessenen Gruenden
+     * 46 Bauplaenen dort bleiben hier 31 uebrig; der Rest faellt aus zwei gemessenen Gruenden
      * weg:
      *
-     * ES GIBT DIE WAFFE NICHT: Flammenwerfer und Topaz, Stinger, Chemiewerfer, Quadro, LAG,
-     * Raketenwerfer, Teslakanone, Laserpistole und Pew Pew, Fat Man, Tau, Lasergewehr,
-     * Ladungswerfer, Bohrer und die beiden Panzerruestungswaffen. Sie sind im Port nicht
-     * angelegt; ein Bauplan auf ein nicht vorhandenes Erzeugnis waere kein Rezept.
+     * ES GIBT DIE WAFFE NICHT: Stinger, Chemiewerfer, Quadro, LAG, Raketenwerfer,
+     * Teslakanone, Laserpistole und Pew Pew, Fat Man, Tau, Lasergewehr, Ladungswerfer,
+     * Bohrer und die beiden Panzerruestungswaffen. Sie sind im Port nicht angelegt; ein
+     * Bauplan auf ein nicht vorhandenes Erzeugnis waere kein Rezept.
      *
      * ES GIBT DIE ZUTAT NICHT: gun_double_barrel_sacred_dragon braucht item_secret in der
      * Ausfuehrung SELENIUM_STEEL. Die ganze Familie der Geheimstuecke fehlt im Port; die
@@ -4409,6 +4409,20 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .define('S', stock(Mats.MAT_WOOD))
                 .define('G', grip(Mats.MAT_WOOD))
                 .unlockedBy("has_mechanism", has(NtmItems.PART_MECHANISM.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_FLAMER, " MG", "BBR", " GM")
+                .define('M', mechanism(Mats.MAT_GUNMETAL))
+                .define('G', grip(Mats.MAT_DURA))
+                .define('B', heavyBarrel(Mats.MAT_DURA))
+                .define('R', heavyReceiver(Mats.MAT_DURA))
+                .unlockedBy("has_mechanism", has(NtmItems.PART_MECHANISM.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_FLAMER_TOPAZ, " M ", "MFM", " M ")
+                .define('M', mechanism(Mats.MAT_WEAPONSTEEL))
+                .define('F', NtmItems.GUN_FLAMER.get())
+                .unlockedBy("has_flamer", has(NtmItems.GUN_FLAMER.get()))
                 .save(recipeOutput);
 
         gun(NtmItems.GUN_HEAVY_REVOLVER, "BRM", "  G")
