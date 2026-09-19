@@ -2370,6 +2370,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.SUBSTATION, "Substation");
 
         this.add(NtmBlocks.FLUID_DUCT_NEO, "Universal Fluid Duct");
+        this.add(NtmBlocks.FLUID_DUCT_GAUGE, "Fluid Gauge");
+        this.add(NtmBlocks.FLUID_DUCT_GAUGE, DESC, "Duct that displays how much fluid$moves within the network per tick.");
 
         this.add(NtmBlocks.MACHINE_BATTERY_SOCKET, "Battery Socket");
         this.add(NtmBlocks.MACHINE_BATTERY_SOCKET, DESC,"Allows battery items to be connected$to the power grid directly.$Acts as a cable, all ports are connected$to the same network.");

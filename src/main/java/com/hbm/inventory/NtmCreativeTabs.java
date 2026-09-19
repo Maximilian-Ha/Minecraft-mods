@@ -1193,6 +1193,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.SUBSTATION);
 
                         addMetaItems(output, NtmBlocks.FLUID_DUCT_NEO.asItem());
+                        output.accept(NtmBlocks.FLUID_DUCT_GAUGE);
 
                         output.accept(NtmBlocks.PRESS_PREHEATER);
                         output.accept(NtmBlocks.MACHINE_PRESS);

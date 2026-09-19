@@ -1966,6 +1966,15 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_red_wire_coated", has(NtmBlocks.RED_WIRE_COATED.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "red_cable_gauge"));
 
+        // Original CraftingManager Z. 574, formlos. Das bemalbare Rohr des Originals
+        // heisst im Port fluid_duct_neo.
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, NtmBlocks.FLUID_DUCT_GAUGE.get(), 1)
+                .requires(NtmBlocks.FLUID_DUCT_NEO.get())
+                .requires(NtmItems.INGOT_STEEL.get())
+                .requires(NtmItems.CIRCUIT_VACUUM_TUBE.get())
+                .unlockedBy("has_fluid_duct_neo", has(NtmBlocks.FLUID_DUCT_NEO.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "fluid_duct_gauge"));
+
         // Original CraftingManager Z. 842: "SIS" / "ICI" / "SIS".
         // CU.plateCast() gibt es im Port nicht, wie schon beim Elektroofen auf PLATE_COPPER verengt.
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.MACHINE_CONDENSER.get(), 1)

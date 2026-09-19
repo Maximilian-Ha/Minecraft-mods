@@ -23,6 +23,7 @@ import com.hbm.blocks.network.CraneBaseBlock;
 import com.hbm.blocks.network.ConveyorBendableBlock;
 import com.hbm.blocks.network.ConveyorLiftBlock;
 import com.hbm.blocks.network.FluidDuctConnectingBlock;
+import com.hbm.blocks.network.FluidDuctGaugeBlock;
 import com.hbm.blocks.states.NtmBlockStateProperties;
 import com.hbm.main.NuclearTechMod;
 import com.hbm.render.model.loader.NtmGeometry.BakedModelType;
@@ -619,6 +620,7 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.registerCableDiode();
         this.registerCableDetector();
         this.registerCableGauge();
+        this.registerFluidDuctGauge();
         this.registerMachineBattery();
         this.registerCableSwitch();
         this.particleOnlyBlock(NtmBlocks.MACHINE_DIFURNACE_EXTENSION, modLoc("block/difurnace_extension"));
@@ -1539,6 +1541,44 @@ public class NtmBlockStateProvider extends BlockStateProvider {
 
         this.getVariantBuilder(block).forAllStates(state -> {
             net.minecraft.core.Direction facing = state.getValue(com.hbm.blocks.network.CableGaugeBlock.FACING);
+            int x = switch(facing) { case UP -> 270; case DOWN -> 90; default -> 0; };
+            int y = switch(facing) { case EAST -> 90; case SOUTH -> 180; case WEST -> 270; default -> 0; };
+            return ConfiguredModel.builder().modelFile(model).rotationX(x).rotationY(y).build();
+        });
+
+        this.simpleBlockItem(block, model);
+    }
+
+    private void registerFluidDuctGauge() {
+        Block block = NtmBlocks.FLUID_DUCT_GAUGE.get();
+
+        ResourceLocation side = modLoc("block/deco_steel");
+        ResourceLocation gauge = modLoc("block/pipe_gauge");
+        ResourceLocation overlay = modLoc("block/fluid_duct_paintable_overlay");
+
+        // Zwei Schichten wie die beiden Renderdurchgaenge des Originals: unten der Stahl,
+        // darueber das Rohr-Overlay auf fuenf Seiten, waehrend die sechste die Anzeige traegt.
+        // Die Anzeige liegt im Grundmodell auf Nord und wird ueber x/y in die Setzrichtung gedreht.
+        BlockModelBuilder model = this.models().withExistingParent(this.name(block), mcLoc("block/block"))
+                .renderType("cutout")
+                .texture("particle", side)
+                .texture("side", side)
+                .texture("gauge", gauge)
+                .texture("overlay", overlay);
+
+        model.element().from(0, 0, 0).to(16, 16, 16)
+                .allFaces((dir, face) -> face.texture(dir == Direction.NORTH ? "#gauge" : "#side").cullface(dir))
+                .end();
+
+        var haut = model.element().from(0, 0, 0).to(16, 16, 16);
+        for(Direction dir : Direction.values()) {
+            if(dir == Direction.NORTH) continue;
+            haut.face(dir).texture("#overlay").cullface(dir).end();
+        }
+        haut.end();
+
+        this.getVariantBuilder(block).forAllStates(state -> {
+            Direction facing = state.getValue(FluidDuctGaugeBlock.FACING);
             int x = switch(facing) { case UP -> 270; case DOWN -> 90; default -> 0; };
             int y = switch(facing) { case EAST -> 90; case SOUTH -> 180; case WEST -> 270; default -> 0; };
             return ConfiguredModel.builder().modelFile(model).rotationX(x).rotationY(y).build();

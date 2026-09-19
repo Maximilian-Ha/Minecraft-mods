@@ -4955,3 +4955,35 @@ Tür nicht sieht, ist schlimmer als keiner.
 
 Nebenbei noch eine Scheinlücke weniger: **`machine_fluidtank`** heißt im Port
 `machine_fluid_tank`, mit Unterstrich. Die Lücke steht bei **27**.
+
+### Das Messrohr
+
+`fluid_duct_gauge` ist das Gegenstück zum schon portierten Strommesser: ein Rohrstück, das
+mitschreibt, wie viel durch das Netz läuft. Die Zählerei selbst ist zwei Zeilen — `FluidNetMK2`
+führt bereits einen `fluidTracker`, genau wie `PowerNetMK2` seinen `energyTracker` —, und die
+Sekundensumme entsteht wie im Original: jeden Tick aufaddieren, alle zwanzig Ticks umschalten.
+
+Beim Abschreiben ist mir aufgefallen, dass das Original ein Paket zu viel verschickt: die
+Blockentität ruft erst `super.updateEntity()` (das am Ende selbst sendet) und danach noch einmal
+`networkPackNT(25)` mit den frisch gezählten Werten. Zwei Pakete pro Tick, pro Messrohr. Ich habe
+die Reihenfolge umgedreht — erst zählen, dann die Basis senden lassen —, damit die Zähler im
+ohnehin abgehenden Paket mitreisen. Das ist kein Abweichen vom Original, das ist dasselbe
+Ergebnis für die Hälfte des Netzverkehrs.
+
+Das Aussehen hat mich länger beschäftigt als die Mechanik. Der Block ist im Original kein Rohr,
+sondern ein voller Stahlwürfel mit zwei Renderdurchgängen: unten `deco_steel`, darüber auf der
+Setzseite die Anzeige und auf den übrigen fünf das Rohr-Overlay. Mein erster Reflex war, das
+Overlay wie beim bemalbaren Rohr nach Fluidfarbe einzufärben — der Port hat dafür schon einen
+Farbgeber, der auf `PipeBaseBlockEntity` hört, und die Versuchung war groß, den Block einfach in
+die Liste zu schreiben.
+
+Nachgesehen, statt angenommen: `FluidDuctGauge` erbt von `FluidDuctBase`, nicht von
+`FluidDuctPaintable` — und nur letzterer überschreibt `colorMultiplier`. Der Anzeigewürfel des
+Originals ist also **nicht** eingefärbt, er trägt das Overlay in Weiß. Hätte ich dem Reflex
+nachgegeben, wäre ein bunter Block herausgekommen, den das Original nie hatte. Das Modell hat
+deshalb zwei ungetönte Schichten, genau wie die Sellafield-Erze im Port sie schon benutzen.
+
+Die Fluidsorte steht trotzdem in der Blickleiste, zusammen mit mB/t und mB/s — das steht so auch
+im Original.
+
+Damit ist die Lücke bei **26**.

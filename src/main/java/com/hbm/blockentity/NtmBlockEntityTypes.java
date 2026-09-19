@@ -58,6 +58,7 @@ import com.hbm.blockentity.network.ConverterHeRfBlockEntity;
 import com.hbm.blockentity.network.ConverterRfHeBlockEntity;
 import com.hbm.blockentity.network.ConnectorSuperBlockEntity;
 import com.hbm.blockentity.network.PipeBaseBlockEntity;
+import com.hbm.blockentity.network.PipeGaugeBlockEntity;
 import com.hbm.blockentity.network.PylonBlockEntity;
 import com.hbm.blockentity.network.PylonLargeBlockEntity;
 import com.hbm.blockentity.network.PylonMediumBlockEntity;
@@ -886,6 +887,7 @@ public class NtmBlockEntityTypes {
     public static final Supplier<BlockEntityType<MachineBatteryBlockEntity>> MACHINE_BATTERY = BLOCK_ENTITY_TYPES.register("machine_battery", () -> BlockEntityType.Builder.of(MachineBatteryBlockEntity::new, NtmBlocks.MACHINE_BATTERY_POTATO.get(), NtmBlocks.MACHINE_BATTERY.get(), NtmBlocks.MACHINE_LITHIUM_BATTERY.get(), NtmBlocks.MACHINE_SCHRABIDIUM_BATTERY.get(), NtmBlocks.MACHINE_DINEUTRONIUM_BATTERY.get()).build(null));
     public static final Supplier<BlockEntityType<DiFurnaceExtensionBlockEntity>> MACHINE_DIFURNACE_EXTENSION = BLOCK_ENTITY_TYPES.register("machine_difurnace_extension", () -> BlockEntityType.Builder.of(DiFurnaceExtensionBlockEntity::new, NtmBlocks.MACHINE_DIFURNACE_EXTENSION.get()).build(null));
     public static final Supplier<BlockEntityType<PipeBaseBlockEntity>> FLUID_DUCT = BLOCK_ENTITY_TYPES.register("fluid_duct", () -> BlockEntityType.Builder.of(PipeBaseBlockEntity::new, NtmBlocks.FLUID_DUCT_NEO.get()).build(null));
+    public static final Supplier<BlockEntityType<PipeGaugeBlockEntity>> FLUID_DUCT_GAUGE = BLOCK_ENTITY_TYPES.register("fluid_duct_gauge", () -> BlockEntityType.Builder.of(PipeGaugeBlockEntity::new, NtmBlocks.FLUID_DUCT_GAUGE.get()).build(null));
 
     public static final Supplier<BlockEntityType<DecontaminatorBlockEntity>> DECONTAMINATOR = BLOCK_ENTITY_TYPES.register(
             "decontaminator",

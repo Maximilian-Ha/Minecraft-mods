@@ -39,6 +39,7 @@ import com.hbm.blocks.network.ConveyorLiftBlock;
 import com.hbm.blocks.network.ConveyorDoubleBlock;
 import com.hbm.blocks.network.ConveyorExpressBlock;
 import com.hbm.blocks.network.ConveyorTripleBlock;
+import com.hbm.blocks.network.FluidDuctGaugeBlock;
 import com.hbm.blocks.machine.WasteDrumBlock;
 import com.hbm.blocks.machine.rbmk.RBMKAutoloaderBlock;
 import com.hbm.blocks.machine.rbmk.RBMKConsoleBlock;
@@ -965,6 +966,7 @@ public class NtmBlocks {
     public static final DeferredBlock<Block> SUBSTATION = register("substation", () -> new SubstationBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops().noOcclusion()));
 
     public static final DeferredBlock<Block> FLUID_DUCT_NEO = registerNew("fluid_duct_neo", () -> new FluidDuctStandardBlock(BlockBehaviour.Properties.of().noOcclusion().strength(1.0F, 10.0F).sound(ModSoundTypes.PIPE).mapColor(MapColor.METAL)));
+    public static final DeferredBlock<Block> FLUID_DUCT_GAUGE = register("fluid_duct_gauge", () -> new FluidDuctGaugeBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(ModSoundTypes.PIPE).mapColor(MapColor.METAL)));
     public static final DeferredBlock<Block> RADIO_TORCH_SENDER = register("radio_torch_sender", () -> new RadioTorchSenderBlock(BlockBehaviour.Properties.of().noOcclusion().strength(1.0F, 10.0F).sound(ModSoundTypes.PIPE).mapColor(MapColor.METAL)));
     public static final DeferredBlock<Block> RADIO_TORCH_RECEIVER  = register("radio_torch_receiver", () -> new RadioTorchReceiverBlock(BlockBehaviour.Properties.of().noOcclusion().strength(1.0F, 10.0F).sound(ModSoundTypes.PIPE).mapColor(MapColor.METAL)));
 

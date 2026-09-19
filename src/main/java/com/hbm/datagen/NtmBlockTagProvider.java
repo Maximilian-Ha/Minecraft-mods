@@ -457,6 +457,7 @@ public class NtmBlockTagProvider extends BlockTagsProvider {
                         NtmBlocks.CABLE_DIODE.get(),
                         NtmBlocks.CABLE_DETECTOR.get(),
                         NtmBlocks.RED_CABLE_GAUGE.get(),
+                        NtmBlocks.FLUID_DUCT_GAUGE.get(),
                         NtmBlocks.MACHINE_BATTERY_POTATO.get(),
                         NtmBlocks.MACHINE_BATTERY.get(),
                         NtmBlocks.MACHINE_LITHIUM_BATTERY.get(),

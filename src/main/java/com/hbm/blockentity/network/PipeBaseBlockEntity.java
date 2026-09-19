@@ -21,6 +21,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class PipeBaseBlockEntity extends LoadedBaseBlockEntity implements IFluidPipeMK2, IFluidCopiable, ITickable {
@@ -29,7 +30,11 @@ public class PipeBaseBlockEntity extends LoadedBaseBlockEntity implements IFluid
     protected FluidType type = Fluids.NONE;
 
     public PipeBaseBlockEntity(BlockPos pos, BlockState state) {
-        super(NtmBlockEntityTypes.FLUID_DUCT.get(), pos, state);
+        this(NtmBlockEntityTypes.FLUID_DUCT.get(), pos, state);
+    }
+
+    protected PipeBaseBlockEntity(BlockEntityType<? extends PipeBaseBlockEntity> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
     @Override
