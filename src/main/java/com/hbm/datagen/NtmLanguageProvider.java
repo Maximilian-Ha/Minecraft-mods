@@ -14,6 +14,7 @@ import com.hbm.items.machine.PileRodItem.EnumPileRod;
 import com.hbm.items.machine.WatzPelletItem.EnumWatzType;
 import com.hbm.items.NtmItems;
 import com.hbm.items.food.ConserveItem.ConserveType;
+import com.hbm.items.tools.AmmoContainerItem.AmmoContainerType;
 import com.hbm.items.weapon.grenade.GrenadeExtraItem.GrenadeExtra;
 import com.hbm.items.weapon.grenade.GrenadeFillingItem.GrenadeFilling;
 import com.hbm.items.weapon.grenade.GrenadeFuzeItem.GrenadeFuze;
@@ -1774,6 +1775,12 @@ public class NtmLanguageProvider extends LanguageProvider {
 
         /* Die Granaten: vier Bauteile und die zusammengesetzte Granate. */
         this.add(NtmItems.GRENADE_UNIVERSAL, "Grenade");
+        this.add(NtmItems.SYRINGE_ANTIDOTE, "Antidote Syringe");
+        this.add("desc.item.syringe.antidote", "Removes all potion effects");
+        this.add(NtmItems.AMMO_CONTAINER, this.getName(AmmoContainerType.STANDARD), "Ammo Container");
+        this.add(NtmItems.AMMO_CONTAINER, this.getName(AmmoContainerType.MAKESHIFT), "Makeshift Ammo Container");
+        this.add("desc.item.ammo_container.standard", "Supplies ammunition for up to three of your guns");
+        this.add("desc.item.ammo_container.makeshift", "Supplies half a load for up to three of your cheaper guns");
         this.add(NtmItems.GRENADE_SHELL, this.getName(GrenadeShell.FRAG), "Compact Grenade Shell");
         this.add(NtmItems.GRENADE_SHELL, this.getName(GrenadeShell.STICK), "Stick Grenade Shell");
         this.add(NtmItems.GRENADE_SHELL, this.getName(GrenadeShell.TECH), "High-Tech Grenade Shell");

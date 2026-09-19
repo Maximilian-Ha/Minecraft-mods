@@ -6,6 +6,8 @@ import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.items.IEquipReceiver;
 import com.hbm.items.IHUDItem;
 import com.hbm.items.IKeybindReceiver;
+import com.hbm.inventory.MetaHelper;
+import com.hbm.items.NtmItems;
 import com.hbm.items.weapon.sedna.factory.GunFactory.Ammo;
 import com.hbm.items.weapon.sedna.hud.IHUDComponent;
 import com.hbm.items.weapon.sedna.mags.IMagazine;
@@ -58,7 +60,19 @@ public class GunBaseNTItem extends Item implements IKeybindReceiver, IHUDItem, I
     public static List<Item> secrets = new ArrayList<>();
     public List<ComparableStack> recognizedMods = new ArrayList<>();
 
-    public ItemStack defaultAmmo;
+    /**
+     * Die Munition, die der Munitionsbehaelter zu dieser Waffe herausgibt -- Sorte und Menge,
+     * nicht der fertige Stapel.
+     *
+     * WARUM NICHT DER STAPEL: eine Waffe wird in einem Lieferanten angelegt, der waehrend der
+     * Anmeldung laeuft. Ein ItemStack an dieser Stelle brauchte NtmItems.AMMO_STANDARD, und
+     * das ist dann unter Umstaenden noch nicht gebunden -- das Spiel bricht beim Laden ab.
+     * Deshalb steht hier nur die Sorte; den Stapel baut getDefaultAmmo(), wenn er gebraucht
+     * wird. (Das Original kann sich den Stapel leisten, weil es seine Gegenstaende
+     * unmittelbar anlegt.)
+     */
+    public Ammo defaultAmmo;
+    public int defaultAmmoAmount;
     public boolean isDefaultExpensive = false;
 
     public static final DecimalFormatSymbols SYMBOLS_US = new DecimalFormatSymbols(Locale.US);
@@ -152,8 +166,15 @@ public class GunBaseNTItem extends Item implements IKeybindReceiver, IHUDItem, I
     }
 
     public GunBaseNTItem setDefaultAmmo(Ammo ammo, int amount) {
-        //this.defaultAmmo = new ItemStack(ModItems.ammo_standard, amount, ammo.ordinal());
+        this.defaultAmmo = ammo;
+        this.defaultAmmoAmount = amount;
         return this;
+    }
+
+    /** Ein frischer Stapel der Standardmunition, oder leer, wenn die Waffe keine hat. */
+    public ItemStack getDefaultAmmo() {
+        if(this.defaultAmmo == null) return ItemStack.EMPTY;
+        return MetaHelper.newStack(NtmItems.AMMO_STANDARD.get(), this.defaultAmmoAmount, this.defaultAmmo.ordinal());
     }
 
     public GunBaseNTItem setDefaultAmmoExpensive(Ammo ammo, int amount) {

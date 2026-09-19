@@ -19,6 +19,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Portiert aus 1.7.10: com.hbm.items.special.ItemSyringe.
@@ -46,10 +47,19 @@ public class SyringeItem extends Item {
     /** Die Schluessel der Hinweiszeilen; der Wortlaut steht im Sprach-Erzeuger. */
     private final String[] hinweis;
 
+    /** Was uebrig bleibt. Die vier Metallspritzen lassen eine Metallhuelle zurueck, das
+     *  Gegenmittel eine glaeserne -- so steht es im Original. */
+    private final Supplier<Item> huelle;
+
     public SyringeItem(Properties properties, Consumer<Player> wirkung, int uebelkeit, String... hinweis) {
+        this(properties, wirkung, uebelkeit, () -> NtmItems.SYRINGE_METAL_EMPTY.get(), hinweis);
+    }
+
+    public SyringeItem(Properties properties, Consumer<Player> wirkung, int uebelkeit, Supplier<Item> huelle, String... hinweis) {
         super(properties);
         this.wirkung = wirkung;
         this.uebelkeit = uebelkeit;
+        this.huelle = huelle;
         this.hinweis = hinweis;
     }
 
@@ -79,6 +89,20 @@ public class SyringeItem extends Item {
         }, 15, "desc.item.syringe.super.heal", "desc.item.syringe.super.slow");
     }
 
+    /**
+     * Das Gegenmittel. Es raeumt alle Trankwirkungen ab -- auch die guten, denn es
+     * unterscheidet nicht.
+     *
+     * ABWEICHUNG: im Original ist es kein ItemSyringe, sondern ein ItemSimpleConsumable, und
+     * das laesst sich auch jemand anderem in den Arm rammen (setHitActionServer). Diesen
+     * zweiten Weg hat der Port nicht; hier wirkt die Spritze nur auf den, der sie haelt.
+     * Die Uebelkeitssperre gilt in beiden Faellen.
+     */
+    public static SyringeItem antidote(Properties properties) {
+        return new SyringeItem(properties, player -> player.removeAllEffects(), 5,
+                () -> NtmItems.SYRINGE_EMPTY.get(), "desc.item.syringe.antidote");
+    }
+
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
 
@@ -99,7 +123,7 @@ public class SyringeItem extends Item {
          * Stelle; sonst wandert sie ins Inventar, und wenn dort kein Platz ist, vor die Fuesse.
          * Genauso macht es das Original.
          */
-        ItemStack huelle = new ItemStack(NtmItems.SYRINGE_METAL_EMPTY.get());
+        ItemStack huelle = new ItemStack(this.huelle.get());
 
         if(stack.isEmpty()) return InteractionResultHolder.consume(huelle);
         if(!player.getInventory().add(huelle)) player.drop(huelle, false);

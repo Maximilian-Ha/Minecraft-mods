@@ -6887,3 +6887,66 @@ anschlägt, sobald der `PLASMA`-Zweig wieder fehlt.
 
 Damit deckt `enum-check` beide Seiten ab: einen Verweis auf eine Konstante, die es nicht gibt,
 und eine Konstante, auf die kein Zweig zeigt.
+
+## Der Munitionsbehälter, das Gegenmittel — und eine Zeile, die auskommentiert war
+
+Die beiden letzten Gegenstände, auf die `crate` und `crate_supply` warten (Aufgabe #104).
+
+### `setDefaultAmmo` hat nichts getan
+
+Der Munitionsbehälter fragt jede Waffe im Gepäck nach ihrer Standardmunition. Beim Nachsehen,
+woher die kommt, stand im Port das hier:
+
+```java
+public GunBaseNTItem setDefaultAmmo(Ammo ammo, int amount) {
+    //this.defaultAmmo = new ItemStack(ModItems.ammo_standard, amount, ammo.ordinal());
+    return this;
+}
+```
+
+Die Zuweisung ist auskommentiert. **38 Waffen** rufen diese Methode auf — jede wirft ihren Wert
+seitdem weg, und `defaultAmmo` war ausnahmslos leer. Aufgefallen ist es nie, weil bis jetzt
+niemand danach gefragt hat: der Behälter ist der erste und einzige Leser.
+
+Warum die Zeile auskommentiert wurde, lässt sich am Code ablesen: sie hätte an dieser Stelle
+gar nicht laufen können. Eine Waffe entsteht in einem Lieferanten, der **während** der
+Anmeldung läuft; `new ItemStack(NtmItems.AMMO_STANDARD.get(), ...)` braucht dort einen
+gebundenen Gegenstand, und ob `AMMO_STANDARD` zu diesem Zeitpunkt schon gebunden ist, hängt an
+der Reihenfolge. Das ist genau der Absturz, den die Dosenkiste ein paar Runden weiter oben
+vorgeführt hat.
+
+Die Lösung ist dieselbe wie dort: **nicht den Stapel merken, sondern die Sorte.** `defaultAmmo`
+ist jetzt ein `Ammo`-Wert samt Menge, und `getDefaultAmmo()` baut den Stapel erst, wenn er
+gebraucht wird — lange nach der Anmeldung. Das Original kann sich den fertigen Stapel leisten,
+weil es seine Gegenstände unmittelbar anlegt; auf 1.21 geht das nicht.
+
+### Der Behälter
+
+Zwei Sorten, wie im Original: der gewöhnliche bedient jede Waffe, der behelfsmäßige gibt nur
+die Hälfte her und lässt die Waffen aus, deren Munition als teuer gilt (`isDefaultExpensive`).
+Gemischt wird die Liste und vorne abgeschnitten — wer mehr als drei Waffen trägt, bekommt für
+drei zufällige etwas.
+
+Im Original sind die beiden Sorten zwei Metadaten mit zwei Symbolen (`ammo_container` und
+`ammo_container_alt`); im Port sind es zwei Spielarten eines `EnumMultiItem`, das seine Modelle
+selbst erzeugt. Die Texturen heißen entsprechend `ammo_container.standard` und
+`ammo_container.makeshift`.
+
+### Das Gegenmittel
+
+Eine Glasspritze, die alle Trankwirkungen abräumt — auch die guten, denn sie unterscheidet
+nicht. Die Übelkeitssperre gilt wie bei den anderen Spritzen.
+
+Dafür musste `SyringeItem` eine Kleinigkeit lernen: was übrig bleibt, war bisher fest die
+Metallhülle. Das Gegenmittel steckt im Original in Glas und lässt `syringe_empty` zurück; die
+leere Hülle ist deshalb jetzt eine Eigenschaft der Spritze.
+
+Eine Abweichung bleibt: im Original ist das Gegenmittel kein `ItemSyringe`, sondern ein
+`ItemSimpleConsumable`, und das lässt sich auch jemand anderem in den Arm rammen
+(`setHitActionServer`). Diesen zweiten Weg hat der Port nicht — hier wirkt die Spritze nur auf
+den, der sie hält.
+
+Damit stehen alle Gegenstände, auf die die Nachschubkiste wartet. Was für Aufgabe #104 noch
+fehlt, sind die beiden Kisten selbst.
+
+Alle 30 Tore grün.

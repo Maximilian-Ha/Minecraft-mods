@@ -1834,6 +1834,7 @@ public class NtmCreativeTabs {
                         addMetaItems(output, NtmItems.GRENADE_FUZE.get());
                         addMetaItems(output, NtmItems.GRENADE_EXTRA.get());
                         addGrenadeCombinations(output, NtmItems.GRENADE_UNIVERSAL.get());
+                        addMetaItems(output, NtmItems.AMMO_CONTAINER.get());
 
                     }).build());
 
@@ -1924,6 +1925,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.COIN_MASKMAN);
                         addMetaItems(output, NtmItems.CANNED_CONSERVE.get());
                         output.accept(NtmItems.PUDDING);
+                        output.accept(NtmItems.SYRINGE_ANTIDOTE);
                         addMetaItems(output, NtmItems.CAP.get());
                         output.accept(NtmItems.RING_PULL);
                         output.accept(NtmItems.CAN_KEY);

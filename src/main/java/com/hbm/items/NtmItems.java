@@ -25,6 +25,7 @@ import com.hbm.items.armor.ItemModKnockback;
 import com.hbm.items.armor.ModCharmItem;
 import com.hbm.items.armor.NtmArmorMaterials;
 import com.hbm.items.food.ConserveItem;
+import com.hbm.items.tools.AmmoContainerItem;
 import com.hbm.items.weapon.grenade.GrenadeExtraItem;
 import com.hbm.items.weapon.grenade.GrenadeFillingItem;
 import com.hbm.items.weapon.grenade.GrenadeFuzeItem;
@@ -1202,6 +1203,9 @@ public class NtmItems {
     public static final DeferredItem<Item> GRENADE_EXTRA = ITEMS.register("grenade_extra", () -> new GrenadeExtraItem(new Item.Properties()));
     public static final DeferredItem<Item> GRENADE_UNIVERSAL = ITEMS.register("grenade_universal", () -> new GrenadeUniversalItem(new Item.Properties()));
 
+    /* Der Munitionsbehaelter der Nachschubkiste. */
+    public static final DeferredItem<Item> AMMO_CONTAINER = ITEMS.register("ammo_container", () -> new AmmoContainerItem(new Item.Properties()));
+
     // Money
     public static final DeferredItem<Item> CAP = ITEMS.register("cap", () -> new EnumMultiItem(new Item.Properties(), CapType.class, true, true));
     public static final DeferredItem<Item> RING_PULL = ITEMS.register("ring_pull", () -> new Item(new Item.Properties()));
@@ -1438,6 +1442,7 @@ public class NtmItems {
      */
     public static final DeferredItem<Item> SYRINGE_EMPTY = ITEMS.register("syringe_empty", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> SYRINGE_METAL_EMPTY = ITEMS.register("syringe_metal_empty", () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> SYRINGE_ANTIDOTE = ITEMS.register("syringe_antidote", () -> SyringeItem.antidote(new Item.Properties()));
     public static final DeferredItem<Item> SYRINGE_METAL_STIMPAK = ITEMS.register("syringe_metal_stimpak", () -> SyringeItem.stimpak(new Item.Properties()));
     public static final DeferredItem<Item> SYRINGE_METAL_MEDX = ITEMS.register("syringe_metal_medx", () -> SyringeItem.medx(new Item.Properties()));
     public static final DeferredItem<Item> SYRINGE_METAL_PSYCHO = ITEMS.register("syringe_metal_psycho", () -> SyringeItem.psycho(new Item.Properties()));
