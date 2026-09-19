@@ -711,6 +711,12 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.particleOnlyBlock(NtmBlocks.FRACTION_SPACER, modLoc("block/block_steel"));
         this.particleOnlyBlock(NtmBlocks.MACHINE_CATALYTIC_REFORMER, modLoc("block/block_steel"));
         this.particleOnlyBlock(NtmBlocks.MACHINE_HYDROTREATER, modLoc("block/block_steel"));
+        this.particleOnlyBlock(NtmBlocks.MACHINE_DEUTERIUM_TOWER, modLoc("block/concrete"));
+        /* Der Extraktor ist ein gewoehnlicher Wuerfel: oben und unten das Wasserbild, ringsum
+         * die Seitentextur. */
+        this.simpleBlockWithItem(NtmBlocks.MACHINE_DEUTERIUM_EXTRACTOR.get(), this.models()
+                .cubeBottomTop("machine_deuterium_extractor", modLoc("block/deuterium_extractor_side"),
+                        modLoc("block/deuterium_extractor_top_water"), modLoc("block/deuterium_extractor_top_water")));
         this.particleOnlyBlock(NtmBlocks.MACHINE_VACUUM_DISTILL, modLoc("block/block_steel"));
         this.particleOnlyBlock(NtmBlocks.MACHINE_SOLIDIFIER, modLoc("block/block_steel"));
         this.particleOnlyBlock(NtmBlocks.MACHINE_PYRO_OVEN, modLoc("block/block_steel"));

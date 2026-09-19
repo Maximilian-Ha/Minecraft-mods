@@ -5937,3 +5937,54 @@ Damit liest sich die Bilanz der 115 fehlenden Blockentitäten so: **19 sind gar 
 5 gehören nachgesehen, 21 sind sofort portierbar, 70 hängen an etwas anderem. Vorher hieß es
 39 sofort portierbar — und ein Drittel davon wäre Arbeit an Blöcken gewesen, die niemand je zu
 sehen bekommt.
+
+### Die Deuteriumkette — und zwei Tore, die zugeschlagen haben
+
+`machine_deuterium_extractor` macht aus **fünfzig** Millilitern Wasser **einen** Milliliter
+schweres Wasser und zieht dafür jede Sekunde ein Zwanzigstel seines Stromspeichers. Der
+`machine_deuterium_tower` ist derselbe Vorgang im Großen: zehn Blöcke hoch, fünfzig Eimer
+Wasser im Tank, fünf Eimer schweres Wasser, zehnmal so viel Strom — und acht Anschlussstellen
+rings um seinen Fuß statt der sechs Würfelseiten.
+
+Der Extraktor rechnet erst und multipliziert dann:
+
+```java
+int menge = Math.min(tanks[1].getMaxFill(), tanks[0].getFill()) / 50;
+tanks[0].setFill(tanks[0].getFill() - menge * 50);
+```
+
+Das ist kein Umweg — so bleibt kein Rest im Wassertank hängen, den die Ganzzahldivision sonst
+verschluckt hätte.
+
+**Eine Frage musste gemessen werden.** Das Original dreht seine Anschlussstellen mit
+`dir.getRotation(ForgeDirection.DOWN)`, und ob das nun `getClockWise` oder
+`getCounterClockWise` ist, weiß man nicht auswendig. Also über alle portierten Mehrblockbauten
+gezählt, welche Abbildung der Port bisher benutzt:
+
+| Original | Port | Fälle |
+|---|---|---|
+| `getRotation(UP)` | `getClockWise()` | **41** |
+| `getRotation(UP)` | `getCounterClockWise()` | 3 |
+| `getRotation(DOWN)` | `getCounterClockWise()` | 2 |
+
+Eindeutig — und die drei Ausreißer (`CondenserPowered`, `MachineCompressor`,
+`MachineCompressorCompact`) sind jetzt eine eigene Aufgabe, denn wenn sie ihre Vorzeichen nicht
+anderweitig ausgleichen, sitzen ihre Rohr- und Stromanschlüsse gespiegelt.
+
+**Zwei Tore haben zugeschlagen**, beide zu Recht:
+
+* `override-check`: der Extraktor erbte von `MachineBaseBlockEntity`, und die ist ein
+  `MenuProvider` — nur hat diese Maschine gar keine Oberfläche. Das Original leitet von
+  `TileEntityMachineBase` mit **null Fächern** ab; im Port wäre das ein Menüanbieter ohne Menü.
+  Jetzt steht dort `LoadedBaseBlockEntity`.
+* `renderbox-check`: der Turm hatte keinen eigenen Sichtkasten. Sein Modell ist zehn Blöcke
+  hoch, der Kern sitzt unten — ohne Sichtkasten verschwindet der ganze Turm, sobald man zu weit
+  nach oben schaut. Das ist genau der Fehler, für den das Tor nach der Leviathan-Turbine
+  gebaut wurde.
+
+Die beiden Ambossrezepte sind mit übernommen. `Fluids.SOURGAS.getDict(1_000)` des Originals —
+ein Eintrag für einen vollen Fluidtank — ist im Port `FLUID_TANK_FULL`, dessen Fluid im
+Metadatum steht; `CU.plateCast()` die kupferne Gussplatte, `EnumCircuitType.BASIC` die
+integrierte Leiterplatte.
+
+Stand danach: fehlende Blockentitäten 114.

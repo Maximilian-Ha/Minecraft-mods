@@ -2853,6 +2853,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.FRACTION_SPACER, "Fractioning Tower Spacer");
         this.add(NtmBlocks.MACHINE_CATALYTIC_REFORMER, "Catalytic Reformer");
         this.add(NtmBlocks.MACHINE_HYDROTREATER, "Hydrotreater");
+        this.add(NtmBlocks.MACHINE_DEUTERIUM_EXTRACTOR, "Deuterium Extractor");
+        this.add(NtmBlocks.MACHINE_DEUTERIUM_TOWER, "Deuterium Extraction Tower");
         this.add(NtmBlocks.MACHINE_VACUUM_DISTILL, "Vacuum Distillation Tower");
         this.add(NtmBlocks.MACHINE_SOLIDIFIER, "Solidifier");
         this.add(NtmBlocks.MACHINE_PYRO_OVEN, "Pyrolysis Oven");

@@ -262,6 +262,7 @@ public class ClientProxy extends ServerProxy {
         BlockEntityRenderers.register(NtmBlockEntityTypes.FRACTION_SPACER.get(), new RenderFractionSpacer());
         BlockEntityRenderers.register(NtmBlockEntityTypes.MACHINE_CATALYTIC_REFORMER.get(), new RenderCatalyticReformer());
         BlockEntityRenderers.register(NtmBlockEntityTypes.MACHINE_HYDROTREATER.get(), new RenderHydrotreater());
+        BlockEntityRenderers.register(NtmBlockEntityTypes.MACHINE_DEUTERIUM_TOWER.get(), new RenderDeuteriumTower());
         BlockEntityRenderers.register(NtmBlockEntityTypes.MACHINE_VACUUM_DISTILL.get(), new RenderVacuumDistill());
         BlockEntityRenderers.register(NtmBlockEntityTypes.MACHINE_SOLIDIFIER.get(), new RenderSolidifier());
         BlockEntityRenderers.register(NtmBlockEntityTypes.MACHINE_PYRO_OVEN.get(), new RenderPyroOven());

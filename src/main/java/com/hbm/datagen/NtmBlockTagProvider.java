@@ -648,6 +648,8 @@ public class NtmBlockTagProvider extends BlockTagsProvider {
                         NtmBlocks.FRACTION_SPACER.get(),
                         NtmBlocks.MACHINE_CATALYTIC_REFORMER.get(),
                         NtmBlocks.MACHINE_HYDROTREATER.get(),
+                        NtmBlocks.MACHINE_DEUTERIUM_EXTRACTOR.get(),
+                        NtmBlocks.MACHINE_DEUTERIUM_TOWER.get(),
                         NtmBlocks.MACHINE_VACUUM_DISTILL.get(),
                         NtmBlocks.MACHINE_PYRO_OVEN.get(),
                         NtmBlocks.MACHINE_CATALYTIC_CRACKER.get(),

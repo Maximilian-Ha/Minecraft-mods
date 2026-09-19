@@ -7,6 +7,7 @@ import com.hbm.inventory.RecipesCommon;
 import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.items.BoltItem;
+import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.CastPlateItem;
 import com.hbm.items.NtmItems;
 import com.hbm.items.machine.GearItem;
@@ -429,6 +430,37 @@ public class AnvilRecipes {
                         new ComparableStack(NtmItems.WIRE_MAGNETIZED_TUNGSTEN.get(), 8),
                 },
                 new AnvilOutput(new ItemStack(NtmItems.PLATE_ARMOR_LUNAR.asItem(), 1))
+        ).setTier(4).setOverlay(OverlayType.CONSTRUCTION));
+
+        /*
+         * Die Deuteriumkette, AnvilRecipes.java Z. 455 und 464. CU.plateCast() ist die kupferne
+         * Gussplatte, EnumCircuitType.BASIC die integrierte Leiterplatte -- wie in allen Runden
+         * davor.
+         */
+        CONSTRUCTION_RECIPES.add(new AnvilConstructionRecipe(
+                new AStack[] {
+                        new ComparableStack(NtmItems.SULFUR.get(), 12),
+                        new ComparableStack(NtmItems.SHELL_STEEL.get(), 4),
+                        new ComparableStack(NtmItems.CAST_PLATE.get(), 6, CastPlateItem.Type.COPPER.ordinal()),
+                        new ComparableStack(NtmItems.CIRCUIT_INTEGRATED_BOARD.get(), 2),
+                },
+                new AnvilOutput(new ItemStack(NtmBlocks.MACHINE_DEUTERIUM_EXTRACTOR.asItem(), 1))
+        ).setTier(2).setOverlay(OverlayType.CONSTRUCTION));
+
+        /*
+         * Fluids.SOURGAS.getDict(1_000) des Originals ist der Eintrag fuer einen vollen
+         * Fluidtank -- im Port ist das FLUID_TANK_FULL, dessen Fluid im Metadatum steht.
+         */
+        CONSTRUCTION_RECIPES.add(new AnvilConstructionRecipe(
+                new AStack[] {
+                        new ComparableStack(NtmItems.DEUTERIUM_FILTER.get(), 2),
+                        new ComparableStack(NtmItems.SHELL_STEEL.get(), 5),
+                        new ComparableStack(NtmItems.PIPE_STEEL.get(), 12),
+                        new ComparableStack(NtmBlocks.CONCRETE_ASBESTOS.get(), 8),
+                        new ComparableStack(NtmBlocks.STEEL_SCAFFOLD.get(), 16),
+                        new ComparableStack(NtmItems.FLUID_TANK_FULL.get(), 8, Fluids.SOURGAS.getID()),
+                },
+                new AnvilOutput(new ItemStack(NtmBlocks.MACHINE_DEUTERIUM_TOWER.asItem(), 1))
         ).setTier(4).setOverlay(OverlayType.CONSTRUCTION));
 
         CONSTRUCTION_RECIPES.add(new AnvilConstructionRecipe(
