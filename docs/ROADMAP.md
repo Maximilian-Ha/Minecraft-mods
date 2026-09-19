@@ -5312,3 +5312,41 @@ ein Byte über 0x7F. (Die 34 Stellen in `NtmLanguageProvider` sind englische Anz
 standen schon vorher dort.)
 
 Die Lücke steht bei **16**.
+
+### Der Schredder lernt die Bauklötze
+
+Bisher kannte der Schredder Erze, Barren, Kristalle und Platten — also alles, was aus dem
+Materialkreislauf kommt. Was er nicht kannte, waren die Blöcke, die man daraus *baut*.
+Im Original stehen diese Rezepte verstreut zwischen den anderen; hier sind sie als
+geschlossene Gruppe in `registerBuildingRecipes()` zusammengefasst.
+
+53 Rezepte sind dazugekommen:
+
+| Gruppe | Ergebnis |
+|---|---|
+| Beton, Betonziegel (sechs Fassungen) | Kies |
+| Obsidianziegel | Obsidiankies |
+| leeres Ölerz, abgeklungenes Sellafield | Kies |
+| Sellafield-Diamanterz | Diamantkies ×2 |
+| Kalkstein | Kalksteinpulver ×4 |
+| Gneis | Lithiumkrümel |
+| Schlacke | Zementpulver ×4 |
+| vier behauene Meteoritblöcke | Meteoritpulver |
+| acht Stahlbauteile | Stahlkrümel, je nach Bauaufwand 1 bis 18 |
+| drei Kisten | Eisen-, Stahl-, Wolframpulver |
+| 24 Deko-Rohre | Stahlpulver |
+
+Die Mengen stammen unverändert aus dem Original — auch die Auffälligkeiten: die Ecke gibt
+mit 18 Krümeln doppelt so viel zurück wie Dach oder Wand, obwohl sie nicht größer ist, und
+die Wolframkiste gibt 36 Pulver, also viermal so viel wie die anderen beiden Kisten.
+
+**Was nicht mitkonnte und warum** steht als Kommentar über der Methode, damit es beim
+Nachziehen nicht gesucht werden muss. Acht Rezepte scheitern daran, dass der Block im Port
+noch fehlt (`ore_nether_fire`, zwei Meteoritziegel, `boxcar`, `ore_tektite_osmiridium`,
+`sand_dirty`, `sand_dirty_red`, `stone_porous`); drei daran, dass es das Ergebnis `scrap_oil`
+noch nicht gibt; die Wackelkopf-Reihe an `scrap_plastic`. Beim Aluminiumerz gibt das Original
+Kryolithbrocken aus — die gibt es im Port nicht, und da das selbsterzeugte Pulverrezept
+bereits greift, bleibt es stehen.
+
+Die Lücke bei den Blöcken bleibt bei **16** — diese Runde hat keine Blöcke nachgereicht,
+sondern eine Lücke *neben* der Liste geschlossen.

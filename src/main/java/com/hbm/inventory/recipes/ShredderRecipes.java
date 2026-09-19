@@ -312,6 +312,78 @@ public class ShredderRecipes extends SerializableRecipe {
         registerIfAbsent(new ItemStack(NtmItems.PLATE_TITANIUM.get()), new ItemStack(NtmItems.POWDER_TITANIUM.get(), 1));
     }
 
+    /**
+     * Die Bau- und Dekobloecke des Mods. Im Original stehen diese Rezepte verstreut zwischen
+     * den Erz- und Werkstoffrezepten; hier sind sie als geschlossene Gruppe beisammen.
+     *
+     * NICHT UEBERNOMMEN, weil die Vorlage im Port fehlt:
+     *   ore_nether_fire, meteor_brick_mossy, meteor_brick_cracked, boxcar,
+     *   ore_tektite_osmiridium, sand_dirty, sand_dirty_red, stone_porous -- diese Bloecke
+     *     sind noch nicht portiert;
+     *   dirt_dead, dirt_oily, stone_cracked -- die Bloecke gibt es, aber ihr Ergebnis
+     *     scrap_oil noch nicht;
+     *   bobblehead -- das Ergebnis scrap_plastic fehlt;
+     *   ore_aluminium -- das Original gibt chunk_ore (Kryolith), den es im Port nicht gibt;
+     *     das selbsterzeugte Rezept auf powder_aluminium bleibt daher stehen.
+     */
+    private static void registerBuildingRecipes() {
+
+        registerIfAbsent(new ItemStack(NtmBlocks.BRICK_LIGHT.get()), new ItemStack(Items.CLAY_BALL, 4));
+
+        // Beton zerfaellt zu Kies -- der Kreis schliesst sich ueber den Betonmischer.
+        registerIfAbsent(new ItemStack(NtmBlocks.CONCRETE.get()), new ItemStack(Blocks.GRAVEL, 1));
+        registerIfAbsent(new ItemStack(NtmBlocks.CONCRETE_SMOOTH.get()), new ItemStack(Blocks.GRAVEL, 1));
+        registerIfAbsent(new ItemStack(NtmBlocks.BRICK_CONCRETE.get()), new ItemStack(Blocks.GRAVEL, 1));
+        registerIfAbsent(new ItemStack(NtmBlocks.BRICK_CONCRETE_MOSSY.get()), new ItemStack(Blocks.GRAVEL, 1));
+        registerIfAbsent(new ItemStack(NtmBlocks.BRICK_CONCRETE_CRACKED.get()), new ItemStack(Blocks.GRAVEL, 1));
+        registerIfAbsent(new ItemStack(NtmBlocks.BRICK_CONCRETE_BROKEN.get()), new ItemStack(Blocks.GRAVEL, 1));
+        registerIfAbsent(new ItemStack(NtmBlocks.BRICK_OBSIDIAN.get()), new ItemStack(NtmBlocks.GRAVEL_OBSIDIAN.get(), 1));
+
+        registerIfAbsent(new ItemStack(NtmBlocks.ORE_OIL_EMPTY.get()), new ItemStack(Blocks.GRAVEL, 1));
+        registerIfAbsent(new ItemStack(NtmBlocks.SELLAFIELD_SLAKED.get()), new ItemStack(Blocks.GRAVEL, 1));
+        registerIfAbsent(new ItemStack(NtmBlocks.ORE_SELLAFIELD_DIAMOND.get()), new ItemStack(NtmBlocks.GRAVEL_DIAMOND.get(), 2));
+
+        registerIfAbsent(new ItemStack(NtmBlocks.RESOURCE_LIMESTONE.get()), new ItemStack(NtmItems.POWDER_LIMESTONE.get(), 4));
+        registerIfAbsent(new ItemStack(NtmBlocks.STONE_GNEISS.get()), new ItemStack(NtmItems.POWDER_LITHIUM_TINY.get(), 1));
+        registerIfAbsent(new ItemStack(NtmBlocks.BLOCK_SLAG.get()), new ItemStack(NtmItems.POWDER_CEMENT.get(), 4));
+
+        // Die behauenen Meteoritbloecke geben nur eine Portion zurueck, der rohe Block zehn.
+        registerIfAbsent(new ItemStack(NtmBlocks.METEOR_POLISHED.get()), new ItemStack(NtmItems.POWDER_METEORITE.get(), 1));
+        registerIfAbsent(new ItemStack(NtmBlocks.METEOR_BRICK.get()), new ItemStack(NtmItems.POWDER_METEORITE.get(), 1));
+        registerIfAbsent(new ItemStack(NtmBlocks.METEOR_BRICK_CHISELED.get()), new ItemStack(NtmItems.POWDER_METEORITE.get(), 1));
+        registerIfAbsent(new ItemStack(NtmBlocks.METEOR_PILLAR.get()), new ItemStack(NtmItems.POWDER_METEORITE.get(), 1));
+
+        // Die Stahlbauteile: die Menge folgt dem Bauaufwand, nicht der Groesse.
+        registerIfAbsent(new ItemStack(NtmBlocks.STEEL_POLES.get()), new ItemStack(NtmItems.POWDER_STEEL_TINY.get(), 2));
+        registerIfAbsent(new ItemStack(NtmBlocks.STEEL_ROOF.get()), new ItemStack(NtmItems.POWDER_STEEL_TINY.get(), 9));
+        registerIfAbsent(new ItemStack(NtmBlocks.STEEL_WALL.get()), new ItemStack(NtmItems.POWDER_STEEL_TINY.get(), 9));
+        registerIfAbsent(new ItemStack(NtmBlocks.STEEL_CORNER.get()), new ItemStack(NtmItems.POWDER_STEEL_TINY.get(), 18));
+        registerIfAbsent(new ItemStack(NtmBlocks.STEEL_BEAM.get()), new ItemStack(NtmItems.POWDER_STEEL_TINY.get(), 3));
+        registerIfAbsent(new ItemStack(NtmBlocks.STEEL_SCAFFOLD.get()), new ItemStack(NtmItems.POWDER_STEEL_TINY.get(), 4));
+        registerIfAbsent(new ItemStack(NtmBlocks.STEEL_GRATE.get()), new ItemStack(NtmItems.POWDER_STEEL_TINY.get(), 3));
+        registerIfAbsent(new ItemStack(NtmBlocks.DUNGEON_CHAIN.get()), new ItemStack(NtmItems.POWDER_STEEL_TINY.get(), 1));
+
+        registerIfAbsent(new ItemStack(NtmBlocks.CRATE_IRON.get()), new ItemStack(NtmItems.POWDER_IRON.get(), 8));
+        registerIfAbsent(new ItemStack(NtmBlocks.CRATE_STEEL.get()), new ItemStack(NtmItems.POWDER_STEEL.get(), 8));
+        registerIfAbsent(new ItemStack(NtmBlocks.CRATE_TUNGSTEN.get()), new ItemStack(NtmItems.POWDER_TUNGSTEN.get(), 36));
+
+        for(Block rohr : new Block[] {
+                NtmBlocks.DECO_PIPE.get(), NtmBlocks.DECO_PIPE_RUSTED.get(),
+                NtmBlocks.DECO_PIPE_GREEN.get(), NtmBlocks.DECO_PIPE_GREEN_RUSTED.get(),
+                NtmBlocks.DECO_PIPE_RED.get(), NtmBlocks.DECO_PIPE_MARKED.get(),
+                NtmBlocks.DECO_PIPE_RIM.get(), NtmBlocks.DECO_PIPE_RIM_RUSTED.get(),
+                NtmBlocks.DECO_PIPE_RIM_GREEN.get(), NtmBlocks.DECO_PIPE_RIM_GREEN_RUSTED.get(),
+                NtmBlocks.DECO_PIPE_RIM_RED.get(), NtmBlocks.DECO_PIPE_RIM_MARKED.get(),
+                NtmBlocks.DECO_PIPE_QUAD.get(), NtmBlocks.DECO_PIPE_QUAD_RUSTED.get(),
+                NtmBlocks.DECO_PIPE_QUAD_GREEN.get(), NtmBlocks.DECO_PIPE_QUAD_GREEN_RUSTED.get(),
+                NtmBlocks.DECO_PIPE_QUAD_RED.get(), NtmBlocks.DECO_PIPE_QUAD_MARKED.get(),
+                NtmBlocks.DECO_PIPE_FRAMED.get(), NtmBlocks.DECO_PIPE_FRAMED_RUSTED.get(),
+                NtmBlocks.DECO_PIPE_FRAMED_GREEN.get(), NtmBlocks.DECO_PIPE_FRAMED_GREEN_RUSTED.get(),
+                NtmBlocks.DECO_PIPE_FRAMED_RED.get(), NtmBlocks.DECO_PIPE_FRAMED_MARKED.get() }) {
+            registerIfAbsent(new ItemStack(rohr), new ItemStack(NtmItems.POWDER_STEEL.get(), 1));
+        }
+    }
+
     private static void registerIfAbsent(ItemStack input, ItemStack output) {
         if(input.isEmpty() || output.isEmpty()) {
             return;
@@ -420,12 +492,14 @@ public class ShredderRecipes extends SerializableRecipe {
         registerVanillaOreRecipes();
         registerRawOreRecipes();
         registerMaterialRecipes();
+        registerBuildingRecipes();
     }
 
     @Override
     public void registerPost() {
         registerRawOreRecipes();
         registerMaterialRecipes();
+        registerBuildingRecipes();
     }
 
     @Override
