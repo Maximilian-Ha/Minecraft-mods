@@ -30,6 +30,8 @@ public class GunFactoryClient {
         registerGunItemRenderer(event, new ItemRenderMaresleg(ResourceManager.MARESLEG_TEX), NtmItems.GUN_MARESLEG.get());
         registerGunItemRenderer(event, new ItemRenderSPAS12(), NtmItems.GUN_SPAS12.get());
         registerGunItemRenderer(event, new ItemRenderHangman(), NtmItems.GUN_HANGMAN.get());
+        registerGunItemRenderer(event, new ItemRenderHenry(ResourceManager.HENRY_TEX), NtmItems.GUN_HENRY.get());
+        registerGunItemRenderer(event, new ItemRenderHenry(ResourceManager.HENRY_LINCOLN_TEX), NtmItems.GUN_HENRY_LINCOLN.get());
         registerGunItemRenderer(event, new ItemRenderHeavyRevolver(ResourceManager.HEAVY_REVOLVER_TEX), NtmItems.GUN_HEAVY_REVOLVER.get());
         registerGunItemRenderer(event, new ItemRenderLiberator(), NtmItems.GUN_LIBERATOR.get());
         registerGunItemRenderer(event, new ItemRenderHeavyRevolver(ResourceManager.LILMAC_TEX), NtmItems.GUN_HEAVY_REVOLVER_LILMAC.get());
@@ -101,6 +103,8 @@ public class GunFactoryClient {
         //HUDS
         ((GunBaseNTItem) NtmItems.GUN_DEBUG.get())						.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO, LegoClient.HUD_COMPONENT_AMMO_SECOND);
         ((GunBaseNTItem) NtmItems.GUN_MARESLEG.get())					.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
+        ((GunBaseNTItem) NtmItems.GUN_HENRY.get())						.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
+        ((GunBaseNTItem) NtmItems.GUN_HENRY_LINCOLN.get())				.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_SPAS12.get())						.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_HANGMAN.get())					.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_HEAVY_REVOLVER.get())			.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);

@@ -70,6 +70,52 @@ public class Orchestras {
         }
     };
 
+    /**
+     * Der Henry. Ein Unterhebelrepetierer laedt EINZELN nach, deshalb die drei
+     * Nachladezustaende: RELOAD einmal am Anfang, RELOAD_CYCLE je Patrone, RELOAD_END zum
+     * Schluss. Der Hebel schnappt dabei nur, wenn die Waffe vorher leer war -- war noch etwas
+     * drin, sitzt die naechste Patrone schon im Lauf.
+     */
+    public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_HENRY = (stack, ctx) -> {
+        LivingEntity entity = ctx.entity;
+        Level level = entity.level;
+        if(!(level instanceof ServerLevel serverLevel)) return;
+        GunAnimation type = GunBaseNTItem.getLastAnim(stack, ctx.configIndex);
+        int timer = GunBaseNTItem.getAnimTimer(stack, ctx.configIndex);
+        boolean aiming = GunBaseNTItem.getIsAiming(stack);
+
+        if(type == GunAnimation.RELOAD) {
+            if(timer == 8) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_SMALL_REMOVE.get(), entity.getSoundSource(), 1F, 1F);
+            if(timer == 16) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_SMALL_INSERT.get(), entity.getSoundSource(), 1F, 1F);
+        }
+        if(type == GunAnimation.RELOAD_CYCLE) {
+            if(timer == 0) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_SMALL_INSERT.get(), entity.getSoundSource(), 1F, 1F);
+        }
+        if(type == GunAnimation.RELOAD_END) {
+            if(timer == 0) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_SMALL_REMOVE.get(), entity.getSoundSource(), 1F, 0.9F);
+            if(timer == 12 && ctx.config.getReceivers(stack)[0].getMagazine(stack).getAmountBeforeReload(stack) <= 0)
+                SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_LEVER_COCK.get(), entity.getSoundSource(), 1F, 1F);
+        }
+        if(type == GunAnimation.JAMMED) {
+            if(timer == 0) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_SMALL_REMOVE.get(), entity.getSoundSource(), 1F, 0.9F);
+            if(timer == 12) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_LEVER_COCK.get(), entity.getSoundSource(), 1F, 1F);
+            if(timer == 36) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_LEVER_COCK.get(), entity.getSoundSource(), 1F, 1F);
+            if(timer == 44) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_LEVER_COCK.get(), entity.getSoundSource(), 1F, 1F);
+        }
+        if(type == GunAnimation.CYCLE) {
+            if(timer == 0) PacketDistributor.sendToPlayersNear(serverLevel, null, entity.getX(), entity.getY(), entity.getZ(), 100, new MuzzleFlashPacket(entity.getId()));
+            if(timer == 14) {
+                SpentCasing casing = ctx.config.getReceivers(stack)[0].getMagazine(stack).getCasing(stack, ctx.container);
+                if(casing != null) CasingCreator.composeEffect(entity.level, entity, 0.5, -0.125, aiming ? -0.125 : -0.375D, 0, 0.12, -0.12, 0.01, -7.5F + (float)entity.random.nextGaussian() * 5F, (float)entity.random.nextGaussian() * 1.5F, casing.getName(), true, 60, 0.5D, 20);
+            }
+            if(timer == 12) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_LEVER_COCK.get(), entity.getSoundSource(), 1F, 1F);
+        }
+        if(type == GunAnimation.CYCLE_DRY) {
+            if(timer == 2) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_DRY_FIRE.get(), entity.getSoundSource(), 1F, 1F);
+            if(timer == 12) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_LEVER_COCK.get(), entity.getSoundSource(), 1F, 1F);
+        }
+    };
+
     public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_MARESLEG = (stack, ctx) -> {
         LivingEntity entity = ctx.entity;
         Level level = entity.level;

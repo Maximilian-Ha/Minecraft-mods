@@ -114,6 +114,46 @@ public class XFactory44 {
          * ein Zielfernrohr aufgesetzt ist. Der Aufsatz selbst ist im Port noch nicht da; ein
          * Namensschalter fuer einen Aufsatz, den es nicht gibt, waere toter Code.
          */
+        /*
+         * Der Henry, XFactory44 Z. 89 des Originals. Ein Unterhebelrepetierer auf .44: vierzehn
+         * Schuss im Roehrenmagazin, einzeln nachgeladen (reloadSequential), und dazwischen wird
+         * jedes Mal der Hebel durchgezogen.
+         *
+         * DIE VIER ZAHLEN HINTER reload SIND DIE VIER ABSCHNITTE des einzelnen Nachladens:
+         * ansetzen, je Patrone, abschliessen, und der Rest. Ein Magazin, das man in einem Stueck
+         * wechselt, braucht nur eine.
+         *
+         * KEIN BAUPLAN, und das ist kein Versaeumnis dieser Runde: der Port hat noch KEINE
+         * einzige Waffe, die sich bauen laesst. Die Bauplaene des Originals stehen alle auf
+         * Waffenbauteilen -- Laeufe, Verschluesse, Mechaniken, Schaefte --, und diese Familie
+         * ist nicht portiert. Nachgemessen: NtmRecipeProvider nennt null NtmItems.GUN_.
+         */
+        NtmItems.GUN_HENRY = registry.register("gun_henry", () -> new GunBaseNTItem(WeaponQuality.A_SIDE, new GunConfig()
+                .dura(300).draw(15).inspect(23).reloadSequential(true).crosshair(Crosshair.CIRCLE).smoke(Lego.LAMBDA_STANDARD_SMOKE)
+                .rec(new Receiver(0)
+                        .dmg(10F).delay(20).reload(25, 11, 14, 8).jam(45).sound(NtmSoundEvents.GUN_RIFLE_FIRE, 1.0F, 1.0F)
+                        .mag(new MagazineSingleReload(0, 14).addConfigs(m44_bp, m44_sp, m44_fmj, m44_jhp, m44_ap, m44_express))
+                        .offset(0.75, -0.0625, -0.1875D)
+                        .setupStandardFire().recoil(LAMBDA_RECOIL_HENRY))
+                .setupStandardConfiguration()
+                .anim(LAMBDA_HENRY_ANIMS).orchestra(Orchestras.ORCHESTRA_HENRY)
+        ).setDefaultAmmo(Ammo.M44_SP, 14));
+
+        /*
+         * Der Lincoln Repeater, XFactory44 Z. 99. Derselbe Bau, aber B_SIDE: doppelter Schaden,
+         * KEINE Streuung aus der Huefte, und der Schuss klingt ein Viertel hoeher.
+         */
+        NtmItems.GUN_HENRY_LINCOLN = registry.register("gun_henry_lincoln", () -> new GunBaseNTItem(WeaponQuality.B_SIDE, new GunConfig()
+                .dura(300).draw(15).inspect(23).reloadSequential(true).crosshair(Crosshair.CIRCLE).smoke(Lego.LAMBDA_STANDARD_SMOKE)
+                .rec(new Receiver(0)
+                        .dmg(20F).spreadHipfire(0F).delay(20).reload(25, 11, 14, 8).jam(45).sound(NtmSoundEvents.GUN_RIFLE_FIRE, 1.0F, 1.25F)
+                        .mag(new MagazineSingleReload(0, 14).addConfigs(m44_bp, m44_sp, m44_fmj, m44_jhp, m44_ap, m44_express))
+                        .offset(0.75, -0.0625, -0.1875D)
+                        .setupStandardFire().recoil(LAMBDA_RECOIL_HENRY))
+                .setupStandardConfiguration()
+                .anim(LAMBDA_HENRY_ANIMS).orchestra(Orchestras.ORCHESTRA_HENRY)
+        ).setDefaultAmmo(Ammo.M44_JHP, 14));
+
         NtmItems.GUN_HEAVY_REVOLVER = registry.register("gun_heavy_revolver", () -> new GunBaseNTItem(WeaponQuality.A_SIDE, new GunConfig()
                 .dura(600).draw(10).inspect(23).crosshair(Crosshair.L_CLASSIC).smoke(Lego.LAMBDA_STANDARD_SMOKE)
                 .rec(new Receiver(0)
@@ -180,8 +220,64 @@ public class XFactory44 {
         }
     };
 
+    public static BiConsumer<ItemStack, LambdaContext> LAMBDA_RECOIL_HENRY = (stack, ctx) -> {
+        GunBaseNTItem.setupRecoil(5, (float) (ctx.getPlayer().random.nextGaussian() * 1));
+    };
+
     public static BiConsumer<ItemStack, LambdaContext> LAMBDA_RECOIL_NOPIP = (stack, ctx) -> {
         GunBaseNTItem.setupRecoil(10, (float) (ctx.getPlayer().random.nextGaussian() * 1.5));
+    };
+
+    /**
+     * Der Unterhebelrepetierer. Sechs Busse bewegen sich: LEVER der Hebel, TURN die ganze
+     * Waffe (sie kippt beim Durchladen zur Seite), HAMMER der Hahn, LIFT und TWIST das
+     * Anheben und Wegdrehen beim Nachladen, BULLET die einzelne Patrone.
+     *
+     * RELOAD_END FRAGT DEN MAGAZININHALT AB: war die Waffe vorher leer, schnappt der Hebel
+     * zum Schluss noch einmal durch, sonst nicht. Das ist der einzige Zweig dieser Kette, der
+     * etwas ueber den Zustand der Waffe wissen muss.
+     */
+    public static BiFunction<ItemStack, GunAnimation, BusAnimation> LAMBDA_HENRY_ANIMS = (stack, type) -> {
+        return switch(type) {
+            case EQUIP -> new BusAnimation()
+                    .addBus("EQUIP", new BusAnimationSequence().addPos(-90, 0, 0, 0).addPos(0, 0, -3, 350, IType.SIN_DOWN))
+                    .addBus("SIGHT", new BusAnimationSequence().addPos(80, 0, 0, 0).addPos(80, 0, 0, 500).addPos(0, 0, -3, 250, IType.SIN_DOWN));
+            case CYCLE -> new BusAnimation()
+                    .addBus("RECOIL", new BusAnimationSequence().addPos(0, 0, 0, 50).addPos(0, 0, -1, 50).addPos(0, 0, 0, 250))
+                    .addBus("SIGHT", new BusAnimationSequence().addPos(35, 0, 0, 100, IType.SIN_DOWN).addPos(0, 0, 0, 100, IType.SIN_FULL))
+                    .addBus("LEVER", new BusAnimationSequence().addPos(0, 0, 0, 600).addPos(-90, 0, 0, 200).addPos(0, 0, 0, 200))
+                    .addBus("TURN", new BusAnimationSequence().addPos(0, 0, 0, 600).addPos(0, 0, 45, 200, IType.SIN_DOWN).addPos(0, 0, 0, 200, IType.SIN_UP))
+                    .addBus("HAMMER", new BusAnimationSequence().addPos(30, 0, 0, 50).addPos(30, 0, 0, 550).addPos(0, 0, 0, 200));
+            case CYCLE_DRY -> new BusAnimation()
+                    .addBus("LEVER", new BusAnimationSequence().addPos(0, 0, 0, 600).addPos(-90, 0, 0, 200).addPos(0, 0, 0, 200))
+                    .addBus("TURN", new BusAnimationSequence().addPos(0, 0, 0, 600).addPos(0, 0, 45, 200, IType.SIN_DOWN).addPos(0, 0, 0, 200, IType.SIN_UP))
+                    .addBus("HAMMER", new BusAnimationSequence().addPos(30, 0, 0, 50).addPos(30, 0, 0, 550).addPos(0, 0, 0, 200));
+            case RELOAD -> new BusAnimation()
+                    .addBus("LIFT", new BusAnimationSequence().addPos(-60, 0, 0, 400, IType.SIN_FULL))
+                    .addBus("TWIST", new BusAnimationSequence().addPos(0, 0, 0, 500).addPos(0, 0, -90, 200, IType.SIN_FULL))
+                    .addBus("BULLET", new BusAnimationSequence().addPos(0, 0, 0, 700).addPos(3, 0, -6, 0).addPos(0, 0, 1, 300, IType.SIN_FULL).addPos(0, 0, 0, 250, IType.SIN_FULL));
+            case RELOAD_CYCLE -> new BusAnimation()
+                    .addBus("LIFT", new BusAnimationSequence().addPos(-60, 0, 0, 0))
+                    .addBus("TWIST", new BusAnimationSequence().addPos(0, 0, -90, 0))
+                    .addBus("BULLET", new BusAnimationSequence().addPos(3, 0, -6, 0).addPos(0, 0, 1, 300, IType.SIN_FULL).addPos(0, 0, 0, 250, IType.SIN_FULL));
+            case RELOAD_END -> {
+                boolean leer = ((GunBaseNTItem) stack.getItem()).getConfig(stack, 0).getReceivers(stack)[0].getMagazine(stack).getAmountBeforeReload(stack) <= 0;
+                yield new BusAnimation()
+                        .addBus("LIFT", new BusAnimationSequence().addPos(-60, 0, 0, 0).addPos(-60, 0, 0, 300).addPos(0, 0, 0, 400, IType.SIN_FULL))
+                        .addBus("TWIST", new BusAnimationSequence().addPos(0, 0, -90, 0).addPos(0, 0, 0, 200, IType.SIN_FULL))
+                        .addBus("LEVER", new BusAnimationSequence().addPos(0, 0, 0, 700).addPos(leer ? -90 : 0, 0, 0, 200).addPos(0, 0, 0, 200))
+                        .addBus("TURN", new BusAnimationSequence().addPos(0, 0, 0, 700).addPos(0, 0, leer ? 45 : 0, 200, IType.SIN_DOWN).addPos(0, 0, 0, 200, IType.SIN_UP));
+            }
+            case JAMMED -> new BusAnimation()
+                    .addBus("LIFT", new BusAnimationSequence().addPos(-60, 0, 0, 0).addPos(-60, 0, 0, 300).addPos(0, 0, 0, 400, IType.SIN_FULL))
+                    .addBus("TWIST", new BusAnimationSequence().addPos(0, 0, -90, 0).addPos(0, 0, 0, 200, IType.SIN_FULL))
+                    .addBus("LEVER", new BusAnimationSequence().addPos(0, 0, 0, 700).addPos(-90, 0, 0, 200).addPos(0, 0, 0, 200).addPos(0, 0, 0, 500).addPos(-90, 0, 0, 200).addPos(0, 0, 0, 200).addPos(0, 0, 0, 200).addPos(-90, 0, 0, 200).addPos(0, 0, 0, 200))
+                    .addBus("TURN", new BusAnimationSequence().addPos(0, 0, 0, 700).addPos(0, 0, 45, 200, IType.SIN_DOWN).addPos(0, 0, 0, 200, IType.SIN_UP).addPos(0, 0, 0, 500).addPos(0, 0, 45, 200, IType.SIN_FULL).addPos(0, 0, 45, 600).addPos(0, 0, 0, 200, IType.SIN_FULL));
+            case INSPECT -> new BusAnimation()
+                    .addBus("YEET", new BusAnimationSequence().addPos(0, 2, 0, 200, IType.SIN_DOWN).addPos(0, 0, 0, 200, IType.SIN_UP))
+                    .addBus("ROLL", new BusAnimationSequence().addPos(0, 0, 360, 400));
+            default -> null;
+        };
     };
 
     public static BiConsumer<ItemStack, LambdaContext> LAMBDA_RECOIL_HANGMAN = (stack, ctx) -> {

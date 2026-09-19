@@ -294,6 +294,8 @@ public class ResourceManager {
     public static final ResourceLocation SHIMMER_SLEDGE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/shimmer_sledge.png");
     public static final ResourceLocation SHIMMER_AXE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/shimmer_axe.png");
 
+    public static final ResourceLocation HENRY_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/henry.png");
+    public static final ResourceLocation HENRY_LINCOLN_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/henry_lincoln.png");
     public static final ResourceLocation MARESLEG_TEX =  NuclearTechMod.withDefaultNamespace("textures/models/weapon/maresleg.png");
     public static final ResourceLocation MARESLEG_BROKEN_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/maresleg_broken.png");
     public static final ResourceLocation DEBUG_GUN_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/debug_gun.png");
@@ -661,6 +663,7 @@ public class ResourceManager {
     public static IModelCustom shimmer_sledge;
     public static IModelCustom shimmer_axe;
 
+    public static IModelCustom henry;
     public static IModelCustom maresleg;
     public static IModelCustom pepperbox;
     public static IModelCustom am180;
@@ -951,6 +954,7 @@ public class ResourceManager {
         //shimmer_sledge = new HFRWavefrontObject("models/obj/shimmer_sledge.obj").asVBO();
         shimmer_axe = new HFRWavefrontObject("models/obj/shimmer_axe.obj").asVBO();
 
+        henry = new HFRWavefrontObject("models/obj/weapons/henry.obj").asVBO();
         maresleg = new HFRWavefrontObject("models/obj/weapons/maresleg.obj").asVBO();
         pepperbox = new HFRWavefrontObject("models/obj/weapons/pepperbox.obj").asVBO();
         am180 = new HFRWavefrontObject("models/obj/weapons/am180.obj").asVBO();

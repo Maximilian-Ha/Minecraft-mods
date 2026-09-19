@@ -7907,3 +7907,40 @@ Dazu der Bauplan der Jodtablette (acht Stück aus Jod- und Fluoritstaub) und die
 Feldration, die sich nur darin unterscheiden, ob ein Setzling oder drei Weizensamen hineingehen.
 
 Alle 34 Tore grün.
+
+## Der Henry und der Lincoln Repeater
+
+Der vorletzte C-130-Eintrag, und der erste seit Langem, bei dem die Blockade **echt** war:
+Modell, beide Texturen und der Schussklang lagen nur in der CE-Abspaltung, `ORCHESTRA_HENRY`
+und die Animationen gab es im Port gar nicht. Eine Runde Arbeit also, keine Fehldiagnose.
+
+Ein Unterhebelrepetierer auf .44, vierzehn Schuss im Röhrenmagazin. Er lädt **einzeln**
+nach — daher die drei Nachladezustände `RELOAD`, `RELOAD_CYCLE` und `RELOAD_END` und die vier
+Zahlen hinter `reload`, wo ein Kastenmagazin nur eine braucht. Sechs Teile des Modells bewegen
+sich einzeln: Kimme, Hahn, Unterhebel, der Vorderschaft (beim Nachladen weggedreht), die
+einzelne Patrone und der Rest.
+
+**Der einzige Zweig, der etwas über den Zustand der Waffe wissen muss,** ist `RELOAD_END`: war
+das Magazin vorher leer, schnappt der Hebel zum Schluss noch einmal durch und lädt die erste
+Patrone; war noch etwas drin, sitzt sie längst im Lauf. Das steht so im Original und ist
+übernommen.
+
+Der Lincoln Repeater ist derselbe Bau als `B_SIDE`: doppelter Schaden, keine Streuung aus der
+Hüfte, der Schuss ein Viertel höher. Beide teilen sich eine Rendererklasse und unterscheiden
+sich nur in der Textur, die der Konstruktor bekommt — genau wie im Original.
+
+### Kein Bauplan, und das ist kein Versäumnis dieser Runde
+
+Der Henry bleibt in der Überlebensrunde unbaubar, und zwar wie **jede** Waffe im Port. Die
+Baupläne des Originals stehen alle auf Waffenbauteilen — Läufe, Verschlüsse, Mechaniken,
+Schäfte —, und diese Familie ist nicht portiert. Nachgemessen: `NtmRecipeProvider` nennt
+**null** `NtmItems.GUN_`. Das ist eine eigene Stufe, keine Zeile in dieser Runde.
+
+### Was von der C-130-Liste bleibt
+
+Zwei Einträge: `canister_full`, das die Flüssigkeitsbehälter braucht, und `gun_n_i_4_n_i`, das
+an `XFactoryAccelerator` hängt — eine ganze Fabrik, die der Port nicht hat. Von den sieben, mit
+denen die Liste anfing, waren damit **vier ein Irrtum, einer eine Runde Arbeit und zwei eine
+echte Blockade**.
+
+Alle 34 Tore grün.
