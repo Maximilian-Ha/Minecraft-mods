@@ -6075,3 +6075,34 @@ taugt nicht), und eine, zu der die Liste keine Vorlage findet
 (`MachineIndustrialBoilerBlockEntity` — im Original heißt sie mit vertauschten Wörtern).
 
 Damit stehen 29 gemessene Tore.
+
+### Ein blinder Fleck im Werkzeug: Erben ohne Import
+
+`tools/be-blocker.py` liest bisher nur die `import com.hbm...`-Zeilen einer Klasse und meldet
+sie als *sofort portierbar*, wenn davon keine im Port fehlt. Beim Durchsehen der Liste fiel
+`TileEntityPipeAnchor` auf — angeblich sofort portierbar, tatsächlich:
+
+```java
+public class TileEntityPipeAnchor extends TileEntityPipelineBase {
+```
+
+`TileEntityPipelineBase` liegt im **selben Paket**, steht also in keiner import-Zeile und war
+für das Werkzeug unsichtbar. Der Port hat diese ganze Grundklasse nicht. Genau die Klasse, an
+der die meiste Arbeit hängt, fehlte in der Bilanz.
+
+Das Werkzeug liest jetzt zusätzlich den Klassenkopf zwischen dem eigenen Namen und der
+öffnenden Klammer. Zwei Versuche davor waren falsch und sind verworfen:
+
+* Der erste nahm jeden Grossbuchstabennamen ab `class` — damit zählte die Klasse ihren *eigenen*
+  Namen als fehlende Abhängigkeit, und die Liste der Portierbaren fiel auf **null**.
+* Der zweite nahm jeden Grossbuchstabennamen nach dem eigenen — damit zählte das vanilla
+  `TileEntity` mit, und `DecoBlockAltF` und `ChlorineSeal` fielen zu Unrecht heraus.
+
+Die dritte Fassung schneidet die Namen aus dem Kopf mit den Klassennamen, die es im Original
+unterhalb von `com/hbm/` als Datei *gibt*. Vanilla-Oberklassen fallen damit heraus,
+Projekttypen nicht.
+
+Gemessen: sofort portierbar **15 → 13**. Die zwei, die herausfallen, sind beide echte Treffer —
+`TileEntityPipeAnchor` (erbt `TileEntityPipelineBase`) und `TileEntityRequestNetworkContainer`
+(erbt `TileEntityRequestNetwork`), beide gleiches Paket, beide im Port nicht vorhanden. Kein
+Eintrag fällt zu Unrecht heraus.

@@ -215,6 +215,10 @@ def main():
     up = up_dateien()
     be_up = [p for p in up if '/com/hbm/tileentity/' in p and os.path.basename(p).startswith('TileEntity')]
 
+    # Alle Klassennamen des Originals unterhalb von com/hbm -- gebraucht, um im Klassenkopf
+    # Projekttypen von Vanilla-Typen zu unterscheiden.
+    up_klassen = {os.path.basename(p)[:-5] for p in up if '/com/hbm/' in p}
+
     typen = port_typen()
     kerne = {kern(t) for t in typen}
 
@@ -251,7 +255,19 @@ def main():
             continue
 
         importe = re.findall(r'^import (?:static )?(com\.hbm\.[\w.]+)\.(\w+);', text, re.M)
-        fehlt = sorted({k for _, k in importe if not vorhanden(k)})
+        gebraucht = {k for _, k in importe}
+
+        # Oberklasse und Schnittstellen zaehlen mit, AUCH OHNE IMPORT: liegen sie im selben
+        # Paket, steht keine import-Zeile da. Genau daran haette TileEntityPipeAnchor als
+        # sofort portierbar gegolten, obwohl seine ganze Grundklasse (TileEntityPipelineBase,
+        # dasselbe Paket) im Port fehlt.
+        kopf = re.search(r'\bclass\s+' + re.escape(name) + r'\b([^{]*)', text)
+        if kopf:
+            # Nur Namen, die es im Original als com.hbm-Klasse GIBT -- sonst faenge man sich
+            # "TileEntity" und jede andere Vanilla-Oberklasse ein.
+            gebraucht.update(k for k in re.findall(r'\b([A-Z]\w*)\b', kopf.group(1)) if k in up_klassen)
+
+        fehlt = sorted({k for k in gebraucht if not vorhanden(k)})
 
         if fehlt: blockiert[name] = fehlt
         else: frei.append(name)
