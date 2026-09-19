@@ -1937,6 +1937,13 @@ public class NtmCreativeTabs {
                         addMetaItems(output, NtmItems.CANNED_CONSERVE.get());
                         output.accept(NtmItems.PUDDING);
                         output.accept(NtmItems.SYRINGE_ANTIDOTE);
+                        output.accept(NtmItems.IV_EMPTY);
+                        output.accept(NtmItems.IV_BLOOD);
+                        output.accept(NtmItems.IV_XP_EMPTY);
+                        output.accept(NtmItems.IV_XP);
+                        output.accept(NtmItems.RADAWAY);
+                        output.accept(NtmItems.RADAWAY_STRONG);
+                        output.accept(NtmItems.RADAWAY_FLUSH);
                         addMetaItems(output, NtmItems.CAP.get());
                         output.accept(NtmItems.RING_PULL);
                         output.accept(NtmItems.CAN_KEY);

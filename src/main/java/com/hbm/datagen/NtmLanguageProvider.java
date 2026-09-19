@@ -1787,6 +1787,20 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.FLAME_PONY, "Painting of a Cartoon Pony");
         this.add(NtmItems.FLAME_PONY, DESC, "Yellow horse beats blue horse, that's a proven fact!");
         this.add("desc.item.syringe.antidote", "Removes all potion effects");
+
+        /* Die Radaway-Familie und die vier Beutel. Die Hinweiszeilen stehen wortgetreu wie
+         * in ItemSyringe.addInformation des Originals -- auch die 1.000 bei radaway_flush,
+         * deren Dauer nur 500 Ticks betraegt. */
+        this.add(NtmItems.IV_EMPTY, "IV Bag");
+        this.add(NtmItems.IV_BLOOD, "Blood Bag");
+        this.add(NtmItems.IV_XP_EMPTY, "Empty Experience Bag");
+        this.add(NtmItems.IV_XP, "Experience Bag");
+        this.add(NtmItems.RADAWAY, "RadAway");
+        this.add("desc.item.radaway", "Removes 140 RAD");
+        this.add(NtmItems.RADAWAY_STRONG, "Strong RadAway");
+        this.add("desc.item.radaway_strong", "Removes 350 RAD");
+        this.add(NtmItems.RADAWAY_FLUSH, "Elite RadAway");
+        this.add("desc.item.radaway_flush", "Removes 1000 RAD");
         this.add(NtmItems.AMMO_CONTAINER, this.getName(AmmoContainerType.STANDARD), "Ammo Container");
         this.add(NtmItems.AMMO_CONTAINER, this.getName(AmmoContainerType.MAKESHIFT), "Makeshift Ammo Container");
         this.add("desc.item.ammo_container.standard", "Supplies ammunition for up to three of your guns");

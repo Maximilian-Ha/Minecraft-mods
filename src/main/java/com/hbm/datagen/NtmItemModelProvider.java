@@ -1023,6 +1023,13 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicItem(NtmItems.PUDDING.get());
         this.basicItem(NtmItems.GRENADE_UNIVERSAL.get());
         this.basicItem(NtmItems.SYRINGE_ANTIDOTE.get());
+        this.basicItem(NtmItems.IV_EMPTY.get());
+        this.basicItem(NtmItems.IV_BLOOD.get());
+        this.basicItem(NtmItems.IV_XP_EMPTY.get());
+        this.basicItem(NtmItems.IV_XP.get());
+        this.basicItem(NtmItems.RADAWAY.get());
+        this.basicItem(NtmItems.RADAWAY_STRONG.get());
+        this.basicItem(NtmItems.RADAWAY_FLUSH.get());
         this.basicItem(NtmItems.MYSTERYSHOVEL.get());
         this.basicItem(NtmItems.FLAME_PONY.get());
         this.basicItem(NtmItems.CHOCOLATE_MILK.get());

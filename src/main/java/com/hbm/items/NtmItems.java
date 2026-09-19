@@ -14,6 +14,7 @@ import com.hbm.items.ItemEnums.CapType;
 import com.hbm.items.ItemEnums.U238M2Type;
 import com.hbm.items.ItemEnums.CasingType;
 import com.hbm.items.armor.ArmorFSBItem;
+import com.hbm.items.special.SimpleConsumableItem;
 import com.hbm.items.special.SyringeItem;
 import com.hbm.items.armor.ArmorHEVItem;
 import com.hbm.items.armor.ArmorNo9;
@@ -1460,6 +1461,26 @@ public class NtmItems {
     public static final DeferredItem<Item> SYRINGE_METAL_MEDX = ITEMS.register("syringe_metal_medx", () -> SyringeItem.medx(new Item.Properties()));
     public static final DeferredItem<Item> SYRINGE_METAL_PSYCHO = ITEMS.register("syringe_metal_psycho", () -> SyringeItem.psycho(new Item.Properties()));
     public static final DeferredItem<Item> SYRINGE_METAL_SUPER = ITEMS.register("syringe_metal_super", () -> SyringeItem.superStimpak(new Item.Properties()));
+
+    /*
+     * Die Radaway-Familie und die vier Beutel. Im Original sind sie keine Spritzen, sondern
+     * ItemSimpleConsumable -- sie lassen einen Behaelter zurueck, statt eine leere Huelle,
+     * und kennen keine Uebelkeitssperre.
+     *
+     * DER RADAWAY-EFFEKT LAG SCHON IM PORT und hatte keine Quelle: nichts hat ihn je
+     * ausgeloest. Diese sieben Gegenstaende sind sie.
+     *
+     * Die Zahlen sind die des Originals. Der Hinweis des Originals zu radaway_flush nennt
+     * 1.000 RAD, die Dauer gibt aber 500 Ticks her -- der Wortlaut ist uebernommen wie er
+     * dort steht, samt dieser Unstimmigkeit.
+     */
+    public static final DeferredItem<Item> IV_EMPTY = ITEMS.register("iv_empty", () -> SimpleConsumableItem.blutbeutelLeer(new Item.Properties()));
+    public static final DeferredItem<Item> IV_BLOOD = ITEMS.register("iv_blood", () -> SimpleConsumableItem.blutbeutelVoll(new Item.Properties()));
+    public static final DeferredItem<Item> IV_XP_EMPTY = ITEMS.register("iv_xp_empty", () -> SimpleConsumableItem.erfahrungsbeutelLeer(new Item.Properties()));
+    public static final DeferredItem<Item> IV_XP = ITEMS.register("iv_xp", () -> SimpleConsumableItem.erfahrungsbeutelVoll(new Item.Properties()));
+    public static final DeferredItem<Item> RADAWAY = ITEMS.register("radaway", () -> SimpleConsumableItem.radaway(new Item.Properties(), 140, "desc.item.radaway"));
+    public static final DeferredItem<Item> RADAWAY_STRONG = ITEMS.register("radaway_strong", () -> SimpleConsumableItem.radaway(new Item.Properties(), 350, "desc.item.radaway_strong"));
+    public static final DeferredItem<Item> RADAWAY_FLUSH = ITEMS.register("radaway_flush", () -> SimpleConsumableItem.radaway(new Item.Properties(), 500, "desc.item.radaway_flush"));
 
     /** Der Kronkorken. Im Original das Zahlungsmittel des Oedlands, hier vorerst nur Beute. */
     public static final DeferredItem<Item> CAP_NUKA = ITEMS.register("cap_nuka", () -> new Item(new Item.Properties()));

@@ -2242,6 +2242,46 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_steel_grate_wide", has(NtmBlocks.STEEL_GRATE_WIDE.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "steel_grate_from_wide"));
 
+        /* ---- Die Radaway-Familie und die Beutel, aus ConsumableRecipes Z. 143-149 ----
+         *
+         * Die beiden Bauplaene des Originals fuer med_bag stehen noch aus, weil es den
+         * Sanitaetsbeutel noch nicht gibt. Der zweite Blutbeutel-Bauplan des Originals nimmt
+         * beliebigen Kautschuk aus dem Erzwoerterbuch; der Port hat dafuer nur seinen
+         * eigenen Kautschukbarren, also steht der hier. */
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.IV_EMPTY.get(), 4)
+                .pattern("S")
+                .pattern("I")
+                .pattern("S")
+                .define('S', NtmItems.INGOT_RUBBER.get())
+                .define('I', NtmItems.PLATE_IRON.get())
+                .unlockedBy("has_ingot_rubber", has(NtmItems.INGOT_RUBBER.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "iv_empty"));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, NtmItems.IV_XP_EMPTY.get(), 1)
+                .requires(NtmItems.IV_EMPTY.get())
+                .requires(NtmItems.POWDER_MAGIC.get())
+                .unlockedBy("has_iv_empty", has(NtmItems.IV_EMPTY.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "iv_xp_empty"));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, NtmItems.RADAWAY.get(), 1)
+                .requires(NtmItems.IV_BLOOD.get())
+                .requires(NtmItems.POWDER_COAL.get())
+                .requires(Items.PUMPKIN_SEEDS)
+                .unlockedBy("has_iv_blood", has(NtmItems.IV_BLOOD.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "radaway"));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, NtmItems.RADAWAY_STRONG.get(), 1)
+                .requires(NtmItems.RADAWAY.get())
+                .requires(NtmBlocks.MUSH.get())
+                .unlockedBy("has_radaway", has(NtmItems.RADAWAY.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "radaway_strong"));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, NtmItems.RADAWAY_FLUSH.get(), 1)
+                .requires(NtmItems.RADAWAY_STRONG.get())
+                .requires(NtmItems.POWDER_IODINE.get())
+                .unlockedBy("has_radaway_strong", has(NtmItems.RADAWAY_STRONG.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "radaway_flush"));
+
         // ---- Runde 7: restliche Netzbauteile und Kondensatoren ----
 
         // Original CraftingManager Z. 237: " Q " / "CAC" / " Q "

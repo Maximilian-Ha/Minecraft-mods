@@ -33,8 +33,14 @@ import java.util.function.Supplier;
  * Der Port haengt die Wirkung stattdessen an den Gegenstand: jede Spritze bekommt bei der
  * Anmeldung ihre eigene. Die Zahlen sind unveraendert.
  *
- * NOCH NICHT PORTIERT: syringe_taint und syringe_mkunicorn (beide brauchen die Verseuchung),
- * die Blutbeutel und der Sanitaetsbeutel (ItemSimpleConsumable, ein eigenes Teilsystem).
+ * NOCH NICHT PORTIERT: syringe_taint und syringe_mkunicorn (beide brauchen die Verseuchung)
+ * sowie der Sanitaetsbeutel med_bag.
+ *
+ * BERICHTIGT: hier stand, die Blutbeutel und der Sanitaetsbeutel haengen an
+ * "ItemSimpleConsumable, ein eigenes Teilsystem". Ein Teilsystem ist das nicht -- es sind
+ * 181 Zeilen mit vier Lambda-Feldern, dieselbe Bauart wie diese Klasse. Die Blutbeutel und
+ * die Radaway-Familie stehen inzwischen als SimpleConsumableItem im Port; der Beutel fehlt
+ * noch, weil sein Bauplan die Wunderspritze und Kautschuk aus dem Erzwoerterbuch braucht.
  */
 public class SyringeItem extends Item {
 

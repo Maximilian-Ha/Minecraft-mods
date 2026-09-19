@@ -7774,3 +7774,60 @@ Minecraft-Klassenpfad und ist damit ein schwächerer Abklatsch des Bauschritts, 
 richtig übersetzt. Örtlich ist es die einzige Möglichkeit, in der CI wäre es nur Wartezeit.
 
 Alle 34 Tore grün.
+
+## Die Radaway-Familie — ein Effekt ohne Quelle
+
+Dieselbe Form wie beim Feuerpony, nur größer. `ModEffect.RADAWAY` liegt seit Langem im Port,
+voll ausgeführt: er zieht je Tick Strahlung ab. **Ausgelöst hat ihn nie etwas.** Die einzige
+Stelle, die ihn überhaupt erwähnte, war das Radongrab — und zwar um ihn wieder *wegzunehmen*
+(`livingEntity.removeEffect(ModEffect.RADAWAY); //get fucked`). Die Wirkung war da, die Ursache
+fehlte.
+
+Die Ursache sind sieben Gegenstände, und ich hatte sie in der C-130-Runde als blockiert
+notiert. Nachgemessen war das falsch:
+
+* `radaway` stand in der Liste der fehlenden Vorratseinträge. Eine Suche nach dem Namen im Port
+  findet ihn — aber als **Trankeffekt**, nicht als Gegenstand. Zwei Registrierungen dürfen
+  denselben Namen tragen, wenn sie in verschiedenen Verzeichnissen stehen. (Genau diese
+  Zweideutigkeit ist auch eine Schwäche des neuen Behauptungs-Tores: es kennt nur Namen, nicht
+  Verzeichnisse. Hier hat sie nichts angerichtet, weil der zweite Filter — „steht auch ein
+  unbekannter Name im Satz" — den Satz ohnehin durchgelassen hat.)
+* Die Basisklasse `ItemSimpleConsumable` stand im Kopf von `SyringeItem` als **„ein eigenes
+  Teilsystem"**. Sie ist 181 Zeilen lang, hat vier Lambda-Felder und drei Hilfsmethoden — und
+  `SyringeItem` selbst ist nach genau derselben Bauart gebaut. Das war die sechste Behauptung
+  dieser Sitzung, die beim Nachsehen zerfiel.
+* Alle sieben Texturen und der Klang lagen in der CE-Abspaltung.
+
+### Was jetzt drin ist
+
+`SimpleConsumableItem` und sieben Gegenstände: drei Radaway-Stärken (140, 350, 500 Ticks) und
+vier Beutel. Der leere Blutbeutel wird am eigenen Arm gefüllt — fünf Herzen für eine Konserve,
+und wer damit auf null geht, stirbt daran. Der Fakeplayer ist davon ausgenommen, sonst ließe
+sich der Beutel von einer Maschine füllen, die kein Leben hat, das sie verlieren könnte.
+Dasselbe noch einmal mit Erfahrung statt Blut.
+
+Radaway **addiert** seine Dauer auf einen schon anliegenden Effekt, statt ihn zu überschreiben.
+Zwei Beutel wirken also doppelt so lange und nicht nur so lange wie einer; so steht es im
+Original.
+
+Dazu die fünf Baupläne aus `ConsumableRecipes` Z. 143–149 und der Vorratseintrag, der in der
+C-130-Runde gefehlt hat: `radaway`, ein bis fünf Stück, Gewicht 10.
+
+Die Namen und Hinweiszeilen stehen wie in `en_US.lang` und `ItemSyringe.addInformation` des
+Originals — `iv_empty` heißt dort „IV Bag" und `iv_blood` „Blood Bag", nicht umgekehrt, und die
+beiden Beutel tragen gar keine Hinweiszeile. Mein erster Entwurf hatte beides falsch: vier
+Namen geraten und zwei Hinweiszeilen dazuerfunden. Auch das fällt nur auf, wenn man nachsieht
+statt zu schließen. Übernommen ist auch, dass `radaway_flush` im Hinweis 1.000 RAD verspricht,
+seine Dauer aber nur 500 Ticks beträgt.
+
+### Zwei bewusste Auslassungen
+
+**Die Trefferwirkung** (`setHitAction`) ist nicht übernommen. Sie gehört zu den drei Spritzen —
+Gegenmittel, Gift, Wunderspritze —, die man auch jemand anderem in den Arm rammen kann, und die
+stehen noch aus. Ein Lambda-Feld, das niemand setzt, wäre toter Code.
+
+**Der Sanitätsbeutel** `med_bag` fehlt weiter, jetzt aber mit der richtigen Begründung: nicht
+weil eine Basisklasse fehlt, sondern weil sein Bauplan die Wunderspritze und Kautschuk aus dem
+Erzwörterbuch braucht. Von den sieben Einträgen der C-130 sind damit noch sechs offen.
+
+Alle 34 Tore grün.
