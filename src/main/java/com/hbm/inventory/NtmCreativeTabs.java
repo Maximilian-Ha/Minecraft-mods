@@ -1160,6 +1160,14 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.SPOTLIGHT_FLUORO);
                         output.accept(NtmBlocks.SPOTLIGHT_HALOGEN);
                         output.accept(NtmBlocks.POLE_TOP);
+                        output.accept(NtmBlocks.DECO_CRT_CLEAN);
+                        output.accept(NtmBlocks.DECO_CRT_BROKEN);
+                        output.accept(NtmBlocks.DECO_CRT_BLINKING);
+                        output.accept(NtmBlocks.DECO_CRT_BSOD);
+                        output.accept(NtmBlocks.DECO_TOASTER_IRON);
+                        output.accept(NtmBlocks.DECO_TOASTER_STEEL);
+                        output.accept(NtmBlocks.DECO_TOASTER_WOOD);
+                        output.accept(NtmBlocks.TAPE_RECORDER);
                         output.accept(NtmBlocks.BLOCK_STARMETAL);
                         output.accept(NtmBlocks.BLOCK_ELECTRICAL_SCRAP);
                         output.accept(NtmBlocks.WOOD_BARRIER);

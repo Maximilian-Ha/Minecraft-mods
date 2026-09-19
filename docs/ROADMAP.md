@@ -4865,3 +4865,22 @@ Flutlicht stellt man ihn mit dem Werkzeug, und beides wird über eine eigene Dar
 gezeichnet, nicht über ein festes Modell. Das ist eine eigene Runde.
 
 Die Lücke steht bei **35**.
+
+## Stufe 5: Bildschirm, Toaster, Tonbandgerät
+
+Acht Blöcke, eine Klasse. Der Röhrenbildschirm steht im Original in vier Zuständen — sauber,
+zerbrochen, blinkend und mit Absturzbild —, der Toaster in drei Werkstoffen, dazu das
+Tonbandgerät. Alle sind Metadaten eines Blocks; im Port ist jede Ausführung ein eigener Block,
+und im Messskript stehen `deco_crt` und `deco_toaster` als Familien.
+
+Eine Klasse reicht für alle acht: Sie tun nichts, stehen nur herum und richten sich beim Setzen
+nach der Blickrichtung. Was sie unterscheidet, steckt im Bild, nicht im Verhalten — genau wie
+im Original, wo die Metadaten nur die Textur austauschen. Entsprechend teilen sich die vier
+Bildschirme ein OBJ-Modell und die drei Toaster ebenfalls.
+
+**Drei Tore haben gleichzeitig zugeschlagen**, alle mit demselben Grund: Die acht Blöcke waren
+registriert, aber nirgends angemeldet — keine Namenszeile, keine Beutetabelle, kein
+Kreativreiter. `lang-check`, `loot-check` und `tab-check` haben das je aus ihrer Richtung
+gemeldet, bevor etwas in die CI ging. Der Beutetabellen-Fund hätte `runData` abgebrochen.
+
+Die Lücke steht bei **32**.

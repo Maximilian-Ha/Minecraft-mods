@@ -2328,6 +2328,14 @@ public class NtmLanguageProvider extends LanguageProvider {
         /* Der Lichtkegel ist unsichtbar, braucht aber eine Namenszeile. */
         this.add(NtmBlocks.SPOTLIGHT_BEAM, "Light Beam");
         this.add(NtmBlocks.POLE_TOP, "Antenna Top");
+        this.add(NtmBlocks.DECO_CRT_CLEAN, "CRT Monitor");
+        this.add(NtmBlocks.DECO_CRT_BROKEN, "Broken CRT Monitor");
+        this.add(NtmBlocks.DECO_CRT_BLINKING, "Blinking CRT Monitor");
+        this.add(NtmBlocks.DECO_CRT_BSOD, "Crashed CRT Monitor");
+        this.add(NtmBlocks.DECO_TOASTER_IRON, "Iron Toaster");
+        this.add(NtmBlocks.DECO_TOASTER_STEEL, "Steel Toaster");
+        this.add(NtmBlocks.DECO_TOASTER_WOOD, "Wooden Toaster");
+        this.add(NtmBlocks.TAPE_RECORDER, "Tape Recorder");
         this.add(NtmBlocks.BLOCK_STARMETAL, "Block of Starmetal");
         this.add(NtmBlocks.BLOCK_ELECTRICAL_SCRAP, "Block of Electrical Scrap");
         this.add(NtmBlocks.NTM_DIRT, "Dirt");

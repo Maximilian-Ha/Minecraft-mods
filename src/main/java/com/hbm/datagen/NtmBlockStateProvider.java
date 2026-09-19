@@ -858,6 +858,7 @@ public class NtmBlockStateProvider extends BlockStateProvider {
 
         this.registerPwr();
         this.registerSpotlights();
+        this.registerDekoStuecke();
         this.simpleBlock(NtmBlocks.PLANT_DEAD_GENERIC.get(), this.models().withExistingParent("plant_dead_generic", mcLoc("block/cross")).renderType("cutout").texture("cross", modLoc("block/plant_dead_generic")));
         this.itemModels().withExistingParent("plant_dead_generic", mcLoc("item/generated")).texture("layer0", modLoc("block/plant_dead_generic"));
         this.simpleBlock(NtmBlocks.PLANT_DEAD_GRASS.get(), this.models().withExistingParent("plant_dead_grass", mcLoc("block/cross")).renderType("cutout").texture("cross", modLoc("block/plant_dead_grass")));
@@ -1139,6 +1140,39 @@ public class NtmBlockStateProvider extends BlockStateProvider {
      * Die dunkle Fassung teilt sich das Modell mit der hellen -- das Original hat dafuer zwei
      * Bloecke, im Port ist es die Eigenschaft LIT, und die aendert am Aussehen nur das Licht.
      */
+    /**
+     * Bildschirm, Toaster und Tonbandgeraet. Jede Ausfuehrung hat ihr eigenes Bild, aber alle
+     * teilen sich je ein OBJ-Modell -- so wie im Original, wo die Metadaten nur die Textur
+     * austauschen.
+     */
+    private void registerDekoStuecke() {
+
+        this.dekoVariante(NtmBlocks.DECO_CRT_CLEAN, "crt_clean", CrtModelBuilder::new);
+        this.dekoVariante(NtmBlocks.DECO_CRT_BROKEN, "crt_broken", CrtModelBuilder::new);
+        this.dekoVariante(NtmBlocks.DECO_CRT_BLINKING, "crt_blinking", CrtModelBuilder::new);
+        this.dekoVariante(NtmBlocks.DECO_CRT_BSOD, "crt_bsod", CrtModelBuilder::new);
+
+        this.dekoVariante(NtmBlocks.DECO_TOASTER_IRON, "toaster_iron", ToasterModelBuilder::new);
+        this.dekoVariante(NtmBlocks.DECO_TOASTER_STEEL, "toaster_steel", ToasterModelBuilder::new);
+        this.dekoVariante(NtmBlocks.DECO_TOASTER_WOOD, "toaster_wood", ToasterModelBuilder::new);
+
+        this.dekoVariante(NtmBlocks.TAPE_RECORDER, "deco_tape_recorder", TapeRecorderModelBuilder::new);
+    }
+
+    private <T extends BlockModelBuilderBase> void dekoVariante(DeferredBlock<Block> block, String textur,
+                                                                java.util.function.BiFunction<BlockModelBuilder, ExistingFileHelper, T> bauer) {
+
+        ModelFile model = this.models().getBuilder(this.name(block.get()))
+                .customLoader(bauer).texture("texture", this.modLoc("block/" + textur)).end();
+
+        this.getVariantBuilder(block.get()).forAllStates(state -> ConfiguredModel.builder()
+                .modelFile(model)
+                .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180) % 360)
+                .build());
+
+        this.blockItem(block);
+    }
+
     private void registerSpotlights() {
 
         this.spotlightVariants(NtmBlocks.SPOTLIGHT_INCANDESCENT, this.models().getBuilder("spotlight_incandescent")
@@ -2481,6 +2515,18 @@ public class NtmBlockStateProvider extends BlockStateProvider {
             super(parent, helper);
         }
         @Override public BakedModelType getType() { return BakedModelType.PIPE; }
+    }
+    protected static class CrtModelBuilder extends BlockModelBuilderBase {
+        public CrtModelBuilder(BlockModelBuilder parent, ExistingFileHelper helper) { super(parent, helper); }
+        @Override public BakedModelType getType() { return BakedModelType.CRT; }
+    }
+    protected static class ToasterModelBuilder extends BlockModelBuilderBase {
+        public ToasterModelBuilder(BlockModelBuilder parent, ExistingFileHelper helper) { super(parent, helper); }
+        @Override public BakedModelType getType() { return BakedModelType.TOASTER; }
+    }
+    protected static class TapeRecorderModelBuilder extends BlockModelBuilderBase {
+        public TapeRecorderModelBuilder(BlockModelBuilder parent, ExistingFileHelper helper) { super(parent, helper); }
+        @Override public BakedModelType getType() { return BakedModelType.TAPE_RECORDER; }
     }
     protected static class PoleTopModelBuilder extends BlockModelBuilderBase {
         public PoleTopModelBuilder(BlockModelBuilder parent, ExistingFileHelper helper) { super(parent, helper); }

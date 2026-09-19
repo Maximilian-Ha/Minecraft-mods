@@ -443,6 +443,14 @@ public class NtmBlockLootTableProvider extends BlockLootSubProvider {
         this.dropSelf(NtmBlocks.SPOTLIGHT_FLUORO.get());
         this.dropSelf(NtmBlocks.SPOTLIGHT_HALOGEN.get());
         this.dropSelf(NtmBlocks.POLE_TOP.get());
+        this.dropSelf(NtmBlocks.DECO_CRT_CLEAN.get());
+        this.dropSelf(NtmBlocks.DECO_CRT_BROKEN.get());
+        this.dropSelf(NtmBlocks.DECO_CRT_BLINKING.get());
+        this.dropSelf(NtmBlocks.DECO_CRT_BSOD.get());
+        this.dropSelf(NtmBlocks.DECO_TOASTER_IRON.get());
+        this.dropSelf(NtmBlocks.DECO_TOASTER_STEEL.get());
+        this.dropSelf(NtmBlocks.DECO_TOASTER_WOOD.get());
+        this.dropSelf(NtmBlocks.TAPE_RECORDER.get());
         this.dropSelf(NtmBlocks.BLOCK_STARMETAL.get());
         this.dropSelf(NtmBlocks.BLOCK_ELECTRICAL_SCRAP.get());
         /* Wie im Original faellt gewoehnliche Erde ab, nicht der Block selbst. */
