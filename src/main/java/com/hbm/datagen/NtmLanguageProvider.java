@@ -2365,6 +2365,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.RADIOREC, DESC, "Turns what it hears on its channel$into note block sounds.");
         this.add(NtmBlocks.TESLA, "Tesla Coil");
         this.add(NtmBlocks.TESLA, DESC, "Zaps every living thing in range.$Wear a full set of metal armor$to stay out of the circuit.");
+        this.add(NtmBlocks.SKELETON_HOLDER, "Oh, that's a dead guy");
         this.add(NtmBlocks.MACHINE_MICROWAVE, "Microwave");
         this.add(NtmBlocks.MACHINE_MICROWAVE, DESC, "Heats up food using the regular$smelting recipes.$Do not run it at full power.");
         this.add(NtmBlocks.CHARGER, "Charging Station");

@@ -74,6 +74,7 @@ VERBORGENE_BLOECKE = {
     'PWR_BLOCK':                    'Huelle des Druckwasserreaktors, wird vom Regler gesetzt (Original: null)',
     'TAINT':                        'breitet sich selbst aus, kein Bauklotz (Original: null)',
     'ZIRNOX_DESTROYED':             'Ruine nach der Kernschmelze, entsteht nur dort (Original: null)',
+    'SKELETON_HOLDER':              'Sockel aus den Weltbauwerken, wird nur von der Generierung gesetzt (Original: setCreativeTab(null))',
 }
 
 VERBORGENE_ITEMS = {

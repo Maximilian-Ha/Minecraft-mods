@@ -28,6 +28,7 @@ import com.hbm.blocks.generic.LootCrateBlock;
 import com.hbm.blocks.machine.FloodlightBlock;
 import com.hbm.blocks.machine.ChargerBlock;
 import com.hbm.blocks.machine.MachineMicrowaveBlock;
+import com.hbm.blocks.generic.SkeletonHolderBlock;
 import com.hbm.blocks.machine.TeslaBlock;
 import com.hbm.blocks.network.RadioRecBlock;
 import com.hbm.blocks.network.RadioTelexBlock;
@@ -369,6 +370,9 @@ public class NtmBlocks {
     public static final DeferredBlock<Block> RADIO_TELEX = register("radio_telex", () -> new RadioTelexBlock(BlockBehaviour.Properties.of().strength(3.0F, 10.0F).sound(SoundType.WOOD).mapColor(MapColor.WOOD).noOcclusion()));
     /* Stufe 5: die Teslaspule. Werte aus ModBlocks.java:2074. */
     public static final DeferredBlock<Block> TESLA = register("tesla", () -> new TeslaBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion()));
+    /* Stufe 5: der Sockel aus den Weltbauwerken. Werte aus ModBlocks.java:1448; wie im
+     * Original in keinem Kreativreiter -- er wird nur von der Weltgenerierung gesetzt. */
+    public static final DeferredBlock<Block> SKELETON_HOLDER = register("skeleton_holder", () -> new SkeletonHolderBlock(BlockBehaviour.Properties.of().strength(2.0F, 10.0F).sound(SoundType.SOUL_SAND).mapColor(MapColor.COLOR_BROWN).noOcclusion()));
     /* Sein Lichtfleck: unsichtbar, nicht anfassbar, nur hell -- aber mit eigener
      * Blockentitaet, weil er sich Quelle und Strahlnummer merken muss. */
     public static final DeferredBlock<Block> FLOODLIGHT_BEAM = BLOCKS.register("floodlight_beam", () -> new FloodlightBeamBlock(BlockBehaviour.Properties.of().replaceable().noCollission().noOcclusion().noLootTable().air().lightLevel(state -> 15).pushReaction(PushReaction.DESTROY)));

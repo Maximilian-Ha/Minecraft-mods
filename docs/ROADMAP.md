@@ -5397,3 +5397,31 @@ Teslakrabbe am Blitz, die Cyberkrabbe bleibt unbehelligt; die drei Wesen gibt es
 noch nicht. Der Kommentar in der Blockentität sagt, wohin sie gehören, wenn sie kommen.
 
 Die Lücke steht bei **15**.
+
+### Der Sockel, auf dem ein Toter liegt
+
+`skeleton_holder` heißt im Original „Oh, that's a dead guy“ und steht in den Weltbauwerken:
+ein kleiner Sockel, der genau einen Gegenstand hält. Rechtsklick mit vollem Beutel legt ab,
+Rechtsklick mit leerer Hand nimmt wieder mit, geduckt geschieht nichts. Beim Abbauen fällt
+der Gegenstand heraus — er gehört zum Inhalt, nicht zur Beutetabelle.
+
+In 1.21 zerfällt der eine Rechtsklick des Originals in zwei Methoden: `useItemOn` für die
+volle Hand, `useWithoutItem` für die leere. Die Bedingungen des Originals verteilen sich
+dabei sauber auf beide — mit Gegenstand wird nur ein leerer Sockel belegt, ohne Gegenstand
+nur ein voller geleert.
+
+**Die Drehung bleibt schief, und das mit Absicht.** Der Sockel zeigt nicht dorthin, wo man
+hinsieht, sondern eine Vierteldrehung gegen den Uhrzeigersinn davon. Im Original steht das
+als Tabelle von Blickviertel auf Metadatenwert da, versehen mit dem Kommentar des Urhebers,
+dass er das nicht mehr aufräumen werde. Die Tabelle bleibt, weil die 79 Bauwerke des
+Originals sich darauf verlassen — geradegerückt stünde in jeder Ruine der Sockel verdreht.
+
+Ein Wert, der nicht abgeschrieben werden konnte: das Inventarbild. Das Original hat für den
+Sockel keines, weil er in keinem Kreativreiter steht. Hergeleitet statt geraten:
+`ItemRenderBase` verkleinert auf ein Sechzehntel, das Modell ist 1,43 hoch, und mit dem
+Faktor acht kommt es auf dieselbe Bildhöhe wie die Teslaspule (1,94 bei sechs).
+
+Er steht wie im Original in keinem Reiter — dafür jetzt mit Begründung in der Ausnahmeliste
+von `tab-check`, statt als stiller Sonderfall.
+
+Die Lücke steht bei **14**.

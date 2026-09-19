@@ -359,6 +359,7 @@ public class ClientProxy extends ServerProxy {
         BlockEntityRenderers.register(NtmBlockEntityTypes.CHARGER.get(), new RenderCharger());
         BlockEntityRenderers.register(NtmBlockEntityTypes.RADIO_TELEX.get(), new RenderTelex());
         BlockEntityRenderers.register(NtmBlockEntityTypes.TESLA.get(), new RenderTesla());
+        BlockEntityRenderers.register(NtmBlockEntityTypes.SKELETON_HOLDER.get(), new RenderSkeletonHolder());
         BlockEntityRenderers.register(NtmBlockEntityTypes.MACHINE_TOWER_LARGE.get(), new RenderTowerLarge());
     }
 

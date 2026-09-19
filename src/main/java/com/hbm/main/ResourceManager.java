@@ -99,6 +99,8 @@ public class ResourceManager {
     public static final ResourceLocation HEATER_ELECTRIC_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/electric_heater.png");
     public static final ResourceLocation HEATER_HEATEX_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/heater_heatex.png");
     public static final ResourceLocation TESLA_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/tesla.png");
+    /* Der Sockel nimmt im Original die Partikeltextur des Skeletts -- keine eigene Haut. */
+    public static final ResourceLocation SKELETON_HOLDER_TEX = NuclearTechMod.withDefaultNamespace("textures/particle/skeleton.png");
     public static final ResourceLocation BATTERY_SC_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/battery_sc.png");
     public static final ResourceLocation BATTERY_REDD_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/fensu2.png");
 
@@ -562,6 +564,7 @@ public class ResourceManager {
     public static IModelCustom heater_electric;
     public static IModelCustom heater_heatex;
     public static IModelCustom tesla;
+    public static IModelCustom skeleton_holder;
 
     // Radar
     public static IModelCustom radar_body;
@@ -849,6 +852,7 @@ public class ResourceManager {
         heater_electric = new HFRWavefrontObject("models/obj/machines/electric_heater.obj").asVBO();
         heater_heatex = new HFRWavefrontObject("models/obj/machines/heatex.obj").asVBO();
         tesla = new HFRWavefrontObject("models/obj/machines/tesla.obj").asVBO();
+        skeleton_holder = new HFRWavefrontObject("models/obj/blocks/skeleton_holder.obj").noSmooth().asVBO();
 
         radar_body = new HFRWavefrontObject("models/obj/radar_base.obj").noSmooth().asVBO();
         radar = new HFRWavefrontObject("models/obj/machines/radar.obj").noSmooth().asVBO();
