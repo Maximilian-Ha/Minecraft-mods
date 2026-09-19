@@ -437,6 +437,11 @@ public class NtmBlockLootTableProvider extends BlockLootSubProvider {
         this.dropSelf(NtmBlocks.STEEL_WALL.get());
         this.dropSelf(NtmBlocks.STEEL_CORNER.get());
         this.dropSelf(NtmBlocks.STEEL_POLES.get());
+        this.dropSelf(NtmBlocks.MUSH.get());
+        // Original BlockMushHuge.quantityDropped: nextInt(10) - 7, negative Zahlen zaehlen
+        // als nichts. Die Beutetabelle drueckt das als Gleichverteilung von -7 bis 2 aus.
+        this.add(NtmBlocks.MUSH_BLOCK.get(), this.mushDrop());
+        this.add(NtmBlocks.MUSH_BLOCK_STEM.get(), this.mushDrop());
         this.dropSelf(NtmBlocks.PLANT_DEAD_GENERIC.get());
         this.dropSelf(NtmBlocks.PLANT_DEAD_GRASS.get());
         this.dropSelf(NtmBlocks.PLANT_DEAD_FLOWER.get());
@@ -780,6 +785,19 @@ public class NtmBlockLootTableProvider extends BlockLootSubProvider {
         ArrayList<Block> blocks = new ArrayList<>();
         NtmBlocks.BLOCKS.getEntries().stream().map(Holder::value).forEach(blocks::add);
         return blocks;
+    }
+
+    /**
+     * Hut und Stiel des Riesenpilzes: das Original wuerfelt nextInt(10) - 7 und zaehlt
+     * negative Ergebnisse als nichts. Das ist dieselbe Verteilung wie eine Gleichverteilung
+     * von -7 bis 2 -- Stapel mit nicht positiver Anzahl fallen ohnehin weg.
+     */
+    private LootTable.Builder mushDrop() {
+        return LootTable.lootTable()
+                .withPool(this.applyExplosionDecay(NtmBlocks.MUSH.get(), LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1))
+                        .add(LootItem.lootTableItem(NtmBlocks.MUSH.get())
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(-7.0F, 2.0F))))));
     }
 
     private LootTable.Builder oreDrop(Block block, Item item) {

@@ -874,6 +874,13 @@ public class NtmBlockStateProvider extends BlockStateProvider {
                         this.modLoc("block/machine_boiler_front"),
                         this.modLoc("block/machine_boiler_base")));
         this.blockItem(NtmBlocks.MACHINE_BOILER_OFF);
+        // Der Pilz steht wie eine Pflanze im Kreuz; Hut und Stiel sind volle Wuerfel, deren
+        // Ober- und Unterseite sich vom Mantel unterscheiden.
+        this.simpleBlock(NtmBlocks.MUSH.get(), this.models().withExistingParent("mush", mcLoc("block/cross")).renderType("cutout").texture("cross", modLoc("block/mush")));
+        this.itemModels().withExistingParent("mush", mcLoc("item/generated")).texture("layer0", modLoc("block/mush"));
+        this.simpleBlockWithItem(NtmBlocks.MUSH_BLOCK.get(), this.models().cubeAll("mush_block", modLoc("block/mush_block_skin")));
+        this.simpleBlockWithItem(NtmBlocks.MUSH_BLOCK_STEM.get(), this.models().cubeBottomTop("mush_block_stem",
+                modLoc("block/mush_block_stem"), modLoc("block/mush_block_inside"), modLoc("block/mush_block_inside")));
         this.simpleBlock(NtmBlocks.PLANT_DEAD_GENERIC.get(), this.models().withExistingParent("plant_dead_generic", mcLoc("block/cross")).renderType("cutout").texture("cross", modLoc("block/plant_dead_generic")));
         this.itemModels().withExistingParent("plant_dead_generic", mcLoc("item/generated")).texture("layer0", modLoc("block/plant_dead_generic"));
         this.simpleBlock(NtmBlocks.PLANT_DEAD_GRASS.get(), this.models().withExistingParent("plant_dead_grass", mcLoc("block/cross")).renderType("cutout").texture("cross", modLoc("block/plant_dead_grass")));

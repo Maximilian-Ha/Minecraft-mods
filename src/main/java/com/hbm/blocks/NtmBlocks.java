@@ -22,6 +22,8 @@ import com.hbm.blocks.machine.WatzStructBlock;
 import com.hbm.blocks.generic.ToolConversionBlock;
 import com.hbm.blocks.generic.SteelRoofBlock;
 import com.hbm.blocks.generic.DecoPoleSatelliteReceiverBlock;
+import com.hbm.blocks.generic.MushBlock;
+import com.hbm.blocks.generic.MushHugeBlock;
 import com.hbm.blocks.generic.LootCrateBlock;
 import com.hbm.blocks.machine.FloodlightBlock;
 import com.hbm.blocks.machine.ChargerBlock;
@@ -340,6 +342,12 @@ public class NtmBlocks {
     public static final DeferredBlock<Block> POLE_TOP = register("pole_top", () -> new Block(BlockBehaviour.Properties.of().strength(5.0F, 15.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion()));
     /* Stufe 5: der Mastaufsatz mit Richtfunkschuessel. Werte aus ModBlocks.java:1597. */
     public static final DeferredBlock<Block> POLE_SATELLITE_RECEIVER = register("pole_satellite_receiver", () -> new DecoPoleSatelliteReceiverBlock(BlockBehaviour.Properties.of().strength(5.0F, 15.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion()));
+
+    /* Stufe 5: der Pilz und sein Riesenwuchs. Werte aus ModBlocks.java:1649 bis 1651.
+     * setLightLevel(0.5F) des Originals sind sieben Lichtstufen, setLightLevel(1.0F) fuenfzehn. */
+    public static final DeferredBlock<Block> MUSH = register("mush", () -> new MushBlock(BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).mapColor(MapColor.COLOR_LIGHT_GREEN).lightLevel(state -> 7).randomTicks().noOcclusion().pushReaction(PushReaction.DESTROY)));
+    public static final DeferredBlock<Block> MUSH_BLOCK = register("mush_block", () -> new MushHugeBlock(BlockBehaviour.Properties.of().strength(0.2F).sound(SoundType.GRASS).mapColor(MapColor.COLOR_LIGHT_GREEN).lightLevel(state -> 15)));
+    public static final DeferredBlock<Block> MUSH_BLOCK_STEM = register("mush_block_stem", () -> new MushHugeBlock(BlockBehaviour.Properties.of().strength(0.2F).sound(SoundType.GRASS).mapColor(MapColor.COLOR_LIGHT_GREEN).lightLevel(state -> 15)));
     /* Der Lichtkegel selbst: unsichtbar, nicht anfassbar, nur hell. */
     public static final DeferredBlock<Block> SPOTLIGHT_BEAM = BLOCKS.register("spotlight_beam", () -> new SpotlightBeamBlock(BlockBehaviour.Properties.of().replaceable().noCollission().noOcclusion().noLootTable().air().lightLevel(state -> 15).pushReaction(PushReaction.DESTROY)));
 

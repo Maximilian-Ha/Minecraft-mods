@@ -5151,3 +5151,42 @@ selbst läuft weiter auf beiden Seiten mit.
 und Toroidspule). `coil_copper_torus` gibt es im Port noch nicht.
 
 Die Lücke steht bei **20**.
+
+### Der Pilz — und ein vertauschtes Koordinatenpaar
+
+`mush` ist einer der wenigen lebendigen Blöcke des Mods: er wächst auf verseuchter Erde,
+breitet sich langsam aus, verwandelt `waste_earth` mit der Zeit in `waste_mycelium` und lässt
+sich mit Knochenmehl zum Riesenpilz treiben. Dafür brauchte es drei neue Blöcke — `mush`,
+`mush_block` und `mush_block_stem` — und den Generator `HugeMush`, der im Original sechs
+geschachtelte Schleifen ist und hier sechs geschachtelte Schleifen bleibt.
+
+Beim Abschreiben der Ausbreitung bin ich gestolpert. Das Original zählt die Nachbarn so:
+
+```java
+for(ix = x - range; ix <= x + range; ++ix)
+  for(iy = y - range; iy <= y + range; ++iy)
+    for(iz = z - 1; iz <= z + 1; ++iz)
+      if(world.getBlock(ix, iz, iy) == this) ...
+```
+
+Die Schleifenvariable `iy` läuft über **y**, `iz` über **z** — aber der Aufruf setzt `iz` an
+die Y-Stelle und `iy` an die Z-Stelle. Dasselbe beim Setzen: `iy = z + …`, `iz = y + …`, und
+dann `setBlock(ix, iy, iz)`. Die Höhe wird also aus einer waagerechten Koordinate gezogen und
+umgekehrt.
+
+Das ist keine Absicht, sondern eine Spur: die Routine ist Vanillas `BlockMushroom.updateTick`
+mit umbenannten Variablen, und beim Umbenennen ist die Argumentreihenfolge stehen geblieben.
+Wörtlich übernommen würde der Port Pilze in willkürlichen Höhen setzen und Nachbarn an
+Stellen zählen, an denen keine sein können.
+
+Ich habe die Vertauschung aufgelöst und die Zahlen des Originals behalten — ±2 waagerecht,
+±1 senkrecht, höchstens drei Pilze im Umkreis von vier Blöcken, 1:25 pro Zufallstick. Das
+steht so auch im Kommentar der Klasse, damit später niemand meint, ich hätte hier etwas
+erfunden.
+
+Zwei kleinere Übersetzungen: `EnumPlantType.Cave` beantwortet Vanilla mit „hat der Block oben
+eine feste Fläche?" — in 1.21 heißt das `isFaceSturdy`. Und `quantityDropped` mit
+`nextInt(10) - 7` (negative Zahlen zählen als nichts) ist dieselbe Verteilung wie eine
+Gleichverteilung von −7 bis 2 in der Beutetabelle.
+
+Die Lücke steht bei **19**.
