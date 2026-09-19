@@ -3,6 +3,11 @@ package com.hbm.inventory;
 import com.hbm.blocks.NtmBlocks;
 import com.hbm.items.NtmItems;
 import com.hbm.items.machine.RTGPelletItem.RTGPelletType;
+import com.hbm.items.weapon.grenade.GrenadeExtraItem.GrenadeExtra;
+import com.hbm.items.weapon.grenade.GrenadeFillingItem.GrenadeFilling;
+import com.hbm.items.weapon.grenade.GrenadeFuzeItem.GrenadeFuze;
+import com.hbm.items.weapon.grenade.GrenadeShellItem.GrenadeShell;
+import com.hbm.items.weapon.grenade.GrenadeUniversalItem;
 import com.hbm.items.machine.BatteryPackItem.BatteryPackType;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
@@ -20,11 +25,8 @@ import java.util.function.Supplier;
  * aufsummiert -- dieselbe Verteilung, ohne die Liste aufzublaehen. Das Original baut die
  * Listen ausserdem bei jedem Oeffnen neu auf; hier entstehen sie einmal beim ersten Zugriff.
  *
- * NICHT UEBERNOMMEN, weil es die Gegenstaende im Port noch nicht gibt:
- *   Bleikiste   : pellet_rtg_weak (Gewicht 7 von 155)
- *   Metallkiste : centrifuge_element (6), piston_selenium (6) von 125
- * Die uebrigen drei Listen des Originals (Nachschub-, Waffen- und rote Kiste) sind noch gar
- * nicht zu portieren: dort fehlen die Spritzen, die Granaten und die meisten Sonderwaffen.
+ * STAND: Blei-, Metall-, Nachschub- und Waffenliste sind vollstaendig -- jeder Eintrag des
+ * Originals ist da. Es fehlt nur die rote Kiste; ihr fehlen die meisten Sonderwaffen.
  */
 public class CrateLoot {
 
@@ -33,6 +35,8 @@ public class CrateLoot {
 
     private static List<Eintrag> blei;
     private static List<Eintrag> metall;
+    private static List<Eintrag> nachschub;
+    private static List<Eintrag> waffen;
 
     private static void lege(List<Eintrag> liste, Supplier<? extends ItemLike> was, int gewicht) {
         liste.add(new Eintrag(() -> new ItemStack(was.get()), gewicht));
@@ -96,11 +100,54 @@ public class CrateLoot {
         return metall = liste;
     }
 
+    /**
+     * Die Nachschubkiste. Zwei Spritzen und drei fertig zusammengesetzte Granaten, dazu mit
+     * geringem Gewicht ein Munitionsbehaelter. Die Zusammenstellungen der Granaten sind die
+     * des Originals: Splitterkoerper mit Sprengfuellung, Dreisekundenzuender und
+     * Splittermantel; Stiel mit Sprengfuellung und Aufschlagzuender; Splitterkoerper mit
+     * Brandfuellung und Siebensekundenzuender.
+     */
+    private static List<Eintrag> nachschub() {
+        if(nachschub != null) return nachschub;
+
+        List<Eintrag> liste = new ArrayList<>();
+        lege(liste, NtmItems.SYRINGE_METAL_STIMPAK, 10);
+        lege(liste, NtmItems.SYRINGE_ANTIDOTE, 5);
+        liste.add(new Eintrag(() -> GrenadeUniversalItem.make(GrenadeShell.FRAG, GrenadeFilling.HE, GrenadeFuze.S3, GrenadeExtra.FRAG_SLEEVE), 8));
+        liste.add(new Eintrag(() -> GrenadeUniversalItem.make(GrenadeShell.STICK, GrenadeFilling.HE, GrenadeFuze.IMPACT), 6));
+        liste.add(new Eintrag(() -> GrenadeUniversalItem.make(GrenadeShell.FRAG, GrenadeFilling.INC, GrenadeFuze.S7), 4));
+        lege(liste, NtmItems.AMMO_CONTAINER, 2);
+
+        return nachschub = liste;
+    }
+
+    /** Die Waffenkiste. Sieben Waffen, vom leichten Revolver bis zum Panzerschreck. */
+    private static List<Eintrag> waffen() {
+        if(waffen != null) return waffen;
+
+        List<Eintrag> liste = new ArrayList<>();
+        lege(liste, NtmItems.GUN_LIGHT_REVOLVER, 10);
+        lege(liste, NtmItems.GUN_MARESLEG, 7);
+        lege(liste, NtmItems.GUN_HEAVY_REVOLVER, 5);
+        lege(liste, NtmItems.GUN_GREASEGUN, 5);
+        lege(liste, NtmItems.GUN_LIBERATOR, 2);
+        lege(liste, NtmItems.GUN_FLAREGUN, 8);
+        lege(liste, NtmItems.GUN_PANZERSCHRECK, 1);
+
+        return waffen = liste;
+    }
+
     /** Zieht einen Gegenstand aus der Bleikiste. */
     public static ItemStack ziehBlei(RandomSource zufall) { return zieh(blei(), zufall); }
 
     /** Zieht einen Gegenstand aus der Metallkiste. */
     public static ItemStack ziehMetall(RandomSource zufall) { return zieh(metall(), zufall); }
+
+    /** Zieht einen Gegenstand aus der Nachschubkiste. */
+    public static ItemStack ziehNachschub(RandomSource zufall) { return zieh(nachschub(), zufall); }
+
+    /** Zieht eine Waffe aus der Waffenkiste. */
+    public static ItemStack ziehWaffen(RandomSource zufall) { return zieh(waffen(), zufall); }
 
     private static ItemStack zieh(List<Eintrag> liste, RandomSource zufall) {
         int summe = 0;

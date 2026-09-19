@@ -977,6 +977,10 @@ public class NtmBlocks {
      * noOcclusion. Werte aus ModBlocks.java:2169 des Originals. */
     public static final DeferredBlock<Block> CRATE_CAN = register("crate_can", () -> new CanCrateBlock(BlockBehaviour.Properties.of().strength(1.0F, 2.5F).sound(SoundType.WOOD).mapColor(MapColor.WOOD).noOcclusion()));
     public static final DeferredBlock<Block> CRATE_METAL = register("crate_metal", () -> new LootCrateBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL), LootCrateBlock.Art.METALL));
+    /* Nachschub- und Waffenkiste: Holz statt Metall, sonst dieselben Werte.
+     * Aus ModBlocks.java:2164 f. des Originals. */
+    public static final DeferredBlock<Block> CRATE = register("crate", () -> new LootCrateBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.WOOD).mapColor(MapColor.WOOD), LootCrateBlock.Art.NACHSCHUB));
+    public static final DeferredBlock<Block> CRATE_WEAPON = register("crate_weapon", () -> new LootCrateBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.WOOD).mapColor(MapColor.WOOD), LootCrateBlock.Art.WAFFEN));
     public static final DeferredBlock<Block> BARREL_PLASTIC = registerNew("barrel_plastic", () -> new com.hbm.blocks.machine.BarrelBlock(BlockBehaviour.Properties.of().noOcclusion().strength(0.3F, 2.5F).sound(SoundType.METAL), 12_000, false));
     public static final DeferredBlock<Block> EMP_BOMB = register("emp_bomb", () -> new Block(BlockBehaviour.Properties.of().strength(3.0F, 30.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops()));
     public static final DeferredBlock<Block> BARREL_STEEL = registerNew("barrel_steel", () -> new com.hbm.blocks.machine.BarrelBlock(BlockBehaviour.Properties.of().noOcclusion().strength(0.3F, 2.5F).sound(SoundType.METAL), 16_000, false));

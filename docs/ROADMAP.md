@@ -6950,3 +6950,50 @@ Damit stehen alle Gegenstände, auf die die Nachschubkiste wartet. Was für Aufg
 fehlt, sind die beiden Kisten selbst.
 
 Alle 30 Tore grün.
+
+## Die Nachschubkiste und die Waffenkiste
+
+Mit den Granaten, dem Munitionsbehälter und dem Gegenmittel stehen alle Gegenstände, auf die
+Aufgabe #104 gewartet hat. Beide Kisten sind damit nur noch eine Liste und ein Block.
+
+**Die Nachschubkiste** (`crate`) zieht aus sechs Einträgen: zwei Spritzen und drei fertig
+zusammengesetzte Granaten, dazu mit geringem Gewicht ein Munitionsbehälter. Die
+Zusammenstellungen der Granaten sind die des Originals — Splitterkörper mit Sprengfüllung,
+Dreisekundenzünder und Splittermantel; Stiel mit Sprengfüllung und Aufschlagzünder;
+Splitterkörper mit Brandfüllung und Siebensekundenzünder.
+
+**Die Waffenkiste** (`crate_weapon`) zieht aus sieben Waffen, vom leichten Revolver bis zum
+Panzerschreck. Sie zählt als einzige anders: aus ihr fallen nur ein bis zwei Stücke, denn eine
+Waffe ist mehr wert als eine Handvoll Erz. In einem von hundert Fällen kippt sie stattdessen
+fünfundzwanzig aus — ein Scherz des Originals (`if(rand.nextInt(100) == 34) i = 25;`), hier
+unverändert.
+
+### Berichtigung: `crate_supply` war nie an Gegenständen blockiert
+
+Aufgabe #104 heißt „`crate` und `crate_supply`: Granaten und `ammo_container`". Für `crate`
+stimmt das. Für `crate_supply` nicht, und das fiel erst beim Nachlesen auf.
+
+`crate_supply` ist keine Beutekiste. Sie ist ein **Behälter**: `BlockSupplyCrate` hat eine
+Blockentität mit einer Gegenstandsliste, trägt sie beim Abbauen ins NBT des abgeworfenen
+Gegenstands und lädt sie beim Setzen wieder. Gewürfelt wird nichts.
+
+Wer füllt sie? Nachgesehen — genau eine Stelle im ganzen Original:
+
+```
+EntityParachuteCrate.java:45: worldObj.setBlock(..., ModBlocks.crate_supply);
+EntityParachuteCrate.java:46: TileEntitySupplyCrate crate = (TileEntitySupplyCrate) ...
+```
+
+Der Fallschirmabwurf, den die C-130 hinterherwirft. Und die C-130 ist im Port ausdrücklich
+nicht portiert — das steht seit der 40-mm-Runde im Kopf von `XFactory40mm`: die beiden
+Signalkugeln fehlen, weil das Flugzeug fehlt.
+
+Eine Nachschubkiste ohne Flugzeug wäre eine Kiste, die niemals etwas enthält. Sie bleibt
+deshalb aus, und ihr Blocker steht ab jetzt richtig in der Liste: nicht Granaten und
+`ammo_container`, sondern der Fallschirmabwurf samt C-130.
+
+Stand der Beutekisten: `crate_ammo`, `crate_can`, `crate`, `crate_weapon`, `crate_lead` und
+`crate_metal` stehen. Offen bleiben `crate_red` (Aufgabe #105) und `crate_supply` (wartet auf
+die C-130).
+
+Alle 30 Tore grün.

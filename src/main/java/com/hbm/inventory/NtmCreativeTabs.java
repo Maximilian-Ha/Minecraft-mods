@@ -1554,6 +1554,8 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.CRATE_TEMPLATE);
                         output.accept(NtmBlocks.CRATE_LEAD);
                         output.accept(NtmBlocks.CRATE_METAL);
+                        output.accept(NtmBlocks.CRATE);
+                        output.accept(NtmBlocks.CRATE_WEAPON);
                         output.accept(NtmBlocks.MACHINE_SATLINKER);
                         output.accept(NtmBlocks.MACHINE_SAT_LINK);
                         output.accept(NtmBlocks.MACHINE_SAT_DOCK);
