@@ -4553,3 +4553,36 @@ ist die Fehlerklasse strukturell ausgeschlossen, und daraus wird ein Tor, das si
 — anders als die Namensprüfung, für die offline die Vanilla-Klassenliste fehlt.
 
 Die Lücke steht damit bei **53**.
+
+### Wand und Außenecke aus Stahl
+
+Zwei weitere Bauteile derselben Gruppe. Beide Geometrien sind belegt, nicht geschätzt:
+`DecoBlock.setBlockBoundsBasedOnState` liefert die Kollisionsform, `RenderSteelWall` und
+`RenderSteelCorner` die sichtbare. Die Ecke besteht aus drei Quadern — für Norden
+
+```
+(4|0|14)-(16|16|16)   die lange Wand
+(0|0|12)-(4|16|16)    das dickere Eckstück
+(0|0|0)-(2|16|12)     der kurze Schenkel
+```
+
+Ich habe nachgerechnet, ob die drei anderen Richtungen im Original dieselbe Form gedreht sind:
+Norden um 180° gedreht ergibt Zeile für Zeile Süden, um 90° gegen den Uhrzeigersinn Westen,
+im Uhrzeigersinn Osten. Deckungsgleich — deshalb steht im Port **ein** Modell mit vier
+Drehungen statt vier Modellen. Der Versatz um 180° in der Drehung kommt daher, dass
+`Direction.toYRot()` bei Süden null zählt, das Modell aber für Norden gebaut ist.
+
+**Die Ausrichtung folgt hier einer anderen Regel als bei der Holzbohle**, und das ist kein
+Versehen: `BlockBarrier` setzt für Blick nach Süden Metadatum 2 (Norden) und zeichnet die Bohle
+an der Südkante — die Form liegt also auf der zugewandten Seite. `DecoBlock` setzt für
+denselben Blick Metadatum 3 (Süden) und zeichnet die Wand an der Nordkante, also abgewandt.
+Beide Zuordnungen sind unverändert übernommen.
+
+Der Schraubendreher dreht Wand und Ecke weiter; das Original geht dabei 3 → 4 → 2 → 5, was
+genau `getClockWise()` entspricht, mit Schleichtaste andersherum.
+
+**Eine Textur bleibt beim Original:** CE hat `steel_wall.png` ersetzt — statt des Rippenblechs
+eine glatte Platte mit Rand. Das ist keine Überarbeitung derselben Vorlage, sondern ein anderes
+Bild; ohne Beleg, dass es denselben Block meint, bleibt die Fassung des Originals stehen.
+
+Die Lücke steht bei **51**.

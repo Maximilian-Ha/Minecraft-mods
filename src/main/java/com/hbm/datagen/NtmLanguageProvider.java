@@ -2312,6 +2312,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.STEEL_BEAM, "Steel Beam");
         this.add(NtmBlocks.STEEL_GRATE, "Steel Grate");
         this.add(NtmBlocks.STEEL_GRATE_WIDE, "Wide Steel Grate");
+        this.add(NtmBlocks.STEEL_WALL, "Steel Wall");
+        this.add(NtmBlocks.STEEL_CORNER, "Steel Corner");
         this.add(NtmBlocks.WOOD_BARRIER, "Wooden Barrier");
         this.add(NtmBlocks.WOOD_STRUCTURE_ROOF, "Wooden Roof");
         this.add(NtmBlocks.WOOD_STRUCTURE_SCAFFOLD, "Wooden Scaffold");

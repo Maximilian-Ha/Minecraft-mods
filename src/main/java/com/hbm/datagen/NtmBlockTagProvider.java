@@ -467,6 +467,8 @@ public class NtmBlockTagProvider extends BlockTagsProvider {
                         NtmBlocks.STEEL_BEAM.get(),
                         NtmBlocks.STEEL_GRATE.get(),
                         NtmBlocks.STEEL_GRATE_WIDE.get(),
+                        NtmBlocks.STEEL_WALL.get(),
+                        NtmBlocks.STEEL_CORNER.get(),
                         NtmBlocks.STONE_GNEISS.get(),
                         NtmBlocks.CABLE_SWITCH.get(),
                         NtmBlocks.RED_CONNECTOR.get(),

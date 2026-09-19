@@ -622,6 +622,7 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.simpleCubeAllBlock(NtmBlocks.STONE_GNEISS);
         this.registerSteelGrate(NtmBlocks.STEEL_GRATE.get(), "grate_top");
         this.registerWoodStructures();
+        this.registerSteelDeco();
         this.registerSteelGrate(NtmBlocks.STEEL_GRATE_WIDE.get(), "grate_wide_top");
         this.simpleCubeAllBlock(NtmBlocks.MACHINE_CONVERTER_HE_RF);
         this.simpleCubeAllBlock(NtmBlocks.MACHINE_CONVERTER_RF_HE);
@@ -1095,6 +1096,36 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         for(Direction dir : Direction.values()) builder = builder.face(dir).texture("#all").end();
 
         return builder.end();
+    }
+
+    /**
+     * Wand und Aussenecke aus Stahl. Beide sind fuer Norden gebaut und werden gedreht; der
+     * Versatz um 180 Grad kommt daher, dass Direction.toYRot() bei Sueden null zaehlt.
+     */
+    private void registerSteelDeco() {
+
+        ResourceLocation tex = this.modLoc("block/steel_wall");
+
+        ModelFile wall = this.models().withExistingParent("steel_wall", this.mcLoc("block/block"))
+                .texture("all", tex).texture("particle", tex)
+                .element().from(0, 0, 14).to(16, 16, 16).allFaces((dir, face) -> face.texture("#all")).end();
+
+        ModelFile corner = this.models().withExistingParent("steel_corner", this.mcLoc("block/block"))
+                .texture("all", tex).texture("particle", tex)
+                .element().from(4, 0, 14).to(16, 16, 16).allFaces((dir, face) -> face.texture("#all")).end()
+                .element().from(0, 0, 12).to(4, 16, 16).allFaces((dir, face) -> face.texture("#all")).end()
+                .element().from(0, 0, 0).to(2, 16, 12).allFaces((dir, face) -> face.texture("#all")).end();
+
+        this.registerFacingDeco(NtmBlocks.STEEL_WALL.get(), wall);
+        this.registerFacingDeco(NtmBlocks.STEEL_CORNER.get(), corner);
+    }
+
+    private void registerFacingDeco(Block block, ModelFile model) {
+        this.getVariantBuilder(block).forAllStates(state -> ConfiguredModel.builder()
+                .modelFile(model)
+                .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180) % 360)
+                .build());
+        this.simpleBlockItem(block, model);
     }
 
     /**

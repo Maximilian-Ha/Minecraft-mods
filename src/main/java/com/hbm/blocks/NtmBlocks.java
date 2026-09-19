@@ -281,6 +281,12 @@ public class NtmBlocks {
      * im Original derselbe BlockGrate, der seine Oberseitentextur am Block festmacht. */
     public static final DeferredBlock<Block> STEEL_GRATE_WIDE = register("steel_grate_wide", () -> new GrateBlock(BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops().noOcclusion()));
 
+    /* Stufe 5: Wand und Aussenecke aus Stahl. Werte 1:1 aus ModBlocks.java:1598 f. des
+     * Originals; die Formen stehen in DecoBlock und in den Darstellern RenderSteelWall und
+     * RenderSteelCorner. */
+    public static final DeferredBlock<Block> STEEL_WALL = register("steel_wall", () -> new SteelWallBlock(BlockBehaviour.Properties.of().strength(5.0F, 15.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion()));
+    public static final DeferredBlock<Block> STEEL_CORNER = register("steel_corner", () -> new SteelCornerBlock(BlockBehaviour.Properties.of().strength(15.0F, 15.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion()));
+
     /* Stufe 5: die Holzteile der Bauwerke. Werte 1:1 aus ModBlocks.java:1461 f. des Originals. */
     public static final DeferredBlock<Block> WOOD_BARRIER = register("wood_barrier", () -> new WoodBarrierBlock(BlockBehaviour.Properties.of().strength(5.0F, 15.0F).sound(SoundType.WOOD).mapColor(MapColor.WOOD).noOcclusion()));
     public static final DeferredBlock<Block> WOOD_STRUCTURE_ROOF = register("wood_structure_roof", () -> new WoodStructureBlock(BlockBehaviour.Properties.of().strength(5.0F, 15.0F).sound(SoundType.WOOD).mapColor(MapColor.WOOD).noOcclusion(), WoodStructureBlock.Type.ROOF));
