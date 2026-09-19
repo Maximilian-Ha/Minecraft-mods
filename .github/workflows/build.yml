@@ -151,6 +151,14 @@ jobs:
           chmod +x ./tools/claim-check.sh
           ./tools/claim-check.sh
 
+      # Namenskollisionen mit festen Vanilla-Methoden. Ohne Minecraft-Klassenpfad sieht das
+      # kein anderes Tor: signature-check prueft nur @Override, syntax-check kennt die
+      # Oberklasse nicht.
+      - name: Check vanilla method name collisions
+        run: |
+          chmod +x ./tools/vanilla-name-check.sh
+          ./tools/vanilla-name-check.sh
+
       # DIESE SIEBEN LIEFEN BIS HIERHER NUR OERTLICH. Damit stand "alle Tore gruen" auf einem
       # Wort statt auf einer Messung -- wer sie vor dem Schieben vergisst, merkt nichts. Sie
       # kosten zusammen keine zwei Minuten und melden ihren Fund mit einer genauen Zeile,

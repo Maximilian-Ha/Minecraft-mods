@@ -119,7 +119,7 @@ public class Chemical extends ThrowableNT {
         return this;
     }
 
-    public FluidType getType() {
+    public FluidType getFluidType() {
         return Fluids.fromID(this.entityData.get(FLUID));
     }
 
@@ -130,7 +130,7 @@ public class Chemical extends ThrowableNT {
 
             if(this.tickCount > this.getMaxAge()) this.discard();
 
-            FluidType type = this.getType();
+            FluidType type = this.getFluidType();
 
             /*
              * Gas und Dampf wirken nicht erst beim Aufschlag, sondern im Vorbeiziehen -- und
@@ -146,7 +146,7 @@ public class Chemical extends ThrowableNT {
 
         } else {
 
-            FluidType type = this.getType();
+            FluidType type = this.getFluidType();
             ChemicalStyle art = this.getStyle();
 
             if(type == Fluids.BALEFIRE) {
@@ -172,7 +172,7 @@ public class Chemical extends ThrowableNT {
     protected void affect(Entity e, double staerke) {
 
         ChemicalStyle art = this.getStyle();
-        FluidType type = this.getType();
+        FluidType type = this.getFluidType();
         LivingEntity lebendig = e instanceof LivingEntity living ? living : null;
 
         /* Fluessigkeiten treffen mit voller Wucht, egal wie weit sie geflogen sind. */
@@ -285,7 +285,7 @@ public class Chemical extends ThrowableNT {
 
     /** Ob diese Sorte Feuer loescht: kalte, nicht brennbare Fluessigkeit. */
     protected boolean isExtinguishing() {
-        return this.getStyle() == ChemicalStyle.LIQUID && this.getType().temperature < 50 && !this.getType().hasTrait(FT_Flammable.class);
+        return this.getStyle() == ChemicalStyle.LIQUID && this.getFluidType().temperature < 50 && !this.getFluidType().hasTrait(FT_Flammable.class);
     }
 
     /** Womit brennende Mehrblockbauten geloescht werden -- wie beim Feuerloescher. */
@@ -315,7 +315,7 @@ public class Chemical extends ThrowableNT {
 
         if(!(treffer instanceof BlockHitResult blockTreffer)) return;
 
-        FluidType type = this.getType();
+        FluidType type = this.getFluidType();
         BlockPos stelle = blockTreffer.getBlockPos();
         ChemicalStyle art = this.getStyle();
 
@@ -420,7 +420,7 @@ public class Chemical extends ThrowableNT {
     @Override public boolean fireImmune() { return true; }
 
     public ChemicalStyle getStyle() {
-        return getStyleFromType(this.getType());
+        return getStyleFromType(this.getFluidType());
     }
 
     public static ChemicalStyle getStyleFromType(FluidType type) {

@@ -55,7 +55,7 @@ public class RenderChemical extends EntityRenderer<Chemical> {
             rgb = Color.getHSBColor(Math.max((60F - alter * 100F) / 360F, 0F), 1F - alter * 0.25F, 1F - alter * 0.5F).getRGB();
             deckkraft = 1F - alter;
         } else {
-            rgb = wolke.getType().getColor();
+            rgb = wolke.getFluidType().getColor();
             deckkraft = (1F - alter) * 0.5F;
         }
 

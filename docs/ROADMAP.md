@@ -8423,5 +8423,26 @@ einen Schraubenschlüssel. `RUBBER` trägt zwar `PIPE` in seinem `autogen`, aber
 `pipes_rubber` gibt es im Port nicht — und einen `wrench` ebenso wenig. Zwei Ersatzzutaten
 wären kein Port mehr, sondern ein eigener Bauplan.
 
-Alle 34 Tore grün.
+### Ein Torloch, das die Abnahme gefunden hat
+
+Der erste Anlauf dieser Runde fiel durch, und zwar an einer Zeile, die im Original
+selbstverständlich war:
+
+    error: getType() in Chemical cannot override getType() in Entity
+
+Die Wolke hieß im Original `EntityChemical` und hatte ein `getType()`, das den Fluidtyp
+zurückgab. In 1.21 hat schon `Entity` ein `getType()`, und das liefert `EntityType`.
+
+**Kein bestehendes Tor konnte das sehen.** `signature-check.sh` vergleicht nur Methoden *mit*
+`@Override` gegen die Mehrheit im Projekt — hier stand keines, und es sollte auch keines
+stehen. `syntax-check.sh` übersetzt ohne Minecraft-Klassenpfad und kennt die Oberklasse gar
+nicht.
+
+Dafür gibt es jetzt ein **35. Tor**: `vanilla-name-check.sh` verfolgt die Vererbungskette im
+Baum selbst bis zu einer bekannten Vanilla-Wurzel und prüft dort fest belegte Methodennamen
+gegen ihren Rückgabetyp. Die Liste ist bewusst kurz — sie enthält nur, was nachweislich schon
+schiefging, und wächst mit jedem weiteren Fall. Gegengemessen in beide Richtungen: benennt man
+`getFluidType` zurück in `getType`, meldet es genau diese Zeile und sonst nichts.
+
+Alle 35 Tore grün.
 
