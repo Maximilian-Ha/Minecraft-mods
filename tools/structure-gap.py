@@ -39,8 +39,9 @@ KEIN_BLOCK = {
     "brick_double_slab", "concrete_brick_double_slab", "concrete_double_slab",
     # Der Port benennt sie anders herum; sie sind da.
     "concrete_brick_slab", "lox_barrel", "pink_barrel", "red_barrel",
-    # Im Port heisst der Waffentisch weapon_table, ohne das machine_ davor.
-    "machine_weapon_table",
+    # Im Port heisst der Waffentisch weapon_table, ohne das machine_ davor,
+    # und das TNT schlicht tnt.
+    "machine_weapon_table", "tnt_ntm",
     # Das Original selbst kennt sie nicht mehr: sie stehen dort in ignoreMappings,
     # der Liste der Altnamen, die beim Laden alter Welten stillschweigend wegfallen.
     "barrel_iron", "ladder_tungsten", "ore_coal_oil",
@@ -59,6 +60,7 @@ FAMILIEN = {
     "spotlight_incandescent_off": "spotlight_incandescent mit lit=false",
     "deco_crt":             "deco_crt_clean, _broken, _blinking, _bsod",
     "deco_toaster":         "deco_toaster_iron, _steel, _wood",
+    "anvil_lead":           "anvil mit subtype=LEAD (NTMAnvilBlock.Variant)",
     "machine_electric_furnace_off": "machine_electric_furnace mit lit=false",
 }
 

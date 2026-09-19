@@ -4898,3 +4898,22 @@ rechnen. Die Drehformel — (x\|z) wird zu (1−z\|x) — ist dieselbe, mit der 
 gedreht werden; sonst stünde die Form quer zum Bild.
 
 Die Lücke steht bei **31**.
+
+### Der alte Kessel — und zwei weitere Scheinlücken
+
+**`machine_boiler_off`** ist ein Kuriosum: Im Original gibt es ihn **nur** in der
+Aus-Fassung. Ich habe nach dem Gegenstück gesucht, `machine_boiler_on` gibt es nicht — die
+Klasse `MachineBoiler` nimmt zwar einen Schalter entgegen, aber angelegt wird sie einmal, mit
+`false`. Er tut nichts, steht in den Zivilbauten herum und heißt im Original `machine_boiler`
+etwas ganz anderes (das ist der Wärmekessel, im Port `heat_boiler`). Deckel und Boden tragen
+das Grundbild, die Vorderseite ihr eigenes, die drei übrigen Seiten das Seitenbild — wie in
+`getIcon`.
+
+Zwei weitere Einträge waren wieder keine Arbeit, sondern Messfehler:
+
+- **`tnt_ntm`** heißt im Port schlicht `tnt`. Das Original nennt die Variable `tnt` und den
+  Registriernamen `tnt_ntm`; der Port hat es andersherum aufgelöst.
+- **`anvil_lead`** ist im Port eine Variante des Ambosses (`NTMAnvilBlock.Variant.LEAD`), und
+  `addMetaItems` legt alle Varianten in den Kreativreiter — nachgesehen, nicht angenommen.
+
+Die Lücke steht bei **28**.

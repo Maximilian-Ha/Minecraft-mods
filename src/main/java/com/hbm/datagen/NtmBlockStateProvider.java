@@ -859,6 +859,14 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.registerPwr();
         this.registerSpotlights();
         this.registerDekoStuecke();
+        /* Der alte Kessel: Deckel und Boden tragen das Grundbild, die Vorderseite ihr eigenes,
+         * die drei uebrigen Seiten das Seitenbild -- so steht es in getIcon des Originals. */
+        this.horizontalBlock(NtmBlocks.MACHINE_BOILER_OFF.get(), this.models()
+                .orientable("machine_boiler_off",
+                        this.modLoc("block/machine_boiler_side"),
+                        this.modLoc("block/machine_boiler_front"),
+                        this.modLoc("block/machine_boiler_base")));
+        this.blockItem(NtmBlocks.MACHINE_BOILER_OFF);
         this.simpleBlock(NtmBlocks.PLANT_DEAD_GENERIC.get(), this.models().withExistingParent("plant_dead_generic", mcLoc("block/cross")).renderType("cutout").texture("cross", modLoc("block/plant_dead_generic")));
         this.itemModels().withExistingParent("plant_dead_generic", mcLoc("item/generated")).texture("layer0", modLoc("block/plant_dead_generic"));
         this.simpleBlock(NtmBlocks.PLANT_DEAD_GRASS.get(), this.models().withExistingParent("plant_dead_grass", mcLoc("block/cross")).renderType("cutout").texture("cross", modLoc("block/plant_dead_grass")));

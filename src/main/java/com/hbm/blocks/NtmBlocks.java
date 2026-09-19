@@ -305,6 +305,11 @@ public class NtmBlocks {
     public static final DeferredBlock<Block> SPOTLIGHT_INCANDESCENT = register("spotlight_incandescent", () -> new SpotlightBlock(spotlight(), 2, SpotlightBlock.Bauart.GLUEHBIRNE));
     public static final DeferredBlock<Block> SPOTLIGHT_FLUORO = register("spotlight_fluoro", () -> new SpotlightBlock(spotlight(), 8, SpotlightBlock.Bauart.LEUCHTSTOFF));
     public static final DeferredBlock<Block> SPOTLIGHT_HALOGEN = register("spotlight_halogen", () -> new SpotlightBlock(spotlight(), 32, SpotlightBlock.Bauart.HALOGEN));
+    /* Stufe 5: der alte Kessel aus den Bauwerken. Im Original gibt es ihn nur in der
+     * Aus-Fassung (MachineBoiler(false), ModBlocks.java:2233) -- ein Ueberbleibsel, das nichts
+     * tut und nur herumsteht. Die Vorderseite richtet sich nach der Blickrichtung. */
+    public static final DeferredBlock<Block> MACHINE_BOILER_OFF = register("machine_boiler_off", () -> new DecoFacingBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops()));
+
     /* Stufe 5: die Deko der Bauwerke. Der Bildschirm in vier Zustaenden, der Toaster in drei
      * Werkstoffen, dazu das Tonbandgeraet -- im Original Metadaten eines Blocks
      * (ModBlocks.java:1590 ff.), im Port je ein Block. Alle richten sich nach der
