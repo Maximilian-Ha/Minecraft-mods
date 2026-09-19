@@ -5988,3 +5988,25 @@ Metadatum steht; `CU.plateCast()` die kupferne Gussplatte, `EnumCircuitType.BASI
 integrierte Leiterplatte.
 
 Stand danach: fehlende Blockentitäten 114.
+
+**Nachtrag zur vierten Gruppe:** beim Durchsehen der verbliebenen Liste kamen noch drei Fälle
+dazu, alle drei einzeln nachgesehen.
+
+`TileEntityMachineLPW2` ist dieselbe reine Zeichenhilfe wie die Deko-Blöcke, merkt sich ihren
+Sichtkasten aber in einem Feld — und die Prüfung weist jedes Feld ab. Namentlich eingetragen
+statt die Regel aufzuweichen.
+
+`TileEntitySellafield` und `TileEntityFF` erzeugt **kein einziger registrierter Block**: ihre
+Blockklassen (`Sellafield`, `BlockFF`) stehen in keiner Zeile von `ModBlocks` und haben auch
+keine Unterklasse. Die Sellafield-Blockentität wird sogar noch angesprochen — `world/dungeon/
+Barrel.java` setzt ihren Radius auf 2.5 —, nur kann sie nie entstehen.
+
+Daraus wäre beinahe eine fünfte automatische Regel geworden: „kein Block erzeugt sie“. Gemessen
+liefert sie 24 Treffer — und **taugt nicht**, denn zehn davon sind abstrakte Grundklassen, und
+bei `TileEntityCharge` hebelt Vererbung sie aus: `BlockChargeBase` steht selbst in keiner Zeile
+von `ModBlocks`, hat aber vier Unterklassen (C4, Dynamit, Semtex, Bohrladung), die alle live
+sind. Eine Regel, die eine Sprengladung als tot meldet, ist keine Regel. Deshalb drei
+namentliche Einträge statt einer schlechten Automatik.
+
+Stand: 113 fehlende Blockentitäten, davon 22 gar keine Lücke, 5 zum Nachsehen, 16 sofort
+portierbar, 70 blockiert.

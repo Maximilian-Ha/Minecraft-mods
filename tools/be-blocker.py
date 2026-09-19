@@ -113,6 +113,15 @@ OHNE_ENTSPRECHUNG = {
     'TileEntityData':          'zwei Zusatzbits fuers Metadatum; auf 1.21 traegt der Blockzustand beliebig viele',
     'TileEntityDummy':         'Platzhalter eines Mehrblockbaus; im Port macht das DummyableBlock ohne Blockentitaet',
     'TileEntityInventoryBase': 'abstrakte Grundklasse; im Port heisst sie MachineBaseBlockEntity',
+    # Dieselbe Zeichenhilfe wie oben, aber mit gemerktem Sichtkasten in einem Feld -- daran
+    # kommt die Pruefung unten nicht vorbei, sie weist jedes Feld ab.
+    'TileEntityMachineLPW2':   'nur ein gemerkter Sichtkasten und die Sichtweite fuer den TESR',
+    # Kein einziger registrierter Block erzeugt diese beiden: ihre Blockklassen (Sellafield und
+    # BlockFF) stehen in keiner Zeile von ModBlocks und haben auch keine Unterklasse. Beide
+    # nachgesehen, nicht geraten -- die naive Regel "kein Block erzeugt sie" taugt nicht als
+    # Automatik, weil Vererbung sie aushebelt (BlockChargeBase hat vier Unterklassen).
+    'TileEntitySellafield':    'kein registrierter Block erzeugt sie; die Klasse Sellafield steht in keiner Zeile von ModBlocks',
+    'TileEntityFF':            'kein registrierter Block erzeugt sie; die Klasse BlockFF steht in keiner Zeile von ModBlocks',
 }
 
 
