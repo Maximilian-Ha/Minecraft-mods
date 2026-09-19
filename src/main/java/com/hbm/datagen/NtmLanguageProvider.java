@@ -1119,6 +1119,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.FOUNDRY_SLAGTAP, "Slag Tap");
         this.add(NtmBlocks.HEV_BATTERY, "HEV Suit Battery");
         this.add(NtmBlocks.CRATE_AMMO, "Starmetal Crate");
+        this.add(NtmBlocks.CRATE_CAN, "Canned Food Crate");
         /* Die Pfuetze hat im Original gar keinen Namen -- sie ist in keinem Reiter und
          * traegt keinen Gegenstand. Einen braucht sie trotzdem, sonst steht der rohe
          * Schluessel in der Anzeige beim Hinsehen. */
@@ -1765,6 +1766,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.RING_PULL, "Ring Pull");
         this.add(NtmItems.CAN_KEY, "Winding Key");
 
+        this.add(NtmItems.PUDDING, "Pudding");
         this.add(NtmItems.CHOCOLATE_MILK, "Chocolate Milk");
         this.add(NtmItems.CHOCOLATE_MILK, DESC, "Regular chocolate milk. Safe to drink.$Totally not made from nitroglycerine.");
         this.add("item.hbmsntm.obj_cigarette.desc0", "✓ Asbestos filter$✓ High in tar$✓ Tobacco contains 100%% Polonium-210$✓ Yum");

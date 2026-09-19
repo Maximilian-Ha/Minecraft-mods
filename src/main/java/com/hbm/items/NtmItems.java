@@ -1188,6 +1188,7 @@ public class NtmItems {
 
     // Canned Food
     public static final DeferredItem<Item> CANNED_CONSERVE = ITEMS.register("canned_conserve", () -> new ConserveItem(new Item.Properties()));
+    public static final DeferredItem<Item> PUDDING = ITEMS.register("pudding", () -> new Item(new Item.Properties().food(NtmFoods.PUDDING)));
 
     // Money
     public static final DeferredItem<Item> CAP = ITEMS.register("cap", () -> new EnumMultiItem(new Item.Properties(), CapType.class, true, true));

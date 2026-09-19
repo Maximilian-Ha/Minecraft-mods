@@ -6557,3 +6557,58 @@ Damit ist `crate_weapon` frei: alle drei fehlenden Waffen stehen. Die Kiste selb
 Aufgabe #80, sobald auch die übrigen fünf ihre Gegenstände haben.
 
 Alle 29 Tore grün.
+
+## Die Dosenkiste
+
+Aufgabe #103, die zweite der fünf noch blockierten Beutekisten. Sie war deutlich billiger als
+befürchtet: nachgemessen fehlte von der ganzen Dosen- und Nahrungsfamilie genau ein Stück.
+
+### Was schon dastand
+
+Der Topf des Originals hat 36 Einträge: alle 27 Konserven (`EnumFoodType`), acht Dosengetränke
+und der Pudding. Im Port stehen die 27 Konserven längst als `ConserveType` (nachgezählt: 27 auf
+beiden Seiten), und die acht Getränke sind Spielarten des `DRINK`-Gegenstands — das Original
+führt jede Dose als eigenen Gegenstand, der Port hat sie zusammengefasst. Gezogen wird aus
+demselben Topf mit denselben Gewichten; nur die Liste im Code sieht anders aus.
+
+Übrig blieb `pudding`: im Original ein `ItemLemon(6, 1F, false)`, also schlichte Nahrung mit
+sechs Punkten und Sättigungsfaktor eins, ohne Sonderverhalten. Im Port eine Zeile in `NtmFoods`
+und eine in `NtmItems`. Die Textur lag schon bereit.
+
+### Die Kiste
+
+Fünf bis acht Stück, jedes einzeln und gleich wahrscheinlich gezogen — dieselbe Sorte kann
+also mehrfach kommen, genau wie im Original. Geöffnet wird sie wie jede Kiste des Mods: nur
+mit der Brechstange.
+
+Ihr Aussehen ist im Original ein Wellenfrontmodell ohne Blockentität
+(`ISimpleBlockRenderingHandler` mit `conservecrate.obj`). Nach der schon beim HEV-Akku
+festgelegten Regel — eine Blockentität nur zum Zeichnen lehnt der Port ab — steht dafür ein
+gebackenes JSON-Modell. Nachgemessen am OBJ: ein unterer und ein oberer Rand von je drei Pixeln
+auf voller Blockbreite, dazwischen ein um einen Pixel eingezogenes Mittelstück, und davor acht
+Latten von drei Pixeln Breite, je zwei vor jeder Seite. Das sind elf Kästen.
+
+Eine Abweichung bleibt: im Original läuft das Mittelstück über eine Schräge in die Ränder. Eine
+Schräge lässt sich in einem JSON-Modell nicht achsenparallel ausdrücken, hier trifft es
+rechtwinklig auf. Die Textur kommt aus `crate_can_side/top/bottom` — drei 16×16-Bilder, die das
+Original mitliefert, aber selbst nirgends benutzt (sein OBJ zieht seine Flächen stattdessen aus
+einem 32×32-Atlas, dessen UV-Zuschnitt ein JSON-Modell nicht nachbilden kann).
+
+### Ein Tor, das an dieser Stelle blind war
+
+Beim Nachprüfen, ob das neue Modell auch wirklich von einem Tor erfasst wird, kam heraus: der
+Verweis vom Blockzustand auf das Modell wird geprüft (`model-resolve-check` schlägt an, wenn
+`crate_can.json` fehlt), der Verweis vom Modell auf seine **Texturen** aber nicht. Ein
+handgeschriebenes Modell durfte bis jetzt eine Textur nennen, die es nicht gibt, ohne dass
+irgendetwas davon Notiz nahm — sichtbar erst im laufenden Spiel als schwarz-violettes Karo.
+
+`asset-check` prüft jetzt auch die handgeschriebenen Modelldateien unter `models/block` und
+`models/item`: jeden Eintrag in `textures` und den `parent`-Verweis, soweit beide im eigenen
+Namensraum liegen. Nachgewiesen an beiden Fällen — eine entfernte Textur und ein erfundener
+Elternverweis lassen das Tor anschlagen, danach ist es wieder grün. Geprüfte Verweise insgesamt:
+1516.
+
+Bleiben für Aufgabe #80 noch `crate`, `crate_supply`, `crate_red` und `crate_weapon` — letztere
+nur noch als Block, ihre drei Waffen stehen seit der vorigen Runde.
+
+Alle 29 Tore grün.

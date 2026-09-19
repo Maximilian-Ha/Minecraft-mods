@@ -58,6 +58,47 @@ while IFS= read -r line; do
   done
 done < <(grep -rn 'modLoc("block/' src/main/java/com/hbm/datagen --include='*.java' | grep -v 'UncheckedModelFile')
 
+# Handgeschriebene Modelldateien unter models/block und models/item verweisen auf Texturen
+# ("hbmsntm:block/xyz") und auf ein Elternmodell ("hbmsntm:block/abc"). Der Datengenerator
+# erzeugt seine Modelle selbst und prueft dabei nichts nach; diese Dateien schreibt niemand
+# ausser uns, und ein Tippfehler darin faellt sonst erst im Spiel auf.
+while IFS= read -r line; do
+  ref="${line%%|*}"
+  file="${line#*|}"
+  check "$ASSETS/$ref" "$file"
+done < <(python3 - "$ASSETS" <<'PYEOF'
+import json, os, sys
+
+wurzel = sys.argv[1]
+
+def melde(pfad, quelle):
+    print("%s|%s" % (pfad, quelle))
+
+for unterbau in ("models/block", "models/item"):
+    ordner = os.path.join(wurzel, unterbau)
+    if not os.path.isdir(ordner): continue
+    for name in sorted(os.listdir(ordner)):
+        if not name.endswith(".json"): continue
+        quelle = os.path.join(ordner, name)
+        try:
+            daten = json.load(open(quelle))
+        except Exception as fehler:
+            print("KAPUTT: %s (%s)" % (quelle, fehler), file=sys.stderr)
+            sys.exit(2)
+
+        eltern = daten.get("parent")
+        # Ohne Namensraum meint das Vanille (block/block, item/generated) -- nicht unsere Sache.
+        if isinstance(eltern, str) and eltern.startswith("hbmsntm:"):
+            melde("models/%s.json" % eltern.split(":", 1)[1], quelle)
+
+        for wert in (daten.get("textures") or {}).values():
+            # "#seite" verweist auf einen anderen Eintrag derselben Tabelle, nicht auf eine Datei.
+            if not isinstance(wert, str) or wert.startswith("#"): continue
+            if not wert.startswith("hbmsntm:"): continue
+            melde("textures/%s.png" % wert.split(":", 1)[1], quelle)
+PYEOF
+)
+
 echo "  geprueft: $CHECKED Referenzen"
 if [ "$MISSING" -gt 0 ]; then
   echo "  FEHLEND : $MISSING"

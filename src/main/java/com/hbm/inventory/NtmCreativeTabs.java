@@ -1537,6 +1537,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.FOUNDRY_SLAGTAP);
                         output.accept(NtmBlocks.HEV_BATTERY);
                         output.accept(NtmBlocks.CRATE_AMMO);
+                        output.accept(NtmBlocks.CRATE_CAN);
                         output.accept(NtmBlocks.FOUNDRY_TANK);
                         output.accept(NtmBlocks.TRANSFORMER);
 
@@ -1913,6 +1914,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.BOTTLE_OPENER);
                         output.accept(NtmItems.COIN_MASKMAN);
                         addMetaItems(output, NtmItems.CANNED_CONSERVE.get());
+                        output.accept(NtmItems.PUDDING);
                         addMetaItems(output, NtmItems.CAP.get());
                         output.accept(NtmItems.RING_PULL);
                         output.accept(NtmItems.CAN_KEY);
