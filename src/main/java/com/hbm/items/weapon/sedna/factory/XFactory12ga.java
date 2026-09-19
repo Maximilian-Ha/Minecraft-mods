@@ -1,6 +1,8 @@
 package com.hbm.items.weapon.sedna.factory;
 
+import com.hbm.entity.NtmEntityTypes;
 import com.hbm.entity.projectile.BulletBaseMK4;
+import com.hbm.entity.projectile.DuchessGambit;
 import com.hbm.extprop.HbmLivingAttachments;
 import com.hbm.items.ItemEnums.CasingType;
 import com.hbm.items.NtmItems;
@@ -10,6 +12,8 @@ import com.hbm.items.weapon.sedna.GunBaseNTItem.LambdaContext;
 import com.hbm.items.weapon.sedna.GunBaseNTItem.WeaponQuality;
 import com.hbm.items.weapon.sedna.factory.GunFactory.Ammo;
 import com.hbm.items.weapon.sedna.factory.GunFactory.AmmoSecret;
+import com.hbm.items.weapon.sedna.mags.IMagazine;
+import com.hbm.items.weapon.sedna.mags.MagazineFullReload;
 import com.hbm.items.weapon.sedna.mags.MagazineSingleReload;
 import com.hbm.items.weapon.sedna.mods.XWeaponModManager;
 import com.hbm.main.NuclearTechMod;
@@ -24,11 +28,14 @@ import com.hbm.render.anim.BusAnimationKeyframe.IType;
 import com.hbm.render.anim.BusAnimationSequence;
 import com.hbm.util.SoundUtils;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.BiConsumer;
@@ -47,9 +54,34 @@ public class XFactory12ga {
     public static BulletConfig g12_explosive;
     public static BulletConfig g12_phosphorus;
     public static BulletConfig g12_equestrian_tkr;
+    /** Die Signaturpatrone der schoenen Autoschrotflinte. Kein Schaden -- sie ruft ein Luftschiff. */
+    public static BulletConfig g12_equestrian_bj;
 
     public static BiConsumer<BulletBaseMK4, HitResult> LAMBDA_STANDARD_EXPLODE = (bullet, hr) -> {
         Lego.standardExplode(bullet, hr, 2F); bullet.discard();
+    };
+
+    /**
+     * Was die Signaturpatrone der schoenen Autoschrotflinte anrichtet: fuenfzig Bloecke ueber
+     * dem Getroffenen erscheint die Duchess Gambit, und ein Hornstoss kuendigt sie an. Den Rest
+     * erledigt die Schwerkraft -- dasselbe Spiel wie beim Gueterwagen des Lilmac.
+     *
+     * ABWEICHUNG, die im Original ein Versehen sein duerfte: es spielt den Klang nicht dort, wo
+     * das Schiff erscheint, sondern noch einmal fuenfzig Bloecke darueber. Hier steht er am Ort
+     * des Schiffs.
+     */
+    public static BiConsumer<BulletBaseMK4, HitResult> LAMBDA_BOAT = (geschoss, treffer) -> {
+
+        Vec3 stelle = treffer.getLocation();
+        Level level = geschoss.level;
+
+        DuchessGambit schiff = new DuchessGambit(NtmEntityTypes.DUCHESS_GAMBIT.get(), level);
+        schiff.setPos(stelle.x, stelle.y + 50, stelle.z);
+        schiff.setOwner(geschoss.getOwner());
+        level.addFreshEntity(schiff);
+
+        SoundUtils.playAtVec3(level, schiff.position(), NtmSoundEvents.GUN_BOAT.get(), SoundSource.HOSTILE, 100F, 1F);
+        geschoss.discard();
     };
 
     public static void init(DeferredRegister.Items registry) {
@@ -75,6 +107,9 @@ public class XFactory12ga {
          */
         g12_equestrian_tkr = new BulletConfig().setItem(AmmoSecret.G12_EQUESTRIAN).setDamage(0F)
                 .setCasing(new SpentCasing(SpentCasingType.SHOTGUN).setColor(0xB52B2B, SpentCasing.COLOR_CASE_EQUESTRIAN).setScale(0.75F).register("12GA_EQUESTRIAN_TKR"));
+
+        g12_equestrian_bj = new BulletConfig().setItem(AmmoSecret.G12_EQUESTRIAN).setDamage(0F).setOnImpact(LAMBDA_BOAT)
+                .setCasing(new SpentCasing(SpentCasingType.SHOTGUN).setColor(0xB52B2B, SpentCasing.COLOR_CASE_EQUESTRIAN).setScale(0.75F).register("12gaEquestrianBJ"));
 
         BulletConfig[] all = new BulletConfig[] {g12_bp, g12_bp_magnum, g12_bp_slug, g12, g12_slug, g12_flechette, g12_magnum, g12_explosive, g12_phosphorus};
 
@@ -156,6 +191,43 @@ public class XFactory12ga {
                 .setupStandardConfiguration()
                 .anim(LAMBDA_MARESLEG_SHORT_ANIMS).orchestra(Orchestras.ORCHESTRA_MARESLEG_SHORT)
         ).setDefaultAmmo(Ammo.G12_MAGNUM, 24));
+
+        /*
+         * Die Autoschrotflinte, XFactory12ga Z. 357 des Originals. Zwanzig Schuss im Kasten,
+         * vollautomatisch, und sie feuert auch nach dem letzten Schuss weiter (autoAfterDry),
+         * bis der Abzug losgelassen wird.
+         */
+        NtmItems.GUN_AUTOSHOTGUN = registry.register("gun_autoshotgun", () -> new GunBaseNTItem(WeaponQuality.A_SIDE, new GunConfig()
+                .dura(2_000).draw(10).inspect(33).reloadSequential(true).crosshair(Crosshair.L_CIRCLE).smoke(Lego.LAMBDA_STANDARD_SMOKE)
+                .rec(new Receiver(0)
+                        .dmg(48F).delay(10).auto(true).autoAfterDry(true).dryfireAfterAuto(true).reload(44).jam(19).sound(NtmSoundEvents.GUN_SHREDDER_FIRE, 1.0F, 1.0F)
+                        .mag(new MagazineFullReload(0, 20).addConfigs(all))
+                        .offset(0.75, -0.125, -0.25)
+                        .setupStandardFire().recoil(LAMBDA_RECOIL_AUTOSHOTGUN))
+                .setupStandardConfiguration()
+                .anim(LAMBDA_SHREDDER_ANIMS).orchestra(Orchestras.ORCHESTRA_SHREDDER)
+        ).setDefaultAmmo(Ammo.G12, 20));
+
+        /*
+         * Die schoene Autoschrotflinte, XFactory12ga Z. 378 des Originals. Hundert Schuss im
+         * Gurt, vier Ticks zwischen zwei Schuessen, und ihr erstes Magazin ist die
+         * Signaturpatrone -- wer sie hat, wirft Luftschiffe.
+         *
+         * NICHT UEBERNOMMEN: gun_autoshotgun_shredder, die dritte der Familie. Ihre Munition
+         * zerfaellt beim Aufschlag in Strahlen, die weiterspringen (makeShredderConfig mit
+         * setOnBeamImpact und setOnRicochet); das Geschossteilsystem des Ports kennt diese
+         * Aufspaltung noch nicht.
+         */
+        NtmItems.GUN_AUTOSHOTGUN_SEXY = registry.register("gun_autoshotgun_sexy", () -> new GunBaseNTItem(WeaponQuality.LEGENDARY, new GunConfig()
+                .dura(5_000).draw(20).inspect(65).reloadSequential(true).inspectCancel(false).crosshair(Crosshair.L_CIRCLE).hideCrosshair(false).smoke(Lego.LAMBDA_STANDARD_SMOKE)
+                .rec(new Receiver(0)
+                        .dmg(64F).delay(4).auto(true).dryfireAfterAuto(true).reload(110).jam(19).sound(NtmSoundEvents.GUN_SHREDDER_FIRE, 1.0F, 1.0F)
+                        .mag(new MagazineFullReload(0, 100).addConfigs(g12_equestrian_bj, g12_bp, g12_bp_magnum, g12_bp_slug, g12, g12_slug, g12_flechette, g12_magnum, g12_explosive, g12_phosphorus))
+                        .offset(0.75, -0.125, -0.25)
+                        .setupStandardFire().recoil(LAMBDA_RECOIL_SEXY))
+                .setupStandardConfiguration()
+                .anim(LAMBDA_SEXY_ANIMS).orchestra(Orchestras.ORCHESTRA_SHREDDER_SEXY)
+        ).setDefaultAmmo(Ammo.G12_MAGNUM, 50));
     }
 
     /** Mit der Saege ist sie keine Flinte mehr, sondern eine Mare's Leg. */
@@ -172,6 +244,16 @@ public class XFactory12ga {
 
     public static BiConsumer<ItemStack, LambdaContext> LAMBDA_RECOIL_MARESLEG = (stack, ctx) -> {
         GunBaseNTItem.setupRecoil(10, (float) (ctx.getPlayer().getRandom().nextGaussian() * 1.5));
+    };
+
+    public static BiConsumer<ItemStack, LambdaContext> LAMBDA_RECOIL_AUTOSHOTGUN = (stack, ctx) -> {
+        GunBaseNTItem.setupRecoil((float) (ctx.getPlayer().getRandom().nextGaussian() * 1.5) + 1.5F,
+                (float) (ctx.getPlayer().getRandom().nextGaussian() * 0.5));
+    };
+
+    public static BiConsumer<ItemStack, LambdaContext> LAMBDA_RECOIL_SEXY = (stack, ctx) -> {
+        GunBaseNTItem.setupRecoil((float) (ctx.getPlayer().getRandom().nextGaussian() * 0.5),
+                (float) (ctx.getPlayer().getRandom().nextGaussian() * 0.5));
     };
 
     public static BiConsumer<ItemStack, LambdaContext> LAMBDA_SPAS_SECONDARY = (stack, ctx) -> {
@@ -369,6 +451,68 @@ public class XFactory12ga {
             case INSPECT -> liberatorHuelsenRuhe(new BusAnimation()
                     .addBus("LATCH", new BusAnimationSequence().addPos(15, 0, 0, 100).addPos(15, 0, 0, 1100).addPos(0, 0, 0, 50))
                     .addBus("BREAK", new BusAnimationSequence().addPos(0, 0, 0, 100).addPos(60, 0, 0, 350, IType.SIN_DOWN).addPos(60, 0, 0, 500).addPos(0, 0, 0, 250, IType.SIN_UP)), ammo);
+            default -> null;
+        };
+    };
+
+    /** Die Autoschrotflinte, XFactory12ga Z. 629 des Originals. */
+    public static BiFunction<ItemStack, GunAnimation, BusAnimation> LAMBDA_SHREDDER_ANIMS = (stack, type) -> {
+        return switch(type) {
+            case EQUIP -> new BusAnimation()
+                    .addBus("EQUIP", new BusAnimationSequence().addPos(60, 0, 0, 0).addPos(0, 0, 0, 500, IType.SIN_DOWN));
+            case CYCLE -> new BusAnimation()
+                    .addBus("RECOIL", new BusAnimationSequence().addPos(0, 0, -1, 50, IType.SIN_DOWN).addPos(0, 0, 0, 150, IType.SIN_FULL))
+                    .addBus("CYCLE", new BusAnimationSequence().addPos(0, 0, 0, 150).addPos(0, 0, 18, 100));
+            case CYCLE_DRY -> new BusAnimation()
+                    .addBus("CYCLE", new BusAnimationSequence().addPos(0, 0, 0, 150).addPos(0, 0, 18, 100));
+            case RELOAD -> new BusAnimation()
+                    .addBus("MAG", new BusAnimationSequence().addPos(0, -8, 0, 250, IType.SIN_UP).addPos(0, -8, 0, 1000).addPos(0, 0, 0, 300))
+                    .addBus("LIFT", new BusAnimationSequence().addPos(0, 0, 0, 750).addPos(-25, 0, 0, 300, IType.SIN_FULL).addPos(-25, 0, 0, 500).addPos(-27, 0, 0, 100, IType.SIN_DOWN).addPos(-25, 0, 0, 100, IType.SIN_FULL).addPos(-25, 0, 0, 150).addPos(0, 0, 0, 300, IType.SIN_FULL));
+            case JAMMED -> new BusAnimation()
+                    .addBus("MAG", new BusAnimationSequence().addPos(0, 0, 0, 500).addPos(0, -2, 0, 150, IType.SIN_UP).addPos(0, 0, 0, 100))
+                    .addBus("LIFT", new BusAnimationSequence().addPos(0, 0, 0, 750).addPos(-2, 0, 0, 100, IType.SIN_DOWN).addPos(0, 0, 0, 100, IType.SIN_FULL));
+            case INSPECT -> new BusAnimation()
+                    .addBus("MAG", new BusAnimationSequence()
+                            .addPos(0, -1, 0, 150).addPos(6, -1, 0, 150).addPos(6, 12, 0, 350, IType.SIN_DOWN).addPos(6, -2, 0, 350, IType.SIN_UP).addPos(6, -1, 0, 50)
+                            .addPos(6, -1, 0, 100).addPos(0, -1, 0, 150, IType.SIN_FULL).addPos(0, 0, 0, 150, IType.SIN_UP))
+                    .addBus("SPEEN", new BusAnimationSequence().addPos(0, 0, 0, 300).addPos(360, 0, 0, 700))
+                    .addBus("LIFT", new BusAnimationSequence().addPos(0, 0, 0, 1450).addPos(-2, 0, 0, 100, IType.SIN_DOWN).addPos(0, 0, 0, 100, IType.SIN_FULL));
+            default -> null;
+        };
+    };
+
+    /**
+     * Die schoene Autoschrotflinte, XFactory12ga Z. 655 des Originals.
+     *
+     * Beim Schuss verschiebt der Bus SHELLS den Gurt um einen Platz -- deshalb steht dort der
+     * aktuelle Fuellstand des Magazins und keine feste Zahl. Beim Pruefen nimmt sie einen
+     * Schluck aus der Flasche; das ist im Original so, und es bleibt so.
+     */
+    public static BiFunction<ItemStack, GunAnimation, BusAnimation> LAMBDA_SEXY_ANIMS = (stack, type) -> {
+        return switch(type) {
+            case EQUIP -> new BusAnimation()
+                    .addBus("EQUIP", new BusAnimationSequence().addPos(45, 0, 0, 0).addPos(0, 0, 0, 1000, IType.SIN_DOWN));
+            case CYCLE -> {
+                int menge = ((GunBaseNTItem) stack.getItem()).getConfig(stack, 0).getReceivers(stack)[0].getMagazine(stack).getAmount(stack, null);
+                yield new BusAnimation()
+                        .addBus("RECOIL", new BusAnimationSequence().hold(50).addPos(0, 0, -0.25, 50, IType.SIN_DOWN).addPos(0, 0, 0, 100, IType.SIN_FULL))
+                        .addBus("BARREL", new BusAnimationSequence().addPos(0, 0, -1, 50, IType.SIN_DOWN).addPos(0, 0, 0, 150))
+                        .addBus("CYCLE", new BusAnimationSequence().addPos(1, 0, 0, 150))
+                        .addBus("HOOD", new BusAnimationSequence().hold(50).addPos(3, 0, 0, 50, IType.SIN_DOWN).addPos(0, 0, 0, 50, IType.SIN_UP))
+                        .addBus("SHELLS", new BusAnimationSequence().setPos(menge - 1, 0, 0));
+            }
+            case CYCLE_DRY -> new BusAnimation()
+                    .addBus("CYCLE", new BusAnimationSequence().addPos(0, 0, 18, 50));
+            case RELOAD -> new BusAnimation()
+                    .addBus("LOWER", new BusAnimationSequence().addPos(15, 0, 0, 500, IType.SIN_FULL).hold(2750).addPos(12, 0, 0, 100, IType.SIN_DOWN).addPos(15, 0, 0, 100, IType.SIN_FULL).hold(1050).addPos(18, 0, 0, 100, IType.SIN_DOWN).addPos(15, 0, 0, 100, IType.SIN_FULL).hold(300).addPos(0, 0, 0, 500, IType.SIN_FULL))
+                    .addBus("LEVER", new BusAnimationSequence().addPos(0, 0, 1, 150).hold(4700).addPos(0, 0, 0, 150))
+                    .addBus("HOOD", new BusAnimationSequence().hold(250).addPos(60, 0, 0, 500, IType.SIN_FULL).hold(3250).addPos(0, 0, 0, 500, IType.SIN_UP))
+                    .addBus("BELT", new BusAnimationSequence().setPos(1, 0, 0).hold(750).addPos(0, 0, 0, 500, IType.SIN_UP).hold(2000).addPos(1, 0, 0, 500, IType.SIN_UP))
+                    .addBus("MAG", new BusAnimationSequence().hold(1500).addPos(0, -1, 0, 250, IType.SIN_UP).addPos(2, -1, 0, 500, IType.SIN_UP).addPos(7, 1, 0, 250, IType.SIN_UP).addPos(15, 2, 0, 250).setPos(0, -2, 0).addPos(0, 0, 0, 500, IType.SIN_UP))
+                    .addBus("MAGROT", new BusAnimationSequence().hold(2250).addPos(0, 0, -180, 500, IType.SIN_FULL).setPos(0, 0, 0));
+            case INSPECT -> new BusAnimation()
+                    .addBus("BOTTLE", new BusAnimationSequence().setPos(8, -8, -2).addPos(6, -4, -2, 500, IType.SIN_DOWN).addPos(3, -3, -5, 500, IType.SIN_FULL).addPos(3, -2, -5, 1000).addPos(4, -6, -2, 750, IType.SIN_FULL).addPos(6, -8, -2, 500, IType.SIN_UP))
+                    .addBus("SIP", new BusAnimationSequence().setPos(25, 0, 0).hold(500).addPos(-90, 0, 0, 500, IType.SIN_FULL).addPos(-110, 0, 0, 1000).addPos(25, 0, 0, 750, IType.SIN_FULL));
             default -> null;
         };
     };

@@ -13,6 +13,7 @@ import com.hbm.items.weapon.sedna.GunBaseNTItem.GunState;
 import com.hbm.items.weapon.sedna.GunBaseNTItem.LambdaContext;
 import com.hbm.items.weapon.sedna.GunBaseNTItem.WeaponQuality;
 import com.hbm.items.weapon.sedna.factory.GunFactory.Ammo;
+import com.hbm.items.weapon.sedna.factory.GunFactory.AmmoSecret;
 import com.hbm.items.weapon.sedna.mags.MagazineFullReload;
 import com.hbm.items.weapon.sedna.mags.MagazineSingleReload;
 import com.hbm.particle.SpentCasing;
@@ -23,6 +24,9 @@ import com.hbm.render.anim.BusAnimation;
 import com.hbm.render.anim.BusAnimationKeyframe.IType;
 import com.hbm.render.anim.BusAnimationSequence;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.BiConsumer;
@@ -146,15 +150,9 @@ public class XFactory44 {
         GunBaseNTItem.setupRecoil(5, (float) (ctx.getPlayer().random.nextGaussian() * 1));
     };
 
-    /**
-     * Der Lilmac bewegt sich wie der schwere Revolver -- nur beim Ziehen wirbelt er einmal um
-     * sich selbst. Alles andere reicht er an LAMBDA_NOPIP_ANIMS weiter.
-     */
-    public static BiFunction<ItemStack, GunAnimation, BusAnimation> LAMBDA_LILMAC_ANIMS = (stack, type) -> {
-        if(type == GunAnimation.EQUIP) return new BusAnimation().addBus("SPIN", new BusAnimationSequence().addPos(-360, 0, 0, 350));
-        return LAMBDA_NOPIP_ANIMS.apply(stack, type);
-    };
-
+    /* MUSS UNTER LAMBDA_NOPIP_ANIMS STEHEN: das Feld greift beim Auswerten darauf zu, und ein
+     * statisches Feld darf im selben Klassenkoerper nur auf bereits deklarierte verweisen --
+     * sonst "illegal forward reference". */
     public static BiFunction<ItemStack, GunAnimation, BusAnimation> LAMBDA_NOPIP_ANIMS = (stack, type) -> {
         return switch(type) {
             case CYCLE -> new BusAnimation()
@@ -207,5 +205,14 @@ public class XFactory44 {
             default -> null;
         };
 
+    };
+
+    /**
+     * Der Lilmac bewegt sich wie der schwere Revolver -- nur beim Ziehen wirbelt er einmal um
+     * sich selbst. Alles andere reicht er an LAMBDA_NOPIP_ANIMS weiter.
+     */
+    public static BiFunction<ItemStack, GunAnimation, BusAnimation> LAMBDA_LILMAC_ANIMS = (stack, type) -> {
+        if(type == GunAnimation.EQUIP) return new BusAnimation().addBus("SPIN", new BusAnimationSequence().addPos(-360, 0, 0, 350));
+        return LAMBDA_NOPIP_ANIMS.apply(stack, type);
     };
 }

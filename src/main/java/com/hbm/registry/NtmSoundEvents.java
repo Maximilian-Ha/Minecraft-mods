@@ -67,6 +67,15 @@ public class NtmSoundEvents {
      *  Konstante GUN_GO_GO_GADGET_FUCK_EVERYTHING_IN_THIS_GENERAL_DIRECTION und zeigt auf
      *  "hbm:alarm.trainHorn". */
     public static final DeferredHolder<SoundEvent, SoundEvent> TRAIN_HORN = reg("alarm.train_horn");
+    /** Das Nebelhorn der Duchess Gambit beim Aufschlag -- im Original "hbm:alarm.gambit". */
+    public static final DeferredHolder<SoundEvent, SoundEvent> GAMBIT = reg("alarm.gambit");
+    /** Womit die schoene Autoschrotflinte ihr Luftschiff ankuendigt. Im Original heisst die
+     *  Konstante GUN_SOLDIER_TF2_BOAT_EXE_WAV_MP3 und zeigt auf "hbm:weapon.boat". */
+    public static final DeferredHolder<SoundEvent, SoundEvent> GUN_BOAT = reg("weapon.boat");
+    /** Der Nachladetakt der Autoschrotflinte -- im Original "hbm:weapon.fire.shredderCycle". */
+    public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SHREDDER_CYCLE = reg("weapon.fire.shreddercycle");
+    /** Der Schuss der Autoschrotflinte -- im Original "hbm:weapon.fire.shotgunAuto". */
+    public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SHREDDER_FIRE = reg("weapon.fire.shotgunauto");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SWITCHMODE_1 = reg("weapon.switchmode1");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SWITCHMODE_2 = reg("weapon.switchmode2");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SILENCER_SHOOT = reg("weapon.fire.silencer_shoot");

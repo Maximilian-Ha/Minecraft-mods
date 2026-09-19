@@ -3,6 +3,7 @@ package com.hbm.entity;
 import com.hbm.entity.effect.BlackHole;
 import com.hbm.entity.grenade.GrenadeUniversal;
 import com.hbm.entity.projectile.Boxcar;
+import com.hbm.entity.projectile.DuchessGambit;
 import com.hbm.entity.projectile.Sawblade;
 import com.hbm.entity.effect.FalloutRain;
 import com.hbm.entity.effect.FireLingering;
@@ -139,6 +140,10 @@ public class NtmEntityTypes {
     /* Der Gueterwagen aus der Luft. Drei Bloecke breit, drei hoch -- ungefaehr sein Modell. */
     public static final DeferredHolder<EntityType<?>, EntityType<Boxcar>> BOXCAR = ENTITY_TYPES.register("boxcar",
             () -> EntityType.Builder.<Boxcar>of(Boxcar::new, MobCategory.MISC).noSummon().setTrackingRange(250).sized(3.0F, 3.0F).fireImmune().build("boxcar"));
+
+    /* Das Luftschiff aus der Luft. Zehn Bloecke breit, acht hoch -- grob sein Modell. */
+    public static final DeferredHolder<EntityType<?>, EntityType<DuchessGambit>> DUCHESS_GAMBIT = ENTITY_TYPES.register("duchess_gambit",
+            () -> EntityType.Builder.<DuchessGambit>of(DuchessGambit::new, MobCategory.MISC).noSummon().setTrackingRange(250).sized(10.0F, 8.0F).fireImmune().build("duchess_gambit"));
 
     /* Die geworfene Granate. Ein Viertelblock gross, wie im Original (setSize(0.25F, 0.25F)). */
     public static final DeferredHolder<EntityType<?>, EntityType<GrenadeUniversal>> GRENADE_UNIVERSAL = ENTITY_TYPES.register("grenade_universal",

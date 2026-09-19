@@ -185,6 +185,18 @@ public class NtmSoundDefinitionsProvider extends SoundDefinitionsProvider {
         this.add(NtmSoundEvents.TRAIN_HORN, SoundDefinition.definition()
                 .with(sound(NuclearTechMod.withDefaultNamespace("alarm/train_horn")))
         );
+        this.add(NtmSoundEvents.GAMBIT, SoundDefinition.definition()
+                .with(sound(NuclearTechMod.withDefaultNamespace("alarm/gambit")))
+        );
+        this.add(NtmSoundEvents.GUN_BOAT, SoundDefinition.definition()
+                .with(sound(NuclearTechMod.withDefaultNamespace("weapon/boat")))
+        );
+        this.add(NtmSoundEvents.GUN_SHREDDER_CYCLE, SoundDefinition.definition()
+                .with(sound(NuclearTechMod.withDefaultNamespace("weapon/fire/shreddercycle")))
+        );
+        this.add(NtmSoundEvents.GUN_SHREDDER_FIRE, SoundDefinition.definition()
+                .with(sound(NuclearTechMod.withDefaultNamespace("weapon/fire/shotgunauto")))
+        );
         /* Drei Aufnahmen, wie im Original -- welche kommt, entscheidet das Spiel. */
         this.add(NtmSoundEvents.GRENADE_BOUNCE, SoundDefinition.definition()
                 .with(sound(NuclearTechMod.withDefaultNamespace("weapon/grenade_bounce1")))

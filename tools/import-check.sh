@@ -166,7 +166,7 @@ for path, pkg, raw in files:
     used |= set(re.findall(r'(?<![.\w])([A-Z]\w*)\s+\w+\s*[=;)]', body))
     # Runde 45: die beiden Formen, die bis dahin durchrutschten und einen CI-Lauf kosteten --
     # der Typ als Generikum-Argument (BlockEntityType<Foo>) und als Methodenreferenz (Foo::new).
-    used |= set(re.findall(r'[<,]\s*([A-Z]\w*)\s*[>,]', body))
+    used |= set(re.findall(r'(?<=[<,])\s*([A-Z]\w*)\s*(?=[>,])', body))
     used |= set(re.findall(r'(?<![.\w])([A-Z]\w*)\s*::', body))
     # Runde 128: der STATISCHE ZUGRIFF, die Form, die bis dahin durchrutschte und einen
     # CI-Lauf kostete -- CassetteItem.TrackType.fromMeta(...) nennt CassetteItem nur als
@@ -344,6 +344,12 @@ for path, pkg, raw in files:
     used |= set(re.findall(r'\bextends\s+([A-Z]\w*)', body))
     used |= set(re.findall(r'\bimplements\s+([A-Z]\w*)', body))
     used |= set(re.findall(r'\binstanceof\s+([A-Z]\w*)', body))
+    # Runde 180: die beiden Formen, die bis hierher fehlten und einen CI-Lauf kosteten --
+    # der Typ als DEKLARATION einer Variablen (Vec3 stelle = ...; Level level = ...) und als
+    # GENERIKUM-ARGUMENT (BiConsumer<BulletBaseMK4, HitResult>). In XFactory44 standen genau
+    # diese drei Namen ohne Import; die Formen oben nennen keinen davon.
+    used |= set(re.findall(r'(?<![.\w])([A-Z]\w*)\s+\w+\s*[=;)]', body))
+    used |= set(re.findall(r'(?<=[<,])\s*([A-Z]\w*)\s*(?=[>,])', body))
 
     for name in sorted(used):
         if name in own or name in explicit: continue
@@ -354,6 +360,98 @@ for path, pkg, raw in files:
         if home in wildcards: continue
         problems.append('%s: %s ist nicht erreichbar -- weder importiert noch von einem '
                         'Wildcard gedeckt (liegt in %s)' % (path, name, home))
+
+# ---------------------------------------------------------------------------------------
+# Runde 180: VERSCHACHTELTE PROJEKTTYPEN. Die erste Pruefung oben kennt nur Dateinamen
+# ("types"); ein Typ, der als innere Klasse in einer fremden Datei steht, faellt dort unter
+# "kein Projekttyp -> nicht beurteilbar" und rutscht durch. Das kostete in Runde 179 einen
+# CI-Lauf: XFactory44 benutzte AmmoSecret, die innere Aufzaehlung von GunFactory, ohne sie
+# zu importieren. GunFactory liegt im selben Paket -- aber das hilft einem verschachtelten
+# Typ nicht, der braucht einen eigenen Import.
+#
+# ENTSCHEIDBAR IST DAS: ein Name, den das Projekt AUSSCHLIESSLICH als verschachtelten Typ
+# kennt, muss importiert, qualifiziert, geerbt oder von einem Wildcard auf die Huelle
+# gedeckt sein. Sonst gibt es ihn an dieser Stelle nicht.
+#
+# VIER FILTER halten die Fehlalarme heraus, und jeder einzelne war noetig:
+#   * Namen, die es auch als eigene Datei gibt, gehen an die erste Pruefung -- nicht hierher.
+#   * Namen mit mehreren moeglichen Huellen sind mehrdeutig (Type steht in acht Klassen).
+#   * Die Huelle kann GEERBT sein, auch ueber mehrere Stufen: wer IToolable implementiert,
+#     sieht ToolType ohne Import. Dafuer wird die Obertypkette durchlaufen.
+#   * Namen, die irgendwo im Projekt als Fremdimport stehen, koennen den Minecraft-Typ
+#     meinen (Item, Blocks) -- die bleiben aussen vor.
+#
+# NACHGEMESSEN (Runde 180): ueber den ganzen Baum null Funde. Nimmt man den Import aus
+# Runde 179 wieder heraus, meldet die Regel genau ihn -- und sonst nichts.
+# ---------------------------------------------------------------------------------------
+
+NESTED_IN = {}      # einfacher Name -> {(paket, huellende Datei)}
+DECLARES = {}       # Dateiname -> darin erklaerte Typnamen
+SUPER_OF = {}       # Typname -> direkte Obertypen
+
+for _path, _pkg, _raw in files:
+    if not (_pkg.startswith('com.hbm') or _pkg.startswith('api.hbm')): continue
+    _body = strip(_raw)
+    _file = os.path.basename(_path)[:-5]
+    for _m in re.finditer(r'\b(?:class|interface|enum|record|@interface)\s+(\w+)', _body):
+        if _m.group(1) == _file: continue
+        NESTED_IN.setdefault(_m.group(1), set()).add((_pkg, _file))
+        DECLARES.setdefault(_file, set()).add(_m.group(1))
+    for _m in re.finditer(r'\b(?:class|interface|enum|record)\s+(\w+)[^{;]*?\b(?:extends|implements)\s+([^{]+)\{', _body):
+        for _t in re.findall(r'(?<![.\w])([A-Z]\w*)', _m.group(2)):
+            SUPER_OF.setdefault(_m.group(1), set()).add(_t)
+
+
+def erbt_typ(eigene, gesucht):
+    """Erklaert einer der Obertypen einer der eigenen Klassen (transitiv) 'gesucht'?"""
+    gesehen, rand = set(), list(eigene)
+    while rand:
+        t = rand.pop()
+        if t in gesehen: continue
+        gesehen.add(t)
+        if gesucht in DECLARES.get(t, ()): return True
+        rand.extend(SUPER_OF.get(t, ()))
+    return False
+
+
+for path, pkg, raw in files:
+    if not (pkg.startswith('com.hbm') or pkg.startswith('api.hbm')): continue
+
+    body_all = strip(raw)
+
+    explicit = set()
+    wildcards = set()
+    for im in re.finditer(r'^\s*import\s+(?:static\s+)?([\w.]+?)(?:\.(\*))?\s*;', body_all, re.M):
+        full, star = im.group(1), im.group(2)
+        if star: wildcards.add(full)
+        else: explicit.add(full.rsplit('.', 1)[-1])
+
+    body = re.sub(r'^\s*import\s+[^;]+;', '', body_all, flags=re.M)
+    body = re.sub(r'\b(?:com|api|net|java|javax|org|io|it|mezz|foundry)\.[\w.]*', '', body)
+
+    own = {tm.group(1) for tm in re.finditer(r'\b(?:class|interface|enum|record|@interface)\s+(\w+)', body_all)}
+
+    used = set(re.findall(r'(?<![.\w])([A-Z]\w*)\s*\.', body))
+    used |= set(re.findall(r'\bnew\s+([A-Z]\w*)\s*[(<]', body))
+    used |= set(re.findall(r'\binstanceof\s+([A-Z]\w*)', body))
+    used |= set(re.findall(r'(?<![.\w])([A-Z]\w*)\s+\w+\s*[=;)]', body))
+    used |= set(re.findall(r'(?<=[<,])\s*([A-Z]\w*)\s*(?=[>,])', body))
+
+    for name in sorted(used):
+        if name in own or name in explicit: continue
+        if re.fullmatch(r'[A-Z0-9_]+', name): continue
+        if name in types: continue                  # eigene Datei -> erste Pruefung
+        if name in FOREIGN: continue                # koennte der gleichnamige Fremdtyp sein
+        if name not in NESTED_IN: continue
+        if len(NESTED_IN[name]) != 1: continue      # mehrdeutig
+
+        hpkg, hfile = next(iter(NESTED_IN[name]))
+        if hfile in own: continue                   # die Huelle ist diese Datei
+        if (hpkg + '.' + hfile) in wildcards: continue
+        if erbt_typ(own, name): continue            # ueber die Obertypkette sichtbar
+
+        problems.append('%s: %s ist nicht erreichbar -- verschachtelt in %s.%s und weder '
+                        'importiert noch geerbt' % (path, name, hpkg, hfile))
 
 print('Pruefe Projekt-Importe ... %d Dateien, %d bekannte Typen, %d Importziele' % (len(files), len(types), len(toplevel)))
 if problems:

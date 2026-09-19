@@ -7121,3 +7121,94 @@ Nach dieser Runde fehlt der roten Kiste nur noch `gun_autoshotgun_sexy` — und 
 Autoschrotflinte, die der Port ganz nicht hat.
 
 Alle 30 Tore grün.
+
+## Die Autoschrotflinte und die Duchess Gambit
+
+Die letzte fehlende Waffe der roten Kiste. `gun_autoshotgun_sexy` ist die legendäre der drei
+Autoschrotflinten, und ihre Signaturpatrone lässt ein Luftschiff vom Himmel fallen — dasselbe
+Spiel wie beim Li'l Mac, nur eine Nummer größer.
+
+### Das Schiff
+
+`DuchessGambit` fällt wie der Güterwagen: eigene Rechnung, gedeckelt auf anderthalb Blöcke je
+Tick. Beim Aufschlag ein Nebelhorn (10 000 Lautstärke, das ist die Zahl des Originals),
+tausend Punkte Schaden in einem langgezogenen Kasten — zehn Blöcke breit, achtzehn lang, es ist
+ein Schiff —, fünf Explosionen entlang der Längsachse von Heck zu Bug, fünf Druckwellen
+übereinander, und wo es liegen bleibt, steht danach ein Schiffsblock.
+
+Der Block ist im Original ein `DecoBlock` mit der Textur `hbm:asphalt`, die der Port schon hat.
+**Abweichung:** das Original zeichnet ihn als das OBJ-Modell des Schiffs; hier steht, wie schon
+beim Güterwagen, ein Würfel mit dieser Textur.
+
+**Abweichung, wie beim Güterwagen:** die fünfzig Balefire-Partikel beim Erscheinen fehlen, die
+Partikelart `bf` hat der Port nicht.
+
+**Berichtigt im Vorbeigehen:** der Güterwagen-Schaden trug im Port den Kommentar „absolut und
+rüstungsdurchdringend" — in den Schadensart-Marken stand er aber in keiner der drei Listen. Das
+Original setzt für beide, Güterwagen wie Schiff, `setDamageIsAbsolute()` und
+`setDamageBypassesArmor()`. Beide stehen jetzt in `BYPASSES_ARMOR`, `BYPASSES_EFFECTS` und
+`BYPASSES_RESISTANCE`.
+
+### Die Waffen
+
+Zwei der drei: `gun_autoshotgun` (A-Seite, zwanzig Schuss, vollautomatisch, feuert auch nach
+dem letzten Schuss weiter, bis der Abzug losgelassen wird) und `gun_autoshotgun_sexy`
+(legendär, hundert Schuss im Gurt, vier Ticks Schussfolge, erstes Magazin die Signaturpatrone).
+
+**Nicht übernommen: `gun_autoshotgun_shredder`.** Ihre Munition zerfällt beim Aufschlag in
+Strahlen, die weiterspringen — `makeShredderConfig` mit `setOnBeamImpact` und `setOnRicochet`.
+Diese Aufspaltung kennt das Geschossteilsystem des Ports noch nicht.
+
+Der Zeichner zeigt drei Teile: Gehäuse, Trommelmagazin und den Gurt darin. Über dem Lauf steht
+ein Schild, `[> <]`; die gewöhnliche Flinte zeigt es nur über Kimme und Korn und in Grün, die
+schöne immer und in Rot, und es flackert. Das Original zieht dafür eine eigene Lichtberechnung
+hoch und stellt sie danach zurück — im Port genügt `FullBright`.
+
+**Abweichung im Klang, die im Original ein Versehen sein dürfte:** `LAMBDA_BOAT` spielt den
+Hornstoß nicht dort, wo das Schiff erscheint, sondern noch einmal fünfzig Blöcke darüber. Hier
+steht er am Ort des Schiffs.
+
+### Der CI-Lauf, den der Güterwagen gekostet hat — und drei neue Prüfungen
+
+Der Commit davor fiel mit fünf Fehlern durch, alle in `XFactory44`: drei fehlende Importe
+(`HitResult`, `Vec3`, `Level`), ein fehlender Import auf `AmmoSecret`, und ein unerlaubter
+Vorwärtsverweis. **Kein einziges der dreißig Tore hat etwas davon gesehen.** Drei Lücken, alle
+entscheidbar, alle jetzt geschlossen:
+
+**1. Der Typ in der Deklaration und im Generikum.** `import-check` kennt seit Runde 99 eine
+Regel für Fremdtypen: wo eine Minecraft-Klasse wohnt, steht in den tausenden expliziten
+Importen, die der Port ohnehin hat. Sie sah aber nur `new X(…)`, `extends`, `implements`,
+`instanceof` und den statischen Empfänger — nicht `Vec3 stelle = …` und nicht
+`BiConsumer<…, HitResult>`. Beide Formen sind jetzt dabei.
+
+Dabei fiel ein zweiter Fehler auf, der schon länger dort stand: der Ausdruck für
+Generikum-Argumente verbrauchte das trennende Komma und fand deshalb in `<A, B>` nur `A`.
+Zwei Vorausschauen statt zweier Zeichenklassen — jetzt findet er beide.
+
+**2. Der verschachtelte Projekttyp.** Die erste Prüfung kennt nur Dateinamen. `AmmoSecret`
+steht als innere Aufzählung in `GunFactory.java` und fiel deshalb unter „kein Projekttyp →
+nicht beurteilbar". Dass `GunFactory` im selben Paket liegt, hilft einem verschachtelten Typ
+nicht — der braucht einen eigenen Import. Die neue Regel meldet jeden Namen, den das Projekt
+ausschließlich verschachtelt kennt und der weder importiert noch qualifiziert noch geerbt ist.
+
+Vier Filter waren nötig, und jeder einzelne hat sich in der Messung verdient: Namen, die es
+auch als eigene Datei gibt (die gehören an die erste Prüfung), Namen mit mehreren möglichen
+Hüllen (`Type` steht in acht Klassen), geerbte Hüllen über die ganze Obertypkette (wer
+`IToolable` implementiert, sieht `ToolType` ohne Import — das geht über mehrere Stufen), und
+Namen, die irgendwo als Fremdimport stehen (`Item`, `Blocks`). Ohne den dritten Filter meldete
+die Regel 112 Fehlalarme, mit ihm drei, mit dem vierten null.
+
+**3. Der Vorwärtsverweis** — `tools/forward-check.sh`, das einunddreißigste Tor. Ein statisches
+Feld darf im selben Klassenkörper nur auf bereits deklarierte verweisen; `LAMBDA_LILMAC_ANIMS`
+stand über `LAMBDA_NOPIP_ANIMS` und griff darauf zu. Ohne Klassenpfad ist das entscheidbar,
+denn beide Seiten stehen in derselben Datei. Gebraucht wird nur eine saubere Trennung von
+Feldinitialisierern und Methodenrümpfen: eine `}` auf Klassenebene, der ein `;` folgt, beendet
+einen Feldinitialisierer; eine ohne folgendes `;` beendet eine Methode, und was davor
+angesammelt wurde, ist kein Feld. Vor dieser Unterscheidung meldete der Prototyp 83
+Fehlalarme, danach null — über 6088 statische Felder mit Initialisierung.
+
+Jede der drei Regeln ist in beide Richtungen nachgemessen: über den sauberen Baum null Funde,
+und mit der alten Fassung von `XFactory44` melden sie genau die vier Fehler, die der Übersetzer
+gemeldet hat — und sonst nichts.
+
+Alle 31 Tore grün.

@@ -1326,6 +1326,8 @@ public class NtmItems {
     public static DeferredItem<Item> GUN_DEBUG;
     public static DeferredItem<Item> GUN_MARESLEG;
     public static DeferredItem<Item> GUN_SPAS12;
+    public static DeferredItem<Item> GUN_AUTOSHOTGUN;
+    public static DeferredItem<Item> GUN_AUTOSHOTGUN_SEXY;
     public static DeferredItem<Item> GUN_LIBERATOR;
     public static DeferredItem<Item> GUN_HEAVY_REVOLVER_LILMAC;
     public static DeferredItem<Item> GUN_HANGMAN;

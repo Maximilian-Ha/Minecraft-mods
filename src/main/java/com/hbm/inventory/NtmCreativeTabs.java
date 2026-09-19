@@ -1557,6 +1557,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.CRATE);
                         output.accept(NtmBlocks.CRATE_WEAPON);
                         output.accept(NtmBlocks.BOXCAR);
+                        output.accept(NtmBlocks.BOAT);
                         output.accept(NtmBlocks.MACHINE_SATLINKER);
                         output.accept(NtmBlocks.MACHINE_SAT_LINK);
                         output.accept(NtmBlocks.MACHINE_SAT_DOCK);
@@ -1809,6 +1810,8 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.GUN_MARESLEG);
                         output.accept(NtmItems.GUN_MARESLEG_AKIMBO);
                         output.accept(NtmItems.GUN_SPAS12);
+                        output.accept(NtmItems.GUN_AUTOSHOTGUN);
+                        output.accept(NtmItems.GUN_AUTOSHOTGUN_SEXY);
                         output.accept(NtmItems.GUN_LIGHT_REVOLVER_DANI);
                         output.accept(NtmItems.GUN_MARESLEG_BROKEN);
 

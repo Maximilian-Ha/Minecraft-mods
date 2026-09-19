@@ -37,6 +37,9 @@ public interface NtmDamageTypes {
     /** Der Gueterwagen aus der Luft. Im Original ModDamageSource.boxcar: absolut und
      *  ruestungsdurchdringend -- wer darunter steht, hat verloren. */
     ResourceKey<DamageType> BOXCAR = key("boxcar");
+    /** Das Luftschiff aus der Luft. Im Original ModDamageSource.boat: wie der Gueterwagen
+     *  absolut und ruestungsdurchdringend. */
+    ResourceKey<DamageType> BOAT = key("boat");
 
     ResourceKey<DamageType> PHYSICAL = key("physical");
     ResourceKey<DamageType> FIRE = key("fire");
@@ -69,6 +72,7 @@ public interface NtmDamageTypes {
         context.register(ELECTRICITY, new DamageType("electricity", 0.1F));
         context.register(BROADCAST, new DamageType("broadcast", 0.1F));
         context.register(BOXCAR, new DamageType("boxcar", 0.1F));
+        context.register(BOAT, new DamageType("boat", 0.1F));
         context.register(MUD_POISONING, new DamageType("mudPoisoning", 0.1F));
 
         context.register(PHYSICAL, new DamageType("sednaPhysical", 0.1F));

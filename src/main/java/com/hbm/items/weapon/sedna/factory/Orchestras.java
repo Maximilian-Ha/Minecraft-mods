@@ -1337,4 +1337,79 @@ public class Orchestras {
             }
         }
     };
+
+    /** Die Autoschrotflinte, Orchestras Z. 1064 des Originals. */
+    public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_SHREDDER = (stack, ctx) -> {
+        LivingEntity entity = ctx.entity;
+        Level level = entity.level;
+        if(!(level instanceof ServerLevel serverLevel)) return;
+        GunAnimation type = GunBaseNTItem.getLastAnim(stack, ctx.configIndex);
+        int timer = GunBaseNTItem.getAnimTimer(stack, ctx.configIndex);
+
+        if(type == GunAnimation.CYCLE) {
+            if(timer == 0) PacketDistributor.sendToPlayersNear(serverLevel, null, entity.getX(), entity.getY(), entity.getZ(), 100, new MuzzleFlashPacket(entity.getId()));
+            if(timer == 2) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_SHREDDER_CYCLE.get(), entity.getSoundSource(), 0.25F, 1.5F);
+        }
+        if(type == GunAnimation.CYCLE_DRY) {
+            if(timer == 0) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_DRY_FIRE.get(), entity.getSoundSource(), 1F, 1F);
+            if(timer == 2) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_SHREDDER_CYCLE.get(), entity.getSoundSource(), 0.25F, 1.5F);
+        }
+        if(type == GunAnimation.RELOAD) {
+            if(timer == 2) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_REMOVE.get(), entity.getSoundSource(), 1F, 1F);
+            if(timer == 32) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_INSERT.get(), entity.getSoundSource(), 1F, 1F);
+        }
+        if(type == GunAnimation.INSPECT) {
+            if(timer == 2) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_REMOVE.get(), entity.getSoundSource(), 1F, 1F);
+            if(timer == 28) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_INSERT.get(), entity.getSoundSource(), 1F, 1F);
+        }
+    };
+
+    /**
+     * Die schoene Autoschrotflinte, Orchestras Z. 1088 des Originals.
+     *
+     * WAS DIE SIGNATURPATRONE KOSTET: schiesst sie, wird der Zeitgeber auf zwanzig Ticks
+     * gesetzt. Das ist die Pause, die das Luftschiff braucht -- eine Sekunde Stillstand fuer
+     * eine Sekunde Schauspiel.
+     */
+    public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_SHREDDER_SEXY = (stack, ctx) -> {
+        LivingEntity entity = ctx.entity;
+        Level level = entity.level;
+        if(!(level instanceof ServerLevel serverLevel)) return;
+        GunAnimation type = GunBaseNTItem.getLastAnim(stack, ctx.configIndex);
+        int timer = GunBaseNTItem.getAnimTimer(stack, ctx.configIndex);
+        boolean aiming = GunBaseNTItem.getIsAiming(stack);
+
+        if(type == GunAnimation.CYCLE) {
+            if(timer == 0) {
+                PacketDistributor.sendToPlayersNear(serverLevel, null, entity.getX(), entity.getY(), entity.getZ(), 100, new MuzzleFlashPacket(entity.getId()));
+                if(ctx.config.getReceivers(stack)[0].getMagazine(stack).getType(stack, null) == XFactory12ga.g12_equestrian_bj) {
+                    GunBaseNTItem.setTimer(stack, 0, 20);
+                }
+            }
+
+            if(timer == 2) {
+                SpentCasing casing = ctx.config.getReceivers(stack)[0].getMagazine(stack).getCasing(stack, ctx.container);
+                if(casing != null) CasingCreator.composeEffect(level, entity, 0.375, aiming ? -0.0625 : -0.125, aiming ? -0.125 : -0.25D, 0, 0.18, -0.12, 0.01,
+                        -10F + (float) entity.random.nextGaussian() * 2.5F, (float) entity.random.nextGaussian() * -20F + 15F, casing.getName(), false, 60, 0.5D, 20);
+            }
+        }
+
+        if(type == GunAnimation.CYCLE_DRY) {
+            if(timer == 0) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_DRY_FIRE.get(), entity.getSoundSource(), 1F, 1F);
+        }
+        if(type == GunAnimation.RELOAD) {
+            if(timer == 0) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_COCK.get(), entity.getSoundSource(), 1F, 1F);
+            if(timer == 4) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_CLOSE.get(), entity.getSoundSource(), 1F, 0.75F);
+            if(timer == 16) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_SMALL_REMOVE.get(), entity.getSoundSource(), 1F, 1F);
+            if(timer == 30) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_REMOVE.get(), entity.getSoundSource(), 1F, 1F);
+            if(timer == 55) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_IMPACT.get(), entity.getSoundSource(), 0.5F, 1F);
+            if(timer == 65) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_INSERT.get(), entity.getSoundSource(), 1F, 1F);
+            if(timer == 74) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_SMALL_INSERT.get(), entity.getSoundSource(), 1F, 1F);
+            if(timer == 88) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_CLOSE.get(), entity.getSoundSource(), 1F, 0.75F);
+            if(timer == 100) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_COCK.get(), entity.getSoundSource(), 1F, 1F);
+
+            /* Der Gurt wird in der Mitte der Bewegung nachgelegt, nicht am Ende. */
+            if(timer == 55) ctx.config.getReceivers(stack)[0].getMagazine(stack).reloadAction(stack, ctx.container);
+        }
+    };
 }

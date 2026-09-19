@@ -588,6 +588,11 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.simpleCubeAllBlock(NtmBlocks.CRATE);
         this.simpleCubeAllBlock(NtmBlocks.CRATE_WEAPON);
         this.simpleCubeAllBlock(NtmBlocks.BOXCAR);
+        /* ABWEICHUNG: das Original zeichnet den Block als das OBJ-Modell des Luftschiffs.
+         * Hier steht, wie schon beim Gueterwagen, ein Wuerfel -- die Textur ist dieselbe
+         * "asphalt", die das Original dem Block gibt. */
+        this.simpleBlockWithItem(NtmBlocks.BOAT.get(),
+                this.models().cubeAll(this.name(NtmBlocks.BOAT), this.modLoc("block/asphalt")));
 
         this.particleOnlyBlock(NtmBlocks.GEIGER, blockTexture(NtmBlocks.GEIGER));
 
