@@ -1045,6 +1045,9 @@ public class NtmBlocks {
      * Werten. Haerte wie bei den drei anderen Funkfackeln des Ports -- das Original setzt fuer
      * alle vier 0.1F, der Port ist hier schon bei Sender und Empfaenger davon abgewichen. */
     public static final DeferredBlock<Block> RADIO_TORCH_READER = register("radio_torch_reader", () -> new RadioTorchReaderBlock(BlockBehaviour.Properties.of().noOcclusion().strength(1.0F, 10.0F).sound(ModSoundTypes.PIPE).mapColor(MapColor.METAL)));
+    /* Die Logikfackel: ein Empfaenger, dessen Redstone-Staerke aus sechzehn Bedingungen
+     * hervorgeht statt aus der Nachricht selbst. */
+    public static final DeferredBlock<Block> RADIO_TORCH_LOGIC = register("radio_torch_logic", () -> new RadioTorchLogicBlock(BlockBehaviour.Properties.of().noOcclusion().strength(1.0F, 10.0F).sound(ModSoundTypes.PIPE).mapColor(MapColor.METAL)));
 
     public static final DeferredBlock<Block> MACHINE_BATTERY_SOCKET = register("machine_battery_socket", () -> new MachineBatterySocketBlock(BlockBehaviour.Properties.of().noOcclusion().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL)));
     public static final DeferredBlock<Block> MACHINE_BATTERY_REDD = register("machine_battery_redd", () -> new MachineBatteryREDDBlock(BlockBehaviour.Properties.of().noOcclusion().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL)));

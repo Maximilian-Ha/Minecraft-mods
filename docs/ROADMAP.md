@@ -5722,3 +5722,42 @@ Gegenstandsnamen, aber nicht, ob ein frei geschriebener Schlüssel auch eine Zei
 Nicht übernommen: die sieben OpenComputers-Rückrufe, wie schon beim Zählventil.
 
 Stand danach: fehlende Blockentitäten 119, Bauwerkslücke unverändert 14.
+
+### Die Logikfackel — und ein Puffer, der nicht aufging
+
+`radio_torch_logic` ist die letzte Funkfackel des Originals mit eigener Blockentität. Sie hört
+auf einem Kanal, vergleicht die empfangene Nachricht der Reihe nach gegen **sechzehn
+Bedingungen** und gibt die Nummer der ersten zutreffenden als Redstone-Stärke aus. Jede Zeile
+ist eine Vergleichsart plus eine Konstante: die Arten 0 bis 5 rechnen (`<`, `<=`, `>=`, `>`,
+`==`, `!=`) und überspringen die Zeile, wenn sich Nachricht oder Konstante nicht als Zahl lesen
+lassen; 6 bis 9 vergleichen Zeichenketten (gleich, ungleich, enthält, enthält nicht). Die
+Reihenfolge lässt sich umdrehen — aufsteigend gewinnt die kleinste zutreffende Zeile,
+absteigend die größte.
+
+Anders als das Original leitet die Blockentität hier von `RadioTorchBaseBlockEntity` ab statt
+deren sechs Felder zu wiederholen. Sie benutzt alle davon außer `customMap`; neu sind nur
+`descending` und die sechzehn Vergleichsarten.
+
+Beim Erben fiel dann auf, warum das keine bloße Kosmetik war: **`serialize` und `deserialize`
+der Basisklasse passten nicht zusammen.**
+
+```java
+for(int i = 0; i < 16; i++) if(mapping[i] != null) buf.writeUtf(this.mapping[i]);  // Schreiben
+for(int i = 0; i < 16; i++) this.mapping[i] = buf.readUtf();                       // Lesen
+```
+
+`mapping` ist `new String[16]` und damit anfangs sechzehnmal `null`. Eine frisch gesetzte
+Fackel schrieb also **gar keine** Zeichenkette, während die Gegenseite sechzehn las und im
+Puffer ins Leere griff — bei jedem `networkPackNT`, also jeden Tick. Das `if` war offenbar dazu
+da, den `NullPointerException` von `writeUtf(null)` abzufangen; das Original hat das Problem
+nicht, weil sein `BufferUtil.writeString` `null` verträgt. Richtig ist, alle sechzehn zu
+schreiben und `null` als leere Zeichenkette zu behandeln.
+
+Das ist ein Fehler, den kein Tor auf dem Quelltext finden kann und den auch die
+Datengenerierung nicht sieht: er braucht einen Client, der einem Server zuhört. Gefunden hat
+ihn erst das Lesen der Klasse, in die man erbt.
+
+Nachgereicht wurde außerdem das Rezept der Logikfackel (CraftingManager Z. 216), womit jetzt
+alle fünf Funkfackeln herstellbar sind.
+
+Stand danach: fehlende Blockentitäten 118, Bauwerkslücke unverändert 14.

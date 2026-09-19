@@ -76,6 +76,7 @@ import com.hbm.blockentity.network.RadioTorchCounterBlockEntity;
 import com.hbm.blockentity.network.RadioTorchReceiverBlockEntity;
 import com.hbm.blockentity.network.RadioTorchSenderBlockEntity;
 import com.hbm.blockentity.network.RadioTorchReaderBlockEntity;
+import com.hbm.blockentity.network.RadioTorchLogicBlockEntity;
 import com.hbm.blockentity.network.SubstationBlockEntity;
 import com.hbm.blockentity.turret.TurretChekhovBlockEntity;
 import com.hbm.blockentity.turret.TurretFriendlyBlockEntity;
@@ -284,6 +285,7 @@ public class NtmBlockEntityTypes {
     public static final Supplier<BlockEntityType<RadioTorchCounterBlockEntity>> RADIO_TORCH_COUNTER = BLOCK_ENTITY_TYPES.register("radio_torch_counter", () -> BlockEntityType.Builder.of(RadioTorchCounterBlockEntity::new, NtmBlocks.RADIO_TORCH_COUNTER.get()).build(null));
     public static final Supplier<BlockEntityType<RadioTorchSenderBlockEntity>> RADIO_TORCH_SENDER = BLOCK_ENTITY_TYPES.register("radio_torch_sender", () -> BlockEntityType.Builder.of(RadioTorchSenderBlockEntity::new, NtmBlocks.RADIO_TORCH_SENDER.get()).build(null));
     public static final Supplier<BlockEntityType<RadioTorchReaderBlockEntity>> RADIO_TORCH_READER = BLOCK_ENTITY_TYPES.register("radio_torch_reader", () -> BlockEntityType.Builder.of(RadioTorchReaderBlockEntity::new, NtmBlocks.RADIO_TORCH_READER.get()).build(null));
+    public static final Supplier<BlockEntityType<RadioTorchLogicBlockEntity>> RADIO_TORCH_LOGIC = BLOCK_ENTITY_TYPES.register("radio_torch_logic", () -> BlockEntityType.Builder.of(RadioTorchLogicBlockEntity::new, NtmBlocks.RADIO_TORCH_LOGIC.get()).build(null));
 
     public static final Supplier<BlockEntityType<MachineOilWellBlockEntity>> MACHINE_OIL_WELL = BLOCK_ENTITY_TYPES.register("machine_oil_well", () -> BlockEntityType.Builder.of(MachineOilWellBlockEntity::new, NtmBlocks.MACHINE_WELL.get()).build(null));
     public static final Supplier<BlockEntityType<MachinePumpjackBlockEntity>> MACHINE_PUMPJACK = BLOCK_ENTITY_TYPES.register("machine_pumpjack", () -> BlockEntityType.Builder.of(MachinePumpjackBlockEntity::new, NtmBlocks.MACHINE_PUMPJACK.get()).build(null));

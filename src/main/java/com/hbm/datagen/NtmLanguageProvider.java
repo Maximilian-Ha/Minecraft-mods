@@ -2373,6 +2373,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.RADIO_TORCH_COUNTER, DESC, "Counts matching items in the inventory$behind it and broadcasts the number.");
         this.add(NtmBlocks.RADIO_TORCH_READER, "Redstone-over-Radio Reader");
         this.add(NtmBlocks.RADIO_TORCH_READER, DESC, "Reads values from connected blocks,$then sends them over the specified frequency");
+        this.add(NtmBlocks.RADIO_TORCH_LOGIC, "Redstone-over-Radio Logic Receiver");
+        this.add(NtmBlocks.RADIO_TORCH_LOGIC, DESC, "Placable on flat surfaces or comparator-compatible blocks$Maps redstone signals to conditions evaluated in a set order$Numerical or string inputs are compared against a constant");
         this.add(NtmBlocks.TESLA, "Tesla Coil");
         this.add(NtmBlocks.TESLA, DESC, "Zaps every living thing in range.$Wear a full set of metal armor$to stay out of the circuit.");
         this.add(NtmBlocks.SKELETON_HOLDER, "Oh, that's a dead guy");
@@ -3256,6 +3258,20 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("container.rttyCounter", "Redstone-over-Radio Item Counter");
         this.add("container.rttyReader", "Redstone-over-Radio Reader");
         this.add("rtty.readableValues", "Readable values:");
+        this.add("container.rttyLogic", "Redstone-over-Radio Logic Receiver");
+        this.add("rtty.ascending", "Ascending Order");
+        this.add("rtty.descending", "Descending Order");
+        /* Die zehn Vergleichsarten der Logikfackel, woertlich aus en_US.lang Z. 974 bis 983. */
+        this.add("desc.gui.rttyLogic.cond0", "Signal \u00A76LESS THAN\u00A7r Constant");
+        this.add("desc.gui.rttyLogic.cond1", "Signal \u00A76LESS THAN OR EQUAL TO\u00A7r Constant");
+        this.add("desc.gui.rttyLogic.cond2", "Signal \u00A76GREATER THAN OR EQUAL TO\u00A7r Constant");
+        this.add("desc.gui.rttyLogic.cond3", "Signal \u00A76GREATER THAN\u00A7r Constant");
+        this.add("desc.gui.rttyLogic.cond4", "Signal \u00A76EQUAL TO\u00A7r Constant");
+        this.add("desc.gui.rttyLogic.cond5", "Signal \u00A76NOT EQUAL TO\u00A7r Constant");
+        this.add("desc.gui.rttyLogic.cond6", "Signal \u00A76MATCHES\u00A7r String");
+        this.add("desc.gui.rttyLogic.cond7", "Signal \u00A76DOES NOT MATCH\u00A7r String");
+        this.add("desc.gui.rttyLogic.cond8", "Signal \u00A76CONTAINS\u00A7r String");
+        this.add("desc.gui.rttyLogic.cond9", "Signal \u00A76DOES NOT CONTAIN\u00A7r String");
         /*
          * Die vier Schluessel von RadioTorchScreen standen bisher nirgends -- Sender und
          * Empfaenger zeigten in Titel und Hinweis den rohen Schluessel. Gefunden beim Bau des

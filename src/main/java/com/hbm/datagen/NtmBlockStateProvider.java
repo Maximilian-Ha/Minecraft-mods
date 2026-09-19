@@ -378,6 +378,10 @@ public class NtmBlockStateProvider extends BlockStateProvider {
                 .cubeAll("radio_torch_reader", modLoc("block/rtty_reader")));
         this.blockItem(NtmBlocks.RADIO_TORCH_READER);
 
+        this.directionalBlock(NtmBlocks.RADIO_TORCH_LOGIC.get(), this.models()
+                .cubeAll("radio_torch_logic", modLoc("block/rtty_logic_off")));
+        this.blockItem(NtmBlocks.RADIO_TORCH_LOGIC);
+
         /*
          * Runde 103: die Weiche. Sie ist zwei Bloecke breit, und beide tragen verschiedene
          * Bilder -- der Kern die linke Spur, der Beiblock die rechte. Gewaehlt wird nach der

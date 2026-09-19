@@ -1956,9 +1956,9 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "radiorec"));
 
         /*
-         * Die vier Funkfackeln. Sie standen bisher nur im Kreativreiter -- der Fernschreiber
-         * und die RBMK-Pulte brauchen sie als Zutat, waren also nicht herstellbar. Muster aus
-         * CraftingManager Z. 214, 215, 217 und 218; alle vier geben vier Stueck.
+         * Die Funkfackeln. Sie standen bisher nur im Kreativreiter -- der Fernschreiber und die
+         * RBMK-Pulte brauchen sie als Zutat, waren also nicht herstellbar. Muster aus
+         * CraftingManager Z. 214 bis 218; alle geben vier Stueck.
          *
          * NETHERQUARTZ.gem() ist der Netherquarz, IRON.ingot() der Eisenbarren,
          * EnumCircuitType.VACUUM_TUBE die Roehrenschaltung des Ports.
@@ -1986,6 +1986,15 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .define('I', NtmItems.CIRCUIT_VACUUM_TUBE.get())
                 .unlockedBy("has_circuit_vacuum_tube", has(NtmItems.CIRCUIT_VACUUM_TUBE.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "radio_torch_counter"));
+
+        // Original CraftingManager Z. 216: "G" / "R" / "I". EnumCircuitType.CHIP ist der Mikrochip.
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, NtmBlocks.RADIO_TORCH_LOGIC.get(), 4)
+                .pattern("G").pattern("R").pattern("I")
+                .define('G', Items.GLOWSTONE_DUST)
+                .define('R', Items.REDSTONE_TORCH)
+                .define('I', NtmItems.CIRCUIT_MICROCHIP.get())
+                .unlockedBy("has_circuit_microchip", has(NtmItems.CIRCUIT_MICROCHIP.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "radio_torch_logic"));
 
         // Original CraftingManager Z. 218: " G " / "IRI".
         ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, NtmBlocks.RADIO_TORCH_READER.get(), 4)

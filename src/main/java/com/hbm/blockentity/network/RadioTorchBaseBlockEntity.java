@@ -69,13 +69,20 @@ public class RadioTorchBaseBlockEntity extends LoadedBaseBlockEntity implements 
         for(int i = 0; i < 16; i++) if(mapping[i] != null) tag.putString("m" + i, mapping[i]);
     }
 
+    /*
+     * Die sechzehn Zeilen gehen IMMER ueber die Leitung, auch die leeren. Vorher stand hier
+     * "if(mapping[i] != null)", und damit passten Schreiben und Lesen nicht zusammen: eine
+     * frisch gesetzte Fackel hat sechzehn null-Eintraege, schrieb also gar keine Zeichenkette,
+     * waehrend die Gegenseite sechzehn las und im Puffer ins Leere griff. Das Original schreibt
+     * ebenfalls alle sechzehn -- sein BufferUtil.writeString vertraegt null, writeUtf nicht.
+     */
     @Override
     public void serialize(RegistryFriendlyByteBuf buf) {
 
         buf.writeBoolean(this.polling);
         buf.writeBoolean(this.customMap);
         buf.writeUtf(this.channel);
-        for(int i = 0; i < 16; i++) if(mapping[i] != null) buf.writeUtf(this.mapping[i]);
+        for(int i = 0; i < 16; i++) buf.writeUtf(this.mapping[i] == null ? "" : this.mapping[i]);
     }
 
     @Override
