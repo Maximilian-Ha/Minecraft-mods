@@ -62,6 +62,7 @@ public class GunFactoryClient {
         registerGunItemRenderer(event, new ItemRenderAberrator(), NtmItems.GUN_ABERRATOR_EOTT.get());
         registerGunItemRenderer(event, new ItemRenderFlaregun(), NtmItems.GUN_FLAREGUN.get());
         registerGunItemRenderer(event, new ItemRenderCongoLake(), NtmItems.GUN_CONGOLAKE.get());
+        registerGunItemRenderer(event, new ItemRenderPanzerschreck(), NtmItems.GUN_PANZERSCHRECK.get());
         registerGunItemRenderer(event, new ItemRenderMK108(), NtmItems.GUN_MK108.get());
 
         //PROJECTILES
@@ -99,6 +100,7 @@ public class GunFactoryClient {
         ((GunBaseNTItem) NtmItems.GUN_HANGMAN.get())					.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_HEAVY_REVOLVER.get())			.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_LIBERATOR.get())				.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
+        ((GunBaseNTItem) NtmItems.GUN_PANZERSCHRECK.get())			.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_GREASEGUN.get())				.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
     }
 

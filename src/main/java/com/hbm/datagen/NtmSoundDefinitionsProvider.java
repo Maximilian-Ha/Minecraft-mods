@@ -176,6 +176,9 @@ public class NtmSoundDefinitionsProvider extends SoundDefinitionsProvider {
         this.add(NtmSoundEvents.GUN_MK108_FIRE, SoundDefinition.definition()
                 .with(sound(NuclearTechMod.withDefaultNamespace("weapon/fire/mk108")))
         );
+        this.add(NtmSoundEvents.GUN_ROCKET_FIRE, SoundDefinition.definition()
+                .with(sound(NuclearTechMod.withDefaultNamespace("weapon/rpg_shoot")))
+        );
         this.add(NtmSoundEvents.GUN_SWITCHMODE_1, SoundDefinition.definition()
                 .with(sound(NuclearTechMod.withDefaultNamespace("weapon/switchmode1")))
         );

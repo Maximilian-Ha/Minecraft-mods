@@ -6475,3 +6475,85 @@ Dateinamen klein mit Unterstrich, die Datei heißt hier also `shotgun_alt.ogg`.
 
 Bleibt für `crate_weapon` nur noch `gun_panzerschreck` — und der braucht die ganze
 Raketenfabrik `XFactoryRocket`, die der Port nicht hat.
+
+## Der Panzerschreck und die Raketenfabrik
+
+Dritte und letzte der Waffen, die `crate_weapon` fehlten (Aufgabe #102). Sie ist die teuerste
+der drei, weil sie nicht nur eine Waffe ist, sondern ein ganzes Kaliber: `XFactoryRocket` —
+fünf Raketen mit eigenem Antrieb.
+
+### Eine Rakete ist kein Geschoss
+
+Alle anderen Kaliber des Ports verschießen etwas, das beim Abschuss seine volle Geschwindigkeit
+hat und danach nur noch fällt. Eine Rakete macht das Gegenteil: sie verlässt das Rohr mit
+Geschwindigkeit null (`setVel(0F)`), schiebt sich im Flug auf Fahrt (vierzig Tausendstel je
+Tick, bis das Siebenfache erreicht ist) und fällt gar nicht (`setGrav(0D)`). Sie zerplatzt auch
+nicht an Wesen (`setOnEntityHit(null)`), sondern nur beim Aufschlag.
+
+Das Feld dafür — `accel` in `BulletBaseMK4`, in `getMotionMult()` zur Konfigurations-
+geschwindigkeit addiert — stand im Port schon; es hatte bisher nur niemanden, der es benutzt.
+
+### Fünf Gefechtsköpfe, fast wie beim 40-mm-Kaliber
+
+Sprengkopf, Hohlladung, Abbruchkopf, Brand- und Phosphorkopf: dieselben fünf Wirkungen wie bei
+den 40-mm-Granaten, nur größer. Verlockend wäre gewesen, `XFactory40mm.spawnFire` einfach
+mitzubenutzen — der Code sieht Zeile für Zeile gleich aus.
+
+Er ist es nicht. Nachgemessen im Original: die Rakete stellt ein Feuer von sechs Blöcken Breite
+hin (die Granate fünf) und zündet in einem Würfel von fünf Blöcken Kantenlänge alles Brennbare
+an (die Granate in dreien). Das sind hundertfünfundzwanzig statt siebenundzwanzig geprüfte
+Positionen. `XFactoryRocket` bekommt deshalb ein eigenes `spawnFire` mit einem Vermerk, warum
+es kein Aufruf des anderen ist.
+
+### Der Selbstschutz, den der Port nicht hat
+
+Das Original schützt den Schützen doppelt. Erstens steht in jedem Aufschlaglambda
+`if(typeOfHit == ENTITY && ticksExisted < 3) return;` — in den ersten drei Ticks zählt
+überhaupt kein Wesen. Zweitens setzt die Raketenvorlage `setSelfDamageDelay(10)`: zehn Ticks
+lang geht die Rakete durch ihren eigenen Schützen hindurch, ohne ihn zu berühren.
+
+Die zweite Regel sitzt im Original tief im Geschoss (`EntityThrowableNT` prüft sie bei der
+Kollisionssuche). Der Port hat dort keine Vorlaufzeit; `BulletBaseMK4.canHitEntity` fragt nur,
+ob die Konfiguration Wesen trifft. Deshalb steht die Regel hier als Wachposten `zuFrueh(...)`
+vor jedem Aufschlag, zusammen mit der ersten — beide zusammen ergeben genau das Verhalten des
+Originals, nur an einer anderen Stelle im Code.
+
+### Nicht übernommen: Stinger, Quadro, Raketenwerfer
+
+`XFactoryRocket` stellt im Original vier Waffen her. Drei bleiben draußen:
+
+* **Stinger** — braucht `ItemGunStinger` samt Zielerfassung (`getLockonTarget`) und
+  `setupLockonFire`. Letzteres ist im Port bereits auskommentiert vorhanden, die Zielerfassung
+  fehlt ganz.
+* **Quadro** und **Raketenwerfer** — brauchen lenkbare Raketen (`rocket_qd`, `rocket_ml`).
+  Lenkbar heißt: die Rakete fragt jeden Tick, wohin ihr Schütze gerade zielt, und dreht ihren
+  Bewegungsvektor dorthin. Eine lenkbare Rakete ohne Lenkung wäre eine gewöhnliche — deshalb
+  lieber gar keine.
+
+Die Vorlage `rocket_template` und die Kopie `rocket_rpzb` bleiben trotzdem getrennt, obwohl
+`makeRPZB` im Original nichts weiter als `clone()` ist: eine `BulletConfig` trägt eine eigene
+Kennung, und zwei Werfer dürfen sich keine teilen.
+
+### Kleinigkeiten
+
+**Der Rückstoß.** Das Original hängt ein leeres `LAMBDA_RECOIL_ROCKET` an, damit der
+Standardrückstoß ausfällt. Der Port lässt den Haken schlicht leer — das Feld ist ohnehin leer
+vorbelegt, und `HbmAnimation` fragt vor dem Aufruf nach. Eine leere Lambda wäre toter Code mit
+zusätzlichem Namen.
+
+**Der Vertipper.** Das Original nennt die Klangfolge `ORCHESTRA_PANERSCHRECK` — ohne Z. Anders
+als beim `RELAOD_TILT` der 44er ist das kein Datenname, der irgendwo als Zeichenkette
+nachgeschlagen wird, sondern ein reiner Feldname. Er steht hier deshalb richtig.
+
+**Das Schutzschild.** Im Original lässt es sich per Aufsatz abnehmen (`ID_NO_SHIELD`). Den
+Aufsatz gibt es im Port nicht — die Abfrage hätte nur einen Zweig, der nie genommen wird. Das
+Schild steht deshalb fest, mit Vermerk im Zeichner.
+
+**Der Klang.** `GUN_ROCKET_FIRE` zeigt im Original auf `weapon/rpgShoot`; der Port schreibt
+Dateinamen klein mit Unterstrich, hier also `rpg_shoot.ogg`. Modell, Textur und Klang sind
+Byte für Byte die Dateien des Originals.
+
+Damit ist `crate_weapon` frei: alle drei fehlenden Waffen stehen. Die Kiste selbst kommt mit
+Aufgabe #80, sobald auch die übrigen fünf ihre Gegenstände haben.
+
+Alle 29 Tore grün.

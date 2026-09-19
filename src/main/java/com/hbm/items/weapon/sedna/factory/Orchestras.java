@@ -253,6 +253,29 @@ public class Orchestras {
     };
 
     /**
+     * Der Panzerschreck. Beim Schuss das Muendungsfeuer, beim Nachladen ein einziger Ton -- das
+     * Einschieben der Rakete, dreissig Ticks nach Beginn, kurz bevor das Rohr wieder herumkommt.
+     *
+     * Das Original schreibt den Namen ORCHESTRA_PANERSCHRECK; das fehlende Z ist ein Vertipper
+     * und steht hier richtig, weil der Name nirgends als Zeichenkette auftaucht.
+     */
+    public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_PANZERSCHRECK = (stack, ctx) -> {
+        LivingEntity entity = ctx.entity;
+        Level level = entity.level;
+        if(!(level instanceof ServerLevel serverLevel)) return;
+        GunAnimation type = GunBaseNTItem.getLastAnim(stack, ctx.configIndex);
+        int timer = GunBaseNTItem.getAnimTimer(stack, ctx.configIndex);
+
+        if(type == GunAnimation.CYCLE) {
+            if(timer == 0) PacketDistributor.sendToPlayersNear(serverLevel, null, entity.getX(), entity.getY(), entity.getZ(), 100, new MuzzleFlashPacket(entity.getId()));
+        }
+
+        if(type == GunAnimation.RELOAD) {
+            if(timer == 30) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_CANISTER_INSERT.get(), entity.getSoundSource());
+        }
+    };
+
+    /**
      * Die Liberator. Beim Nachladen fliegen so viele Huelsen heraus, wie seit dem letzten
      * Nachladen verschossen wurden -- daher die Rechnung getAmountAfterReload minus getAmount.
      * Beim Nachsehen (INSPECT) tut sie dasselbe und setzt den Zaehler danach auf null, damit die
