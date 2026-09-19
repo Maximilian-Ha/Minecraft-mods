@@ -469,6 +469,8 @@ public class NtmBlockTagProvider extends BlockTagsProvider {
                         NtmBlocks.STEEL_GRATE_WIDE.get(),
                         NtmBlocks.STEEL_WALL.get(),
                         NtmBlocks.STEEL_CORNER.get(),
+                        NtmBlocks.BLOCK_STARMETAL.get(),
+                        NtmBlocks.BLOCK_ELECTRICAL_SCRAP.get(),
                         NtmBlocks.STONE_GNEISS.get(),
                         NtmBlocks.CABLE_SWITCH.get(),
                         NtmBlocks.RED_CONNECTOR.get(),
@@ -683,7 +685,8 @@ public class NtmBlockTagProvider extends BlockTagsProvider {
                         NtmBlocks.FROZEN_GRASS.get(),
                         NtmBlocks.FALLOUT.get(),
                         NtmBlocks.MOON_TURF.get(),
-                        NtmBlocks.SAND_QUARTZ.get()
+                        NtmBlocks.SAND_QUARTZ.get(),
+                        NtmBlocks.NTM_DIRT.get()
 
                 );
 
@@ -692,6 +695,10 @@ public class NtmBlockTagProvider extends BlockTagsProvider {
                         NtmBlocks.WASTE_LEAVES.get(),
                         NtmBlocks.LEAVES_LAYER.get()
                 );
+
+        /* Im Original ist der Sternmetallblock ein BlockBeaconable -- in 1.21 macht das
+         * der Tag. */
+        this.tag(BlockTags.BEACON_BASE_BLOCKS).add(NtmBlocks.BLOCK_STARMETAL.get());
 
         // vanilla compat
         this.tag(BlockTags.STRIDER_WARM_BLOCKS).add(NtmBlocks.VOLCANIC_LAVA.get());

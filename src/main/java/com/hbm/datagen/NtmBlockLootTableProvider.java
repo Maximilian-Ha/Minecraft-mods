@@ -431,6 +431,10 @@ public class NtmBlockLootTableProvider extends BlockLootSubProvider {
         this.dropSelf(NtmBlocks.STEEL_GRATE_WIDE.get());
         this.dropSelf(NtmBlocks.STEEL_WALL.get());
         this.dropSelf(NtmBlocks.STEEL_CORNER.get());
+        this.dropSelf(NtmBlocks.BLOCK_STARMETAL.get());
+        this.dropSelf(NtmBlocks.BLOCK_ELECTRICAL_SCRAP.get());
+        /* Wie im Original faellt gewoehnliche Erde ab, nicht der Block selbst. */
+        this.dropOther(NtmBlocks.NTM_DIRT.get(), Blocks.DIRT);
         this.dropSelf(NtmBlocks.WOOD_BARRIER.get());
         this.dropSelf(NtmBlocks.WOOD_STRUCTURE_ROOF.get());
         this.dropSelf(NtmBlocks.WOOD_STRUCTURE_SCAFFOLD.get());

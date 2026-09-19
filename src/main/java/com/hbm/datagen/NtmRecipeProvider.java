@@ -3483,6 +3483,21 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_cobalt_powder", has(NtmItems.POWDER_COBALT.get()))
                 .save(recipeOutput);
 
+        /* ---- Stufe 5: der Sternmetallblock ---- */
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, NtmBlocks.BLOCK_STARMETAL.get(), 1)
+                .pattern("###")
+                .pattern("###")
+                .pattern("###")
+                .define('#', NtmItems.INGOT_STARMETAL.get())
+                .unlockedBy("has_starmetal", has(NtmItems.INGOT_STARMETAL.get()))
+                .save(recipeOutput);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, NtmItems.INGOT_STARMETAL.get(), 9)
+                .requires(NtmBlocks.BLOCK_STARMETAL.get())
+                .unlockedBy("has_starmetal_block", has(NtmBlocks.BLOCK_STARMETAL.get()))
+                .save(recipeOutput, "ingot_starmetal_from_block");
+
         /* ---- Runde 170: die Hammerkette und das Buch ---- */
 
         /* Der Holzhammer. Das Original nimmt KEY_SLAB, KEY_LOG und KEY_STICK -- also jede

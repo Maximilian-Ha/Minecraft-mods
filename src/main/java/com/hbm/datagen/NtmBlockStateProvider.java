@@ -619,6 +619,11 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.particleOnlyBlock(NtmBlocks.MACHINE_DIFURNACE_EXTENSION, modLoc("block/difurnace_extension"));
         this.simpleCubeAllBlock(NtmBlocks.RED_WIRE_COATED);
         this.simpleCubeAllBlock(NtmBlocks.STEEL_BEAM);
+        this.simpleCubeAllBlock(NtmBlocks.BLOCK_STARMETAL);
+        /* ntm_dirt traegt im Original die Textur der gewoehnlichen Erde. */
+        this.simpleBlockWithItem(NtmBlocks.NTM_DIRT.get(), this.models().cubeAll("ntm_dirt", this.mcLoc("block/dirt")));
+        /* Das Original nimmt fuer den Elektroschrott die Textur electrical_scrap. */
+        this.simpleBlockWithItem(NtmBlocks.BLOCK_ELECTRICAL_SCRAP.get(), this.models().cubeAll("block_electrical_scrap", this.modLoc("block/electrical_scrap")));
         this.simpleCubeAllBlock(NtmBlocks.STONE_GNEISS);
         this.registerSteelGrate(NtmBlocks.STEEL_GRATE.get(), "grate_top");
         this.registerWoodStructures();

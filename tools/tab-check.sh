@@ -63,6 +63,7 @@ for zeile in tabs_src.split('\n'):
 # Absichtlich in keinem Reiter. Der Klammerzusatz ist der Stand des Originals.
 # ---------------------------------------------------------------------------------------
 VERBORGENE_BLOECKE = {
+    'NTM_DIRT':                     'Erde der Bauwerke; sieht aus wie gewoehnliche Erde, heisst so und faellt als solche ab (Original: setCreativeTab(null))',
     'MACHINE_BATTERY':              'veraltet, im Namen als LEGACY gefuehrt (Original: setCreativeTab(null))',
     'MACHINE_BATTERY_POTATO':       'veraltet, im Namen als LEGACY gefuehrt (Original: null)',
     'MACHINE_LITHIUM_BATTERY':      'veraltet, im Namen als LEGACY gefuehrt (Original: null)',

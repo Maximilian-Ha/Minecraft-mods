@@ -105,9 +105,15 @@ Beim Portieren bewusst weggelassen, weil die Grundlage im Port fehlt:
       Einlagerungsversuch durch einen Trichter.
 - [x] Fehlendes Culling in der NEO-Basis behoben (Zentrifuge, Holzbrenner, beide Kessel,
       alle vier Heizer).
-- [x] `steel_beam` und `stone_gneiss` nachgereicht — beide sind im Original schlichte Blöcke.
+- [x] `steel_beam` und `stone_gneiss` nachgereicht.
       Damit hat der Heliostatspiegel wieder sein Originalrezept (ihm fehlte bis jetzt eines),
       und die Steinmühle mahlt wieder Gneis (`rock.schist`).
+      **Berichtigung (Stufe 5):** der Satz „beide sind im Original schlichte Blöcke" stimmte
+      für `steel_beam` nicht. Es ist dort ein `DecoBlock` mit eigenem Darsteller
+      (`RenderSteelBeam` zeichnet `ResourceManager.beam`, ein OBJ-Modell) und der Kollisionsform
+      (7\|0\|7)-(9\|16\|9) — eine dünne Säule, kein Würfel. Im Port ist er beides nicht.
+      Kollision und Aussehen werden zusammen richtiggestellt, sobald der OBJ-Modelllader steht;
+      einzeln geändert sähe man einen Würfel und liefe hindurch.
 - [x] `KEY_BLACK` beim Solarkessel: das Original meint den OreDict-Sammelbegriff `dyeBlack`,
       der Port nahm nur `Items.BLACK_DYE`. Jetzt über den Tag `c:dyes/black`.
 - [x] Ruß (Fulleren) nachgetragen — Runde 10. Die Notiz „hängt an einer Chemiekette" war
@@ -4586,3 +4592,36 @@ eine glatte Platte mit Rand. Das ist keine Überarbeitung derselben Vorlage, son
 Bild; ohne Beleg, dass es denselben Block meint, bleibt die Fassung des Originals stehen.
 
 Die Lücke steht bei **51**.
+
+### Sternmetallblock, Elektroschrott und die Erde der Bauwerke
+
+Drei weitere Blöcke, alle ohne Sondermodell:
+
+- **`block_starmetal`** ist im Original ein `BlockBeaconable` — er trägt ein Leuchtfeuer. In
+  1.21 gibt es diese Klasse nicht mehr; das macht der Tag `minecraft:beacon_base_blocks`. Dazu
+  die beiden Rezepte des Originals (neun Barren zum Block und zurück).
+- **`block_electrical_scrap`** ist ein fallender Block; `SimpleFallingBlock` stand schon.
+- **`ntm_dirt`** ist ein Kuriosum: Erde, die aussieht wie gewöhnliche Erde, so heißt und auch
+  als solche abfällt. Das Original legt sie an, damit die Bauwerke eine eigene Erde setzen
+  können, ohne dass der Spieler etwas davon merkt. Sie steht wie dort in keinem Kreativreiter
+  und ist im Tor mit Begründung eingetragen.
+
+Die Lücke steht bei **48**.
+
+### Ein Fund nebenbei: `steel_beam` stimmt nicht
+
+Beim Durchsehen der Bauteile ist aufgefallen, dass die Roadmap-Zeile aus Runde 9 —
+„`steel_beam` und `stone_gneiss` nachgereicht, beide sind im Original schlichte Blöcke" — für
+`steel_beam` falsch ist. Im Original ist er ein `DecoBlock` mit eigenem Darsteller:
+`RenderSteelBeam` zeichnet `ResourceManager.beam`, ein OBJ-Modell, und die Kollisionsform ist
+(7\|0\|7)-(9\|16\|9), eine dünne Säule. Im Port ist er ein Vollwürfel.
+
+Die Zeile ist berichtigt, der Block noch nicht: **Kollision und Aussehen müssen zusammen
+geändert werden.** Nur die Kollision zu verschmälern wäre schlimmer als der jetzige Zustand —
+man sähe einen Würfel und liefe hindurch.
+
+Dafür fehlt der Weg, OBJ-Modelle als Blockmodelle zu laden (`neoforge:obj`), den der Port
+bisher nirgends benutzt. Er wird in einer eigenen Runde eingeführt und bringt dann drei Dinge
+auf einmal: die Berichtigung von `steel_beam`, dazu `steel_poles` und `steel_roof`. Für
+`steel_poles` ist das der einzige Weg — sein Modell hat 84 Dreiecke, davon 40 schräge; als
+Quader im JSON-Format ist es nicht nachbaubar, das wäre Raten.

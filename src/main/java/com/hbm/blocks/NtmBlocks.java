@@ -199,6 +199,16 @@ public class NtmBlocks {
     public static final DeferredBlock<Block> BLOCK_COMBINE_STEEL = register("block_combine_steel", () -> new Block(BlockBehaviour.Properties.of().strength(1.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL)));
     public static final DeferredBlock<Block> BLOCK_COPPER = register("block_copper", () -> new Block(BlockBehaviour.Properties.of().strength(1.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL)));
     public static final DeferredBlock<Block> BLOCK_DESH = register("block_desh", () -> new Block(BlockBehaviour.Properties.of().strength(1.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL)));
+    /* Stufe 5: Sternmetall traegt im Original ein Leuchtfeuer (BlockBeaconable) -- im Port
+     * macht das der Tag minecraft:beacon_base_blocks. Werte aus ModBlocks.java:1392. */
+    public static final DeferredBlock<Block> BLOCK_STARMETAL = register("block_starmetal", () -> new Block(BlockBehaviour.Properties.of().strength(5.0F, 400.0F).sound(SoundType.METAL).mapColor(MapColor.METAL)));
+    /* Stufe 5: die Erde der Bauwerke. Sie sieht aus wie gewoehnliche Erde, heisst so und
+     * faellt auch als solche ab -- im Original ein BlockNTMDirt, damit die Bauwerke eine
+     * eigene Erde setzen koennen, ohne dass der Spieler etwas davon merkt. */
+    public static final DeferredBlock<Block> NTM_DIRT = register("ntm_dirt", () -> new Block(BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.GRAVEL).mapColor(MapColor.DIRT)));
+
+    /* Stufe 5: Elektroschrott faellt, wenn ihm der Halt fehlt. Werte aus ModBlocks.java:1377. */
+    public static final DeferredBlock<Block> BLOCK_ELECTRICAL_SCRAP = register("block_electrical_scrap", () -> new SimpleFallingBlock(BlockBehaviour.Properties.of().strength(2.5F, 5.0F).sound(SoundType.METAL).mapColor(MapColor.METAL)));
     public static final DeferredBlock<Block> BLOCK_DINEUTRONIUM = register("block_dineutronium", () -> new Block(BlockBehaviour.Properties.of().strength(1.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL)));
     public static final DeferredBlock<Block> BLOCK_DURA_STEEL = register("block_dura_steel", () -> new Block(BlockBehaviour.Properties.of().strength(1.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL)));
     public static final DeferredBlock<Block> BLOCK_EUPHEMIUM = register("block_euphemium", () -> new Block(BlockBehaviour.Properties.of().strength(1.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL)));
