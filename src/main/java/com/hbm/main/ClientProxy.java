@@ -196,6 +196,7 @@ public class ClientProxy extends ServerProxy {
         //deco
         BlockEntityRenderers.register(NtmBlockEntityTypes.BOBBLEHEAD.get(), new RenderBobble());
         BlockEntityRenderers.register(NtmBlockEntityTypes.PLUSHIE.get(), new RenderPlushie());
+        BlockEntityRenderers.register(NtmBlockEntityTypes.LOOT_DECO.get(), new RenderLootDeco());
         //bombs
         BlockEntityRenderers.register(NtmBlockEntityTypes.NUKE_GADGET.get(), new RenderNukeGadget());
         BlockEntityRenderers.register(NtmBlockEntityTypes.NUKE_LITTLE_BOY.get(), new RenderNukeLittleBoy());

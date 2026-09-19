@@ -78,6 +78,7 @@ VERBORGENE_BLOECKE = {
     'ZIRNOX_DESTROYED':             'Ruine nach der Kernschmelze, entsteht nur dort (Original: null)',
     'SKELETON_HOLDER':              'Sockel aus den Weltbauwerken, wird nur von der Generierung gesetzt (Original: setCreativeTab(null))',
     'CRATE_RED':                    'die rote Kiste steht nur in Weltbauwerken (Original: setCreativeTab(null))',
+    'DECO_LOOT':                    'Beutesockel der Weltbauwerke; er gibt sich selbst nicht her und ist nur Traeger fuer die Stapel darauf (Original: setCreativeTab(null))',
 }
 
 VERBORGENE_ITEMS = {

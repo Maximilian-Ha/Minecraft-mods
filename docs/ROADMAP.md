@@ -7304,3 +7304,51 @@ Damit ist die Kistenfamilie vollständig: `crate`, `crate_weapon`, `crate_lead`,
 `crate_ammo`, `crate_can`, `crate_red` und `crate_supply`.
 
 Alle 31 Tore grün.
+
+## Der Beutesockel
+
+Ein Blech von einem Sechzehntel Blockhöhe, das selbst nichts zeigt. Was man sieht, sind die
+Gegenstände, die auf ihm liegen — jeder mit seinem eigenen Versatz innerhalb des Blocks. Die
+Weltgenerierung streut damit Gerümpel in ihre Bauwerke: ein Gewehr auf einem Tisch, Patronen
+daneben, eine Dose auf dem Boden.
+
+Er gibt sich selbst nicht her: was beim Zerschlagen herausfällt, sind die Stapel; den Sockel
+bekommt man nicht. Deshalb `noLootTable()` und kein Kreativreiter — im Original
+`getItemDropped` auf `null` und `setCreativeTab(null)`.
+
+**Rechtsklick ohne Schleichen räumt ihn weg.** Weil das Wegräumen durch dieselbe Stelle läuft
+wie das Zerschlagen, fallen die Stapel dabei ebenso heraus; im Original geht der Rechtsklick
+über `setBlockToAir`, und das ruft `breakBlock`. Wer schleicht, geht durch — dann greift, was
+unter dem Sockel steht.
+
+Der Zeichner legt den Normalfall als Gegenstandsbild hin, um neunzig Grad gekippt und halbiert;
+das Original zeichnet dafür noch ein rohes Zweiecksbild. Zwei Ausnahmen hat es, und beide hat
+der Port: eine Minikernwaffe (die fünf Patronen von `NUKE_STANDARD` bis `NUKE_HIVE`) und die
+Mare's Leg liegen als körperliche Modelle da. **Zwei weitere sind nicht übernommen** — die
+Trenchmaster- und die NCR-Rüstung zeichnet das Original als getragene Rüstungsteile; beide
+Rüstungen hat der Port nicht, und sobald sie nachkommen, liegen sie hier zunächst als
+gewöhnliches Gegenstandsbild.
+
+### Drei Tore haben zugegriffen
+
+Der Sockel ist klein, und trotzdem haben drei der einunddreißig Tore etwas gefunden, bevor er
+überhaupt nach CI ging:
+
+* **`api-check`**: `@Override` auf `getRenderBoundingBox`. Die Methode stammt aus der
+  NeoForge-Erweiterung von `BlockEntity`, nicht aus der Minecraft-Klasse, und gilt dem
+  Übersetzer nicht als überschrieben.
+* **`loot-check`**: keine Beutetabelle. Richtig war nicht, eine anzulegen, sondern
+  `noLootTable()` an den Block zu schreiben — er gibt sich selbst ja nicht her.
+* **`tab-check`**: in keinem Kreativreiter. Das ist hier korrekt und gehört mit Begründung in
+  die Ausnahmeliste, nicht in einen Reiter.
+
+### Stand der kuratierten Lücke
+
+Die Liste aus der Stufe-5-Bestandsaufnahme stand einmal bei neunzehn. Mit den sechs Beutekisten
+(vorige Runden), Teslaspule und HEV-Batterie, Mikrowelle, Radioempfänger und Fernschreiber und
+jetzt dem Beutesockel sind **sechs übrig** — und alle sechs sind dasselbe: `wand_jigsaw`,
+`wand_logic`, `wand_loot`, `wand_tandem`, `dungeon_spawner`, `meteor_spawner`. Das sind die
+Werkzeuge, mit denen das Original seine Bauwerke zusammensetzt; sie sinnvoll zu portieren
+heißt, die Bauwerksgenerierung selbst zu portieren. Das ist keine Runde, das ist eine Stufe.
+
+Alle 31 Tore grün.

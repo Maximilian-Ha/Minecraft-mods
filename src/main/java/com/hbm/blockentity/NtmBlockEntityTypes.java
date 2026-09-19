@@ -866,6 +866,13 @@ public class NtmBlockEntityTypes {
                             NtmBlocks.MACHINE_PRECASS.get())
                     .build(null));
 
+    public static final Supplier<BlockEntityType<LootDecoBlockEntity>> LOOT_DECO = BLOCK_ENTITY_TYPES.register(
+            "loot_deco",
+            () -> BlockEntityType.Builder.of(
+                            LootDecoBlockEntity::new,
+                            NtmBlocks.DECO_LOOT.get())
+                    .build(null));
+
     public static final Supplier<BlockEntityType<SupplyCrateBlockEntity>> SUPPLY_CRATE = BLOCK_ENTITY_TYPES.register(
             "supply_crate",
             () -> BlockEntityType.Builder.of(

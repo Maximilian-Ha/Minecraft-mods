@@ -1,0 +1,7 @@
+{
+  "__comment": "Der Sockel selbst zeigt nichts -- nur eine Partikeltextur fuer die Wolke beim Zerschlagen. Was man sieht, legt RenderLootDeco hin.",
+  "parent": "block/block",
+  "textures": {
+    "particle": "hbmsntm:block/block_steel"
+  }
+}

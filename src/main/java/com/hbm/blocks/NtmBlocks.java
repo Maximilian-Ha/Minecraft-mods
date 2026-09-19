@@ -21,6 +21,7 @@ import com.hbm.blocks.machine.WatzPumpBlock;
 import com.hbm.blocks.machine.WatzStructBlock;
 import com.hbm.blocks.generic.ToolConversionBlock;
 import com.hbm.blocks.generic.SteelRoofBlock;
+import com.hbm.blocks.generic.LootDecoBlock;
 import com.hbm.blocks.generic.SupplyCrateBlock;
 import com.hbm.blocks.generic.DecoPoleSatelliteReceiverBlock;
 import com.hbm.blocks.generic.MushBlock;
@@ -976,6 +977,9 @@ public class NtmBlocks {
     public static final DeferredBlock<Block> CRATE_AMMO = register("crate_ammo", () -> new AmmoCrateBlock(BlockBehaviour.Properties.of().strength(1.0F, 2.5F).sound(SoundType.METAL).mapColor(MapColor.METAL)));
     /* Die Dosenkiste. Holz statt Metall, und ihr Umriss ist kein voller Wuerfel -- daher
      * noOcclusion. Werte aus ModBlocks.java:2169 des Originals. */
+    /* Der Beutesockel. Hart wie nichts und ohne Widerstand, wie im Original
+     * (ModBlocks.java:1446) -- er soll nicht im Weg stehen. */
+    public static final DeferredBlock<Block> DECO_LOOT = register("deco_loot", () -> new LootDecoBlock(BlockBehaviour.Properties.of().strength(0.0F, 0.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().noLootTable()));
     /* Die Nachschubkiste am Fallschirm. Holzwerte wie im Original (ModBlocks.java:2092),
      * und sie teilt sich das Modell der Dosenkiste -- dort ebenfalls, ueber denselben
      * Zeichnertyp und dieselbe Textur. */
