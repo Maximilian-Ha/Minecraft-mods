@@ -6433,3 +6433,45 @@ wie ihre Geschwister im Kreativreiter.
 Bleiben für `crate_weapon`: `gun_liberator` (Modell und Zeichner sind im Original da, müssen
 aber übernommen werden) und `gun_panzerschreck` (braucht die ganze Raketenfabrik
 `XFactoryRocket`, die der Port nicht hat).
+
+## Die Liberator
+
+Zweite der drei Waffen für `crate_weapon`. Eine vierläufige Kipplaufwaffe, einzeln geladen —
+und damit die erste, deren Bewegung vom Füllstand abhängt.
+
+### Vier Hülsen, vier Zweige, eine Regel
+
+Das Original schreibt für jeden Füllstand einen eigenen Animationszweig aus: vier bis zur
+Verwechslung ähnliche Blöcke, in denen nur die Nummer der gerade bewegten Hülse wandert, und
+das zweimal (für `RELOAD` und `RELOAD_CYCLE`). Dahinter steht eine einzige Regel:
+
+> Alles unter der bewegten Hülse steckt schon im Lauf, die bewegte fliegt gerade herein, alles
+> darüber liegt noch draußen.
+
+Im Port steht genau das als Schleife. Ein Detail entfällt dabei: das Original hängt für die
+jeweils nicht gemeinten Hülsen einen Bus namens `NULL` an, den niemand liest — ein Kunstgriff,
+um in einer Kette aus `addBus`-Aufrufen einen Zweig stumm zu schalten. In einer Schleife kommt
+jede Hülse ohnehin genau einmal vor.
+
+Der Unterschied zwischen `RELOAD` und `RELOAD_CYCLE` ist **ein Index**: beim ersten zeigt das
+Magazin noch den Stand vor dem Nachladen, beim zweiten ist die erste Patrone schon verbucht.
+Dasselbe gilt für `INSPECT` gegenüber `RELOAD_END`. Beides steht im Original als unterschiedliche
+Vergleiche (`ammo >= i` gegen `ammo > i`) und ist hier als unterschiedlicher Zählerstand
+übernommen.
+
+### Ein Tippfehler, der bleiben durfte
+
+Beim Nachsehen wirft das Original die Hülsen mit
+`-15F * entity.getRNG().nextGaussian() * 7.5F` aus — beim Nachladen an derselben Stelle mit
+`-15F + ...`. Das `*` statt `+` ist offensichtlich ein Vertipper; er wirft die Hülsen mal
+nach links, mal nach rechts, je nach Vorzeichen der Zufallszahl. Übernommen, weil er nur den
+Wurfwinkel betrifft und nichts kaputtmacht — aber mit einem Vermerk, damit ihn niemand für
+Absicht hält.
+
+### Der Ton hieß anders
+
+`GUN_LIBERATOR_FIRE` zeigt im Original auf `weapon/fire/shotgunAlt`. Der Port schreibt
+Dateinamen klein mit Unterstrich, die Datei heißt hier also `shotgun_alt.ogg`.
+
+Bleibt für `crate_weapon` nur noch `gun_panzerschreck` — und der braucht die ganze
+Raketenfabrik `XFactoryRocket`, die der Port nicht hat.

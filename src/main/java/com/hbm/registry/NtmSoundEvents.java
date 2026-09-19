@@ -28,6 +28,8 @@ public class NtmSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_DRY_FIRE = reg("weapon.reload.dry_fire_click");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_HEAVY_REVOLVER_FIRE = reg("weapon.fire.44_shoot");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SHOTGUN_FIRE = reg("weapon.fire.shotgun");
+    /* Im Original heisst die Datei shotgunAlt; der Port schreibt Dateinamen klein mit Unterstrich. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> GUN_LIBERATOR_FIRE = reg("weapon.fire.shotgun_alt");
     /** Der Schlag der Teslaspule, vier Aufnahmen im Wechsel. */
     public static final DeferredHolder<SoundEvent, SoundEvent> WEAPON_TESLA = reg("weapon.tesla");
     /* Die drei Schleifen des verseuchten Senders. Welche ein Sender spielt, haengt an

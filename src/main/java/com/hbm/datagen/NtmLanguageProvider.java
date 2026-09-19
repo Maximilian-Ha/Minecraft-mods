@@ -1911,6 +1911,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.GUN_STAR_F_AKIMBO, "Star-F Akimbo");
         this.add(NtmItems.GUN_HANGMAN, "Hangman");
         this.add(NtmItems.GUN_HEAVY_REVOLVER, "Heavy Revolver");
+        this.add(NtmItems.GUN_LIBERATOR, "Liberator");
         this.add(NtmItems.GUN_MARESLEG, "Lever Action Shotgun");
         this.add(NtmItems.GUN_MARESLEG_AKIMBO, "Lever Action Shotguns");
         this.add(NtmItems.GUN_MARESLEG_BROKEN, "Broken");

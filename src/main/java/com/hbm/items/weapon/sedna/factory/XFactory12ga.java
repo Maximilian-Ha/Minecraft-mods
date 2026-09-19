@@ -88,6 +88,18 @@ public class XFactory12ga {
                 .setupStandardConfiguration()
                 .anim(LAMBDA_MARESLEG_ANIMS).orchestra(Orchestras.ORCHESTRA_MARESLEG)
         ).setDefaultAmmo(Ammo.G12, 12).setNameMutator(LAMBDA_NAME_MARESLEG));
+        /* Die Liberator, XFactory12ga Z. 335 des Originals: vier Laeufe, einzeln geladen. */
+        NtmItems.GUN_LIBERATOR = registry.register("gun_liberator", () -> new GunBaseNTItem(WeaponQuality.A_SIDE, new GunConfig()
+                .dura(200).draw(20).inspect(21).reloadSequential(true).crosshair(Crosshair.L_CIRCLE).smoke(Lego.LAMBDA_STANDARD_SMOKE)
+                .rec(new Receiver(0)
+                        .dmg(16F).delay(20).rounds(4).reload(25, 15, 7, 0).jam(45).sound(NtmSoundEvents.GUN_LIBERATOR_FIRE, 1.0F, 1.0F)
+                        .mag(new MagazineSingleReload(0, 4).addConfigs(all))
+                        .offset(0.75, -0.0625, -0.1875)
+                        .setupStandardFire().recoil(LAMBDA_RECOIL_LIBERATOR))
+                .setupStandardConfiguration()
+                .anim(LAMBDA_LIBERATOR_ANIMS).orchestra(Orchestras.ORCHESTRA_LIBERATOR)
+        ).setDefaultAmmo(Ammo.G12, 12));
+
         NtmItems.GUN_SPAS12 = registry.register("gun_spas12", () -> new GunBaseNTItem(WeaponQuality.A_SIDE, new GunConfig()
                 .dura(600).draw(20).inspect(39).reloadSequential(true).reloadChangeType(true).crosshair(Crosshair.L_CIRCLE).smoke(Lego.LAMBDA_STANDARD_SMOKE)
                 .rec(new Receiver(0)
@@ -152,6 +164,10 @@ public class XFactory12ga {
             return Component.translatable(stack.getItem().getDescriptionId() + ".short");
         }
         return null;
+    };
+
+    public static BiConsumer<ItemStack, LambdaContext> LAMBDA_RECOIL_LIBERATOR = (stack, ctx) -> {
+        GunBaseNTItem.setupRecoil(5, (float) (ctx.getPlayer().random.nextGaussian() * 1.5));
     };
 
     public static BiConsumer<ItemStack, LambdaContext> LAMBDA_RECOIL_MARESLEG = (stack, ctx) -> {
@@ -282,6 +298,78 @@ public class XFactory12ga {
                     .addBus("LEVER", new BusAnimationSequence().addPos(-85, 0, 0, 0).addPos(-15, 0, 0, 200).addPos(-15, 0, 0, 650).addPos(-85, 0, 0, 200).addPos(-15, 0, 0, 200).addPos(-15, 0, 0, 200).addPos(-85, 0, 0, 200).addPos(0, 0, 0, 200))
                     .addBus("FLAG", new BusAnimationSequence().addPos(1, 1, 1, 0));
             default -> LAMBDA_MARESLEG_ANIMS.apply(stack, type);
+        };
+    };
+
+    /*
+     * Die vier Huelsen der Liberator waehrend des Ladens. Das Original schreibt fuer jeden
+     * Fuellstand einen eigenen Zweig aus -- vier bis zum Verwechseln aehnliche Bloecke, in denen
+     * nur die Nummer der bewegten Huelse wandert. Hier steht dieselbe Regel als Schleife:
+     * alles unter "inBewegung" steckt schon im Lauf, "inBewegung" fliegt gerade herein, alles
+     * darueber liegt noch draussen.
+     *
+     * Das Original haengt fuer die jeweils nicht gemeinten Huelsen einen Bus namens "NULL" an,
+     * den niemand liest. Den braucht es hier nicht: jede Huelse kommt genau einmal vor.
+     */
+    private static BusAnimation liberatorHuelsen(BusAnimation anim, int inBewegung, boolean langerWeg) {
+
+        for(int i = 0; i < 4; i++) {
+            String bus = "SHELL" + (i + 1);
+
+            if(i < inBewegung) {
+                anim.addBus(bus, new BusAnimationSequence().addPos(0, 0, 0, 0));
+            } else if(i == inBewegung) {
+                anim.addBus(bus, langerWeg
+                        ? new BusAnimationSequence().addPos(2, -4, -2, 0).addPos(2, -4, -2, 400).addPos(0, 0, -2, 450, IType.SIN_FULL).addPos(0, 0, 0, 50, IType.SIN_UP)
+                        : new BusAnimationSequence().addPos(2, -4, -2, 0).addPos(0, 0, -2, 450, IType.SIN_FULL).addPos(0, 0, 0, 50, IType.SIN_UP));
+            } else {
+                anim.addBus(bus, new BusAnimationSequence().addPos(2, -4, -2, 0));
+            }
+        }
+
+        return anim;
+    }
+
+    /** Dieselben vier Huelsen in Ruhe: die ersten "vorhanden" stecken im Lauf, der Rest liegt daneben. */
+    private static BusAnimation liberatorHuelsenRuhe(BusAnimation anim, int vorhanden) {
+
+        for(int i = 0; i < 4; i++) {
+            anim.addBus("SHELL" + (i + 1), i < vorhanden
+                    ? new BusAnimationSequence().addPos(0, 0, 0, 0)
+                    : new BusAnimationSequence().addPos(2, -8, -2, 0));
+        }
+
+        return anim;
+    }
+
+    public static BiFunction<ItemStack, GunAnimation, BusAnimation> LAMBDA_LIBERATOR_ANIMS = (stack, type) -> {
+
+        int ammo = ((GunBaseNTItem) stack.getItem()).getConfig(stack, 0).getReceivers(stack)[0].getMagazine(stack).getAmount(stack, NuclearTechMod.proxy.me().inventory);
+
+        return switch(type) {
+            case EQUIP -> new BusAnimation()
+                    .addBus("EQUIP", new BusAnimationSequence().addPos(60, 0, 0, 0).addPos(0, 0, 0, 500, IType.SIN_DOWN));
+            case CYCLE -> new BusAnimation()
+                    .addBus("RECOIL", new BusAnimationSequence().addPos(0, 0, -2.5, 50, IType.SIN_DOWN).addPos(0, 0, 0, 350, IType.SIN_FULL));
+            case CYCLE_DRY -> new BusAnimation();
+            case RELOAD -> ammo > 3 ? null : liberatorHuelsen(new BusAnimation()
+                    .addBus("LATCH", new BusAnimationSequence().addPos(15, 0, 0, 100))
+                    .addBus("BREAK", new BusAnimationSequence().addPos(0, 0, 0, 100).addPos(60, 0, 0, 350, IType.SIN_DOWN)), ammo, true);
+            case RELOAD_CYCLE -> ammo > 2 ? null : liberatorHuelsen(new BusAnimation()
+                    .addBus("LATCH", new BusAnimationSequence().addPos(15, 0, 0, 0))
+                    .addBus("BREAK", new BusAnimationSequence().addPos(60, 0, 0, 0)), ammo + 1, false);
+            case RELOAD_END -> liberatorHuelsenRuhe(new BusAnimation()
+                    .addBus("LATCH", new BusAnimationSequence().addPos(15, 0, 0, 0).addPos(15, 0, 0, 250).addPos(0, 0, 0, 50))
+                    .addBus("BREAK", new BusAnimationSequence().addPos(60, 0, 0, 0).addPos(0, 0, 0, 250, IType.SIN_UP)), ammo + 1);
+            case JAMMED -> liberatorHuelsenRuhe(new BusAnimation()
+                    .addBus("LATCH", new BusAnimationSequence().addPos(15, 0, 0, 0).addPos(15, 0, 0, 250).addPos(0, 0, 0, 50).addPos(0, 0, 0, 550).addPos(15, 0, 0, 100).addPos(15, 0, 0, 600).addPos(0, 0, 0, 50))
+                    .addBus("BREAK", new BusAnimationSequence().addPos(60, 0, 0, 0).addPos(0, 0, 0, 250, IType.SIN_UP).addPos(0, 0, 0, 600).addPos(45, 0, 0, 250, IType.SIN_DOWN).addPos(45, 0, 0, 300).addPos(0, 0, 0, 150, IType.SIN_UP)), ammo + 1);
+            /* Beim Nachsehen zaehlt das Original eine Huelse weniger als beim Nachladen --
+             * die gerade gekammerte ist da schon verbucht. */
+            case INSPECT -> liberatorHuelsenRuhe(new BusAnimation()
+                    .addBus("LATCH", new BusAnimationSequence().addPos(15, 0, 0, 100).addPos(15, 0, 0, 1100).addPos(0, 0, 0, 50))
+                    .addBus("BREAK", new BusAnimationSequence().addPos(0, 0, 0, 100).addPos(60, 0, 0, 350, IType.SIN_DOWN).addPos(60, 0, 0, 500).addPos(0, 0, 0, 250, IType.SIN_UP)), ammo);
+            default -> null;
         };
     };
 }

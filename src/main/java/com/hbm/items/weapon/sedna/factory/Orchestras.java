@@ -252,6 +252,71 @@ public class Orchestras {
         }
     };
 
+    /**
+     * Die Liberator. Beim Nachladen fliegen so viele Huelsen heraus, wie seit dem letzten
+     * Nachladen verschossen wurden -- daher die Rechnung getAmountAfterReload minus getAmount.
+     * Beim Nachsehen (INSPECT) tut sie dasselbe und setzt den Zaehler danach auf null, damit die
+     * Huelsen nicht beim naechsten Nachladen ein zweites Mal kommen.
+     */
+    public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_LIBERATOR = (stack, ctx) -> {
+        LivingEntity entity = ctx.entity;
+        Level level = entity.level;
+        if(!(level instanceof ServerLevel serverLevel)) return;
+        GunAnimation type = GunBaseNTItem.getLastAnim(stack, ctx.configIndex);
+        int timer = GunBaseNTItem.getAnimTimer(stack, ctx.configIndex);
+
+        if(type == GunAnimation.CYCLE) {
+            if(timer == 0) PacketDistributor.sendToPlayersNear(serverLevel, null, entity.getX(), entity.getY(), entity.getZ(), 100, new MuzzleFlashPacket(entity.getId()));
+        }
+
+        if(type == GunAnimation.RELOAD) {
+            if(timer == 0) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_COCK.get(), entity.getSoundSource(), 1F, 0.75F);
+            if(timer == 4) {
+                IMagazine mag = ctx.config.getReceivers(stack)[0].getMagazine(stack);
+                int toEject = mag.getAmountAfterReload(stack) - mag.getAmount(stack, ctx.container);
+                SpentCasing casing = mag.getCasing(stack, ctx.container);
+                if(casing != null) for(int i = 0; i < toEject; i++) CasingCreator.composeEffect(level, entity, 0.625, -0.1875, -0.375D, -0.12, 0.18, 0, 0.01, -15F + (float) entity.random.nextGaussian() * 7.5F, (float) entity.random.nextGaussian() * 5F, casing.getName(), true, 60, 0.5D, 20);
+            }
+            if(timer == 15) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_SMALL_INSERT.get(), entity.getSoundSource());
+        }
+
+        if(type == GunAnimation.RELOAD_CYCLE) {
+            if(timer == 5) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_SMALL_INSERT.get(), entity.getSoundSource());
+        }
+
+        if(type == GunAnimation.RELOAD_END) {
+            if(timer == 2) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_CLOSE.get(), entity.getSoundSource(), 1F, 0.9F);
+        }
+
+        if(type == GunAnimation.JAMMED) {
+            if(timer == 2) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_CLOSE.get(), entity.getSoundSource(), 1F, 0.9F);
+            if(timer == 12) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_COCK.get(), entity.getSoundSource(), 1F, 0.75F);
+            if(timer == 26) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_CLOSE.get(), entity.getSoundSource(), 1F, 0.9F);
+        }
+
+        if(type == GunAnimation.CYCLE_DRY) {
+            if(timer == 0) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_DRY_FIRE.get(), entity.getSoundSource());
+        }
+
+        if(type == GunAnimation.INSPECT) {
+            if(timer == 0) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_COCK.get(), entity.getSoundSource(), 1F, 0.75F);
+
+            IMagazine mag = ctx.config.getReceivers(stack)[0].getMagazine(stack);
+            int toEject = mag.getAmountAfterReload(stack) - mag.getAmount(stack, ctx.container);
+
+            if(timer == 4 && toEject > 0) {
+                SpentCasing casing = mag.getCasing(stack, ctx.container);
+                /* Das Original multipliziert hier statt zu addieren -- ein Tippfehler, der die
+                 * Huelsen mal in die eine, mal in die andere Richtung wirft. Uebernommen, weil
+                 * er nur den Wurfwinkel betrifft und nichts kaputtmacht. */
+                if(casing != null) for(int i = 0; i < toEject; i++) CasingCreator.composeEffect(level, entity, 0.625, -0.1875, -0.375D, -0.12, 0.18, 0, 0.01, -15F * (float) entity.random.nextGaussian() * 7.5F, (float) entity.random.nextGaussian() * 5F, casing.getName(), true, 60, 0.5D, 20);
+                mag.setAmountAfterReload(stack, 0);
+            }
+
+            if(timer == 20) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_CLOSE.get(), entity.getSoundSource(), 1F, 0.9F);
+        }
+    };
+
     public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_GREASEGUN = (stack, ctx) -> {
         LivingEntity entity = ctx.entity;
         Level level = entity.level;

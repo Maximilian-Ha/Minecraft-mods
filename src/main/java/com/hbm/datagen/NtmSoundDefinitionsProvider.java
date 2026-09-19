@@ -90,6 +90,9 @@ public class NtmSoundDefinitionsProvider extends SoundDefinitionsProvider {
         this.add(NtmSoundEvents.GUN_SHOTGUN_FIRE, SoundDefinition.definition()
                 .with(sound(NuclearTechMod.withDefaultNamespace("weapon/fire/shotgun")))
         );
+        this.add(NtmSoundEvents.GUN_LIBERATOR_FIRE, SoundDefinition.definition()
+                .with(sound(NuclearTechMod.withDefaultNamespace("weapon/fire/shotgun_alt")))
+        );
         this.add(NtmSoundEvents.GUN_GREASEGUN_FIRE, SoundDefinition.definition()
                 .with(sound(NuclearTechMod.withDefaultNamespace("weapon/fire/greasegun")))
         );
