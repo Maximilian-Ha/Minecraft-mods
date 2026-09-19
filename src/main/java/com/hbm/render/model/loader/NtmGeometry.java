@@ -43,7 +43,8 @@ public class NtmGeometry implements IUnbakedGeometry<NtmGeometry> {
         POLE_TOP,
         CRT,
         TOASTER,
-        TAPE_RECORDER
+        TAPE_RECORDER,
+        COMPUTER
     }
 
     private final BakedModelType type;
@@ -78,6 +79,7 @@ public class NtmGeometry implements IUnbakedGeometry<NtmGeometry> {
             case CRT -> new SimpleWavefrontBakedModel(new HFRWavefrontObject("models/obj/block/crt.obj"), textureSprite);
             case TOASTER -> new SimpleWavefrontBakedModel(new HFRWavefrontObject("models/obj/block/toaster.obj"), textureSprite);
             case TAPE_RECORDER -> new SimpleWavefrontBakedModel(new HFRWavefrontObject("models/obj/block/taperecorder.obj"), textureSprite);
+            case COMPUTER -> new SimpleWavefrontBakedModel(new HFRWavefrontObject("models/obj/block/puter.obj"), textureSprite);
         };
     }
 }

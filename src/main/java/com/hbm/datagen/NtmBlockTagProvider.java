@@ -479,6 +479,7 @@ public class NtmBlockTagProvider extends BlockTagsProvider {
                         NtmBlocks.DECO_TOASTER_STEEL.get(),
                         NtmBlocks.DECO_TOASTER_WOOD.get(),
                         NtmBlocks.TAPE_RECORDER.get(),
+                        NtmBlocks.DECO_COMPUTER.get(),
                         NtmBlocks.BLOCK_STARMETAL.get(),
                         NtmBlocks.BLOCK_ELECTRICAL_SCRAP.get(),
                         NtmBlocks.STONE_GNEISS.get(),

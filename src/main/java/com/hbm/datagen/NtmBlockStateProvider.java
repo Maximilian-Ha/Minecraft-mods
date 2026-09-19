@@ -1157,6 +1157,7 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.dekoVariante(NtmBlocks.DECO_TOASTER_WOOD, "toaster_wood", ToasterModelBuilder::new);
 
         this.dekoVariante(NtmBlocks.TAPE_RECORDER, "deco_tape_recorder", TapeRecorderModelBuilder::new);
+        this.dekoVariante(NtmBlocks.DECO_COMPUTER, "deco_computer", ComputerModelBuilder::new);
     }
 
     private <T extends BlockModelBuilderBase> void dekoVariante(DeferredBlock<Block> block, String textur,
@@ -2515,6 +2516,10 @@ public class NtmBlockStateProvider extends BlockStateProvider {
             super(parent, helper);
         }
         @Override public BakedModelType getType() { return BakedModelType.PIPE; }
+    }
+    protected static class ComputerModelBuilder extends BlockModelBuilderBase {
+        public ComputerModelBuilder(BlockModelBuilder parent, ExistingFileHelper helper) { super(parent, helper); }
+        @Override public BakedModelType getType() { return BakedModelType.COMPUTER; }
     }
     protected static class CrtModelBuilder extends BlockModelBuilderBase {
         public CrtModelBuilder(BlockModelBuilder parent, ExistingFileHelper helper) { super(parent, helper); }

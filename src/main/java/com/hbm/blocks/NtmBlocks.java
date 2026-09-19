@@ -317,6 +317,9 @@ public class NtmBlocks {
     public static final DeferredBlock<Block> DECO_TOASTER_STEEL = register("deco_toaster_steel", () -> new DecoFacingBlock(deco()));
     public static final DeferredBlock<Block> DECO_TOASTER_WOOD = register("deco_toaster_wood", () -> new DecoFacingBlock(deco()));
     public static final DeferredBlock<Block> TAPE_RECORDER = register("tape_recorder", () -> new DecoFacingBlock(BlockBehaviour.Properties.of().strength(5.0F, 15.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion()));
+    /* Der Buerorechner. Das Original hat nur eine Ausfuehrung (IBM_300PL) und gibt ihm die
+     * Masse (2|0|0)-(14|14|10). */
+    public static final DeferredBlock<Block> DECO_COMPUTER = register("deco_computer", () -> new DecoFacingBlock(deco(), Block.box(2, 0, 0, 14, 14, 10)));
 
     /* Stufe 5: der Aufsatz der Antennenmasten. Werte aus ModBlocks.java:1596. */
     public static final DeferredBlock<Block> POLE_TOP = register("pole_top", () -> new Block(BlockBehaviour.Properties.of().strength(5.0F, 15.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion()));

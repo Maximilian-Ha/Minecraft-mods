@@ -4884,3 +4884,17 @@ Kreativreiter. `lang-check`, `loot-check` und `tab-check` haben das je aus ihrer
 gemeldet, bevor etwas in die CI ging. Der Beutetabellen-Fund hätte `runData` abgebrochen.
 
 Die Lücke steht bei **32**.
+
+### Der Bürorechner
+
+`deco_computer` sieht im Original nach einer Metadatenfamilie aus — `BlockDecoModel` mit einer
+Aufzählungsklasse. Nachgesehen, was darin steht: **ein einziger Wert**, `IBM_300PL`. Also ein
+Block, keine Familie.
+
+Er ist das erste Stück dieser Gruppe mit eigenen Maßen: (2\|0\|0)-(14\|14\|10), aus
+`setBlockBoundsTo` des Originals. `DecoFacingBlock` nimmt sie jetzt als zweiten Parameter und
+dreht sie einmal beim Anlegen auf alle vier Richtungen vor, statt bei jedem Kollisionstest zu
+rechnen. Die Drehformel — (x\|z) wird zu (1−z\|x) — ist dieselbe, mit der auch die Modelle
+gedreht werden; sonst stünde die Form quer zum Bild.
+
+Die Lücke steht bei **31**.

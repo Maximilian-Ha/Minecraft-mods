@@ -2336,6 +2336,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.DECO_TOASTER_STEEL, "Steel Toaster");
         this.add(NtmBlocks.DECO_TOASTER_WOOD, "Wooden Toaster");
         this.add(NtmBlocks.TAPE_RECORDER, "Tape Recorder");
+        this.add(NtmBlocks.DECO_COMPUTER, "Computer");
         this.add(NtmBlocks.BLOCK_STARMETAL, "Block of Starmetal");
         this.add(NtmBlocks.BLOCK_ELECTRICAL_SCRAP, "Block of Electrical Scrap");
         this.add(NtmBlocks.NTM_DIRT, "Dirt");

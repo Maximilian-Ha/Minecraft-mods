@@ -451,6 +451,7 @@ public class NtmBlockLootTableProvider extends BlockLootSubProvider {
         this.dropSelf(NtmBlocks.DECO_TOASTER_STEEL.get());
         this.dropSelf(NtmBlocks.DECO_TOASTER_WOOD.get());
         this.dropSelf(NtmBlocks.TAPE_RECORDER.get());
+        this.dropSelf(NtmBlocks.DECO_COMPUTER.get());
         this.dropSelf(NtmBlocks.BLOCK_STARMETAL.get());
         this.dropSelf(NtmBlocks.BLOCK_ELECTRICAL_SCRAP.get());
         /* Wie im Original faellt gewoehnliche Erde ab, nicht der Block selbst. */

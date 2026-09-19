@@ -1168,6 +1168,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.DECO_TOASTER_STEEL);
                         output.accept(NtmBlocks.DECO_TOASTER_WOOD);
                         output.accept(NtmBlocks.TAPE_RECORDER);
+                        output.accept(NtmBlocks.DECO_COMPUTER);
                         output.accept(NtmBlocks.BLOCK_STARMETAL);
                         output.accept(NtmBlocks.BLOCK_ELECTRICAL_SCRAP);
                         output.accept(NtmBlocks.WOOD_BARRIER);
