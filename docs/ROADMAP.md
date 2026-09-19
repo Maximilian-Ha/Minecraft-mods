@@ -5905,3 +5905,35 @@ die Liste der sofort Portierbaren steht bei 25.
 Dass die *Blöcke* `machine_uf6_tank` und `machine_puf6_tank` weiter fehlen, bleibt davon
 unberührt — die Lücke ist ein Block, keine Blockentität. Genau dafür steht der Hinweis im Kopf
 des Werkzeugs.
+
+### Und eine vierte Gruppe: Blöcke, die es im Original nicht mehr gibt
+
+Die nächste Runde sollte die **FEnSU** werden — der gewaltige Energiespeicher mit der
+rotierenden Scheibe. Das Lesen des Originals brachte stattdessen:
+
+```java
+@Deprecated public static Block machine_fensu;
+...
+machine_fensu = new MachineFENSU(Material.iron).setBlockName("machine_fensu")
+        .setHardness(5.0F).setResistance(10.0F).setCreativeTab(null)
+```
+
+Ausgemustert und durch `machine_battery_redd` ersetzt — den der Port längst hat, samt
+`fensu2.obj` als Modell. Eine ganze Runde wäre in einen Block geflossen, den HBM selbst
+herausgenommen hat.
+
+`ModBlocks` führt **59** Felder als `@Deprecated` und **74** mit `setCreativeTab(null)`. Das
+Werkzeug verfolgt jetzt die Kette Blockentität → Blockklasse → Feld in `ModBlocks` und meldet
+zwei Stufen getrennt, denn sie sagen Verschiedenes:
+
+* **ausgemustert** (`@Deprecated`) — acht Fälle, darunter die FEnSU, der BAT-9000, die alte
+  große Turbine, der Sojus-Kern und die vier Chicago-Pile-Blöcke. Keine Lücke.
+* **kein Kreativreiter** allein — fünf Fälle (`seal_hatch`, `lantern_behemoth`, die beiden
+  UF6-Tanks, `obj_tester`). Das heißt *nicht*, dass es sie nicht gibt: Bauwerke und andere
+  Blöcke setzen sie trotzdem. Sie stehen in einer eigenen Liste mit der Aufschrift
+  „erst nachsehen“.
+
+Damit liest sich die Bilanz der 115 fehlenden Blockentitäten so: **19 sind gar keine Lücke**,
+5 gehören nachgesehen, 21 sind sofort portierbar, 70 hängen an etwas anderem. Vorher hieß es
+39 sofort portierbar — und ein Drittel davon wäre Arbeit an Blöcken gewesen, die niemand je zu
+sehen bekommt.

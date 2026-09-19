@@ -41,6 +41,15 @@ Zeichenhilfe und leerer Rumpf werden erkannt, dieselbe Klasse mit einem updateEn
 einzigen Feld nicht mehr. Dazu drei namentlich gefuehrte Faelle, die der Port anders loest --
 nachgesehen, nicht geraten.
 
+UND EINE VIERTE: Bloecke, die es im Original selbst nicht mehr gibt. ModBlocks fuehrt 59
+Felder als @Deprecated und 74 mit setCreativeTab(null). Ist JEDER Block, der eine
+Blockentitaet erzeugt, so gekennzeichnet, ist sie keine Luecke -- die FEnSU etwa ist
+ausgemustert und durch machine_battery_redd ersetzt, das im Port laengst steht. Die beiden
+Stufen werden getrennt gemeldet, denn sie sagen Verschiedenes: @Deprecated heisst
+ausgemustert, setCreativeTab(null) allein heisst nur, dass kein Spieler herankommt -- Bauwerke
+und andere Bloecke setzen solche Bloecke trotzdem, und die gehoeren nachgesehen statt
+abgehakt.
+
 Aufruf:
     tools/be-blocker.py           -- Uebersicht
     tools/be-blocker.py --list    -- dazu die vollstaendige Liste der Blockierten
@@ -145,6 +154,54 @@ def nur_zeichenhilfe(text):
     return all(m in NUR_ZUM_ZEICHNEN for m in methoden)
 
 
+def stillgelegte_bloecke():
+    """Welche Blockentitaeten gehoeren zu Bloecken, die im Original gar nicht mehr im Spiel sind?
+
+    Zwei Stufen, und der Unterschied ist wichtig:
+      * @Deprecated an der Felddeklaration -- der Block ist ausgemustert. Wer ihn portiert,
+        portiert etwas, das HBM selbst herausgenommen hat.
+      * nur setCreativeTab(null) -- kein Spieler kommt an ihn heran. Das heisst NICHT, dass es
+        ihn nicht gibt: Bauwerke und andere Bloecke setzen ihn trotzdem.
+    """
+
+    mb = subprocess.run(['git', 'show', UP + ':src/main/java/com/hbm/blocks/ModBlocks.java'],
+                        capture_output=True, text=True).stdout
+
+    ausgemustert, ohne_reiter, feld_klasse = set(), set(), {}
+
+    for m in re.finditer(r'@Deprecated\s+public\s+static\s+Block\s+([\w,\s]+);', mb):
+        for f in m.group(1).split(','):
+            ausgemustert.add(f.strip())
+
+    for m in re.finditer(r'^\s*(\w+)\s*=\s*new\s+(\w+)\(.*$', mb, re.M):
+        feld_klasse.setdefault(m.group(1), m.group(2))
+        if 'setCreativeTab(null)' in m.group(0):
+            ohne_reiter.add(m.group(1))
+
+    # Welche Blockklasse erzeugt welche Blockentitaet? Ein einziger Durchlauf ueber alle Bloecke.
+    aus = subprocess.run(['git', 'grep', '-n', '-E', r'new\s+TileEntity\w+\s*\(',
+                          UP, '--', 'src/main/java/com/hbm/blocks'], capture_output=True, text=True).stdout
+    be_von_klasse = defaultdict(set)
+    for zeile in aus.split('\n'):
+        teile = zeile.split(':', 3)
+        if len(teile) < 4: continue
+        klasse = os.path.basename(teile[1])[:-5]
+        be_von_klasse[klasse].update(re.findall(r'new\s+(TileEntity\w+)\s*\(', teile[3]))
+
+    urteil = {}
+    for feld, klasse in feld_klasse.items():
+        for be in be_von_klasse.get(klasse, ()):
+            urteil.setdefault(be, []).append(feld)
+
+    ausgemustert_be, ohne_reiter_be = {}, {}
+    for be, felder in urteil.items():
+        if all(f in ausgemustert for f in felder):
+            ausgemustert_be[be] = 'im Original ausgemustert (@Deprecated): ' + ", ".join(sorted(felder))
+        elif all(f in ausgemustert or f in ohne_reiter for f in felder):
+            ohne_reiter_be[be] = 'kein Kreativreiter: ' + ", ".join(sorted(felder))
+    return ausgemustert_be, ohne_reiter_be
+
+
 def main():
     up = up_dateien()
     be_up = [p for p in up if '/com/hbm/tileentity/' in p and os.path.basename(p).startswith('TileEntity')]
@@ -158,7 +215,8 @@ def main():
         k = kern(name)
         return k in kerne or ('machine' + k) in kerne or k.replace('machine', '') in kerne
 
-    frei, blockiert, unnoetig = [], {}, {}
+    frei, blockiert, unnoetig, nachsehen = [], {}, {}, {}
+    stillgelegt, ohne_reiter = stillgelegte_bloecke()
 
     for p in be_up:
         name = os.path.basename(p)[:-5]
@@ -168,6 +226,14 @@ def main():
 
         if name in OHNE_ENTSPRECHUNG:
             unnoetig[name] = OHNE_ENTSPRECHUNG[name]
+            continue
+
+        if name in stillgelegt:
+            unnoetig[name] = stillgelegt[name]
+            continue
+
+        if name in ohne_reiter:
+            nachsehen[name] = ohne_reiter[name]
             continue
 
         if nur_zeichenhilfe(text):
@@ -183,13 +249,19 @@ def main():
 
     print("Fehlende Blockentitaeten und was sie aufhaelt")
     print()
-    print("  fehlend gesamt          : %d" % (len(frei) + len(blockiert) + len(unnoetig)))
-    print("  braucht keine im Port   : %d" % len(unnoetig))
+    print("  fehlend gesamt          : %d" % (len(frei) + len(blockiert) + len(unnoetig) + len(nachsehen)))
+    print("  gar keine Luecke        : %d" % len(unnoetig))
+    print("  erst nachsehen          : %d" % len(nachsehen))
     print("  ohne fehlende Vorlage   : %d" % len(frei))
     print("  mit fehlender Vorlage   : %d" % len(blockiert))
     print()
-    print("BRAUCHT IM PORT GAR KEINE BLOCKENTITAET:")
+    print("GAR KEINE LUECKE -- entweder braucht der Port keine Blockentitaet, oder es gibt den")
+    print("Block im Original selbst nicht mehr:")
     for n in sorted(unnoetig): print("   %-30s %s" % (n, unnoetig[n]))
+    print()
+    print("ERST NACHSEHEN -- der Block steht im Original in keinem Kreativreiter. Das heisst")
+    print("nicht, dass es ihn nicht gibt: Bauwerke und andere Bloecke setzen ihn trotzdem.")
+    for n in sorted(nachsehen): print("   %-30s %s" % (n, nachsehen[n]))
     print()
     print("SOFORT PORTIERBAR -- kein com.hbm-Import fehlt:")
     for n in sorted(frei): print("   " + n)
