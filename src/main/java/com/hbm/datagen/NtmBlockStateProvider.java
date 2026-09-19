@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.hbm.blocks.DummyableBlock;
 import com.hbm.blocks.ICustomBlockModelRegister;
 import com.hbm.blocks.NtmBlocks;
+import com.hbm.blocks.machine.FurnaceBrickBlock;
 import com.hbm.blocks.network.FluidValveBlock;
 import com.hbm.blocks.machine.MachineDetectorBlock;
 import com.hbm.blocks.machine.icf.ICFLaserComponentBlock;
@@ -607,6 +608,7 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.registerMachineRtgFurnace();
         this.registerMachineDiFurnaceRtg();
         this.registerMachineDiFurnace();
+        this.registerFurnaceBrick();
         this.particleOnlyBlock(NtmBlocks.MACHINE_COMBUSTION_ENGINE, modLoc("block/block_steel"));
         this.particleOnlyBlock(NtmBlocks.MACHINE_TURBINEGAS, modLoc("block/block_steel"));
         this.particleOnlyBlock(NtmBlocks.MACHINE_TURBOFAN, modLoc("block/block_steel"));
@@ -1721,6 +1723,37 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         });
 
         this.simpleBlockItem(block, model);
+    }
+
+    /** Der Ziegelofen: Vorderseite wechselt mit LIT, gedreht wird ueber rotationY. */
+    private void registerFurnaceBrick() {
+        Block block = NtmBlocks.MACHINE_FURNACE_BRICK.get();
+
+        ResourceLocation unten = modLoc("block/machine_furnace_brick_bottom");
+        ResourceLocation oben = modLoc("block/machine_furnace_brick_top");
+        ResourceLocation seite = modLoc("block/machine_furnace_brick_side");
+
+        ModelFile aus = this.models().cube(this.name(block),
+                unten, oben, modLoc("block/machine_furnace_brick_front_off"),
+                seite, seite, seite).texture("particle", seite);
+
+        ModelFile an = this.models().cube(this.name(block) + "_on",
+                unten, oben, modLoc("block/machine_furnace_brick_front_on"),
+                seite, seite, seite).texture("particle", seite);
+
+        this.getVariantBuilder(block).forAllStates(state -> {
+            int y = switch(state.getValue(FurnaceBrickBlock.FACING)) {
+                case EAST -> 90;
+                case SOUTH -> 180;
+                case WEST -> 270;
+                default -> 0;
+            };
+            return ConfiguredModel.builder()
+                    .modelFile(state.getValue(FurnaceBrickBlock.LIT) ? an : aus)
+                    .rotationY(y).build();
+        });
+
+        this.simpleBlockItem(block, aus);
     }
 
     private void registerMachineDiFurnace() {

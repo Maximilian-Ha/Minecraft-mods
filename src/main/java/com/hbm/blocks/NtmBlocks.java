@@ -27,6 +27,7 @@ import com.hbm.blocks.generic.MushHugeBlock;
 import com.hbm.blocks.generic.LootCrateBlock;
 import com.hbm.blocks.machine.FloodlightBlock;
 import com.hbm.blocks.machine.ChargerBlock;
+import com.hbm.blocks.machine.FurnaceBrickBlock;
 import com.hbm.blocks.machine.MachineMicrowaveBlock;
 import com.hbm.blocks.generic.SkeletonHolderBlock;
 import com.hbm.blocks.machine.TeslaBlock;
@@ -736,6 +737,9 @@ public class NtmBlocks {
     public static final DeferredBlock<Block> MACHINE_SOLAR_BOILER = register("machine_solar_boiler", () -> new MachineSolarBoilerBlock(BlockBehaviour.Properties.of().noOcclusion().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops()));
     public static final DeferredBlock<Block> SOLAR_MIRROR = register("solar_mirror", () -> new SolarMirrorBlock(BlockBehaviour.Properties.of().noOcclusion().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops()));
     public static final DeferredBlock<Block> FURNACE_IRON = register("furnace_iron", () -> new FurnaceIronBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops().noOcclusion()));
+    /* Der Ziegelofen. Im Original zwei Bloecke (machine_furnace_brick_off und _on), hier
+     * einer mit der Eigenschaft LIT. Werte aus ModBlocks.java:1795. */
+    public static final DeferredBlock<Block> MACHINE_FURNACE_BRICK = register("machine_furnace_brick", () -> new FurnaceBrickBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.STONE).mapColor(MapColor.COLOR_RED).requiresCorrectToolForDrops().lightLevel(state -> state.getValue(FurnaceBrickBlock.LIT) ? 15 : 0)));
     public static final DeferredBlock<Block> FURNACE_STEEL = register("furnace_steel", () -> new FurnaceSteelBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops().noOcclusion()));
     public static final DeferredBlock<Block> MACHINE_COMPRESSOR_COMPACT = register("machine_compressor_compact", () -> new MachineCompressorCompactBlock(BlockBehaviour.Properties.of().strength(10.0F, 20.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops().noOcclusion()));
     public static final DeferredBlock<Block> MACHINE_MIXER = register("machine_mixer", () -> new MachineMixerBlock(BlockBehaviour.Properties.of().strength(0.6F, 100.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops().noOcclusion()));

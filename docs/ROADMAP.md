@@ -5479,3 +5479,37 @@ zu Recht.
 
 Gemessen in beide Richtungen: 411 Klassennamen, 0 Funde; mit dem wiedereingesetzten Fehler
 genau ein Fund und Rückgabewert 1. Damit sind es **28 Tore**.
+
+### Der Ziegelofen
+
+`machine_brick_furnace` ist ein gemauerter Ofen, der zwei Dinge anders macht als der
+Vanilla-Ofen: er ist **schneller bei dem, wofür er gebaut ist**, und er **hinterlässt Asche**.
+
+| Eingelegt | Tempo |
+|---|---|
+| Ton, Netherrack | vierfach |
+| Bruchstein, Sand, Stammholz | doppelt |
+| alles andere | normal |
+
+Die Asche folgt derselben Einteilung wie beim Feuerraum — Holz, Kohle, Sonstiges, je Sorte
+ein eigener Zähler. Bei 2000 gesammelten Brennticks einer Sorte springt eine Portion Pulver
+ins Aschefach. Die Routine dafür (`getAshFromFuel`) stand schon im Port und wird hier
+wiederverwendet, statt sie ein zweites Mal zu schreiben.
+
+Zwei Stellen, an denen 1.7.10 und 1.21 auseinandergehen:
+
+- **Stammholz.** Das Original nennt `log` und `log2`, also die beiden Stammholzblöcke von
+  1.7.10. In 1.21 ist daraus eine Familie mit acht Sorten geworden; sie steht jetzt
+  vollständig in der Tabelle, sonst wäre Kirsche oder Mangrove ohne Grund langsamer als Eiche.
+- **Die Partikel.** Das Original schreibt vier Fälle aus, einen je Metadatenwert. Es ist
+  viermal dieselbe Formel mit gedrehten Achsen — mit `FACING` steht sie einmal da.
+
+**Nicht übernommen:** die Schamottekugel `ball_fireclay` in der Tempo-Tabelle (gibt es im
+Port nicht), und die Erfahrung am Ausgabeplatz. Das Original benutzt dort `SlotSmelting`,
+also den Vanilla-Ofenausgang mit XP. Der Port hat diesen Platztyp nicht; seine Öfen
+benutzen durchgehend `SlotTakeOnly`, und dabei bleibt es auch hier — sonst verhielte sich
+der Ziegelofen anders als der Eisen- oder Stahlofen daneben.
+
+Ein Tor hat wieder etwas gefunden: `loot-check` meldete, dass der Block
+`requiresCorrectToolForDrops()` trägt, aber in keinem `mineable`-Tag steht — er wäre mit
+keinem Werkzeug abbaubar gewesen, und seine Beutetabelle wäre tote Ladung. Nachgetragen.

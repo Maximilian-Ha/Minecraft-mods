@@ -2422,6 +2422,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.FLUID_SWITCH, "Redstone Fluid Valve");
         this.add(NtmBlocks.FLUID_COUNTER_VALVE, "Fluid Valve with Counter");
         this.add(NtmBlocks.FLUID_COUNTER_VALVE, DESC, "Beware of loops in your fluid network...");
+        this.add(NtmBlocks.MACHINE_FURNACE_BRICK, "Brick Furnace");
+        this.add(NtmBlocks.MACHINE_FURNACE_BRICK, DESC, "Smelts clay, netherrack, cobblestone,$sand and logs faster than a regular furnace.$Leaves ash behind.");
 
         this.add(NtmBlocks.MACHINE_BATTERY_SOCKET, "Battery Socket");
         this.add(NtmBlocks.MACHINE_BATTERY_SOCKET, DESC,"Allows battery items to be connected$to the power grid directly.$Acts as a cable, all ports are connected$to the same network.");
@@ -3240,6 +3242,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("container.machineMixer", "Industrial Mixer");
         this.add("container.machineTurbine", "Steam Turbine");
         this.add("container.furnaceIron", "Iron Furnace");
+        this.add("container.furnaceBrick", "Brick Furnace");
         this.add("container.furnaceSteel", "Steel Furnace");
         this.add("container.machineRockMill", "Rock Mill");
         this.add("rock.crushing", "Crushing of %s");

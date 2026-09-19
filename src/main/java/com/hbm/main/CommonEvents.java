@@ -264,6 +264,7 @@ public class CommonEvents {
         event.register(NtmMenuTypes.MACHINE_MIXER.get(), MachineMixerScreen::new);
         event.register(NtmMenuTypes.MACHINE_TURBINE.get(), MachineTurbineScreen::new);
         event.register(NtmMenuTypes.FURNACE_IRON.get(), FurnaceIronScreen::new);
+        event.register(NtmMenuTypes.FURNACE_BRICK.get(), FurnaceBrickScreen::new);
         event.register(NtmMenuTypes.FURNACE_STEEL.get(), FurnaceSteelScreen::new);
         event.register(NtmMenuTypes.MACHINE_ROCK_MILL.get(), MachineRockMillScreen::new);
         event.register(NtmMenuTypes.MACHINE_OIL_WELL.get(), MachineOilWellScreen::new);

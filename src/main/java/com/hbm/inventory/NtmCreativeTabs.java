@@ -1208,6 +1208,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.FLUID_VALVE);
                         output.accept(NtmBlocks.FLUID_SWITCH);
                         output.accept(NtmBlocks.FLUID_COUNTER_VALVE);
+                        output.accept(NtmBlocks.MACHINE_FURNACE_BRICK);
 
                         output.accept(NtmBlocks.PRESS_PREHEATER);
                         output.accept(NtmBlocks.MACHINE_PRESS);

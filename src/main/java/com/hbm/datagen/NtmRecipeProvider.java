@@ -2065,6 +2065,14 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_fluid_duct_neo", has(NtmBlocks.FLUID_DUCT_NEO.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "fluid_duct_gauge"));
 
+        // Original CraftingManager Z. 299: "III" / "I I" / "BBB".
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.MACHINE_FURNACE_BRICK.get(), 1)
+                .pattern("III").pattern("I I").pattern("BBB")
+                .define('I', Items.BRICK)
+                .define('B', Blocks.STONE)
+                .unlockedBy("has_brick", has(Items.BRICK))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "machine_furnace_brick"));
+
         /*
          * Die drei Haehne, CraftingManager Z. 575 bis 577. Das bemalbare Rohr des Originals
          * heisst im Port fluid_duct_neo; EnumCircuitType.CHIP ist der Mikrochip.
