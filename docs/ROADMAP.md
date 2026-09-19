@@ -6677,3 +6677,26 @@ BulletBeamBase` kommt kein einziges Mal vor. Der Fehler lag also still da und h�
 Strahl zugeschlagen. Jetzt steht dort `super.tick()`, mit Vermerk.
 
 Alle 29 Tore grün.
+
+## Berichtigung: die W9 riss zu klein
+
+Beim Nachmessen der Explosions-Schnittstelle für die Granaten fiel in `XFactoryTurret` dieser
+Vermerk auf:
+
+```java
+/* ABWEICHUNG: der Reichweitenaufschlag des Originals (withRangeMod) fehlt dem Port. */
+vnt.setEntityProcessor(new EntityProcessorCrossSmooth(2, bullet.damage));
+```
+
+Der Satz stimmt nicht. `withRangeMod` steht in `EntityProcessorCross` (Zeile 183) und wird im
+Port an sechs Stellen benutzt — unter anderem von der Atommine und vom Abfangflugkörper. Der
+Vermerk hat also nicht eine fehlende Schnittstelle beschrieben, sondern eine weggelassene
+Zeile, und die Atomgranate der W9 hat seitdem in einem Drittel zu kleinem Umkreis Schaden
+gemacht: das Original setzt dort `withRangeMod(1.5F)`.
+
+Nachgetragen. Der Vermerk entfällt, weil er nichts mehr beschreibt.
+
+Damit ist es die dritte Falschaussage dieser Art, die beim Nachmessen aufgefallen ist (nach
+`centrifuge_element`/`piston_selenium` und der veralteten Kopfnotiz in `CrateLoot`). Alle drei
+hatten dieselbe Form: ein Vermerk, der einmal richtig war oder nie geprüft wurde, und den
+seitdem niemand nachgerechnet hat.

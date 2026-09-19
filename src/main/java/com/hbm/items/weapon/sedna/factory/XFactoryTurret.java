@@ -95,8 +95,7 @@ public class XFactoryTurret {
         Vec3 position = hr.getLocation();
 
         ExplosionVNT vnt = new ExplosionVNT(bullet.level, position.x, position.y, position.z, 10F, bullet.getOwner());
-        /* ABWEICHUNG: der Reichweitenaufschlag des Originals (withRangeMod) fehlt dem Port. */
-        vnt.setEntityProcessor(new EntityProcessorCrossSmooth(2, bullet.damage));
+        vnt.setEntityProcessor(new EntityProcessorCrossSmooth(2, bullet.damage).withRangeMod(1.5F));
         vnt.explode();
 
         ExplosionNukeGeneric.incrementRad(bullet.level, position.x, position.y, position.z, 1F);
