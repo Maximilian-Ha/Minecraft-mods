@@ -20,6 +20,7 @@ import com.hbm.blocks.machine.WatzBlock;
 import com.hbm.blocks.machine.WatzPumpBlock;
 import com.hbm.blocks.machine.WatzStructBlock;
 import com.hbm.blocks.generic.ToolConversionBlock;
+import com.hbm.blocks.generic.SteelRoofBlock;
 import com.hbm.blocks.fluids.CoriumLiquidBlock;
 import com.hbm.blocks.fluids.MudLiquidBlock;
 import com.hbm.blocks.fluids.ToxicLiquidBlock;
@@ -301,6 +302,9 @@ public class NtmBlocks {
     /* BERICHTIGT (Stufe 5): der Traeger ist im Original kein Wuerfel, sondern eine duenne
      * Saeule mit eigenem Modell (beam.obj). Werte aus ModBlocks.java:1601. */
     public static final DeferredBlock<Block> STEEL_BEAM = register("steel_beam", () -> new SteelBeamBlock(BlockBehaviour.Properties.of().strength(5.0F, 15.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion()));
+    /* Stufe 5: das Dachblech. Nur die unterste Lage traegt, die Streben darueber sind
+     * Aussehen. Werte aus ModBlocks.java:1600. */
+    public static final DeferredBlock<Block> STEEL_ROOF = register("steel_roof", () -> new SteelRoofBlock(BlockBehaviour.Properties.of().strength(5.0F, 15.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion()));
     /* Stufe 5: die drei Scheinwerfer und ihr Lichtkegel. Reichweiten 2, 8 und 32 Bloecke wie
      * im Original (ModBlocks.java:1483 ff.); das Rotsteinsignal schaltet sie AUS. */
     public static final DeferredBlock<Block> SPOTLIGHT_INCANDESCENT = register("spotlight_incandescent", () -> new SpotlightBlock(spotlight(), 2, SpotlightBlock.Bauart.GLUEHBIRNE));

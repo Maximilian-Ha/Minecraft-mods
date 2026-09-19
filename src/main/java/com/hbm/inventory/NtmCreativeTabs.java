@@ -1146,6 +1146,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.RED_CABLE);
                         output.accept(NtmBlocks.RED_WIRE_COATED);
                         output.accept(NtmBlocks.STEEL_BEAM);
+                        output.accept(NtmBlocks.STEEL_ROOF);
                         output.accept(NtmBlocks.STEEL_GRATE);
                         output.accept(NtmBlocks.STEEL_GRATE_WIDE);
                         output.accept(NtmBlocks.STEEL_WALL);

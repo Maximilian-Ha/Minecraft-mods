@@ -466,6 +466,7 @@ public class NtmBlockTagProvider extends BlockTagsProvider {
                         NtmBlocks.MACHINE_DIFURNACE_EXTENSION.get(),
                         NtmBlocks.RED_WIRE_COATED.get(),
                         NtmBlocks.STEEL_BEAM.get(),
+                        NtmBlocks.STEEL_ROOF.get(),
                         NtmBlocks.STEEL_GRATE.get(),
                         NtmBlocks.STEEL_GRATE_WIDE.get(),
                         NtmBlocks.STEEL_WALL.get(),

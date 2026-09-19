@@ -621,6 +621,7 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.registerCableDetector();
         this.registerCableGauge();
         this.registerFluidDuctGauge();
+        this.registerSteelRoof();
         this.registerMachineBattery();
         this.registerCableSwitch();
         this.particleOnlyBlock(NtmBlocks.MACHINE_DIFURNACE_EXTENSION, modLoc("block/difurnace_extension"));
@@ -1584,6 +1585,54 @@ public class NtmBlockStateProvider extends BlockStateProvider {
             return ConfiguredModel.builder().modelFile(model).rotationX(x).rotationY(y).build();
         });
 
+        this.simpleBlockItem(block, model);
+    }
+
+    /**
+     * Uebersetzt einen Kasten aus einem Techne-Modell (ModelRenderer mit Texturversatz) in ein
+     * Modellelement. Die sechs Texturfelder liegen dort im festen Kreuzmuster um den Versatz
+     * (u|v) herum; b, h und t sind Breite, Hoehe und Tiefe des Kastens:
+     *
+     *   -X: (u+t+b | v+t)   bis (u+2t+b | v+t+h)      -Y: (u+t     | v)   bis (u+t+b   | v+t)
+     *   +X: (u     | v+t)   bis (u+t    | v+t+h)      +Y: (u+t+b   | v+t) bis (u+2b+t  | v)
+     *   -Z: (u+t   | v+t)   bis (u+t+b  | v+t+h)      +Z: (u+2t+b  | v+t) bis (u+2t+2b | v+t+h)
+     *
+     * Der Renderer des Originals dreht das Modell um 180 Grad um Z, bevor er es setzt: dabei
+     * werden X und Y gespiegelt, Z bleibt. Aus -X wird also Ost, aus +X West, aus -Y Oben und
+     * aus +Y Unten -- so sind die Richtungen unten zugeordnet. Die Pixelwerte werden mit 16/64
+     * auf die uv-Skala der Modelle umgerechnet, denn die Texturbahn ist 64 Pixel breit.
+     */
+    private void techneKasten(BlockModelBuilder model, String textur,
+                              int x, int y, int z, int b, int h, int tf, int u, int v) {
+
+        float s = 16F / 64F;
+        var kasten = model.element().from(x, y, z).to(x + b, y + h, z + tf);
+
+        kasten.face(Direction.EAST) .uvs((u)        * s, (v + tf)     * s, (u + tf)        * s, (v + tf + h) * s).texture(textur).end();
+        kasten.face(Direction.WEST) .uvs((u+tf+b)   * s, (v + tf)     * s, (u + 2*tf + b)  * s, (v + tf + h) * s).texture(textur).end();
+        kasten.face(Direction.UP)   .uvs((u+tf)     * s, (v)          * s, (u + tf + b)    * s, (v + tf)     * s).texture(textur).end();
+        kasten.face(Direction.DOWN) .uvs((u+tf+b)   * s, (v + tf)     * s, (u + 2*b + tf)  * s, (v)          * s).texture(textur).end();
+        kasten.face(Direction.NORTH).uvs((u+tf)     * s, (v + tf)     * s, (u + tf + b)    * s, (v + tf + h) * s).texture(textur).end();
+        kasten.face(Direction.SOUTH).uvs((u+2*tf+b) * s, (v + tf)     * s, (u + 2*tf + 2*b)* s, (v + tf + h) * s).texture(textur).end();
+
+        kasten.end();
+    }
+
+    private void registerSteelRoof() {
+        Block block = NtmBlocks.STEEL_ROOF.get();
+
+        BlockModelBuilder model = this.models().withExistingParent(this.name(block), mcLoc("block/block"))
+                .renderType("cutout")
+                .texture("particle", modLoc("block/steel_roof"))
+                .texture("all", modLoc("block/steel_roof"));
+
+        // Die drei Kaesten aus ModelSteelRoof: Blech, Laengsstrebe, Querbalken. Die
+        // Weltkoordinaten folgen aus der Drehung des Renderers -- Blech unten, Streben darauf.
+        this.techneKasten(model, "#all",  0, 0,  0, 16, 1, 16,  0,  0);
+        this.techneKasten(model, "#all", 10, 1,  0,  1, 1, 16, 30, 15);
+        this.techneKasten(model, "#all",  0, 1, 10, 16, 2,  2,  0, 17);
+
+        this.simpleBlock(block, model);
         this.simpleBlockItem(block, model);
     }
 

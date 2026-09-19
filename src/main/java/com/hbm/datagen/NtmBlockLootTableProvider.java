@@ -429,6 +429,7 @@ public class NtmBlockLootTableProvider extends BlockLootSubProvider {
         this.dropSelf(NtmBlocks.RED_CABLE.get());
         this.dropSelf(NtmBlocks.RED_WIRE_COATED.get());
         this.dropSelf(NtmBlocks.STEEL_BEAM.get());
+        this.dropSelf(NtmBlocks.STEEL_ROOF.get());
         this.dropSelf(NtmBlocks.STEEL_GRATE.get());
         this.dropSelf(NtmBlocks.STEEL_GRATE_WIDE.get());
         this.dropSelf(NtmBlocks.STEEL_WALL.get());

@@ -4987,3 +4987,41 @@ Die Fluidsorte steht trotzdem in der Blickleiste, zusammen mit mB/t und mB/s —
 im Original.
 
 Damit ist die Lücke bei **26**.
+
+### Das Dachblech — ein Techne-Modell von Hand übersetzt
+
+`steel_roof` war der letzte offene Punkt aus der Bauteil-Gruppe, und der unangenehmste: sein
+Aussehen steckt nicht in einer OBJ-Datei, sondern in einer Java-Klasse. `ModelSteelRoof` ist ein
+Techne-Export von 2015 — drei `ModelRenderer`-Kästen mit Texturversätzen, gezeichnet von einem
+TileEntitySpecialRenderer.
+
+In 1.21 braucht es dafür keine Blockentität. Drei Kästen sind drei Modellelemente; die Arbeit
+liegt darin, die Koordinaten richtig zu übersetzen. Zwei Fallen:
+
+**Erstens die Achsen.** Entitätsmodelle zählen Y nach unten, deshalb dreht der Renderer das
+Modell um 180° um Z und verschiebt es um (0,5\|1,5\|0,5). Aus einem Modellpunkt (mx\|my\|mz)
+wird also (8−mx \| 24−my \| 8+mz) in Pixeln. Das ergibt für die Platte genau
+(0\|0\|0)-(16\|1\|16) — und das ist dieselbe Box, die `setBlockBoundsBasedOnState` als
+Kollision setzt. Diese Übereinstimmung war die Gegenprobe: hätte ich die Drehung falsch
+herum gerechnet, läge die Platte oben und die Kollision unten.
+
+**Zweitens die Textur.** Techne legt die sechs Seiten eines Kastens in einem festen Kreuzmuster
+um den Versatz (u\|v). Ich habe das Muster einmal als Kommentar hingeschrieben und in eine
+Hilfsmethode gegossen, statt achtzehn Zahlenpaare von Hand einzutippen — die Formel ist die
+Begründung, die Zahlen wären nur ihr Ergebnis.
+
+Und die Textur selbst musste wachsen: sie ist 64×32, und Minecraft nimmt in den Blockatlas nur
+Bahnen auf, deren Höhe ein Vielfaches der Breite ist — sonst hält es sie für eine Animation und
+bricht ab. Also auf 64×64 aufgefüllt, untere Hälfte durchsichtig. Das Auffüllen habe ich mit
+einem selbstgeschriebenen PNG-Ent- und -Packer gemacht (weder PIL noch ImageMagick sind hier
+installiert) und danach gegengeprüft: obere Hälfte Byte für Byte gleich, untere Hälfte leer.
+
+Nebenbei eine Bestätigung, dass die UV-Rechnung stimmt: im Muster bleibt oben links ein
+ungenutztes Feld frei — und genau dort ist die Originaltextur durchsichtig, während die Felder,
+die die Formel als Ober- und Unterseite ausweist, undurchsichtiges Blech zeigen.
+
+**Nicht mitportiert:** das Schredderrezept (`steel_roof` → 9× Stahlstaub-Krümel). Der Port hat in
+`ShredderRecipes` bisher überhaupt keine Mod-Blöcke stehen, nur Erze und Trümmer; ein einzelner
+Eintrag für dieses eine Blech wäre willkürlich. Das ist eine eigene Lücke, keine dieses Blocks.
+
+Die Lücke steht bei **25**.

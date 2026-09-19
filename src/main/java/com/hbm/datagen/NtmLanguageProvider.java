@@ -2312,6 +2312,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.RED_CABLE, "Red Copper Cable");
         this.add(NtmBlocks.RED_WIRE_COATED, "Coated Red Copper Cable");
         this.add(NtmBlocks.STEEL_BEAM, "Steel Beam");
+        this.add(NtmBlocks.STEEL_ROOF, "Steel Roof");
         this.add(NtmBlocks.STEEL_GRATE, "Steel Grate");
         this.add(NtmBlocks.STEEL_GRATE_WIDE, "Wide Steel Grate");
         this.add(NtmBlocks.STEEL_WALL, "Steel Wall");

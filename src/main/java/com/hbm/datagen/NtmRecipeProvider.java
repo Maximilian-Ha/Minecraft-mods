@@ -1890,6 +1890,13 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_steel_scaffold", has(NtmBlocks.STEEL_SCAFFOLD.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "steel_beam_from_scaffold"));
 
+        // Original CraftingManager Z. 461: drei Barren nebeneinander ergeben zwei Bleche.
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, NtmBlocks.STEEL_ROOF.get(), 2)
+                .pattern("SSS")
+                .define('S', NtmItems.INGOT_STEEL.get())
+                .unlockedBy("has_ingot_steel", has(NtmItems.INGOT_STEEL.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "steel_roof"));
+
         // Original CraftingManager Z. 293. Bisher fehlte dem Heliostatspiegel das Rezept,
         // weil steel_beam im Port nicht existierte.
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.SOLAR_MIRROR.get(), 3)
