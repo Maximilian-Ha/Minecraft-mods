@@ -1968,6 +1968,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.GUN_MARESLEG_BROKEN, "Broken");
         this.add(NtmItems.GUN_SPAS12, "SPAS-12");
         this.add(NtmItems.GUN_AUTOSHOTGUN, "Automatic Shotgun");
+        this.add(NtmItems.GUN_AUTOSHOTGUN_SHREDDER, "Shredder");
         this.add(NtmItems.GUN_AUTOSHOTGUN_SEXY, "Sexy Automatic Shotgun");
         this.add(NtmItems.GUN_LIGHT_REVOLVER_DANI, "Day And Night");
         this.add(NtmItems.GUN_UZI, "Uzi");

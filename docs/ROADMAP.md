@@ -7416,3 +7416,65 @@ aus Feldern oder Rechnungen und stehen mit Namen in der Ausgabe. Ein Tor, das st
 woanders hinschaut, ist schlimmer als keins.
 
 Alle 33 Tore grün.
+
+## Berichtigung: die Schredder-Schrotflinte war nie blockiert
+
+Im Commit der Autoschrotflinte stand, `gun_autoshotgun_shredder` sei nicht übernommen, weil
+„das Geschossteilsystem des Ports diese Aufspaltung noch nicht kennt". **Das war falsch, und
+zwar ohne dass ich nachgesehen hätte.** Nachgemessen ist jedes einzelne Stück da:
+
+| gebraucht | im Port |
+|---|---|
+| `setBeam`, `setOnBeamImpact` | da, `BulletBeamBase.onImpact` ruft den Haken |
+| `setOnRicochet` | da, `BulletBaseMK4.onHitBlock` ruft den Haken |
+| `ricochetAngle`, `maxRicochetCount`, Feld `ricochets` | alle drei da |
+| `BulletConfig.clone()`, `getDamage(...)` | da |
+| Konstruktor für die Splitter | `BulletBaseMK4(Level, LivingEntity, BulletConfig, float, float, Vec3, Vec3)` |
+
+Es fehlten zwei Schauwerte, mehr nicht. Die Waffe ist jetzt drin.
+
+### Was der Schredder tut
+
+Jede seiner sechs Patronen ist ein **Strahl**, der den Schaden aller Schrotkugeln auf einmal
+trägt (`damageMult × projectilesMax`). Wo er auftrifft, richtet er im Umkreis eines
+Dreiviertelblocks Laserschaden an und zerfällt in Splitter: an einer Wand fliegen sie von ihr
+weg, in einem Getroffenen stieben sie in alle Richtungen. Die Splitter selbst sind langsame,
+langlebige Kopien der Ausgangspatrone, die bis zu dreimal von Wänden abspringen — bei jedem
+Winkel bis neunzig Grad, also praktisch immer — und bei jedem Absprung Plasmaschaden im
+Umkreis eines halben Blocks machen.
+
+Sie kommen vom **Gurt**, nicht aus einem Kasten: `MagazineBelt` statt `MagazineFullReload`.
+
+### Der zweite Fehler, den das aufgedeckt hat
+
+Beim Schreiben hatte ich die Winkelrechnung und das Abprallen von Hand gebaut — und dabei in
+den Kommentar geschrieben, `BlockDetonatable` gebe es im Port nicht und der Teleport-Kniff des
+Originals sei in 1.21 unnötig. Beides falsch: `BulletConfig.LAMBDA_STANDARD_RICOCHET` steht
+seit Langem im Port, benutzt `DetonatableBlock`, `BobMathUtil.getCrossAngle` **und** genau
+diesen Teleport-Kniff. Der Schredder-Abpraller ist jetzt derselbe Ablauf mit einem Zusatz
+(dem Flächenschaden) statt einer zweiten, abweichenden Fassung.
+
+Zwei falsche Behauptungen in einer Runde, beide aus demselben Grund: ich habe geschrieben, was
+ich erwartet habe, statt nachzusehen. Die Messung dauert eine Minute.
+
+### `import-check` hatte ein Loch: `instanceof`
+
+Bei der ersten Fassung stand ein `BulletBeamBase` ohne Import in der Datei, und das Tor schwieg.
+Der Grund: sein Ausdruck für die Deklaration sucht `Typ name` gefolgt von `=`, `;` oder `)` —
+die Form `instanceof Typ name ?` hat danach ein Fragezeichen. Die Gegenprobe des Tors kannte
+`instanceof` zwar, aber nur für „gibt es diesen Namen überhaupt". Jetzt steht er in beiden.
+
+Damit hat dieselbe Runde alle zehn übrigen fehlenden Importe **statisch** gemeldet, darunter
+`DamageClass` als verschachtelten Typ — die Regel aus der vorigen Runde bei ihrem ersten
+echten Einsatz.
+
+### Und ein Modell, das CI gefunden hat
+
+Der Beutesockel fiel noch einmal durch: `models/item/deco_loot.json` fehlte. Sein BlockItem
+liegt zwar nie in einer Hand — kein Reiter, keine Beute —, ein Modell braucht es trotzdem,
+sonst zeigt Minecraft den Fehlwürfel. **Dieses Tor lässt sich hier nicht vorab fahren:**
+`model-resolve-check` braucht die erzeugte Sprachdatei, um zu wissen, welche Gegenstände es
+gibt, und die entsteht erst in `runData`. Lokal meldet es deshalb „ohne Sprachdatei" und
+überspringt genau diese Prüfung. Das ist eine Grenze der Werkstatt, kein Fehler des Tors.
+
+Alle 33 Tore grün.

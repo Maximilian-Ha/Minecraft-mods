@@ -1,0 +1,7 @@
+{
+  "__comment": "Der Sockel liegt nie in einer Hand -- er steht in keinem Reiter und gibt sich beim Abbauen nicht her. Ein Modell braucht sein BlockItem trotzdem, sonst zeigt Minecraft den fehlenden-Modell-Wuerfel. Gezeigt wird die Textur, die ihm das Original gibt.",
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "hbmsntm:block/block_steel"
+  }
+}

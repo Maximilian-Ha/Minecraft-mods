@@ -1,7 +1,9 @@
 package com.hbm.items.weapon.sedna.factory;
 
+import com.hbm.blocks.bomb.DetonatableBlock;
 import com.hbm.entity.NtmEntityTypes;
 import com.hbm.entity.projectile.BulletBaseMK4;
+import com.hbm.entity.projectile.BulletBeamBase;
 import com.hbm.entity.projectile.DuchessGambit;
 import com.hbm.extprop.HbmLivingAttachments;
 import com.hbm.items.ItemEnums.CasingType;
@@ -13,6 +15,7 @@ import com.hbm.items.weapon.sedna.GunBaseNTItem.WeaponQuality;
 import com.hbm.items.weapon.sedna.factory.GunFactory.Ammo;
 import com.hbm.items.weapon.sedna.factory.GunFactory.AmmoSecret;
 import com.hbm.items.weapon.sedna.mags.IMagazine;
+import com.hbm.items.weapon.sedna.mags.MagazineBelt;
 import com.hbm.items.weapon.sedna.mags.MagazineFullReload;
 import com.hbm.items.weapon.sedna.mags.MagazineSingleReload;
 import com.hbm.items.weapon.sedna.mods.XWeaponModManager;
@@ -26,13 +29,25 @@ import com.hbm.render.anim.BusAnimation;
 import com.hbm.render.anim.BusAnimationKeyframe;
 import com.hbm.render.anim.BusAnimationKeyframe.IType;
 import com.hbm.render.anim.BusAnimationSequence;
+import com.hbm.util.BobMathUtil;
+import com.hbm.util.DamageResistanceHandler.DamageClass;
+import com.hbm.util.EntityDamageUtil;
 import com.hbm.util.SoundUtils;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -41,6 +56,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.IntFunction;
 
 public class XFactory12ga {
 
@@ -56,6 +72,15 @@ public class XFactory12ga {
     public static BulletConfig g12_equestrian_tkr;
     /** Die Signaturpatrone der schoenen Autoschrotflinte. Kein Schaden -- sie ruft ein Luftschiff. */
     public static BulletConfig g12_equestrian_bj;
+
+    /* Die Schredderpatronen. Jede ist ein Strahl, der beim Aufschlag in Splitter zerfaellt;
+     * die Splitter springen von Waenden ab. Paarweise zu den gewoehnlichen Patronen. */
+    public static BulletConfig g12_shredder;
+    public static BulletConfig g12_shredder_slug;
+    public static BulletConfig g12_shredder_flechette;
+    public static BulletConfig g12_shredder_magnum;
+    public static BulletConfig g12_shredder_explosive;
+    public static BulletConfig g12_shredder_phosphorus;
 
     public static BiConsumer<BulletBaseMK4, HitResult> LAMBDA_STANDARD_EXPLODE = (bullet, hr) -> {
         Lego.standardExplode(bullet, hr, 2F); bullet.discard();
@@ -110,6 +135,13 @@ public class XFactory12ga {
 
         g12_equestrian_bj = new BulletConfig().setItem(AmmoSecret.G12_EQUESTRIAN).setDamage(0F).setOnImpact(LAMBDA_BOAT)
                 .setCasing(new SpentCasing(SpentCasingType.SHOTGUN).setColor(0xB52B2B, SpentCasing.COLOR_CASE_EQUESTRIAN).setScale(0.75F).register("12gaEquestrianBJ"));
+
+        g12_shredder            = schredder(g12,            splitter(g12));
+        g12_shredder_slug       = schredder(g12_slug,       splitter(g12_slug));
+        g12_shredder_flechette  = schredder(g12_flechette,  splitter(g12_flechette));
+        g12_shredder_magnum     = schredder(g12_magnum,     splitter(g12_magnum));
+        g12_shredder_explosive  = schredder(g12_explosive,  splitter(g12_explosive));
+        g12_shredder_phosphorus = schredder(g12_phosphorus, splitter(g12_phosphorus));
 
         BulletConfig[] all = new BulletConfig[] {g12_bp, g12_bp_magnum, g12_bp_slug, g12, g12_slug, g12_flechette, g12_magnum, g12_explosive, g12_phosphorus};
 
@@ -209,14 +241,26 @@ public class XFactory12ga {
         ).setDefaultAmmo(Ammo.G12, 20));
 
         /*
+         * Die Schredder-Autoschrotflinte, XFactory12ga Z. 367 des Originals. Baugleich mit der
+         * gewoehnlichen, aber sie frisst nur Schredderpatronen -- und die kommen vom Gurt,
+         * nicht aus einem Kasten.
+         */
+        NtmItems.GUN_AUTOSHOTGUN_SHREDDER = registry.register("gun_autoshotgun_shredder", () -> new GunBaseNTItem(WeaponQuality.B_SIDE, new GunConfig()
+                .dura(2_000).draw(10).inspect(33).reloadSequential(true).crosshair(Crosshair.L_CIRCLE).smoke(Lego.LAMBDA_STANDARD_SMOKE)
+                .rec(new Receiver(0)
+                        .dmg(50F).delay(10).auto(true).autoAfterDry(true).dryfireAfterAuto(true).reload(44).jam(19).sound(NtmSoundEvents.GUN_SHREDDER_FIRE, 1.0F, 1.0F)
+                        .mag(new MagazineBelt().addConfigs(g12_shredder, g12_shredder_slug, g12_shredder_flechette, g12_shredder_magnum, g12_shredder_explosive, g12_shredder_phosphorus))
+                        .offset(0.75, -0.125, -0.25)
+                        .setupStandardFire().recoil(LAMBDA_RECOIL_AUTOSHOTGUN))
+                .setupStandardConfiguration()
+                .anim(LAMBDA_SHREDDER_ANIMS).orchestra(Orchestras.ORCHESTRA_SHREDDER)
+        ).setDefaultAmmo(Ammo.G12, 20));
+
+        /*
          * Die schoene Autoschrotflinte, XFactory12ga Z. 378 des Originals. Hundert Schuss im
          * Gurt, vier Ticks zwischen zwei Schuessen, und ihr erstes Magazin ist die
          * Signaturpatrone -- wer sie hat, wirft Luftschiffe.
          *
-         * NICHT UEBERNOMMEN: gun_autoshotgun_shredder, die dritte der Familie. Ihre Munition
-         * zerfaellt beim Aufschlag in Strahlen, die weiterspringen (makeShredderConfig mit
-         * setOnBeamImpact und setOnRicochet); das Geschossteilsystem des Ports kennt diese
-         * Aufspaltung noch nicht.
          */
         NtmItems.GUN_AUTOSHOTGUN_SEXY = registry.register("gun_autoshotgun_sexy", () -> new GunBaseNTItem(WeaponQuality.LEGENDARY, new GunConfig()
                 .dura(5_000).draw(20).inspect(65).reloadSequential(true).inspectCancel(false).crosshair(Crosshair.L_CIRCLE).hideCrosshair(false).smoke(Lego.LAMBDA_STANDARD_SMOKE)
@@ -228,6 +272,163 @@ public class XFactory12ga {
                 .setupStandardConfiguration()
                 .anim(LAMBDA_SEXY_ANIMS).orchestra(Orchestras.ORCHESTRA_SHREDDER_SEXY)
         ).setDefaultAmmo(Ammo.G12_MAGNUM, 50));
+    }
+
+    /**
+     * Baut aus einer gewoehnlichen Patrone ihre Schredderfassung: kein Schrot mehr, sondern
+     * EIN Strahl, der den Schaden aller Schrotkugeln auf einmal traegt (damageMult mal
+     * projectilesMax). Wo er auftrifft, zerfaellt er in die mitgegebenen Splitter.
+     *
+     * XFactory12ga Z. 105 des Originals (makeShredderConfig).
+     *
+     * ABWEICHUNG, der Schauwert: das Original streut an der Aufschlagstelle einen
+     * "plasmablast"-Partikelfaecher. Diese Partikelart hat der Port nicht -- dieselbe
+     * Abweichung steht schon bei der Plasmafuellung der Granate.
+     */
+    public static BulletConfig schredder(BulletConfig original, BulletConfig splitter) {
+
+        BulletConfig cfg = new BulletConfig().setBeam().setRenderRotations(false).setLife(5)
+                .setDamage(original.damageMult * original.projectilesMax).setupDamageClass(DamageClass.LASER);
+        cfg.setItem(original::getAmmo);
+        cfg.setCasing(original.casing);
+
+        cfg.setOnBeamImpact((strahl, treffer) -> {
+
+            /* Die Seite ist schon geklaert: BulletBeamBase.onImpact ruft diesen Haken nur auf
+             * dem Server. */
+            Level level = strahl.level;
+
+            int anzahl = splitter.projectilesMin;
+            if(splitter.projectilesMax > splitter.projectilesMin) {
+                anzahl += level.random.nextInt(splitter.projectilesMax - splitter.projectilesMin + 1);
+            }
+
+            if(treffer instanceof BlockHitResult bhr) {
+
+                /* Die Splitter starten ein Zehntel vor der Wand, sonst stecken sie sofort darin. */
+                Direction seite = bhr.getDirection();
+                Vec3 stelle = bhr.getLocation().add(seite.getStepX() * 0.1, seite.getStepY() * 0.1, seite.getStepZ() * 0.1);
+
+                schadenImUmkreis(strahl, strahl.getThrower(), strahl.damage, stelle, 0.75, DamageClass.LASER);
+                streuSplitter(level, strahl, splitter, anzahl, stelle,
+                        i -> new Vec3(seite.getStepX(), seite.getStepY(), seite.getStepZ()));
+            }
+
+            if(treffer instanceof EntityHitResult ehr) {
+
+                /* Im Getroffenen gibt es keine Flaeche, von der die Splitter wegfliegen
+                 * koennten -- sie stieben in alle Richtungen auseinander. */
+                streuSplitter(level, strahl, splitter, anzahl, ehr.getLocation(),
+                        i -> new Vec3(level.random.nextGaussian(), level.random.nextGaussian(), level.random.nextGaussian()).normalize());
+            }
+        });
+
+        return cfg;
+    }
+
+    /** Die Splitter eines zerfallenen Strahls in die Welt setzen. */
+    private static void streuSplitter(Level level, BulletBeamBase strahl, BulletConfig splitter,
+                                      int anzahl, Vec3 stelle, IntFunction<Vec3> richtung) {
+
+        LivingEntity schuetze = strahl.getThrower();
+
+        for(int i = 0; i < anzahl; i++) {
+            level.addFreshEntity(new BulletBaseMK4(level, schuetze, splitter,
+                    strahl.damage * splitter.damageMult, 0.2F, stelle, richtung.apply(i)));
+        }
+    }
+
+    /**
+     * Baut aus einer gewoehnlichen Patrone den Splitter, in den die Schredderfassung zerfaellt:
+     * langsam, langlebig, und er springt bis zu dreimal von Waenden ab -- bei jedem Winkel bis
+     * neunzig Grad, also praktisch immer.
+     *
+     * XFactory12ga Z. 158 des Originals (makeShredderSubmunition).
+     */
+    public static BulletConfig splitter(BulletConfig original) {
+        return original.clone()
+                .setRicochetAngle(90).setRicochetCount(3).setVel(0.5F).setLife(50)
+                .setupDamageClass(DamageClass.PLASMA).setOnRicochet(LAMBDA_SHREDDER_RICOCHET);
+    }
+
+    /**
+     * Was ein Splitter an einer Wand tut. Das ist der gewoehnliche Abpraller des Ports
+     * (BulletConfig.LAMBDA_STANDARD_RICOCHET) mit einem Zusatz: bei jedem Absprung richtet er
+     * im Umkreis eines halben Blocks Plasmaschaden an.
+     *
+     * XFactory12ga Z. 164 des Originals.
+     *
+     * NICHT UEBERNOMMEN, zwei Sonderfaelle des Originals: Glas zerschlaegt der Splitter, statt
+     * davon abzuprallen, und einem deco_crt dreht er den Bildschirm um. Glas laesst sich in
+     * 1.21 nicht mehr ueber ein Material erkennen, und deco_crt hat der Port nicht. Der dritte
+     * Sonderfall, das Zuenden eines DetonatableBlock, steht dagegen drin -- den Block gibt es.
+     *
+     * NICHT UEBERNOMMEN, der Schauwert: der "plasmablast"-Partikelfaecher bei jedem Absprung,
+     * aus demselben Grund wie oben.
+     */
+    public static BiConsumer<BulletBaseMK4, BlockHitResult> LAMBDA_SHREDDER_RICOCHET = (geschoss, bhr) -> {
+
+        BlockState zustand = geschoss.level.getBlockState(bhr.getBlockPos());
+        if(zustand.getBlock() instanceof DetonatableBlock db) db.onShot(geschoss.level, bhr.getBlockPos());
+
+        Direction seite = bhr.getDirection();
+        Vec3 flaeche = new Vec3(seite.getStepX(), seite.getStepY(), seite.getStepZ());
+        Vec3 fahrt = geschoss.getDeltaMovement().normalize();
+
+        /* Null Grad heisst streifend, neunzig heisst senkrecht auf die Wand zu. */
+        double winkel = Math.abs(BobMathUtil.getCrossAngle(fahrt, flaeche) - 90);
+
+        if(winkel > geschoss.config.ricochetAngle) {
+            geschoss.setPos(bhr.getLocation());
+            geschoss.discard();
+            return;
+        }
+
+        schadenImUmkreis(geschoss, geschoss.getOwner(), geschoss.damage, geschoss.position(), 0.5, DamageClass.PLASMA);
+
+        geschoss.ricochets++;
+        if(geschoss.ricochets > geschoss.config.maxRicochetCount) {
+            geschoss.setPos(bhr.getLocation());
+            geschoss.discard();
+            return;
+        }
+
+        /* Gespiegelt wird nur die Achse, auf der die getroffene Flaeche steht. */
+        Vec3 bewegung = geschoss.getDeltaMovement();
+        geschoss.setDeltaMovement(
+                seite.getStepX() != 0 ? -bewegung.x : bewegung.x,
+                seite.getStepY() != 0 ? -bewegung.y : bewegung.y,
+                seite.getStepZ() != 0 ? -bewegung.z : bewegung.z);
+        geschoss.setPos(bhr.getLocation());
+
+        SoundUtils.playAtEntity(geschoss, NtmSoundEvents.RICOCHET.get(), SoundSource.BLOCKS, 0.25F, 1.0F);
+
+        /* Ohne diesen Sprung glaettet der Client den Knick weg und das Geschoss scheint durch
+         * die Wand zu fliegen -- derselbe Kniff wie im gewoehnlichen Abpraller. */
+        if(geschoss.level instanceof ServerLevel serverLevel) {
+            serverLevel.getChunkSource().broadcast(geschoss, new ClientboundTeleportEntityPacket(geschoss));
+        }
+    };
+
+    /**
+     * Schaden in einem Wuerfel um eine Stelle. Beide Schredderwege brauchen dasselbe: der
+     * Strahl beim Zerfallen, der Splitter bei jedem Absprung.
+     */
+    private static void schadenImUmkreis(Entity urheber, Entity schuetze, float schaden,
+                                         Vec3 stelle, double reichweite, DamageClass art) {
+
+        Level level = urheber.level;
+        AABB kasten = new AABB(stelle, stelle).inflate(reichweite);
+
+        for(Entity getroffen : level.getEntities(urheber, kasten)) {
+            if(!getroffen.isAlive()) continue;
+            DamageSource quelle = BulletConfig.getDamage(level, getroffen, schuetze, art);
+            if(getroffen instanceof LivingEntity lebendig) {
+                EntityDamageUtil.hurtNT(lebendig, quelle, schaden, true, false, 0D, 0F, 0F);
+            } else {
+                getroffen.hurt(quelle, schaden);
+            }
+        }
     }
 
     /** Mit der Saege ist sie keine Flinte mehr, sondern eine Mare's Leg. */

@@ -168,6 +168,10 @@ for path, pkg, raw in files:
     # der Typ als Generikum-Argument (BlockEntityType<Foo>) und als Methodenreferenz (Foo::new).
     used |= set(re.findall(r'(?<=[<,])\s*([A-Z]\w*)\s*(?=[>,])', body))
     used |= set(re.findall(r'(?<![.\w])([A-Z]\w*)\s*::', body))
+    # Runde 182: instanceof. Der Ausdruck fuer die Deklaration ("Typ name =") trifft die Form
+    # "instanceof Typ name ?" nicht -- danach steht ein Fragezeichen, kein =, ; oder ). In
+    # XFactory12ga stand so ein BulletBeamBase ohne Import, und das Gate schwieg.
+    used |= set(re.findall(r'\binstanceof\s+([A-Z]\w*)', body))
     # Runde 128: der STATISCHE ZUGRIFF, die Form, die bis dahin durchrutschte und einen
     # CI-Lauf kostete -- CassetteItem.TrackType.fromMeta(...) nennt CassetteItem nur als
     # Praefix. Der Name steht in keiner der Formen oben, ist aber sehr wohl ein Typ, der

@@ -66,6 +66,7 @@ public class GunFactoryClient {
         registerGunItemRenderer(event, new ItemRenderPanzerschreck(), NtmItems.GUN_PANZERSCHRECK.get());
         registerGunItemRenderer(event, new ItemRenderMK108(), NtmItems.GUN_MK108.get());
         registerGunItemRenderer(event, new ItemRenderShredder(ResourceManager.SHREDDER_TEX), NtmItems.GUN_AUTOSHOTGUN.get());
+        registerGunItemRenderer(event, new ItemRenderShredder(ResourceManager.SHREDDER_TEX), NtmItems.GUN_AUTOSHOTGUN_SHREDDER.get());
         registerGunItemRenderer(event, new ItemRenderShredder(ResourceManager.SHREDDER_TEX), NtmItems.GUN_AUTOSHOTGUN_SEXY.get());
 
         //PROJECTILES
