@@ -1150,6 +1150,12 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.spotlightVariants(NtmBlocks.SPOTLIGHT_HALOGEN, this.models().getBuilder("spotlight_halogen")
                 .customLoader(LampFloodModelBuilder::new).texture("texture", this.modLoc("block/flood_lamp")).end());
 
+        /* Der Mastaufsatz steht rund; das Original dreht ihn nicht. */
+        ModelFile poleTop = this.models().getBuilder("pole_top")
+                .customLoader(PoleTopModelBuilder::new).texture("texture", this.modLoc("block/deco_pole_top")).end();
+        this.simpleBlock(NtmBlocks.POLE_TOP.get(), poleTop);
+        this.blockItem(NtmBlocks.POLE_TOP);
+
         /* Der Lichtkegel ist unsichtbar: ein leeres Modell, und kein Gegenstand dazu. */
         this.simpleBlock(NtmBlocks.SPOTLIGHT_BEAM.get(), this.models().getBuilder("spotlight_beam"));
     }
@@ -2475,6 +2481,10 @@ public class NtmBlockStateProvider extends BlockStateProvider {
             super(parent, helper);
         }
         @Override public BakedModelType getType() { return BakedModelType.PIPE; }
+    }
+    protected static class PoleTopModelBuilder extends BlockModelBuilderBase {
+        public PoleTopModelBuilder(BlockModelBuilder parent, ExistingFileHelper helper) { super(parent, helper); }
+        @Override public BakedModelType getType() { return BakedModelType.POLE_TOP; }
     }
     protected static class LampCageModelBuilder extends BlockModelBuilderBase {
         public LampCageModelBuilder(BlockModelBuilder parent, ExistingFileHelper helper) { super(parent, helper); }

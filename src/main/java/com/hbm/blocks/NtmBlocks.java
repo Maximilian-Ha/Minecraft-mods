@@ -305,6 +305,8 @@ public class NtmBlocks {
     public static final DeferredBlock<Block> SPOTLIGHT_INCANDESCENT = register("spotlight_incandescent", () -> new SpotlightBlock(spotlight(), 2, SpotlightBlock.Bauart.GLUEHBIRNE));
     public static final DeferredBlock<Block> SPOTLIGHT_FLUORO = register("spotlight_fluoro", () -> new SpotlightBlock(spotlight(), 8, SpotlightBlock.Bauart.LEUCHTSTOFF));
     public static final DeferredBlock<Block> SPOTLIGHT_HALOGEN = register("spotlight_halogen", () -> new SpotlightBlock(spotlight(), 32, SpotlightBlock.Bauart.HALOGEN));
+    /* Stufe 5: der Aufsatz der Antennenmasten. Werte aus ModBlocks.java:1596. */
+    public static final DeferredBlock<Block> POLE_TOP = register("pole_top", () -> new Block(BlockBehaviour.Properties.of().strength(5.0F, 15.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion()));
     /* Der Lichtkegel selbst: unsichtbar, nicht anfassbar, nur hell. */
     public static final DeferredBlock<Block> SPOTLIGHT_BEAM = BLOCKS.register("spotlight_beam", () -> new SpotlightBeamBlock(BlockBehaviour.Properties.of().replaceable().noCollission().noOcclusion().noLootTable().air().lightLevel(state -> 15).pushReaction(PushReaction.DESTROY)));
 

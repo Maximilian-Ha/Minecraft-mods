@@ -442,6 +442,7 @@ public class NtmBlockLootTableProvider extends BlockLootSubProvider {
         this.dropSelf(NtmBlocks.SPOTLIGHT_INCANDESCENT.get());
         this.dropSelf(NtmBlocks.SPOTLIGHT_FLUORO.get());
         this.dropSelf(NtmBlocks.SPOTLIGHT_HALOGEN.get());
+        this.dropSelf(NtmBlocks.POLE_TOP.get());
         this.dropSelf(NtmBlocks.BLOCK_STARMETAL.get());
         this.dropSelf(NtmBlocks.BLOCK_ELECTRICAL_SCRAP.get());
         /* Wie im Original faellt gewoehnliche Erde ab, nicht der Block selbst. */

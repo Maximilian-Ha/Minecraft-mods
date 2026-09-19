@@ -1159,6 +1159,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.SPOTLIGHT_INCANDESCENT);
                         output.accept(NtmBlocks.SPOTLIGHT_FLUORO);
                         output.accept(NtmBlocks.SPOTLIGHT_HALOGEN);
+                        output.accept(NtmBlocks.POLE_TOP);
                         output.accept(NtmBlocks.BLOCK_STARMETAL);
                         output.accept(NtmBlocks.BLOCK_ELECTRICAL_SCRAP);
                         output.accept(NtmBlocks.WOOD_BARRIER);

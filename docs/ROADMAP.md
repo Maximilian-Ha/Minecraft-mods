@@ -4853,3 +4853,15 @@ war. `lang-check` fand, dass der Lichtkegel keine Namenszeile hatte — unsichtb
 ohne sie stünde im Spiel der rohe Schlüssel. Beides vor dem Push behoben, kein Lauf verbrannt.
 
 Die Lücke steht bei **36**.
+
+### Der Mastaufsatz
+
+`pole_top` folgt genau dem Muster von Träger und Masten: ein OBJ-Modell (`antenna_top.obj`)
+über den Lader, der im Port längst steht. Das Original dreht ihn nicht — er steht rund.
+
+Die beiden übrigen Stücke der Beleuchtungsgruppe brauchen mehr: `floodlight` und
+`pole_satellite_receiver` sind im Original Blockentitäten mit einstellbarem Winkel — beim
+Flutlicht stellt man ihn mit dem Werkzeug, und beides wird über eine eigene Darstellerklasse
+gezeichnet, nicht über ein festes Modell. Das ist eine eigene Runde.
+
+Die Lücke steht bei **35**.
