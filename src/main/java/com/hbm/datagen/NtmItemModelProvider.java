@@ -754,6 +754,7 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.layeredItem(NtmItems.FLUID_TANK_LEAD_FULL.get(), "fluid_tank_lead", "fluid_tank_lead_overlay");
         this.basicCustomLayerItem(NtmItems.FLUID_BARREL_EMPTY.get(), "fluid_barrel_empty");
         this.layeredItem(NtmItems.FLUID_BARREL_FULL.get(), "fluid_barrel", "fluid_barrel_overlay");
+        this.layeredItem(NtmItems.CANISTER_FULL.get(), "canister_empty", "canister_overlay");
         this.basicItem(NtmItems.FLUID_BARREL_INFINITE.get());
 
         this.basicCustomLayerItem(NtmItems.FLUID_PACK_EMPTY.get(), "fluid_pack");

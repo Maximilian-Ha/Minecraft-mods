@@ -1113,6 +1113,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("item.hbmsntm.part_generic.hde", "Heavy Duty Element");
         this.add("item.hbmsntm.part_generic.glass_polarized", "Polarized Lens");
         this.add(NtmItems.CANISTER_EMPTY, "Empty Canister");
+        this.add(NtmItems.CANISTER_FULL, "Canister: %s");
         this.add(NtmItems.CANISTER_NAPALM, "Napalm B");
         this.add(NtmItems.FUEL_ADDITIVE, "Fuel Additive");
         this.add("item.hbmsntm.fuel_additive.antiknock", "Tetraethyllead Antiknock Agent");

@@ -7944,3 +7944,41 @@ denen die Liste anfing, waren damit **vier ein Irrtum, einer eine Runde Arbeit u
 echte Blockade**.
 
 Alle 34 Tore grün.
+
+## Der Kanister — die fünfte Fehldiagnose derselben Liste
+
+Der vorletzte Eintrag, und die Begründung, die ich ihm zwei Runden lang mitgegeben hatte
+(„braucht die Flüssigkeitsbehälter"), war wieder zu groß. Nachgemessen:
+
+* `CANISTER_EMPTY` liegt seit der Ölrunde im Port.
+* `CD_Canister` — die Behälterangabe, die im Original entscheidet, welche Flüssigkeit in einen
+  Kanister darf und welche Farbe der Aufdruck bekommt — ist vollständig da. Sie steht an
+  Öl, Schweröl, Diesel und den übrigen, und `RenderCombustionEngine` liest sie schon aus.
+* Und das ganze Muster für „ein Gegenstand je Flüssigkeit" steht seit dem Fluidfass: das
+  Item (`FluidTankItem`, neunzehn Zeilen), das zweischichtige Modell, der Farbgeber, der
+  Kreativreiter-Durchlauf und das Behälterregister.
+
+Der Kanister ist also dasselbe wie das Fass, nur kleiner — tausend Millibar statt
+sechzehntausend — und mit **zwei** Unterschieden, die beide aus dem Original stammen:
+
+1. Er nimmt **nicht jede** Flüssigkeit, sondern nur die mit einem `CD_Canister`. Das Fass
+   nimmt alles, was überhaupt in einen Behälter geht.
+2. Er färbt sich **nicht nach der Flüssigkeit**, sondern nach der Farbe, die ihr
+   `CD_Canister` trägt. Diesel ist fast weiß und der Kanister trotzdem rot.
+
+### Ein Zugang, der privat war
+
+`ItemPool.add(Supplier, min, max, weight)` stand seit der C-130-Runde als privater Zugang da
+und wurde nur von der `ItemLike`-Fassung darüber benutzt. Der Kanister braucht beides — eine
+Spielart (welche Flüssigkeit) **und** eine gewürfelte Stückzahl von eins bis vier. Jetzt ist
+er offen.
+
+### Die Bilanz der C-130-Liste
+
+Sie fing mit sieben fehlenden Einträgen an. **Fünf davon waren ein Irrtum**: `radaway` lag nur
+als Trankeffekt vor, `med_bag` hatte alle Zutaten, `pill_iodine` und `definitelyfood` sind
+gewöhnliche Nahrung, und der Kanister brauchte nur das Muster des Fasses. **Einer**, der Henry,
+war wirklich eine Runde Arbeit. **Bleibt einer**: `gun_n_i_4_n_i`, und der hängt an
+`XFactoryAccelerator` — einer ganzen Fabrik, die der Port nicht hat.
+
+Alle 34 Tore grün.

@@ -1,6 +1,7 @@
 package com.hbm.inventory;
 
 import com.hbm.inventory.fluid.FluidType;
+import com.hbm.inventory.fluid.Fluids.CD_Canister;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.NtmItems;
 import net.minecraft.world.item.ItemStack;
@@ -36,6 +37,12 @@ public class FluidContainerRegistry {
 
             FluidContainerRegistry.registerContainer(new FluidContainer(MetaHelper.newStack(NtmItems.FLUID_TANK_FULL.get(), 1, id), new ItemStack(NtmItems.FLUID_TANK_EMPTY.get()), type, 1000));
             FluidContainerRegistry.registerContainer(new FluidContainer(MetaHelper.newStack(NtmItems.FLUID_BARREL_FULL.get(), 1, id), new ItemStack(NtmItems.FLUID_BARREL_EMPTY.get()), type, 16000));
+
+            /* Der Kanister nimmt NICHT jede Fluessigkeit, sondern nur die mit einem
+             * CD_Canister. Im Original steht genau diese Bedingung (FluidContainerRegistry
+             * Z. 75), und sie ist dieselbe, die auch ueber die Farbe des Aufdrucks entscheidet. */
+            if(type.getContainer(CD_Canister.class) != null)
+                FluidContainerRegistry.registerContainer(new FluidContainer(MetaHelper.newStack(NtmItems.CANISTER_FULL.get(), 1, id), new ItemStack(NtmItems.CANISTER_EMPTY.get()), type, 1000));
         }
     }
 

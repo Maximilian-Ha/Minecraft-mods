@@ -54,7 +54,15 @@ public class ItemPool {
         return this;
     }
 
-    private ItemPool add(Supplier<ItemStack> supplier, int min, int max, int weight) {
+    /**
+     * Wie oben, aber mit gewuerfelter Stueckzahl: der Lieferant bestimmt nur, WAS gezogen
+     * wird, der Vorrat wie viel davon.
+     *
+     * Runde 187: war bis hierher privat und wurde nur von der ItemLike-Fassung darueber
+     * benutzt. Der Kanister der C-130 braucht beides -- eine Spielart (die Fluessigkeit) UND
+     * eine Stueckzahl von eins bis vier.
+     */
+    public ItemPool add(Supplier<ItemStack> supplier, int min, int max, int weight) {
         this.entries.add(new Entry(supplier, min, max, weight));
         this.totalWeight += weight;
         return this;

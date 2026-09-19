@@ -511,6 +511,11 @@ public class NtmItems {
     public static final DeferredItem<Item> SOLID_FUEL = ITEMS.register("solid_fuel", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> CANISTER_EMPTY = ITEMS.register("canister_empty", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> CANISTER_NAPALM = ITEMS.register("canister_napalm", () -> new Item(new Item.Properties()));
+    /* Der gefuellte Kanister. Wie das Fass ein Gegenstand je Fluessigkeit, nur kleiner: tausend
+     * Millibar statt sechzehntausend. Er gilt aber NICHT fuer jede Fluessigkeit, sondern nur
+     * fuer die mit einem CD_Canister -- das ist im Original dieselbe Bedingung, und sie
+     * entscheidet zugleich ueber die Farbe des Aufdrucks. */
+    public static final DeferredItem<Item> CANISTER_FULL = ITEMS.register("canister_full", () -> new FluidTankItem(new Item.Properties()));
     public static final DeferredItem<Item> FUEL_ADDITIVE = ITEMS.register("fuel_additive", () -> new FuelAdditiveItem(new Item.Properties()));
     public static final DeferredItem<Item> ROCKET_FUEL = ITEMS.register("rocket_fuel", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> CORDITE = ITEMS.register("cordite", () -> new Item(new Item.Properties()));

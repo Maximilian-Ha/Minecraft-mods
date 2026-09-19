@@ -19,6 +19,7 @@ import com.hbm.interfaces.Spaghetti;
 import com.hbm.inventory.MetaHelper;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
+import com.hbm.inventory.fluid.Fluids.CD_Canister;
 import com.hbm.inventory.screens.LoadingScreenRendererNT;
 import com.hbm.items.*;
 import com.hbm.items.machine.CassetteItem;
@@ -769,6 +770,17 @@ public class NuclearTechModClient {
                 NtmItems.FLUID_TANK_LEAD_FULL.get(),
                 NtmItems.FLUID_BARREL_FULL.get(),
                 NtmItems.FLUID_PACK_FULL.get()
+        );
+        /* Der Kanister faerbt sich NICHT nach der Fluessigkeit, sondern nach der Farbe, die
+         * ihr CD_Canister traegt -- Diesel ist rot, obwohl die Fluessigkeit fast weiss ist.
+         * Das ist im Original genauso (ItemCanister.getColorFromItemStack). */
+        event.register(
+                (stack, tintIndex) -> {
+                    if(tintIndex != 1) return 0xFFFFFFFF;
+                    CD_Canister canister = Fluids.fromID(MetaHelper.getMeta(stack)).getContainer(CD_Canister.class);
+                    return canister == null ? 0xFFFFFFFF : 0xFF000000 | canister.color;
+                },
+                NtmItems.CANISTER_FULL.get()
         );
         event.register(
                 (stack, tintIndex) -> tintIndex == 0 ? 0xFF000000 | ((CastPlateItem) stack.getItem()).getColor(stack) : 0xFFFFFFFF,

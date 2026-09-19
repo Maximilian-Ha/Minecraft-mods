@@ -3,6 +3,7 @@ package com.hbm.inventory;
 import com.hbm.blocks.machine.fusion.FusionComponentBlock;
 import com.hbm.blocks.NtmBlocks;
 import com.hbm.inventory.fluid.FluidType;
+import com.hbm.inventory.fluid.Fluids.CD_Canister;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.IMetaItem;
 import com.hbm.items.NtmItems;
@@ -607,6 +608,13 @@ public class NtmCreativeTabs {
                             if (type.hasNoContainer()) continue;
                             if (type.needsLeadContainer()) continue;
                             output.accept(MetaHelper.metaStack(new ItemStack(NtmItems.FLUID_BARREL_FULL.get(), 1), id));
+                        }
+                        // Kanister -- nur die Fluessigkeiten mit einem CD_Canister. Der leere
+                        // steht schon im Reiter der Bauteile und gehoert hier nicht noch einmal hin.
+                        for(int i = 1; i < types.length; ++i) {
+                            FluidType type = types[i];
+                            if(type.getContainer(CD_Canister.class) == null) continue;
+                            output.accept(MetaHelper.metaStack(new ItemStack(NtmItems.CANISTER_FULL.get(), 1), type.getID()));
                         }
                         // fluid packs
                         output.accept(NtmItems.FLUID_PACK_EMPTY.get());
