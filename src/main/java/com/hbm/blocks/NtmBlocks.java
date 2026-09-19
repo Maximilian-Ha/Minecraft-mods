@@ -27,6 +27,7 @@ import com.hbm.blocks.generic.MushHugeBlock;
 import com.hbm.blocks.generic.LootCrateBlock;
 import com.hbm.blocks.machine.FloodlightBlock;
 import com.hbm.blocks.machine.ChargerBlock;
+import com.hbm.blocks.machine.BroadcasterBlock;
 import com.hbm.blocks.machine.FurnaceBrickBlock;
 import com.hbm.blocks.machine.MachineMicrowaveBlock;
 import com.hbm.blocks.generic.SkeletonHolderBlock;
@@ -370,6 +371,9 @@ public class NtmBlocks {
     public static final DeferredBlock<Block> MACHINE_MICROWAVE = register("machine_microwave", () -> new MachineMicrowaveBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops()));
     /* Stufe 5: der Funkempfaenger. Werte aus ModBlocks.java:2278. */
     public static final DeferredBlock<Block> RADIOREC = register("radiorec", () -> new RadioRecBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion()));
+    /* Der verseuchte Rundfunksender. Gehaeuse und Umriss wie beim Empfaenger -- das
+     * Original benutzt fuer beide dasselbe Modell. Werte aus ModBlocks.java:1632. */
+    public static final DeferredBlock<Block> BROADCASTER_PC = register("broadcaster_pc", () -> new BroadcasterBlock(BlockBehaviour.Properties.of().strength(5.0F, 15.0F).sound(SoundType.METAL).mapColor(MapColor.COLOR_PINK).noOcclusion()));
     /* Stufe 5: der Fernschreiber, zwei Bloecke breit. Werte aus ModBlocks.java:1896. */
     public static final DeferredBlock<Block> RADIO_TELEX = register("radio_telex", () -> new RadioTelexBlock(BlockBehaviour.Properties.of().strength(3.0F, 10.0F).sound(SoundType.WOOD).mapColor(MapColor.WOOD).noOcclusion()));
     /* Stufe 5: die Teslaspule. Werte aus ModBlocks.java:2074. */

@@ -44,13 +44,14 @@ public class NtmDamageTypeTagsProvider extends DamageTypeTagsProvider {
                         NtmDamageTypes.CLOUD,
                         NtmDamageTypes.TURBOFAN,
                         NtmDamageTypes.MUD_POISONING,
-                        NtmDamageTypes.ELECTRICITY
+                        NtmDamageTypes.ELECTRICITY,
+                        NtmDamageTypes.BROADCAST
                 );
 
         // Gegenstueck zu setDamageIsAbsolute() des Originals: der Turbofan ignoriert
         // Resistenz und Schutzeffekte.
-        this.tag(DamageTypeTags.BYPASSES_EFFECTS).add(NtmDamageTypes.TURBOFAN, NtmDamageTypes.CLOUD, NtmDamageTypes.ELECTRICITY);
-        this.tag(DamageTypeTags.BYPASSES_RESISTANCE).add(NtmDamageTypes.TURBOFAN, NtmDamageTypes.CLOUD, NtmDamageTypes.ELECTRICITY);
+        this.tag(DamageTypeTags.BYPASSES_EFFECTS).add(NtmDamageTypes.TURBOFAN, NtmDamageTypes.CLOUD, NtmDamageTypes.ELECTRICITY, NtmDamageTypes.BROADCAST);
+        this.tag(DamageTypeTags.BYPASSES_RESISTANCE).add(NtmDamageTypes.TURBOFAN, NtmDamageTypes.CLOUD, NtmDamageTypes.ELECTRICITY, NtmDamageTypes.BROADCAST);
 
         this.tag(DamageTypeTags.IS_PROJECTILE)
                 .add(

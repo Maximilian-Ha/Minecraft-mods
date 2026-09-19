@@ -30,6 +30,11 @@ public class NtmSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SHOTGUN_FIRE = reg("weapon.fire.shotgun");
     /** Der Schlag der Teslaspule, vier Aufnahmen im Wechsel. */
     public static final DeferredHolder<SoundEvent, SoundEvent> WEAPON_TESLA = reg("weapon.tesla");
+    /* Die drei Schleifen des verseuchten Senders. Welche ein Sender spielt, haengt an
+     * seinem Ort -- darum drei einzelne Ereignisse statt eines mit drei Aufnahmen. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> BLOCK_BROADCAST_1 = reg("block.broadcast1");
+    public static final DeferredHolder<SoundEvent, SoundEvent> BLOCK_BROADCAST_2 = reg("block.broadcast2");
+    public static final DeferredHolder<SoundEvent, SoundEvent> BLOCK_BROADCAST_3 = reg("block.broadcast3");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_GREASEGUN_FIRE = reg("weapon.fire.greasegun");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_POWDER_FIRE = reg("weapon.fire.black_powder");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_PISTOL_FIRE = reg("weapon.fire.pistol");

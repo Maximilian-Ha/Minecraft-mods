@@ -5544,3 +5544,42 @@ Namensähnlichkeit. Sonst schrumpft die Lücke auf dem Papier, während die Arbe
 
 Blockentitäten stehen damit bei **128** statt 133 — und der Ziegelofen ist da schon
 abgezogen.
+
+### Der verseuchte Sender
+
+`broadcaster_pc` sendet nichts Gutes: in fünfundzwanzig Blöcken Umkreis wird jedem Lebewesen
+übel, in fünfzehn Blöcken tut es zusätzlich weh — und zwar umso mehr, je näher man steht.
+Aus voller Entfernung nichts, direkt davor zehn Schaden je Tick, dazwischen linear.
+
+Beim Nachsehen kam eine angenehme Überraschung: **Modell und Umriss sind dieselben wie beim
+Funkempfänger.** Das Original benutzt für beide Blöcke dasselbe Techne-Modell
+(`ModelBroadcaster`) und wechselt nur die Haut — `RenderDecoBlock` zeichnet `radiorec` und
+`broadcaster_pc` mit derselben Instanz. Die vier Kästen waren also schon ausgerechnet; sie
+stehen jetzt in einer gemeinsamen Methode, die beide Blöcke aufrufen, statt zweimal
+dieselben zwölf Zahlen.
+
+Nachgerechnet, nicht angenommen: alle vier Kästen des Senders ergeben über die
+Techne-Umrechnung `(mx|my|mz) → (8-mx-breite | 24-my-höhe | 8+mz)` exakt die Werte, die für
+den Empfänger schon im Erzeuger standen.
+
+Neu waren nur drei Dinge: die Schadensart `broadcast` (rüstungsdurchdringend und absolut wie
+im Original), die drei Klangschleifen, und die Regel, welche davon ein Sender spielt — sie
+hängt am Ort, damit zwei Sender nebeneinander verschieden klingen, derselbe Sender aber
+immer gleich.
+
+**Eine Abweichung:** das Original lässt die Schleife über die Lebewesen auf *beiden* Seiten
+laufen. Auf dem Client bewirkt weder der Schaden noch der Effekt etwas — beides gehört dem
+Server. Hier steht der Teil serverseitig und der Klang clientseitig; dasselbe Ergebnis, nur
+ohne die halbe Arbeit doppelt.
+
+### Ein Werkzeug fürs Polstern
+
+Die Haut des Senders ist 64×32 groß, wie die meisten Techne-Häute aus 1.7.10. Der Blockatlas
+von 1.21 nimmt nur Texturen an, deren Höhe ein Vielfaches der Breite ist — eine 64×32 wird
+abgelehnt, und das Modell bleibt unsichtbar. Beim Funkempfänger hatte ich das von Hand
+gelöst; jetzt steht es als `tools/pad-png.py` da und polstert ein PNG durchsichtig nach
+unten, ohne Fremdbibliothek und ohne einen einzigen vorhandenen Bildpunkt anzufassen.
+
+Geprüft wurde es an der Haut, die schon im Port liegt: `tools/pad-png.py` auf die
+Originaldatei angewandt ergibt Bildpunkt für Bildpunkt dieselbe 64×64 wie
+`radiorec.png` — und die oberen 32 Zeilen sind unverändert die der Quelle.

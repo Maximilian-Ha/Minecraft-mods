@@ -54,6 +54,16 @@ public class NtmSoundDefinitionsProvider extends SoundDefinitionsProvider {
                         sound(NuclearTechMod.withDefaultNamespace("weapon/reload/shotgun_reload3"))
                 )
         );
+        this.add(NtmSoundEvents.BLOCK_BROADCAST_1, SoundDefinition.definition()
+                .with(sound(NuclearTechMod.withDefaultNamespace("block/broadcast1")).stream())
+        );
+        this.add(NtmSoundEvents.BLOCK_BROADCAST_2, SoundDefinition.definition()
+                .with(sound(NuclearTechMod.withDefaultNamespace("block/broadcast2")).stream())
+        );
+        this.add(NtmSoundEvents.BLOCK_BROADCAST_3, SoundDefinition.definition()
+                .with(sound(NuclearTechMod.withDefaultNamespace("block/broadcast3")).stream())
+        );
+
         this.add(NtmSoundEvents.WEAPON_TESLA, SoundDefinition.definition()
                 .with(
                         sound(NuclearTechMod.withDefaultNamespace("weapon/tesla1")),
