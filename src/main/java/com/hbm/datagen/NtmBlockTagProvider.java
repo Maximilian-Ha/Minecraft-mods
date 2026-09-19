@@ -650,6 +650,7 @@ public class NtmBlockTagProvider extends BlockTagsProvider {
                         NtmBlocks.MACHINE_HYDROTREATER.get(),
                         NtmBlocks.MACHINE_DEUTERIUM_EXTRACTOR.get(),
                         NtmBlocks.MACHINE_DEUTERIUM_TOWER.get(),
+                        NtmBlocks.MACHINE_REFUELER.get(),
                         NtmBlocks.MACHINE_VACUUM_DISTILL.get(),
                         NtmBlocks.MACHINE_PYRO_OVEN.get(),
                         NtmBlocks.MACHINE_CATALYTIC_CRACKER.get(),

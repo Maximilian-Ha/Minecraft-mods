@@ -6,6 +6,7 @@ import com.hbm.inventory.MetaHelper;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.BoltItem;
 import com.hbm.items.CastPlateItem;
+import com.hbm.items.PartGenericItem;
 import com.hbm.items.NtmItems;
 import com.hbm.items.weapon.sedna.factory.GunFactory;
 import com.hbm.items.machine.GearItem;
@@ -2048,6 +2049,19 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .requires(NtmItems.PLATE_STEEL.get())
                 .unlockedBy("has_foundry_channel", has(NtmBlocks.FOUNDRY_CHANNEL.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "foundry_outlet"));
+
+        /*
+         * Die Zapfsaeule, CraftingManager Z. 849: "SS" / "HC" / "SS". TI.plate() ist die
+         * Titanplatte, EnumPartType.PISTON_HYDRAULIC der Hydraulikkolben, EnumCircuitType.BASIC
+         * die integrierte Leiterplatte.
+         */
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.MACHINE_REFUELER.get(), 1)
+                .pattern("SS").pattern("HC").pattern("SS")
+                .define('S', NtmItems.PLATE_TITANIUM.get())
+                .define('H', DataComponentIngredient.of(false, NtmDataComponents.META, PartGenericItem.Type.PISTON_HYDRAULIC.ordinal(), NtmItems.PART_GENERIC.get()))
+                .define('C', NtmItems.CIRCUIT_INTEGRATED_BOARD.get())
+                .unlockedBy("has_plate_titanium", has(NtmItems.PLATE_TITANIUM.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "machine_refueler"));
 
         // Original CraftingManager Z. 220: "SCR" / "W#W" / "WWW".
         // EnumCircuitType.ANALOG ist im Port die Analogplatine, wie schon bei den RBMK-Pulten.

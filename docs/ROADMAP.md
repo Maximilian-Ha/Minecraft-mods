@@ -6010,3 +6010,33 @@ namentliche Einträge statt einer schlechten Automatik.
 
 Stand: 113 fehlende Blockentitäten, davon 22 gar keine Lücke, 5 zum Nachsehen, 16 sofort
 portierbar, 70 blockiert.
+
+### Die Zapfsäule — und zwei Techniken, die es auf 1.21 nicht mehr gibt
+
+`machine_refueler` betankt alles, was sich betanken lässt, an dem, der auf ihr steht — **auch
+die Module in den Rüstungsteilen**, denn genau dort steckt der Treibstoff des Jetpacks. Der Tank
+fasst hundert Milliliter; er ist kein Lager, sondern ein Durchlauf. Was gezapft wird, stellt ein
+Fluidkennzeichner am Block ein.
+
+Zweimal musste eine 1.7.10-Technik ersetzt werden, und beide Male ist das Ergebnis eine
+dokumentierte Abweichung, keine Nachbildung:
+
+**Die Klipp-Ebene.** Das Original schiebt die Flüssigkeitssäule nach unten aus dem Gehäuse
+heraus und schneidet sie mit `GL_CLIP_PLANE0` bei `y = 0.125` ab — so scheint sie von unten
+aufzusteigen. Klipp-Ebenen gibt es auf 1.21 nicht mehr. Stattdessen wird die Säule um dieselbe
+Höhe **gestaucht**, um genau diese Schnitthöhe herum. Für einen Quader wäre das dasselbe Bild;
+das Teil hat aber vierzehn Ecken, also bleibt beim Stand null hier nichts stehen, wo das
+Original noch einen schmalen Rest zeigt.
+
+**Der eingefärbte Partikel.** Das Original nimmt einen Kritzel-Partikel (`EntityCritFX`) und
+setzt dessen Farbe von Hand — beides aus der Blockentität heraus, weil der ganze Zweig ohnehin
+nur auf dem Client läuft. Auf 1.21 ginge das nicht, ohne aus einer Blockentität eine
+Clientklasse anzufassen, und genau das verbietet `dist-check`. Der Staubpartikel trägt seine
+Farbe dagegen **im Partikeltyp** und läuft über `level.addParticle`, das auf beiden Seiten
+steht. Lage und Bewegung sind unverändert übernommen.
+
+Die Fächerschleife des Originals (`for(int i = 0; i < 5; i++) player.getEquipmentInSlot(i)`)
+ist auf 1.7.10 „Hand plus vier Rüstungsteile“ — im Port also die vier Rüstungsfächer und
+zusätzlich die Haupthand.
+
+Stand danach: fehlende Blockentitäten 113.

@@ -1474,6 +1474,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.MACHINE_HYDROTREATER);
                         output.accept(NtmBlocks.MACHINE_DEUTERIUM_EXTRACTOR);
                         output.accept(NtmBlocks.MACHINE_DEUTERIUM_TOWER);
+                        output.accept(NtmBlocks.MACHINE_REFUELER);
                         output.accept(NtmBlocks.MACHINE_VACUUM_DISTILL);
                         output.accept(NtmBlocks.MACHINE_SOLIDIFIER);
                         output.accept(NtmBlocks.MACHINE_PYRO_OVEN);

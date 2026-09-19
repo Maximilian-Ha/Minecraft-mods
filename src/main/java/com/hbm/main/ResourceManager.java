@@ -70,6 +70,7 @@ public class ResourceManager {
     public static final ResourceLocation CATALYTIC_REFORMER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/catalytic_reformer.png");
     public static final ResourceLocation HYDROTREATER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/hydrotreater.png");
     public static final ResourceLocation DEUTERIUM_TOWER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/machine_deuterium_tower.png");
+    public static final ResourceLocation REFUELER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/refueler.png");
     public static final ResourceLocation VACUUM_DISTILL_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/vacuum_distill.png");
     public static final ResourceLocation SOLIDIFIER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/solidifier.png");
     public static final ResourceLocation PYRO_OVEN_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/pyrooven.png");
@@ -516,6 +517,7 @@ public class ResourceManager {
     public static IModelCustom catalyticReformer;
     public static IModelCustom hydrotreater;
     public static IModelCustom deuterium_tower;
+    public static IModelCustom refueler;
     public static IModelCustom vacuumDistill;
     public static IModelCustom solidifier;
     public static IModelCustom pyroOven;
@@ -808,6 +810,7 @@ public class ResourceManager {
         catalyticReformer = new HFRWavefrontObject("models/obj/machines/catalytic_reformer.obj").asVBO();
         hydrotreater = new HFRWavefrontObject("models/obj/machines/hydrotreater.obj").asVBO();
         deuterium_tower = new HFRWavefrontObject("models/obj/machines/machine_deuterium_tower.obj").asVBO();
+        refueler = new HFRWavefrontObject("models/obj/machines/refueler.obj").asVBO();
         vacuumDistill = new HFRWavefrontObject("models/obj/machines/vacuum_distill.obj").asVBO();
         solidifier = new HFRWavefrontObject("models/obj/machines/solidifier.obj").asVBO();
         pyroOven = new HFRWavefrontObject("models/obj/machines/pyrooven.obj").asVBO();
