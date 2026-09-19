@@ -1606,4 +1606,57 @@ public class Orchestras {
             if(timer == 85) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_VALVE.get(), entity.getSoundSource());
         }
     };
+
+    /**
+     * Die drei Laserpistolen. Der Laser hat keinen Auswurf und keine Huelse -- was hier
+     * passiert, ist die Muendungswolke beim Schuss und die vier Griffe des Magazinwechsels.
+     */
+    public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_LASER_PISTOL = (stack, ctx) -> {
+
+        LivingEntity entity = ctx.entity;
+        Level level = entity.level;
+        if(!(level instanceof ServerLevel serverLevel)) return;
+
+        GunAnimation type = GunBaseNTItem.getLastAnim(stack, ctx.configIndex);
+        int timer = GunBaseNTItem.getAnimTimer(stack, ctx.configIndex);
+
+        if(type == GunAnimation.CYCLE && timer == 0) {
+            PacketDistributor.sendToPlayersNear(serverLevel, null, entity.getX(), entity.getY(), entity.getZ(), 100, new MuzzleFlashPacket(entity.getId()));
+        }
+        if(type == GunAnimation.CYCLE_DRY && timer == 0) {
+            SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_DRY_FIRE.get(), entity.getSoundSource(), 1F, 1.5F);
+        }
+
+        if(type == GunAnimation.RELOAD) {
+            if(timer == 0) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_COCK.get(), entity.getSoundSource());
+            if(timer == 10) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_SMALL_REMOVE.get(), entity.getSoundSource(), 1F, 1.25F);
+            if(timer == 34) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_SMALL_INSERT.get(), entity.getSoundSource(), 1F, 1.25F);
+            if(timer == 40) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_CLOSE.get(), entity.getSoundSource(), 1F, 1.25F);
+        }
+    };
+
+    /** Das Lasergewehr. Dasselbe Muster, aber mit dem grossen Magazin und dem Hebel. */
+    public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_LASRIFLE = (stack, ctx) -> {
+
+        LivingEntity entity = ctx.entity;
+        Level level = entity.level;
+        if(!(level instanceof ServerLevel serverLevel)) return;
+
+        GunAnimation type = GunBaseNTItem.getLastAnim(stack, ctx.configIndex);
+        int timer = GunBaseNTItem.getAnimTimer(stack, ctx.configIndex);
+
+        if(type == GunAnimation.CYCLE && timer == 0) {
+            PacketDistributor.sendToPlayersNear(serverLevel, null, entity.getX(), entity.getY(), entity.getZ(), 100, new MuzzleFlashPacket(entity.getId()));
+        }
+        if(type == GunAnimation.CYCLE_DRY && timer == 0) {
+            SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_DRY_FIRE.get(), entity.getSoundSource(), 1F, 1.5F);
+        }
+
+        if(type == GunAnimation.RELOAD) {
+            if(timer == 2) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_SMALL_REMOVE.get(), entity.getSoundSource());
+            if(timer == 18) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_IMPACT.get(), entity.getSoundSource(), 0.25F, 1F);
+            if(timer == 30) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_INSERT.get(), entity.getSoundSource());
+            if(timer == 38) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_CLOSE.get(), entity.getSoundSource());
+        }
+    };
 }

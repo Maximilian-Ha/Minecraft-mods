@@ -34,6 +34,10 @@ public class GunFactoryClient {
         registerGunItemRenderer(event, new ItemRenderNI4NI(), NtmItems.GUN_N_I_4_N_I.get());
         registerGunItemRenderer(event, new ItemRenderHenry(ResourceManager.HENRY_TEX), NtmItems.GUN_HENRY.get());
         registerGunItemRenderer(event, new ItemRenderDrill(), NtmItems.GUN_DRILL.get());
+        registerGunItemRenderer(event, new ItemRenderLaserPistol(ResourceManager.LASER_PISTOL_TEX), NtmItems.GUN_LASER_PISTOL.get());
+        registerGunItemRenderer(event, new ItemRenderLaserPistol(ResourceManager.LASER_PISTOL_PEW_PEW_TEX), NtmItems.GUN_LASER_PISTOL_PEW_PEW.get());
+        registerGunItemRenderer(event, new ItemRenderLaserPistol(ResourceManager.LASER_PISTOL_MORNING_GLORY_TEX), NtmItems.GUN_LASER_PISTOL_MORNING_GLORY.get());
+        registerGunItemRenderer(event, new ItemRenderLasrifle(), NtmItems.GUN_LASRIFLE.get());
         registerGunItemRenderer(event, new ItemRenderFlamer(ResourceManager.FLAMETHROWER_TEX), NtmItems.GUN_FLAMER.get());
         registerGunItemRenderer(event, new ItemRenderFlamer(ResourceManager.FLAMETHROWER_TOPAZ_TEX), NtmItems.GUN_FLAMER_TOPAZ.get());
         registerGunItemRenderer(event, new ItemRenderFlamer(ResourceManager.FLAMETHROWER_DAYBREAKER_TEX), NtmItems.GUN_FLAMER_DAYBREAKER.get());
@@ -114,12 +118,22 @@ public class GunFactoryClient {
 
         for(BulletConfig schredder : XFactory12ga.SCHREDDER_STRAHLEN) schredder.setRendererBeam(LegoClient.RENDER_SHREDDER);
         XFactoryAccelerator.ni4ni_arc.setRendererBeam(LegoClient.RENDER_NI4NI_BOLT);
+        XFactoryEnergy.energy_las.setRendererBeam(LegoClient.RENDER_LASER_RED);
+        XFactoryEnergy.energy_las_overcharge.setRendererBeam(LegoClient.RENDER_LASER_RED);
+        XFactoryEnergy.energy_las_ir.setRendererBeam(LegoClient.RENDER_LASER_RED);
+        XFactoryEnergy.energy_emerald.setRendererBeam(LegoClient.RENDER_LASER_EMERALD);
+        XFactoryEnergy.energy_emerald_overcharge.setRendererBeam(LegoClient.RENDER_LASER_EMERALD);
+        XFactoryEnergy.energy_emerald_ir.setRendererBeam(LegoClient.RENDER_LASER_EMERALD);
 
         //HUDS
         ((GunBaseNTItem) NtmItems.GUN_DEBUG.get())						.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO, LegoClient.HUD_COMPONENT_AMMO_SECOND);
         ((GunBaseNTItem) NtmItems.GUN_MARESLEG.get())					.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_HENRY.get())						.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_DRILL.get())						.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
+        ((GunBaseNTItem) NtmItems.GUN_LASER_PISTOL.get())				.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
+        ((GunBaseNTItem) NtmItems.GUN_LASER_PISTOL_PEW_PEW.get())		.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
+        ((GunBaseNTItem) NtmItems.GUN_LASER_PISTOL_MORNING_GLORY.get()).getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
+        ((GunBaseNTItem) NtmItems.GUN_LASRIFLE.get())					.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_FLAMER.get())						.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO_NOCOUNTER);
         ((GunBaseNTItem) NtmItems.GUN_FLAMER_TOPAZ.get())				.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO_NOCOUNTER);
         ((GunBaseNTItem) NtmItems.GUN_FLAMER_DAYBREAKER.get())			.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO_NOCOUNTER);

@@ -116,6 +116,17 @@ public class LegoClient {
     public static BiConsumer<BulletBeamBase, Float> RENDER_NI4NI_BOLT = (strahl, partialTick) ->
             zeichneStrahl(strahl, partialTick, 0xFF3C6BE0, 0xFFFFFFFF);
 
+    /**
+     * Die Laserstrahlen. Das Original zieht sie mit BeamPronter als gewellten Schlauch; der
+     * Port hat den nicht und nimmt denselben Weg wie fuer alle uebrigen Strahlen -- dunkler
+     * Kern, heller Saum. Die Farben sind die des Originals.
+     */
+    public static BiConsumer<BulletBeamBase, Float> RENDER_LASER_RED = (strahl, partialTick) ->
+            zeichneStrahl(strahl, partialTick, 0xFF801515, 0xFFFF8080);
+
+    public static BiConsumer<BulletBeamBase, Float> RENDER_LASER_EMERALD = (strahl, partialTick) ->
+            zeichneStrahl(strahl, partialTick, 0xFF158015, 0xFF80FF80);
+
     /** Der Schredder: derselbe Riss, nur gruen wie sein Plasma. */
     public static BiConsumer<BulletBeamBase, Float> RENDER_SHREDDER = (strahl, partialTick) ->
             zeichneStrahl(strahl, partialTick, 0xFF1E7A1E, 0xFFBFFFBF);

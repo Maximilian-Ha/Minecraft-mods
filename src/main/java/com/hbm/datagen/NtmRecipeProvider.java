@@ -4102,6 +4102,8 @@ public class NtmRecipeProvider extends RecipeProvider {
     private static Ingredient anyPlasticGrip() { return CompoundIngredient.of(grip(Mats.MAT_POLYMER), grip(Mats.MAT_BAKELITE)); }
     private static Ingredient anyHardPlasticStock() { return CompoundIngredient.of(stock(Mats.MAT_HARDPLASTIC), stock(Mats.MAT_PVC)); }
     private static Ingredient anyHardPlasticGrip() { return CompoundIngredient.of(grip(Mats.MAT_HARDPLASTIC), grip(Mats.MAT_PVC)); }
+    private static Ingredient anyBismoidBronzeLightBarrel() { return CompoundIngredient.of(lightBarrel(Mats.MAT_BBRONZE), lightBarrel(Mats.MAT_ABRONZE)); }
+    private static Ingredient anyBismoidBronzeLightReceiver() { return CompoundIngredient.of(lightReceiver(Mats.MAT_BBRONZE), lightReceiver(Mats.MAT_ABRONZE)); }
     private static Ingredient anyResistantAlloyLightBarrel() { return CompoundIngredient.of(lightBarrel(Mats.MAT_TCALLOY), lightBarrel(Mats.MAT_CDALLOY)); }
     private static Ingredient anyResistantAlloyHeavyReceiver() { return CompoundIngredient.of(heavyReceiver(Mats.MAT_TCALLOY), heavyReceiver(Mats.MAT_CDALLOY)); }
     private static Ingredient anyResistantAlloyCastPlate() { return CompoundIngredient.of(castPlate(CastPlateItem.Type.TCALLOY), castPlate(CastPlateItem.Type.CDALLOY)); }
@@ -4298,13 +4300,13 @@ public class NtmRecipeProvider extends RecipeProvider {
      * Die Waffenbauplaene.
      *
      * Wortgetreu aus WeaponRecipes des Originals, in der Reihenfolge des Originals. Von den
-     * 46 Bauplaenen dort bleiben hier 32 uebrig; der Rest faellt aus zwei gemessenen Gruenden
+     * 46 Bauplaenen dort bleiben hier 35 uebrig; der Rest faellt aus zwei gemessenen Gruenden
      * weg:
      *
      * ES GIBT DIE WAFFE NICHT: Stinger, Chemiewerfer, Quadro, LAG, Raketenwerfer,
-     * Teslakanone, Laserpistole und Pew Pew, Fat Man, Tau, Lasergewehr, Ladungswerfer
-     * und die beiden Panzerruestungswaffen. Sie sind im Port nicht angelegt; ein Bauplan
-     * auf ein nicht vorhandenes Erzeugnis waere kein Rezept.
+     * Teslakanone, Fat Man, Tau, Ladungswerfer und die beiden Panzerruestungswaffen. Sie
+     * sind im Port nicht angelegt; ein Bauplan auf ein nicht vorhandenes Erzeugnis waere
+     * kein Rezept.
      *
      * ES GIBT DIE ZUTAT NICHT: gun_double_barrel_sacred_dragon braucht item_secret in der
      * Ausfuehrung SELENIUM_STEEL. Die ganze Familie der Geheimstuecke fehlt im Port; die
@@ -4571,6 +4573,33 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .define('R', anyResistantAlloyHeavyReceiver())
                 .define('E', NtmItems.MOTOR_DESH.get())
                 .unlockedBy("has_motor_desh", has(NtmItems.MOTOR_DESH.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_LASER_PISTOL, "CRM", "GG ")
+                .define('C', NtmItems.CRYSTAL_REDSTONE.get())
+                .define('R', lightReceiver(Mats.MAT_SATURN))
+                .define('M', mechanism(Mats.MAT_SATURN))
+                .define('G', anyHardPlasticGrip())
+                .unlockedBy("has_crystal", has(NtmItems.CRYSTAL_REDSTONE.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_LASER_PISTOL_PEW_PEW, " M ", "MPM", " M ")
+                .define('M', mechanism(Mats.MAT_SATURN))
+                .define('P', NtmItems.GUN_LASER_PISTOL.get())
+                .unlockedBy("has_laser_pistol", has(NtmItems.GUN_LASER_PISTOL.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_LASRIFLE, "DLC", "BRS", "MG ")
+                .define('D', NtmItems.CRYSTAL_REDSTONE.get())
+                .define('L', DataComponentIngredient.of(false, NtmDataComponents.META,
+                        GunFactory.ModSpecial.SCOPE.ordinal(), NtmItems.WEAPON_MOD_SPECIAL.get()))
+                .define('C', NtmItems.CIRCUIT_VERSATILE_BOARD.get())
+                .define('B', anyBismoidBronzeLightBarrel())
+                .define('R', anyBismoidBronzeLightReceiver())
+                .define('S', anyHardPlasticStock())
+                .define('M', mechanism(Mats.MAT_SATURN))
+                .define('G', anyHardPlasticGrip())
+                .unlockedBy("has_crystal", has(NtmItems.CRYSTAL_REDSTONE.get()))
                 .save(recipeOutput);
 
         gun(NtmItems.GUN_STG77, " D ", "BRS", "GGM")

@@ -4,6 +4,7 @@ import com.hbm.items.weapon.sedna.GunBaseNTItem;
 import com.hbm.items.weapon.sedna.GunBaseNTItem.SmokeNode;
 import com.hbm.main.NuclearTechMod;
 import com.hbm.render.NtmRenderTypes;
+import com.hbm.main.ResourceManager;
 import com.hbm.render.util.RenderContext;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -305,5 +306,29 @@ public abstract class ItemRenderWeaponBase extends BlockEntityWithoutLevelRender
             consumer.addVertex(matrix, 0.1F, -length + inset, width).setUv(0 ,0).setColor(color);
             consumer.addVertex(matrix, 0.1F, -length + inset, -width).setUv(1, 0).setColor(color);
         }
+    }
+
+    /**
+     * Der Laserblitz an der Muendung: ein einzelnes Viereck, das in der Farbe des Strahls
+     * aufleuchtet und mit der Zeit groesser und blasser wird.
+     *
+     * ANDERS ALS DIE PULVERWOLKE hat er keine Tiefe -- ein Laser hat keine Muendungsgase, nur
+     * den Schein. Deshalb ein Viereck statt vier.
+     */
+    public static void renderLaserFlash(MultiBufferSource buffer, long lastShot, int duration, float scale, int color) {
+
+        if(System.currentTimeMillis() - lastShot >= duration) return;
+
+        VertexConsumer consumer = buffer.getBuffer(FLASH.apply(ResourceManager.LASER_FLASH_TEX));
+        Matrix4f matrix = RenderContext.poseStack().last().pose();
+
+        float fire = (System.currentTimeMillis() - lastShot) / (float) duration;
+        float size = 4F * fire * scale;
+        int rgba = 0xFF000000 | color;
+
+        consumer.addVertex(matrix, 0F, -size, -size).setUv(1, 1).setColor(rgba);
+        consumer.addVertex(matrix, 0F, size, -size).setUv(0, 1).setColor(rgba);
+        consumer.addVertex(matrix, 0F, size, size).setUv(0, 0).setColor(rgba);
+        consumer.addVertex(matrix, 0F, -size, size).setUv(1, 0).setColor(rgba);
     }
 }

@@ -8362,3 +8362,35 @@ angemeldet ist. Beim Bohrer war der alte Grund seit dieser Runde ohnehin falsch.
 
 Alle 34 Tore grün.
 
+## Runde 187 — Die Laserfamilie
+
+Die fünfte der sechs fehlenden Waffenfabriken, zum größeren Teil. Vier Waffen: Laserpistole,
+Pew Pew, Morning Glory und Lasergewehr.
+
+**Wieder Munition ohne Waffe.** Die drei Kondensatoren — gewöhnlich, überladen, Brand — lagen
+seit Langem als Gegenstände im Port, genau wie die vier Flammenwerferbrennstoffe vor Runde
+184. Keine Waffe konnte sie verschießen.
+
+Alle vier schießen Strahlen, nicht Geschosse — dasselbe Hitscan-System, das die 35800 und die
+NI4NI benutzen und das vor Runde 183 überhaupt nicht funktionierte. Der Brandstrahl zündet an,
+was er trifft; wo weder ein Wesen noch ein brennbarer Block getroffen wird, bleibt eine Lache
+stehenden Feuers.
+
+**Nicht in dieser Runde: die Teslakanone** aus derselben Fabrik. Ihr Einschlag ist eine
+Explosion mit eigenem Spielerverarbeiter (`PlayerProcessorStandard`) und einem Partikelpaket —
+beides fehlt im Port —, dazu kommt ihr Gurtmagazin. Ihre drei Strahlkonfigurationen stehen
+bereit, sobald das nachgezogen ist.
+
+**Zwei benannte Abweichungen:**
+
+* Das Original zeichnet den Strahl mit `BeamPronter` als gewellten Schlauch. Den gibt es im
+  Port nicht; die Laser nehmen denselben Weg wie alle übrigen Strahlen — dunkler Kern, heller
+  Saum —, in den Farben des Originals.
+* Die beiden Aufsatzteile am Lasergewehr (Schrotlauf, Unterlaufkondensator) sind nicht
+  übernommen: die Aufsätze `LAS_SHOTGUN` und `LAS_CAPACITOR` sind im `XWeaponModManager` nicht
+  angemeldet, ein Modellteil das nie erscheint wäre totes Gewicht.
+
+**35 von 46 Bauplänen.**
+
+Alle 34 Tore grün.
+
