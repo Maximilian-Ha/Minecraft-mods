@@ -1801,6 +1801,9 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("desc.item.radaway_strong", "Removes 350 RAD");
         this.add(NtmItems.RADAWAY_FLUSH, "Elite RadAway");
         this.add("desc.item.radaway_flush", "Removes 1000 RAD");
+        this.add(NtmItems.MED_BAG, "First Aid Kit");
+        this.add("desc.item.med_bag.heal", "Full heal, regardless of max health");
+        this.add("desc.item.med_bag.cure", "Removes negative effects");
         this.add(NtmItems.AMMO_CONTAINER, this.getName(AmmoContainerType.STANDARD), "Ammo Container");
         this.add(NtmItems.AMMO_CONTAINER, this.getName(AmmoContainerType.MAKESHIFT), "Makeshift Ammo Container");
         this.add("desc.item.ammo_container.standard", "Supplies ammunition for up to three of your guns");

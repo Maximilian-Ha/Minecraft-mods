@@ -2244,10 +2244,9 @@ public class NtmRecipeProvider extends RecipeProvider {
 
         /* ---- Die Radaway-Familie und die Beutel, aus ConsumableRecipes Z. 143-149 ----
          *
-         * Die beiden Bauplaene des Originals fuer med_bag stehen noch aus, weil es den
-         * Sanitaetsbeutel noch nicht gibt. Der zweite Blutbeutel-Bauplan des Originals nimmt
-         * beliebigen Kautschuk aus dem Erzwoerterbuch; der Port hat dafuer nur seinen
-         * eigenen Kautschukbarren, also steht der hier. */
+         * Der Blutbeutel-Bauplan des Originals nimmt beliebigen Kautschuk aus dem
+         * Erzwoerterbuch; der Port hat dafuer nur seinen eigenen Kautschukbarren, also steht
+         * der hier. Die beiden Bauplaene des Sanitaetsbeutels folgen weiter unten. */
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.IV_EMPTY.get(), 4)
                 .pattern("S")
                 .pattern("I")
@@ -2281,6 +2280,30 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .requires(NtmItems.POWDER_IODINE.get())
                 .unlockedBy("has_radaway_strong", has(NtmItems.RADAWAY_STRONG.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "radaway_flush"));
+
+        /* Der Sanitaetsbeutel, aus ConsumableRecipes Z. 137 und 140. Das Original hat den
+         * Bauplan zweimal: einmal mit Leder, einmal mit Kautschuk aus dem Erzwoerterbuch.
+         * Beide stehen hier, weil beide im Original stehen -- unter eigenen Namen, denn sie
+         * haben dasselbe Ergebnis. */
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.MED_BAG.get(), 1)
+                .pattern("LL")
+                .pattern("SI")
+                .pattern("LL")
+                .define('L', Items.LEATHER)
+                .define('S', NtmItems.SYRINGE_METAL_SUPER.get())
+                .define('I', NtmItems.RADAWAY.get())
+                .unlockedBy("has_radaway", has(NtmItems.RADAWAY.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "med_bag"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.MED_BAG.get(), 1)
+                .pattern("LL")
+                .pattern("SI")
+                .pattern("LL")
+                .define('L', NtmItems.INGOT_RUBBER.get())
+                .define('S', NtmItems.SYRINGE_METAL_SUPER.get())
+                .define('I', NtmItems.RADAWAY.get())
+                .unlockedBy("has_radaway", has(NtmItems.RADAWAY.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "med_bag_from_rubber"));
 
         // ---- Runde 7: restliche Netzbauteile und Kondensatoren ----
 

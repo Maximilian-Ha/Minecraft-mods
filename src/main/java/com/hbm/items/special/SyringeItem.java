@@ -1,6 +1,7 @@
 package com.hbm.items.special;
 
 import com.hbm.items.NtmItems;
+import com.hbm.lib.ModEffect;
 import com.hbm.registry.NtmMobEffects;
 import com.hbm.registry.NtmSoundEvents;
 
@@ -33,14 +34,14 @@ import java.util.function.Supplier;
  * Der Port haengt die Wirkung stattdessen an den Gegenstand: jede Spritze bekommt bei der
  * Anmeldung ihre eigene. Die Zahlen sind unveraendert.
  *
- * NOCH NICHT PORTIERT: syringe_taint und syringe_mkunicorn (beide brauchen die Verseuchung)
- * sowie der Sanitaetsbeutel med_bag.
+ * NOCH NICHT PORTIERT: syringe_taint und syringe_mkunicorn, beide brauchen die Verseuchung.
  *
- * BERICHTIGT: hier stand, die Blutbeutel und der Sanitaetsbeutel haengen an
- * "ItemSimpleConsumable, ein eigenes Teilsystem". Ein Teilsystem ist das nicht -- es sind
- * 181 Zeilen mit vier Lambda-Feldern, dieselbe Bauart wie diese Klasse. Die Blutbeutel und
- * die Radaway-Familie stehen inzwischen als SimpleConsumableItem im Port; der Beutel fehlt
- * noch, weil sein Bauplan die Wunderspritze und Kautschuk aus dem Erzwoerterbuch braucht.
+ * ZWEIMAL BERICHTIGT, und beide Male war die Behauptung groesser als der Befund. Zuerst stand
+ * hier, die Blutbeutel und der Sanitaetsbeutel haengen an "ItemSimpleConsumable, ein eigenes
+ * Teilsystem" -- das sind 181 Zeilen mit vier Lambda-Feldern, dieselbe Bauart wie diese
+ * Klasse. Dann stand hier, der Sanitaetsbeutel fehle noch, weil sein Bauplan die
+ * Wunderspritze und Kautschuk aus dem Erzwoerterbuch brauche; beide lagen zu dem Zeitpunkt
+ * schon im Port, und Radaway kam in derselben Runde dazu. Er steht jetzt unten.
  */
 public class SyringeItem extends Item {
 
@@ -54,7 +55,8 @@ public class SyringeItem extends Item {
     private final String[] hinweis;
 
     /** Was uebrig bleibt. Die vier Metallspritzen lassen eine Metallhuelle zurueck, das
-     *  Gegenmittel eine glaeserne -- so steht es im Original. */
+     *  Gegenmittel eine glaeserne -- so steht es im Original. NULL heisst: nichts bleibt
+     *  uebrig; der Sanitaetsbeutel wird im Original restlos verbraucht. */
     private final Supplier<Item> huelle;
 
     public SyringeItem(Properties properties, Consumer<Player> wirkung, int uebelkeit, String... hinweis) {
@@ -109,6 +111,29 @@ public class SyringeItem extends Item {
                 () -> NtmItems.SYRINGE_EMPTY.get(), "desc.item.syringe.antidote");
     }
 
+    /**
+     * Der Sanitaetsbeutel. Er heilt VOLL, nicht um einen festen Betrag -- auch wenn die
+     * Hoechstgesundheit angehoben ist --, und nimmt acht schaedliche Wirkungen samt der
+     * Verstrahlung weg. Dafuer liegt die Uebelkeit danach fuenfzehn Sekunden statt fuenf.
+     *
+     * Er laesst nichts zurueck: im Original zaehlt der Stapel nur herunter.
+     */
+    public static SyringeItem medBag(Properties properties) {
+        return new SyringeItem(properties, player -> {
+            player.setHealth(player.getMaxHealth());
+
+            player.removeEffect(MobEffects.BLINDNESS);
+            player.removeEffect(MobEffects.CONFUSION);
+            player.removeEffect(MobEffects.DIG_SLOWDOWN);
+            player.removeEffect(MobEffects.HUNGER);
+            player.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
+            player.removeEffect(MobEffects.POISON);
+            player.removeEffect(MobEffects.WEAKNESS);
+            player.removeEffect(MobEffects.WITHER);
+            player.removeEffect(ModEffect.RADIATION);
+        }, 15, (Supplier<Item>) null, "desc.item.med_bag.heal", "desc.item.med_bag.cure");
+    }
+
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
 
@@ -129,6 +154,8 @@ public class SyringeItem extends Item {
          * Stelle; sonst wandert sie ins Inventar, und wenn dort kein Platz ist, vor die Fuesse.
          * Genauso macht es das Original.
          */
+        if(this.huelle == null) return InteractionResultHolder.consume(stack);
+
         ItemStack huelle = new ItemStack(this.huelle.get());
 
         if(stack.isEmpty()) return InteractionResultHolder.consume(huelle);

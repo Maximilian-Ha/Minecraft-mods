@@ -1944,6 +1944,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.RADAWAY);
                         output.accept(NtmItems.RADAWAY_STRONG);
                         output.accept(NtmItems.RADAWAY_FLUSH);
+                        output.accept(NtmItems.MED_BAG);
                         addMetaItems(output, NtmItems.CAP.get());
                         output.accept(NtmItems.RING_PULL);
                         output.accept(NtmItems.CAN_KEY);

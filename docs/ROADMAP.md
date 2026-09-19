@@ -7831,3 +7831,37 @@ weil eine Basisklasse fehlt, sondern weil sein Bauplan die Wunderspritze und Kau
 Erzwörterbuch braucht. Von den sieben Einträgen der C-130 sind damit noch sechs offen.
 
 Alle 34 Tore grün.
+
+## Der Sanitätsbeutel — und die Behauptung, die keine Stunde alt war
+
+Im Commit der Radaway-Familie steht, `med_bag` fehle weiter, „jetzt aber mit der richtigen
+Begründung: weil sein Bauplan die Wunderspritze und Kautschuk aus dem Erzwörterbuch braucht".
+
+Das war schon beim Schreiben falsch. `SYRINGE_METAL_SUPER` liegt seit der Spritzenrunde im
+Port, `INGOT_RUBBER` seit der Kautschukkette, und `RADAWAY` — die dritte Zutat — war in
+derselben Runde dazugekommen, in der ich den Satz geschrieben habe. **Ich habe eine
+Blockade behauptet, während ich sie gerade auflöste.**
+
+Das ist innerhalb einer Sitzung die siebte Behauptung dieser Art, und die einzige, die ich
+selbst und direkt widerlegen konnte, weil ich beide Seiten in derselben Stunde geschrieben
+habe. Der Reflex, eine Lücke mit einer Begründung zu schließen statt mit einer Messung, ist
+offenbar unabhängig davon, wie frisch das Wissen ist.
+
+Der Beutel ist jetzt drin. Im Original ist er keine Konserve, sondern eine Spritze: er heilt
+**voll**, nicht um einen festen Betrag — auch bei angehobener Höchstgesundheit —, nimmt acht
+schädliche Wirkungen samt der Verstrahlung weg, und die Übelkeit danach liegt fünfzehn
+Sekunden statt fünf. Er lässt nichts zurück; im Original zählt der Stapel nur herunter. Dafür
+darf die Hülle in `SyringeItem` jetzt `null` sein.
+
+**Und das neue Tor hat es sofort noch einmal gefunden.** Beim Nachreichen des Beutels blieb im
+Rezeptgeber ein Satz stehen, den ich eine Stunde zuvor selbst geschrieben hatte: „Die beiden
+Bauplaene des Originals fuer med_bag stehen noch aus, weil es den Sanitaetsbeutel noch nicht
+gibt." Das Tor hat ihn im selben Lauf gemeldet, in dem der Beutel dazukam — genau der Fall,
+für den es gebaut ist, und diesmal vor dem Commit statt drei Runden später.
+
+Dazu die beiden Baupläne aus `ConsumableRecipes` Z. 137 und 140 — einer mit Leder, einer mit
+Kautschuk, beide im Original vorhanden — und der Vorratseintrag der C-130: ein Stück,
+Gewicht 3. Von den sieben Einträgen, die dort als blockiert standen, sind noch fünf offen:
+`definitelyfood`, `pill_iodine`, `canister_full`, `gun_henry`, `gun_n_i_4_n_i`.
+
+Alle 34 Tore grün.

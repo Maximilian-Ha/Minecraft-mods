@@ -1482,6 +1482,9 @@ public class NtmItems {
     public static final DeferredItem<Item> RADAWAY_STRONG = ITEMS.register("radaway_strong", () -> SimpleConsumableItem.radaway(new Item.Properties(), 350, "desc.item.radaway_strong"));
     public static final DeferredItem<Item> RADAWAY_FLUSH = ITEMS.register("radaway_flush", () -> SimpleConsumableItem.radaway(new Item.Properties(), 500, "desc.item.radaway_flush"));
 
+    /** Der Sanitaetsbeutel. Im Original eine Spritze, keine Konserve -- er laesst nichts zurueck. */
+    public static final DeferredItem<Item> MED_BAG = ITEMS.register("med_bag", () -> SyringeItem.medBag(new Item.Properties()));
+
     /** Der Kronkorken. Im Original das Zahlungsmittel des Oedlands, hier vorerst nur Beute. */
     public static final DeferredItem<Item> CAP_NUKA = ITEMS.register("cap_nuka", () -> new Item(new Item.Properties()));
 
