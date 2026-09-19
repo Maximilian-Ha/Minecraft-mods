@@ -8147,9 +8147,81 @@ Minute an eine Quelle — kein Gegenstand ohne Weg dorthin.
 
 **Warum kein Tag je Material:** die Tag-Erzeugung des Ports geht über *Namen*
 (`ingot_steel` → `c:ingots/steel`), und ein Metagegenstand hat nur einen Namen für alle
-Materialien. Für die Bauplänе heißt das: sie greifen die Bauteile über
+Materialien. Für die Baupläne heißt das: sie greifen die Bauteile über
 `DataComponentIngredient` mit der Materialnummer ab, nicht über einen Tag. Das Original löst
 dasselbe über sein Erzwörterbuch; bei den Waffenbauplänen fällt der Unterschied nicht auf,
 weil sie ohnehin ein bestimmtes Material nennen (`STEEL.lightBarrel()`), keine Gruppe.
+
+Alle 34 Tore grün.
+
+## Runde 182 — Die Waffenbaupläne, und eine Textur, die keiner gesucht hat
+
+### Zuerst: die Bauteilrunde ist in der Abnahme durchgefallen
+
+Der Commit der sieben Waffenbauteile kam nicht durch. Nicht am Java — `runData` brach ab:
+
+    Texture hbmsntm:item/mold_barrel_light does not exist in any known resource pack
+
+Sieben neue Gießformen, sieben Bilder für die *Bauteile* kopiert, sieben Bilder für die
+*Formen* vergessen. Beide Sätze liegen in der CE-Abspaltung nebeneinander; ich hatte nur den
+einen gesehen.
+
+**Das eigentliche Versäumnis ist nicht die Textur, sondern das Tor.** `metatex-check.sh` prüft
+Metagegenstände, deren Bildname sich aus dem `layer0`-Ausdruck ableiten lässt. Bei `MoldItem`
+steht der Name als Zeichenkette im `registerMold`-Aufruf, nicht in einer Aufzählung — das Tor
+konnte ihn nicht auflösen und hat die Klasse (korrekt, aber folgenlos) unter „nicht geprüft"
+aufgeführt. Ein Tor, das an einer Stelle bewusst wegschaut, ist genau dort blind.
+
+Jetzt hat es dafür eine eigene Regel: die Formnamen werden direkt aus den `registerMold`-
+Aufrufen gelesen und `item/mold_<name>.png` wird geprüft, samt `mold_base.png`. Gegengemessen
+in beide Richtungen — mit entferntem `mold_grip.png` meldet es genau diese Datei und geht mit
+Rückgabewert 1.
+
+### Und dann die Baupläne
+
+Vor dieser Runde: **null** Waffenbaupläne im Port. Gemessen, nicht geschätzt —
+`NtmRecipeProvider` nannte kein einziges `NtmItems.GUN_`.
+
+Von den 46 Bauplänen aus `WeaponRecipes` sind **28** übernommen. Der Rest fällt aus zwei
+gemessenen Gründen weg, und beide stehen als Liste im Quelltext:
+
+* **Die Waffe gibt es nicht** (16 Stück): Flammenwerfer und Topaz, Stinger, Chemiewerfer,
+  Quadro, LAG, Raketenwerfer, Teslakanone, Laserpistole und Pew Pew, Fat Man, Tau,
+  Lasergewehr, Ladungswerfer, Bohrer, die beiden Panzerrüstungswaffen.
+* **Die Zutat gibt es nicht** (2 Stück): die Minigun braucht `motor_desh`, den Deshmotor;
+  der Heilige Drache braucht `item_secret` in der Ausführung Selenstahl. Beide Waffen sind da,
+  beide Zutaten nicht.
+
+Dazu die zwölf Bauteilrezepte von Hand — Schaft und Griff aus Brettern, Polymer, Bakelit,
+Polycarbonat, PVC, Gummi und Knochen. Die **metallenen** Bauteile haben auch im Original
+bewusst kein Werkbankrezept; sie kommen aus der Gießform.
+
+### Drei alte Rezepte waren stillschweigend umgeschrieben
+
+Schalldämpfer, Säge und Saturnit-Gehäuse standen seit Runde 74 im Port — aber mit
+ausgetauschten Zutaten, weil es die Waffenbauteile nicht gab: ein Stahlrohr statt des leichten
+Laufs, Stahlplatten statt Bolzen, Barren statt Lauf und Verschluss. Nirgends stand, dass das
+Absicht war. Diese Runde stellt die Muster des Originals her.
+
+Beim Schalldämpfer kam ein zweiter Fehler mit heraus: er verlangte Polycarbonat, wo das
+Original `AnyPlastic` sagt — und `AnyPlastic` ist **Polymer und Bakelit**. Polycarbonat gehört
+zu `AnyHardPlastic`. Das war schlicht der falsche Kunststoff.
+
+Zehn weitere Sonderaufsätze sind neu (Zielfernrohr, Schnellader, Bremse, Beschleuniger,
+Grease-Gun-Schaft, Würgebohrung, die beiden Schaftsätze, Doppelmagazin, Seitengewehr), und
+die letzten vier Paare der Allgemeinaufsätze. Bei denen ist die Begründung übrigens
+zweigeteilt und steht so im Quelltext: die vier `DAMAGE`-Stufen hingen wirklich an der
+Mechanik, die vier `DURA`-Stufen brauchten nur Platten — die standen ohne Grund noch aus.
+
+**Nicht übernommen, weil die Waffe dazu fehlt:** `LAS_*` (Lasergewehr), `DRILL_*`, `ENGINE_*`,
+`MAGNET`, `SIFTER`, `CANISTERS` (Bohrer). Ihre Zutaten wären großenteils da, aber es gäbe im
+Port keine Waffe, an die sie passen — ein Aufsatz ohne Waffe ist ein Gegenstand ohne Wirkung.
+
+### Die Sammelbegriffe
+
+`AnyPlastic`, `AnyHardPlastic`, `AnyResistantAlloy` und `AnyBismoidBronze` sind im Original
+Einträge im Erzwörterbuch, die mehrere Materialien zugleich annehmen. Im Port werden daraus
+zusammengesetzte Zutaten (`CompoundIngredient`) über die jeweiligen Metadaten — derselbe Sinn,
+ohne Erzwörterbuch.
 
 Alle 34 Tore grün.

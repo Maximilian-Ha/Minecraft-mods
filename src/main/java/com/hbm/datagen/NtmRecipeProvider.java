@@ -3,10 +3,15 @@ package com.hbm.datagen;
 import com.hbm.blocks.NtmBlocks;
 import com.hbm.blocks.generic.BarbedWireBlock;
 import com.hbm.inventory.MetaHelper;
+import com.hbm.inventory.material.MatShapeItems;
+import com.hbm.inventory.material.MaterialShapes;
+import com.hbm.inventory.material.Mats;
+import com.hbm.inventory.material.NTMMaterial;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.BoltItem;
 import com.hbm.items.CastPlateItem;
 import com.hbm.items.PartGenericItem;
+import com.hbm.items.WireDenseItem;
 import com.hbm.items.NtmItems;
 import com.hbm.items.weapon.sedna.factory.GunFactory;
 import com.hbm.items.machine.GearItem;
@@ -28,7 +33,9 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.crafting.CompoundIngredient;
 import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -95,37 +102,31 @@ public class NtmRecipeProvider extends RecipeProvider {
         weaponModShapeless(recipeOutput, GunFactory.ModGeneric.WSTEEL_DURA,
                 NtmItems.PLATE_GUNMETAL.get(), NtmItems.INGOT_WEAPON_STEEL.get(), NtmItems.DUCTTAPE.get());
 
-        /* Der Schalldaempfer: ein Stahlrohr zwischen zwei Lagen Kunststoff. */
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC,
-                        MetaHelper.newStack(NtmItems.WEAPON_MOD_SPECIAL.get(), 1, GunFactory.ModSpecial.SILENCER.ordinal()))
-                .pattern("P")
-                .pattern("B")
-                .pattern("P")
-                .define('P', NtmItems.INGOT_PC.get())
-                .define('B', NtmItems.PIPES_STEEL.get())
-                .unlockedBy("has_steel_pipes", has(NtmItems.PIPES_STEEL.get()))
-                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_silencer"));
+        /*
+         * Die letzten vier Paare. Die vier DAMAGE-Stufen brauchen eine Mechanik und waren
+         * damit bis zur Bauteilrunde blockiert. Die vier DURA-Stufen brauchen nur Platte und
+         * Gussplatte, beides laengst da -- die standen ohne Grund noch aus.
+         */
+        weaponModShapeless(recipeOutput, GunFactory.ModGeneric.FERRO_DAMAGE,
+                mechanism(Mats.MAT_WEAPONSTEEL), castPlate(CastPlateItem.Type.FERROURANIUM), castPlate(CastPlateItem.Type.FERROURANIUM), castPlate(CastPlateItem.Type.FERROURANIUM), Ingredient.of(NtmItems.DUCTTAPE.get()));
+        weaponModShapeless(recipeOutput, GunFactory.ModGeneric.FERRO_DURA,
+                Ingredient.of(NtmItems.PLATE_WEAPON_STEEL.get()), castPlate(CastPlateItem.Type.FERROURANIUM), Ingredient.of(NtmItems.DUCTTAPE.get()));
+        weaponModShapeless(recipeOutput, GunFactory.ModGeneric.TCALLOY_DAMAGE,
+                mechanism(Mats.MAT_WEAPONSTEEL), anyResistantAlloyCastPlate(), anyResistantAlloyCastPlate(), anyResistantAlloyCastPlate(), Ingredient.of(NtmItems.DUCTTAPE.get()));
+        weaponModShapeless(recipeOutput, GunFactory.ModGeneric.TCALLOY_DURA,
+                Ingredient.of(NtmItems.PLATE_WEAPON_STEEL.get()), anyResistantAlloyCastPlate(), Ingredient.of(NtmItems.DUCTTAPE.get()));
+        weaponModShapeless(recipeOutput, GunFactory.ModGeneric.BIGMT_DAMAGE,
+                mechanism(Mats.MAT_SATURN), castPlate(CastPlateItem.Type.SATURNITE), castPlate(CastPlateItem.Type.SATURNITE), castPlate(CastPlateItem.Type.SATURNITE), Ingredient.of(NtmItems.DUCTTAPE.get()));
+        weaponModShapeless(recipeOutput, GunFactory.ModGeneric.BIGMT_DURA,
+                Ingredient.of(NtmItems.PLATE_SATURNITE.get()), castPlate(CastPlateItem.Type.SATURNITE), Ingredient.of(NtmItems.DUCTTAPE.get()));
+        weaponModShapeless(recipeOutput, GunFactory.ModGeneric.BRONZE_DAMAGE,
+                mechanism(Mats.MAT_SATURN), anyBismoidBronzeCastPlate(), anyBismoidBronzeCastPlate(), anyBismoidBronzeCastPlate(), Ingredient.of(NtmItems.DUCTTAPE.get()));
+        weaponModShapeless(recipeOutput, GunFactory.ModGeneric.BRONZE_DURA,
+                Ingredient.of(NtmItems.PLATE_SATURNITE.get()), anyBismoidBronzeCastPlate(), Ingredient.of(NtmItems.DUCTTAPE.get()));
 
-        /* Die Saege: ein Buegel aus Stahlplatten an zwei Griffen, mit einem Blatt aus HSS. */
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC,
-                        MetaHelper.newStack(NtmItems.WEAPON_MOD_SPECIAL.get(), 1, GunFactory.ModSpecial.SAW.ordinal()))
-                .pattern("BBS")
-                .pattern("BHS")
-                .define('B', NtmItems.PLATE_STEEL.get())
-                .define('S', Items.STICK)
-                .define('H', NtmItems.PLATE_DURA_STEEL.get())
-                .unlockedBy("has_dura_plate", has(NtmItems.PLATE_DURA_STEEL.get()))
-                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_saw"));
-
-        /* Das Saturnit-Gehaeuse der Uzi: Lauf, Verschluss und Mechanik, alles aus Saturnit. */
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC,
-                        MetaHelper.newStack(NtmItems.WEAPON_MOD_SPECIAL.get(), 1, GunFactory.ModSpecial.SKIN_SATURNITE.ordinal()))
-                .pattern("IPI")
-                .pattern(" P ")
-                .define('I', NtmItems.INGOT_SATURNITE.get())
-                .define('P', NtmItems.PLATE_SATURNITE.get())
-                .unlockedBy("has_saturnite", has(NtmItems.INGOT_SATURNITE.get()))
-                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_skin_saturnite"));
+        this.gunPartRecipes(recipeOutput);
+        this.specialWeaponMods(recipeOutput);
+        this.gunRecipes(recipeOutput);
 
         /* Die 240-mm-Granaten. Vier Ausfuehrungen; die W9 wird nicht gebaut, sie ist Fundstueck. */
         shell(recipeOutput, GunFactory.Ammo240Shell.STOCK, Blocks.TNT, NtmItems.SHELL_STEEL.get());
@@ -3563,6 +3564,21 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_generic_" + mod.name().toLowerCase(Locale.US)));
     }
 
+    /**
+     * Dieselben Aufsaetze, aber mit Zutaten, die kein schlichter Gegenstand sind -- die vier
+     * letzten Paare brauchen Gussplatten und Mechaniken, und beides sind Meta-Gegenstaende.
+     */
+    private void weaponModShapeless(RecipeOutput recipeOutput, GunFactory.ModGeneric mod, Ingredient... ingredients) {
+
+        ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC,
+                MetaHelper.newStack(NtmItems.WEAPON_MOD_GENERIC.get(), 1, mod.ordinal()));
+
+        for(Ingredient ingredient : ingredients) builder.requires(ingredient);
+
+        builder.unlockedBy("has_ducttape", has(NtmItems.DUCTTAPE.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_generic_" + mod.name().toLowerCase(Locale.US)));
+    }
+
 
     /**
      * Runde 136: Schutzkleidung, Gasmasken und Filter.
@@ -4004,6 +4020,522 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .define('A', Items.BOOK)
                 .unlockedBy("has_balefire_shard", has(NtmItems.EGG_BALEFIRE_SHARD.get()))
                 .save(recipeOutput);
+    }
+
+    /* ==================================================================================
+     * DIE WAFFENBAUPLAENE (com.hbm.crafting.WeaponRecipes des Originals)
+     *
+     * Bis zur vorigen Runde hatte KEINE Waffe des Ports einen Bauplan, und der Grund war
+     * nicht der Bauplan, sondern die Zutat: jeder Waffenbauplan des Originals steht auf
+     * Waffenbauteilen, und die gab es nicht. Seit der Bauteilrunde gibt es sie.
+     *
+     * Die Bauteile sind Meta-Gegenstaende ueber die Materialnummer. Eine Marke kann das
+     * nicht abbilden (sie trifft immer den ganzen Gegenstand), deshalb laufen sie hier --
+     * wie Gussplatte, Bolzen und dichter Draht -- ueber DataComponentIngredient.
+     * ================================================================================== */
+
+    /**
+     * Ein Waffenbauteil aus einem bestimmten Material als Zutat.
+     *
+     * Die Pruefung laeuft ueber MatShapeItems, damit hier und im Kreativreiter dieselbe
+     * Quelle entscheidet, welches Material welche Form hergibt. Wer ein Bauteil verlangt,
+     * das es nicht gibt, bekommt beim Erzeugen der Daten einen Abbruch statt eines
+     * stillschweigend unbaubaren Rezepts.
+     */
+    private static Ingredient gunPart(NTMMaterial mat, MaterialShapes shape, DeferredItem<Item> item) {
+
+        if(MatShapeItems.gunPart(mat, shape, item).isEmpty())
+            throw new IllegalStateException("Kein Waffenbauteil der Form " + shape + " aus " + mat.tagName);
+
+        return DataComponentIngredient.of(false, NtmDataComponents.META, mat.id, item.get());
+    }
+
+    private static Ingredient lightBarrel(NTMMaterial mat) { return gunPart(mat, MaterialShapes.LIGHTBARREL, NtmItems.PART_BARREL_LIGHT); }
+    private static Ingredient heavyBarrel(NTMMaterial mat) { return gunPart(mat, MaterialShapes.HEAVYBARREL, NtmItems.PART_BARREL_HEAVY); }
+    private static Ingredient lightReceiver(NTMMaterial mat) { return gunPart(mat, MaterialShapes.LIGHTRECEIVER, NtmItems.PART_RECEIVER_LIGHT); }
+    private static Ingredient heavyReceiver(NTMMaterial mat) { return gunPart(mat, MaterialShapes.HEAVYRECEIVER, NtmItems.PART_RECEIVER_HEAVY); }
+    private static Ingredient mechanism(NTMMaterial mat) { return gunPart(mat, MaterialShapes.MECHANISM, NtmItems.PART_MECHANISM); }
+    private static Ingredient stock(NTMMaterial mat) { return gunPart(mat, MaterialShapes.STOCK, NtmItems.PART_STOCK); }
+    private static Ingredient grip(NTMMaterial mat) { return gunPart(mat, MaterialShapes.GRIP, NtmItems.PART_GRIP); }
+
+    /** Eine Gussplatte als Zutat -- ebenfalls ein Meta-Gegenstand. */
+    private static Ingredient castPlate(CastPlateItem.Type type) {
+        return DataComponentIngredient.of(false, NtmDataComponents.META, type.ordinal(), NtmItems.CAST_PLATE.get());
+    }
+
+    /** Ein Bolzen als Zutat. */
+    private static Ingredient bolt(BoltItem.Type type) {
+        return DataComponentIngredient.of(false, NtmDataComponents.META, type.meta, NtmItems.BOLT.get());
+    }
+
+    /** Dichter Draht als Zutat. */
+    private static Ingredient wireDense(WireDenseItem.Type type) {
+        return DataComponentIngredient.of(false, NtmDataComponents.META, type.meta, NtmItems.WIRE_DENSE.get());
+    }
+
+    /*
+     * Die Sammelbegriffe des Originals. Im Original sind AnyPlastic, AnyHardPlastic,
+     * AnyResistantAlloy und AnyBismoidBronze Eintraege im Erzverzeichnis, die mehrere
+     * Materialien zugleich annehmen. Hier wird daraus eine zusammengesetzte Zutat --
+     * derselbe Sinn, nur ohne Erzverzeichnis.
+     *
+     * ACHTUNG, leicht zu verwechseln: AnyPlastic ist im Original Polymer UND Bakelit,
+     * NICHT Polycarbonat. Polycarbonat und PVC bilden AnyHardPlastic.
+     */
+    private static Ingredient anyPlasticIngot() { return Ingredient.of(NtmItems.INGOT_POLYMER.get(), NtmItems.INGOT_BAKELITE.get()); }
+    private static Ingredient anyPlasticStock() { return CompoundIngredient.of(stock(Mats.MAT_POLYMER), stock(Mats.MAT_BAKELITE)); }
+    private static Ingredient anyPlasticGrip() { return CompoundIngredient.of(grip(Mats.MAT_POLYMER), grip(Mats.MAT_BAKELITE)); }
+    private static Ingredient anyHardPlasticStock() { return CompoundIngredient.of(stock(Mats.MAT_HARDPLASTIC), stock(Mats.MAT_PVC)); }
+    private static Ingredient anyHardPlasticGrip() { return CompoundIngredient.of(grip(Mats.MAT_HARDPLASTIC), grip(Mats.MAT_PVC)); }
+    private static Ingredient anyResistantAlloyCastPlate() { return CompoundIngredient.of(castPlate(CastPlateItem.Type.TCALLOY), castPlate(CastPlateItem.Type.CDALLOY)); }
+    private static Ingredient anyBismoidBronzeCastPlate() { return CompoundIngredient.of(castPlate(CastPlateItem.Type.BISMUTH_BRONZE), castPlate(CastPlateItem.Type.ARSENIC_BRONZE)); }
+
+    /**
+     * Die Bauteile, die man von Hand macht.
+     *
+     * Die METALLENEN Bauteile haben im Original bewusst KEIN Werkbankrezept -- sie kommen
+     * aus der Giessform (MoldItem, Formen 22 bis 28). Von Hand entstehen nur Schaft und
+     * Griff aus Holz, Kunststoff, Gummi und Knochen; das sind die zwoelf Rezepte hier.
+     */
+    private void gunPartRecipes(RecipeOutput recipeOutput) {
+
+        // Holz: der Einstieg, denn Bretter hat jeder
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MatShapeItems.stockOf(Mats.MAT_WOOD))
+                .pattern("WWW").pattern("  W")
+                .define('W', ItemTags.PLANKS)
+                .unlockedBy("has_planks", has(ItemTags.PLANKS))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("part_stock_wood"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MatShapeItems.gripOf(Mats.MAT_WOOD))
+                .pattern("W ").pattern(" W").pattern(" W")
+                .define('W', ItemTags.PLANKS)
+                .unlockedBy("has_planks", has(ItemTags.PLANKS))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("part_grip_wood"));
+
+        partStock(recipeOutput, Mats.MAT_POLYMER, NtmItems.INGOT_POLYMER.get());
+        partGrip(recipeOutput, Mats.MAT_POLYMER, NtmItems.INGOT_POLYMER.get());
+        partStock(recipeOutput, Mats.MAT_BAKELITE, NtmItems.INGOT_BAKELITE.get());
+        partGrip(recipeOutput, Mats.MAT_BAKELITE, NtmItems.INGOT_BAKELITE.get());
+        partStock(recipeOutput, Mats.MAT_HARDPLASTIC, NtmItems.INGOT_PC.get());
+        partGrip(recipeOutput, Mats.MAT_HARDPLASTIC, NtmItems.INGOT_PC.get());
+        partStock(recipeOutput, Mats.MAT_PVC, NtmItems.INGOT_PVC.get());
+        partGrip(recipeOutput, Mats.MAT_PVC, NtmItems.INGOT_PVC.get());
+        partGrip(recipeOutput, Mats.MAT_RUBBER, NtmItems.INGOT_RUBBER.get());
+        partGrip(recipeOutput, Mats.MAT_IVORY, Items.BONE);
+    }
+
+    private void partStock(RecipeOutput recipeOutput, NTMMaterial mat, ItemLike material) {
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MatShapeItems.stockOf(mat))
+                .pattern("WWW").pattern("  W")
+                .define('W', material)
+                .unlockedBy("has_material", has(material))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("part_stock_" + mat.tagName));
+    }
+
+    private void partGrip(RecipeOutput recipeOutput, NTMMaterial mat, ItemLike material) {
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MatShapeItems.gripOf(mat))
+                .pattern("W ").pattern(" W").pattern(" W")
+                .define('W', material)
+                .unlockedBy("has_material", has(material))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("part_grip_" + mat.tagName));
+    }
+
+    /**
+     * Die Sonderaufsaetze.
+     *
+     * DREI DAVON STANDEN SCHON HIER, aber mit ausgetauschten Zutaten: Schalldaempfer, Saege
+     * und Saturnit-Gehaeuse waren in Runde 74 auf Rohre, Platten und Barren umgeschrieben
+     * worden, weil es die Waffenbauteile nicht gab. Diese Runde stellt die Muster des
+     * Originals wieder her.
+     *
+     * Beim Schalldaempfer wird dabei ein zweiter Fehler mitberichtigt: er verlangte
+     * Polycarbonat, wo das Original AnyPlastic sagt. AnyPlastic ist Polymer und Bakelit --
+     * Polycarbonat gehoert zu AnyHardPlastic und war schlicht der falsche Kunststoff.
+     */
+    private void specialWeaponMods(RecipeOutput recipeOutput) {
+
+        /* Der Schalldaempfer: ein leichter Stahllauf zwischen zwei Lagen Kunststoff. */
+        modSpecial(GunFactory.ModSpecial.SILENCER)
+                .pattern("P").pattern("B").pattern("P")
+                .define('P', anyPlasticIngot())
+                .define('B', lightBarrel(Mats.MAT_STEEL))
+                .unlockedBy("has_barrel", has(NtmItems.PART_BARREL_LIGHT.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_silencer"));
+
+        /* Das Zielfernrohr: zwei Scheiben in einem Rahmen aus Stahl und Kunststoff. */
+        modSpecial(GunFactory.ModSpecial.SCOPE)
+                .pattern("SPS").pattern("G G").pattern("SPS")
+                .define('P', anyPlasticIngot())
+                .define('S', NtmItems.PLATE_STEEL.get())
+                .define('G', Tags.Items.GLASS_PANES)
+                .unlockedBy("has_plate_steel", has(NtmItems.PLATE_STEEL.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_scope"));
+
+        /* Die Saege: ein Buegel aus Stahlbolzen an zwei Stoecken, mit einem Blatt aus HSS. */
+        modSpecial(GunFactory.ModSpecial.SAW)
+                .pattern("BBS").pattern("BHS")
+                .define('B', bolt(BoltItem.Type.STEEL))
+                .define('S', Items.STICK)
+                .define('H', NtmItems.PLATE_DURA_STEEL.get())
+                .unlockedBy("has_dura_plate", has(NtmItems.PLATE_DURA_STEEL.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_saw"));
+
+        /* Der Schnellader: vier Stahlbolzen um eine Waffenstahlplatte. */
+        modSpecial(GunFactory.ModSpecial.SPEEDLOADER)
+                .pattern(" B ").pattern("BSB").pattern(" B ")
+                .define('B', bolt(BoltItem.Type.STEEL))
+                .define('S', NtmItems.PLATE_WEAPON_STEEL.get())
+                .unlockedBy("has_plate_weapon_steel", has(NtmItems.PLATE_WEAPON_STEEL.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_speedloader"));
+
+        /* Die Bremse: drei Waffenstahlbarren um eine Mechanik. */
+        modSpecial(GunFactory.ModSpecial.SLOWDOWN)
+                .pattern(" I ").pattern(" M ").pattern("I I")
+                .define('I', NtmItems.INGOT_WEAPON_STEEL.get())
+                .define('M', mechanism(Mats.MAT_WEAPONSTEEL))
+                .unlockedBy("has_mechanism", has(NtmItems.PART_MECHANISM.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_slowdown"));
+
+        /* Der Beschleuniger: Golddraht zwischen Waffenstahlplatten und Gunmetal. */
+        modSpecial(GunFactory.ModSpecial.SPEEDUP)
+                .pattern("PIP").pattern("WWW").pattern("PIP")
+                .define('P', NtmItems.PLATE_WEAPON_STEEL.get())
+                .define('I', NtmItems.INGOT_GUNMETAL.get())
+                .define('W', wireDense(WireDenseItem.Type.GOLD))
+                .unlockedBy("has_wire_dense", has(NtmItems.WIRE_DENSE.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_speedup"));
+
+        /* Der Vorderschaft der Grease Gun -- ein halbes Gewehr als Aufsatz. */
+        modSpecial(GunFactory.ModSpecial.GREASEGUN)
+                .pattern("BRM").pattern("P G")
+                .define('B', lightBarrel(Mats.MAT_WEAPONSTEEL))
+                .define('R', lightReceiver(Mats.MAT_WEAPONSTEEL))
+                .define('M', mechanism(Mats.MAT_WEAPONSTEEL))
+                .define('P', NtmItems.PLATE_DURA_STEEL.get())
+                .define('G', anyPlasticGrip())
+                .unlockedBy("has_mechanism", has(NtmItems.PART_MECHANISM.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_greasegun"));
+
+        /* Die Wuergebohrung: ein leichter HSS-Lauf zwischen zwei Waffenstahlplatten. */
+        modSpecial(GunFactory.ModSpecial.CHOKE)
+                .pattern("P").pattern("B").pattern("P")
+                .define('P', NtmItems.PLATE_WEAPON_STEEL.get())
+                .define('B', lightBarrel(Mats.MAT_DURA))
+                .unlockedBy("has_barrel", has(NtmItems.PART_BARREL_LIGHT.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_choke"));
+
+        /* Die beiden Schaftsaetze: Schaft und Griff aus Kunststoff, eingefaerbt. */
+        modSpecial(GunFactory.ModSpecial.FURNITURE_GREEN)
+                .pattern("PDS").pattern("  G")
+                .define('P', anyPlasticIngot())
+                .define('D', Tags.Items.DYES_GREEN)
+                .define('S', anyPlasticStock())
+                .define('G', anyPlasticGrip())
+                .unlockedBy("has_stock", has(NtmItems.PART_STOCK.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_furniture_green"));
+
+        modSpecial(GunFactory.ModSpecial.FURNITURE_BLACK)
+                .pattern("PDS").pattern("  G")
+                .define('P', anyPlasticIngot())
+                .define('D', Tags.Items.DYES_BLACK)
+                .define('S', anyPlasticStock())
+                .define('G', anyPlasticGrip())
+                .unlockedBy("has_stock", has(NtmItems.PART_STOCK.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_furniture_black"));
+
+        /* Das Doppelmagazin: ein Kasten aus Waffenstahl um eine Saturnitmechanik. */
+        modSpecial(GunFactory.ModSpecial.STACK_MAG)
+                .pattern("P P").pattern("P P").pattern("PMP")
+                .define('P', NtmItems.PLATE_WEAPON_STEEL.get())
+                .define('M', mechanism(Mats.MAT_SATURN))
+                .unlockedBy("has_mechanism", has(NtmItems.PART_MECHANISM.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_stack_mag"));
+
+        /* Das Seitengewehr: eine Stahlplatte auf drei Bolzen. */
+        modSpecial(GunFactory.ModSpecial.BAYONET)
+                .pattern("  P").pattern("BBB")
+                .define('P', NtmItems.PLATE_STEEL.get())
+                .define('B', bolt(BoltItem.Type.STEEL))
+                .unlockedBy("has_bolt", has(NtmItems.BOLT.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_bayonet"));
+
+        /* Das Saturnit-Gehaeuse der Uzi: Lauf, Verschluss und Mechanik, alles aus Saturnit. */
+        modSpecial(GunFactory.ModSpecial.SKIN_SATURNITE)
+                .pattern("BRM").pattern(" P ")
+                .define('B', lightBarrel(Mats.MAT_SATURN))
+                .define('R', lightReceiver(Mats.MAT_SATURN))
+                .define('M', mechanism(Mats.MAT_SATURN))
+                .define('P', NtmItems.PLATE_SATURNITE.get())
+                .unlockedBy("has_saturnite", has(NtmItems.INGOT_SATURNITE.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_skin_saturnite"));
+    }
+
+    private ShapedRecipeBuilder modSpecial(GunFactory.ModSpecial mod) {
+        return ShapedRecipeBuilder.shaped(RecipeCategory.MISC,
+                MetaHelper.newStack(NtmItems.WEAPON_MOD_SPECIAL.get(), 1, mod.ordinal()));
+    }
+
+    /**
+     * Die Waffenbauplaene.
+     *
+     * Wortgetreu aus WeaponRecipes des Originals, in der Reihenfolge des Originals. Von den
+     * 46 Bauplaenen dort bleiben hier 28 uebrig; der Rest faellt aus zwei gemessenen Gruenden
+     * weg:
+     *
+     * ES GIBT DIE WAFFE NICHT: Flammenwerfer und Topaz, Stinger, Chemiewerfer, Quadro, LAG,
+     * Raketenwerfer, Teslakanone, Laserpistole und Pew Pew, Fat Man, Tau, Lasergewehr,
+     * Ladungswerfer, Bohrer und die beiden Panzerruestungswaffen. Sie sind im Port nicht
+     * angelegt; ein Bauplan auf ein nicht vorhandenes Erzeugnis waere kein Rezept.
+     *
+     * ES GIBT DIE ZUTAT NICHT:
+     * - gun_minigun braucht motor_desh, den Deshmotor. Den kennt der Port nicht.
+     * - gun_double_barrel_sacred_dragon braucht item_secret in der Ausfuehrung SELENIUM_STEEL.
+     *   Die ganze Familie der Geheimstuecke fehlt im Port; die Waffe selbst gibt es.
+     *
+     * NICHT UEBERNOMMEN, WEIL SIE ZU EINER NICHT PORTIERTEN WAFFE GEHOEREN: die Aufsaetze
+     * LAS_SHOTGUN, LAS_CAPACITOR und LAS_AUTO (Lasergewehr), DRILL_*, ENGINE_*, MAGNET,
+     * SIFTER und CANISTERS (Bohrer). Ihre Zutaten waeren zum Teil da, aber es gaebe im Port
+     * keine Waffe, an die sie passen.
+     */
+    private void gunRecipes(RecipeOutput recipeOutput) {
+
+        /* Pfefferbuechse: der Einstieg, ohne ein einziges Waffenbauteil. */
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.GUN_PEPPERBOX.get(), 1)
+                .pattern("IIW").pattern("  C")
+                .define('I', Items.IRON_INGOT)
+                .define('W', ItemTags.PLANKS)
+                .define('C', NtmItems.INGOT_COPPER.get())
+                .unlockedBy("has_copper", has(NtmItems.INGOT_COPPER.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_LIGHT_REVOLVER, "BRM", "  G")
+                .define('B', lightBarrel(Mats.MAT_STEEL))
+                .define('R', lightReceiver(Mats.MAT_STEEL))
+                .define('M', mechanism(Mats.MAT_GUNMETAL))
+                .define('G', grip(Mats.MAT_WOOD))
+                .unlockedBy("has_mechanism", has(NtmItems.PART_MECHANISM.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_LIGHT_REVOLVER_ATLAS, " M ", "MAM", " M ")
+                .define('M', mechanism(Mats.MAT_WEAPONSTEEL))
+                .define('A', NtmItems.GUN_LIGHT_REVOLVER.get())
+                .unlockedBy("has_revolver", has(NtmItems.GUN_LIGHT_REVOLVER.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_HENRY, "BRP", "BMS")
+                .define('B', lightBarrel(Mats.MAT_STEEL))
+                .define('R', lightReceiver(Mats.MAT_GUNMETAL))
+                .define('M', mechanism(Mats.MAT_GUNMETAL))
+                .define('S', stock(Mats.MAT_WOOD))
+                .define('P', NtmItems.PLATE_GUNMETAL.get())
+                .unlockedBy("has_mechanism", has(NtmItems.PART_MECHANISM.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_HENRY_LINCOLN, " M ", "PGP", " M ")
+                .define('M', mechanism(Mats.MAT_WEAPONSTEEL))
+                .define('P', castPlate(CastPlateItem.Type.GOLD))
+                .define('G', NtmItems.GUN_HENRY.get())
+                .unlockedBy("has_henry", has(NtmItems.GUN_HENRY.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_GREASEGUN, "BRS", "SMG")
+                .define('B', lightBarrel(Mats.MAT_STEEL))
+                .define('R', lightReceiver(Mats.MAT_STEEL))
+                .define('S', bolt(BoltItem.Type.STEEL))
+                .define('M', mechanism(Mats.MAT_GUNMETAL))
+                .define('G', grip(Mats.MAT_STEEL))
+                .unlockedBy("has_mechanism", has(NtmItems.PART_MECHANISM.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_MARESLEG, "BRM", "BGS")
+                .define('B', lightBarrel(Mats.MAT_STEEL))
+                .define('R', lightReceiver(Mats.MAT_STEEL))
+                .define('M', mechanism(Mats.MAT_GUNMETAL))
+                .define('G', bolt(BoltItem.Type.STEEL))
+                .define('S', stock(Mats.MAT_WOOD))
+                .unlockedBy("has_mechanism", has(NtmItems.PART_MECHANISM.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_MARESLEG_AKIMBO, "SMS")
+                .define('S', NtmItems.GUN_MARESLEG.get())
+                .define('M', mechanism(Mats.MAT_WEAPONSTEEL))
+                .unlockedBy("has_maresleg", has(NtmItems.GUN_MARESLEG.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_FLAREGUN, "BRM", "  G")
+                .define('B', heavyBarrel(Mats.MAT_STEEL))
+                .define('R', lightReceiver(Mats.MAT_STEEL))
+                .define('M', mechanism(Mats.MAT_GUNMETAL))
+                .define('G', grip(Mats.MAT_STEEL))
+                .unlockedBy("has_mechanism", has(NtmItems.PART_MECHANISM.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_AM180, "BRS", "GMG")
+                .define('B', lightBarrel(Mats.MAT_DURA))
+                .define('R', lightReceiver(Mats.MAT_DURA))
+                .define('M', mechanism(Mats.MAT_GUNMETAL))
+                .define('G', grip(Mats.MAT_WOOD))
+                .define('S', stock(Mats.MAT_WOOD))
+                .unlockedBy("has_mechanism", has(NtmItems.PART_MECHANISM.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_LIBERATOR, "BB ", "BBM", "G G")
+                .define('B', lightBarrel(Mats.MAT_DURA))
+                .define('M', mechanism(Mats.MAT_GUNMETAL))
+                .define('G', grip(Mats.MAT_WOOD))
+                .unlockedBy("has_mechanism", has(NtmItems.PART_MECHANISM.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_CONGOLAKE, "BM ", "BRS", "G  ")
+                .define('B', heavyBarrel(Mats.MAT_DURA))
+                .define('M', mechanism(Mats.MAT_GUNMETAL))
+                .define('R', lightReceiver(Mats.MAT_DURA))
+                .define('S', stock(Mats.MAT_WOOD))
+                .define('G', grip(Mats.MAT_WOOD))
+                .unlockedBy("has_mechanism", has(NtmItems.PART_MECHANISM.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_HEAVY_REVOLVER, "BRM", "  G")
+                .define('B', lightBarrel(Mats.MAT_DESH))
+                .define('R', lightReceiver(Mats.MAT_DESH))
+                .define('M', mechanism(Mats.MAT_GUNMETAL))
+                .define('G', grip(Mats.MAT_WOOD))
+                .unlockedBy("has_mechanism", has(NtmItems.PART_MECHANISM.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_CARBINE, "BRM", "G S")
+                .define('B', lightBarrel(Mats.MAT_DESH))
+                .define('R', lightReceiver(Mats.MAT_DESH))
+                .define('M', mechanism(Mats.MAT_GUNMETAL))
+                .define('G', grip(Mats.MAT_WOOD))
+                .define('S', stock(Mats.MAT_WOOD))
+                .unlockedBy("has_mechanism", has(NtmItems.PART_MECHANISM.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_UZI, "BRS", " GM")
+                .define('B', lightBarrel(Mats.MAT_DESH))
+                .define('R', lightReceiver(Mats.MAT_DESH))
+                .define('S', anyPlasticStock())
+                .define('G', anyPlasticGrip())
+                .define('M', mechanism(Mats.MAT_GUNMETAL))
+                .unlockedBy("has_mechanism", has(NtmItems.PART_MECHANISM.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_UZI_AKIMBO, "UMU")
+                .define('U', NtmItems.GUN_UZI.get())
+                .define('M', mechanism(Mats.MAT_WEAPONSTEEL))
+                .unlockedBy("has_uzi", has(NtmItems.GUN_UZI.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_SPAS12, "BRM", "BGS")
+                .define('B', lightBarrel(Mats.MAT_DESH))
+                .define('R', lightReceiver(Mats.MAT_DESH))
+                .define('M', mechanism(Mats.MAT_GUNMETAL))
+                .define('G', anyPlasticGrip())
+                .define('S', stock(Mats.MAT_DESH))
+                .unlockedBy("has_mechanism", has(NtmItems.PART_MECHANISM.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_PANZERSCHRECK, "BBB", "PGM")
+                .define('B', heavyBarrel(Mats.MAT_DESH))
+                .define('P', castPlate(CastPlateItem.Type.STEEL))
+                .define('G', grip(Mats.MAT_DESH))
+                .define('M', mechanism(Mats.MAT_GUNMETAL))
+                .unlockedBy("has_mechanism", has(NtmItems.PART_MECHANISM.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_STAR_F, "BRM", "  G")
+                .define('B', lightBarrel(Mats.MAT_WEAPONSTEEL))
+                .define('R', lightReceiver(Mats.MAT_WEAPONSTEEL))
+                .define('M', mechanism(Mats.MAT_WEAPONSTEEL))
+                .define('G', anyPlasticGrip())
+                .unlockedBy("has_mechanism", has(NtmItems.PART_MECHANISM.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_STAR_F_AKIMBO, "UMU")
+                .define('U', NtmItems.GUN_STAR_F.get())
+                .define('M', mechanism(Mats.MAT_SATURN))
+                .unlockedBy("has_star_f", has(NtmItems.GUN_STAR_F.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_G3, "BRM", "WGS")
+                .define('B', lightBarrel(Mats.MAT_WEAPONSTEEL))
+                .define('R', lightReceiver(Mats.MAT_WEAPONSTEEL))
+                .define('M', mechanism(Mats.MAT_WEAPONSTEEL))
+                .define('W', grip(Mats.MAT_WOOD))
+                .define('G', grip(Mats.MAT_RUBBER))
+                .define('S', stock(Mats.MAT_WOOD))
+                .unlockedBy("has_mechanism", has(NtmItems.PART_MECHANISM.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_G3_ZEBRA, " M ", "MPM", " M ")
+                .define('M', mechanism(Mats.MAT_SATURN))
+                .define('P', NtmItems.GUN_G3.get())
+                .unlockedBy("has_g3", has(NtmItems.GUN_G3.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_MK108, " GG", "BRM", " D ")
+                .define('G', anyPlasticGrip())
+                .define('B', heavyBarrel(Mats.MAT_WEAPONSTEEL))
+                .define('R', heavyReceiver(Mats.MAT_WEAPONSTEEL))
+                .define('M', mechanism(Mats.MAT_WEAPONSTEEL))
+                .define('D', NtmItems.SHELL_WEAPON_STEEL.get())
+                .unlockedBy("has_mechanism", has(NtmItems.PART_MECHANISM.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_AMAT, " C ", "BRS", " MG")
+                .define('G', grip(Mats.MAT_WOOD))
+                .define('B', heavyBarrel(Mats.MAT_FERRO))
+                .define('R', heavyReceiver(Mats.MAT_FERRO))
+                .define('M', mechanism(Mats.MAT_WEAPONSTEEL))
+                .define('C', DataComponentIngredient.of(false, NtmDataComponents.META,
+                        GunFactory.ModSpecial.SCOPE.ordinal(), NtmItems.WEAPON_MOD_SPECIAL.get()))
+                .define('S', stock(Mats.MAT_WOOD))
+                .unlockedBy("has_scope", has(NtmItems.WEAPON_MOD_SPECIAL.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_M2, "  G", "BRM", "  G")
+                .define('G', grip(Mats.MAT_WOOD))
+                .define('B', heavyBarrel(Mats.MAT_FERRO))
+                .define('R', heavyReceiver(Mats.MAT_FERRO))
+                .define('M', mechanism(Mats.MAT_WEAPONSTEEL))
+                .unlockedBy("has_mechanism", has(NtmItems.PART_MECHANISM.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_AUTOSHOTGUN, "BRM", "G G")
+                .define('B', heavyBarrel(Mats.MAT_FERRO))
+                .define('R', heavyReceiver(Mats.MAT_FERRO))
+                .define('M', mechanism(Mats.MAT_WEAPONSTEEL))
+                .define('G', anyPlasticGrip())
+                .unlockedBy("has_mechanism", has(NtmItems.PART_MECHANISM.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_AUTOSHOTGUN_SHREDDER, " M ", "MAM", " M ")
+                .define('M', mechanism(Mats.MAT_SATURN))
+                .define('A', NtmItems.GUN_AUTOSHOTGUN.get())
+                .unlockedBy("has_autoshotgun", has(NtmItems.GUN_AUTOSHOTGUN.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_STG77, " D ", "BRS", "GGM")
+                .define('D', DataComponentIngredient.of(false, NtmDataComponents.META,
+                        GunFactory.ModSpecial.SCOPE.ordinal(), NtmItems.WEAPON_MOD_SPECIAL.get()))
+                .define('B', lightBarrel(Mats.MAT_SATURN))
+                .define('R', lightReceiver(Mats.MAT_SATURN))
+                .define('S', anyHardPlasticStock())
+                .define('G', anyHardPlasticGrip())
+                .define('M', mechanism(Mats.MAT_SATURN))
+                .unlockedBy("has_scope", has(NtmItems.WEAPON_MOD_SPECIAL.get()))
+                .save(recipeOutput);
+    }
+
+    /** Eine Waffe mit ihrem Muster -- spart in jedem Bauplan zwei Zeilen Geruest. */
+    private ShapedRecipeBuilder gun(DeferredItem<Item> gun, String... pattern) {
+
+        ShapedRecipeBuilder builder = ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, gun.get(), 1);
+        for(String row : pattern) builder.pattern(row);
+        return builder;
     }
 
 }

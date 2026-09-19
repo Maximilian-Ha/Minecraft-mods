@@ -21,8 +21,12 @@
 # einem Feld); solche Ausdruecke sind statisch nicht aufzuloesen. Sie werden aufgezaehlt statt
 # verschwiegen -- ein Tor, das stillschweigend woanders hinschaut, ist schlimmer als keins.
 #
-# NACHGEMESSEN (Runde 181): 30 Registrierungen mit eigenem Bild je Wert, 505 Bilder, null
-# fehlend. Benennt man eine beliebige davon um, meldet die Pruefung genau sie.
+# DIE GIESSFORMEN haben eine eigene Regel (Abschnitt 3b), weil ihr Bildname als Zeichenkette
+# im registerMold-Aufruf steht und nicht in einer Aufzaehlung.
+#
+# NACHGEMESSEN (Runde 182): 34 Registrierungen mit eigenem Bild je Wert, 433 Bilder, null
+# fehlend. Benennt man eine beliebige davon um, meldet die Pruefung genau sie -- mit
+# mold_grip.png nachgestellt.
 
 set -uo pipefail
 cd "$(dirname "$0")/.."
@@ -206,6 +210,25 @@ for p in sorted(quellen):
         geprueft += 1
         for wert in werte:
             pfad = os.path.join(TEX, vorlage.format(name=name, wert=wert.lower()) + '.png')
+            bilder += 1
+            if not os.path.exists(pfad): fehlend.append(pfad)
+
+# --- 3b. Die Giessformen ------------------------------------------------------------------
+# MoldItem legt je Form ein eigenes Modell an, dessen layer0 auf "item/mold_<name>" zeigt.
+# Der Name steht nicht in einer Aufzaehlung, sondern als Zeichenkette im registerMold-Aufruf
+# -- die Regel oben kann ihn nicht aufloesen, und genau da ist in Runde 182 mold_barrel_light
+# durchgerutscht: sieben neue Formen, keine einzige Textur, und erst runData in der Abnahme
+# hat es gemeldet. Deshalb hier eine eigene, ausdrueckliche Pruefung.
+MOLD = 'src/main/java/com/hbm/items/machine/MoldItem.java'
+if os.path.exists(MOLD):
+    mold_src = strip(open(MOLD, encoding='utf-8', errors='replace').read())
+    namen = re.findall(r'registerMold\(\s*new\s+Mold\w*\(\s*\d+\s*,\s*\w+\s*,\s*"([a-z0-9_]+)"', mold_src)
+    if not namen:
+        uebersprungen.append('MoldItem: kein registerMold-Aufruf lesbar, die Formbilder bleiben ungeprueft')
+    else:
+        geprueft += 1
+        for n_ in ['base'] + namen:
+            pfad = os.path.join(TEX, 'item', 'mold_' + n_ + '.png')
             bilder += 1
             if not os.path.exists(pfad): fehlend.append(pfad)
 
