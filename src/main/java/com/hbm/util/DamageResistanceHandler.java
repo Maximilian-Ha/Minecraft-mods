@@ -297,6 +297,9 @@ public class DamageResistanceHandler {
         FIRE,
         EXPLOSION,
         ELECTRIC,
+        /* Im Original zwischen ELECTRIC und LASER; beim Uebertragen der Aufzaehlung
+         * weggefallen und mit der Plasmafuellung der Granaten nachgetragen. */
+        PLASMA,
         LASER,
         MICROWAVE,
         SUBATOMIC,

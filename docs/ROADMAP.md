@@ -6792,3 +6792,55 @@ kennt das Tor jetzt den dritten Helfer. Nachgewiesen, dass es weiterhin anschlä
 Zeile wirklich fehlt.
 
 Alle 29 Tore grün.
+
+## Berichtigung: die Plasmafüllung gab es nicht
+
+Der erste Anlauf der Granaten (`1e47282c`) war grün durch alle 29 Tore und ist in der CI an
+einem einzigen Fehler gescheitert:
+
+```
+GrenadeFillingItem.java:195: error: cannot find symbol
+  ... energieExplosion(granate, 50F, 5F, DamageClass.PLASMA);
+                                                     ^
+  symbol:   variable PLASMA
+  location: class DamageClass
+```
+
+Nachgesehen: das Original führt in `DamageClass` neun Werte, der Port acht. `PLASMA` steht dort
+zwischen `ELECTRIC` und `LASER` und ist beim Übertragen der Aufzählung weggefallen — lange vor
+dieser Runde, und bis jetzt hat es niemand gebraucht.
+
+`DamageClass` ist eine reine Kennzeichnung ohne Verzweigungstabellen und ohne gespeicherte
+Ordnungszahlen; nachgezählt wird sie im Port an sechs Stellen benutzt, alle in der Form
+`setDamageClass(...)`. Der Wert ist deshalb an seiner ursprünglichen Stelle nachgetragen.
+
+### Ein neues Tor: `enum-check`
+
+Das ist die zweite Runde in Folge, die grün durch alle Tore ging und in der CI fiel. Beim
+letzten Mal war es eine Frage der Ladereihenfolge — dafür kann es kein statisches Tor geben.
+Diesmal ist es etwas, das ein Tor sehr wohl sehen kann: ein Verweis auf eine Konstante, die
+nicht existiert.
+
+`syntax-check` kann es nicht finden, und zwar aus gutem Grund: es übersetzt ohne
+Minecraft-Klassenpfad und muss „cannot find symbol" herausfiltern, weil diese Meldung dabei
+zehntausendfach als Folgefehler entsteht. Der echte Fall geht in diesem Rauschen unter.
+
+`enum-check` schaut deshalb nur auf das, was der Port selbst erklärt: es liest alle
+Aufzählungen unter `src/main/java`, sammelt ihre Konstanten und hält jeden Verweis der Form
+`Name.KONSTANTE` dagegen. Gemessen: 137 Aufzählungen, 3825 Verweise.
+
+Zwei Dinge mussten beim Bauen nachgebessert werden, beide durch Nachmessen gefunden:
+
+* **Ein Semikolon im Kommentar** hat die Konstantenliste abgeschnitten. Der Vermerk, den ich
+  gerade erst neben `PLASMA` geschrieben hatte, enthielt eines — und prompt hat das Tor seinen
+  eigenen Anlass nicht mehr gesehen. Die Deklarationen werden jetzt ohne Kommentare gelesen.
+* **Namensgleichheit mit Minecraft.** Der Port hat eigene Aufzählungen namens `SoundType` und
+  `ConnectionType`, und beide Namen gibt es auch in Minecraft bzw. NeoForge. Ein ausdrücklicher
+  Import sticht jetzt jeden Sammelimport — steht in der Datei `import
+  net.minecraft.world.level.block.SoundType;`, dann ist dieser gemeint. Vier Aufzählungen
+  bleiben mehrdeutig und werden übersprungen: welche gemeint ist, ließe sich nur raten.
+
+Nachgewiesen an zwei Fällen: das Tor meldet `DamageClass.PLASMA`, sobald der Wert wieder
+fehlt, und ebenso ein erfundenes `GrenadeFuze.S4`. Danach ist es wieder grün.
+
+Damit sind es **30 Tore**.
