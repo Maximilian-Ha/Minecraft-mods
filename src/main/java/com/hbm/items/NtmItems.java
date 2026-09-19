@@ -25,6 +25,7 @@ import com.hbm.items.food.ConserveItem;
 import com.hbm.items.food.DrinkItem;
 import com.hbm.items.food.EnergyItem;
 import com.hbm.blockentity.machine.rbmk.IRBMKFluxReceiver.NType;
+import com.hbm.items.special.DemonCoreItem;
 import com.hbm.items.special.BedrockOreBaseItem;
 import com.hbm.items.special.BedrockOreFragmentItem;
 import com.hbm.items.special.BedrockOreItem;
@@ -1206,6 +1207,10 @@ public class NtmItems {
     // Fat Man
     public static final DeferredItem<Item> FAT_MAN_IGNITER = ITEMS.register("fat_man_igniter", () -> new Item(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> FAT_MAN_CORE =    ITEMS.register("fat_man_core",    () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
+    /* Der Daemonenkern. Offen wird er von einem Schraubenzieher gehalten; faellt er zu
+     * Boden, rutscht der heraus und der Kern schliesst sich. Werte aus ModItems.java:2692. */
+    public static final DeferredItem<Item> DEMON_CORE_OPEN = ITEMS.register("demon_core_open", () -> new DemonCoreItem(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
+    public static final DeferredItem<Item> DEMON_CORE_CLOSED = ITEMS.register("demon_core_closed", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
 
     // Ivy Mike
     public static final DeferredItem<Item> IVY_MIKE_CORE =         ITEMS.register("ivy_mike_core",         () -> new Item(new Item.Properties().stacksTo(1)));

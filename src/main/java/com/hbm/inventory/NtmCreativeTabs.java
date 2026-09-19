@@ -1618,6 +1618,8 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.LITTLE_BOY_IGNITER);
 
                         output.accept(NtmItems.FAT_MAN_CORE);
+                        output.accept(NtmItems.DEMON_CORE_OPEN);
+                        output.accept(NtmItems.DEMON_CORE_CLOSED);
                         output.accept(NtmItems.FAT_MAN_IGNITER);
 
                         output.accept(NtmItems.IVY_MIKE_CORE);

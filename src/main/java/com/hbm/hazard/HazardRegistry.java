@@ -169,6 +169,7 @@ public class HazardRegistry {
         HazardSystem.register(item(CELL_TRITIUM), makeData(RADIATION, 0.001F));
         HazardSystem.register(item(CELL_SAS3), makeData().addEntry(RADIATION, sas3).addEntry(BLINDING, 60F));
         HazardSystem.register(item(CELL_BALEFIRE), makeData(RADIATION, 50F));
+        HazardSystem.register(item(DEMON_CORE_OPEN), makeData(RADIATION, 5F));
         HazardSystem.register(item(EGG_BALEFIRE_SHARD), makeData(RADIATION, bf * nugget));
         HazardSystem.register(item(EGG_BALEFIRE), makeData(RADIATION, bf * ingot));
 

@@ -1026,6 +1026,8 @@ public class NtmItemModelProvider extends ItemModelProvider {
 
         this.basicItem(NtmItems.FAT_MAN_IGNITER.get());
         this.basicItem(NtmItems.FAT_MAN_CORE.get());
+        this.basicItem(NtmItems.DEMON_CORE_OPEN.get());
+        this.basicItem(NtmItems.DEMON_CORE_CLOSED.get());
 
         this.basicItem(NtmItems.IVY_MIKE_CORE.get());
         this.basicItem(NtmItems.IVY_MIKE_DEUT.get());

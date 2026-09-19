@@ -5607,3 +5607,25 @@ gibt es im Port noch nicht. Sie steht wie im Original im Kreativreiter und ist d
 erreichbar, aber im Überleben noch nicht herstellbar.
 
 Die Lücke bei den Blockentitäten steht bei **126**.
+
+### Der Dämonenkern
+
+Damit die Lampe der vorigen Runde auch im Überleben gebaut werden kann, fehlte ihr Herzstück:
+`demon_core_open` und `demon_core_closed`.
+
+Der Mod baut hier einen echten Unfall nach. 1946 hielt Louis Slotin die beiden
+Berylliumhalbschalen um einen Plutoniumkern mit einem **Schraubenzieher** auseinander — der
+abrutschte. Genau das passiert hier: am Amboss der dritten Stufe setzt man aus einem
+Plutoniumkern, vier Berylliumbarren und einem Schraubenzieher den *offenen* Kern zusammen.
+Er strahlt mit 5 Rad. Und sobald er als Gegenstand den Boden berührt, rutscht der
+Schraubenzieher heraus: der Kern schließt sich, das Werkzeug liegt daneben.
+
+`onEntityItemUpdate` gibt es in 1.21 als NeoForge-Erweiterung mit derselben Bedeutung; der
+Port benutzt sie schon für den nassen Lappen. Die Umsetzung ist daher wörtlich — bis auf
+`entityItem.onGround`, das in 1.21 `entity.onGround()` heißt.
+
+Ein Detail, das fast verlorengegangen wäre: die Textur des geschlossenen Kerns ist 16×64 groß
+und bringt eine `.mcmeta` mit — sie ist **animiert**, vier Bilder mit einem Tick Standzeit.
+Die Datei ist mitgekommen, sonst hätte Minecraft die Textur als vierfach zu hoch abgelehnt.
+
+Damit ist auch das Rezept der Lampe nachgereicht.

@@ -362,6 +362,20 @@ public class AnvilRecipes {
                 new AnvilOutput(new ItemStack(NtmItems.PLATE_DESH.asItem(), 4))
         ).setTier(3).setOverlay(OverlayType.CONSTRUCTION));
 
+        /*
+         * Der Daemonenkern, Original AnvilRecipes.java Z. 523. man_core heisst im Port
+         * FAT_MAN_CORE. Der Schraubenzieher geht in den Kern hinein und haelt ihn offen --
+         * er kommt zurueck, sobald der Kern zu Boden faellt.
+         */
+        CONSTRUCTION_RECIPES.add(new AnvilConstructionRecipe(
+                new AStack[] {
+                        new ComparableStack(NtmItems.FAT_MAN_CORE.get(), 1),
+                        new ComparableStack(NtmItems.INGOT_BERYLLIUM.get(), 4),
+                        new ComparableStack(NtmItems.SCREWDRIVER.get(), 1)
+                },
+                new AnvilOutput(new ItemStack(NtmItems.DEMON_CORE_OPEN.get()))
+        ).setTier(3).setOverlay(OverlayType.CONSTRUCTION));
+
         CONSTRUCTION_RECIPES.add(new AnvilConstructionRecipe(
                 new AStack[] {
                         new ComparableStack(NtmItems.NUGGET_BISMUTH.get(), 2),

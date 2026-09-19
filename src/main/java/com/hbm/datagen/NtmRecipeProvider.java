@@ -2065,6 +2065,14 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_fluid_duct_neo", has(NtmBlocks.FLUID_DUCT_NEO.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "fluid_duct_gauge"));
 
+        // Original WeaponRecipes Z. 320: " D " / "S S".
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.LAMP_DEMON.get(), 1)
+                .pattern(" D ").pattern("S S")
+                .define('D', NtmItems.DEMON_CORE_CLOSED.get())
+                .define('S', NtmItems.INGOT_STEEL.get())
+                .unlockedBy("has_demon_core_closed", has(NtmItems.DEMON_CORE_CLOSED.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "lamp_demon"));
+
         // Original CraftingManager Z. 299: "III" / "I I" / "BBB".
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.MACHINE_FURNACE_BRICK.get(), 1)
                 .pattern("III").pattern("I I").pattern("BBB")

@@ -1751,6 +1751,8 @@ public class NtmLanguageProvider extends LanguageProvider {
 
         this.add(NtmItems.FAT_MAN_IGNITER, "Bomb Firing Unit");
         this.add(NtmItems.FAT_MAN_CORE, "Plutonium Core");
+        this.add(NtmItems.DEMON_CORE_OPEN, "Suspended Demon Core");
+        this.add(NtmItems.DEMON_CORE_CLOSED, "Closed Demon Core");
 
         this.add(NtmItems.IVY_MIKE_CORE, "Uranium Coated Deuterium Tank");
         this.add(NtmItems.IVY_MIKE_DEUT, "Deuterium Tank");
