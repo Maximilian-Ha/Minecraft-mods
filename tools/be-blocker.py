@@ -23,6 +23,12 @@ NICHT ERFASST wird, was ohne Import erreichbar ist: Vanilla-Klassen, Methoden, F
 Liste der sofort Portierbaren ist deshalb eine ANNAEHERUNG von unten -- wer eine davon
 aufgreift, findet im Zweifel doch noch eine Luecke, aber selten.
 
+UND SIE GILT DER BLOCKENTITAET, NICHT DEM BLOCK. Beim ersten Versuch nach dieser Liste ist das
+gleich aufgefallen: TileEntityPipeExhaust haengt an nichts, aber der Block darum ist ein
+FluidDuctBox -- ein Kastenrohr, das seine Textur aus der Nachbarschaft waehlt, und diese ganze
+Familie fehlt im Port noch. Wer einen Eintrag aufgreift, sieht also zuerst nach, welcher Block
+die Entitaet traegt.
+
 Aufruf:
     tools/be-blocker.py           -- Uebersicht
     tools/be-blocker.py --list    -- dazu die vollstaendige Liste der Blockierten
