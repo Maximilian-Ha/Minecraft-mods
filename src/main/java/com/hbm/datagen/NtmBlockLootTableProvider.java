@@ -453,6 +453,7 @@ public class NtmBlockLootTableProvider extends BlockLootSubProvider {
         this.dropSelf(NtmBlocks.FLOODLIGHT.get());
         this.dropSelf(NtmBlocks.POLE_SATELLITE_RECEIVER.get());
         this.dropSelf(NtmBlocks.CHARGER.get());
+        this.dropSelf(NtmBlocks.MACHINE_MICROWAVE.get());
         this.dropSelf(NtmBlocks.POLE_TOP.get());
         this.dropSelf(NtmBlocks.DECO_CRT_CLEAN.get());
         this.dropSelf(NtmBlocks.DECO_CRT_BROKEN.get());

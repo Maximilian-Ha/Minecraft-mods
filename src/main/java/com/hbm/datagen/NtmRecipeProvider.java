@@ -1934,6 +1934,17 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_coil_copper", has(NtmItems.COIL_COPPER.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "charger"));
 
+        // Original CraftingManager Z. 291: "III" / "SGM" / "IDI".
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.MACHINE_MICROWAVE.get(), 1)
+                .pattern("III").pattern("SGM").pattern("IDI")
+                .define('I', NtmItems.PLATE_POLYMER.get())
+                .define('S', NtmItems.PLATE_STEEL.get())
+                .define('G', Tags.Items.GLASS_PANES)
+                .define('M', NtmItems.MAGNETRON.get())
+                .define('D', NtmItems.MOTOR.get())
+                .unlockedBy("has_magnetron", has(NtmItems.MAGNETRON.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "machine_microwave"));
+
         // Original CraftingManager Z. 293. Bisher fehlte dem Heliostatspiegel das Rezept,
         // weil steel_beam im Port nicht existierte.
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.SOLAR_MIRROR.get(), 3)

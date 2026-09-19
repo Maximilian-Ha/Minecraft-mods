@@ -63,6 +63,7 @@ import com.hbm.blockentity.machine.FloodlightBlockEntity;
 import com.hbm.blockentity.machine.FloodlightBeamBlockEntity;
 import com.hbm.blockentity.machine.DecoPoleSatelliteReceiverBlockEntity;
 import com.hbm.blockentity.machine.ChargerBlockEntity;
+import com.hbm.blockentity.machine.MachineMicrowaveBlockEntity;
 import com.hbm.blockentity.network.PylonBlockEntity;
 import com.hbm.blockentity.network.PylonLargeBlockEntity;
 import com.hbm.blockentity.network.PylonMediumBlockEntity;
@@ -896,6 +897,7 @@ public class NtmBlockEntityTypes {
     public static final Supplier<BlockEntityType<FloodlightBeamBlockEntity>> FLOODLIGHT_BEAM = BLOCK_ENTITY_TYPES.register("floodlight_beam", () -> BlockEntityType.Builder.of(FloodlightBeamBlockEntity::new, NtmBlocks.FLOODLIGHT_BEAM.get()).build(null));
     public static final Supplier<BlockEntityType<DecoPoleSatelliteReceiverBlockEntity>> POLE_SATELLITE_RECEIVER = BLOCK_ENTITY_TYPES.register("pole_satellite_receiver", () -> BlockEntityType.Builder.of(DecoPoleSatelliteReceiverBlockEntity::new, NtmBlocks.POLE_SATELLITE_RECEIVER.get()).build(null));
     public static final Supplier<BlockEntityType<ChargerBlockEntity>> CHARGER = BLOCK_ENTITY_TYPES.register("charger", () -> BlockEntityType.Builder.of(ChargerBlockEntity::new, NtmBlocks.CHARGER.get()).build(null));
+    public static final Supplier<BlockEntityType<MachineMicrowaveBlockEntity>> MACHINE_MICROWAVE = BLOCK_ENTITY_TYPES.register("machine_microwave", () -> BlockEntityType.Builder.of(MachineMicrowaveBlockEntity::new, NtmBlocks.MACHINE_MICROWAVE.get()).build(null));
 
     public static final Supplier<BlockEntityType<DecontaminatorBlockEntity>> DECONTAMINATOR = BLOCK_ENTITY_TYPES.register(
             "decontaminator",

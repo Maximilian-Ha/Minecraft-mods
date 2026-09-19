@@ -21,6 +21,7 @@ public class NtmMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<MachineArcWelderMenu>> MACHINE_ARC_WELDER = reg("machine_arc_welder", MachineArcWelderMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<MachineShredderMenu>> MACHINE_SHREDDER = reg("machine_shredder", MachineShredderMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<MachineElectricFurnaceMenu>> MACHINE_ELECTRIC_FURNACE = reg("machine_electric_furnace", MachineElectricFurnaceMenu::new);
+    public static final DeferredHolder<MenuType<?>, MenuType<MachineMicrowaveMenu>> MACHINE_MICROWAVE = reg("machine_microwave", MachineMicrowaveMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<MachineRtgFurnaceMenu>> MACHINE_RTG_FURNACE = reg("machine_rtg_furnace", MachineRtgFurnaceMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<MachineDiFurnaceRtgMenu>> MACHINE_DIFURNACE_RTG = reg("machine_difurnace_rtg", MachineDiFurnaceRtgMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<MachinePWRMenu>> MACHINE_PWR = reg("machine_pwr", MachinePWRMenu::new);

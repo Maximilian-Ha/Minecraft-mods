@@ -231,6 +231,7 @@ public class CommonEvents {
         event.register(NtmMenuTypes.MACHINE_ARC_WELDER.get(), MachineArcWelderScreen::new);
         event.register(NtmMenuTypes.MACHINE_SHREDDER.get(), MachineShredderScreen::new);
         event.register(NtmMenuTypes.MACHINE_ELECTRIC_FURNACE.get(), MachineElectricFurnaceScreen::new);
+        event.register(NtmMenuTypes.MACHINE_MICROWAVE.get(), MachineMicrowaveScreen::new);
         event.register(NtmMenuTypes.MACHINE_RTG_FURNACE.get(), MachineRtgFurnaceScreen::new);
         event.register(NtmMenuTypes.MACHINE_DIFURNACE_RTG.get(), MachineDiFurnaceRtgScreen::new);
         event.register(NtmMenuTypes.MACHINE_PWR.get(), MachinePWRScreen::new);

@@ -5219,3 +5219,31 @@ selbst zu portieren.
 
 **Steht für sich, aber ohne Kreativreiter** (zwei Blöcke): `deco_loot` und `skeleton_holder`.
 Beide setzt im Original nur die Weltgenerierung; im Kreativmodus sind sie nicht zu bekommen.
+
+### Die Mikrowelle
+
+`machine_microwave` ist die erste der drei Oberflächen-Maschinen aus der Restliste. Sie nimmt
+die ganz normalen Ofenrezepte — aber nur, wenn entweder das Eingelegte oder das Ergebnis
+**essbar** ist; in 1.21 ist das die `FOOD`-Komponente statt `instanceof ItemFood`.
+
+Der Regler geht von null bis fünf und bestimmt, wie schnell die Zeit läuft (`time += speed *
+2`). Auf Stufe fünf fliegt sie in die Luft — das ist kein Fehler, das steht so im Original,
+gleich als erste Abfrage in der Arbeitsschleife.
+
+Zwei Kleinigkeiten beim Übersetzen:
+
+**Die Drehrichtung.** Das Original setzt `rotatable = true` und legt beim Setzen die
+Blickrichtung in die Metadaten. Benutzt wird sie nirgends: `BlockMachineBase` überschreibt
+keine Bildauswahl, und es gibt nur eine einzige Textur für alle sechs Seiten. Der Block hat
+hier deshalb gar keine Richtungseigenschaft — ein Blockzustand, den niemand liest, wäre toter
+Zustand, und tote Zustände kosten Blockstate-Einträge.
+
+**Die Explosion.** Das Original hängt ihr zusätzlich einen `PlayerProcessorStandard` an, der
+Spielern eigene Schadens- und Rückstoßregeln gibt. Den gibt es im Port nicht; ohne ihn
+behandelt die Explosion den Spieler wie jedes andere Wesen. Das ist dieselbe Abweichung, die
+der Port an allen anderen `ExplosionVNT`-Stellen schon trägt.
+
+Die beiden Knöpfe der Oberfläche laufen über `CompoundTagControl` und `IControlReceiver` —
+die Mechanik, die der Port für alle Knopfpakete benutzt.
+
+Die Lücke steht bei **18**.

@@ -1222,6 +1222,9 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.particleOnlyBlock(NtmBlocks.FLOODLIGHT, modLoc("block/block_steel"));
         this.particleOnlyBlock(NtmBlocks.POLE_SATELLITE_RECEIVER, modLoc("block/deco_satellite_receiver"));
         this.particleOnlyBlock(NtmBlocks.CHARGER, modLoc("block/block_steel"));
+        // Das Original hat fuer die Mikrowelle nur eine Textur und waehlt sie fuer alle
+        // sechs Seiten; also ein schlichter Wuerfel.
+        this.simpleCubeAllBlock(NtmBlocks.MACHINE_MICROWAVE);
     }
 
     /**
