@@ -56,6 +56,7 @@ FAMILIEN = {
     "reinforced_lamp_off":  "reinforced_lamp mit lit=false",
     "wood_structure":       "wood_structure_roof, wood_structure_scaffold, wood_structure_ceiling",
     "plant_dead":           "plant_dead_generic, _grass, _flower, _bigflower, _fern",
+    "spotlight_incandescent_off": "spotlight_incandescent mit lit=false",
     "machine_electric_furnace_off": "machine_electric_furnace mit lit=false",
 }
 

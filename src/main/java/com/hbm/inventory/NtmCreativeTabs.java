@@ -1156,6 +1156,9 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.PLANT_DEAD_FLOWER);
                         output.accept(NtmBlocks.PLANT_DEAD_BIGFLOWER);
                         output.accept(NtmBlocks.PLANT_DEAD_FERN);
+                        output.accept(NtmBlocks.SPOTLIGHT_INCANDESCENT);
+                        output.accept(NtmBlocks.SPOTLIGHT_FLUORO);
+                        output.accept(NtmBlocks.SPOTLIGHT_HALOGEN);
                         output.accept(NtmBlocks.BLOCK_STARMETAL);
                         output.accept(NtmBlocks.BLOCK_ELECTRICAL_SCRAP);
                         output.accept(NtmBlocks.WOOD_BARRIER);

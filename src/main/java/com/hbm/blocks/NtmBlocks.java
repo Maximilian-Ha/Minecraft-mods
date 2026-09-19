@@ -300,6 +300,14 @@ public class NtmBlocks {
     /* BERICHTIGT (Stufe 5): der Traeger ist im Original kein Wuerfel, sondern eine duenne
      * Saeule mit eigenem Modell (beam.obj). Werte aus ModBlocks.java:1601. */
     public static final DeferredBlock<Block> STEEL_BEAM = register("steel_beam", () -> new SteelBeamBlock(BlockBehaviour.Properties.of().strength(5.0F, 15.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion()));
+    /* Stufe 5: die drei Scheinwerfer und ihr Lichtkegel. Reichweiten 2, 8 und 32 Bloecke wie
+     * im Original (ModBlocks.java:1483 ff.); das Rotsteinsignal schaltet sie AUS. */
+    public static final DeferredBlock<Block> SPOTLIGHT_INCANDESCENT = register("spotlight_incandescent", () -> new SpotlightBlock(spotlight(), 2, SpotlightBlock.Bauart.GLUEHBIRNE));
+    public static final DeferredBlock<Block> SPOTLIGHT_FLUORO = register("spotlight_fluoro", () -> new SpotlightBlock(spotlight(), 8, SpotlightBlock.Bauart.LEUCHTSTOFF));
+    public static final DeferredBlock<Block> SPOTLIGHT_HALOGEN = register("spotlight_halogen", () -> new SpotlightBlock(spotlight(), 32, SpotlightBlock.Bauart.HALOGEN));
+    /* Der Lichtkegel selbst: unsichtbar, nicht anfassbar, nur hell. */
+    public static final DeferredBlock<Block> SPOTLIGHT_BEAM = BLOCKS.register("spotlight_beam", () -> new SpotlightBeamBlock(BlockBehaviour.Properties.of().replaceable().noCollission().noOcclusion().noLootTable().air().lightLevel(state -> 15).pushReaction(PushReaction.DESTROY)));
+
     /* Stufe 5: totes Gewaechs, fuenf Formen. Im Original ein Block mit Metadaten
      * (ModBlocks.java:1657), im Port fuenf Bloecke. */
     public static final DeferredBlock<Block> PLANT_DEAD_GENERIC = register("plant_dead_generic", () -> new DeadPlantBlock(deadPlant()));
@@ -1098,6 +1106,18 @@ public class NtmBlocks {
                 .sound(SoundType.GRASS)
                 .mapColor(MapColor.PLANT)
                 .pushReaction(PushReaction.DESTROY);
+    }
+
+
+    /** Die Eigenschaften aller drei Scheinwerfer; Haerte 0,5 wie im Original. */
+    private static BlockBehaviour.Properties spotlight() {
+        return BlockBehaviour.Properties.of()
+                .strength(0.5F)
+                .noCollission()
+                .noOcclusion()
+                .sound(SoundType.METAL)
+                .mapColor(MapColor.NONE)
+                .lightLevel(state -> state.getValue(SpotlightBlock.LIT) ? 15 : 0);
     }
 
 }

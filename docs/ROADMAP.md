@@ -4813,3 +4813,43 @@ Die Lücke steht bei **41**.
 Der Pilz (`mush`) bleibt vorerst liegen: Er wächst im Original zu einem Riesenpilz, und der
 Generator dafür gehört zur Weltgenerierung, die noch nicht portiert ist. Ihn ohne sein Wachstum
 hinzustellen wäre eine halbe Sache — er kommt, wenn die Generatoren dran sind.
+
+## Stufe 5: die Scheinwerfer und ihr Lichtkegel
+
+Drei Scheinwerfer — Glühbirne, Leuchtstoffröhre, Halogenstrahler — und der Lichtkegel, den sie
+werfen. Reichweiten wie im Original: zwei, acht und zweiunddreißig Blöcke.
+
+### Zwei Eigenheiten, die man kennen muss
+
+**Das Rotsteinsignal schaltet sie AUS.** Das ist kein Versehen, sondern ausdrücklich so gebaut
+— der Kommentar im Original sagt, die Lampen sollten ohne Verkabelung nützlich sein und sich
+wie Redstone-Fackeln verhalten. Dafür hat das Original je zwei Blöcke (`spotlight_x` und
+`spotlight_x_off`); im Port ist es die Eigenschaft `LIT`, wie beim elektrischen Ofen, und
+`spotlight_incandescent_off` steht im Messskript als Familienfall.
+
+**Eine zerschossene Lampe** bleibt dunkel, bis jemand sie mit einem Rechtsklick ersetzt — und
+das Original repariert dabei gleich alle anliegenden Lampen mit, rekursiv über alle sechs
+Seiten. Auch das ist übernommen.
+
+### Der Lichtkegel merkt sich, woher er beleuchtet wird
+
+Ein Platz kann von mehreren Scheinwerfern zugleich getroffen werden. Das Original hält die
+Herkunftsrichtungen als **sechs Bits in einer Blockentität**; im Port sind es sechs Ja-Nein-
+Eigenschaften im Blockzustand — dieselbe Auskunft, ohne dass für jeden Lichtblock eine
+Blockentität nötig wäre. Erst wenn die letzte Richtung wegfällt, verschwindet der Strahl.
+
+Dazu gehören drei Wege, alle aus dem Original:
+
+| | |
+| --- | --- |
+| `propagateBeam` | setzt den Kegel, bis die Reichweite aufgebraucht ist oder etwas im Weg steht |
+| `unpropagateBeam` | nimmt ihn zurück, lässt aber stehen, was von woanders noch leuchtet |
+| `backPropagate` | sucht vom Strahl aus rückwärts die Lampe, wenn ein Hindernis wegfällt |
+
+### Zwei Tore haben lokal zugeschlagen
+
+`import-check` fand, dass `SpotlightBlock` im Blockstate-Geber benutzt, aber nicht importiert
+war. `lang-check` fand, dass der Lichtkegel keine Namenszeile hatte — unsichtbar hin oder her,
+ohne sie stünde im Spiel der rohe Schlüssel. Beides vor dem Push behoben, kein Lauf verbrannt.
+
+Die Lücke steht bei **36**.

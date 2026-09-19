@@ -7,6 +7,7 @@ import com.hbm.blocks.NtmBlocks;
 import com.hbm.blocks.machine.MachineDetectorBlock;
 import com.hbm.blocks.machine.icf.ICFLaserComponentBlock;
 import com.hbm.blocks.machine.icf.ICFWrapperBlock;
+import com.hbm.blocks.generic.SpotlightBlock;
 import com.hbm.blocks.generic.ToolConversionBlock;
 import com.hbm.blocks.generic.BarbedWireBlock;
 import com.hbm.blocks.generic.GrateBlock;
@@ -856,6 +857,7 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         );
 
         this.registerPwr();
+        this.registerSpotlights();
         this.simpleBlock(NtmBlocks.PLANT_DEAD_GENERIC.get(), this.models().withExistingParent("plant_dead_generic", mcLoc("block/cross")).renderType("cutout").texture("cross", modLoc("block/plant_dead_generic")));
         this.itemModels().withExistingParent("plant_dead_generic", mcLoc("item/generated")).texture("layer0", modLoc("block/plant_dead_generic"));
         this.simpleBlock(NtmBlocks.PLANT_DEAD_GRASS.get(), this.models().withExistingParent("plant_dead_grass", mcLoc("block/cross")).renderType("cutout").texture("cross", modLoc("block/plant_dead_grass")));
@@ -1127,6 +1129,49 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         for(Direction dir : Direction.values()) builder = builder.face(dir).texture("#all").end();
 
         return builder.end();
+    }
+
+    /**
+     * Die drei Scheinwerfer. Ihr Modell kommt aus einer OBJ-Datei und wird ueber die
+     * Blockzustaende in alle sechs Richtungen gedreht: waagerecht ueber die Y-Drehung, an
+     * Decke und Boden zusaetzlich ueber die X-Drehung.
+     *
+     * Die dunkle Fassung teilt sich das Modell mit der hellen -- das Original hat dafuer zwei
+     * Bloecke, im Port ist es die Eigenschaft LIT, und die aendert am Aussehen nur das Licht.
+     */
+    private void registerSpotlights() {
+
+        this.spotlightVariants(NtmBlocks.SPOTLIGHT_INCANDESCENT, this.models().getBuilder("spotlight_incandescent")
+                .customLoader(LampCageModelBuilder::new).texture("texture", this.modLoc("block/cage_lamp")).end());
+
+        this.spotlightVariants(NtmBlocks.SPOTLIGHT_FLUORO, this.models().getBuilder("spotlight_fluoro")
+                .customLoader(LampFluorescentModelBuilder::new).texture("texture", this.modLoc("block/fluorescent_lamp")).end());
+
+        this.spotlightVariants(NtmBlocks.SPOTLIGHT_HALOGEN, this.models().getBuilder("spotlight_halogen")
+                .customLoader(LampFloodModelBuilder::new).texture("texture", this.modLoc("block/flood_lamp")).end());
+
+        /* Der Lichtkegel ist unsichtbar: ein leeres Modell, und kein Gegenstand dazu. */
+        this.simpleBlock(NtmBlocks.SPOTLIGHT_BEAM.get(), this.models().getBuilder("spotlight_beam"));
+    }
+
+    /**
+     * Dreht das Lampenmodell in alle sechs Richtungen: waagerecht ueber die Y-Drehung, an
+     * Decke und Boden ueber die X-Drehung. Die dunkle Fassung teilt sich das Modell mit der
+     * hellen -- das Original hat dafuer zwei Bloecke, im Port ist es die Eigenschaft LIT, und
+     * die aendert am Aussehen nur das Licht.
+     */
+    private void spotlightVariants(DeferredBlock<Block> block, ModelFile model) {
+
+        this.getVariantBuilder(block.get()).forAllStates(state -> {
+            Direction dir = state.getValue(SpotlightBlock.FACING);
+            return ConfiguredModel.builder()
+                    .modelFile(model)
+                    .rotationX(dir == Direction.UP ? 270 : dir == Direction.DOWN ? 90 : 0)
+                    .rotationY(dir.getAxis().isHorizontal() ? ((int) dir.toYRot() + 180) % 360 : 0)
+                    .build();
+        });
+
+        this.blockItem(block);
     }
 
     /**
@@ -2430,6 +2475,18 @@ public class NtmBlockStateProvider extends BlockStateProvider {
             super(parent, helper);
         }
         @Override public BakedModelType getType() { return BakedModelType.PIPE; }
+    }
+    protected static class LampCageModelBuilder extends BlockModelBuilderBase {
+        public LampCageModelBuilder(BlockModelBuilder parent, ExistingFileHelper helper) { super(parent, helper); }
+        @Override public BakedModelType getType() { return BakedModelType.LAMP_CAGE; }
+    }
+    protected static class LampFluorescentModelBuilder extends BlockModelBuilderBase {
+        public LampFluorescentModelBuilder(BlockModelBuilder parent, ExistingFileHelper helper) { super(parent, helper); }
+        @Override public BakedModelType getType() { return BakedModelType.LAMP_FLUORESCENT; }
+    }
+    protected static class LampFloodModelBuilder extends BlockModelBuilderBase {
+        public LampFloodModelBuilder(BlockModelBuilder parent, ExistingFileHelper helper) { super(parent, helper); }
+        @Override public BakedModelType getType() { return BakedModelType.LAMP_FLOOD; }
     }
     protected static class SteelBeamModelBuilder extends BlockModelBuilderBase {
         public SteelBeamModelBuilder(BlockModelBuilder parent, ExistingFileHelper helper) {

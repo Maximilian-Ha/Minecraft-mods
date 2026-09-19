@@ -122,14 +122,14 @@ for key in sorted(models):
 # Die Liste enthaelt auch Fluide, Toene und Menues; das schadet nicht, denn nur item.- und
 # block.-Zeilen werden ueberhaupt gegen sie gehalten. Umgekehrt gilt: was der Ausdruck nicht
 # faengt, bleibt unbemerkt -- eine blinde Stelle, kein Fehlalarm.
-# Zehn Bloecke bekommen absichtlich KEINEN Gegenstand: sie stehen mit dem blanken
+# Elf Bloecke bekommen absichtlich KEINEN Gegenstand: sie stehen mit dem blanken
 # BLOCKS.register im Quelltext statt mit einem der register-Helfer, die sonst jedem Block
 # einen BlockItem mitgeben. Fluessigkeiten, Feuer, Wrapper -- nichts davon soll in der Hand
 # liegen. Eine Namenszeile haben sie trotzdem, deshalb muessen sie hier ausgenommen werden.
 # Kommt einer hinzu, faellt er auf und gehoert mit Begruendung in diese Liste.
 OHNE_GEGENSTAND = {
     'balefire', 'barricade', 'corium', 'fire_digamma', 'icf_block',
-    'mud', 'pile_block', 'rad_lava', 'toxic_block', 'volcanic_lava',
+    'mud', 'pile_block', 'rad_lava', 'spotlight_beam', 'toxic_block', 'volcanic_lava',
 }
 
 def registry_namen(quelle='src/main/java'):

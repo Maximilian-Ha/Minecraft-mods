@@ -36,7 +36,10 @@ public class NtmGeometry implements IUnbakedGeometry<NtmGeometry> {
         PIPE,
         ANVIL,
         STEEL_BEAM,
-        STEEL_POLES
+        STEEL_POLES,
+        LAMP_CAGE,
+        LAMP_FLUORESCENT,
+        LAMP_FLOOD
     }
 
     private final BakedModelType type;
@@ -64,6 +67,9 @@ public class NtmGeometry implements IUnbakedGeometry<NtmGeometry> {
             case ANVIL -> new AnvilBakedModel(new HFRWavefrontObject("models/obj/block/anvil.obj"), textureSprite);
             case STEEL_BEAM -> new SimpleWavefrontBakedModel(new HFRWavefrontObject("models/obj/block/beam.obj"), textureSprite);
             case STEEL_POLES -> new SimpleWavefrontBakedModel(new HFRWavefrontObject("models/obj/block/pole.obj"), textureSprite);
+            case LAMP_CAGE -> new SimpleWavefrontBakedModel(new HFRWavefrontObject("models/obj/lights/cage_lamp.obj"), textureSprite);
+            case LAMP_FLUORESCENT -> new SimpleWavefrontBakedModel(new HFRWavefrontObject("models/obj/lights/fluorescent_lamp.obj"), textureSprite);
+            case LAMP_FLOOD -> new SimpleWavefrontBakedModel(new HFRWavefrontObject("models/obj/lights/flood_lamp.obj"), textureSprite);
         };
     }
 }

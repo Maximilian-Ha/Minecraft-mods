@@ -2322,6 +2322,11 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.PLANT_DEAD_FLOWER, "Dead Flower");
         this.add(NtmBlocks.PLANT_DEAD_BIGFLOWER, "Dead Large Flower");
         this.add(NtmBlocks.PLANT_DEAD_FERN, "Dead Fern");
+        this.add(NtmBlocks.SPOTLIGHT_INCANDESCENT, "Incandescent Lamp");
+        this.add(NtmBlocks.SPOTLIGHT_FLUORO, "Fluorescent Lamp");
+        this.add(NtmBlocks.SPOTLIGHT_HALOGEN, "Halogen Flood Lamp");
+        /* Der Lichtkegel ist unsichtbar, braucht aber eine Namenszeile. */
+        this.add(NtmBlocks.SPOTLIGHT_BEAM, "Light Beam");
         this.add(NtmBlocks.BLOCK_STARMETAL, "Block of Starmetal");
         this.add(NtmBlocks.BLOCK_ELECTRICAL_SCRAP, "Block of Electrical Scrap");
         this.add(NtmBlocks.NTM_DIRT, "Dirt");
