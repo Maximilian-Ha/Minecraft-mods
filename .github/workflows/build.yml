@@ -79,6 +79,11 @@ jobs:
           chmod +x ./tools/dist-check.sh
           ./tools/dist-check.sh
 
+      - name: Check star imports
+        run: |
+          chmod +x ./tools/wildcard-check.sh
+          ./tools/wildcard-check.sh
+
       - name: Check render bounding boxes
         run: |
           chmod +x ./tools/renderbox-check.sh

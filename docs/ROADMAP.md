@@ -4638,3 +4638,30 @@ bisher nirgends benutzt. Er wird in einer eigenen Runde eingeführt und bringt d
 auf einmal: die Berichtigung von `steel_beam`, dazu `steel_poles` und `steel_roof`. Für
 `steel_poles` ist das der einzige Weg — sein Modell hat 84 Dreiecke, davon 40 schräge; als
 Quader im JSON-Format ist es nicht nachbaubar, das wäre Raten.
+
+## Das 25. Tor: keine gemischten Stern-Importe
+
+Zweimal in Folge hat derselbe Fehler zugeschlagen: `NtmItems` importiert
+`com.hbm.items.special.*` **und** `net.minecraft.world.item.*`, und Vanilla hat eine Klasse
+`BookItem` — der Übersetzer bricht mit `reference to BookItem is ambiguous` ab. Das hat Runde
+170 einen CI-Lauf gekostet. Zwei Stunden später hätte `BarrierBlock` in `NtmBlocks` dasselbe
+getan, diesmal vorher bemerkt.
+
+Eine Prüfung auf die Namen selbst wäre das Naheliegende, ist aber **nicht messbar**: dafür
+bräuchte es die Liste aller Vanilla-Klassennamen, und offline gibt es keinen
+Minecraft-Classpath. Die Ersatzquelle — Vanilla-Klassen, die der Port selbst irgendwo explizit
+importiert — hätte ausgerechnet den Anlassfall verfehlt, denn
+`net.minecraft.world.item.BookItem` wird nirgends importiert.
+
+Also geht das Tor an die Ursache statt an das Symptom: **keine Datei darf gleichzeitig ein
+Projekt-Paket und ein `net.minecraft`-Paket mit Stern importieren.** Damit kann der Konflikt
+gar nicht erst entstehen.
+
+Beide Sammeldateien sind entsprechend aufgelöst. Die Vanilla-Sternimporte standen für
+erstaunlich wenig: `NtmBlocks` braucht aus `net.minecraft.world.level.block` genau **vierzehn**
+Klassen, `NtmItems` aus `net.minecraft.world.item` **dreizehn**. Ermittelt wurden sie nicht von
+Hand, sondern durch Abgleich aller benutzten Typnamen gegen die Dateinamen des Projekts —
+was nicht im Projekt liegt, kam aus dem Stern.
+
+**Gemessen:** 1929 Dateien durchgesehen, null Funde. Setzt man den Stern in `NtmBlocks` wieder
+ein, meldet das Tor genau diese eine Datei und nennt beide Seiten.
