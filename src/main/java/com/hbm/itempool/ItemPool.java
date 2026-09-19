@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * Portiert aus 1.7.10: com.hbm.itempool.ItemPool.
@@ -37,7 +38,24 @@ public class ItemPool {
     }
 
     public ItemPool add(ItemLike item, int min, int max, int weight) {
-        this.entries.add(new Entry(item, min, max, weight));
+        return this.add(() -> new ItemStack(item, 1), min, max, weight);
+    }
+
+    /**
+     * Fuer Eintraege, die kein blosser Gegenstand sind -- eine Spielart eines Metagegenstands
+     * etwa. Der Lieferant bestimmt Gegenstand UND Stueckzahl; hier wird nicht mehr gewuerfelt.
+     *
+     * Runde 183: die Munition der C-130 liegt im Port als Spielart eines einzigen Gegenstands,
+     * und die laesst sich ueber ItemLike nicht ausdruecken.
+     */
+    public ItemPool add(Supplier<ItemStack> supplier, int weight) {
+        this.entries.add(new Entry(supplier, 0, 0, weight));
+        this.totalWeight += weight;
+        return this;
+    }
+
+    private ItemPool add(Supplier<ItemStack> supplier, int min, int max, int weight) {
+        this.entries.add(new Entry(supplier, min, max, weight));
         this.totalWeight += weight;
         return this;
     }
@@ -52,13 +70,18 @@ public class ItemPool {
         for(Entry entry : this.entries) {
             roll -= entry.weight;
             if(roll < 0) {
-                int count = entry.min + (entry.max > entry.min ? random.nextInt(entry.max - entry.min + 1) : 0);
-                return new ItemStack(entry.item, Math.max(1, count));
+                ItemStack stack = entry.supplier.get();
+                /* min == 0 heisst: der Lieferant hat die Stueckzahl schon gesetzt. */
+                if(entry.min > 0) {
+                    int count = entry.min + (entry.max > entry.min ? random.nextInt(entry.max - entry.min + 1) : 0);
+                    stack.setCount(Math.max(1, count));
+                }
+                return stack;
             }
         }
 
         return ItemStack.EMPTY;
     }
 
-    private record Entry(ItemLike item, int min, int max, int weight) { }
+    private record Entry(Supplier<ItemStack> supplier, int min, int max, int weight) { }
 }

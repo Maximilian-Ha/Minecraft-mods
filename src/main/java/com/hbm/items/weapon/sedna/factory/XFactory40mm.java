@@ -1,6 +1,8 @@
 package com.hbm.items.weapon.sedna.factory;
 
+import com.hbm.entity.NtmEntityTypes;
 import com.hbm.entity.effect.FireLingering;
+import com.hbm.entity.logic.C130;
 import com.hbm.entity.projectile.BulletBaseMK4;
 import com.hbm.explosion.vanillant.ExplosionVNT;
 import com.hbm.explosion.vanillant.standard.BlockAllocatorStandard;
@@ -20,6 +22,7 @@ import com.hbm.items.weapon.sedna.Receiver;
 import com.hbm.items.weapon.sedna.factory.GunFactory.Ammo;
 import com.hbm.items.weapon.sedna.mags.MagazineFullReload;
 import com.hbm.items.weapon.sedna.mags.MagazineSingleReload;
+import com.hbm.util.SoundUtils;
 import com.hbm.main.NuclearTechMod;
 import com.hbm.main.ResourceManager;
 import com.hbm.particle.SpentCasing;
@@ -33,12 +36,15 @@ import com.hbm.util.DamageResistanceHandler.DamageClass;
 import com.hbm.util.EntityDamageUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -74,6 +80,9 @@ import java.util.function.BiFunction;
 public class XFactory40mm {
 
     public static BulletConfig g26_flare;
+    /** Die beiden Signalpatronen: blau ruft Nachschub, gruen Waffen und Munition. */
+    public static BulletConfig g26_flare_supply;
+    public static BulletConfig g26_flare_weapon;
 
     public static BulletConfig g40_he;
     public static BulletConfig g40_heat;
@@ -195,7 +204,7 @@ public class XFactory40mm {
                 .dura(100).draw(7).inspect(39).crosshair(Crosshair.L_CIRCUMFLEX).smoke(LAMBDA_SMOKE)
                 .rec(new Receiver(0)
                         .dmg(15F).delay(20).reload(28).jam(33).sound(NtmSoundEvents.GUN_UNDERBARREL_FIRE, 1.0F, 1.0F)
-                        .mag(new MagazineSingleReload(0, 1).addConfigs(g26_flare))
+                        .mag(new MagazineSingleReload(0, 1).addConfigs(g26_flare, g26_flare_supply, g26_flare_weapon))
                         .offset(0.75, -0.0625, -0.1875D)
                         .setupStandardFire().recoil(LAMBDA_RECOIL_GL))
                 .setupStandardConfiguration()
@@ -239,6 +248,10 @@ public class XFactory40mm {
 
         g26_flare = new BulletConfig().setItem(Ammo.G26_FLARE).setCasing(CasingType.LARGE, 4).setLife(100).setVel(2F).setGrav(0.015D).setRenderRotations(false).setOnImpact(LAMBDA_STANDARD_IGNITE)
                 .setCasing(new SpentCasing(SpentCasingType.STRAIGHT).setColor(0x9E1616).setScale(2F).register("g26Flare"));
+        g26_flare_supply = new BulletConfig().setItem(Ammo.G26_FLARE_SUPPLY).setCasing(CasingType.LARGE, 4).setLife(100).setVel(2F).setGrav(0.015D).setRenderRotations(false).setOnImpact(LAMBDA_STANDARD_IGNITE).setOnUpdate(LAMBDA_SPAWN_C130_SUPPLIES)
+                .setCasing(new SpentCasing(SpentCasingType.STRAIGHT).setColor(0x3C80F0).setScale(2F).register("g26FlareSupply"));
+        g26_flare_weapon = new BulletConfig().setItem(Ammo.G26_FLARE_WEAPON).setCasing(CasingType.LARGE, 4).setLife(100).setVel(2F).setGrav(0.015D).setRenderRotations(false).setOnImpact(LAMBDA_STANDARD_IGNITE).setOnUpdate(LAMBDA_SPAWN_C130_WEAPONS)
+                .setCasing(new SpentCasing(SpentCasingType.STRAIGHT).setColor(0x278400).setScale(2F).register("g26FlareWeapon"));
 
         /* Alle fuenf Granaten teilen Flugzeit, Geschwindigkeit und Fall -- nur die Wirkung trennt sie. */
         BulletConfig g40_base = new BulletConfig().setLife(200).setVel(2F).setGrav(0.035D);
@@ -370,4 +383,34 @@ public class XFactory40mm {
             default -> null;
         };
     };
+
+    public static Consumer<Entity> LAMBDA_SPAWN_C130_SUPPLIES = (geschoss) -> rufeFlugzeug(geschoss, C130.Nutzlast.SUPPLIES);
+    public static Consumer<Entity> LAMBDA_SPAWN_C130_WEAPONS  = (geschoss) -> rufeFlugzeug(geschoss, C130.Nutzlast.WEAPONS);
+
+    /**
+     * Ruft die C-130. Das geschieht nicht beim Aufschlag, sondern VIERZIG TICKS NACH DEM
+     * ABSCHUSS -- die Leuchtkugel steigt noch, und das Flugzeug ist schon unterwegs. Das ist
+     * im Original genauso; wer die Patrone senkrecht nach oben schiesst, bekommt das Flugzeug
+     * ueber seinem eigenen Kopf.
+     *
+     * Es wird ueber der Gelaendeoberkante eingesetzt, nicht auf Hoehe der Leuchtkugel.
+     */
+    public static void rufeFlugzeug(Entity geschoss, C130.Nutzlast nutzlast) {
+
+        if(geschoss.level.isClientSide) return;
+        if(geschoss.tickCount != 40) return;
+        if(!(geschoss instanceof BulletBaseMK4 kugel)) return;
+
+        if(kugel.getOwner() != null) {
+            SoundUtils.playAtVec3(kugel.level, kugel.getOwner().position(), NtmSoundEvents.TECH_BLEEP.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+        }
+
+        int x = Mth.floor(kugel.getX());
+        int z = Mth.floor(kugel.getZ());
+        int y = kugel.level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z);
+
+        C130 flugzeug = new C130(NtmEntityTypes.C130.get(), kugel.level);
+        flugzeug.fac(kugel.level, x, y, z, nutzlast);
+        kugel.level.addFreshEntity(flugzeug);
+    }
 }

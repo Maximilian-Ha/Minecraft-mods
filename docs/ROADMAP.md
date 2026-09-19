@@ -7539,3 +7539,54 @@ und die ist nachgemessen: Stinger, Quadro und Raketenwerfer. Der Stinger braucht
 `rocket_ml`) — das sind eigene Teilsysteme, keine einzelnen Klassen.
 
 Alle 33 Tore grün.
+
+## Die C-130
+
+Der vierte und letzte „blockiert", der keiner war. Die Nachschubkiste am Fallschirm stand in
+der vorigen Runde mit dem Vermerk „niemand wirft sie ab — im Original ist das die C-130, und
+die ist eine eigene Runde". Eine Runde ist sie, blockiert war sie nicht: **das Modell
+`c130.obj`, die Textur und ihre beiden `ResourceManager`-Einträge lagen längst im Port**, und
+`PlaneBase`, `ItemPool` und `AudioWrapper.getLoopedSound` ebenso.
+
+Eine Leuchtpatrone ruft sie. Nicht beim Aufschlag, sondern **vierzig Ticks nach dem Abschuss** —
+die Leuchtkugel steigt noch, und das Flugzeug ist schon unterwegs. Wer senkrecht nach oben
+schießt, bekommt es über dem eigenen Kopf; das ist im Original genauso. Es wird hundert Blöcke
+vor der Stelle und hundert über der Geländeoberkante eingesetzt, fliegt geradeaus und wirft auf
+halber Strecke die Kiste ab: sieben Tickschritte hinter sich und zehn Blöcke tiefer, als wäre
+sie aus der Heckklappe gerutscht.
+
+Die Propeller drehen sich nach der Uhr, nicht nach der Spielzeit — fünfzehn Grad je
+Millisekunde. Sie laufen also auch weiter, wenn das Spiel steht. Auch das ist übernommen.
+
+### Die Ladung, und was ihr fehlt
+
+Drei Vorräte: Nachschub, Waffen, Munition. Blau zieht fünfmal Nachschub, grün ein bis zwei
+Waffen und sechsmal Munition.
+
+**Sieben Einträge des Originals fehlen, und zwar weil ihre Gegenstände fehlen** — nicht aus
+Nachlässigkeit. Sie stehen namentlich im Kopf von `ItemPoolsC130`, damit die spätere Runde
+nicht nachschlagen muss:
+
+* Nachschub: `definitelyfood`, `pill_iodine`, `canister_full` (Diesel), `med_bag`, `radaway`
+* Waffen: `gun_henry`, `gun_n_i_4_n_i`
+
+Die übrigen stehen mit den Gewichten des Originals da. Ein gewichteter Vorrat verträgt das —
+er zieht aus dem, was drin ist —, aber die Verteilung ist bis dahin eine andere, und das gehört
+gesagt statt verschwiegen.
+
+### `ItemPool` kann jetzt Metadatenstapel
+
+Die Munitionstabelle des Originals besteht aus `ammo_standard` mit neun verschiedenen
+Metadaten. Der Nachbau im Port nahm bisher nur ein `ItemLike` — ein Gegenstand, eine
+Stückzahl —, und damit ließ sich keine einzige Zeile davon ausdrücken. Ein zweiter Zugang
+nimmt jetzt einen Lieferanten, der Gegenstand **und** Stückzahl selbst setzt; der alte Weg ist
+ein Aufruf des neuen geworden, damit es nur eine Zugmechanik gibt.
+
+### Die vier Fehlurteile dieser Sitzung
+
+Schredder, `DetonatableBlock`, Protégé, C-130 — viermal „blockiert" geschrieben, viermal war
+der Baustein da. Beim Schredder und beim Protégé habe ich vom fehlenden Klassennamen auf den
+Zustand geschlossen; bei der C-130 habe ich nicht einmal nachgesehen, ob ihr Modell im Baum
+liegt. **Es lag da, seit jemand es hineinkopiert hat.**
+
+Alle 33 Tore grün.

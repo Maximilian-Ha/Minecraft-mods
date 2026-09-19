@@ -143,6 +143,10 @@ public class NtmEntityTypes {
     public static final DeferredHolder<EntityType<?>, EntityType<Boxcar>> BOXCAR = ENTITY_TYPES.register("boxcar",
             () -> EntityType.Builder.<Boxcar>of(Boxcar::new, MobCategory.MISC).noSummon().setTrackingRange(250).sized(3.0F, 3.0F).fireImmune().build("boxcar"));
 
+    /* Das Transportflugzeug. Acht Bloecke breit, vier hoch -- dieselben Masse wie der Bomber. */
+    public static final DeferredHolder<EntityType<?>, EntityType<C130>> C130 = ENTITY_TYPES.register("c130",
+            () -> EntityType.Builder.<C130>of(C130::new, MobCategory.MISC).noSummon().sized(8F, 4F).setTrackingRange(1000).build("c130"));
+
     /* Die Kiste am Fallschirm. Einen Block gross, wie das Modell, das sie zeigt. */
     public static final DeferredHolder<EntityType<?>, EntityType<ParachuteCrate>> PARACHUTE_CRATE = ENTITY_TYPES.register("parachute_crate",
             () -> EntityType.Builder.<ParachuteCrate>of(ParachuteCrate::new, MobCategory.MISC).noSummon().setTrackingRange(250).sized(1.0F, 1.0F).fireImmune().build("parachute_crate"));
