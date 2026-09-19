@@ -4739,3 +4739,27 @@ Explosion nur zerstört.
 die CI ging.
 
 Die Lücke steht bei **43**.
+
+### Nachtrag: der Giftblock hatte kein Item — und das Tor sah es nur in der CI
+
+Der Lauf ist an `tools/model-resolve-check.sh` gescheitert:
+
+```
+OHNE MODELL: block toxic_block -- models/item/toxic_block.json fehlt
+```
+
+Das war kein Fehler im Block, sondern ein fehlender Eintrag: Flüssigkeiten werden mit blankem
+`BLOCKS.register` angelegt und bekommen bewusst **keinen** Gegenstand. Neun solche Blöcke standen
+in der Ausnahmeliste `OHNE_GEGENSTAND`, der zehnte fehlte.
+
+Ärgerlich war nicht der Eintrag, sondern dass er mir lokal nicht auffallen konnte: **dieses Tor
+ist auf dem Entwicklungsrechner blind.** Es prüft die *erzeugten* Modelle, und die entstehen
+erst durch `runData` in der CI — lokal findet es 13 Modelle statt tausender und meldet
+zufrieden „OK".
+
+Deshalb hat das Tor jetzt einen zweiten Teil, der **ohne** erzeugte Modelle auskommt: Er liest
+aus dem Quelltext, welche Blöcke mit blankem `BLOCKS.register` angelegt sind, und hält das gegen
+die Liste — in beide Richtungen. Fehlt einer, sagt er das; steht einer zu viel darin, auch.
+
+**Gemessen** (Exit-Code direkt, nicht durch eine Pipe): 10 Blöcke im Quelltext, alle in der
+Liste, `rc=0`. Nimmt man `toxic_block` heraus, meldet er genau diesen einen und gibt `rc=1`.

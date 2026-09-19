@@ -122,14 +122,14 @@ for key in sorted(models):
 # Die Liste enthaelt auch Fluide, Toene und Menues; das schadet nicht, denn nur item.- und
 # block.-Zeilen werden ueberhaupt gegen sie gehalten. Umgekehrt gilt: was der Ausdruck nicht
 # faengt, bleibt unbemerkt -- eine blinde Stelle, kein Fehlalarm.
-# Neun Bloecke bekommen absichtlich KEINEN Gegenstand: sie stehen mit dem blanken
+# Zehn Bloecke bekommen absichtlich KEINEN Gegenstand: sie stehen mit dem blanken
 # BLOCKS.register im Quelltext statt mit einem der register-Helfer, die sonst jedem Block
 # einen BlockItem mitgeben. Fluessigkeiten, Feuer, Wrapper -- nichts davon soll in der Hand
 # liegen. Eine Namenszeile haben sie trotzdem, deshalb muessen sie hier ausgenommen werden.
 # Kommt einer hinzu, faellt er auf und gehoert mit Begruendung in diese Liste.
 OHNE_GEGENSTAND = {
     'balefire', 'barricade', 'corium', 'fire_digamma', 'icf_block',
-    'mud', 'pile_block', 'rad_lava', 'volcanic_lava',
+    'mud', 'pile_block', 'rad_lava', 'toxic_block', 'volcanic_lava',
 }
 
 def registry_namen(quelle='src/main/java'):
@@ -166,6 +166,24 @@ if lang and registriert:
         if ('item/' + name) not in models:
             ohne_modell.append((art, name))
 
+# ------------------------------------------------------------------ Liste gegen Quelltext
+# Dieser Teil laeuft AUCH OHNE erzeugte Modelle und damit auch auf dem Entwicklungsrechner.
+# Er gleicht ab, welche Bloecke im Quelltext mit blankem BLOCKS.register angelegt sind -- also
+# ohne Gegenstand -- und haelt das gegen OHNE_GEGENSTAND. Ohne ihn faellt ein neuer solcher
+# Block erst in der CI auf, wo allein "runData" die Modelle erzeugt; genau das ist beim
+# Giftblock passiert und hat einen Lauf gekostet.
+import re as _re2
+
+blank = set()
+for dirpath, _, names in os.walk('src/main/java'):
+    for fn in names:
+        if not fn.endswith('.java'): continue
+        text = open(os.path.join(dirpath, fn), encoding='utf-8').read()
+        blank |= set(_re2.findall(r'\bBLOCKS\.register\(\s*"([a-z0-9_]+)"\s*,', text))
+
+fehlt_in_liste = sorted(blank - OHNE_GEGENSTAND)
+zuviel_in_liste = sorted(OHNE_GEGENSTAND - blank)
+
 # ------------------------------------------------------------------ Bericht
 print("Pruefe erzeugte Modelle ... %d Modelle in %d Baeumen%s%s"
       % (len(models), len(roots),
@@ -173,6 +191,19 @@ print("Pruefe erzeugte Modelle ... %d Modelle in %d Baeumen%s%s"
          ", %d Registrierungsnamen" % len(registriert) if registriert else ""))
 print("  Elternmodell fehlt      : %d" % len(unresolved))
 print("  Gegenstand ohne Modell  : %d" % len(ohne_modell))
+print("  Bloecke ohne Gegenstand : %d im Quelltext, %d nicht in der Liste, %d ueberfluessig"
+      % (len(blank), len(fehlt_in_liste), len(zuviel_in_liste)))
+
+if fehlt_in_liste or zuviel_in_liste:
+    if fehlt_in_liste:
+        print("\nMIT BLANKEM BLOCKS.register ANGELEGT, ABER NICHT IN OHNE_GEGENSTAND:")
+        for name in fehlt_in_liste:
+            print("  %s -- entweder einen Gegenstand geben oder mit Begruendung eintragen" % name)
+    if zuviel_in_liste:
+        print("\nIN OHNE_GEGENSTAND, ABER NICHT MEHR SO ANGELEGT:")
+        for name in zuviel_in_liste:
+            print("  %s -- Eintrag streichen" % name)
+    sys.exit(1)
 
 if unresolved or ohne_modell:
     if unresolved:
