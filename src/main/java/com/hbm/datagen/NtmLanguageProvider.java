@@ -483,6 +483,27 @@ public class NtmLanguageProvider extends LanguageProvider {
 
         /* Die Ueberschriften der Fenster. Runde 96 und 97 hatten sie vergessen -- ohne sie
          * stuende dort der nackte Schluessel. */
+        this.add("container.radiotelex", "Telex Machine");
+        this.add("container.radiotelex.bell", "BELL");
+        this.add("container.radiotelex.bell.desc", "Plays a bell when this character is received");
+        this.add("container.radiotelex.print", "PRINT");
+        this.add("container.radiotelex.print.desc", "Forces recipient to print message after transmission ends");
+        this.add("container.radiotelex.clear", "CLEAR SCREEN");
+        this.add("container.radiotelex.clear.desc", "Wipes message buffer when this character is received");
+        this.add("container.radiotelex.format", "FORMAT");
+        this.add("container.radiotelex.format.desc", "Inserts format character for message formatting");
+        this.add("container.radiotelex.pause", "PAUSE");
+        this.add("container.radiotelex.pause.desc", "Pauses message transmission for one second");
+        this.add("container.radiotelex.save", "SAVE ID");
+        this.add("container.radiotelex.save.desc", "Stores both channel names");
+        this.add("container.radiotelex.send", "SEND MESSAGE");
+        this.add("container.radiotelex.send.desc", "Transmits the message above, one character per tick");
+        this.add("container.radiotelex.delete", "DELETE MESSAGE BUFFER");
+        this.add("container.radiotelex.delete.desc", "Clears what you typed");
+        this.add("container.radiotelex.rxprint", "PRINT MESSAGE");
+        this.add("container.radiotelex.rxprint.desc", "Drops the received message as a sheet of paper");
+        this.add("container.radiotelex.rxclear", "CLEAR SCREEN");
+        this.add("container.radiotelex.rxclear.desc", "Wipes the received message");
         this.add("container.radiorec", "Radio Receiver");
         this.add("container.radiorec.save", "Save Settings");
         this.add("container.radiorec.toggle", "Toggle");
@@ -2338,6 +2359,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         /* Der Lichtkegel ist unsichtbar, braucht aber eine Namenszeile. */
         this.add(NtmBlocks.SPOTLIGHT_BEAM, "Light Beam");
         this.add(NtmBlocks.POLE_SATELLITE_RECEIVER, "Satellite Receiver Pole");
+        this.add(NtmBlocks.RADIO_TELEX, "Telex Machine");
+        this.add(NtmBlocks.RADIO_TELEX, DESC, "Types messages onto a channel$and prints what it receives.");
         this.add(NtmBlocks.RADIOREC, "Radio Receiver");
         this.add(NtmBlocks.RADIOREC, DESC, "Turns what it hears on its channel$into note block sounds.");
         this.add(NtmBlocks.MACHINE_MICROWAVE, "Microwave");

@@ -5273,3 +5273,42 @@ Gegenprobe: das Grundmodell steht damit in der Süd-Lage, und dessen Gehäusekas
 Metadaten 3 setzt.
 
 Die Lücke steht bei **17**.
+
+### Der Fernschreiber
+
+`radio_telex` ist der größte Einzelblock dieser Runde: fünf Sendezeilen, fünf Empfangszeilen,
+zwei Kanäle, Steuerzeichen mit eigenen Knöpfen — und er ist zwei Blöcke breit.
+
+Die Mechanik ließ sich wörtlich übernehmen, weil alle Grundlagen standen. Gesendet wird ein
+Zeichen pro Tick über `RTTYSystem`; die Steuerzeichen sind echte ASCII-Steuerzeichen und
+stehen jetzt als benannte Konstanten in der Blockentität statt als Zahlen im Code:
+
+| Zeichen | ASCII | Wirkung |
+|---|---|---|
+| `\u0004` | EOT | Ende der Übertragung |
+| `\n` | EOL | Zeilenwechsel |
+| `\u0007` | BEL | lässt beim Empfänger eine Glocke schlagen |
+| `\u000c` | FF | Empfänger soll nach dem Ende ausdrucken |
+| `\u0016` | SYN | eine Sekunde Pause beim Senden |
+| `\u007f` | DEL | löscht den Empfangsspeicher |
+
+**Eine Abweichung, die sein musste:** das Original zeichnet den Ausschlag des Senders als
+`GL_LINES`-Zug mit dem Tessellator. In 1.21 gibt es im Oberflächenzeichner keine Linien mehr.
+Die Kurve entsteht hier aus lauter kleinen Rechtecken, eines je Schritt — dieselbe Kurve,
+andere Grundfigur. Der Zufallsstrom hängt weiterhin am gerade gesendeten Zeichen, damit
+dieselbe Sendung immer denselben Zug ergibt.
+
+**Und ein Tor, das mich erwischt hat:** `api-check` hat fünf Stellen gemeldet, an denen ich
+`.length()` auf einer Variablen namens `text` aufrufe. Das Tor weiß, dass `text` im Port
+überall eine `List<Component>` ist, und hielt das für den bekannten Fehlgriff. Hier war es ein
+Fehlalarm — meine Variable war ein `String` —, aber die richtige Antwort war trotzdem nicht,
+das Tor aufzuweichen, sondern die Variable umzubenennen. Sie heißt jetzt `inhalt` und passt
+damit zur Namensgebung des übrigen Ports.
+
+Beim Aufräumen ist noch etwas aufgefallen: die Paragraphenzeichen für die Farbcodes waren als
+echte UTF-8-Bytes in die Datei geraten. Der Port schreibt seinen Quelltext in reinem ASCII;
+sie stehen jetzt als `§`. Gegengeprüft: keine der elf Dateien dieser Sitzung enthält noch
+ein Byte über 0x7F. (Die 34 Stellen in `NtmLanguageProvider` sind englische Anzeigetexte und
+standen schon vorher dort.)
+
+Die Lücke steht bei **16**.

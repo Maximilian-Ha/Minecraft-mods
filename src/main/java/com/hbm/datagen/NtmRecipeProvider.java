@@ -1955,6 +1955,18 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_circuit_vacuum_tube", has(NtmItems.CIRCUIT_VACUUM_TUBE.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "radiorec"));
 
+        // Original CraftingManager Z. 220: "SCR" / "W#W" / "WWW".
+        // EnumCircuitType.ANALOG ist im Port die Analogplatine, wie schon bei den RBMK-Pulten.
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.RADIO_TELEX.get(), 2)
+                .pattern("SCR").pattern("W#W").pattern("WWW")
+                .define('S', NtmBlocks.RADIO_TORCH_SENDER.get())
+                .define('C', NtmItems.CRT_DISPLAY.get())
+                .define('R', NtmBlocks.RADIO_TORCH_RECEIVER.get())
+                .define('W', ItemTags.PLANKS)
+                .define('#', NtmItems.CIRCUIT_ANALOG_BOARD.get())
+                .unlockedBy("has_crt_display", has(NtmItems.CRT_DISPLAY.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "radio_telex"));
+
         // Original CraftingManager Z. 293. Bisher fehlte dem Heliostatspiegel das Rezept,
         // weil steel_beam im Port nicht existierte.
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.SOLAR_MIRROR.get(), 3)

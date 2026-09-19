@@ -65,6 +65,7 @@ import com.hbm.blockentity.machine.DecoPoleSatelliteReceiverBlockEntity;
 import com.hbm.blockentity.machine.ChargerBlockEntity;
 import com.hbm.blockentity.machine.MachineMicrowaveBlockEntity;
 import com.hbm.blockentity.network.RadioRecBlockEntity;
+import com.hbm.blockentity.network.RadioTelexBlockEntity;
 import com.hbm.blockentity.network.PylonBlockEntity;
 import com.hbm.blockentity.network.PylonLargeBlockEntity;
 import com.hbm.blockentity.network.PylonMediumBlockEntity;
@@ -900,6 +901,7 @@ public class NtmBlockEntityTypes {
     public static final Supplier<BlockEntityType<ChargerBlockEntity>> CHARGER = BLOCK_ENTITY_TYPES.register("charger", () -> BlockEntityType.Builder.of(ChargerBlockEntity::new, NtmBlocks.CHARGER.get()).build(null));
     public static final Supplier<BlockEntityType<MachineMicrowaveBlockEntity>> MACHINE_MICROWAVE = BLOCK_ENTITY_TYPES.register("machine_microwave", () -> BlockEntityType.Builder.of(MachineMicrowaveBlockEntity::new, NtmBlocks.MACHINE_MICROWAVE.get()).build(null));
     public static final Supplier<BlockEntityType<RadioRecBlockEntity>> RADIO_REC = BLOCK_ENTITY_TYPES.register("radiorec", () -> BlockEntityType.Builder.of(RadioRecBlockEntity::new, NtmBlocks.RADIOREC.get()).build(null));
+    public static final Supplier<BlockEntityType<RadioTelexBlockEntity>> RADIO_TELEX = BLOCK_ENTITY_TYPES.register("radio_telex", () -> BlockEntityType.Builder.of(RadioTelexBlockEntity::new, NtmBlocks.RADIO_TELEX.get()).build(null));
 
     public static final Supplier<BlockEntityType<DecontaminatorBlockEntity>> DECONTAMINATOR = BLOCK_ENTITY_TYPES.register(
             "decontaminator",
