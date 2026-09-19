@@ -1,6 +1,7 @@
 package com.hbm.items.weapon.sedna.factory;
 
 import com.hbm.items.NtmItems;
+import com.hbm.items.weapon.sedna.BulletConfig;
 import com.hbm.items.weapon.sedna.GunBaseNTItem;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.item.weapon.sedna.*;
@@ -99,6 +100,14 @@ public class GunFactoryClient {
         p9_ap.setRenderer(LegoClient.RENDER_AP_BULLET);
 
         cluster_submunition.setRenderer(LegoClient.RENDER_BOMB);
+
+        /* DIE STRAHLEN. Bis Runde 188 hatte keiner von ihnen einen Zeichner -- was nicht
+         * auffiel, weil bis dahin auch gar kein Strahl erzeugt wurde. Jetzt wirken sie, und
+         * damit gehoert sichtbar gemacht, was sie tun. */
+        XFactory35800.p35800.setRendererBeam(LegoClient.RENDER_CRACKLE);
+        XFactory35800.p35800_bl.setRendererBeam(LegoClient.RENDER_BLACK_LIGHTNING);
+
+        for(BulletConfig schredder : XFactory12ga.SCHREDDER_STRAHLEN) schredder.setRendererBeam(LegoClient.RENDER_SHREDDER);
 
         //HUDS
         ((GunBaseNTItem) NtmItems.GUN_DEBUG.get())						.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO, LegoClient.HUD_COMPONENT_AMMO_SECOND);

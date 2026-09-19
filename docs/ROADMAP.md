@@ -8033,3 +8033,30 @@ Rangfolge — Münze vor Spieler vor Monster vor allem anderen. Dafür braucht e
 Münzentität samt Zeichner und den Knick. Der Strahl selbst läuft seit dieser Runde.
 
 Alle 34 Tore grün.
+
+## Und jetzt sieht man ihn auch
+
+Die vorige Runde hat den Strahl wirken lassen, aber unsichtbar. Der Zeichner fehlte an drei
+Stellen gleichzeitig, und keine davon hätte allein gereicht:
+
+* `ClientProxy` meldete für `BULLET_BEAM` keinen Entitätszeichner an.
+* Die Klasse `RenderBeam`, die es im Original gibt, war nicht portiert.
+* `setRendererBeam` rief im ganzen Baum niemand auf — die drei Strahlkonfigurationen hatten
+  also auch keinen, an den der Zeichner hätte weiterreichen können.
+
+Alle drei sind nachgetragen. `RenderBeam` zeichnet dabei selbst nichts: wie ein Strahl
+aussieht, hängt an seiner Munition, nicht an seiner Entität, und die Klasse reicht genau wie
+`RenderBulletMK4` an die Konfiguration weiter.
+
+### Die Drehung ist eine andere als beim Geschoss
+
+`renderBulletStandard` zeichnet entlang der X-Achse — das passt für ein Geschoss, das ohnehin
+in Flugrichtung liegt. Ein Strahl steht dagegen in Weltwinkeln da und ist so lang, wie sein
+Schussweg ausfiel. Er wird deshalb erst in die Senkrechte gedreht, um seine eigene Länge
+verschoben und dann zurückgekippt; diese drei Schritte macht das Original genauso, und ohne
+sie liegt der Strahl quer.
+
+Über seine Lebensdauer zieht er sich zusammen: je älter, desto dünner. Die 35800 bekommt den
+Riss in der Luft und ihre Schwarzlicht-Variante, der Schredder denselben Riss in seinem Grün.
+
+Alle 34 Tore grün.

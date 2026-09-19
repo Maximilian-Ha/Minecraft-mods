@@ -82,6 +82,9 @@ public class XFactory12ga {
     public static BulletConfig g12_shredder_explosive;
     public static BulletConfig g12_shredder_phosphorus;
 
+    /** Dieselben sechs als Feld -- der Strahlzeichner greift sie im Bausatz gesammelt ab. */
+    public static BulletConfig[] SCHREDDER_STRAHLEN = new BulletConfig[0];
+
     public static BiConsumer<BulletBaseMK4, HitResult> LAMBDA_STANDARD_EXPLODE = (bullet, hr) -> {
         Lego.standardExplode(bullet, hr, 2F); bullet.discard();
     };
@@ -142,6 +145,12 @@ public class XFactory12ga {
         g12_shredder_magnum     = schredder(g12_magnum,     splitter(g12_magnum));
         g12_shredder_explosive  = schredder(g12_explosive,  splitter(g12_explosive));
         g12_shredder_phosphorus = schredder(g12_phosphorus, splitter(g12_phosphorus));
+
+        /* Die sechs an einer Stelle, damit der Zeichner sie nicht einzeln aufzaehlen muss.
+         * Sie stehen HIER und nicht als Feldzuweisung oben, weil die sechs Konfigurationen
+         * erst in dieser Zeile fertig sind. */
+        SCHREDDER_STRAHLEN = new BulletConfig[] {g12_shredder, g12_shredder_slug, g12_shredder_flechette,
+                g12_shredder_magnum, g12_shredder_explosive, g12_shredder_phosphorus};
 
         BulletConfig[] all = new BulletConfig[] {g12_bp, g12_bp_magnum, g12_bp_slug, g12, g12_slug, g12_flechette, g12_magnum, g12_explosive, g12_phosphorus};
 
