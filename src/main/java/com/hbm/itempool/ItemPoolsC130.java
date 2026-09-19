@@ -19,7 +19,11 @@ import net.minecraft.world.item.ItemStack;
  * WAS NOCH FEHLT, und zwar aus dem Vorrat des Originals, nicht aus Nachlaessigkeit: EIN
  * Eintrag haengt an einem Gegenstand, den der Port noch nicht hat.
  *
- *   Waffen: gun_n_i_4_n_i -- braucht XFactoryAccelerator, das der Port nicht hat
+ *   Waffen: gun_n_i_4_n_i -- nachgemessen, und zwar genauer als beim ersten Mal: NICHT die
+ *           Fabrik XFactoryAccelerator fehlt, sondern die geworfene Muenze. Die ganze Waffe
+ *           besteht daraus, dass ihr Strahl an einer Muenze in der Luft abknickt und das
+ *           naechste Ziel sucht. Dafuer braucht es die Muenzentitaet samt Zeichner und den
+ *           Knick im Strahl; der Strahl selbst laeuft seit Runde 188.
  *
  * BILANZ DIESER LISTE, die mit sieben fehlenden Eintraegen anfing: FUENF davon waren ein
  * Irrtum -- radaway lag nur als Trankeffekt vor, med_bag hatte alle Zutaten, pill_iodine und

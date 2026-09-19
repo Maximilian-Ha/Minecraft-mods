@@ -1,5 +1,6 @@
 package com.hbm.items.weapon.sedna.factory;
 
+import com.hbm.entity.projectile.BulletBeamBase;
 import com.hbm.entity.projectile.BulletBaseMK4;
 import com.hbm.explosion.vanillant.ExplosionVNT;
 import com.hbm.explosion.vanillant.standard.EntityProcessorCrossSmooth;
@@ -231,14 +232,19 @@ public class Lego {
                 if(GunBaseNTItem.getIsLockedOn(stack)) mk4.lockonTarget = entity.level.getEntity(GunBaseNTItem.getLockonTarget(stack));
                 //if(i == 0 && config.blackPowder) BlackPowderCreator.composeEffect(entity.worldObj, mk4.posX, mk4.posY, mk4.posZ, mk4.motionX, mk4.motionY, mk4.motionZ, 10, 0.25F, 0.5F, 10, 0.25F);
                 entity.level.addFreshEntity(mk4);
+
+            /* RUNDE 188: dieser Zweig war auskommentiert, und damit haben alle drei
+             * setBeam()-Konfigurationen des Ports ins Leere gefeuert -- die beiden der 35800
+             * und der Schredder. Der Strahl rechnet seinen Weg schon im Konstruktor ab; was
+             * hier in die Welt gesetzt wird, ist nur noch das, was man davon sieht. */
+            } else if(config.pType == ProjectileType.BEAM) {
+                BulletBeamBase strahl = new BulletBeamBase(entity, config, damage, spread, sideOffset, heightOffset, forwardOffset);
+                entity.level.addFreshEntity(strahl);
             }
 //            } else if(config.pType == ProjectileType.BULLET_CHUNKLOADING) {
 //                EntityBulletBaseMK4CL mk4 = new EntityBulletBaseMK4CL(entity, config, damage, spread, sideOffset, heightOffset, forwardOffset);
 //                if(ItemGunBaseNT.getIsLockedOn(stack)) mk4.lockonTarget = entity.worldObj.getEntityByID(ItemGunBaseNT.getLockonTarget(stack));
 //                if(i == 0 && config.blackPowder) BlackPowderCreator.composeEffect(entity.worldObj, mk4.posX, mk4.posY, mk4.posZ, mk4.motionX, mk4.motionY, mk4.motionZ, 10, 0.25F, 0.5F, 10, 0.25F);
-//                entity.worldObj.spawnEntityInWorld(mk4);
-//            } else if(config.pType == ProjectileType.BEAM) {
-//                EntityBulletBeamBase mk4 = new EntityBulletBeamBase(entity, config, damage, spread, sideOffset, heightOffset, forwardOffset);
 //                entity.worldObj.spawnEntityInWorld(mk4);
 //            }
         }

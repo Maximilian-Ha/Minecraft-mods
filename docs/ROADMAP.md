@@ -7982,3 +7982,54 @@ war wirklich eine Runde Arbeit. **Bleibt einer**: `gun_n_i_4_n_i`, und der häng
 `XFactoryAccelerator` — einer ganzen Fabrik, die der Port nicht hat.
 
 Alle 34 Tore grün.
+
+## Der Strahl feuerte ins Leere
+
+Beim Nachmessen der NI4NI — dem letzten Eintrag der C-130-Liste — bin ich über etwas
+gestolpert, das mit ihr nichts zu tun hat und schwerer wiegt: **das Strahlgeschoss des Ports
+hat nie funktioniert.**
+
+Nachgemessen, nicht geschlossen:
+
+* `new BulletBeamBase(…)` steht im ganzen Baum **kein einziges Mal**.
+* `Lego.shoot` behandelt nur `ProjectileType.BULLET`; der `BEAM`-Zweig war auskommentiert.
+* Die Klasse selbst hatte Konfigurationszeiger, Schaden, Richtung und Länge — aber **keine
+  Strahlverfolgung**. Das `performHitscan` des Originals, hundert Zeilen, fehlte ganz.
+
+Betroffen sind alle drei `setBeam()`-Konfigurationen des Ports: die beiden der 35800 und
+**der Schredder, den ich in dieser Sitzung selbst gebaut habe**. Sie haben Munition
+verbraucht, Hülsen ausgeworfen, Rückstoß erzeugt — und nichts getroffen. Beim Schredder ist
+mir das nicht aufgefallen, weil ich die Mechanik oberhalb des Geschosses geprüft habe und
+darunter nicht weitergefragt.
+
+### Was jetzt läuft
+
+Der Schussweg. Ein Strahl fliegt nicht, er trifft sofort: der Konstruktor legt Ursprung und
+Richtung fest und läuft die zweihundertfünfzig Blöcke noch in derselben Zeile ab. Was danach
+in der Welt steht, ist nur noch die Zeichnung.
+
+**Die beiden Wege sind nicht gleich**, und das ist der Teil, den man leicht falsch schreibt:
+ein durchschlagender Strahl trifft *jedes* Wesen auf der Strecke und rechnet sofort ab; ein
+gewöhnlicher merkt sich das nächste und rechnet erst am Ende. Die Länge geht an den Zeichner
+und wird deshalb immer gesetzt, auch wenn nichts getroffen wurde.
+
+### Was noch fehlt, und zwar gemessen
+
+**Der Zeichner.** `ClientProxy` meldet für den Strahl keinen an, und `setRendererBeam` ruft im
+ganzen Baum niemand auf. Der Strahl wirkt jetzt, aber man sieht ihn nicht. Das ist eine eigene
+Runde.
+
+**Der Knick an der Münze.** Er gehört zur NI4NI und steht bewusst nicht drin: die
+Münzentität gibt es im Port nicht, und ein Zweig auf eine Entität, die fehlt, wäre toter Code.
+`setRotationsFromVector` und `schussweg` stehen aber schon bereit — genau die beiden Methoden,
+die der Knick braucht.
+
+### Und damit zur NI4NI
+
+Ihre Begründung in `ItemPoolsC130` war zum dritten Mal zu grob. Es fehlt **nicht** die Fabrik
+`XFactoryAccelerator`, sondern die geworfene Münze: die ganze Waffe besteht daraus, dass ihr
+Strahl an einer Münze in der Luft abknickt und sich das nächste Ziel sucht, mit einer
+Rangfolge — Münze vor Spieler vor Monster vor allem anderen. Dafür braucht es die
+Münzentität samt Zeichner und den Knick. Der Strahl selbst läuft seit dieser Runde.
+
+Alle 34 Tore grün.
