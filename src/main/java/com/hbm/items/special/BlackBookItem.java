@@ -16,9 +16,9 @@ import net.minecraft.world.level.Level;
  * Das Buch oeffnet beim Rechtsklick seine eigene Werkbank mit vier Plaetzen. Was darauf geht,
  * steht in MagicRecipes.
  */
-public class BookItem extends Item {
+public class BlackBookItem extends Item {
 
-    public BookItem(Properties properties) {
+    public BlackBookItem(Properties properties) {
         super(properties);
     }
 

@@ -4489,3 +4489,28 @@ führt. Als Hintergrund dient wie dort die Oberfläche des Buchs; der Ausschnitt
 (5|11), und genau darauf beziehen sich die Platzkoordinaten des Originals — die vier Eingänge
 bei (25|6) im Abstand 36, das Ergebnis bei (119|24). Nachgerechnet gegen die Oberfläche:
 30−5 = 25, 17−11 = 6, 124−5 = 119, 35−11 = 24.
+
+### Nachtrag: `BookItem` war mehrdeutig
+
+Der erste Anlauf ist in der CI am Übersetzer gescheitert, mit genau einem Fehler:
+
+```
+NtmItems.java:1112: error: reference to BookItem is ambiguous
+  both class net.minecraft.world.item.BookItem in net.minecraft.world.item
+  and class com.hbm.items.special.BookItem in com.hbm.items.special match
+```
+
+`NtmItems` importiert beide Pakete mit Stern — `com.hbm.items.special.*` und
+`net.minecraft.world.item.*` —, und Vanilla hat selbst eine Klasse `BookItem`. Die Klasse
+heißt jetzt `BlackBookItem`, nach der Kategorie, unter der das Original sie in NEI führt.
+
+**Ein Tor dafür gibt es nicht, und zwar begründet.** Die Prüfung bräuchte die Liste der
+Vanilla-Klassennamen; offline steht kein Minecraft-Classpath zur Verfügung (`maven.neoforged.net`
+ist gesperrt). Die naheliegende Ersatzquelle — die Vanilla-Klassen, die der Port selbst
+irgendwo explizit importiert — hätte hier nichts gefunden: `net.minecraft.world.item.BookItem`
+wird im ganzen Port kein einziges Mal importiert. Eine Regel, die den eigenen Anlassfall nicht
+findet, wird nicht ausgeliefert. Es bleibt bei der Merkregel: **klingt ein Klassenname nach
+Vanilla, bekommt er ein Präfix** — und bei der CI als Fangnetz.
+
+Die übrigen fünf neuen Klassen dieser Runde sind unkritisch: keine von ihnen importiert
+irgendetwas mit Stern.

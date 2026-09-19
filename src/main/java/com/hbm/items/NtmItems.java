@@ -1109,7 +1109,7 @@ public class NtmItems {
 
     /* Das Buch oeffnet beim Rechtsklick seine eigene Werkbank mit vier Plaetzen, auf der die
      * Rezepte aus MagicRecipes liegen (Runde 170). */
-    public static final DeferredItem<Item> BOOK_OF_ = ITEMS.register("book_of_", () -> new BookItem(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> BOOK_OF_ = ITEMS.register("book_of_", () -> new BlackBookItem(new Item.Properties().stacksTo(1)));
 
     /* "Deals as much damage as it needs to": der Hammer nimmt dem Ziel ein Drittel seiner
      * hoechsten Lebenspunkte ab, egal wie viel das ist. */
