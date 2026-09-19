@@ -2331,6 +2331,9 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.SPOTLIGHT_HALOGEN, "Halogen Flood Lamp");
         /* Der Lichtkegel ist unsichtbar, braucht aber eine Namenszeile. */
         this.add(NtmBlocks.SPOTLIGHT_BEAM, "Light Beam");
+        this.add(NtmBlocks.FLOODLIGHT, "Floodlight");
+        this.add(NtmBlocks.FLOODLIGHT, DESC, "Aim it with a screwdriver.$Needs 100HE/t to stay lit.");
+        this.add(NtmBlocks.FLOODLIGHT_BEAM, "Light Beam");
         this.add(NtmBlocks.POLE_TOP, "Antenna Top");
         this.add(NtmBlocks.DECO_CRT_CLEAN, "CRT Monitor");
         this.add(NtmBlocks.DECO_CRT_BROKEN, "Broken CRT Monitor");

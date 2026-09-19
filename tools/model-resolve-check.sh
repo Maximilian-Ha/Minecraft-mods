@@ -130,6 +130,8 @@ for key in sorted(models):
 OHNE_GEGENSTAND = {
     'balefire', 'barricade', 'corium', 'fire_digamma', 'icf_block',
     'mud', 'pile_block', 'rad_lava', 'spotlight_beam', 'toxic_block', 'volcanic_lava',
+    # Der Lichtfleck des Flutlichts: wie spotlight_beam nur Licht, nichts zum Anfassen.
+    'floodlight_beam',
 }
 
 def registry_namen(quelle='src/main/java'):

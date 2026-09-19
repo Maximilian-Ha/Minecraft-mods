@@ -1160,6 +1160,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.SPOTLIGHT_INCANDESCENT);
                         output.accept(NtmBlocks.SPOTLIGHT_FLUORO);
                         output.accept(NtmBlocks.SPOTLIGHT_HALOGEN);
+                        output.accept(NtmBlocks.FLOODLIGHT);
                         output.accept(NtmBlocks.POLE_TOP);
                         output.accept(NtmBlocks.DECO_CRT_CLEAN);
                         output.accept(NtmBlocks.DECO_CRT_BROKEN);

@@ -22,6 +22,8 @@ import com.hbm.blocks.machine.WatzStructBlock;
 import com.hbm.blocks.generic.ToolConversionBlock;
 import com.hbm.blocks.generic.SteelRoofBlock;
 import com.hbm.blocks.generic.LootCrateBlock;
+import com.hbm.blocks.machine.FloodlightBlock;
+import com.hbm.blocks.machine.FloodlightBeamBlock;
 import com.hbm.blocks.fluids.CoriumLiquidBlock;
 import com.hbm.blocks.fluids.MudLiquidBlock;
 import com.hbm.blocks.fluids.ToxicLiquidBlock;
@@ -336,6 +338,14 @@ public class NtmBlocks {
     public static final DeferredBlock<Block> POLE_TOP = register("pole_top", () -> new Block(BlockBehaviour.Properties.of().strength(5.0F, 15.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion()));
     /* Der Lichtkegel selbst: unsichtbar, nicht anfassbar, nur hell. */
     public static final DeferredBlock<Block> SPOTLIGHT_BEAM = BLOCKS.register("spotlight_beam", () -> new SpotlightBeamBlock(BlockBehaviour.Properties.of().replaceable().noCollission().noOcclusion().noLootTable().air().lightLevel(state -> 15).pushReaction(PushReaction.DESTROY)));
+
+    /* Stufe 5: das Flutlicht. Es haengt an der Flaeche, auf die man es setzt, zieht Strom
+     * aus dem Block dahinter und wirft fuenfzehn Strahlen nach vorn. Werte aus
+     * ModBlocks.java:1490. */
+    public static final DeferredBlock<Block> FLOODLIGHT = register("floodlight", () -> new FloodlightBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion()));
+    /* Sein Lichtfleck: unsichtbar, nicht anfassbar, nur hell -- aber mit eigener
+     * Blockentitaet, weil er sich Quelle und Strahlnummer merken muss. */
+    public static final DeferredBlock<Block> FLOODLIGHT_BEAM = BLOCKS.register("floodlight_beam", () -> new FloodlightBeamBlock(BlockBehaviour.Properties.of().replaceable().noCollission().noOcclusion().noLootTable().air().lightLevel(state -> 15).pushReaction(PushReaction.DESTROY)));
 
     /* Stufe 5: totes Gewaechs, fuenf Formen. Im Original ein Block mit Metadaten
      * (ModBlocks.java:1657), im Port fuenf Bloecke. */

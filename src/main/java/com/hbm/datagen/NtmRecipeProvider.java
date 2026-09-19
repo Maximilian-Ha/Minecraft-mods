@@ -1904,6 +1904,16 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_ingot_steel", has(NtmItems.INGOT_STEEL.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "crowbar"));
 
+        // Original CraftingManager Z. 443: "CSC" / "TST" / "G G".
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, NtmBlocks.FLOODLIGHT.get(), 2)
+                .pattern("CSC").pattern("TST").pattern("G G")
+                .define('C', NtmItems.CIRCUIT_CAPACITOR.get())
+                .define('S', NtmItems.PLATE_STEEL.get())
+                .define('T', NtmItems.COIL_TUNGSTEN.get())
+                .define('G', Tags.Items.GLASS_PANES)
+                .unlockedBy("has_coil_tungsten", has(NtmItems.COIL_TUNGSTEN.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "floodlight"));
+
         // Original CraftingManager Z. 293. Bisher fehlte dem Heliostatspiegel das Rezept,
         // weil steel_beam im Port nicht existierte.
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.SOLAR_MIRROR.get(), 3)

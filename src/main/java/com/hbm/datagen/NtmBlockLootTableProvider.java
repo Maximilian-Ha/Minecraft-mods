@@ -445,6 +445,7 @@ public class NtmBlockLootTableProvider extends BlockLootSubProvider {
         this.dropSelf(NtmBlocks.SPOTLIGHT_INCANDESCENT.get());
         this.dropSelf(NtmBlocks.SPOTLIGHT_FLUORO.get());
         this.dropSelf(NtmBlocks.SPOTLIGHT_HALOGEN.get());
+        this.dropSelf(NtmBlocks.FLOODLIGHT.get());
         this.dropSelf(NtmBlocks.POLE_TOP.get());
         this.dropSelf(NtmBlocks.DECO_CRT_CLEAN.get());
         this.dropSelf(NtmBlocks.DECO_CRT_BROKEN.get());

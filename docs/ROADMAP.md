@@ -5064,3 +5064,41 @@ daneben und wird beim Ziehen aufsummiert; die Verteilung ist dieselbe, die Liste
 einmal.
 
 Die Lücke steht bei **23**.
+
+### Das Flutlicht
+
+Von den 22 verbliebenen Blöcken war das Flutlicht der erste mit richtiger Mechanik: ein
+Stromverbraucher, der fünfzehn Strahlen nach vorn wirft und dort, wo sie auf etwas Festes
+treffen, einen Lichtfleck setzt. Fünf Höhenlagen zu je drei Seitenlagen, gestreut um 7,5°
+beziehungsweise 15° — die Formel steht unverändert im Port.
+
+Drei Stellen haben Kopfarbeit gekostet:
+
+**Die Metadaten.** Das Original legt die Aufstellseite in die unteren drei Bit und benutzt
+zusätzlich die Werte 6 und 7 für einen Sonderfall: hängt das Flutlicht an Decke oder Boden,
+gibt es zwei Lagen, je nachdem in welche Himmelsrichtung man beim Setzen schaut. Im Port sind
+das eine Richtung und ein Ja/Nein — `FACING` plus `FLIPPED`. Jede der sechs
+`meta`-Abfragen im Strahlengang und im Darsteller musste einzeln zurückübersetzt werden; beim
+ersten Durchgang hatte ich `UP` unbedingt um 90° gedreht, obwohl das Original nur `meta == 7`
+dreht, also `UP` **mit** gesetztem Flip. Beim Gegenlesen gefunden und berichtigt.
+
+**Der Strom kommt von hinten.** Das Original rechnet `getOrientation(meta).getOpposite()` und
+hängt sich dort ans Kabel. `FACING` ist die angeklickte Fläche, das Kabel steckt also in der
+Gegenrichtung — auch das stand im ersten Entwurf falsch herum.
+
+**Die Lichtundurchlässigkeit.** 1.7.10 zählt sie von 0 bis 255 und lässt alles unter 127
+durch; 1.21 zählt von 0 bis 15. Aus `< 127` wird hier `< 15`: alles außer einem voll
+deckenden Block. Das steht als Kommentar an der Stelle, damit die Zahl nicht wie ein
+Tippfehler aussieht.
+
+Der Lichtfleck braucht — anders als der des Scheinwerfers — eine eigene Blockentität: er merkt
+sich nicht bloß Richtungen, sondern **welches** Flutlicht ihn gesetzt hat und der wievielte
+Strahl er ist. Nur so kann er sich selbst löschen, wenn das Flutlicht verschwindet, ohne sich
+abmelden zu können. Eine Kleinigkeit habe ich dabei gegenüber dem Original geändert: er
+wartet, bis der Abschnitt der Quelle geladen ist, bevor er über sein eigenes Fortbestehen
+entscheidet — sonst löschen sich Lichtflecke am Rand der Sichtweite selbst.
+
+Das Aussehen kommt aus `floodlight.obj` über einen Blockentitäts-Darsteller, denn die Neigung
+ist stufenlos und lässt sich nicht in Blockzustände packen.
+
+Die Lücke steht bei **22**.

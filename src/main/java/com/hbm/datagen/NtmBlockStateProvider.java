@@ -1208,6 +1208,11 @@ public class NtmBlockStateProvider extends BlockStateProvider {
 
         /* Der Lichtkegel ist unsichtbar: ein leeres Modell, und kein Gegenstand dazu. */
         this.simpleBlock(NtmBlocks.SPOTLIGHT_BEAM.get(), this.models().getBuilder("spotlight_beam"));
+        this.simpleBlock(NtmBlocks.FLOODLIGHT_BEAM.get(), this.models().getBuilder("floodlight_beam"));
+
+        // Das Flutlicht zeichnet ein eigener Darsteller; im Blockmodell steht nur die
+        // Teilchenfarbe.
+        this.particleOnlyBlock(NtmBlocks.FLOODLIGHT, modLoc("block/block_steel"));
     }
 
     /**
