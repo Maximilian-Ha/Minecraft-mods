@@ -1,6 +1,7 @@
 package com.hbm.entity;
 
 import com.hbm.entity.effect.BlackHole;
+import com.hbm.entity.grenade.GrenadeUniversal;
 import com.hbm.entity.projectile.Sawblade;
 import com.hbm.entity.effect.FalloutRain;
 import com.hbm.entity.effect.FireLingering;
@@ -133,6 +134,10 @@ public class NtmEntityTypes {
     public static final DeferredHolder<EntityType<?>, EntityType<Rubble>> RUBBLE = ENTITY_TYPES.register("rubble", () -> EntityType.Builder.of(Rubble::new, MobCategory.MISC).sized(0.25F, 0.25F).build("rubble"));
 
     public static final DeferredHolder<EntityType<?>, EntityType<Rocket>> ROCKET = ENTITY_TYPES.register("rocket", () -> EntityType.Builder.of(Rocket::new, MobCategory.MISC).sized(0.5F, 0.5F).build("rocket"));
+
+    /* Die geworfene Granate. Ein Viertelblock gross, wie im Original (setSize(0.25F, 0.25F)). */
+    public static final DeferredHolder<EntityType<?>, EntityType<GrenadeUniversal>> GRENADE_UNIVERSAL = ENTITY_TYPES.register("grenade_universal",
+            () -> EntityType.Builder.<GrenadeUniversal>of(GrenadeUniversal::new, MobCategory.MISC).sized(0.25F, 0.25F).build("grenade_universal"));
 
     public static final DeferredHolder<EntityType<?>, EntityType<Tom>> TOM = ENTITY_TYPES.register("tom", () -> EntityType.Builder.<Tom>of(Tom::new, MobCategory.MISC).setTrackingRange(1000).build("tom"));
 

@@ -1022,6 +1022,7 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicItem(NtmItems.CAN_KEY.get());
 
         this.basicItem(NtmItems.PUDDING.get());
+        this.basicItem(NtmItems.GRENADE_UNIVERSAL.get());
         this.basicItem(NtmItems.CHOCOLATE_MILK.get());
         this.handheldItem(NtmItems.CIGARETTE.get());
         this.handheldItem(NtmItems.CRACKPIPE.get());

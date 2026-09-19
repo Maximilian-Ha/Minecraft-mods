@@ -1,5 +1,6 @@
 package com.hbm.explosion;
 
+import api.hbm.energymk2.IEnergyHandlerMK2;
 import com.hbm.blocks.NtmBlocks;
 import com.hbm.config.VersatileConfig;
 import com.hbm.handler.radiation.ChunkRadiationManager;
@@ -35,6 +36,43 @@ public class ExplosionNukeGeneric {
                 }
             }
         }
+    }
+
+    /**
+     * Portiert aus 1.7.10: ExplosionNukeGeneric.empBlast und emp.
+     *
+     * Der elektromagnetische Schlag. Er laesst das Gelaende stehen und trifft nur, was Strom
+     * haelt: jede Blockentitaet im Umkreis verliert ihre Ladung, und jede fuenfte wird dabei
+     * zu Elektroschrott.
+     *
+     * Die Kugel ist die des Originals, einschliesslich ihrer Eigenheit: geprueft wird gegen
+     * r*r/2, nicht gegen r*r -- der Schlag reicht also nur etwa sieben Zehntel so weit, wie der
+     * uebergebene Wert vermuten laesst. Uebernommen, weil die Staerken darauf abgestimmt sind.
+     */
+    public static void empBlast(Level level, BlockPos mitte, int staerke) {
+
+        int r = staerke;
+        int rQuadratHalb = r * r / 2;
+
+        for(int dx = -r; dx < r; dx++)
+        for(int dy = -r; dy < r; dy++)
+        for(int dz = -r; dz < r; dz++) {
+            if(dx * dx + dy * dy + dz * dz < rQuadratHalb) emp(level, mitte.offset(dx, dy, dz));
+        }
+    }
+
+    /**
+     * ABWEICHUNG: das Original entlaedt zusaetzlich Maschinen fremder Mods ueber die
+     * RF-Schnittstelle (IEnergyProvider). Der Port kennt nur seine eigene.
+     */
+    public static void emp(Level level, BlockPos pos) {
+
+        if(level.isClientSide) return;
+
+        if(!(level.getBlockEntity(pos) instanceof IEnergyHandlerMK2 speicher)) return;
+
+        speicher.setPower(0);
+        if(level.random.nextInt(5) < 1) level.setBlockAndUpdate(pos, NtmBlocks.BLOCK_ELECTRICAL_SCRAP.get().defaultBlockState());
     }
 
     public static void dealDamage(Level level, double x, double y, double z, double radius) {

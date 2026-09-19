@@ -55,7 +55,9 @@ items   = {m.group(1): m.group(2) for m in
 # Nur Zeilen, die tatsaechlich etwas in einen Reiter legen.
 im_reiter_b, im_reiter_i = set(), set()
 for zeile in tabs_src.split('\n'):
-    if 'output.accept' not in zeile and 'addMetaItems' not in zeile: continue
+    # addGrenadeCombinations legt jede Zusammenstellung der Granate ab; die Zusammenstellung
+    # steht in den Zusatzdaten, nicht in einer Ordnungszahl, deshalb ein eigener Helfer.
+    if not any(h in zeile for h in ('output.accept', 'addMetaItems', 'addGrenadeCombinations')): continue
     im_reiter_b |= set(re.findall(r'NtmBlocks\.([A-Z][A-Z0-9_]*)', zeile))
     im_reiter_i |= set(re.findall(r'NtmItems\.([A-Z][A-Z0-9_]*)', zeile))
 

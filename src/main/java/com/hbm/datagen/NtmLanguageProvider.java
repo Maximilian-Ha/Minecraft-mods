@@ -14,6 +14,10 @@ import com.hbm.items.machine.PileRodItem.EnumPileRod;
 import com.hbm.items.machine.WatzPelletItem.EnumWatzType;
 import com.hbm.items.NtmItems;
 import com.hbm.items.food.ConserveItem.ConserveType;
+import com.hbm.items.weapon.grenade.GrenadeExtraItem.GrenadeExtra;
+import com.hbm.items.weapon.grenade.GrenadeFillingItem.GrenadeFilling;
+import com.hbm.items.weapon.grenade.GrenadeFuzeItem.GrenadeFuze;
+import com.hbm.items.weapon.grenade.GrenadeShellItem.GrenadeShell;
 import com.hbm.items.food.DrinkItem.DrinkType;
 import com.hbm.items.machine.BatteryPackItem.BatteryPackType;
 import com.hbm.items.machine.BatterySCItem.BatterySCType;
@@ -1767,6 +1771,33 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.CAN_KEY, "Winding Key");
 
         this.add(NtmItems.PUDDING, "Pudding");
+
+        /* Die Granaten: vier Bauteile und die zusammengesetzte Granate. */
+        this.add(NtmItems.GRENADE_UNIVERSAL, "Grenade");
+        this.add(NtmItems.GRENADE_SHELL, this.getName(GrenadeShell.FRAG), "Compact Grenade Shell");
+        this.add(NtmItems.GRENADE_SHELL, this.getName(GrenadeShell.STICK), "Stick Grenade Shell");
+        this.add(NtmItems.GRENADE_SHELL, this.getName(GrenadeShell.TECH), "High-Tech Grenade Shell");
+        this.add(NtmItems.GRENADE_SHELL, this.getName(GrenadeShell.NUKE), "Nuclear Grenade Shell");
+        this.add(NtmItems.GRENADE_FILLING, this.getName(GrenadeFilling.POWDER), "Gunpowder Grenade Charge");
+        this.add(NtmItems.GRENADE_FILLING, this.getName(GrenadeFilling.HE), "High-Explosive Grenade Charge");
+        this.add(NtmItems.GRENADE_FILLING, this.getName(GrenadeFilling.DEMO), "Demolition Grenade Charge");
+        this.add(NtmItems.GRENADE_FILLING, this.getName(GrenadeFilling.INC), "Incendiary Grenade Charge");
+        this.add(NtmItems.GRENADE_FILLING, this.getName(GrenadeFilling.WP), "White Phosphorus Grenade Charge");
+        this.add(NtmItems.GRENADE_FILLING, this.getName(GrenadeFilling.CLUSTER), "Cluster Grenade Charge");
+        this.add(NtmItems.GRENADE_FILLING, this.getName(GrenadeFilling.EMP), "EMP Grenade Charge");
+        this.add(NtmItems.GRENADE_FILLING, this.getName(GrenadeFilling.PLASMA), "Plasma Grenade Charge");
+        this.add(NtmItems.GRENADE_FILLING, this.getName(GrenadeFilling.CLUSTER_HEAVY), "Heavy Cluster Grenade Charge");
+        this.add(NtmItems.GRENADE_FILLING, this.getName(GrenadeFilling.NUCLEAR), "Nuclear Grenade Charge");
+        this.add(NtmItems.GRENADE_FILLING, this.getName(GrenadeFilling.NUCLEAR_DEMO), "Nuclear Demolition Grenade Charge");
+        this.add(NtmItems.GRENADE_FUZE, this.getName(GrenadeFuze.S3), "Timed Grenade Fuze, 3s");
+        this.add(NtmItems.GRENADE_FUZE, this.getName(GrenadeFuze.S7), "Timed Grenade Fuze, 7s");
+        this.add(NtmItems.GRENADE_FUZE, this.getName(GrenadeFuze.S15), "Timed Grenade Fuze, 15s");
+        this.add(NtmItems.GRENADE_FUZE, this.getName(GrenadeFuze.IMPACT), "Impact Grenade Fuze");
+        this.add(NtmItems.GRENADE_FUZE, this.getName(GrenadeFuze.AIRBURST), "Airburst Grenade Fuze");
+        this.add(NtmItems.GRENADE_EXTRA, this.getName(GrenadeExtra.GLUE), "Grenade Extra - Glue");
+        this.add(NtmItems.GRENADE_EXTRA, this.getName(GrenadeExtra.PROXY_FUZE), "Grenade Extra - Proximity Fuze");
+        this.add(NtmItems.GRENADE_EXTRA, this.getName(GrenadeExtra.FRAG_SLEEVE), "Grenade Extra - Fragmentation Sleeve");
+        this.add(NtmItems.GRENADE_EXTRA, this.getName(GrenadeExtra.TRIPLEX), "Grenade Extra - Triplex");
         this.add(NtmItems.CHOCOLATE_MILK, "Chocolate Milk");
         this.add(NtmItems.CHOCOLATE_MILK, DESC, "Regular chocolate milk. Safe to drink.$Totally not made from nitroglycerine.");
         this.add("item.hbmsntm.obj_cigarette.desc0", "✓ Asbestos filter$✓ High in tar$✓ Tobacco contains 100%% Polonium-210$✓ Yum");

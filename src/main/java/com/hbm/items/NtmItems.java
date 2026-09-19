@@ -25,6 +25,11 @@ import com.hbm.items.armor.ItemModKnockback;
 import com.hbm.items.armor.ModCharmItem;
 import com.hbm.items.armor.NtmArmorMaterials;
 import com.hbm.items.food.ConserveItem;
+import com.hbm.items.weapon.grenade.GrenadeExtraItem;
+import com.hbm.items.weapon.grenade.GrenadeFillingItem;
+import com.hbm.items.weapon.grenade.GrenadeFuzeItem;
+import com.hbm.items.weapon.grenade.GrenadeShellItem;
+import com.hbm.items.weapon.grenade.GrenadeUniversalItem;
 import com.hbm.items.food.DrinkItem;
 import com.hbm.items.food.EnergyItem;
 import com.hbm.blockentity.machine.rbmk.IRBMKFluxReceiver.NType;
@@ -1189,6 +1194,13 @@ public class NtmItems {
     // Canned Food
     public static final DeferredItem<Item> CANNED_CONSERVE = ITEMS.register("canned_conserve", () -> new ConserveItem(new Item.Properties()));
     public static final DeferredItem<Item> PUDDING = ITEMS.register("pudding", () -> new Item(new Item.Properties().food(NtmFoods.PUDDING)));
+
+    /* Die Granaten. Vier Bauteile einzeln, dazu die zusammengesetzte Granate selbst. */
+    public static final DeferredItem<Item> GRENADE_SHELL = ITEMS.register("grenade_shell", () -> new GrenadeShellItem(new Item.Properties()));
+    public static final DeferredItem<Item> GRENADE_FILLING = ITEMS.register("grenade_filling", () -> new GrenadeFillingItem(new Item.Properties()));
+    public static final DeferredItem<Item> GRENADE_FUZE = ITEMS.register("grenade_fuze", () -> new GrenadeFuzeItem(new Item.Properties()));
+    public static final DeferredItem<Item> GRENADE_EXTRA = ITEMS.register("grenade_extra", () -> new GrenadeExtraItem(new Item.Properties()));
+    public static final DeferredItem<Item> GRENADE_UNIVERSAL = ITEMS.register("grenade_universal", () -> new GrenadeUniversalItem(new Item.Properties()));
 
     // Money
     public static final DeferredItem<Item> CAP = ITEMS.register("cap", () -> new EnumMultiItem(new Item.Properties(), CapType.class, true, true));

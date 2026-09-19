@@ -6700,3 +6700,95 @@ Damit ist es die dritte Falschaussage dieser Art, die beim Nachmessen aufgefalle
 `centrifuge_element`/`piston_selenium` und der veralteten Kopfnotiz in `CrateLoot`). Alle drei
 hatten dieselbe Form: ein Vermerk, der einmal richtig war oder nie geprüft wurde, und den
 seitdem niemand nachgerechnet hat.
+
+## Die Granaten
+
+Aufgabe #104 ist die größte seit langem: `crate` und `crate_supply` warten auf das
+Granatensystem, und das ist im Original kein Gegenstand, sondern ein Baukasten aus vier
+Bauteilen, einer Wurfentität und rund 1200 Zeilen.
+
+### Vier Bauteile, eine Granate
+
+```
+ __________
+| ________ | ______ KÖRPER  – was hineinpasst, wie weit sie fliegt, wie hoch sie abspringt
+||        ||
+||       __________ FÜLLUNG – der Knall
+||________||
+ \   /\   /
+  \_ || _/
+   | |_____________ ZÜNDER  – wann sie hochgeht
+   | || | _________ AUFSATZ – wahlweise, das einzige Bauteil, das fehlen darf
+   /_||_\
+```
+
+Jedes Bauteil gibt es auch einzeln als Gegenstand; welche Zusammenstellung ein Stapel trägt,
+steht in seinen Zusatzdaten. Das Original schreibt vier Zahlen ins NBT, der Port legt sie unter
+denselben vier Schlüsseln ab.
+
+Die Arbeitsteilung ist streng und kommt an drei Stellen zum Tragen: **jeden Tick** melden sich
+Zeit- und Näherungszünder, **beim Anstoßen** Aufschlagzünder und Kleber, **beim Hochgehen** die
+Füllung samt Splittermantel und Dreifachteiler. Der Zünder allein entscheidet, *wann* es knallt;
+die Füllung allein, *was* dann passiert.
+
+### Eine Wurfentität, die den Aufschlag überlebt
+
+Alle Geschosse des Ports hängen an `ProjectileNT`, und dort beendet der erste Treffer den Flug.
+Eine Granate muss aber abspringen und weiterrollen. Dafür steht jetzt `ThrowableNT` daneben —
+die Übertragung von `EntityThrowableNT` aus dem Original, aber deutlich kürzer:
+
+* Die Verwaltung des Werfers entfällt: `Projectile` trägt sie auf 1.21 selbst, samt Speicherung.
+* Die Zwischenschicht `EntityThrowableInterp`, die im Original nur die Bewegung zwischen zwei
+  Netzpaketen glättet, entfällt ebenfalls — das macht 1.21 in `lerpTo`.
+
+Geblieben sind die zwei Zustände: in der Luft zählt `ticksInAir`, festgeklebt `ticksInGround`.
+Wird der Block, in dem die Granate steckt, abgebaut, fällt sie wieder und fliegt mit einem
+Bruchteil ihrer alten Geschwindigkeit weiter.
+
+Das Abspringen selbst ist die Regel des Originals: senkrecht zur getroffenen Fläche kehrt sich
+die Bewegung um und wird um den Absprungwert des Körpers gedämpft, längs der Fläche bleibt ein
+Fünftel liegen. Der Stiel springt nur halb so hoch wie die Handgranate — ein Griff am Ende macht
+den Wurf weiter und den Aufprall stumpfer.
+
+### Nachgetragen: der elektromagnetische Schlag
+
+Die EMP-Füllung braucht `ExplosionNukeGeneric.empBlast`, und die gab es im Port nicht. Sie ist
+jetzt da, mitsamt `emp`: jede Blockentität in der Kugel verliert ihre Ladung, jede fünfte wird
+zu Elektroschrott. Übernommen wurde dabei auch eine Eigenheit des Originals — geprüft wird
+gegen `r*r/2` statt `r*r`, der Schlag reicht also nur etwa sieben Zehntel so weit, wie die
+übergebene Stärke vermuten lässt. Die Stärken sind darauf abgestimmt, also bleibt es so.
+
+Eine Abweichung: das Original entlädt zusätzlich Maschinen fremder Mods über die
+RF-Schnittstelle. Der Port kennt nur seine eigene.
+
+### Was nicht mitgekommen ist
+
+**Zwei der dreizehn Füllungen.** `LASER` verschießt beim Hochgehen Strahlen auf alles im
+Umkreis — der Port hat mit `BulletBeamBase` zwar die Hülle einer Strahlenentität, aber keine
+Abtastung; `performHitscan` fehlt ganz. `SCHRAB` zündet eine Fleija, wofür die Wolkenentität
+fehlt; die gehört zur Fleija-Bombe und kommt mit deren Runde. Beide stehen im Original am Ende
+der Aufzählung, ihr Fehlen verschiebt also keine Ordnungszahl der übrigen.
+
+**Das Aussehen.** Das Original zeichnet ein Wellenfrontmodell mit vier Körperformen und färbt
+Körper, Aufkleber und Zünderring nach den Werten der Bauteile — dazu eine Ziehbewegung je
+Körper, mit eigenem Ton und eigenem Abziehring. Der Port zeigt vorerst das Gegenstandsbild: die
+Granate fliegt, springt und wirkt richtig, sie sieht nur noch flach aus. Modell und Ziehbewegung
+gehören zusammen in eine eigene Runde; die Anlaufzeiten stehen schon im Körper
+(`drawDuration`), damit sie dann nicht neu gemessen werden müssen.
+
+**Zwei Partikelarten**, `plasmablast` und `haze`, die es im Port nicht gibt. Der Schlag und das
+Feuer sind da, der Schleier fehlt.
+
+### Ein Tor, das den Kreativreiter zu eng gesehen hat
+
+`tab-check` sucht Zeilen mit `output.accept` oder `addMetaItems` und liest daraus die
+Gegenstandsnamen. Die Granate wird aber weder einzeln noch nach Ordnungszahl abgelegt, sondern
+in allen Zusammenstellungen — der Reiter ruft dafür `addGrenadeCombinations`. Das Tor hat den
+Gegenstand deshalb als „in keinem Reiter" gemeldet, obwohl er dort steht.
+
+Naheliegend wäre gewesen, ihn in die Ausnahmeliste zu schreiben. Das wäre aber gelogen: die
+Liste sagt „absichtlich in keinem Reiter", und hier ist das Gegenteil der Fall. Stattdessen
+kennt das Tor jetzt den dritten Helfer. Nachgewiesen, dass es weiterhin anschlägt, wenn die
+Zeile wirklich fehlt.
+
+Alle 29 Tore grün.

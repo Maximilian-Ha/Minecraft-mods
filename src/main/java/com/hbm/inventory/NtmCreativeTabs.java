@@ -17,6 +17,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import com.hbm.items.weapon.grenade.GrenadeUniversalItem;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -1826,6 +1827,14 @@ public class NtmCreativeTabs {
                         addMetaItems(output, NtmItems.AMMO_SHELL.get());
                         output.accept(NtmItems.AMMO_DGK);
 
+                        /* Die vier Bauteile einzeln, dann jede Granate, die sich daraus bauen
+                         * laesst -- das Original zeigt sie ebenso vollstaendig. */
+                        addMetaItems(output, NtmItems.GRENADE_SHELL.get());
+                        addMetaItems(output, NtmItems.GRENADE_FILLING.get());
+                        addMetaItems(output, NtmItems.GRENADE_FUZE.get());
+                        addMetaItems(output, NtmItems.GRENADE_EXTRA.get());
+                        addGrenadeCombinations(output, NtmItems.GRENADE_UNIVERSAL.get());
+
                     }).build());
 
     // drinks, kits, tools
@@ -1980,6 +1989,17 @@ public class NtmCreativeTabs {
     /** Ein fertig bestuecktes ICF-Kuegelchen fuer den Kreativreiter. */
     private static ItemStack icfPellet(EnumICFFuel type1, EnumICFFuel type2, boolean muon) {
         return ICFPelletItem.setup(new ItemStack(NtmItems.ICF_PELLET.get()), type1, type2, muon);
+    }
+
+    /**
+     * Legt jede Granate ab, die sich aus den vier Bauteilen zusammensetzen laesst. Die
+     * Zusammenstellung steht nicht in einer Ordnungszahl, sondern in den Zusatzdaten -- deshalb
+     * greift addMetaItems hier nicht.
+     */
+    private static void addGrenadeCombinations(CreativeModeTab.Output output, Item item) {
+        if(item instanceof GrenadeUniversalItem) {
+            for(ItemStack granate : GrenadeUniversalItem.alleZusammenstellungen()) output.accept(granate);
+        }
     }
 
     private static void addMetaItems(CreativeModeTab.Output output, Item item) {

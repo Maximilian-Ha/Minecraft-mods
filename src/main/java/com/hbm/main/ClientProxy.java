@@ -377,6 +377,8 @@ public class ClientProxy extends ServerProxy {
         EntityRenderers.register(NtmEntityTypes.TOM.get(), RenderTom::new);
         EntityRenderers.register(NtmEntityTypes.RUBBLE.get(), RenderRubble::new);
         EntityRenderers.register(NtmEntityTypes.SHRAPNEL.get(), RenderShrapnel::new);
+        /* Die Granate zeigt ihr Gegenstandsbild -- siehe GrenadeUniversal.getItem(). */
+        EntityRenderers.register(NtmEntityTypes.GRENADE_UNIVERSAL.get(), ThrownItemRenderer::new);
         EntityRenderers.register(NtmEntityTypes.SAWBLADE.get(), RenderSawblade::new);
         EntityRenderers.register(NtmEntityTypes.COG.get(), RenderCog::new);
         EntityRenderers.register(NtmEntityTypes.RBMK_DEBRIS.get(), RenderRBMKDebris::new);

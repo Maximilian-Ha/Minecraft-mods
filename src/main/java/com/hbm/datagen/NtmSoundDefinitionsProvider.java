@@ -179,6 +179,12 @@ public class NtmSoundDefinitionsProvider extends SoundDefinitionsProvider {
         this.add(NtmSoundEvents.GUN_ROCKET_FIRE, SoundDefinition.definition()
                 .with(sound(NuclearTechMod.withDefaultNamespace("weapon/rpg_shoot")))
         );
+        /* Drei Aufnahmen, wie im Original -- welche kommt, entscheidet das Spiel. */
+        this.add(NtmSoundEvents.GRENADE_BOUNCE, SoundDefinition.definition()
+                .with(sound(NuclearTechMod.withDefaultNamespace("weapon/grenade_bounce1")))
+                .with(sound(NuclearTechMod.withDefaultNamespace("weapon/grenade_bounce2")))
+                .with(sound(NuclearTechMod.withDefaultNamespace("weapon/grenade_bounce3")))
+        );
         this.add(NtmSoundEvents.GUN_SWITCHMODE_1, SoundDefinition.definition()
                 .with(sound(NuclearTechMod.withDefaultNamespace("weapon/switchmode1")))
         );
