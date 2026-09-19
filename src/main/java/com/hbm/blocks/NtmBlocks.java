@@ -21,6 +21,7 @@ import com.hbm.blocks.machine.WatzPumpBlock;
 import com.hbm.blocks.machine.WatzStructBlock;
 import com.hbm.blocks.generic.ToolConversionBlock;
 import com.hbm.blocks.generic.SteelRoofBlock;
+import com.hbm.blocks.generic.LootCrateBlock;
 import com.hbm.blocks.fluids.CoriumLiquidBlock;
 import com.hbm.blocks.fluids.MudLiquidBlock;
 import com.hbm.blocks.fluids.ToxicLiquidBlock;
@@ -886,6 +887,11 @@ public class NtmBlocks {
     public static final DeferredBlock<Block> CRATE_STEEL = registerNew("crate_steel", () -> new CrateBlock(BlockBehaviour.Properties.of().strength(0.6F, 6.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops(), CrateBlock.Type.STEEL));
     public static final DeferredBlock<Block> CRATE_DESH = registerNew("crate_desh", () -> new CrateBlock(BlockBehaviour.Properties.of().strength(0.6F, 6.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops(), CrateBlock.Type.DESH));
     public static final DeferredBlock<Block> CRATE_TEMPLATE = registerNew("crate_template", () -> new CrateBlock(BlockBehaviour.Properties.of().strength(0.6F, 6.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops(), CrateBlock.Type.TEMPLATE));
+
+    /* Stufe 5: die Beutekisten. Sie fallen wie Kies und geben ihren Inhalt nur der
+     * Brechstange her. Werte aus ModBlocks.java:2079 ff. des Originals. */
+    public static final DeferredBlock<Block> CRATE_LEAD = register("crate_lead", () -> new LootCrateBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL), LootCrateBlock.Art.BLEI));
+    public static final DeferredBlock<Block> CRATE_METAL = register("crate_metal", () -> new LootCrateBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL), LootCrateBlock.Art.METALL));
     public static final DeferredBlock<Block> BARREL_PLASTIC = registerNew("barrel_plastic", () -> new com.hbm.blocks.machine.BarrelBlock(BlockBehaviour.Properties.of().noOcclusion().strength(0.3F, 2.5F).sound(SoundType.METAL), 12_000, false));
     public static final DeferredBlock<Block> EMP_BOMB = register("emp_bomb", () -> new Block(BlockBehaviour.Properties.of().strength(3.0F, 30.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops()));
     public static final DeferredBlock<Block> BARREL_STEEL = registerNew("barrel_steel", () -> new com.hbm.blocks.machine.BarrelBlock(BlockBehaviour.Properties.of().noOcclusion().strength(0.3F, 2.5F).sound(SoundType.METAL), 16_000, false));

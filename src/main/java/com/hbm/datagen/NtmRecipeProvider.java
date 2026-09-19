@@ -1897,6 +1897,13 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_ingot_steel", has(NtmItems.INGOT_STEEL.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "steel_roof"));
 
+        // Original ToolRecipes Z. 87: "II" / " I" / " I".
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, NtmItems.CROWBAR.get(), 1)
+                .pattern("II").pattern(" I").pattern(" I")
+                .define('I', NtmItems.INGOT_STEEL.get())
+                .unlockedBy("has_ingot_steel", has(NtmItems.INGOT_STEEL.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "crowbar"));
+
         // Original CraftingManager Z. 293. Bisher fehlte dem Heliostatspiegel das Rezept,
         // weil steel_beam im Port nicht existierte.
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.SOLAR_MIRROR.get(), 3)

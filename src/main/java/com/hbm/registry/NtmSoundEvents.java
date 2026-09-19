@@ -124,6 +124,7 @@ public class NtmSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> SOYUZ_READY = reg("block.soyuz_ready"); // BLOCKS CATEGORY, STREAM
     public static final DeferredHolder<SoundEvent, SoundEvent> CRATE_CLOSE = reg("crate_close"); // BLOCKS CATEGORY
     public static final DeferredHolder<SoundEvent, SoundEvent> CRATE_OPEN = reg("crate_open"); // BLOCKS CATEGORY
+    public static final DeferredHolder<SoundEvent, SoundEvent> CRATE_BREAK = reg("crate_break"); // BLOCKS CATEGORY
     public static final DeferredHolder<SoundEvent, SoundEvent> SQUEAKY_TOY = reg("block.squeaky_toy"); // BLOCKS CATEGORY
     public static final DeferredHolder<SoundEvent, SoundEvent> HUNDUNS_MAGNIFICENT_HOWL = reg("block.hunduns_magnificent_howl"); // BLOCKS CATEGORY
     public static final DeferredHolder<SoundEvent, SoundEvent> ELECTRIC_MOTOR_LOOP = reg("block.motor"); // BLOCKS CATEGORY

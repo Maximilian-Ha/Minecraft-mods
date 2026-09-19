@@ -566,6 +566,10 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.crateBlock(NtmBlocks.CRATE_DESH.get(), "crate_desh_side", "crate_desh_top");
         this.crateBlock(NtmBlocks.CRATE_TEMPLATE.get(), "crate_template", "crate_template");
 
+        // Die Beutekisten tragen im Original ein einziges Bild auf allen sechs Seiten.
+        this.simpleCubeAllBlock(NtmBlocks.CRATE_LEAD);
+        this.simpleCubeAllBlock(NtmBlocks.CRATE_METAL);
+
         this.particleOnlyBlock(NtmBlocks.GEIGER, blockTexture(NtmBlocks.GEIGER));
 
         this.simpleCubeAllBlock(NtmBlocks.PRESS_PREHEATER);

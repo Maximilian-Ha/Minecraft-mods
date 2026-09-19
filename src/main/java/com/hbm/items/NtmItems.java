@@ -1102,6 +1102,18 @@ public class NtmItems {
 
     // Energy Drinks
     public static final DeferredItem<Item> DRINK = ITEMS.register("drink", () -> new DrinkItem(new Item.Properties()));
+    /* Die Brechstange: im Original ein Stahlschwert mit eigenem Bild (ModItems.java:4284).
+     * Sie ist der einzige Weg, eine Beutekiste zu oeffnen. */
+    public static final DeferredItem<Item> CROWBAR = ITEMS.register(
+            "crowbar",
+            () -> new SwordItem(
+                    NtmTiers.STEEL,
+                    new Item.Properties()
+                            .stacksTo(1)
+                            .attributes(SwordItem.createAttributes(NtmTiers.STEEL, 3, -2.4F))
+            )
+    );
+
     public static final DeferredItem<Item> BOTTLE_OPENER = ITEMS.register(
             "bottle_opener",
             () -> new SpecialSwordItem(

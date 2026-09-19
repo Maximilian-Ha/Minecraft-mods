@@ -588,6 +588,8 @@ public class NtmBlockTagProvider extends BlockTagsProvider {
                         NtmBlocks.CRATE_STEEL.get(),
                         NtmBlocks.CRATE_DESH.get(),
                         NtmBlocks.CRATE_TEMPLATE.get(),
+                        NtmBlocks.CRATE_LEAD.get(),
+                        NtmBlocks.CRATE_METAL.get(),
                         NtmBlocks.TRANSFORMER.get(),
 
                         NtmBlocks.MACHINE_FLUID_TANK.get(),

@@ -1635,6 +1635,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.PELLET_BUCKSHOT, "Buckshot Pellets");
         this.add("container.book_of_", "Book of ");
         this.add(NtmItems.COIN_MASKMAN, "Maskman Coin");
+        this.add(NtmItems.CROWBAR, "Crowbar");
         this.add(NtmItems.BOTTLE_OPENER, "Hbm's Own Self-Made Bottle Opener");
         this.add(NtmItems.BOTTLE_OPENER, DESC, "My very own bottle opener.$Use with caution!");
 
@@ -2282,6 +2283,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.CRATE_STEEL, "Steel Crate");
         this.add(NtmBlocks.CRATE_DESH, "Desh Crate");
         this.add(NtmBlocks.CRATE_TEMPLATE, "Template Crate");
+        this.add(NtmBlocks.CRATE_LEAD, "Lead-Lined Crate");
+        this.add(NtmBlocks.CRATE_METAL, "Metal Crate");
         this.add("container.crateIron", "Iron Crate");
         this.add("container.crateTungsten", "Tungsten Crate");
         this.add("container.crateSteel", "Steel Crate");

@@ -1514,6 +1514,8 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.CRATE_STEEL);
                         output.accept(NtmBlocks.CRATE_DESH);
                         output.accept(NtmBlocks.CRATE_TEMPLATE);
+                        output.accept(NtmBlocks.CRATE_LEAD);
+                        output.accept(NtmBlocks.CRATE_METAL);
                         output.accept(NtmBlocks.MACHINE_SATLINKER);
                         output.accept(NtmBlocks.MACHINE_SAT_LINK);
                         output.accept(NtmBlocks.MACHINE_SAT_DOCK);
@@ -1858,6 +1860,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.BALEFIRE_AND_STEEL);
 
                         addMetaItems(output, NtmItems.DRINK.get());
+                        output.accept(NtmItems.CROWBAR);
                         output.accept(NtmItems.BOTTLE_OPENER);
                         output.accept(NtmItems.COIN_MASKMAN);
                         addMetaItems(output, NtmItems.CANNED_CONSERVE.get());

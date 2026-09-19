@@ -415,6 +415,13 @@ public class NtmSoundDefinitionsProvider extends SoundDefinitionsProvider {
         this.add(NtmSoundEvents.CRATE_OPEN, SoundDefinition.definition()
                 .with(sound("hbmsntm:block/crate_open"))
         );
+        this.add(NtmSoundEvents.CRATE_BREAK, SoundDefinition.definition()
+                .with(sound("hbmsntm:block/crate_break1"))
+                .with(sound("hbmsntm:block/crate_break2"))
+                .with(sound("hbmsntm:block/crate_break3"))
+                .with(sound("hbmsntm:block/crate_break4"))
+                .with(sound("hbmsntm:block/crate_break5"))
+        );
         this.add(NtmSoundEvents.SQUEAKY_TOY, SoundDefinition.definition()
                 .with(sound("hbmsntm:block/squeaky_toy"))
         );

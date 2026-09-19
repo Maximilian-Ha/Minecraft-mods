@@ -5025,3 +5025,42 @@ die die Formel als Ober- und Unterseite ausweist, undurchsichtiges Blech zeigen.
 Eintrag für dieses eine Blech wäre willkürlich. Das ist eine eigene Lücke, keine dieses Blocks.
 
 Die Lücke steht bei **25**.
+
+### Die Beutekisten — und warum nur zwei davon
+
+Acht Kisten fehlen dem Port. Ich habe zwei davon portiert und sechs stehen lassen, und das
+ist bewusst so.
+
+Der Grund steht in `BlockCrate` des Originals: fünf gewichtete Beutelisten, gefüllt mit
+Gegenständen aus dem ganzen Mod. Ich habe ausgezählt, wie viele davon es im Port überhaupt
+schon gibt — nicht geschätzt, sondern jeden Registriernamen einzeln gegen den Quelltext
+gehalten:
+
+| Liste | Einträge | im Port vorhanden |
+|---|---|---|
+| Bleikiste | 23 | 22 |
+| Metallkiste | 17 | 15 |
+| Waffenkiste | 7 | 4 |
+| rote Kiste | 14 | 4 |
+| Nachschubkiste | 6 | **0** |
+
+Der Bleikiste fehlt ein einziger Eintrag (`pellet_rtg_weak`), der Metallkiste zwei
+(`centrifuge_element`, `piston_selenium`). Die beiden habe ich portiert. Der Nachschubkiste
+fehlt **jeder** Eintrag — sie zieht aus Spritzen und Granaten, und beides gibt es im Port
+noch gar nicht. Eine Kiste, die nichts ausspuckt, ist schlimmer als keine Kiste; deshalb
+bleiben `crate`, `crate_weapon`, `crate_red`, `crate_can`, `crate_ammo` und `crate_supply`
+liegen, bis ihre Inhalte da sind.
+
+Zwei Kleinigkeiten am Rand:
+
+**Die Brechstange** gab es im Port noch nicht — und ohne sie lässt sich keine Kiste öffnen.
+Sie ist im Original schlicht ein Stahlschwert mit eigenem Bild, also auch hier: `SwordItem`
+auf `NtmTiers.STEEL`, Rezept `"II"/" I"/" I"` aus `ToolRecipes` Zeile 87.
+
+**Das Gewicht** habe ich anders gelöst als das Original. Dort wird jeder Eintrag so oft in
+eine `ArrayList` gelegt, wie sein Gewicht sagt — die Bleikiste ist also eine Liste mit 155
+Elementen, und sie wird bei **jedem** Öffnen neu aufgebaut. Hier steht das Gewicht als Zahl
+daneben und wird beim Ziehen aufsummiert; die Verteilung ist dieselbe, die Liste entsteht
+einmal.
+
+Die Lücke steht bei **23**.
