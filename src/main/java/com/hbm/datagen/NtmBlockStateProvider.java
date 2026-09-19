@@ -1232,6 +1232,7 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.particleOnlyBlock(NtmBlocks.TESLA, modLoc("block/tesla"));
         // Das Original nimmt fuer den Sockel schlicht die Seelensand-Textur des Spiels.
         this.particleOnlyBlock(NtmBlocks.SKELETON_HOLDER, mcLoc("block/soul_sand"));
+        this.particleOnlyBlock(NtmBlocks.LAMP_DEMON, modLoc("block/lamp_demon"));
         // Das Original hat fuer die Mikrowelle nur eine Textur und waehlt sie fuer alle
         // sechs Seiten; also ein schlichter Wuerfel.
         this.simpleCubeAllBlock(NtmBlocks.MACHINE_MICROWAVE);

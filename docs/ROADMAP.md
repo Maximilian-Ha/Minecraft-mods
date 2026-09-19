@@ -5583,3 +5583,27 @@ unten, ohne Fremdbibliothek und ohne einen einzigen vorhandenen Bildpunkt anzufa
 Geprüft wurde es an der Haut, die schon im Port liegt: `tools/pad-png.py` auf die
 Originaldatei angewandt ergibt Bildpunkt für Bildpunkt dieselbe 64×64 wie
 `radiorec.png` — und die oberen 32 Zeilen sind unverändert die der Quelle.
+
+### Die Dämonenkern-Lampe
+
+`lamp_demon` ist die vielleicht boshafteste Deko des Mods: eine Lampe mit einem Dämonenkern
+darin, die alles Lebende im Umkreis von fünfundzwanzig Blöcken bestrahlt. Und zwar nicht
+gleichmäßig — der Strahl wird von allem gebremst, was auf der Sichtlinie steht, nach der
+**Sprengfestigkeit** der Blöcke dazwischen. Hunderttausend Rad durch Luft sind etwas anderes
+als hunderttausend Rad durch eine Betonwand. Wer näher als zwei Blöcke steht, verbrennt
+zusätzlich.
+
+Der Lichtkegel besteht aus zwei Ringen zu je sechzehn Segmenten, die vom Lampenrand nach
+außen laufen und dabei durchsichtig werden — einer nach oben geneigt, einer nach unten.
+Additiv gemischt, damit sich überlappende Segmente aufhellen statt einander zu verdecken;
+im Port ist das `NtmRenderTypes.GLOW`, der genau die Mischung des Originals nachbildet.
+
+Das Original dreht den Kegel Segment für Segment mit `Vec3.rotateAroundY`. Hier steht
+stattdessen der Winkel direkt in Sinus und Kosinus — dasselbe Sechzehneck, nur ohne den
+Umweg über einen mitwandernden Vektor.
+
+**Kein Rezept:** das Original baut die Lampe aus `demon_core_closed`, und den Dämonenkern
+gibt es im Port noch nicht. Sie steht wie im Original im Kreativreiter und ist damit
+erreichbar, aber im Überleben noch nicht herstellbar.
+
+Die Lücke bei den Blockentitäten steht bei **126**.

@@ -1168,6 +1168,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.MACHINE_MICROWAVE);
                         output.accept(NtmBlocks.RADIOREC);
                         output.accept(NtmBlocks.BROADCASTER_PC);
+                        output.accept(NtmBlocks.LAMP_DEMON);
                         output.accept(NtmBlocks.RADIO_TELEX);
                         output.accept(NtmBlocks.TESLA);
                         output.accept(NtmBlocks.POLE_SATELLITE_RECEIVER);

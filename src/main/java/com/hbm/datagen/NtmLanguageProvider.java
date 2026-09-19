@@ -2365,6 +2365,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.RADIOREC, DESC, "Turns what it hears on its channel$into note block sounds.");
         this.add(NtmBlocks.BROADCASTER_PC, "Corrupted Broadcaster");
         this.add(NtmBlocks.BROADCASTER_PC, DESC, "Makes everything within 25 blocks dizzy$and everything within 15 blocks hurt.");
+        this.add(NtmBlocks.LAMP_DEMON, "Demon Core Lamp");
+        this.add(NtmBlocks.LAMP_DEMON, DESC, "Irradiates everything in sight.$Walls help, but not much.");
         this.add(NtmBlocks.TESLA, "Tesla Coil");
         this.add(NtmBlocks.TESLA, DESC, "Zaps every living thing in range.$Wear a full set of metal armor$to stay out of the circuit.");
         this.add(NtmBlocks.SKELETON_HOLDER, "Oh, that's a dead guy");

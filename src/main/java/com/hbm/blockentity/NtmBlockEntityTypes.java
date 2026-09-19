@@ -911,6 +911,7 @@ public class NtmBlockEntityTypes {
     public static final Supplier<BlockEntityType<RadioTelexBlockEntity>> RADIO_TELEX = BLOCK_ENTITY_TYPES.register("radio_telex", () -> BlockEntityType.Builder.of(RadioTelexBlockEntity::new, NtmBlocks.RADIO_TELEX.get()).build(null));
     public static final Supplier<BlockEntityType<TeslaBlockEntity>> TESLA = BLOCK_ENTITY_TYPES.register("tesla", () -> BlockEntityType.Builder.of(TeslaBlockEntity::new, NtmBlocks.TESLA.get()).build(null));
     public static final Supplier<BlockEntityType<BroadcasterBlockEntity>> BROADCASTER = BLOCK_ENTITY_TYPES.register("broadcaster", () -> BlockEntityType.Builder.of(BroadcasterBlockEntity::new, NtmBlocks.BROADCASTER_PC.get()).build(null));
+    public static final Supplier<BlockEntityType<DemonLampBlockEntity>> LAMP_DEMON = BLOCK_ENTITY_TYPES.register("lamp_demon", () -> BlockEntityType.Builder.of(DemonLampBlockEntity::new, NtmBlocks.LAMP_DEMON.get()).build(null));
     public static final Supplier<BlockEntityType<SkeletonHolderBlockEntity>> SKELETON_HOLDER = BLOCK_ENTITY_TYPES.register("skeleton_holder", () -> BlockEntityType.Builder.of(SkeletonHolderBlockEntity::new, NtmBlocks.SKELETON_HOLDER.get()).build(null));
 
     public static final Supplier<BlockEntityType<DecontaminatorBlockEntity>> DECONTAMINATOR = BLOCK_ENTITY_TYPES.register(

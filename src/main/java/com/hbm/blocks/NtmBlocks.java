@@ -28,6 +28,7 @@ import com.hbm.blocks.generic.LootCrateBlock;
 import com.hbm.blocks.machine.FloodlightBlock;
 import com.hbm.blocks.machine.ChargerBlock;
 import com.hbm.blocks.machine.BroadcasterBlock;
+import com.hbm.blocks.machine.DemonLampBlock;
 import com.hbm.blocks.machine.FurnaceBrickBlock;
 import com.hbm.blocks.machine.MachineMicrowaveBlock;
 import com.hbm.blocks.generic.SkeletonHolderBlock;
@@ -374,6 +375,9 @@ public class NtmBlocks {
     /* Der verseuchte Rundfunksender. Gehaeuse und Umriss wie beim Empfaenger -- das
      * Original benutzt fuer beide dasselbe Modell. Werte aus ModBlocks.java:1632. */
     public static final DeferredBlock<Block> BROADCASTER_PC = register("broadcaster_pc", () -> new BroadcasterBlock(BlockBehaviour.Properties.of().strength(5.0F, 15.0F).sound(SoundType.METAL).mapColor(MapColor.COLOR_PINK).noOcclusion()));
+    /* Die Daemonenkern-Lampe. Sie haengt an der angeklickten Flaeche und leuchtet voll.
+     * Werte aus ModBlocks.java:1479. */
+    public static final DeferredBlock<Block> LAMP_DEMON = register("lamp_demon", () -> new DemonLampBlock(BlockBehaviour.Properties.of().strength(3.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().lightLevel(state -> 15)));
     /* Stufe 5: der Fernschreiber, zwei Bloecke breit. Werte aus ModBlocks.java:1896. */
     public static final DeferredBlock<Block> RADIO_TELEX = register("radio_telex", () -> new RadioTelexBlock(BlockBehaviour.Properties.of().strength(3.0F, 10.0F).sound(SoundType.WOOD).mapColor(MapColor.WOOD).noOcclusion()));
     /* Stufe 5: die Teslaspule. Werte aus ModBlocks.java:2074. */
