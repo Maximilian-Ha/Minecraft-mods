@@ -1439,6 +1439,10 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.STAMP_OBSIDIAN_WIRE, "Wire Stamp (Obsidian)");
         this.add(NtmItems.STAMP_OBSIDIAN_CIRCUIT, "Circuit Stamp (Obsidian)");
         this.add(NtmItems.STAMP_DESH_FLAT, "Flat Stamp (Desh)");
+        this.add(NtmItems.STAMP_9, "Small Caliber Stamp");
+        this.add(NtmItems.STAMP_50, "Large Caliber Stamp");
+        this.add(NtmItems.STAMP_DESH_9, "Small Caliber Stamp (Desh)");
+        this.add(NtmItems.STAMP_DESH_50, "Large Caliber Stamp (Desh)");
         this.add(NtmItems.STAMP_DESH_PLATE, "Plate Stamp (Desh)");
         this.add(NtmItems.STAMP_DESH_WIRE, "Wire Stamp (Desh)");
         this.add(NtmItems.STAMP_DESH_CIRCUIT, "Circuit Stamp (Desh)");

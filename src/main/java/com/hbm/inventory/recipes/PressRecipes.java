@@ -7,6 +7,7 @@ import com.hbm.inventory.MetaHelper;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.recipes.loader.SerializableRecipe;
+import com.hbm.items.ItemEnums.CasingType;
 import com.hbm.items.NtmItems;
 import com.hbm.items.machine.StampItem;
 import com.hbm.items.machine.StampItem.StampType;
@@ -63,6 +64,16 @@ public class PressRecipes extends SerializableRecipe {
         makeRecipe(StampType.WIRE, new ComparableStack(NtmItems.INGOT_LEAD.get()),			        new ItemStack(NtmItems.WIRE_LEAD.get(), 8));
         makeRecipe(StampType.WIRE, new ComparableStack(Items.COPPER_INGOT),			                new ItemStack(NtmItems.WIRE_COPPER.get(), 8));
         makeRecipe(StampType.WIRE, new ComparableStack(NtmItems.INGOT_SCHRABIDIUM.get()),		    new ItemStack(NtmItems.WIRE_SCHRABIDIUM.get(), 8));
+
+        /*
+         * DIE HUELSEN. Bis hierher hatte die Presse kein einziges Huelsenrezept -- und damit
+         * hatte die Munitionspresse, die Huelsen verbraucht, im ganzen Spiel keine Quelle
+         * dafuer. Die vier Zeilen sind wortgetreu aus PressRecipes des Originals (Z. 88-91).
+         */
+        makeRecipe(StampType.C9,  new ComparableStack(NtmItems.PLATE_GUNMETAL.get()),		        MetaHelper.newStack(NtmItems.CASING.get(), 4, CasingType.SMALL));
+        makeRecipe(StampType.C50, new ComparableStack(NtmItems.PLATE_GUNMETAL.get()),		        MetaHelper.newStack(NtmItems.CASING.get(), 2, CasingType.LARGE));
+        makeRecipe(StampType.C9,  new ComparableStack(NtmItems.PLATE_WEAPON_STEEL.get()),	        MetaHelper.newStack(NtmItems.CASING.get(), 4, CasingType.SMALL_STEEL));
+        makeRecipe(StampType.C50, new ComparableStack(NtmItems.PLATE_WEAPON_STEEL.get()),	        MetaHelper.newStack(NtmItems.CASING.get(), 2, CasingType.LARGE_STEEL));
     }
 
     public static void makeRecipe(StampType type, AStack in, Item out) {

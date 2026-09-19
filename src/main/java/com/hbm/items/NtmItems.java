@@ -902,10 +902,19 @@ public class NtmItems {
     public static final DeferredItem<Item> STAMP_DESH_PLATE = ITEMS.register("stamp_desh_plate", () -> new StampItem(0, StampType.PLATE));
     public static final DeferredItem<Item> STAMP_DESH_WIRE = ITEMS.register("stamp_desh_wire", () -> new StampItem(0, StampType.WIRE));
     public static final DeferredItem<Item> STAMP_DESH_CIRCUIT = ITEMS.register("stamp_desh_circuit", () -> new StampItem(0, StampType.CIRCUIT));
-//    public static final DeferredItem<Item> stamp_357 = ITEMS.register("stamp_357", () -> new StampItem(1000, StampType.C357));
-//    public static final DeferredItem<Item> stamp_44 = ITEMS.register("stamp_44", () -> new StampItem(1000, StampType.C44));
-//    public static final DeferredItem<Item> stamp_9 = ITEMS.register("stamp_9", () -> new StampItem(1000, StampType.C9));
-//    public static final DeferredItem<Item> stamp_50 = ITEMS.register("stamp_50", () -> new StampItem(1000, StampType.C50));
+    /*
+     * DIE KALIBERSTEMPEL. Sie praegen Huelsen aus Platten; ohne sie hat die Munitionspresse
+     * keinen Rohstoff, denn Huelsen entstehen im ganzen Spiel nur hier.
+     *
+     * NICHT UEBERNOMMEN sind stamp_357 und stamp_44 (samt ihren Desh-Ausfuehrungen). Sie gibt
+     * es im Original zwar, aber KEIN Pressrezept verlangt C357 oder C44 -- nachgemessen in
+     * PressRecipes des Originals, das nur C9 und C50 kennt. Es waeren Gegenstaende ohne
+     * Wirkung. Die Bilder dafuer liegen im Baum und warten.
+     */
+    public static final DeferredItem<Item> STAMP_9 = ITEMS.register("stamp_9", () -> new StampItem(1000, StampType.C9));
+    public static final DeferredItem<Item> STAMP_50 = ITEMS.register("stamp_50", () -> new StampItem(1000, StampType.C50));
+    public static final DeferredItem<Item> STAMP_DESH_9 = ITEMS.register("stamp_desh_9", () -> new StampItem(0, StampType.C9));
+    public static final DeferredItem<Item> STAMP_DESH_50 = ITEMS.register("stamp_desh_50", () -> new StampItem(0, StampType.C50));
 
     // Machine Templates
     public static final DeferredItem<FluidIconItem> FLUID_ICON = ITEMS.register("fluid_icon", () -> new FluidIconItem(new Item.Properties()));

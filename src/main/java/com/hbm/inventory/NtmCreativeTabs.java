@@ -563,6 +563,10 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.STAMP_OBSIDIAN_WIRE);
                         output.accept(NtmItems.STAMP_OBSIDIAN_CIRCUIT);
                         output.accept(NtmItems.STAMP_DESH_FLAT);
+                        output.accept(NtmItems.STAMP_9);
+                        output.accept(NtmItems.STAMP_50);
+                        output.accept(NtmItems.STAMP_DESH_9);
+                        output.accept(NtmItems.STAMP_DESH_50);
                         output.accept(NtmItems.STAMP_DESH_PLATE);
                         output.accept(NtmItems.STAMP_DESH_WIRE);
                         output.accept(NtmItems.STAMP_DESH_CIRCUIT);

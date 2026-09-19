@@ -8293,3 +8293,35 @@ benutzt sie hier aber nicht — sie gehören zum Chemiewerfer und zur Panzerrüs
 
 Alle 34 Tore grün.
 
+## Runde 185 — Die Hülsenkette: eine Maschine ohne Rohstoff
+
+Beim Nachtragen der letzten Einträge aus `WeaponRecipes` stellte sich heraus, dass die drei
+abgeleiteten Hülsen (Schrotpatrone, Schrot, Schrot verstärkt) auf einer Zutat stehen, die es im
+Port **nirgends** gibt.
+
+Die Kette rückwärts durchgemessen:
+
+* `AmmoPressRecipes` **verbraucht** große und kleine Hülsen — über hundert Rezepte.
+* `PressRecipes` hatte **kein einziges** Hülsenrezept. Im Original sind es vier
+  (`PressRecipes` Z. 88–91).
+* Die vier Kaliber-Prägestempel standen in `NtmItems` **auskommentiert**.
+
+Also: die Munitionspresse, die ganze Patronenherstellung des Ports, hatte keinen Rohstoff. Der
+einzige Weg an Hülsen wäre der Kreativreiter gewesen. Aufgefallen ist das nicht beim Bau der
+Presse, sondern erst, als ein Werkbankrezept eine Hülse als *Zutat* verlangte.
+
+**Jetzt geschlossen:** die Stempel `stamp_9`, `stamp_50` und ihre Desh-Ausführungen samt
+Amboss-Bauplänen (Stufe 2 aus Gunmetal, Stufe 4 aus Waffenstahl), die vier Pressrezepte und die
+drei Umbauten an der Werkbank. Die Bilder aller acht Stempel lagen längst im Baum.
+
+**Nicht übernommen:** `stamp_357` und `stamp_44` samt Desh-Ausführungen. Es gibt sie im
+Original, aber kein Pressrezept verlangt `C357` oder `C44` — nachgemessen in `PressRecipes` des
+Originals, das nur `C9` und `C50` kennt. Es wären Gegenstände ohne Wirkung.
+
+Dazu der Rest von `WeaponRecipes`: die vier Steinzeitpatronen (Kopfsteinpflaster, Feuerstein,
+Kies, Eisen — je sechs Schuss) und die Treibladung des Katapults. Damit ist `WeaponRecipes`
+**vollständig abgearbeitet**, bis auf das, was in den Runden 182 und 184 mit Grund
+stehengelassen wurde.
+
+Alle 34 Tore grün.
+

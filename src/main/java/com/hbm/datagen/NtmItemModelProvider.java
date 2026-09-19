@@ -791,6 +791,11 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicItem(NtmItems.STAMP_OBSIDIAN_WIRE.get());
         this.basicItem(NtmItems.STAMP_OBSIDIAN_CIRCUIT.get());
         this.basicItem(NtmItems.STAMP_DESH_FLAT.get());
+        this.basicItem(NtmItems.STAMP_9.get());
+        this.basicItem(NtmItems.STAMP_50.get());
+        /* Die Bilder der Desh-Stempel heissen stamp_9_desh, nicht stamp_desh_9. */
+        this.withExistingParent("stamp_desh_9", mcLoc("item/generated")).texture("layer0", modLoc("item/stamp_9_desh"));
+        this.withExistingParent("stamp_desh_50", mcLoc("item/generated")).texture("layer0", modLoc("item/stamp_50_desh"));
         this.basicItem(NtmItems.STAMP_DESH_PLATE.get());
         this.basicItem(NtmItems.STAMP_DESH_WIRE.get());
         this.basicItem(NtmItems.STAMP_DESH_CIRCUIT.get());

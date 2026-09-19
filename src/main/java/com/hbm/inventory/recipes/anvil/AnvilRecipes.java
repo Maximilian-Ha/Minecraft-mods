@@ -490,6 +490,40 @@ public class AnvilRecipes {
                 new AnvilOutput(new ItemStack(NtmItems.MOTOR_DESH.asItem(), 1))
 
         ).setTier(3));
+        /*
+         * DIE KALIBERSTEMPEL. Aus einem flachen Stempel und Gunmetal wird der Praegestempel;
+         * die Desh-Ausfuehrung haelt ewig und braucht Waffenstahl. Wortgetreu aus
+         * AnvilRecipes des Originals (Z. 611-615).
+         */
+        CONSTRUCTION_RECIPES.add(new AnvilConstructionRecipe(
+                new AStack[] {
+                        new ComparableStack(NtmItems.STAMP_IRON_FLAT.get(), 1),
+                        new ComparableStack(NtmItems.INGOT_GUNMETAL.get(), 2),
+                },
+                new AnvilOutput(new ItemStack(NtmItems.STAMP_9.asItem(), 1))
+        ).setTier(2));
+        CONSTRUCTION_RECIPES.add(new AnvilConstructionRecipe(
+                new AStack[] {
+                        new ComparableStack(NtmItems.STAMP_IRON_FLAT.get(), 1),
+                        new ComparableStack(NtmItems.INGOT_GUNMETAL.get(), 2),
+                },
+                new AnvilOutput(new ItemStack(NtmItems.STAMP_50.asItem(), 1))
+        ).setTier(2));
+        CONSTRUCTION_RECIPES.add(new AnvilConstructionRecipe(
+                new AStack[] {
+                        new ComparableStack(NtmItems.STAMP_DESH_FLAT.get(), 1),
+                        new ComparableStack(NtmItems.INGOT_WEAPON_STEEL.get(), 4),
+                },
+                new AnvilOutput(new ItemStack(NtmItems.STAMP_DESH_9.asItem(), 1))
+        ).setTier(4));
+        CONSTRUCTION_RECIPES.add(new AnvilConstructionRecipe(
+                new AStack[] {
+                        new ComparableStack(NtmItems.STAMP_DESH_FLAT.get(), 1),
+                        new ComparableStack(NtmItems.INGOT_WEAPON_STEEL.get(), 4),
+                },
+                new AnvilOutput(new ItemStack(NtmItems.STAMP_DESH_50.asItem(), 1))
+        ).setTier(4));
+
         addAnvilRecipe(NtmItems.PLATE_TITANIUM.get(), 4, NtmItems.SHELL_TITANIUM.get(), 1, 1);
         addAnvilRecipe(NtmItems.PLATE_ALUMINIUM.get(), 4, NtmItems.SHELL_ALUMINIUM.get(), 1, 1);
         addAnvilRecipe(NtmItems.PLATE_COPPER.get(), 4, NtmItems.SHELL_COPPER.get(), 1, 1);

@@ -10,6 +10,7 @@ import com.hbm.inventory.material.NTMMaterial;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.BoltItem;
 import com.hbm.items.CastPlateItem;
+import com.hbm.items.ItemEnums.CasingType;
 import com.hbm.items.PartGenericItem;
 import com.hbm.items.WireDenseItem;
 import com.hbm.items.NtmItems;
@@ -140,6 +141,7 @@ public class NtmRecipeProvider extends RecipeProvider {
         this.gunPartRecipes(recipeOutput);
         this.specialWeaponMods(recipeOutput);
         this.gunRecipes(recipeOutput);
+        this.casingAndStoneAmmo(recipeOutput);
 
         /* Die 240-mm-Granaten. Vier Ausfuehrungen; die W9 wird nicht gebaut, sie ist Fundstueck. */
         shell(recipeOutput, GunFactory.Ammo240Shell.STOCK, Blocks.TNT, NtmItems.SHELL_STEEL.get());
@@ -4573,6 +4575,64 @@ public class NtmRecipeProvider extends RecipeProvider {
         ShapedRecipeBuilder builder = ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, gun.get(), 1);
         for(String row : pattern) builder.pattern(row);
         return builder;
+    }
+
+    /**
+     * Was von WeaponRecipes sonst noch uebrig war: die drei abgeleiteten Huelsen und die
+     * Steinzeitmunition.
+     *
+     * DIE DREI HUELSEN sind keine eigene Herstellung, sondern ein Umbau: eine grosse Huelse
+     * plus ein Deckel wird zur Schrotpatrone. Die grossen Huelsen selbst kommen wie im
+     * Original aus der Munitionspresse, nicht aus der Werkbank.
+     *
+     * DIE STEINZEITMUNITION ist der Einstieg ins Waffensystem ueberhaupt -- Kopfsteinpflaster,
+     * Papier, Schiesspulver, und schon hat man sechs Schuss fuer die Pfefferbuechse.
+     */
+    private void casingAndStoneAmmo(RecipeOutput recipeOutput) {
+
+        casingUpgrade(recipeOutput, CasingType.SHOTSHELL, Ingredient.of(NtmItems.PLATE_GUNMETAL.get()), CasingType.LARGE);
+        casingUpgrade(recipeOutput, CasingType.BUCKSHOT, anyPlasticIngot(), CasingType.LARGE);
+        casingUpgrade(recipeOutput, CasingType.BUCKSHOT_ADVANCED, anyPlasticIngot(), CasingType.LARGE_STEEL);
+
+        stoneAmmo(recipeOutput, GunFactory.Ammo.STONE, Ingredient.of(ItemTags.STONE_CRAFTING_MATERIALS));
+        stoneAmmo(recipeOutput, GunFactory.Ammo.STONE_AP, Ingredient.of(Items.FLINT));
+        stoneAmmo(recipeOutput, GunFactory.Ammo.STONE_SHOT, Ingredient.of(Blocks.GRAVEL));
+        stoneAmmo(recipeOutput, GunFactory.Ammo.STONE_IRON, Ingredient.of(Items.IRON_INGOT));
+
+        /*
+         * Die Treibladung des Katapults: sieben Moerserbomben und zwei Rollen Klebeband. Das
+         * Original macht sie formlos, hier auch.
+         */
+        ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(RecipeCategory.COMBAT,
+                MetaHelper.newStack(NtmItems.AMMO_STANDARD.get(), 1, GunFactory.Ammo.CT_MORTAR_CHARGE));
+        for(int i = 0; i < 7; i++) builder.requires(DataComponentIngredient.of(false, NtmDataComponents.META,
+                GunFactory.Ammo.CT_MORTAR.ordinal(), NtmItems.AMMO_STANDARD.get()));
+        builder.requires(NtmItems.DUCTTAPE.get()).requires(NtmItems.DUCTTAPE.get())
+                .unlockedBy("has_ducttape", has(NtmItems.DUCTTAPE.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("ammo_standard_ct_mortar_charge"));
+    }
+
+    /** Eine Huelse mit einem Deckel darauf wird zur naechsten. */
+    private void casingUpgrade(RecipeOutput recipeOutput, CasingType ergebnis, Ingredient deckel, CasingType grundlage) {
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, MetaHelper.newStack(NtmItems.CASING.get(), 2, ergebnis))
+                .pattern("P").pattern("C")
+                .define('P', deckel)
+                .define('C', DataComponentIngredient.of(false, NtmDataComponents.META, grundlage.ordinal(), NtmItems.CASING.get()))
+                .unlockedBy("has_casing", has(NtmItems.CASING.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("casing_" + ergebnis.name().toLowerCase(Locale.US)));
+    }
+
+    /** Sechs Schuss Steinzeitmunition: Geschosskopf, Papier, Schiesspulver. */
+    private void stoneAmmo(RecipeOutput recipeOutput, GunFactory.Ammo art, Ingredient kopf) {
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, MetaHelper.newStack(NtmItems.AMMO_STANDARD.get(), 6, art))
+                .pattern("C").pattern("P").pattern("G")
+                .define('C', kopf)
+                .define('P', Items.PAPER)
+                .define('G', Items.GUNPOWDER)
+                .unlockedBy("has_gunpowder", has(Items.GUNPOWDER))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("ammo_standard_" + art.name().toLowerCase(Locale.US)));
     }
 
 }
