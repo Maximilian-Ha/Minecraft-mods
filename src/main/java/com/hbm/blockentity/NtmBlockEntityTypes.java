@@ -58,7 +58,9 @@ import com.hbm.blockentity.network.ConverterHeRfBlockEntity;
 import com.hbm.blockentity.network.ConverterRfHeBlockEntity;
 import com.hbm.blockentity.network.ConnectorSuperBlockEntity;
 import com.hbm.blockentity.network.PipeBaseBlockEntity;
+import com.hbm.blockentity.network.PipeCounterValveBlockEntity;
 import com.hbm.blockentity.network.PipeGaugeBlockEntity;
+import com.hbm.blockentity.network.PipeValveBlockEntity;
 import com.hbm.blockentity.machine.FloodlightBlockEntity;
 import com.hbm.blockentity.machine.FloodlightBeamBlockEntity;
 import com.hbm.blockentity.machine.DecoPoleSatelliteReceiverBlockEntity;
@@ -896,6 +898,9 @@ public class NtmBlockEntityTypes {
     public static final Supplier<BlockEntityType<DiFurnaceExtensionBlockEntity>> MACHINE_DIFURNACE_EXTENSION = BLOCK_ENTITY_TYPES.register("machine_difurnace_extension", () -> BlockEntityType.Builder.of(DiFurnaceExtensionBlockEntity::new, NtmBlocks.MACHINE_DIFURNACE_EXTENSION.get()).build(null));
     public static final Supplier<BlockEntityType<PipeBaseBlockEntity>> FLUID_DUCT = BLOCK_ENTITY_TYPES.register("fluid_duct", () -> BlockEntityType.Builder.of(PipeBaseBlockEntity::new, NtmBlocks.FLUID_DUCT_NEO.get()).build(null));
     public static final Supplier<BlockEntityType<PipeGaugeBlockEntity>> FLUID_DUCT_GAUGE = BLOCK_ENTITY_TYPES.register("fluid_duct_gauge", () -> BlockEntityType.Builder.of(PipeGaugeBlockEntity::new, NtmBlocks.FLUID_DUCT_GAUGE.get()).build(null));
+    /* Handventil und Redstoneventil teilen sich eine Blockentitaet -- im Original wie hier. */
+    public static final Supplier<BlockEntityType<PipeValveBlockEntity>> FLUID_VALVE = BLOCK_ENTITY_TYPES.register("fluid_valve", () -> BlockEntityType.Builder.of(PipeValveBlockEntity::new, NtmBlocks.FLUID_VALVE.get(), NtmBlocks.FLUID_SWITCH.get()).build(null));
+    public static final Supplier<BlockEntityType<PipeCounterValveBlockEntity>> FLUID_COUNTER_VALVE = BLOCK_ENTITY_TYPES.register("fluid_counter_valve", () -> BlockEntityType.Builder.of(PipeCounterValveBlockEntity::new, NtmBlocks.FLUID_COUNTER_VALVE.get()).build(null));
     public static final Supplier<BlockEntityType<FloodlightBlockEntity>> FLOODLIGHT = BLOCK_ENTITY_TYPES.register("floodlight", () -> BlockEntityType.Builder.of(FloodlightBlockEntity::new, NtmBlocks.FLOODLIGHT.get()).build(null));
     public static final Supplier<BlockEntityType<FloodlightBeamBlockEntity>> FLOODLIGHT_BEAM = BLOCK_ENTITY_TYPES.register("floodlight_beam", () -> BlockEntityType.Builder.of(FloodlightBeamBlockEntity::new, NtmBlocks.FLOODLIGHT_BEAM.get()).build(null));
     public static final Supplier<BlockEntityType<DecoPoleSatelliteReceiverBlockEntity>> POLE_SATELLITE_RECEIVER = BLOCK_ENTITY_TYPES.register("pole_satellite_receiver", () -> BlockEntityType.Builder.of(DecoPoleSatelliteReceiverBlockEntity::new, NtmBlocks.POLE_SATELLITE_RECEIVER.get()).build(null));

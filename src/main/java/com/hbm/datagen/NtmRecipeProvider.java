@@ -2065,6 +2065,31 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_fluid_duct_neo", has(NtmBlocks.FLUID_DUCT_NEO.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "fluid_duct_gauge"));
 
+        /*
+         * Die drei Haehne, CraftingManager Z. 575 bis 577. Das bemalbare Rohr des Originals
+         * heisst im Port fluid_duct_neo; EnumCircuitType.CHIP ist der Mikrochip.
+         */
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.FLUID_VALVE.get(), 1)
+                .pattern("S").pattern("W")
+                .define('S', Blocks.LEVER)
+                .define('W', NtmBlocks.FLUID_DUCT_NEO.get())
+                .unlockedBy("has_fluid_duct_neo", has(NtmBlocks.FLUID_DUCT_NEO.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "fluid_valve"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.FLUID_SWITCH.get(), 1)
+                .pattern("S").pattern("W")
+                .define('S', Items.REDSTONE)
+                .define('W', NtmBlocks.FLUID_DUCT_NEO.get())
+                .unlockedBy("has_fluid_duct_neo", has(NtmBlocks.FLUID_DUCT_NEO.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "fluid_switch"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.FLUID_COUNTER_VALVE.get(), 1)
+                .pattern("S").pattern("W")
+                .define('S', NtmItems.CIRCUIT_MICROCHIP.get())
+                .define('W', NtmBlocks.FLUID_SWITCH.get())
+                .unlockedBy("has_fluid_switch", has(NtmBlocks.FLUID_SWITCH.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "fluid_counter_valve"));
+
         // Original CraftingManager Z. 842: "SIS" / "ICI" / "SIS".
         // CU.plateCast() gibt es im Port nicht, wie schon beim Elektroofen auf PLATE_COPPER verengt.
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.MACHINE_CONDENSER.get(), 1)

@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.hbm.blocks.DummyableBlock;
 import com.hbm.blocks.ICustomBlockModelRegister;
 import com.hbm.blocks.NtmBlocks;
+import com.hbm.blocks.network.FluidValveBlock;
 import com.hbm.blocks.machine.MachineDetectorBlock;
 import com.hbm.blocks.machine.icf.ICFLaserComponentBlock;
 import com.hbm.blocks.machine.icf.ICFWrapperBlock;
@@ -629,6 +630,7 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.registerRadioRec();
         this.registerMachineBattery();
         this.registerCableSwitch();
+        this.registerFluidValves();
         this.particleOnlyBlock(NtmBlocks.MACHINE_DIFURNACE_EXTENSION, modLoc("block/difurnace_extension"));
         this.simpleCubeAllBlock(NtmBlocks.RED_WIRE_COATED);
         /* Traeger und Masten kommen aus OBJ-Modellen, wie im Original. Der Traeger traegt
@@ -1773,6 +1775,24 @@ public class NtmBlockStateProvider extends BlockStateProvider {
                 ConfiguredModel.builder().modelFile(state.getValue(com.hbm.blocks.network.CableSwitchBlock.LIT) ? modelOn : modelOff).build());
 
         this.simpleBlockItem(block, modelOff);
+    }
+
+    /** Die drei Haehne: je zwei Wuerfelmodelle, offen und zu. */
+    private void registerFluidValves() {
+        this.registerFluidValve(NtmBlocks.FLUID_VALVE.get(), "fluid_valve");
+        this.registerFluidValve(NtmBlocks.FLUID_SWITCH.get(), "fluid_switch");
+        this.registerFluidValve(NtmBlocks.FLUID_COUNTER_VALVE.get(), "fluid_counter_valve");
+    }
+
+    private void registerFluidValve(Block block, String textur) {
+
+        ModelFile zu = this.models().cubeAll(this.name(block) + "_off", modLoc("block/" + textur + "_off"));
+        ModelFile auf = this.models().cubeAll(this.name(block) + "_on", modLoc("block/" + textur + "_on"));
+
+        this.getVariantBuilder(block).forAllStates(state ->
+                ConfiguredModel.builder().modelFile(state.getValue(FluidValveBlock.OPEN) ? auf : zu).build());
+
+        this.simpleBlockItem(block, zu);
     }
 
     private void registerMachineDiFurnaceRtg() {

@@ -39,6 +39,11 @@ jobs:
           chmod +x ./tools/import-check.sh
           ./tools/import-check.sh
 
+      - name: Check Minecraft import packages
+        run: |
+          chmod +x ./tools/importclash-check.sh
+          ./tools/importclash-check.sh
+
       - name: Check fluid traits
         run: |
           chmod +x ./tools/trait-check.sh

@@ -2418,6 +2418,10 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.FLUID_DUCT_NEO, "Universal Fluid Duct");
         this.add(NtmBlocks.FLUID_DUCT_GAUGE, "Fluid Gauge");
         this.add(NtmBlocks.FLUID_DUCT_GAUGE, DESC, "Duct that displays how much fluid$moves within the network per tick.");
+        this.add(NtmBlocks.FLUID_VALVE, "Fluid Valve");
+        this.add(NtmBlocks.FLUID_SWITCH, "Redstone Fluid Valve");
+        this.add(NtmBlocks.FLUID_COUNTER_VALVE, "Fluid Valve with Counter");
+        this.add(NtmBlocks.FLUID_COUNTER_VALVE, DESC, "Beware of loops in your fluid network...");
 
         this.add(NtmBlocks.MACHINE_BATTERY_SOCKET, "Battery Socket");
         this.add(NtmBlocks.MACHINE_BATTERY_SOCKET, DESC,"Allows battery items to be connected$to the power grid directly.$Acts as a cable, all ports are connected$to the same network.");

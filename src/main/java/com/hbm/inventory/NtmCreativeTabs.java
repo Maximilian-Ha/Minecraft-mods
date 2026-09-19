@@ -1205,6 +1205,9 @@ public class NtmCreativeTabs {
 
                         addMetaItems(output, NtmBlocks.FLUID_DUCT_NEO.asItem());
                         output.accept(NtmBlocks.FLUID_DUCT_GAUGE);
+                        output.accept(NtmBlocks.FLUID_VALVE);
+                        output.accept(NtmBlocks.FLUID_SWITCH);
+                        output.accept(NtmBlocks.FLUID_COUNTER_VALVE);
 
                         output.accept(NtmBlocks.PRESS_PREHEATER);
                         output.accept(NtmBlocks.MACHINE_PRESS);

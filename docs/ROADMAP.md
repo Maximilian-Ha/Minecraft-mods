@@ -5425,3 +5425,57 @@ Er steht wie im Original in keinem Reiter — dafür jetzt mit Begründung in de
 von `tab-check`, statt als stiller Sonderfall.
 
 Die Lücke steht bei **14**.
+
+### Drei Hähne für das Rohrnetz
+
+`fluid_valve`, `fluid_switch` und `fluid_counter_valve` schließen eine Lücke, die seit dem
+Rohrnetz offenstand: bisher ließ sich eine Leitung nur abreißen, nicht absperren.
+
+Alle drei teilen sich dieselbe Mechanik, und sie ist knapper, als man denkt: ein
+geschlossenes Ventil bildet **gar keinen Netzknoten**. Damit ist das Netz an dieser Stelle
+wirklich getrennt und nicht bloß gedrosselt — die beiden Hälften sind für das Fluidsystem
+zwei verschiedene Netze. Das Vorbild stand schon im Port: der Kabelschalter macht es mit
+dem Stromnetz genauso.
+
+| Block | Wie er schaltet |
+|---|---|
+| `fluid_valve` | von Hand, Rechtsklick |
+| `fluid_switch` | vom Redstone; von Hand gar nicht |
+| `fluid_counter_valve` | von Hand, und zählt mit, wie viel durchging |
+
+Der Zähler des dritten hat eine Feinheit, die leicht verlorengeht: beim Zudrehen zählt das
+Original den angefangenen Tick noch zu Ende, **bevor** es den Knoten abbaut. Ohne das ginge
+bei jedem Zudrehen der letzte Tick verloren. Das steht hier genauso.
+
+**Zwei Abweichungen:**
+
+- Der Klang. Das Original nimmt `hbm:block.reactorStart` mit Tonhöhe 1,0 beim Aufdrehen und
+  0,85 beim Zudrehen. Den Klang gibt es im Port nicht — wie schon beim Kabelschalter steht
+  hier der Hebelklang der Mod, mit denselben beiden Tonhöhen.
+- Die OpenComputers-Anbindung des Zählventils (fünf Callbacks) fehlt. Die Mod ist im Port
+  nicht angebunden. Dieselben Werte stehen über Redstone-über-Funk bereit, und das ist
+  portiert: `value`, `state`, `reset` und `setstate` gibt es alle.
+
+### Ein Tor mehr: widersprüchliche Minecraft-Importe
+
+Die Runde davor ist in der CI durchgefallen, obwohl alle siebenundzwanzig Tore grün gemeldet
+hatten. Der Grund: `RenderSkeletonHolder` importierte
+`net.minecraft.client.renderer.ItemRenderer`. Die Klasse liegt in 1.21 aber in
+`net.minecraft.client.renderer.entity` — und genau so steht sie in vier anderen Darstellern
+des Ports.
+
+`import-check` kann das nicht sehen: es beurteilt nur `com.hbm`- und `api.hbm`-Typen, weil
+ohne Minecraft-Klassenpfad nicht feststellbar ist, ob ein Paket eine Klasse wirklich enthält.
+
+Aber eine *relative* Aussage ist prüfbar: **steht derselbe einfache Klassenname in zwei
+verschiedenen `net.minecraft`-Paketen, ist einer der beiden Importe falsch.** Der Port
+benutzt jede Minecraft-Klasse nur in einer Fassung. Das vergleicht den Port mit sich selbst
+und braucht keinen Klassenpfad.
+
+Ausgenommen sind verschachtelte Klassen — bei `SynchedEntityData.Builder` ist das letzte
+Segment vor dem Namen keine Paketebene, sondern die äußere Klasse, erkennbar am
+Großbuchstaben. `Builder` und `Context` kommen im Port heute schon doppelt vor, beide
+zu Recht.
+
+Gemessen in beide Richtungen: 411 Klassennamen, 0 Funde; mit dem wiedereingesetzten Fehler
+genau ein Fund und Rückgabewert 1. Damit sind es **28 Tore**.

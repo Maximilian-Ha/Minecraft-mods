@@ -52,7 +52,10 @@ import com.hbm.blocks.network.ConveyorLiftBlock;
 import com.hbm.blocks.network.ConveyorDoubleBlock;
 import com.hbm.blocks.network.ConveyorExpressBlock;
 import com.hbm.blocks.network.ConveyorTripleBlock;
+import com.hbm.blocks.network.FluidCounterValveBlock;
 import com.hbm.blocks.network.FluidDuctGaugeBlock;
+import com.hbm.blocks.network.FluidSwitchBlock;
+import com.hbm.blocks.network.FluidValveBlock;
 import com.hbm.blocks.machine.WasteDrumBlock;
 import com.hbm.blocks.machine.rbmk.RBMKAutoloaderBlock;
 import com.hbm.blocks.machine.rbmk.RBMKConsoleBlock;
@@ -1017,6 +1020,10 @@ public class NtmBlocks {
 
     public static final DeferredBlock<Block> FLUID_DUCT_NEO = registerNew("fluid_duct_neo", () -> new FluidDuctStandardBlock(BlockBehaviour.Properties.of().noOcclusion().strength(1.0F, 10.0F).sound(ModSoundTypes.PIPE).mapColor(MapColor.METAL)));
     public static final DeferredBlock<Block> FLUID_DUCT_GAUGE = register("fluid_duct_gauge", () -> new FluidDuctGaugeBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(ModSoundTypes.PIPE).mapColor(MapColor.METAL)));
+    /* Die drei Haehne der Rohrfamilie. Werte aus ModBlocks.java:1885 bis 1887. */
+    public static final DeferredBlock<Block> FLUID_VALVE = register("fluid_valve", () -> new FluidValveBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(ModSoundTypes.PIPE).mapColor(MapColor.METAL)));
+    public static final DeferredBlock<Block> FLUID_SWITCH = register("fluid_switch", () -> new FluidSwitchBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(ModSoundTypes.PIPE).mapColor(MapColor.METAL)));
+    public static final DeferredBlock<Block> FLUID_COUNTER_VALVE = register("fluid_counter_valve", () -> new FluidCounterValveBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(ModSoundTypes.PIPE).mapColor(MapColor.METAL)));
     public static final DeferredBlock<Block> RADIO_TORCH_SENDER = register("radio_torch_sender", () -> new RadioTorchSenderBlock(BlockBehaviour.Properties.of().noOcclusion().strength(1.0F, 10.0F).sound(ModSoundTypes.PIPE).mapColor(MapColor.METAL)));
     public static final DeferredBlock<Block> RADIO_TORCH_RECEIVER  = register("radio_torch_receiver", () -> new RadioTorchReceiverBlock(BlockBehaviour.Properties.of().noOcclusion().strength(1.0F, 10.0F).sound(ModSoundTypes.PIPE).mapColor(MapColor.METAL)));
 
