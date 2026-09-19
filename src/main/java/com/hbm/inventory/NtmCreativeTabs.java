@@ -1539,6 +1539,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.HEV_BATTERY);
                         output.accept(NtmBlocks.CRATE_AMMO);
                         output.accept(NtmBlocks.CRATE_CAN);
+                        output.accept(NtmBlocks.CRATE_SUPPLY);
                         output.accept(NtmBlocks.FOUNDRY_TANK);
                         output.accept(NtmBlocks.TRANSFORMER);
 

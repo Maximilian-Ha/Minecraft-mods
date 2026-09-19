@@ -3,6 +3,7 @@ package com.hbm.entity;
 import com.hbm.entity.effect.BlackHole;
 import com.hbm.entity.grenade.GrenadeUniversal;
 import com.hbm.entity.projectile.Boxcar;
+import com.hbm.entity.item.ParachuteCrate;
 import com.hbm.entity.projectile.DuchessGambit;
 import com.hbm.entity.projectile.Sawblade;
 import com.hbm.entity.effect.FalloutRain;
@@ -140,6 +141,10 @@ public class NtmEntityTypes {
     /* Der Gueterwagen aus der Luft. Drei Bloecke breit, drei hoch -- ungefaehr sein Modell. */
     public static final DeferredHolder<EntityType<?>, EntityType<Boxcar>> BOXCAR = ENTITY_TYPES.register("boxcar",
             () -> EntityType.Builder.<Boxcar>of(Boxcar::new, MobCategory.MISC).noSummon().setTrackingRange(250).sized(3.0F, 3.0F).fireImmune().build("boxcar"));
+
+    /* Die Kiste am Fallschirm. Einen Block gross, wie das Modell, das sie zeigt. */
+    public static final DeferredHolder<EntityType<?>, EntityType<ParachuteCrate>> PARACHUTE_CRATE = ENTITY_TYPES.register("parachute_crate",
+            () -> EntityType.Builder.<ParachuteCrate>of(ParachuteCrate::new, MobCategory.MISC).noSummon().setTrackingRange(250).sized(1.0F, 1.0F).fireImmune().build("parachute_crate"));
 
     /* Das Luftschiff aus der Luft. Zehn Bloecke breit, acht hoch -- grob sein Modell. */
     public static final DeferredHolder<EntityType<?>, EntityType<DuchessGambit>> DUCHESS_GAMBIT = ENTITY_TYPES.register("duchess_gambit",

@@ -866,6 +866,13 @@ public class NtmBlockEntityTypes {
                             NtmBlocks.MACHINE_PRECASS.get())
                     .build(null));
 
+    public static final Supplier<BlockEntityType<SupplyCrateBlockEntity>> SUPPLY_CRATE = BLOCK_ENTITY_TYPES.register(
+            "supply_crate",
+            () -> BlockEntityType.Builder.of(
+                            SupplyCrateBlockEntity::new,
+                            NtmBlocks.CRATE_SUPPLY.get())
+                    .build(null));
+
     public static final Supplier<BlockEntityType<BedrockOreBlockEntity>> BEDROCK_ORE = BLOCK_ENTITY_TYPES.register(
             "bedrock_ore",
             () -> BlockEntityType.Builder.of(

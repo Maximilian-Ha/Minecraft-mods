@@ -1129,6 +1129,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.HEV_BATTERY, "HEV Suit Battery");
         this.add(NtmBlocks.CRATE_AMMO, "Starmetal Crate");
         this.add(NtmBlocks.CRATE_CAN, "Canned Food Crate");
+        this.add(NtmBlocks.CRATE_SUPPLY, "Supply Crate");
         /* Die Pfuetze hat im Original gar keinen Namen -- sie ist in keinem Reiter und
          * traegt keinen Gegenstand. Einen braucht sie trotzdem, sonst steht der rohe
          * Schluessel in der Anzeige beim Hinsehen. */

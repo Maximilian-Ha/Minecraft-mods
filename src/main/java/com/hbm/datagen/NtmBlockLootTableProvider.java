@@ -568,6 +568,9 @@ public class NtmBlockLootTableProvider extends BlockLootSubProvider {
         this.dropSelf(NtmBlocks.HEV_BATTERY.get());
         this.dropSelf(NtmBlocks.CRATE_AMMO.get());
         this.dropSelf(NtmBlocks.CRATE_CAN.get());
+        /* Die Nachschubkiste faellt sich selbst -- ihren Inhalt haengt SupplyCrateBlock.getDrops
+         * ueber IPersistentNBT an den Stapel, genau wie die Lagerkisten. */
+        this.dropSelf(NtmBlocks.CRATE_SUPPLY.get());
         this.dropSelf(NtmBlocks.FOUNDRY_TANK.get());
         this.dropSelf(NtmBlocks.RBMK_GAUGE.get());
         this.dropSelf(NtmBlocks.RBMK_INDICATOR.get());

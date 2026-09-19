@@ -7255,3 +7255,52 @@ sie können durch eine Änderung an ganz anderer Stelle erst falsch werden.
 Damit steht die Kistenfamilie bis auf `crate_supply` vollständig.
 
 Alle 31 Tore grün.
+
+## Die Nachschubkiste am Fallschirm
+
+Die letzte der Kistenfamilie. Sie stand bisher als „blockiert auf die C-130" in der Liste — das
+war zu weit gegriffen. Blockiert ist nur, **wer sie abwirft**; die Kiste selbst und ihr
+Fallschirm hängen an nichts, was dem Port fehlt.
+
+### Die Kiste
+
+Anders als alle anderen Kisten des Mods würfelt sie ihren Inhalt nicht aus. Sie trägt genau
+das, was ihr mitgegeben wurde, und gibt es beim Aufbrechen wieder heraus — dafür ein
+Blockobjekt mit einer schlichten Liste von Gegenständen, ohne Oberfläche, ohne Fächer, ohne
+Schnittstelle. Es tickt nicht.
+
+Wird sie stattdessen abgebaut, wandert der Inhalt über `IPersistentNBT` in den
+Gegenstandsstapel und beim Setzen zurück. Das Original schreibt dafür von Hand `slot0`,
+`slot1` … in die Gegenstandsdaten und zählt sie in `amount`; im Port genügt derselbe Weg, den
+die Lagerkisten und die Fässer schon gehen.
+
+**Sie teilt sich ihr Aussehen mit der Dosenkiste**, wie im Original: dort verweist ihr
+Zeichnertyp auf `BlockCanCrate.renderID` und ihre Textur auf `hbm:crate_can`. Im Port zeigt ihr
+Blockzustand auf dasselbe `block/crate_can`, das in der Dosenrunde als gewöhnliches Blockmodell
+entstanden ist.
+
+### Der Fallschirm
+
+Sie sinkt mit einem Fünftel Block je Tick — das ist der Schirm. Die Höhengrenze bei 600 ist die
+des Originals: wird sie höher eingesetzt, fällt sie sofort auf diese Höhe zurück. Das Original
+setzt dafür `posY` direkt; hier geschieht es über `setPos`, sonst wanderte die Begrenzungsbox
+nicht mit.
+
+Der Zeichner lässt sie pendeln: zwei Sinuskurven, um eine Viertelwelle gegeneinander versetzt,
+kippen sie um bis zu fünf Grad in beide Achsen, mit dem Drehpunkt sieben Blöcke darüber — also
+dort, wo der Schirm hängt.
+
+**Abweichung, woraus die Kiste gezeichnet wird:** das Original nimmt dafür `conservecrate.obj`.
+Der Port hat die Dosenkiste als gewöhnliches Blockmodell nachgebaut, und die Nachschubkiste
+teilt es sich mit ihr — also wird dasselbe Blockmodell gezeichnet statt eines zweiten Modells
+in einem anderen Format. Der Schirm selbst ist das `Chute`-Teil aus `soyuz_lander.obj`, das der
+Port seit der Sojus-Runde hat.
+
+**Was bleibt:** niemand wirft sie ab. Im Original ist das die C-130, und die ist eine eigene
+Runde. Die Kiste lässt sich von jeder künftigen Quelle einsetzen — `ParachuteCrate.items`
+füllen, Entität in die Welt setzen, fertig.
+
+Damit ist die Kistenfamilie vollständig: `crate`, `crate_weapon`, `crate_lead`, `crate_metal`,
+`crate_ammo`, `crate_can`, `crate_red` und `crate_supply`.
+
+Alle 31 Tore grün.

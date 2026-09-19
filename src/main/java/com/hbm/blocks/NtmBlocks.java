@@ -21,6 +21,7 @@ import com.hbm.blocks.machine.WatzPumpBlock;
 import com.hbm.blocks.machine.WatzStructBlock;
 import com.hbm.blocks.generic.ToolConversionBlock;
 import com.hbm.blocks.generic.SteelRoofBlock;
+import com.hbm.blocks.generic.SupplyCrateBlock;
 import com.hbm.blocks.generic.DecoPoleSatelliteReceiverBlock;
 import com.hbm.blocks.generic.MushBlock;
 import com.hbm.blocks.generic.MushHugeBlock;
@@ -975,6 +976,10 @@ public class NtmBlocks {
     public static final DeferredBlock<Block> CRATE_AMMO = register("crate_ammo", () -> new AmmoCrateBlock(BlockBehaviour.Properties.of().strength(1.0F, 2.5F).sound(SoundType.METAL).mapColor(MapColor.METAL)));
     /* Die Dosenkiste. Holz statt Metall, und ihr Umriss ist kein voller Wuerfel -- daher
      * noOcclusion. Werte aus ModBlocks.java:2169 des Originals. */
+    /* Die Nachschubkiste am Fallschirm. Holzwerte wie im Original (ModBlocks.java:2092),
+     * und sie teilt sich das Modell der Dosenkiste -- dort ebenfalls, ueber denselben
+     * Zeichnertyp und dieselbe Textur. */
+    public static final DeferredBlock<Block> CRATE_SUPPLY = register("crate_supply", () -> new SupplyCrateBlock(BlockBehaviour.Properties.of().strength(1.0F, 2.5F).sound(SoundType.WOOD).mapColor(MapColor.WOOD).noOcclusion()));
     public static final DeferredBlock<Block> CRATE_CAN = register("crate_can", () -> new CanCrateBlock(BlockBehaviour.Properties.of().strength(1.0F, 2.5F).sound(SoundType.WOOD).mapColor(MapColor.WOOD).noOcclusion()));
     public static final DeferredBlock<Block> CRATE_METAL = register("crate_metal", () -> new LootCrateBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL), LootCrateBlock.Art.METALL));
     /* Nachschub- und Waffenkiste: Holz statt Metall, sonst dieselben Werte.

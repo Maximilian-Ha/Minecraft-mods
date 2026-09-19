@@ -12,6 +12,7 @@ import com.hbm.render.entity.EmptyEntityRenderer;
 import com.hbm.render.entity.effect.*;
 import com.hbm.render.entity.item.RenderFallingBlockEntityNT;
 import com.hbm.render.entity.item.RenderMovingItem;
+import com.hbm.render.entity.item.RenderParachuteCrate;
 import com.hbm.render.entity.item.RenderMovingPackage;
 import com.hbm.render.entity.item.RenderTNTPrimedBase;
 import com.hbm.render.entity.mob.CreeperNuclearRenderer;
@@ -379,6 +380,7 @@ public class ClientProxy extends ServerProxy {
         EntityRenderers.register(NtmEntityTypes.SHRAPNEL.get(), RenderShrapnel::new);
         EntityRenderers.register(NtmEntityTypes.BOXCAR.get(), RenderBoxcar::new);
         EntityRenderers.register(NtmEntityTypes.DUCHESS_GAMBIT.get(), RenderDuchessGambit::new);
+        EntityRenderers.register(NtmEntityTypes.PARACHUTE_CRATE.get(), RenderParachuteCrate::new);
         /* Die Granate zeigt ihr Gegenstandsbild -- siehe GrenadeUniversal.getItem(). */
         EntityRenderers.register(NtmEntityTypes.GRENADE_UNIVERSAL.get(), ThrownItemRenderer::new);
         EntityRenderers.register(NtmEntityTypes.SAWBLADE.get(), RenderSawblade::new);
