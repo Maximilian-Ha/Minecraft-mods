@@ -4298,22 +4298,23 @@ public class NtmRecipeProvider extends RecipeProvider {
      * Die Waffenbauplaene.
      *
      * Wortgetreu aus WeaponRecipes des Originals, in der Reihenfolge des Originals. Von den
-     * 46 Bauplaenen dort bleiben hier 31 uebrig; der Rest faellt aus zwei gemessenen Gruenden
+     * 46 Bauplaenen dort bleiben hier 32 uebrig; der Rest faellt aus zwei gemessenen Gruenden
      * weg:
      *
      * ES GIBT DIE WAFFE NICHT: Stinger, Chemiewerfer, Quadro, LAG, Raketenwerfer,
-     * Teslakanone, Laserpistole und Pew Pew, Fat Man, Tau, Lasergewehr, Ladungswerfer,
-     * Bohrer und die beiden Panzerruestungswaffen. Sie sind im Port nicht angelegt; ein
-     * Bauplan auf ein nicht vorhandenes Erzeugnis waere kein Rezept.
+     * Teslakanone, Laserpistole und Pew Pew, Fat Man, Tau, Lasergewehr, Ladungswerfer
+     * und die beiden Panzerruestungswaffen. Sie sind im Port nicht angelegt; ein Bauplan
+     * auf ein nicht vorhandenes Erzeugnis waere kein Rezept.
      *
      * ES GIBT DIE ZUTAT NICHT: gun_double_barrel_sacred_dragon braucht item_secret in der
      * Ausfuehrung SELENIUM_STEEL. Die ganze Familie der Geheimstuecke fehlt im Port; die
      * Waffe selbst gibt es.
      *
-     * NICHT UEBERNOMMEN, WEIL SIE ZU EINER NICHT PORTIERTEN WAFFE GEHOEREN: die Aufsaetze
-     * LAS_SHOTGUN, LAS_CAPACITOR und LAS_AUTO (Lasergewehr), DRILL_*, ENGINE_*, MAGNET,
-     * SIFTER und CANISTERS (Bohrer). Ihre Zutaten waeren zum Teil da, aber es gaebe im Port
-     * keine Waffe, an die sie passen.
+     * NICHT UEBERNOMMEN, WEIL DER AUFSATZ SELBST FEHLT: LAS_SHOTGUN, LAS_CAPACITOR,
+     * LAS_AUTO, DRILL_*, ENGINE_*, MAGNET, SIFTER und CANISTERS. Sie stehen zwar in der
+     * Aufzaehlung ModSpecial, sind aber nicht im XWeaponModManager angemeldet -- ein
+     * solcher Aufsatz liesse sich bauen und anbringen und taete nichts. Beim Lasergewehr
+     * fehlt ausserdem die Waffe; beim Bohrer nicht mehr, seit Runde 186.
      */
     private void gunRecipes(RecipeOutput recipeOutput) {
 
@@ -4411,6 +4412,21 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .define('S', stock(Mats.MAT_WOOD))
                 .define('G', grip(Mats.MAT_WOOD))
                 .unlockedBy("has_mechanism", has(NtmItems.PART_MECHANISM.get()))
+                .save(recipeOutput);
+
+        /*
+         * Der Bergbaubohrer. Er steht als einzige Waffe NICHT auf Waffenbauteilen, sondern
+         * auf Maschinenteilen -- Gunmetal, Gummi, Titan, ein Stahlblock und ein
+         * Selenkolben. Das Original nennt ANY_RUBBER, also Gummi oder Latex; im Port gibt
+         * es nur Gummi.
+         */
+        gun(NtmItems.GUN_DRILL, " GL", "IBP", " GL")
+                .define('G', NtmItems.INGOT_GUNMETAL.get())
+                .define('L', NtmItems.INGOT_RUBBER.get())
+                .define('I', NtmItems.INGOT_TITANIUM.get())
+                .define('B', NtmBlocks.BLOCK_STEEL.get())
+                .define('P', NtmItems.PISTON_SELENIUM.get())
+                .unlockedBy("has_piston", has(NtmItems.PISTON_SELENIUM.get()))
                 .save(recipeOutput);
 
         gun(NtmItems.GUN_FLAMER, " MG", "BBR", " GM")

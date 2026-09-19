@@ -8325,3 +8325,40 @@ stehengelassen wurde.
 
 Alle 34 Tore grün.
 
+## Runde 186 — Der Bohrer, und drei Aufsätze, die nichts taten
+
+### Ein Werkzeug, gebaut wie eine Waffe
+
+`XFactoryDrill` ist die vierte der sechs fehlenden Waffenfabriken. Der Bohrer verschießt
+nichts: sein „Schuss" ist ein Griff ins Leere vor dem Spieler. Trifft er ein Wesen, macht er
+Schaden; trifft er einen Block, bricht er ihn und die sechsundzwanzig Nachbarn heraus — außer
+man schleicht. Sein Magazin ist ein Kraftstofftank, gefüllt wird an der Zapfsäule.
+
+**Die 1.21-Frage, an der die Runde beim ersten Anlauf hängengeblieben war:** `getHarvestLevel`
+und `canHarvestBlock` sind keine Item-Methoden mehr. Die Entsprechungen sind
+`Item.isCorrectToolForDrops` (der Bohrer gibt immer wahr zurück, wie im Original) und, für das
+Brechen selbst, `ServerPlayerGameMode.destroyBlock` — so greifen Beute, Werkzeugverschleiß und
+Schutzbereiche genauso wie bei einer Spitzhacke.
+
+Die Bruchwolke verschickt das Original in zwei verschiedenen Paketen. In 1.21 verschickt
+`destroyBlock` das Ereignis 2001 schon an alle **außer** den Brechenden; ihm wird es hier
+einzeln nachgereicht. Ein Paket statt zweier, dasselbe Bild.
+
+### Und ein Fehler aus Runde 182
+
+Die Aufsatzrunde hat zehn Sonderaufsätze nachgereicht. Drei davon — Schnellader, Würgebohrung,
+Doppelmagazin — **stehen nicht im `XWeaponModManager`**. Ein Aufsatz ohne Eintrag dort lässt
+sich bauen, lässt sich anbringen und tut nichts. Drei Baupläne für drei Attrappen.
+
+Nachgereicht: `WeaponModLiberatorSpeedloader` (tauscht beim Liberator das Einzelnachladen gegen
+einen Wechsel am Stück, samt eigener Bewegung), `WeaponModChoke` (halbiert die Streuung der
+Schrotladung) und `WeaponModStackMag` (anderthalbfache Kapazität).
+
+Damit stimmt auch die Begründungsliste im Quelltext wieder: die übrigen nicht übernommenen
+Aufsätze fehlen **nicht**, weil die Waffe fehlt — sondern weil der Aufsatz selbst nicht
+angemeldet ist. Beim Bohrer war der alte Grund seit dieser Runde ohnehin falsch.
+
+**32 von 46 Bauplänen.**
+
+Alle 34 Tore grün.
+

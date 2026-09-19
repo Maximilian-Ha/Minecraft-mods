@@ -130,6 +130,20 @@ public class XWeaponModManager {
                 .addMod(NtmItems.GUN_G3.get(), new WeaponModPolymerFurniture(ID_FURNITURE_BLACK));
 
         /* Die Drossel: halbe Schussfolge, dafuer keine Streuung mehr. */
+        /*
+         * Runde 186: die drei Aufsaetze, deren Bauplaene in Runde 182 nachgereicht wurden,
+         * ohne dass es sie hier gab. Ein Aufsatz ohne Eintrag in dieser Liste laesst sich
+         * bauen und anbringen, tut aber nichts -- das war ein Fehler dieser Runde.
+         */
+        new WeaponModDefinition(ModSpecial.SPEEDLOADER)
+                .addMod(NtmItems.GUN_LIBERATOR.get(), new WeaponModLiberatorSpeedloader(200));
+        new WeaponModDefinition(ModSpecial.CHOKE)
+                .addMod(new Item[] { NtmItems.GUN_PEPPERBOX.get(), NtmItems.GUN_MARESLEG.get(), NtmItems.GUN_DOUBLE_BARREL.get(),
+                        NtmItems.GUN_LIBERATOR.get(), NtmItems.GUN_SPAS12.get(), NtmItems.GUN_AUTOSHOTGUN_SEXY.get() }, new WeaponModChoke(210));
+        new WeaponModDefinition(ModSpecial.STACK_MAG)
+                .addMod(new Item[] { NtmItems.GUN_GREASEGUN.get(), NtmItems.GUN_UZI.get(), NtmItems.GUN_UZI_AKIMBO.get(),
+                        NtmItems.GUN_ABERRATOR.get(), NtmItems.GUN_ABERRATOR_EOTT.get() }, new WeaponModStackMag(214));
+
         new WeaponModDefinition(ModSpecial.SLOWDOWN)
                 .addMod(new Item[] { NtmItems.GUN_MINIGUN.get(), NtmItems.GUN_MINIGUN_DUAL.get() }, new WeaponModSlowdown(207));
 

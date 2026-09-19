@@ -12,6 +12,7 @@ import com.hbm.particle.helper.CasingCreator;
 import com.hbm.registry.NtmSoundEvents;
 import com.hbm.sound.AudioWrapper;
 import com.hbm.render.anim.AnimationEnums.GunAnimation;
+import com.hbm.render.anim.HbmAnimations;
 import com.hbm.util.EntityDamageUtil;
 import com.hbm.util.SoundUtils;
 import net.minecraft.core.BlockPos;
@@ -1542,6 +1543,60 @@ public class Orchestras {
 
         GunAnimation type = GunBaseNTItem.getLastAnim(stack, ctx.configIndex);
         int timer = GunBaseNTItem.getAnimTimer(stack, ctx.configIndex);
+
+        if(type == GunAnimation.RELOAD) {
+            if(timer == 15) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_LATCH_OPEN.get(), entity.getSoundSource());
+            if(timer == 35) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_IMPACT.get(), entity.getSoundSource(), 0.5F, 1F);
+            if(timer == 60) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_CLOSE.get(), entity.getSoundSource(), 1F, 0.75F);
+            if(timer == 70) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_CANISTER_INSERT.get(), entity.getSoundSource());
+            if(timer == 85) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_VALVE.get(), entity.getSoundSource());
+        }
+    };
+
+    /**
+     * Der Bohrer. Sein Klang haengt nicht an einer Animationsstufe, sondern am Kanal SPEED der
+     * laufenden Bewegung: solange der Bohrer dreht, laeuft der Motor, und Lautstaerke wie
+     * Tonhoehe folgen der Drehzahl.
+     *
+     * DAS ABSTELLEN IST BEWUSST NICHT IMPLEMENTIERT, wie im Original. Der Ton haelt sich ueber
+     * keepAlive(25) selbst am Leben und verstummt von allein; ein ausdrueckliches stopSound an
+     * dieser Stelle liess ihn im Original stottern.
+     *
+     * NICHT UEBERNOMMEN: die Umschaltung auf den Turbinenklang, wenn ein Elektromotor
+     * eingebaut ist. Den Aufsatz ENGINE_ELECTRIC gibt es im Port nicht.
+     */
+    public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_DRILL = (stack, ctx) -> {
+
+        LivingEntity entity = ctx.entity;
+        Level level = entity.level;
+        GunAnimation type = GunBaseNTItem.getLastAnim(stack, ctx.configIndex);
+        int timer = GunBaseNTItem.getAnimTimer(stack, ctx.configIndex);
+
+        if(level.isClientSide) {
+
+            float speed = HbmAnimations.getRelevantTransformation("SPEED")[0];
+            AudioWrapper laufend = GunBaseNTItem.loopedSounds.get(entity);
+
+            if(speed > 0F) {
+                if(laufend == null || !laufend.isPlaying()) {
+                    AudioWrapper ton = AudioWrapper.getLoopedSound(NtmSoundEvents.ENGINE_LOOP.get(), entity.getSoundSource(),
+                            (float) entity.getX(), (float) entity.getY(), (float) entity.getZ(), speed, 15F, speed, 25);
+                    GunBaseNTItem.loopedSounds.put(entity, ton);
+                    ton.startSound();
+                    ton.attachTo(entity);
+                } else {
+                    laufend.keepAlive();
+                    laufend.updateVolume(speed);
+                    laufend.updatePitch(speed);
+                }
+            }
+
+            if(type != GunAnimation.CYCLE && type != GunAnimation.CYCLE_DRY && laufend != null && laufend.isPlaying()) {
+                laufend.stopSound();
+            }
+
+            return;
+        }
 
         if(type == GunAnimation.RELOAD) {
             if(timer == 15) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_LATCH_OPEN.get(), entity.getSoundSource());

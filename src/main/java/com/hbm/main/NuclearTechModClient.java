@@ -87,6 +87,12 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.world.phys.AABB;
+import com.hbm.items.NtmItems;
+import com.hbm.items.weapon.sedna.factory.XFactoryDrill;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.BlockPos;
@@ -559,6 +565,22 @@ public class NuclearTechModClient {
         BlockHitResult bhr = event.getTarget();
 
         if (bhr.getType() == Type.BLOCK) {
+
+            /*
+             * Der Bohrer zeichnet seinen eigenen Umriss: er bricht nicht einen Block, sondern
+             * einen Wuerfel von Bloecken, und der Spieler soll vorher sehen, wieviel das ist.
+             * Wer schleicht, bricht nur den einen -- dann bleibt der Umriss der gewoehnliche.
+             */
+            Player spieler = Minecraft.getInstance().player;
+            if (spieler != null && spieler.getMainHandItem().getItem() == NtmItems.GUN_DRILL.get() && !spieler.isShiftKeyDown()) {
+                int umkreis = XFactoryDrill.getModdableAoE(spieler.getMainHandItem(), 1);
+                if (umkreis > 0) {
+                    drawDrillHighlight(event, bhr.getBlockPos(), umkreis);
+                    event.setCanceled(true);
+                    return;
+                }
+            }
+
             Block b = level.getBlockState(bhr.getBlockPos()).getBlock();
             if (b instanceof ICustomBlockHighlight cus) {
                 if (cus.shouldDrawHighlight(level, bhr.getBlockPos())) {
@@ -567,6 +589,24 @@ public class NuclearTechModClient {
                 }
             }
         }
+    }
+
+    /** Der getroffene Block hell, der Wuerfel um ihn herum dunkelrot -- wie im Original. */
+    private static void drawDrillHighlight(RenderHighlightEvent.Block event, BlockPos pos, int umkreis) {
+
+        Vec3 kamera = event.getCamera().getPosition();
+        float exp = 0.002F;
+
+        PoseStack poseStack = event.getPoseStack();
+        VertexConsumer vertexConsumer = event.getMultiBufferSource().getBuffer(RenderType.lines());
+
+        AABB einer = new AABB(0, 0, 0, 1, 1, 1).inflate(exp)
+                .move(pos.getX() - kamera.x, pos.getY() - kamera.y, pos.getZ() - kamera.z);
+        LevelRenderer.renderLineBox(poseStack, vertexConsumer, einer, 1.0F, 1.0F, 1.0F, 0.4F);
+
+        AABB wuerfel = new AABB(-umkreis, -umkreis, -umkreis, 1 + umkreis, 1 + umkreis, 1 + umkreis).inflate(exp)
+                .move(pos.getX() - kamera.x, pos.getY() - kamera.y, pos.getZ() - kamera.z);
+        LevelRenderer.renderLineBox(poseStack, vertexConsumer, wuerfel, 0.5F, 0.0F, 0.0F, 0.4F);
     }
     @SubscribeEvent
     public static void onOpenGUI(ScreenEvent.Opening event) {
