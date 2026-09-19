@@ -1458,6 +1458,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.RADIO_TORCH_SENDER);
                         output.accept(NtmBlocks.RADIO_TORCH_RECEIVER);
                         output.accept(NtmBlocks.RADIO_TORCH_COUNTER);
+                        output.accept(NtmBlocks.RADIO_TORCH_READER);
                         output.accept(NtmBlocks.MACHINE_CHEMICAL_FACTORY);
                         output.accept(NtmBlocks.MACHINE_ASSEMBLY_FACTORY);
                         output.accept(NtmBlocks.MACHINE_CHUNGUS);

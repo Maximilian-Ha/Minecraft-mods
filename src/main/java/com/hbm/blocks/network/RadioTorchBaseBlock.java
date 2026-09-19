@@ -87,10 +87,16 @@ public abstract class RadioTorchBaseBlock extends Block implements EntityBlock, 
         return canAttachTo(level, pos, state.getValue(FACING));
     }
 
+    /*
+     * Geprueft wird ueber canSurvive und nicht ueber canAttachTo: fuer die drei Fackeln, die
+     * an jeder festen Wand halten, ist das dasselbe, aber der Leser braucht hinter sich eine
+     * Maschine, die Werte hergibt, und darf abfallen, sobald sie verschwindet. Im Original
+     * ruft onNeighborBlockChange genauso das ueberschreibbare canBlockStay.
+     */
     @Override
     protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         Direction facing = state.getValue(FACING);
-        if(direction == facing.getOpposite() && !canAttachTo(level, pos, facing)) return Blocks.AIR.defaultBlockState();
+        if(direction == facing.getOpposite() && !this.canSurvive(state, level, pos)) return Blocks.AIR.defaultBlockState();
         return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
     }
 

@@ -1955,6 +1955,47 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_circuit_vacuum_tube", has(NtmItems.CIRCUIT_VACUUM_TUBE.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "radiorec"));
 
+        /*
+         * Die vier Funkfackeln. Sie standen bisher nur im Kreativreiter -- der Fernschreiber
+         * und die RBMK-Pulte brauchen sie als Zutat, waren also nicht herstellbar. Muster aus
+         * CraftingManager Z. 214, 215, 217 und 218; alle vier geben vier Stueck.
+         *
+         * NETHERQUARTZ.gem() ist der Netherquarz, IRON.ingot() der Eisenbarren,
+         * EnumCircuitType.VACUUM_TUBE die Roehrenschaltung des Ports.
+         */
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, NtmBlocks.RADIO_TORCH_SENDER.get(), 4)
+                .pattern("G").pattern("R").pattern("I")
+                .define('G', Items.GLOWSTONE_DUST)
+                .define('R', Items.REDSTONE_TORCH)
+                .define('I', Items.QUARTZ)
+                .unlockedBy("has_redstone_torch", has(Items.REDSTONE_TORCH))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "radio_torch_sender"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, NtmBlocks.RADIO_TORCH_RECEIVER.get(), 4)
+                .pattern("G").pattern("R").pattern("I")
+                .define('G', Items.GLOWSTONE_DUST)
+                .define('R', Items.REDSTONE_TORCH)
+                .define('I', Tags.Items.INGOTS_IRON)
+                .unlockedBy("has_redstone_torch", has(Items.REDSTONE_TORCH))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "radio_torch_receiver"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, NtmBlocks.RADIO_TORCH_COUNTER.get(), 4)
+                .pattern("G").pattern("R").pattern("I")
+                .define('G', Items.GLOWSTONE_DUST)
+                .define('R', Items.REDSTONE_TORCH)
+                .define('I', NtmItems.CIRCUIT_VACUUM_TUBE.get())
+                .unlockedBy("has_circuit_vacuum_tube", has(NtmItems.CIRCUIT_VACUUM_TUBE.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "radio_torch_counter"));
+
+        // Original CraftingManager Z. 218: " G " / "IRI".
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, NtmBlocks.RADIO_TORCH_READER.get(), 4)
+                .pattern(" G ").pattern("IRI")
+                .define('G', Items.GLOWSTONE_DUST)
+                .define('R', Items.REDSTONE_TORCH)
+                .define('I', NtmItems.CIRCUIT_VACUUM_TUBE.get())
+                .unlockedBy("has_circuit_vacuum_tube", has(NtmItems.CIRCUIT_VACUUM_TUBE.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "radio_torch_reader"));
+
         // Original CraftingManager Z. 220: "SCR" / "W#W" / "WWW".
         // EnumCircuitType.ANALOG ist im Port die Analogplatine, wie schon bei den RBMK-Pulten.
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.RADIO_TELEX.get(), 2)

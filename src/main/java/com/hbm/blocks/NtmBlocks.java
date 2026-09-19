@@ -1041,6 +1041,10 @@ public class NtmBlocks {
     /* Der Zaehler: dieselbe Fackel, aber mit drei Musterfaechern und einem Menue.
      * Werte wie bei Sender und Empfaenger. */
     public static final DeferredBlock<Block> RADIO_TORCH_COUNTER = register("radio_torch_counter", () -> new RadioTorchCounterBlock(BlockBehaviour.Properties.of().noOcclusion().strength(1.0F, 10.0F).sound(ModSoundTypes.PIPE).mapColor(MapColor.METAL)));
+    /* Der Leser: dieselbe Fackel, aber sie fragt die Maschine hinter sich nach benannten
+     * Werten. Haerte wie bei den drei anderen Funkfackeln des Ports -- das Original setzt fuer
+     * alle vier 0.1F, der Port ist hier schon bei Sender und Empfaenger davon abgewichen. */
+    public static final DeferredBlock<Block> RADIO_TORCH_READER = register("radio_torch_reader", () -> new RadioTorchReaderBlock(BlockBehaviour.Properties.of().noOcclusion().strength(1.0F, 10.0F).sound(ModSoundTypes.PIPE).mapColor(MapColor.METAL)));
 
     public static final DeferredBlock<Block> MACHINE_BATTERY_SOCKET = register("machine_battery_socket", () -> new MachineBatterySocketBlock(BlockBehaviour.Properties.of().noOcclusion().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL)));
     public static final DeferredBlock<Block> MACHINE_BATTERY_REDD = register("machine_battery_redd", () -> new MachineBatteryREDDBlock(BlockBehaviour.Properties.of().noOcclusion().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL)));

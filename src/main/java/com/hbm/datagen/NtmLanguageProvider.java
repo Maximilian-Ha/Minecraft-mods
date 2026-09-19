@@ -2371,6 +2371,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.LAMP_DEMON, DESC, "Irradiates everything in sight.$Walls help, but not much.");
         this.add(NtmBlocks.RADIO_TORCH_COUNTER, "Redstone-over-Radio Item Counter");
         this.add(NtmBlocks.RADIO_TORCH_COUNTER, DESC, "Counts matching items in the inventory$behind it and broadcasts the number.");
+        this.add(NtmBlocks.RADIO_TORCH_READER, "Redstone-over-Radio Reader");
+        this.add(NtmBlocks.RADIO_TORCH_READER, DESC, "Reads values from connected blocks,$then sends them over the specified frequency");
         this.add(NtmBlocks.TESLA, "Tesla Coil");
         this.add(NtmBlocks.TESLA, DESC, "Zaps every living thing in range.$Wear a full set of metal armor$to stay out of the circuit.");
         this.add(NtmBlocks.SKELETON_HOLDER, "Oh, that's a dead guy");
@@ -3252,6 +3254,20 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("container.furnaceIron", "Iron Furnace");
         this.add("container.furnaceBrick", "Brick Furnace");
         this.add("container.rttyCounter", "Redstone-over-Radio Item Counter");
+        this.add("container.rttyReader", "Redstone-over-Radio Reader");
+        this.add("rtty.readableValues", "Readable values:");
+        /*
+         * Die vier Schluessel von RadioTorchScreen standen bisher nirgends -- Sender und
+         * Empfaenger zeigten in Titel und Hinweis den rohen Schluessel. Gefunden beim Bau des
+         * Lesers, der auf demselben Bildschirmgeruest sitzt.
+         */
+        this.add("container.rtty_sender", "Redstone-over-Radio Transmitter");
+        this.add("container.rtty_receiver", "Redstone-over-Radio Receiver");
+        this.add("container.rtty.custom", "Custom Mapping");
+        this.add("container.rtty.pass", "Redstone Passthrough");
+        this.add("container.rtty.polling", "Polling");
+        this.add("container.rtty.change", "State Change");
+        this.add("container.rtty.save", "Save Settings");
         this.add("rtty.polling", "Polling");
         this.add("rtty.stateChange", "State Change");
         this.add("rtty.saveSettings", "Save Settings");

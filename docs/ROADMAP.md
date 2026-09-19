@@ -5688,3 +5688,37 @@ ein Muster oder einen Kanal ändert) sitzt in der Blockentität, wo sie hingehö
 
 Die zwei verbleibenden Funkfackeln des Originals — `radio_torch_logic` und
 `radio_torch_reader` — stehen weiter offen; sie bringen je eigene Oberflächen mit.
+
+### Der Werteleser — und vier Rezepte, die nie geschrieben wurden
+
+`radio_torch_reader` ist die Gegenrichtung des Zählers. Statt Gegenstände zu zählen, fragt
+diese Fackel die Maschine hinter sich nach **benannten Werten** und funkt jeden auf einen
+eigenen Kanal — acht Zeilen aus Kanal und Wertname. Das Gegenstück dazu steht seit Runde 112
+im Port: `IRORValueProvider` mit `provideRORValue(String)`. Acht Blockentitäten geben heute
+Werte her, darunter zwei aus den letzten Runden — das Messrohr (`deltatick`, `deltasecond`)
+und das Zählventil (`value`, `state`). Bis jetzt gab es niemanden, der sie liest.
+
+Die Oberfläche kennt das Problem, dass die Namen nirgends stehen: fährt man über das Feld
+links oben, listet sie auf, was die Maschine dahinter überhaupt hergibt. Das kommt aus
+`getFunctionInfo()`, und das Original macht es genauso.
+
+Eine Kleinigkeit an der Basisklasse war nötig. `RadioTorchBaseBlock.updateShape` prüfte beim
+Nachbarwechsel `canAttachTo` **direkt** statt über `canSurvive` — für die drei Fackeln, die an
+jeder festen Wand halten, ist das dasselbe, aber der Leser braucht hinter sich eine Maschine
+und muss abfallen, sobald sie verschwindet. Seine Überschreibung wäre ins Leere gelaufen. Im
+Original ruft `onNeighborBlockChange` genauso das überschreibbare `canBlockStay`.
+
+Beim Nachsehen, wie die Fackel zu bauen ist, fiel dann etwas Größeres auf: **keine der vier
+Funkfackeln hatte ein Rezept.** Sie standen nur im Kreativreiter — und damit waren auch der
+Fernschreiber und die sieben RBMK-Pulte nicht herstellbar, die sie als Zutat brauchen. Alle
+vier sind jetzt nachgereicht (CraftingManager Z. 214, 215, 217, 218).
+
+Dasselbe Nachsehen brachte sieben fehlende Übersetzungsschlüssel ans Licht: `RadioTorchScreen`
+verlangt `container.rtty_sender`, `container.rtty_receiver` und fünf Hinweise, die nie jemand
+eingetragen hat. Sender und Empfänger zeigten im Titel und in jedem Hinweis den rohen
+Schlüssel. Das Sprach-Tor sieht so etwas nicht — es prüft Dopplungen und fehlende Block- und
+Gegenstandsnamen, aber nicht, ob ein frei geschriebener Schlüssel auch eine Zeile hat.
+
+Nicht übernommen: die sieben OpenComputers-Rückrufe, wie schon beim Zählventil.
+
+Stand danach: fehlende Blockentitäten 119, Bauwerkslücke unverändert 14.
