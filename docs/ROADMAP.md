@@ -7352,3 +7352,67 @@ Werkzeuge, mit denen das Original seine Bauwerke zusammensetzt; sie sinnvoll zu 
 heißt, die Bauwerksgenerierung selbst zu portieren. Das ist keine Runde, das ist eine Stufe.
 
 Alle 31 Tore grün.
+
+## Berichtigung: ein Parametertyp, und zwei neue Tore
+
+Der Beutesockel fiel in CI durch, mit genau einem Fehler:
+
+```
+LootDecoBlock.java:60: error: method does not override or implement a method from a supertype
+```
+
+`getShape` nimmt in 1.21 ein `BlockGetter`, ich hatte `LevelReader` geschrieben. Alle
+einunddreißig Tore waren grün, und keines hat es gesehen — `syntax-check` übersetzt ohne
+Minecraft-Klassenpfad, die Oberklasse fehlt, der Rumpf wird gar nicht erst geprüft.
+
+### `signature-check`, das zweiunddreißigste Tor
+
+Der Fall ist ohne Klassenpfad entscheidbar, und zwar aus dem Projekt selbst heraus: die
+richtige Signatur steht **achtundvierzigmal** im Port. Weicht eine einzige Stelle ab, ist sie
+es, die falsch ist.
+
+Vier Bedingungen halten die Fehlalarme heraus, und jede hat sich in der Messung verdient. Ohne
+sie meldete der Prototyp vier Funde, alle falsch:
+
+* mindestens fünf Belege für den Namen und mindestens neunzig Prozent auf einer Signatur —
+  sonst ist „die Mehrheit" nichts wert;
+* **gleiche Stelligkeit**: eine andere Anzahl Parameter ist eine echte Überladung
+  (`getMaxStackSize()` neben `getMaxStackSize(ItemStack)`), kein Tippfehler;
+* **genau ein abweichender Typ**: zwei und mehr heißt, es ist eine andere Methode;
+* Paketpräfixe fallen vor dem Vergleich weg, auch innerhalb spitzer Klammern — sonst gilt
+  `StateDefinition.Builder<net.minecraft…Block, BlockState>` als eigene Signatur, und
+  `MachineShredderBlock` wurde genau dafür gemeldet.
+
+Über den ganzen Baum: null Funde. Mit `LevelReader` wieder eingesetzt: genau diese Zeile.
+
+**Die Grenze, die bleibt:** ein Name, den das Projekt nur einmal überschreibt, hat keine
+Mehrheit, gegen die er sich messen ließe. Dort hilft weiter nur CI.
+
+### `metatex-check`, das dreiunddreißigste Tor
+
+In derselben Runde eine Lücke geschlossen, die seit der Granatenrunde offen notiert war:
+`EnumMultiItem` legt beim Datenerzeugen je Aufzählungswert ein eigenes Modell an, dessen
+`layer0` auf `item/<Registername>.<wert>` zeigt. **Diese Modelle stehen nirgends im Baum** — sie
+entstehen erst beim Lauf. `asset-check` geht die Modell-JSONs auf der Platte durch und sieht
+sie deshalb nicht, `model-check` ebenso wenig. Fehlt eines der Bilder, zeigt der Gegenstand im
+Spiel das schwarz-violette Ersatzmuster, und kein Tor sagt etwas.
+
+Das Tor liest aus jeder Klasse mit `registerItemModel` den `layer0`-Ausdruck und führt ihn auf
+drei Bausteine zurück: Zeichenketten, `modelLocation.getPath()` und
+`num.name().toLowerCase(…)`. Was sich darauf zurückführen lässt, wird über alle Werte der
+Aufzählung geprüft. Stand: 33 Registrierungen, 410 Bilder, null fehlend.
+
+**Zwei Dinge, die beim Bauen des Tors auffielen:**
+
+`ConserveItem` überschreibt `registerItemModel` und benennt seine Bilder `canned_<wert>` statt
+`canned_conserve.<wert>`. Ein Tor, das die Überschreibung übersieht, hätte siebenundzwanzig
+Fehlalarme gemeldet — und wer sie dann „wegräumt", macht es kaputt.
+
+Umgekehrt war `AmmoContainerItem` zuerst **unsichtbar**: sein `super`-Aufruf reicht
+`properties.stacksTo(1)` durch, und mein Ausdruck verlangte dort einen bloßen Namen. Aufgefallen
+ist das nur, weil ich die Gegenprobe gemacht habe — ein Bild weggenommen, und das Tor schwieg.
+Deshalb zählt es jetzt selbst auf, wo es **nicht** hinschaut: drei Klassen bauen ihren Bildnamen
+aus Feldern oder Rechnungen und stehen mit Namen in der Ausgabe. Ein Tor, das stillschweigend
+woanders hinschaut, ist schlimmer als keins.
+
+Alle 33 Tore grün.
