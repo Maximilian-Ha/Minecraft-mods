@@ -16,19 +16,16 @@ import net.minecraft.world.item.ItemStack;
  * entscheidet, welche gezogen werden -- die blaue holt fuenfmal Nachschub, die gruene ein bis
  * zwei Waffen und sechsmal Munition.
  *
- * WAS NOCH FEHLT, und zwar aus dem Vorrat des Originals, nicht aus Nachlaessigkeit: EIN
- * Eintrag haengt an einem Gegenstand, den der Port noch nicht hat.
+ * DIESE LISTE IST VOLLSTAENDIG. Alle sieben Eintraege des Originals stehen drin.
  *
- *   Waffen: gun_n_i_4_n_i -- nachgemessen, und zwar genauer als beim ersten Mal: NICHT die
- *           Fabrik XFactoryAccelerator fehlt, sondern die geworfene Muenze. Die ganze Waffe
- *           besteht daraus, dass ihr Strahl an einer Muenze in der Luft abknickt und das
- *           naechste Ziel sucht. Dafuer braucht es die Muenzentitaet samt Zeichner und den
- *           Knick im Strahl; der Strahl selbst laeuft seit Runde 188.
+ * BILANZ, und sie ist der Punkt: die Liste fing mit sieben angeblich blockierten Eintraegen
+ * an. FUENF davon waren ein Irrtum -- radaway lag nur als Trankeffekt vor, med_bag hatte alle
+ * Zutaten, pill_iodine und definitelyfood sind gewoehnliche Nahrung, und der Kanister
+ * brauchte nur das Muster des Fasses. ZWEI waren wirklich Arbeit: der Henry eine Runde, die
+ * NI4NI zweieinhalb -- sie hat unterwegs ans Licht gebracht, dass das Strahlgeschoss des
+ * Ports ueberhaupt nie funktioniert hat.
  *
- * BILANZ DIESER LISTE, die mit sieben fehlenden Eintraegen anfing: FUENF davon waren ein
- * Irrtum -- radaway lag nur als Trankeffekt vor, med_bag hatte alle Zutaten, pill_iodine und
- * definitelyfood sind gewoehnliche Nahrung, und der Kanister brauchte nur das Muster des
- * Fasses. Einer, der Henry, war wirklich eine Runde Arbeit. Bleibt einer.
+ * Keiner der sieben war das, wofuer ich ihn beim ersten Aufschreiben gehalten habe.
  */
 public class ItemPoolsC130 {
 
@@ -63,7 +60,8 @@ public class ItemPoolsC130 {
                 .add(NtmItems.GUN_CARBINE.get(), 1, 1, 50)
                 .add(NtmItems.GUN_HEAVY_REVOLVER.get(), 1, 1, 50)
                 .add(NtmItems.GUN_PANZERSCHRECK.get(), 1, 1, 20)
-                .add(NtmItems.GUN_DOUBLE_BARREL.get(), 1, 1, 10);
+                .add(NtmItems.GUN_DOUBLE_BARREL.get(), 1, 1, 10)
+                .add(NtmItems.GUN_N_I_4_N_I.get(), 1, 1, 1);
 
         /* Die Munition liegt im Port als Spielart EINES Gegenstands, deshalb hier ueber
          * Metadatenstapel statt ueber den blossen Gegenstand. */

@@ -1283,6 +1283,7 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.entityItem(NtmItems.GUN_AUTOSHOTGUN_SHREDDER.get(), true);
         this.entityItem(NtmItems.GUN_AUTOSHOTGUN_SEXY.get(), true);
         this.entityItem(NtmItems.GUN_HANGMAN.get(), true);
+        this.entityItem(NtmItems.GUN_N_I_4_N_I.get(), true);
         this.entityItem(NtmItems.GUN_HENRY.get(), true);
         this.entityItem(NtmItems.GUN_HENRY_LINCOLN.get(), true);
         this.entityItem(NtmItems.GUN_HEAVY_REVOLVER.get(), true);

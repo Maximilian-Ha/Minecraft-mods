@@ -136,6 +136,12 @@ public class NtmSoundDefinitionsProvider extends SoundDefinitionsProvider {
         this.add(NtmSoundEvents.GUN_RIFLE_FIRE, SoundDefinition.definition()
                 .with(sound(NuclearTechMod.withDefaultNamespace("weapon/fire/rifle")))
         );
+        this.add(NtmSoundEvents.GUN_COIL_FIRE, SoundDefinition.definition()
+                .with(sound(NuclearTechMod.withDefaultNamespace("weapon/fire/coilgun")))
+        );
+        this.add(NtmSoundEvents.GUN_COIL_RELOAD, SoundDefinition.definition()
+                .with(sound(NuclearTechMod.withDefaultNamespace("weapon/reload/coilgun")))
+        );
         this.add(NtmSoundEvents.GUN_HEAVY_RIFLE_FIRE, SoundDefinition.definition()
                 .with(sound(NuclearTechMod.withDefaultNamespace("weapon/fire/rifle_heavy")))
         );

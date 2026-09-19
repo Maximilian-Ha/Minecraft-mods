@@ -8060,3 +8060,57 @@ sie liegt der Strahl quer.
 Riss in der Luft und ihre Schwarzlicht-Variante, der Schredder denselben Riss in seinem Grün.
 
 Alle 34 Tore grün.
+
+## Die NI4NI — und damit ist die C-130-Liste zu
+
+Der letzte Eintrag, und die Waffe, deren Nachmessen die beiden Strahlrunden ausgelöst hat.
+
+Sie hat unendlich Munition, keine Haltbarkeit und lädt sich **selbst mit Münzen**: alle achtzig
+Ticks wächst eine nach, bis vier daliegen, und der Ton beim Nachwachsen steigt mit dem Vorrat.
+Der Zweitdruck wirft eine in die Luft — aus Augenhöhe, mit vier Fünfteln der Blickrichtung und
+einem halben Block Auftrieb, damit sie erst steigt und einen Moment lang still genug steht.
+
+Und dann knickt der Strahl an ihr ab. **Die Rangfolge des neuen Ziels ist fest**: eine andere
+Münze zuerst, dann ein Spieler, dann ein Monster, dann irgendetwas. Damit lässt sich eine Kette
+aus mehreren Münzen bauen, und genau das ist der Witz der Waffe — sie schießt um die Ecke. Der
+abgeknickte Strahl trägt ein Viertel mehr Schaden. Findet sich in fünfzig Blöcken gar nichts,
+fällt er schräg nach unten ins Leere.
+
+**Die Münze hat vor allem anderen Vorrang**, auch vor dem Durchschlagen: hinter ihr wird nicht
+mehr abgerechnet, dort endet dieser Strahl und ein neuer beginnt.
+
+### Die vier Münzen am Lauf sind die Anzeige
+
+Sie erscheinen von hinten nach vorn, eine je geladener Münze, und schlagen von grün nach gelb
+um, sobald der Vorrat über die Hälfte geht. Eine Zahl braucht die Waffe deshalb nicht — das HUD
+zeigt statt eines Munitionsstands ein Unendlichkeitszeichen.
+
+### Drei bewusste Auslassungen
+
+**Die beiden Waffenmodule** des Originals (Nickel, Dublonen), die den Vorrat auf sechs und acht
+anheben. Das Modulsystem des Ports kennt sie nicht; der Vorrat bleibt bei vier. Die Grenzen
+fünf bis acht stehen im Zeichner trotzdem schon da — sie kosten nichts und stimmen sofort,
+sobald die Module kommen.
+
+**Die drei frei einstellbaren Farben.** Sie hängen an `ICustomizable` und einem Befehl, der die
+Hexwerte entgegennimmt; beides gibt es im Port nicht, und damit auch die Graustufentextur
+nicht.
+
+**Die beiden anderen Waffen der Fabrik** — Tau-Kanone und Spulenkanone. Sie brauchen Munition,
+die der Port nicht hat, und gehören in eine eigene Runde. `XFactoryAccelerator` steht deshalb
+im Port da und enthält genau eine Waffe.
+
+### Die Bilanz der sieben
+
+Die C-130-Liste fing mit sieben angeblich blockierten Einträgen an:
+
+* **Fünf waren ein Irrtum.** `radaway` lag nur als Trankeffekt vor, `med_bag` hatte alle
+  Zutaten, `pill_iodine` und `definitelyfood` sind gewöhnliche Nahrung, und der Kanister
+  brauchte nur das Muster des Fasses.
+* **Zwei waren wirklich Arbeit.** Der Henry eine Runde, die NI4NI zweieinhalb — sie hat
+  unterwegs ans Licht gebracht, dass das Strahlgeschoss des Ports überhaupt nie funktioniert
+  hat.
+
+Keiner der sieben war das, wofür ich ihn beim ersten Aufschreiben gehalten habe.
+
+Alle 34 Tore grün.

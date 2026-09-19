@@ -10,6 +10,8 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.ClipContext;
@@ -113,9 +115,8 @@ public class BulletBeamBase extends Entity implements IEntityWithComplexSpawn {
      * JEDES Wesen auf der Strecke; ein gewoehnlicher nur das naechste. Deshalb wird im
      * ersten Fall sofort abgerechnet und im zweiten erst am Ende.
      *
-     * NICHT UEBERNOMMEN: der Knick an einer geworfenen Muenze. Er gehoert zur NI4NI, und die
-     * Muenze gibt es im Port noch nicht -- ein Zweig auf eine Entitaet, die fehlt, waere
-     * toter Code. setRotationsFromVector und schussweg stehen aber schon bereit.
+     * DER KNICK AN EINER MUENZE hat Vorrang vor allem anderen: trifft der Strahl eine
+     * geworfene Muenze, endet er dort und ein neuer beginnt -- siehe knickAnMuenze.
      */
     protected void performHitscan() {
 
@@ -139,6 +140,10 @@ public class BulletBeamBase extends Entity implements IEntityWithComplexSpawn {
             Vec3 naechsteStelle = null;
             double naechsteEntfernung = 0D;
 
+            CoinEntity muenze = null;
+            Vec3 muenzStelle = null;
+            double muenzEntfernung = 0D;
+
             AABB suchraum = this.getBoundingBox().expandTowards(this.headingX, this.headingY, this.headingZ).inflate(1.0D);
 
             for(Entity wesen : this.level.getEntities(this, suchraum)) {
@@ -149,13 +154,32 @@ public class BulletBeamBase extends Entity implements IEntityWithComplexSpawn {
 
                 double entfernung = pos.distanceTo(stelle.get());
 
+                /* Die Muenzen werden SEPARAT gesammelt, weil sie den Strahl umlenken statt
+                 * ihn zu beenden -- und weil auch ein durchschlagender Strahl an ihnen
+                 * abknickt, statt weiterzulaufen. */
+                if(wesen instanceof CoinEntity getroffene) {
+                    if(muenze == null || entfernung < muenzEntfernung) {
+                        muenze = getroffene;
+                        muenzEntfernung = entfernung;
+                        muenzStelle = stelle.get();
+                    }
+                    continue;
+                }
+
                 if(this.doesPenetrate()) {
-                    this.onImpact(new EntityHitResult(wesen, stelle.get()));
+                    /* Hinter der Muenze wird nicht mehr abgerechnet: dort endet dieser Strahl. */
+                    if(muenze == null || entfernung < muenzEntfernung) this.onImpact(new EntityHitResult(wesen, stelle.get()));
                 } else if(naechstes == null || entfernung < naechsteEntfernung) {
                     naechstes = wesen;
                     naechsteEntfernung = entfernung;
                     naechsteStelle = stelle.get();
                 }
+            }
+
+            if(muenze != null) {
+                this.beamLength = pos.distanceTo(muenzStelle);
+                this.knickAnMuenze(muenze, muenzStelle);
+                return;
             }
 
             if(!this.doesPenetrate() && naechstes != null) treffer = new EntityHitResult(naechstes, naechsteStelle);
@@ -166,6 +190,61 @@ public class BulletBeamBase extends Entity implements IEntityWithComplexSpawn {
         /* Die Laenge geht an den Zeichner, deshalb wird sie IMMER gesetzt -- auch wenn der
          * Strahl nichts getroffen hat und bis ans Ende der Reichweite laeuft. */
         this.beamLength = pos.distanceTo(treffer != null ? treffer.getLocation() : nextPos);
+    }
+
+    /**
+     * Der Knick. Die Muenze zerspringt, und von ihrer Stelle aus geht ein NEUER Strahl los --
+     * mit einem Viertel mehr Schaden, damit sich das Kunststueck lohnt.
+     *
+     * DIE RANGFOLGE DES ZIELS IST FEST: eine andere Muenze zuerst, dann ein Spieler, dann ein
+     * Monster, dann irgendetwas. Damit laesst sich eine Kette aus mehreren Muenzen bauen, und
+     * genau das ist der Witz der Waffe. Findet sich in fuenfzig Bloecken gar nichts, faellt
+     * der neue Strahl schraeg nach unten ins Leere.
+     */
+    private void knickAnMuenze(CoinEntity muenze, Vec3 stelle) {
+
+        double reichweite = 50D;
+        AABB umkreis = new AABB(stelle, stelle).inflate(reichweite);
+
+        Entity naechsteMuenze = null, naechsterSpieler = null, naechstesMonster = null, naechstesSonst = null;
+        double dMuenze = 0D, dSpieler = 0D, dMonster = 0D, dSonst = 0D;
+
+        for(Entity wesen : this.level.getEntities((Entity) null, umkreis, e -> true)) {
+            if(wesen == this.thrower || wesen == muenze || !wesen.isAlive()) continue;
+
+            double entfernung = wesen.distanceTo(muenze);
+            if(entfernung > reichweite) continue;
+
+            if(wesen instanceof CoinEntity) {
+                if(naechsteMuenze == null || entfernung < dMuenze) { dMuenze = entfernung; naechsteMuenze = wesen; }
+            } else if(wesen instanceof Player) {
+                if(naechsterSpieler == null || entfernung < dSpieler) { dSpieler = entfernung; naechsterSpieler = wesen; }
+            } else if(wesen instanceof Monster) {
+                if(naechstesMonster == null || entfernung < dMonster) { dMonster = entfernung; naechstesMonster = wesen; }
+            } else {
+                if(naechstesSonst == null || entfernung < dSonst) { dSonst = entfernung; naechstesSonst = wesen; }
+            }
+        }
+
+        Entity ziel = naechsteMuenze != null ? naechsteMuenze
+                : naechsterSpieler != null ? naechsterSpieler
+                : naechstesMonster != null ? naechstesMonster
+                : naechstesSonst;
+
+        muenze.discard();
+
+        LivingEntity urheber = muenze.getOwner() instanceof LivingEntity werfer ? werfer : this.thrower;
+        BulletBeamBase neuer = new BulletBeamBase(this.level, this.config, this.damage * 1.25F);
+        neuer.thrower = urheber;
+        neuer.setPos(stelle);
+
+        Vec3 richtung = ziel != null
+                ? new Vec3(ziel.getX() - stelle.x, (ziel.getY() + ziel.getBbHeight() / 2D) - stelle.y, ziel.getZ() - stelle.z)
+                : new Vec3(this.random.nextGaussian() * 0.5D, -1D, this.random.nextGaussian() * 0.5D);
+
+        neuer.setRotationsFromVector(richtung);
+        neuer.schussweg(REICHWEITE);
+        this.level.addFreshEntity(neuer);
     }
 
     @Override

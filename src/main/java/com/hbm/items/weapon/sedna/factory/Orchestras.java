@@ -76,6 +76,26 @@ public class Orchestras {
      * Schluss. Der Hebel schnappt dabei nur, wenn die Waffe vorher leer war -- war noch etwas
      * drin, sitzt die naechste Patrone schon im Lauf.
      */
+    /**
+     * Die Spulenkanone und die NI4NI teilen sich diese Orchestrierung. Sie ist die kuerzeste
+     * im ganzen Bausatz: ein Muendungsblitz beim Schuss, ein Ton beim Nachladen. Keine Huelse
+     * -- ein Lichtbogen wirft nichts aus.
+     */
+    public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_COILGUN = (stack, ctx) -> {
+        LivingEntity entity = ctx.entity;
+        Level level = entity.level;
+        if(!(level instanceof ServerLevel serverLevel)) return;
+        GunAnimation type = GunBaseNTItem.getLastAnim(stack, ctx.configIndex);
+        int timer = GunBaseNTItem.getAnimTimer(stack, ctx.configIndex);
+
+        if(type == GunAnimation.CYCLE) {
+            if(timer == 0) PacketDistributor.sendToPlayersNear(serverLevel, null, entity.getX(), entity.getY(), entity.getZ(), 100, new MuzzleFlashPacket(entity.getId()));
+        }
+        if(type == GunAnimation.RELOAD) {
+            if(timer == 0) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_COIL_RELOAD.get(), entity.getSoundSource(), 1F, 1F);
+        }
+    };
+
     public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_HENRY = (stack, ctx) -> {
         LivingEntity entity = ctx.entity;
         Level level = entity.level;

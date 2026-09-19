@@ -45,6 +45,8 @@ public class NtmSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_UZI_FIRE = reg("weapon.fire.uzi");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_AMAT_FIRE = reg("weapon.fire.amat");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_ASSAULT_FIRE = reg("weapon.fire.assault");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GUN_COIL_FIRE = reg("weapon.fire.coilgun");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GUN_COIL_RELOAD = reg("weapon.reload.coilgun");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_RIFLE_FIRE = reg("weapon.fire.rifle");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_HEAVY_RIFLE_FIRE = reg("weapon.fire.rifle_heavy");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_RIFLE_COCK = reg("weapon.reload.rifle_cock");

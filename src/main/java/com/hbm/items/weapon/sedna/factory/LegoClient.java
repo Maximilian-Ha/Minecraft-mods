@@ -112,6 +112,10 @@ public class LegoClient {
     public static BiConsumer<BulletBeamBase, Float> RENDER_BLACK_LIGHTNING = (strahl, partialTick) ->
             zeichneStrahl(strahl, partialTick, 0xFF3B0B4F, 0xFFBB6ACF);
 
+    /** Der Lichtbogen der NI4NI: weiss mit blauem Kern. */
+    public static BiConsumer<BulletBeamBase, Float> RENDER_NI4NI_BOLT = (strahl, partialTick) ->
+            zeichneStrahl(strahl, partialTick, 0xFF3C6BE0, 0xFFFFFFFF);
+
     /** Der Schredder: derselbe Riss, nur gruen wie sein Plasma. */
     public static BiConsumer<BulletBeamBase, Float> RENDER_SHREDDER = (strahl, partialTick) ->
             zeichneStrahl(strahl, partialTick, 0xFF1E7A1E, 0xFFBFFFBF);

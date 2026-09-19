@@ -61,6 +61,7 @@ public class GunFactory {
         XFactory10ga.init(itemRegistry);
         XFactory75Bolt.init(itemRegistry);
         XFactory35800.init(itemRegistry);
+        XFactoryAccelerator.init(itemRegistry);
         XFactory40mm.init(itemRegistry);
         XFactoryRocket.init(itemRegistry);
         XFactory12ga.init(itemRegistry);

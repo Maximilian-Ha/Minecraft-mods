@@ -5,6 +5,7 @@ import com.hbm.entity.grenade.GrenadeUniversal;
 import com.hbm.entity.projectile.Boxcar;
 import com.hbm.entity.item.ParachuteCrate;
 import com.hbm.entity.projectile.DuchessGambit;
+import com.hbm.entity.projectile.CoinEntity;
 import com.hbm.entity.projectile.Torpedo;
 import com.hbm.entity.projectile.Sawblade;
 import com.hbm.entity.effect.FalloutRain;
@@ -154,6 +155,11 @@ public class NtmEntityTypes {
     /* Der Torpedo aus der Luft. Ein Block breit, drei hoch -- ungefaehr sein Modell. */
     public static final DeferredHolder<EntityType<?>, EntityType<Torpedo>> TORPEDO = ENTITY_TYPES.register("torpedo",
             () -> EntityType.Builder.<Torpedo>of(Torpedo::new, MobCategory.MISC).noSummon().setTrackingRange(250).sized(1.0F, 3.0F).fireImmune().build("torpedo"));
+
+    /* Die Muenze der NI4NI. Einen Block gross, obwohl das Modell viel kleiner ist -- der
+     * Strahl muss sie im Flug treffen koennen, und die Trefferflaeche ist es, die zaehlt. */
+    public static final DeferredHolder<EntityType<?>, EntityType<CoinEntity>> COIN = ENTITY_TYPES.register("coin",
+            () -> EntityType.Builder.<CoinEntity>of(CoinEntity::new, MobCategory.MISC).noSummon().setTrackingRange(100).sized(1.0F, 1.0F).build("coin"));
 
     /* Das Luftschiff aus der Luft. Zehn Bloecke breit, acht hoch -- grob sein Modell. */
     public static final DeferredHolder<EntityType<?>, EntityType<DuchessGambit>> DUCHESS_GAMBIT = ENTITY_TYPES.register("duchess_gambit",

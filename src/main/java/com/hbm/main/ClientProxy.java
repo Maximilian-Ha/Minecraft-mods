@@ -374,6 +374,7 @@ public class ClientProxy extends ServerProxy {
         //projectiles
         EntityRenderers.register(NtmEntityTypes.BULLET_MK4.get(), RenderBulletMK4::new);
         EntityRenderers.register(NtmEntityTypes.BULLET_BEAM.get(), RenderBeam::new);
+        EntityRenderers.register(NtmEntityTypes.COIN.get(), RenderCoin::new);
         EntityRenderers.register(NtmEntityTypes.BOMBLET_ZETA.get(), RenderBombletZeta::new);
         EntityRenderers.register(NtmEntityTypes.METEOR.get(), RenderMeteor::new);
         EntityRenderers.register(NtmEntityTypes.BOMBER.get(), RenderBomber::new);
