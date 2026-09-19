@@ -7478,3 +7478,26 @@ gibt, und die entsteht erst in `runData`. Lokal meldet es deshalb „ohne Sprach
 überspringt genau diese Prüfung. Das ist eine Grenze der Werkstatt, kein Fehler des Tors.
 
 Alle 33 Tore grün.
+
+## Die Hälfte des Modelltors, die auch ohne Datengenerator läuft
+
+Der Beutesockel ist zweimal durchgefallen, und beim zweiten Mal an etwas, das lokal **gar nicht
+prüfbar war**: `model-resolve-check` braucht die erzeugte Sprachdatei, um zu wissen, welche
+Gegenstände es gibt. Die entsteht erst in `runData`. Lokal meldet das Tor „ohne Sprachdatei"
+und überspringt genau die Prüfung, die `models/item/deco_loot.json` vermisst hätte.
+
+**Ein Teil davon ist sehr wohl ohne Sprachdatei entscheidbar.** Wer seinen Blockzustand von
+Hand nach `src/main/resources/assets/hbmsntm/blockstates` schreibt, bekommt vom Datenerzeuger
+auch kein Gegenstandsmodell — der läuft ja gar nicht über ihn. Für diese Blöcke muss das
+Gegenstandsmodell ebenfalls von Hand dastehen.
+
+Das sind wenige: elf handgeschriebene Blockzustände zur Zeit. Aber es ist **genau die Gruppe,
+in der der Fehler entsteht** — wer alles dem Datenerzeuger überlässt, kann ihn gar nicht
+machen. Zehn haben ihr Gegenstandsmodell, der elfte (`slag`) bekommt absichtlich keinen
+Gegenstand und steht deshalb schon in `OHNE_GEGENSTAND`.
+
+Nachgemessen in beide Richtungen: null Funde; nimmt man `models/item/deco_loot.json` wieder
+heraus, meldet das Tor genau ihn — und zwar lokal, in einer Sekunde, statt nach fünfzehn
+Minuten CI.
+
+Alle 33 Tore grün.

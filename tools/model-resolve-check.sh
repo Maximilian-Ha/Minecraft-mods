@@ -189,6 +189,35 @@ for dirpath, _, names in os.walk('src/main/java'):
 fehlt_in_liste = sorted(blank - OHNE_GEGENSTAND)
 zuviel_in_liste = sorted(OHNE_GEGENSTAND - blank)
 
+# ------------------------------------------------ Handgeschriebener Zustand ohne Gegenstand
+# Runde 182: die Pruefung "Gegenstand ohne Modell" oben braucht die erzeugte Sprachdatei, um
+# zu wissen, welche Gegenstaende es ueberhaupt gibt. Die entsteht erst in runData -- lokal
+# steht sie nicht zur Verfuegung, und die Pruefung wird uebersprungen. Genau das hat den
+# Beutesockel durchgelassen: sein models/item/deco_loot.json fehlte, alle Tore waren gruen,
+# und CI hat es gefunden.
+#
+# EIN TEIL DAVON IST OHNE SPRACHDATEI ENTSCHEIDBAR. Wer seinen Blockzustand VON HAND in
+# src/main/resources schreibt, bekommt vom Datenerzeuger auch kein Gegenstandsmodell -- er
+# laeuft ja gar nicht ueber ihn. Fuer diese Bloecke muss das Gegenstandsmodell ebenfalls von
+# Hand dastehen. Das sind wenige (elf zur Zeit), aber es ist genau die Gruppe, in der der
+# Fehler entsteht.
+#
+# NACHGEMESSEN (Runde 182): elf handgeschriebene Zustaende, zehn mit eigenem Gegenstandsmodell,
+# einer (slag) absichtlich ohne Gegenstand und deshalb in OHNE_GEGENSTAND. Null Funde. Nimmt
+# man models/item/deco_loot.json wieder heraus, meldet die Pruefung genau ihn.
+
+HAND_BS = 'src/main/resources/assets/hbmsntm/blockstates'
+HAND_IM = 'src/main/resources/assets/hbmsntm/models/item'
+
+zustand_ohne_item = []
+if os.path.isdir(HAND_BS) and os.path.isdir(HAND_IM):
+    hand_item = {f[:-5] for f in os.listdir(HAND_IM) if f.endswith('.json')}
+    for f in sorted(os.listdir(HAND_BS)):
+        if not f.endswith('.json'): continue
+        name = f[:-5]
+        if name in hand_item or name in OHNE_GEGENSTAND: continue
+        zustand_ohne_item.append(name)
+
 # ------------------------------------------------------------------ Bericht
 print("Pruefe erzeugte Modelle ... %d Modelle in %d Baeumen%s%s"
       % (len(models), len(roots),
@@ -198,6 +227,7 @@ print("  Elternmodell fehlt      : %d" % len(unresolved))
 print("  Gegenstand ohne Modell  : %d" % len(ohne_modell))
 print("  Bloecke ohne Gegenstand : %d im Quelltext, %d nicht in der Liste, %d ueberfluessig"
       % (len(blank), len(fehlt_in_liste), len(zuviel_in_liste)))
+print("  Handzustand ohne Bild   : %d" % len(zustand_ohne_item))
 
 if fehlt_in_liste or zuviel_in_liste:
     if fehlt_in_liste:
@@ -208,6 +238,13 @@ if fehlt_in_liste or zuviel_in_liste:
         print("\nIN OHNE_GEGENSTAND, ABER NICHT MEHR SO ANGELEGT:")
         for name in zuviel_in_liste:
             print("  %s -- Eintrag streichen" % name)
+    sys.exit(1)
+
+if zustand_ohne_item:
+    print("\nHANDGESCHRIEBENER BLOCKZUSTAND OHNE HANDGESCHRIEBENES GEGENSTANDSMODELL:")
+    for name in zustand_ohne_item:
+        print("  %s -- models/item/%s.json fehlt; der Datenerzeuger legt es nicht an, denn der "
+              "Blockzustand kommt nicht von ihm" % (name, name))
     sys.exit(1)
 
 if unresolved or ohne_modell:
