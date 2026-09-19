@@ -6040,3 +6040,38 @@ ist auf 1.7.10 „Hand plus vier Rüstungsteile“ — im Port also die vier Rü
 zusätzlich die Haupthand.
 
 Stand danach: fehlende Blockentitäten 113.
+
+### Tor 29: dreht jeder Bau seine Anschlüsse so herum wie das Original?
+
+Der Verdacht aus der Deuteriumrunde — drei Maschinen mit der falschen Drehrichtung — hat sich
+beim Nachsehen **nicht bestätigt**, und zwar aus einem Grund, den man der Zeile nicht ansieht.
+Alle drei Anschlusslisten sind **symmetrisch in `rot`**:
+
+```java
+new DirPos(x + rot.getStepX() * 2, y, z + rot.getStepZ() * 2, rot),
+new DirPos(x - rot.getStepX() * 2, y, z - rot.getStepZ() * 2, rot.getOpposite()),
+```
+
+Zu jedem Eintrag mit `+rot` gibt es einen mit `-rot` und derselben Richtung. Dreht man `rot`
+um, vertauschen sich die beiden — die **Menge** der Anschlussstellen bleibt gleich. Folgenlos.
+
+Was aber bleibt: die Frage „ist `getRotation(UP)` nun `getClockWise` oder `getCounterClockWise`“
+stellt sich bei **jedem** Mehrblockbau neu, man weiß es nicht auswendig, und rät man falsch,
+sitzen sämtliche Anschlüsse gespiegelt — die Maschine nimmt nichts an und gibt nichts ab, ohne
+dass irgendetwas abstürzt. Genau dafür ist ein Tor da.
+
+`tools/rotation-check.sh` vergleicht jetzt jeden Bau gegen seine Vorlage. Die Regel ist nicht
+nachgeschlagen, sondern **gezählt**: 41 zu 2 für „UP ist im Uhrzeigersinn“. Die drei
+symmetrischen Fälle stehen als Ausnahmen mit Begründung im Skript — und wenn eine davon später
+begradigt wird, meldet das Tor die Ausnahme als überflüssig und wird rot, damit die Zeile
+verschwindet. Dieselbe Schuldenlisten-Mechanik wie bei `bewlr-check` und `inventory-check`.
+
+Gemessen in beiden Richtungen: 76 Vorlagen, 62 Bauten im Port, 0 Abweichungen. Dreht man
+`FurnaceIronBlockEntity` zurück, meldet das Tor genau diesen einen Bau und endet mit 1.
+
+Was es nicht sieht, nennt es beim Namen statt zu schweigen: neun Dateien, in denen Original
+oder Port mehrere Achsen benutzen (dort gibt es mehrere Anschlusslisten, ein Vergleich je Datei
+taugt nicht), und eine, zu der die Liste keine Vorlage findet
+(`MachineIndustrialBoilerBlockEntity` — im Original heißt sie mit vertauschten Wörtern).
+
+Damit stehen 29 gemessene Tore.

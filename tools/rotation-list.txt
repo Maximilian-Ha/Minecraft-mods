@@ -1,0 +1,91 @@
+# Um welche Achse das Original seine Anschlussstellen dreht.
+#
+# WOZU: das Original schreibt dir.getRotation(ForgeDirection.UP) bzw. .DOWN, der Port
+# getClockWise() bzw. getCounterClockWise(). Welches wovon die Entsprechung ist, weiss man nicht
+# auswendig -- gemessen ueber alle portierten Mehrblockbauten bildet der Port UP einundvierzigmal
+# auf getClockWise ab und DOWN zweimal auf getCounterClockWise. Das ist in sich stimmig (UP und
+# DOWN sind Gegenrichtungen) und damit die Regel dieses Ports.
+#
+# ERZEUGT AUS DEM ORIGINAL mit (Fernzweig hbm-upstream/master noetig, in der CI nicht da --
+# darum liegt die Liste hier als Datei):
+#   fuer jede Datei unter src/main/java/com/hbm/tileentity/ mit TileEntity-Praefix zaehlen,
+#   wie oft getRotation(ForgeDirection.UP) und getRotation(ForgeDirection.DOWN) darin steht;
+#   eine Zeile je Datei mit mindestens einem Treffer.
+#
+# Format: <Name der Blockentitaet des Originals> <UP|DOWN|BEIDE>
+TileEntityBatteryREDD UP
+TileEntityBatterySocket UP
+TileEntityChungus UP
+TileEntityCondenserPowered UP
+TileEntityCraneConsole BEIDE
+TileEntityCustomMachine UP
+TileEntityDeuteriumTower DOWN
+TileEntityElectrolyser UP
+TileEntityFireboxBase UP
+TileEntityFurnaceCombination UP
+TileEntityFurnaceIron UP
+TileEntityFurnaceSteel UP
+TileEntityFusionBoiler UP
+TileEntityFusionBreeder UP
+TileEntityFusionCoupler UP
+TileEntityFusionKlystron UP
+TileEntityFusionMHDT UP
+TileEntityFusionPlasmaForge UP
+TileEntityHeatBoiler UP
+TileEntityHeaterHeatex UP
+TileEntityICF UP
+TileEntityICFController UP
+TileEntityICFStruct UP
+TileEntityLaunchPad UP
+TileEntityLaunchPadRusted UP
+TileEntityLaunchpadSoyuz UP
+TileEntityMachineAnnihilator UP
+TileEntityMachineArcFurnaceLarge UP
+TileEntityMachineArcWelder UP
+TileEntityMachineAssemblyFactory UP
+TileEntityMachineCatalyticCracker UP
+TileEntityMachineCatalyticReformer UP
+TileEntityMachineChemicalFactory UP
+TileEntityMachineCombustionEngine UP
+TileEntityMachineCompressor UP
+TileEntityMachineCompressorCompact UP
+TileEntityMachineCrystallizer UP
+TileEntityMachineCyclotron UP
+TileEntityMachineDrain BEIDE
+TileEntityMachineExcavator UP
+TileEntityMachineExposureChamber UP
+TileEntityMachineFluidTank BEIDE
+TileEntityMachineIndustrialTurbine UP
+TileEntityMachineIntake UP
+TileEntityMachineLargeTurbine UP
+TileEntityMachineOrbus DOWN
+TileEntityMachineOreSlopper UP
+TileEntityMachinePumpjack DOWN
+TileEntityMachinePyroOven DOWN
+TileEntityMachineRefinery DOWN
+TileEntityMachineRotaryFurnace BEIDE
+TileEntityMachineSolderingStation UP
+TileEntityMachineStrandCaster UP
+TileEntityMachineSuperComputer UP
+TileEntityMachineThresher UP
+TileEntityMachineTurbineGas UP
+TileEntityMachineTurbofan BEIDE
+TileEntityMachineWoodBurner UP
+TileEntityPABeamline DOWN
+TileEntityPADetector BEIDE
+TileEntityPAQuadrupole DOWN
+TileEntityPARFC BEIDE
+TileEntityPASource BEIDE
+TileEntityPileCore UP
+TileEntityRBMKLever UP
+TileEntityReactorZirnox UP
+TileEntityRefueler UP
+TileEntitySILEX UP
+TileEntitySawmill BEIDE
+TileEntitySoyuzLauncher UP
+TileEntitySteamEngine UP
+TileEntityStirling DOWN
+TileEntityTowerLarge UP
+TileEntityTurretBaseArtillery UP
+TileEntityTurretBaseNT UP
+TileEntityTurretFritz UP
