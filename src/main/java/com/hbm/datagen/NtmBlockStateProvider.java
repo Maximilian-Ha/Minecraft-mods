@@ -1213,6 +1213,7 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         // Das Flutlicht zeichnet ein eigener Darsteller; im Blockmodell steht nur die
         // Teilchenfarbe.
         this.particleOnlyBlock(NtmBlocks.FLOODLIGHT, modLoc("block/block_steel"));
+        this.particleOnlyBlock(NtmBlocks.POLE_SATELLITE_RECEIVER, modLoc("block/deco_satellite_receiver"));
     }
 
     /**

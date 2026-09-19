@@ -1914,6 +1914,16 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_coil_tungsten", has(NtmItems.COIL_TUNGSTEN.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "floodlight"));
 
+        // Original CraftingManager Z. 457: "SS " / "SCR" / "SS ".
+        // MINGRADE.wireFine() ist WIRE_RED_COPPER, wie beim ummantelten Draht.
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, NtmBlocks.POLE_SATELLITE_RECEIVER.get(), 1)
+                .pattern("SS ").pattern("SCR").pattern("SS ")
+                .define('S', NtmItems.INGOT_STEEL.get())
+                .define('C', NtmItems.CIRCUIT_VACUUM_TUBE.get())
+                .define('R', NtmItems.WIRE_RED_COPPER.get())
+                .unlockedBy("has_ingot_steel", has(NtmItems.INGOT_STEEL.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "pole_satellite_receiver"));
+
         // Original CraftingManager Z. 293. Bisher fehlte dem Heliostatspiegel das Rezept,
         // weil steel_beam im Port nicht existierte.
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.SOLAR_MIRROR.get(), 3)

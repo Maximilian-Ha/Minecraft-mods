@@ -5102,3 +5102,28 @@ Das Aussehen kommt aus `floodlight.obj` über einen Blockentitäts-Darsteller, d
 ist stufenlos und lässt sich nicht in Blockzustände packen.
 
 Die Lücke steht bei **22**.
+
+### Der Mastaufsatz mit Richtfunkschüssel
+
+`pole_satellite_receiver` steht auf den Antennenmasten der Bunker und tut nichts — er sieht
+nur aus. Trotzdem braucht er eine Blockentität, und zwar aus einem einzigen Grund: die
+Schüssel steht schräg, −15° nach oben und −25° zur Seite. Ein Blockmodell kann Elemente nur um
+±22,5° und ±45° um **eine** Achse drehen; zwei Achsen mit krummen Winkeln gehen nicht.
+
+Das Original löst es mit einem Techne-Modell aus neun Kästen. In 1.21 heißt dasselbe
+`LayerDefinition` mit `CubeListBuilder` — die Übersetzung ist fast wörtlich:
+`new ModelRenderer(this, u, v)` wird `texOffs(u, v)`, `addBox` bleibt `addBox`,
+`setRotationPoint` plus `setRotation` werden `PartPose.offsetAndRotation`. Und die
+Reihenfolge der Drehungen ist in beiden Fassungen Z, dann Y, dann X — nachgesehen, nicht
+angenommen.
+
+Eine Falle gab es doch: das Original setzt auf jedem Kasten `mirror = true`, aber **nach**
+`addBox`. In 1.7.10 liest `addBox` das Feld, die Zeile kommt also zu spät und tut nichts. Ein
+mechanisches `.mirror()` hätte das Modell gespiegelt.
+
+Und noch einmal hat ein Tor gegriffen, das ich früher gebaut hatte: `particleOnlyBlock` gibt
+dem Blockgegenstand ein `builtin/entity`-Modell, das ohne eigenen Gegenstandsdarsteller
+schlicht unsichtbar ist. Das achtzehnte Tor (`bewlr-check`) hat den fehlenden Darsteller gemeldet, bevor die
+CI überhaupt lief.
+
+Die Lücke steht bei **21**.

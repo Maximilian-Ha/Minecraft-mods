@@ -848,6 +848,8 @@ public class NuclearTechModClient {
         event.registerLayerDefinition(ModelRubble.LAYER, ModelRubble::createBodyLayer);
 
         event.registerLayerDefinition(SkeletonModel.SKELETON_PART_LAYER, SkeletonModel::createLayer);
+
+        event.registerLayerDefinition(com.hbm.render.model.ModelSatelliteReceiver.LAYER, com.hbm.render.model.ModelSatelliteReceiver::createBodyLayer);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)

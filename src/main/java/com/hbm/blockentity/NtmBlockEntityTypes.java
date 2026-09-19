@@ -61,6 +61,7 @@ import com.hbm.blockentity.network.PipeBaseBlockEntity;
 import com.hbm.blockentity.network.PipeGaugeBlockEntity;
 import com.hbm.blockentity.machine.FloodlightBlockEntity;
 import com.hbm.blockentity.machine.FloodlightBeamBlockEntity;
+import com.hbm.blockentity.machine.DecoPoleSatelliteReceiverBlockEntity;
 import com.hbm.blockentity.network.PylonBlockEntity;
 import com.hbm.blockentity.network.PylonLargeBlockEntity;
 import com.hbm.blockentity.network.PylonMediumBlockEntity;
@@ -892,6 +893,7 @@ public class NtmBlockEntityTypes {
     public static final Supplier<BlockEntityType<PipeGaugeBlockEntity>> FLUID_DUCT_GAUGE = BLOCK_ENTITY_TYPES.register("fluid_duct_gauge", () -> BlockEntityType.Builder.of(PipeGaugeBlockEntity::new, NtmBlocks.FLUID_DUCT_GAUGE.get()).build(null));
     public static final Supplier<BlockEntityType<FloodlightBlockEntity>> FLOODLIGHT = BLOCK_ENTITY_TYPES.register("floodlight", () -> BlockEntityType.Builder.of(FloodlightBlockEntity::new, NtmBlocks.FLOODLIGHT.get()).build(null));
     public static final Supplier<BlockEntityType<FloodlightBeamBlockEntity>> FLOODLIGHT_BEAM = BLOCK_ENTITY_TYPES.register("floodlight_beam", () -> BlockEntityType.Builder.of(FloodlightBeamBlockEntity::new, NtmBlocks.FLOODLIGHT_BEAM.get()).build(null));
+    public static final Supplier<BlockEntityType<DecoPoleSatelliteReceiverBlockEntity>> POLE_SATELLITE_RECEIVER = BLOCK_ENTITY_TYPES.register("pole_satellite_receiver", () -> BlockEntityType.Builder.of(DecoPoleSatelliteReceiverBlockEntity::new, NtmBlocks.POLE_SATELLITE_RECEIVER.get()).build(null));
 
     public static final Supplier<BlockEntityType<DecontaminatorBlockEntity>> DECONTAMINATOR = BLOCK_ENTITY_TYPES.register(
             "decontaminator",
