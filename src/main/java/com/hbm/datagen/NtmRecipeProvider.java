@@ -2005,6 +2005,42 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_circuit_vacuum_tube", has(NtmItems.CIRCUIT_VACUUM_TUBE.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "radio_torch_reader"));
 
+        /*
+         * Die Giesserei. Auch sie stand bisher nur im Kreativreiter -- Rinne, Form und Becken
+         * sind seit Runde 18 und 19 im Port, ein Rezept hatte keines davon. Muster aus
+         * CraftingManager Z. 920 bis 924.
+         *
+         * Blocks.stone_slab des Originals ist die Steinstufe mit Metadatum 0, auf 1.21 also
+         * SMOOTH_STONE_SLAB. Der Tank (Z. 923) und der Schlackenabstich (Z. 925) fehlen, weil
+         * es die beiden Bloecke im Port noch nicht gibt.
+         */
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.FOUNDRY_BASIN.get(), 1)
+                .pattern("B B").pattern("B B").pattern("BSB")
+                .define('B', NtmItems.INGOT_FIREBRICK.get())
+                .define('S', Blocks.SMOOTH_STONE_SLAB)
+                .unlockedBy("has_ingot_firebrick", has(NtmItems.INGOT_FIREBRICK.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "foundry_basin"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.FOUNDRY_MOLD.get(), 1)
+                .pattern("B B").pattern("BSB")
+                .define('B', NtmItems.INGOT_FIREBRICK.get())
+                .define('S', Blocks.SMOOTH_STONE_SLAB)
+                .unlockedBy("has_ingot_firebrick", has(NtmItems.INGOT_FIREBRICK.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "foundry_mold"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.FOUNDRY_CHANNEL.get(), 4)
+                .pattern("B B").pattern(" S ")
+                .define('B', NtmItems.INGOT_FIREBRICK.get())
+                .define('S', Blocks.SMOOTH_STONE_SLAB)
+                .unlockedBy("has_ingot_firebrick", has(NtmItems.INGOT_FIREBRICK.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "foundry_channel"));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, NtmBlocks.FOUNDRY_OUTLET.get(), 1)
+                .requires(NtmBlocks.FOUNDRY_CHANNEL.get())
+                .requires(NtmItems.PLATE_STEEL.get())
+                .unlockedBy("has_foundry_channel", has(NtmBlocks.FOUNDRY_CHANNEL.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "foundry_outlet"));
+
         // Original CraftingManager Z. 220: "SCR" / "W#W" / "WWW".
         // EnumCircuitType.ANALOG ist im Port die Analogplatine, wie schon bei den RBMK-Pulten.
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.RADIO_TELEX.get(), 2)

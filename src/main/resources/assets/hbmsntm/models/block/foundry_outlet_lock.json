@@ -1,0 +1,17 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "hbmsntm:block/foundry_outlet_lock",
+    "lock": "hbmsntm:block/foundry_outlet_lock"
+  },
+  "elements": [
+    {
+      "from": [6, 1, 15], "to": [10, 8, 15],
+      "faces": {
+        "north": { "texture": "#lock" },
+        "south": { "texture": "#lock" }
+      }
+    }
+  ]
+}

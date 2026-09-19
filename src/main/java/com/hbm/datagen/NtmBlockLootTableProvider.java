@@ -555,6 +555,7 @@ public class NtmBlockLootTableProvider extends BlockLootSubProvider {
         this.dropSelf(NtmBlocks.FOUNDRY_CHANNEL.get());
         this.dropSelf(NtmBlocks.FOUNDRY_MOLD.get());
         this.dropSelf(NtmBlocks.FOUNDRY_BASIN.get());
+        this.dropSelf(NtmBlocks.FOUNDRY_OUTLET.get());
         this.dropSelf(NtmBlocks.RBMK_GAUGE.get());
         this.dropSelf(NtmBlocks.RBMK_INDICATOR.get());
         this.dropSelf(NtmBlocks.RBMK_NUMITRON.get());

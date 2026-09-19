@@ -5761,3 +5761,50 @@ Nachgereicht wurde außerdem das Rezept der Logikfackel (CraftingManager Z. 216)
 alle fünf Funkfackeln herstellbar sind.
 
 Stand danach: fehlende Blockentitäten 118, Bauwerkslücke unverändert 14.
+
+### Der Ausguss der Gießerei — und wie man aus Löchern in der Textur ein Modell macht
+
+`foundry_outlet` ist der Block, der die Schmelze aus einer Rinne nach unten fallen lässt statt
+sie weiterzureichen. Er lagert selbst nichts (Fassungsvermögen null), nimmt nur von der Seite
+an, an der er hängt, und sucht sein Ziel per Strahl vier Blöcke nach unten — dafür gibt es
+`CrucibleUtil.getPouringTarget` seit Runde 19.
+
+Davor sitzen zwei Sperren: ein Materialfilter (mit einem Schrottstück in der Hand gesetzt, mit
+dem Schraubendreher gelöscht, mit dem Handbohrer umgekehrt) und ein Riegel, den ein
+Redstonesignal schließt — auch der umkehrbar.
+
+Interessant war das **Modell**. Der Ausguss hat im Original keinen Blockrenderer im üblichen
+Sinn, sondern einen `ISimpleBlockRenderingHandler`, der neun Flächen einzeln zeichnet und dabei
+UV-Ausschnitte aus 16×16-Bildern nimmt. Wie der Block aussieht, steht deshalb nicht im Code,
+sondern **in der Transparenz der Texturen**. Das Alphabild von `foundry_outlet_front` liest
+sich als Querschnitt:
+
+```
+.....#....#.....   <- zwei Wände,
+.....#....#.....      dazwischen der Trog
+.....######.....   <- Boden
+```
+
+und `foundry_outlet_top` ist eine U-Form mit einem Loch in der Mitte. Ausgemessen ergibt das
+genau drei Kästen: Boden `[5,0,10]–[11,2,16]` und zwei Wände von je einem Pixel. Damit ist das
+JSON-Modell dasselbe wie das der Rinne, nur mit `#front` auf den Z-Flächen — und es braucht
+**keinen** Cutout, weil die Löcher in den Texturen genau dort sitzen, wo ohnehin keine Geometrie
+ist. Nur die beiden Zusatzflächen (Filter und Riegel) sind echte Fensterscheiben und tragen
+`render_type: cutout`.
+
+ABWEICHUNG: Filter und Riegel stehen im **Blockzustand** (`filtered`, `closed`), nicht wie im
+Original nur in der Blockentität. Das Original liest sie beim Zeichnen jedes Bild neu; auf 1.21
+bräuchte das einen eigenen Renderer, als Zustand kennt sie das Modell unmittelbar. Die
+Zustandsdatei ist dafür ein Multipart mit zwölf Zeilen — vier Drehungen für den Trog, vier für
+den Filter, vier für den Riegel —, genau wie die Rinne ihre Anschlüsse hat.
+
+Und wieder dasselbe Bild wie bei den Funkfackeln: **die ganze Gießerei hatte kein einziges
+Rezept.** Rinne, Form und Becken stehen seit Runde 18 und 19 im Port und waren nur im
+Kreativreiter zu haben. Alle vier sind jetzt nachgereicht (CraftingManager Z. 920 bis 924);
+`Blocks.stone_slab` mit Metadatum 0 ist auf 1.21 `SMOOTH_STONE_SLAB`.
+
+Offen aus derselben Aufgabe bleiben der Gießereitank (eigener Blockrenderer, der Wände
+weglässt, wo ein Nachbartank steht, und den Füllstand über Blockgrenzen laufen lässt) und der
+Schlackenabstich, der weiter an `BlockDynamicSlag` hängt.
+
+Stand danach: fehlende Blockentitäten 117.

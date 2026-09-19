@@ -1,0 +1,117 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_outlet"
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_outlet",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_outlet",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_outlet",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "filtered": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_outlet_filter"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "filtered": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_outlet_filter",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "filtered": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_outlet_filter",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "filtered": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_outlet_filter",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "closed": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_outlet_lock"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "closed": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_outlet_lock",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "closed": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_outlet_lock",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "closed": "true"
+      },
+      "apply": {
+        "model": "hbmsntm:block/foundry_outlet_lock",
+        "y": 270
+      }
+    }
+  ]
+}

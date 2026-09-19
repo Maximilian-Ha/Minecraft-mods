@@ -629,6 +629,12 @@ public class NtmBlockEntityTypes {
                             FoundryBasinBlockEntity::new,
                             NtmBlocks.FOUNDRY_BASIN.get())
                     .build(null));
+    public static final Supplier<BlockEntityType<FoundryOutletBlockEntity>> FOUNDRY_OUTLET = BLOCK_ENTITY_TYPES.register(
+            "foundry_outlet",
+            () -> BlockEntityType.Builder.of(
+                            FoundryOutletBlockEntity::new,
+                            NtmBlocks.FOUNDRY_OUTLET.get())
+                    .build(null));
     public static final Supplier<BlockEntityType<MachineArcFurnaceLargeBlockEntity>> MACHINE_ARC_FURNACE = BLOCK_ENTITY_TYPES.register(
             "machine_arc_furnace",
             () -> BlockEntityType.Builder.of(

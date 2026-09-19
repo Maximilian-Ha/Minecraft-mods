@@ -1092,6 +1092,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.FOUNDRY_CHANNEL, "Casting Channel");
         this.add(NtmBlocks.FOUNDRY_MOLD, "Casting Mold");
         this.add(NtmBlocks.FOUNDRY_BASIN, "Casting Basin");
+        this.add(NtmBlocks.FOUNDRY_OUTLET, "Casting Outlet");
         this.add(NtmBlocks.RBMK_GAUGE, "RBMK Gauge Panel");
         this.add(NtmBlocks.RBMK_INDICATOR, "RBMK Indicator Panel");
         this.add(NtmBlocks.RBMK_NUMITRON, "RBMK Numitron Panel");
@@ -1178,6 +1179,12 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.SCRAPS, "%s Scraps");
         this.add(NtmItems.MOLD, "Mold: %s");
         this.add("foundry.noCast", "No mold installed");
+        /* Die drei Zeilen des Ausgusses und die beiden des Aufsatzwerkzeugs, aus en_US.lang. */
+        this.add("foundry.filter", "Filter: %s");
+        this.add("foundry.inverted", "Redstone inverted");
+        this.add("foundry.invertFilter", "Filter inverted");
+        this.add("copytool.invertRedstone", "Redstone Inverted");
+        this.add("copytool.invertFilter", "Filter Inverted");
         this.add("foundry.empty", "Empty");
         this.add("container.machineStrandCaster", "Strand Caster");
 
