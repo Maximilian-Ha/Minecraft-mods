@@ -3687,6 +3687,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.addDamagePlayer("sednaExplosion", "%1$s was blown up by %2$s.");
         this.addDamage("sednaElectric", "%1$s was fried");
         this.addDamagePlayer("sednaElectric", "%1$s was fried by %2$s");
+        this.addDamage("sednaPlasma", "%1$s was immolated");
+        this.addDamagePlayer("sednaPlasma", "%1$s was immolated by %2$s.");
         this.addDamage("sednaLaser", "%1$s was pulverized");
         this.addDamagePlayer("sednaLaser", "%1$s was pulverized by %2$s");
         this.addDamage("sednaMicrowave", "%1$s was microwaved");

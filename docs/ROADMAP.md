@@ -6844,3 +6844,46 @@ Nachgewiesen an zwei Fällen: das Tor meldet `DamageClass.PLASMA`, sobald der We
 fehlt, und ebenso ein erfundenes `GrenadeFuze.S4`. Danach ist es wieder grün.
 
 Damit sind es **30 Tore**.
+
+## Berichtigung zur Berichtigung: der erschöpfende Schalter
+
+Das Nachtragen von `DamageClass.PLASMA` hat die CI ein zweites Mal zu Fall gebracht:
+
+```
+BulletConfig.java:173: error: the switch expression does not cover all possible input values
+    ResourceKey<DamageType> damageType = switch(dmgClass) {
+```
+
+**Das war mein Fehler, und zwar ein vermeidbarer.** Im Abschnitt davor steht der Satz
+„`DamageClass` ist eine reine Kennzeichnung ohne Verzweigungstabellen". Ich hatte dafür zwei
+Dinge abgesucht: `DamageResistanceHandler` nach Verbrauchern, und das ganze Projekt nach
+Verweisen der Form `DamageClass.X`. Ein Schalter schreibt seine Marken aber **ohne**
+Typnamen — `case PHYSICAL ->`. Beide Suchen mussten ihn übersehen. Die Behauptung war nicht
+gemessen, sondern erschlossen, und sie war falsch: es gibt zwei Schalter über `DamageClass`.
+
+Nur einer davon stört. `ConfettiUtil.createConfetti` ist ein Schalter-**Befehl** und darf eine
+Teilmenge behandeln; er tut das mit Absicht, denn nicht jede Schadensart hinterlässt Asche.
+`BulletConfig.getDamage` ist ein Schalter-**Ausdruck** und muss jeden Wert abdecken.
+
+Nachgetragen ist deshalb eine ganze Schadensart: Schlüssel, Anmeldung als `sednaPlasma`, der
+Zweig im Schalter und zwei Todesmeldungen. Der Wortlaut kommt aus dem Original
+(`death.attack.plasma=%1$s was immolated by %2$s.`). Das entspricht dem Original auch im Bau:
+dort entsteht die Schadensquelle aus `dmgClass.name()`, jede Klasse hat also ohnehin ihre
+eigene.
+
+### `enum-check` kann das jetzt auch
+
+Das Tor von vorhin hätte diesen zweiten Fehler nicht gefunden — es prüft Verweise auf
+Konstanten, nicht Lücken in Schaltern. Beides sind aber Folgen derselben Ursache: ein Wert
+kommt zur Aufzählung dazu oder fehlt in ihr.
+
+Der zweite Teil sucht deshalb Schalter-**Ausdrücke** (hinter `=` oder `return`) ohne
+`default`-Zweig, bestimmt anhand der Marken, welche Aufzählung gemeint ist — nur bei genau
+einem Treffer, sonst wird nicht geraten — und meldet, welche Konstante keinen Zweig hat.
+Schalter-Befehle bleiben außen vor, weil eine Teilmenge dort erlaubt und oft gewollt ist.
+
+Gemessen: 19 erschöpfende Schalter im Port, alle vollständig. Nachgewiesen, dass das Tor
+anschlägt, sobald der `PLASMA`-Zweig wieder fehlt.
+
+Damit deckt `enum-check` beide Seiten ab: einen Verweis auf eine Konstante, die es nicht gibt,
+und eine Konstante, auf die kein Zweig zeigt.

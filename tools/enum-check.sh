@@ -42,6 +42,7 @@ dateien.sort()
 
 # Name -> (Menge erlaubter Mitglieder, Datei). Mehrfach vergebene Namen fliegen wieder raus.
 erklaert = {}
+konstantenliste = {}
 mehrdeutig = set()
 
 ENUM_KOPF = re.compile(r'\benum\s+([A-Z]\w*)\b')
@@ -89,6 +90,7 @@ for pfad in dateien:
 
         # Konstanten: Grossbuchstaben-Bezeichner auf Ebene null der Liste.
         mitglieder = set()
+        nur_konstanten = set()
         tiefe = 0
         for stueck in re.finditer(r'[(){}\[\]]|\b[A-Za-z_]\w*\b', liste):
             s = stueck.group(0)
@@ -98,6 +100,7 @@ for pfad in dateien:
                 tiefe -= 1
             elif tiefe == 0 and re.fullmatch(r'[A-Z][A-Z0-9_]*', s):
                 mitglieder.add(s)
+                nur_konstanten.add(s)
 
         # Alles, was der Rumpf sonst in Grossschreibung erklaert, gilt ebenfalls als bekannt.
         for feld in re.finditer(r'\b([A-Z][A-Z0-9_]*)\s*(?:=|\()', rest):
@@ -106,9 +109,11 @@ for pfad in dateien:
         if name in erklaert and erklaert[name][1] != pfad:
             mehrdeutig.add(name)
         erklaert[name] = (mitglieder, pfad)
+        konstantenliste[name] = set(nur_konstanten)
 
 for name in mehrdeutig:
     erklaert.pop(name, None)
+    konstantenliste.pop(name, None)
 
 # Verweise pruefen.
 VERWEIS = re.compile(r'\b([A-Z]\w*)\s*\.\s*([A-Z][A-Z0-9_]*)\b')
@@ -158,8 +163,72 @@ for pfad in dateien:
             if mitglied not in erklaert[typ][0]:
                 fehlend.append((pfad, zeile_nr, typ, mitglied, erklaert[typ][1]))
 
-print('Pruefe Aufzaehlungen ... %d Aufzaehlungen (%d mehrdeutig uebersprungen), %d Verweise'
-      % (len(erklaert), len(mehrdeutig), geprueft))
+# ---------------------------------------------------------------------------------------
+# Zweitens: erschoepfende Schalter.
+#
+# Ein switch-AUSDRUCK ueber eine Aufzaehlung muss jeden Wert abdecken, sonst uebersetzt er
+# nicht. Kommt ein Wert zur Aufzaehlung dazu, faellt das erst in der CI auf -- genau so beim
+# Nachtragen von DamageClass.PLASMA, wo BulletConfig.getDamage einen solchen Ausdruck haelt.
+#
+# Geprueft werden nur AUSDRUECKE (hinter '=' oder 'return') ohne default-Zweig. Ein
+# switch-BEFEHL darf eine Teilmenge behandeln -- ConfettiUtil tut das mit Absicht.
+# ---------------------------------------------------------------------------------------
+
+SCHALTER = re.compile(r'(=|return)\s*switch\s*\(([^)]*)\)\s*\{')
+
+luecken = []
+schalter_geprueft = 0
+
+for pfad in dateien:
+    sauber = entkommentiert(open(pfad, encoding='utf-8', errors='replace').read())
+
+    for treffer in SCHALTER.finditer(sauber):
+        # Rumpf des Schalters einlesen.
+        i = treffer.end() - 1
+        tiefe = 0
+        ende = i
+        while ende < len(sauber):
+            if sauber[ende] == '{': tiefe += 1
+            elif sauber[ende] == '}':
+                tiefe -= 1
+                if tiefe == 0: break
+            ende += 1
+        rumpf = sauber[i:ende]
+
+        if re.search(r'\bdefault\s*(->|:)', rumpf): continue
+
+        labels = set()
+        for fall in re.finditer(r'\bcase\s+([^:>]+?)\s*(?:->|:)', rumpf):
+            for name in re.findall(r'\b([A-Z][A-Z0-9_]*)\b', fall.group(1)):
+                labels.add(name)
+        if not labels: continue
+
+        # Welche Aufzaehlung deckt alle Marken ab? Nur bei genau einer wird geprueft.
+        passend = [n for n, (m, _) in erklaert.items() if labels <= m]
+        if len(passend) != 1: continue
+
+        name = passend[0]
+        fehlt = erklaert[name][0] - labels
+        # Nur echte Konstanten zaehlen, keine sonstigen Grossschreib-Mitglieder: als Marke
+        # taugt nur, was auch in der Konstantenliste steht.
+        fehlt = {f for f in fehlt if f in konstantenliste.get(name, set())}
+        schalter_geprueft += 1
+
+        if fehlt:
+            zeile = sauber[:treffer.start()].count('\n') + 1
+            luecken.append((pfad, zeile, name, sorted(fehlt)))
+
+print('Pruefe Aufzaehlungen ... %d Aufzaehlungen (%d mehrdeutig uebersprungen), %d Verweise, %d erschoepfende Schalter'
+      % (len(erklaert), len(mehrdeutig), geprueft, schalter_geprueft))
+
+if luecken:
+    print('  SCHALTER MIT LUECKE : %d' % len(luecken))
+    print()
+    print('ERSCHOEPFENDE SCHALTER, DENEN EIN ZWEIG FEHLT:')
+    for pfad, nr, name, fehlt in luecken:
+        print('  %s: kein Zweig fuer %s' % (name, ', '.join(fehlt)))
+        print('      %s:%d' % (pfad, nr))
+    sys.exit(1)
 
 if fehlend:
     print('  FEHLEND : %d' % len(fehlend))

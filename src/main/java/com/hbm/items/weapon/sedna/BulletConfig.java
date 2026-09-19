@@ -175,6 +175,7 @@ public class BulletConfig implements Cloneable {
             case FIRE ->        NtmDamageTypes.FIRE;
             case EXPLOSION ->   NtmDamageTypes.EXPLOSION;
             case ELECTRIC ->    NtmDamageTypes.ELECTRIC;
+            case PLASMA ->      NtmDamageTypes.PLASMA;
             case LASER ->       NtmDamageTypes.LASER;
             case MICROWAVE ->   NtmDamageTypes.MICROWAVE;
             case SUBATOMIC ->   NtmDamageTypes.SUBATOMIC;

@@ -39,6 +39,7 @@ public interface NtmDamageTypes {
     ResourceKey<DamageType> FIRE = key("fire");
     ResourceKey<DamageType> EXPLOSION = key("explosion");
     ResourceKey<DamageType> ELECTRIC = key("electric");
+    ResourceKey<DamageType> PLASMA = key("plasma");
     ResourceKey<DamageType> LASER = key("laser");
     ResourceKey<DamageType> MICROWAVE = key("microwave");
     ResourceKey<DamageType> SUBATOMIC = key("subatomic");
@@ -70,6 +71,7 @@ public interface NtmDamageTypes {
         context.register(FIRE, new DamageType("sednaFire", 0.1F));
         context.register(EXPLOSION, new DamageType("sednaExplosion", 0.1F));
         context.register(ELECTRIC, new DamageType("sednaElectric", 0.1F));
+        context.register(PLASMA, new DamageType("sednaPlasma", 0.1F));
         context.register(LASER, new DamageType("sednaLaser", 0.1F));
         context.register(MICROWAVE, new DamageType("sednaMicrowave", 0.1F));
         context.register(SUBATOMIC, new DamageType("sednaSubatomic", 0.1F));
