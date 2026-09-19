@@ -28,6 +28,7 @@ import com.hbm.blocks.generic.LootCrateBlock;
 import com.hbm.blocks.machine.FloodlightBlock;
 import com.hbm.blocks.machine.ChargerBlock;
 import com.hbm.blocks.machine.MachineMicrowaveBlock;
+import com.hbm.blocks.network.RadioRecBlock;
 import com.hbm.blocks.machine.FloodlightBeamBlock;
 import com.hbm.blocks.fluids.CoriumLiquidBlock;
 import com.hbm.blocks.fluids.MudLiquidBlock;
@@ -360,6 +361,8 @@ public class NtmBlocks {
     public static final DeferredBlock<Block> CHARGER = register("charger", () -> new ChargerBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion()));
     /* Stufe 5: die Mikrowelle. Werte aus ModBlocks.java:1825. */
     public static final DeferredBlock<Block> MACHINE_MICROWAVE = register("machine_microwave", () -> new MachineMicrowaveBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops()));
+    /* Stufe 5: der Funkempfaenger. Werte aus ModBlocks.java:2278. */
+    public static final DeferredBlock<Block> RADIOREC = register("radiorec", () -> new RadioRecBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion()));
     /* Sein Lichtfleck: unsichtbar, nicht anfassbar, nur hell -- aber mit eigener
      * Blockentitaet, weil er sich Quelle und Strahlnummer merken muss. */
     public static final DeferredBlock<Block> FLOODLIGHT_BEAM = BLOCKS.register("floodlight_beam", () -> new FloodlightBeamBlock(BlockBehaviour.Properties.of().replaceable().noCollission().noOcclusion().noLootTable().air().lightLevel(state -> 15).pushReaction(PushReaction.DESTROY)));

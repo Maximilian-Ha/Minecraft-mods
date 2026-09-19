@@ -626,6 +626,7 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.registerCableGauge();
         this.registerFluidDuctGauge();
         this.registerSteelRoof();
+        this.registerRadioRec();
         this.registerMachineBattery();
         this.registerCableSwitch();
         this.particleOnlyBlock(NtmBlocks.MACHINE_DIFURNACE_EXTENSION, modLoc("block/difurnace_extension"));
@@ -1624,7 +1625,7 @@ public class NtmBlockStateProvider extends BlockStateProvider {
      * auf die uv-Skala der Modelle umgerechnet, denn die Texturbahn ist 64 Pixel breit.
      */
     private void techneKasten(BlockModelBuilder model, String textur,
-                              int x, int y, int z, int b, int h, int tf, int u, int v) {
+                              float x, float y, float z, int b, int h, int tf, int u, int v) {
 
         float s = 16F / 64F;
         var kasten = model.element().from(x, y, z).to(x + b, y + h, z + tf);
@@ -1637,6 +1638,36 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         kasten.face(Direction.SOUTH).uvs((u+2*tf+b) * s, (v + tf)     * s, (u + 2*tf + 2*b)* s, (v + tf + h) * s).texture(textur).end();
 
         kasten.end();
+    }
+
+    private void registerRadioRec() {
+        Block block = NtmBlocks.RADIOREC.get();
+
+        // Vier Techne-Kaesten aus ModelBroadcaster, alle achsenparallel. Die Weltkoordinaten
+        // folgen aus derselben Drehung wie beim Dachblech: (mx|my|mz) wird (8-mx|24-my|8+mz).
+        // Das Grundmodell steht damit in der Sued-Lage (Metadaten 3 des Originals).
+        BlockModelBuilder model = this.models().withExistingParent(this.name(block), mcLoc("block/block"))
+                .renderType("cutout")
+                .texture("particle", modLoc("block/radiorec"))
+                .texture("all", modLoc("block/radiorec"));
+
+        this.techneKasten(model, "#all",  1,  0,  4, 14, 10,  8,  0,  0);  // Gehaeuse
+        this.techneKasten(model, "#all", 11, 10,  7,  2,  3,  2,  4, 21);  // Knopf
+        this.techneKasten(model, "#all", 11.5F, 13, 7.5F, 1, 11, 1, 0, 18);  // Antenne
+        this.techneKasten(model, "#all",  3, 10, 7.5F,  3,  2, 1, 4, 18);  // Skala
+
+        this.getVariantBuilder(block).forAllStates(state -> {
+            Direction facing = state.getValue(com.hbm.blocks.network.RadioRecBlock.FACING);
+            int y = switch(facing) {
+                case WEST -> 90;
+                case NORTH -> 180;
+                case EAST -> 270;
+                default -> 0;
+            };
+            return ConfiguredModel.builder().modelFile(model).rotationY(y).build();
+        });
+
+        this.simpleBlockItem(block, model);
     }
 
     private void registerSteelRoof() {

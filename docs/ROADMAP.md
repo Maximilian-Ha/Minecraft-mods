@@ -5247,3 +5247,29 @@ Die beiden Knöpfe der Oberfläche laufen über `CompoundTagControl` und `IContr
 die Mechanik, die der Port für alle Knopfpakete benutzt.
 
 Die Lücke steht bei **18**.
+
+### Der Funkempfänger — und ein Helfer, der sich auszahlt
+
+`radiorec` hört auf einem Kanal des Fernschreibfunks mit und setzt das Empfangene in
+Notenblocktöne um. Die Grundlagen lagen alle schon da: `RTTYSystem`, `NoteBuilder`,
+`CompoundTagControl` für die Knöpfe und `IScreenProvider` für eine Oberfläche ohne Behälter.
+
+Interessant war das Aussehen. Das Original zeichnet ihn mit einem Blockentitäts-Darsteller aus
+vier Techne-Kästen — und die sind **alle achsenparallel**, ohne die schrägen Drehungen, die
+den Mastaufsatz zur Modellschicht gezwungen haben. Achsenparallele Kästen kann ein Blockmodell,
+also braucht dieser Block gar keinen Darsteller.
+
+Dafür ließ sich `techneKasten` wiederverwenden — die Hilfsmethode, die ich fürs Dachblech
+geschrieben hatte. Sie musste nur eine Kleinigkeit lernen: die Antenne sitzt auf **halben**
+Pixeln (`setRotationPoint(-4.5F, 0F, -0.5F)`), also nehmen x, y und z jetzt Gleitkommawerte.
+Das Dachblech ruft sie weiterhin mit ganzen Zahlen auf.
+
+Die Drehung war die einzige Stelle zum Nachdenken. Der Darsteller dreht erst 180° um Z und
+dann um Y; in meinem Modell steckt die Z-Drehung schon in den Koordinaten. Es gilt
+Rz(180)·Ry(θ) = Ry(−θ)·Rz(180), und Minecraft dreht im Blockzustand im Uhrzeigersinn, wo
+OpenGL gegen ihn dreht — beides zusammen hebt sich auf, und `rotationY` ist schlicht θ. Zur
+Gegenprobe: das Grundmodell steht damit in der Süd-Lage, und dessen Gehäusekasten
+(1\|0\|4)-(15\|10\|12) ist genau der Kollisionskasten, den `setBlockBoundsBasedOnState` für
+Metadaten 3 setzt.
+
+Die Lücke steht bei **17**.

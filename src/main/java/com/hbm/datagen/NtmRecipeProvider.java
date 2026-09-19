@@ -1945,6 +1945,16 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_magnetron", has(NtmItems.MAGNETRON.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "machine_microwave"));
 
+        // Original CraftingManager Z. 612: "  W" / "PCP" / "PIP".
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.RADIOREC.get(), 1)
+                .pattern("  W").pattern("PCP").pattern("PIP")
+                .define('W', NtmItems.WIRE_COPPER.get())
+                .define('P', NtmItems.PLATE_STEEL.get())
+                .define('C', NtmItems.CIRCUIT_VACUUM_TUBE.get())
+                .define('I', NtmItems.INGOT_POLYMER.get())
+                .unlockedBy("has_circuit_vacuum_tube", has(NtmItems.CIRCUIT_VACUUM_TUBE.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "radiorec"));
+
         // Original CraftingManager Z. 293. Bisher fehlte dem Heliostatspiegel das Rezept,
         // weil steel_beam im Port nicht existierte.
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.SOLAR_MIRROR.get(), 3)

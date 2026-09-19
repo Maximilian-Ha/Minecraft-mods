@@ -483,6 +483,9 @@ public class NtmLanguageProvider extends LanguageProvider {
 
         /* Die Ueberschriften der Fenster. Runde 96 und 97 hatten sie vergessen -- ohne sie
          * stuende dort der nackte Schluessel. */
+        this.add("container.radiorec", "Radio Receiver");
+        this.add("container.radiorec.save", "Save Settings");
+        this.add("container.radiorec.toggle", "Toggle");
         this.add("container.craneInserter", "Conveyor Inserter");
         this.add("container.craneExtractor", "Conveyor Extractor");
         this.add("container.craneGrabber", "Conveyor Grabber");
@@ -2335,6 +2338,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         /* Der Lichtkegel ist unsichtbar, braucht aber eine Namenszeile. */
         this.add(NtmBlocks.SPOTLIGHT_BEAM, "Light Beam");
         this.add(NtmBlocks.POLE_SATELLITE_RECEIVER, "Satellite Receiver Pole");
+        this.add(NtmBlocks.RADIOREC, "Radio Receiver");
+        this.add(NtmBlocks.RADIOREC, DESC, "Turns what it hears on its channel$into note block sounds.");
         this.add(NtmBlocks.MACHINE_MICROWAVE, "Microwave");
         this.add(NtmBlocks.MACHINE_MICROWAVE, DESC, "Heats up food using the regular$smelting recipes.$Do not run it at full power.");
         this.add(NtmBlocks.CHARGER, "Charging Station");
