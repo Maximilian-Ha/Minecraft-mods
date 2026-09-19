@@ -47,6 +47,25 @@ public class XFactory44 {
         m44_express = new BulletConfig().setItem(Ammo.M44_EXPRESS).setCasing(CasingType.SMALL, 6).setDoesPenetrate(true).setDamage(1.5F).setThresholdNegation(3F).setArmorPiercing(0.1F).setWear(1.5F)
                 .setCasing(casing44.clone().register("m44express"));
 
+        /*
+         * Der schwere Revolver, XFactory44 Z. 110 des Originals. Er teilt sich das Modell mit
+         * dem Lilmac -- dasselbe lilmac.obj, nur eine andere Textur.
+         *
+         * ABWEICHUNG: der setNameMutator des Originals haengt "_scoped" an den Namen, sobald
+         * ein Zielfernrohr aufgesetzt ist. Der Aufsatz selbst ist im Port noch nicht da; ein
+         * Namensschalter fuer einen Aufsatz, den es nicht gibt, waere toter Code.
+         */
+        NtmItems.GUN_HEAVY_REVOLVER = registry.register("gun_heavy_revolver", () -> new GunBaseNTItem(WeaponQuality.A_SIDE, new GunConfig()
+                .dura(600).draw(10).inspect(23).crosshair(Crosshair.L_CLASSIC).smoke(Lego.LAMBDA_STANDARD_SMOKE)
+                .rec(new Receiver(0)
+                        .dmg(15F).delay(14).reload(46).jam(23).sound(NtmSoundEvents.GUN_HEAVY_REVOLVER_FIRE, 1.0F, 1.0F)
+                        .mag(new MagazineFullReload(0, 6).addConfigs(m44_bp, m44_sp, m44_fmj, m44_jhp, m44_ap, m44_express))
+                        .offset(0.75, -0.0625, -0.3125D)
+                        .setupStandardFire().recoil(LAMBDA_RECOIL_NOPIP))
+                .setupStandardConfiguration()
+                .anim(LAMBDA_NOPIP_ANIMS).orchestra(Orchestras.ORCHESTRA_NOPIP)
+        ).setDefaultAmmo(Ammo.M44_SP, 12));
+
         NtmItems.GUN_HANGMAN = registry.register("gun_hangman", () -> new GunBaseNTItem(WeaponQuality.LEGENDARY, new GunConfig()
                 .dura(600).draw(10).inspect(31).inspectCancel(false).crosshair(Crosshair.CIRCLE).smoke(Lego.LAMBDA_STANDARD_SMOKE)
                 .rec(new Receiver(0)
@@ -68,8 +87,40 @@ public class XFactory44 {
         }
     };
 
+    public static BiConsumer<ItemStack, LambdaContext> LAMBDA_RECOIL_NOPIP = (stack, ctx) -> {
+        GunBaseNTItem.setupRecoil(10, (float) (ctx.getPlayer().random.nextGaussian() * 1.5));
+    };
+
     public static BiConsumer<ItemStack, LambdaContext> LAMBDA_RECOIL_HANGMAN = (stack, ctx) -> {
         GunBaseNTItem.setupRecoil(5, (float) (ctx.getPlayer().random.nextGaussian() * 1));
+    };
+
+    public static BiFunction<ItemStack, GunAnimation, BusAnimation> LAMBDA_NOPIP_ANIMS = (stack, type) -> {
+        return switch(type) {
+            case CYCLE -> new BusAnimation()
+                    .addBus("RECOIL", new BusAnimationSequence().addPos(0, 0, 0, 50).addPos(0, 0, -3, 50).addPos(0, 0, 0, 250))
+                    .addBus("HAMMER", new BusAnimationSequence().addPos(0, 0, 1, 50).addPos(0, 0, 1, 400).addPos(0, 0, 0, 200))
+                    .addBus("DRUM", new BusAnimationSequence().addPos(0, 0, 0, 450).addPos(0, 0, 1, 200));
+            case CYCLE_DRY -> new BusAnimation()
+                    .addBus("HAMMER", new BusAnimationSequence().addPos(0, 0, 1, 50).addPos(0, 0, 1, 400).addPos(0, 0, 0, 200))
+                    .addBus("DRUM", new BusAnimationSequence().addPos(0, 0, 0, 450).addPos(0, 0, 1, 200));
+            case EQUIP -> new BusAnimation()
+                    .addBus("ROTATE", new BusAnimationSequence().addPos(90, 0, 0, 0).addPos(0, 0, 0, 500, IType.SIN_DOWN));
+            /* Die Schreibweise "RELAOD_TILT" ist ein Tippfehler des Originals. Er steht auch im
+             * Zeichner, also muessen beide Seiten ihn behalten -- richtiggestellt waere die
+             * Bewegung stumm. */
+            case RELOAD -> new BusAnimation()
+                    .addBus("RELAOD_TILT", new BusAnimationSequence().addPos(-15, 0, 0, 100).addPos(65, 0, 0, 100).addPos(45, 0, 0, 50).addPos(0, 0, 0, 200).addPos(0, 0, 0, 1450).addPos(-80, 0, 0, 100).addPos(-80, 0, 0, 100).addPos(0, 0, 0, 200))
+                    .addBus("RELOAD_CYLINDER", new BusAnimationSequence().addPos(0, 0, 0, 200).addPos(90, 0, 0, 100).addPos(90, 0, 0, 1700).addPos(0, 0, 0, 70))
+                    .addBus("RELOAD_LIFT", new BusAnimationSequence().addPos(0, 0, 0, 350).addPos(-45, 0, 0, 250).addPos(-45, 0, 0, 350).addPos(-15, 0, 0, 200).addPos(-15, 0, 0, 1050).addPos(0, 0, 0, 100))
+                    .addBus("RELOAD_JOLT", new BusAnimationSequence().addPos(0, 0, 0, 600).addPos(2, 0, 0, 50).addPos(0, 0, 0, 100))
+                    .addBus("RELOAD_BULLETS", new BusAnimationSequence().addPos(0, 0, 0, 650).addPos(10, 0, 0, 300).addPos(10, 0, 0, 200).addPos(0, 0, 0, 700))
+                    .addBus("RELOAD_BULLETS_CON", new BusAnimationSequence().addPos(1, 0, 0, 0).addPos(1, 0, 0, 950).addPos(0, 0, 0, 1));
+            case INSPECT, JAMMED -> new BusAnimation()
+                    .addBus("RELAOD_TILT", new BusAnimationSequence().addPos(-15, 0, 0, 100).addPos(65, 0, 0, 100).addPos(45, 0, 0, 50).addPos(0, 0, 0, 200).addPos(0, 0, 0, 200).addPos(-80, 0, 0, 100).addPos(-80, 0, 0, 100).addPos(0, 0, 0, 200))
+                    .addBus("RELOAD_CYLINDER", new BusAnimationSequence().addPos(0, 0, 0, 200).addPos(90, 0, 0, 100).addPos(90, 0, 0, 450).addPos(0, 0, 0, 70));
+            default -> null;
+        };
     };
 
     public static BiFunction<ItemStack, GunAnimation, BusAnimation> LAMBDA_HANGMAN_ANIMS = (stack, type) -> {

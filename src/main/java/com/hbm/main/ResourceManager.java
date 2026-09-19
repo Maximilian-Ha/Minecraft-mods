@@ -297,6 +297,7 @@ public class ResourceManager {
     public static final ResourceLocation MARESLEG_TEX =  NuclearTechMod.withDefaultNamespace("textures/models/weapon/maresleg.png");
     public static final ResourceLocation MARESLEG_BROKEN_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/maresleg_broken.png");
     public static final ResourceLocation DEBUG_GUN_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/debug_gun.png");
+    public static final ResourceLocation HEAVY_REVOLVER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/heavy_revolver.png");
     public static final ResourceLocation SPAS_12_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/spas-12.png");
     public static final ResourceLocation FATMAN_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/fatman.png");
     public static final ResourceLocation FATMAN_MININUKE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/fatman_mininuke.png");

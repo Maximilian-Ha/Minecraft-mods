@@ -1772,6 +1772,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.GUN_LIGHT_REVOLVER);
                         output.accept(NtmItems.GUN_LIGHT_REVOLVER_ATLAS);
                         output.accept(NtmItems.GUN_HANGMAN);
+                        output.accept(NtmItems.GUN_HEAVY_REVOLVER);
                         output.accept(NtmItems.GUN_GREASEGUN);
                         output.accept(NtmItems.GUN_AM180);
                         output.accept(NtmItems.GUN_STAR_F);

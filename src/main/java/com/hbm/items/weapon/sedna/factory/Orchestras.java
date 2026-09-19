@@ -210,6 +210,48 @@ public class Orchestras {
         }
     };
 
+    /**
+     * Der schwere Revolver. Beim Nachladen kippt die Trommel heraus, die Huelsen fallen, und
+     * am Ende wird der Hahn gespannt -- die vier Toene sitzen auf genau den Zaehlerstaenden
+     * des Originals.
+     */
+    public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_NOPIP = (stack, ctx) -> {
+        LivingEntity entity = ctx.entity;
+        Level level = entity.level;
+        if(!(level instanceof ServerLevel serverLevel)) return;
+        GunAnimation type = GunBaseNTItem.getLastAnim(stack, ctx.configIndex);
+        int timer = GunBaseNTItem.getAnimTimer(stack, ctx.configIndex);
+
+        if(type == GunAnimation.RELOAD) {
+            if(timer == 3) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_COCK.get(), entity.getSoundSource());
+            if(timer == 10) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_SMALL_REMOVE.get(), entity.getSoundSource());
+            if(timer == 34) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_SMALL_INSERT.get(), entity.getSoundSource());
+            if(timer == 40) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_CLOSE.get(), entity.getSoundSource());
+
+            if(timer == 16) {
+                Receiver rec = ctx.config.getReceivers(stack)[0];
+                IMagazine mag = rec.getMagazine(stack);
+                SpentCasing casing = mag.getCasing(stack, ctx.container);
+                if(casing != null) for(int i = 0; i < mag.getCapacity(stack); i++) CasingCreator.composeEffect(level, entity, 0.25, -0.125, -0.125, -0.05, 0, 0, 0.01, -6.5F + (float) entity.random.nextGaussian() * 3F, (float) entity.random.nextGaussian() * 5F, casing.getName());
+            }
+        }
+
+        if(type == GunAnimation.CYCLE) {
+            if(timer == 0) PacketDistributor.sendToPlayersNear(serverLevel, null, entity.getX(), entity.getY(), entity.getZ(), 100, new MuzzleFlashPacket(entity.getId()));
+            if(timer == 11) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_COCK.get(), entity.getSoundSource());
+        }
+
+        if(type == GunAnimation.CYCLE_DRY) {
+            if(timer == 2) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_DRY_FIRE.get(), entity.getSoundSource());
+            if(timer == 11) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_COCK.get(), entity.getSoundSource());
+        }
+
+        if(type == GunAnimation.INSPECT) {
+            if(timer == 3) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_COCK.get(), entity.getSoundSource());
+            if(timer == 16) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_CLOSE.get(), entity.getSoundSource());
+        }
+    };
+
     public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_GREASEGUN = (stack, ctx) -> {
         LivingEntity entity = ctx.entity;
         Level level = entity.level;

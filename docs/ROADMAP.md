@@ -6392,3 +6392,44 @@ genau das, wovor das Tor warnt. Die Methode heißt jetzt `wuerfleInhalt`.
 Stand danach: fünf der sechs Kisten bleiben blockiert. `crate` und `crate_supply` an Spritzen
 (teilweise da), Granaten und `ammo_container`; `crate_weapon` an drei Waffen; `crate_red` an
 zehn Sonderstücken; `crate_can` an der ganzen Dosen- und Nahrungsfamilie.
+
+## Der schwere Revolver
+
+Erste der drei Waffen, die `crate_weapon` noch fehlen (Aufgabe #102). Sie war die billigste,
+denn ihr Modell liegt längst im Port: `lilmac.obj`, dasselbe, das die Debugwaffe benutzt.
+
+### Ein Zeichner für zwei Waffen
+
+Im Original nimmt `ItemRenderHeavyRevolver` seine Textur im Konstruktor entgegen — derselbe
+Zeichner bedient den schweren Revolver und den Lilmac. Der Port hatte davon bisher nur eine
+Kopie unter dem Namen `ItemRenderDebug`, mit fest eingebauter Debugtextur.
+
+Statt die Kopie ein zweites Mal zu kopieren, ist sie jetzt die Vorlage: `ItemRenderHeavyRevolver`
+trägt den Rumpf und nimmt die Textur herein, `ItemRenderDebug` ist auf zwei Zeilen
+zusammengeschrumpft. Das ist genau der Aufbau des Originals.
+
+Eine Abweichung: das Original zeichnet auf Wunsch noch ein Zielfernrohr und weitet dafür das
+Blickfeld. Den Aufsatz gibt es im Port nicht, also auch das nicht — und aus demselben Grund
+entfällt der `setNameMutator`, der bei aufgesetztem Fernrohr „_scoped" an den Namen hängt.
+
+### Ein Tippfehler, der bleiben muss
+
+Die Nachladebewegung benutzt einen Bus namens `RELAOD_TILT`. Das ist ein Vertipper des
+Originals — aber er steht auf **beiden** Seiten, in der Animation und im Zeichner. Wer ihn hier
+richtigstellte, ohne den Zeichner anzufassen, bekäme eine stumme Bewegung: der Zeichner fragte
+nach einem Bus, den niemand mehr bespielt. Er bleibt also stehen, mit einem Kommentar daneben.
+
+### Was die Waffe sonst braucht
+
+`ORCHESTRA_NOPIP` ist neu in `Orchestras`: vier Töne beim Nachladen (Hahn spannen, Trommel
+heraus, Trommel zurück, schließen), der Mündungsblitz beim Schuss, das Klicken beim leeren
+Abzug. Die Zählerstände sind unverändert. Anders als beim Hangman, wo die Tonzeilen beim
+Portieren auskommentiert stehen blieben, sind hier alle Tonereignisse vorhanden und in Betrieb.
+
+Ein Rezept bekommt sie nicht — im Port hat **keine** Waffe eines, weil die Waffenteile des
+Materialsystems (`lightBarrel`, `lightReceiver`, `mechanism`, `grip`) noch fehlen. Sie steht
+wie ihre Geschwister im Kreativreiter.
+
+Bleiben für `crate_weapon`: `gun_liberator` (Modell und Zeichner sind im Original da, müssen
+aber übernommen werden) und `gun_panzerschreck` (braucht die ganze Raketenfabrik
+`XFactoryRocket`, die der Port nicht hat).
