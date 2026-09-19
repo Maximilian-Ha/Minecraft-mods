@@ -4665,3 +4665,31 @@ was nicht im Projekt liegt, kam aus dem Stern.
 
 **Gemessen:** 1929 Dateien durchgesehen, null Funde. Setzt man den Stern in `NtmBlocks` wieder
 ein, meldet das Tor genau diese eine Datei und nennt beide Seiten.
+
+### Das 25. Tor hat sich beim Einbau selbst ein 26. eingebrockt
+
+Der erste Anlauf zu Tor 25 ist in der CI durchgefallen — mit vier Mal demselben Fehler:
+
+```
+NtmBlocks.java:989: error: cannot find symbol
+  symbol:   class LiquidBlock
+```
+
+Beim Auflösen der Sternimporte habe ich die Liste der gebrauchten Vanilla-Klassen
+automatisch ermittelt. Die Suche verlangte hinter dem Namen einen Punkt, eine Klammer oder
+ein Leerzeichen — `LiquidBlock` kommt aber ausschließlich in `DeferredBlock<LiquidBlock>` vor,
+also mit einem `>` dahinter. Vierzehn Klassen gefunden, die fünfzehnte übersehen.
+
+Das ist genau die Art Fehler, die ein Tor abfangen soll, und er wäre lokal auffindbar gewesen.
+Also gibt es jetzt **Tor 26: jeder benutzte Block- oder Gegenstandstyp muss gedeckt sein** —
+durch einen expliziten Import, eine Klasse des Projekts oder eine Deklaration in derselben
+Datei.
+
+**Warum nur `-Block` und `-Item`?** Weil ein Tor über alle Typnamen nicht zu gebrauchen ist:
+der erste Entwurf meldete hunderte Fehlalarme — innere Klassen (`Tuple.Pair`), Paketgenossen,
+jeden `java.lang`-Typ, den die Liste nicht kennt. Ein Tor, das man wegsehen muss, ist keines.
+Blöcke und Gegenstände sind aber genau die Stelle, an der die Sammeldateien hängen, und dort
+misst es sauber.
+
+**Gemessen:** 1893 Dateien, null Funde. Nimmt man den `LiquidBlock`-Import wieder heraus,
+meldet das Tor genau diese eine Stelle.

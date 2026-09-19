@@ -84,6 +84,11 @@ jobs:
           chmod +x ./tools/wildcard-check.sh
           ./tools/wildcard-check.sh
 
+      - name: Check import coverage
+        run: |
+          chmod +x ./tools/import-cover-check.sh
+          ./tools/import-cover-check.sh
+
       - name: Check render bounding boxes
         run: |
           chmod +x ./tools/renderbox-check.sh

@@ -88,6 +88,7 @@ import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.IronBarsBlock;
 import net.minecraft.world.level.block.LadderBlock;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.RailBlock;
 import net.minecraft.world.level.block.RedstoneLampBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
