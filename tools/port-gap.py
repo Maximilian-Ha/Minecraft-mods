@@ -60,26 +60,10 @@ def kern(name):
     return name.lower().replace('_', '')
 
 
-# Umbenennungen, die die Kernregel nicht faengt. Jede Zeile ist EINZELN nachgesehen, nicht
-# geraten: links der Name im Original, rechts die Datei im Port, die dieselbe Sache macht.
-# Ohne diese Tabelle meldet das Skript sie als fehlend, und wer danach arbeitet, portiert
-# etwas ein zweites Mal.
-#
-# NICHT hierher gehoeren blosse Namensaehnlichkeiten. TileEntityCore ist der Bombenkern und
-# NICHT PileCoreBlockEntity, TileEntityCharge ist die Sprengladung und NICHT das Ladegeraet --
-# beide sahen im Teilstringvergleich wie Treffer aus und sind keine.
-UMBENANNT = {
-    # Das "NT" des Originals faellt im Port weg.
-    'TileEntityCableBaseNT':      'CableBaseBlockEntity',
-    'TileEntityPipeBaseNT':       'PipeBaseBlockEntity',
-    'TileEntityTurretBaseNT':     'TurretBaseBlockEntity',
-    # Abgekuerzter Name im Original, ausgeschriebener im Port -- gleiche Wirkung:
-    # Strahlung senken, Kontaminationen loeschen, Partikel darueber.
-    'TileEntityDecon':            'DecontaminatorBlockEntity',
-    # Der Port fasst die Handsteuerung mit der allgemeinen Steuerstange zusammen; der
-    # Klassenkommentar von RBMKControlBlockEntity nennt beide Vorlagen.
-    'TileEntityRBMKControlManual': 'RBMKControlBlockEntity',
-}
+# Die Abbildungstabellen stehen in tools/portmap.py -- zwei Werkzeuge brauchen sie, und sie
+# duerfen nicht auseinanderlaufen.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from portmap import UMBENANNT
 
 
 def vergleiche(up_pfade, port_pfade, up_filter=lambda n: True):

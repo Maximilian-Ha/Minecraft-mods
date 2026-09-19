@@ -5629,3 +5629,42 @@ und bringt eine `.mcmeta` mit — sie ist **animiert**, vier Bilder mit einem Ti
 Die Datei ist mitgekommen, sonst hätte Minecraft die Textur als vierfach zu hoch abgelehnt.
 
 Damit ist auch das Rezept der Lampe nachgereicht.
+
+### Ein Wegweiser statt einer Zahl
+
+Nach der Dämonenkern-Runde stand die Frage, was als nächstes drankommt — und beim Durchsehen
+der kleinen Kandidaten fiel ein Muster auf: `TileEntityLantern` braucht eine Glyphide,
+`TileEntityVent` zwei Partikel-Entitäten, `TileEntityRadiobox` die FBI-Mobs. Alles Dinge, die
+der Port noch nicht hat.
+
+`port-gap.py` sagt, **wie viele** Blockentitäten fehlen. Es sagt nicht, welche davon man
+heute anfangen kann. Das ist der Unterschied zwischen einer Zahl und einem Wegweiser — und
+eine halbe Stunde Lesen, die in der Schublade endet, ist genau das, was eine Kennzahl
+verhindern sollte.
+
+Also gemessen, statt weiter zu probieren: `tools/be-blocker.py` löst für jede fehlende
+Blockentität die `com.hbm`-Importe des Originals auf und hält sie gegen den Port.
+
+Die erste Fassung war unbrauchbar und hat das auch gezeigt: **41×`IGUIProvider`,
+25×`ModItems`, 21×`ModBlocks`, 17×`BlockPos`** als häufigste „Blocker". Das sind keine — das
+ist die Infrastruktur, die im Port nur anders heißt, und `BlockPos` ist sogar eine
+Vanilla-Klasse, die im Original noch selbstgebaut war. Eine Messung, deren Spitzenwerte
+allesamt Artefakte sind, misst nichts.
+
+Mit einer Abbildungstabelle für die sechzehn Infrastrukturklassen und einer Typensuche, die
+auch verschachtelte Klassen findet (`Mats.MaterialStack` steht in keiner eigenen Datei),
+sieht es anders aus:
+
+| | |
+|---|---|
+| fehlende Blockentitäten | 120 |
+| ohne fehlende Vorlage | **44** |
+| mit fehlender Vorlage | 76 |
+
+Und die häufigsten echten Blocker sind jetzt Dinge, an denen man wirklich hängenbleibt:
+`PathNode` (5×, die Drohnenwegfindung), `ColumnType` (4×, RBMK), `PneumaticNetworkProvider`
+und `PneumaticNode` (7× zusammen, die Rohrpost).
+
+Die Tabellen beider Werkzeuge stehen jetzt gemeinsam in `tools/portmap.py`, damit sie nicht
+auseinanderlaufen. Der Kommentar darüber sagt, was hineingehört und was nicht — jede Zeile
+nachgesehen, Namensähnlichkeit reicht nicht.
