@@ -7,6 +7,7 @@ import com.hbm.handler.ability.IToolHarvestAbility;
 import com.hbm.handler.ability.IWeaponAbility;
 import com.hbm.inventory.MetaHelper;
 import com.hbm.inventory.NtmFoods;
+import com.hbm.inventory.material.MaterialShapes;
 import com.hbm.inventory.NtmTiers;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.fluid.Fluids;
@@ -15,6 +16,7 @@ import com.hbm.items.ItemEnums.U238M2Type;
 import com.hbm.items.ItemEnums.CasingType;
 import com.hbm.items.armor.ArmorFSBItem;
 import com.hbm.items.food.PillItem;
+import com.hbm.items.machine.GunPartItem;
 import com.hbm.items.special.SimpleConsumableItem;
 import com.hbm.items.special.SyringeItem;
 import com.hbm.items.armor.ArmorHEVItem;
@@ -716,6 +718,22 @@ public class NtmItems {
     public static final DeferredItem<Item> BEDROCK_ORE_BASE = ITEMS.register("bedrock_ore_base", () -> new BedrockOreBaseItem(new Item.Properties()));
     public static final DeferredItem<Item> BEDROCK_ORE = ITEMS.register("bedrock_ore", () -> new BedrockOreItem(new Item.Properties()));
     public static final DeferredItem<Item> BEDROCK_ORE_FRAGMENT = ITEMS.register("bedrock_ore_fragment", () -> new BedrockOreFragmentItem(new Item.Properties()));
+
+    /*
+     * DIE SIEBEN WAFFENBAUTEILE. Lauf, Verschluss, Mechanik, Schaft, Griff -- alles, woraus
+     * das Original seine Waffen zusammensetzt. Jedes ist EIN Gegenstand mit allen Materialien
+     * in den Metadaten; welche das sind, steht als setAutogen(...) am Material selbst.
+     *
+     * Sie kommen aus der Giessform, nicht von der Werkbank: MoldItem.registerMolds haengt
+     * ihnen die Formnummern 22 bis 28 des Originals an.
+     */
+    public static final DeferredItem<Item> PART_BARREL_LIGHT = ITEMS.register("part_barrel_light", () -> new GunPartItem(new Item.Properties(), MaterialShapes.LIGHTBARREL));
+    public static final DeferredItem<Item> PART_BARREL_HEAVY = ITEMS.register("part_barrel_heavy", () -> new GunPartItem(new Item.Properties(), MaterialShapes.HEAVYBARREL));
+    public static final DeferredItem<Item> PART_RECEIVER_LIGHT = ITEMS.register("part_receiver_light", () -> new GunPartItem(new Item.Properties(), MaterialShapes.LIGHTRECEIVER));
+    public static final DeferredItem<Item> PART_RECEIVER_HEAVY = ITEMS.register("part_receiver_heavy", () -> new GunPartItem(new Item.Properties(), MaterialShapes.HEAVYRECEIVER));
+    public static final DeferredItem<Item> PART_MECHANISM = ITEMS.register("part_mechanism", () -> new GunPartItem(new Item.Properties(), MaterialShapes.MECHANISM));
+    public static final DeferredItem<Item> PART_STOCK = ITEMS.register("part_stock", () -> new GunPartItem(new Item.Properties(), MaterialShapes.STOCK));
+    public static final DeferredItem<Item> PART_GRIP = ITEMS.register("part_grip", () -> new GunPartItem(new Item.Properties(), MaterialShapes.GRIP));
     public static final DeferredItem<Item> DRILLBIT = ITEMS.register("drillbit", () -> new DrillbitItem(new Item.Properties().stacksTo(1)));
 
     /** Runde 132: die fertig montierte Eigenbau-Rakete. Ihre Teile stehen in den Zusatzdaten. */

@@ -2033,6 +2033,17 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.BROKEN_ITEM, "Broken Item");
         this.add(NtmItems.BEDROCK_ORE_BASE, "Bedrock Ore Sample");
         this.add("item.hbmsntm.bedrock_ore_fragment.named", "%s Fragment");
+
+        /* Die sieben Waffenbauteile. Wortlaut aus en_US.lang des Originals, samt der
+         * Stellung des Materials: beim Lauf und beim Verschluss steht "Light"/"Heavy" VOR
+         * dem Material, bei den uebrigen faengt der Name mit dem Material an. */
+        this.add("item.hbmsntm.part_barrel_light.named", "Light %s Barrel");
+        this.add("item.hbmsntm.part_barrel_heavy.named", "Heavy %s Barrel");
+        this.add("item.hbmsntm.part_receiver_light.named", "Light %s Receiver");
+        this.add("item.hbmsntm.part_receiver_heavy.named", "Heavy %s Receiver");
+        this.add("item.hbmsntm.part_mechanism.named", "%s Mechanism");
+        this.add("item.hbmsntm.part_stock.named", "%s Stock");
+        this.add("item.hbmsntm.part_grip.named", "%s Grip");
         this.add(NtmBlocks.ORE_BEDROCK, "Bedrock Ore");
         this.add(NtmBlocks.STONE_DEPTH, "Depth Rock");
 

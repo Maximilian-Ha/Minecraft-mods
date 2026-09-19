@@ -530,6 +530,13 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.BEDROCK_ORE_BASE);
                         addMetaItems(output, NtmItems.BEDROCK_ORE.get());
                         addMetaItems(output, NtmItems.BEDROCK_ORE_FRAGMENT.get());
+                        addMetaItems(output, NtmItems.PART_BARREL_LIGHT.get());
+                        addMetaItems(output, NtmItems.PART_BARREL_HEAVY.get());
+                        addMetaItems(output, NtmItems.PART_RECEIVER_LIGHT.get());
+                        addMetaItems(output, NtmItems.PART_RECEIVER_HEAVY.get());
+                        addMetaItems(output, NtmItems.PART_MECHANISM.get());
+                        addMetaItems(output, NtmItems.PART_STOCK.get());
+                        addMetaItems(output, NtmItems.PART_GRIP.get());
                         addMetaItems(output, NtmItems.DRILLBIT.get());
                         addMetaItems(output, NtmItems.ORBITAL_ASSEMBLY.get());
                         addMetaItems(output, NtmItems.PA_COIL.get());

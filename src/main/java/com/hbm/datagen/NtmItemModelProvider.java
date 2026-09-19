@@ -1136,6 +1136,13 @@ public class NtmItemModelProvider extends ItemModelProvider {
         // BEDROCK_ORE nutzt ICustomItemModelRegister -- sechsundzwanzig Modelle, eines je Stufe
         this.basicItem(NtmItems.BEDROCK_ORE_BASE.get());
         this.basicItem(NtmItems.BEDROCK_ORE_FRAGMENT.get());
+        this.basicItem(NtmItems.PART_BARREL_LIGHT.get());
+        this.basicItem(NtmItems.PART_BARREL_HEAVY.get());
+        this.basicItem(NtmItems.PART_RECEIVER_LIGHT.get());
+        this.basicItem(NtmItems.PART_RECEIVER_HEAVY.get());
+        this.basicItem(NtmItems.PART_MECHANISM.get());
+        this.basicItem(NtmItems.PART_STOCK.get());
+        this.basicItem(NtmItems.PART_GRIP.get());
         this.basicItem(NtmItems.MISSILE_CUSTOM.get());
         this.basicItem(NtmItems.PARTICLE_HYDROGEN.get());
         this.basicItem(NtmItems.PARTICLE_COPPER.get());

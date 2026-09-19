@@ -112,6 +112,17 @@ public class MoldItem extends Item implements IMetaItem, ICustomItemModelRegiste
         registerMold(new MoldSubtype(20, S, "wire_dense", MaterialShapes.DENSEWIRE, 1, MatShapeItems::wireDenseOf));
         registerMold(new MoldSubtype(13, L, "plates_cast", MaterialShapes.CASTPLATE, 3, MatShapeItems::castPlateOf));
         registerMold(new MoldSubtype(21, L, "wires_dense", MaterialShapes.DENSEWIRE, 9, MatShapeItems::wireDenseOf));
+
+        /* Die sieben Waffenbauteile, Formnummern 22 bis 28 wie im Original. Sie liegen im
+         * Port als Untertyp-Gegenstand vor -- die Materialnummer steckt in den Metadaten --
+         * und laufen deshalb ueber MoldSubtype, genau wie Gussplatte und dichter Draht. */
+        registerMold(new MoldSubtype(22, S, "barrel_light", MaterialShapes.LIGHTBARREL, 1, MatShapeItems::barrelLightOf));
+        registerMold(new MoldSubtype(23, S, "barrel_heavy", MaterialShapes.HEAVYBARREL, 1, MatShapeItems::barrelHeavyOf));
+        registerMold(new MoldSubtype(24, S, "receiver_light", MaterialShapes.LIGHTRECEIVER, 1, MatShapeItems::receiverLightOf));
+        registerMold(new MoldSubtype(25, S, "receiver_heavy", MaterialShapes.HEAVYRECEIVER, 1, MatShapeItems::receiverHeavyOf));
+        registerMold(new MoldSubtype(26, S, "mechanism", MaterialShapes.MECHANISM, 1, MatShapeItems::mechanismOf));
+        registerMold(new MoldSubtype(27, S, "stock", MaterialShapes.STOCK, 1, MatShapeItems::stockOf));
+        registerMold(new MoldSubtype(28, S, "grip", MaterialShapes.GRIP, 1, MatShapeItems::gripOf));
     }
 
     public MoldItem(Properties properties) {

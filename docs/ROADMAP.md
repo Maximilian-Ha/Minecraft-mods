@@ -8114,3 +8114,42 @@ Die C-130-Liste fing mit sieben angeblich blockierten Einträgen an:
 Keiner der sieben war das, wofür ich ihn beim ersten Aufschreiben gehalten habe.
 
 Alle 34 Tore grün.
+
+## Die Waffenbauteile — und warum keine Waffe baubar war
+
+In der Henry-Runde steht: „der Port hat noch **keine** einzige Waffe, die sich bauen lässt",
+nachgemessen über `NtmRecipeProvider`, der null `NtmItems.GUN_` nennt. Das lag an sieben
+fehlenden Gegenständen — Lauf leicht und schwer, Verschluss leicht und schwer, Mechanik,
+Schaft, Griff. Jeder Waffenbauplan des Originals steht auf ihnen.
+
+Was dabei herauskam, war angenehmer als erwartet: **fast alles drumherum lag schon da.**
+
+* `MaterialShapes` kennt alle sieben Formen samt Mengen und Tagnamen — `LIGHTBARREL` sind drei
+  Barren, ein `HEAVYRECEIVER` neun.
+* `Mats` trägt an jedem Material vollständig, welche Bauteile es hergibt. Stahl kann leichte
+  und schwere Läufe, aber nur leichte Verschlüsse; Holz kann Schaft und Griff, Elfenbein nur
+  den Griff. Diese Liste war im Port komplett, lange bevor es die Gegenstände gab.
+* `MoldSubtype` mit Auflöserfunktion existiert seit der Gussplatte.
+* Alle sieben Texturen liegen in der CE-Abspaltung.
+
+Es fehlten also wirklich nur die Gegenstände und ihre Verdrahtung.
+
+### Ein Gegenstand je Bauteil, alle Materialien in den Metadaten
+
+Dieselbe Bauart wie das Grundgesteinsbruchstück: die Zahl **ist** die Materialnummer aus
+`Mats`, und welche Varianten es gibt, entscheidet nicht der Gegenstand, sondern das Material
+über sein `setAutogen(...)`. Die Graustufenzeichnung bekommt die helle Farbe des Materials.
+
+### Sie kommen aus der Gießform, nicht von der Werkbank
+
+Formnummern 22 bis 28, wie im Original. Damit hat jedes der sieben Bauteile von der ersten
+Minute an eine Quelle — kein Gegenstand ohne Weg dorthin.
+
+**Warum kein Tag je Material:** die Tag-Erzeugung des Ports geht über *Namen*
+(`ingot_steel` → `c:ingots/steel`), und ein Metagegenstand hat nur einen Namen für alle
+Materialien. Für die Bauplänе heißt das: sie greifen die Bauteile über
+`DataComponentIngredient` mit der Materialnummer ab, nicht über einen Tag. Das Original löst
+dasselbe über sein Erzwörterbuch; bei den Waffenbauplänen fällt der Unterschied nicht auf,
+weil sie ohnehin ein bestimmtes Material nennen (`STEEL.lightBarrel()`), keine Gruppe.
+
+Alle 34 Tore grün.

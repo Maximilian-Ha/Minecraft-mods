@@ -4,7 +4,9 @@ import com.hbm.inventory.MetaHelper;
 import com.hbm.items.CastPlateItem;
 import com.hbm.items.NtmItems;
 import com.hbm.items.WireDenseItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
@@ -94,6 +96,27 @@ public class MatShapeItems {
         }
         return ItemStack.EMPTY;
     }
+
+    /**
+     * Das Waffenbauteil dieser Form aus diesem Material, oder leer.
+     *
+     * ANDERS ALS BEI GUSSPLATTE UND DRAHT braucht es hier keine Zuordnungstabelle: die
+     * Metadaten der Bauteile SIND die Materialnummern, und ob ein Material die Form
+     * hergibt, steht an ihm selbst. Die Pruefung ist deshalb eine Zeile.
+     */
+    public static ItemStack gunPart(NTMMaterial mat, MaterialShapes shape, DeferredItem<Item> item) {
+        if(mat == null || !mat.autogen.contains(shape)) return ItemStack.EMPTY;
+        return MetaHelper.newStack(item.get(), 1, mat.id);
+    }
+
+    /** Dieselbe Abfrage als Funktion fuer die Formen -- eine je Bauteil. */
+    public static ItemStack barrelLightOf(NTMMaterial mat) { return gunPart(mat, MaterialShapes.LIGHTBARREL, NtmItems.PART_BARREL_LIGHT); }
+    public static ItemStack barrelHeavyOf(NTMMaterial mat) { return gunPart(mat, MaterialShapes.HEAVYBARREL, NtmItems.PART_BARREL_HEAVY); }
+    public static ItemStack receiverLightOf(NTMMaterial mat) { return gunPart(mat, MaterialShapes.LIGHTRECEIVER, NtmItems.PART_RECEIVER_LIGHT); }
+    public static ItemStack receiverHeavyOf(NTMMaterial mat) { return gunPart(mat, MaterialShapes.HEAVYRECEIVER, NtmItems.PART_RECEIVER_HEAVY); }
+    public static ItemStack mechanismOf(NTMMaterial mat) { return gunPart(mat, MaterialShapes.MECHANISM, NtmItems.PART_MECHANISM); }
+    public static ItemStack stockOf(NTMMaterial mat) { return gunPart(mat, MaterialShapes.STOCK, NtmItems.PART_STOCK); }
+    public static ItemStack gripOf(NTMMaterial mat) { return gunPart(mat, MaterialShapes.GRIP, NtmItems.PART_GRIP); }
 
     /** Die gegossene Platte aus diesem Material -- als Funktion fuer die Formen. */
     public static ItemStack castPlateOf(NTMMaterial mat) { return castPlate(mat, false); }

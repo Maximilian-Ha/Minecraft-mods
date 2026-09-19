@@ -31,6 +31,7 @@ import com.hbm.util.EnumUtil;
 import com.hbm.items.machine.RBMKPelletItem;
 import com.hbm.items.machine.ScrapsItem;
 import com.hbm.inventory.material.NTMMaterial;
+import com.hbm.items.machine.GunPartItem;
 import com.hbm.items.special.BedrockOreFragmentItem;
 import com.hbm.items.special.BedrockOreItem;
 import com.hbm.items.special.PolaroidItem;
@@ -719,6 +720,22 @@ public class NuclearTechModClient {
                     return 0xFF000000 | (mat != null ? mat.solidColorLight : 0xFFFFFF);
                 },
                 NtmItems.BEDROCK_ORE_FRAGMENT.get()
+        );
+
+        /* Dieselbe Vorlage, dieselbe Regel: die sieben Waffenbauteile tragen eine
+         * Graustufenzeichnung und bekommen die helle Farbe ihres Materials. */
+        event.register(
+                (stack, tintIndex) -> {
+                    NTMMaterial mat = GunPartItem.getMaterial(stack);
+                    return 0xFF000000 | (mat != null ? mat.solidColorLight : 0xFFFFFF);
+                },
+                NtmItems.PART_BARREL_LIGHT.get(),
+                NtmItems.PART_BARREL_HEAVY.get(),
+                NtmItems.PART_RECEIVER_LIGHT.get(),
+                NtmItems.PART_RECEIVER_HEAVY.get(),
+                NtmItems.PART_MECHANISM.get(),
+                NtmItems.PART_STOCK.get(),
+                NtmItems.PART_GRIP.get()
         );
 
         /* Die untere Lage des ICF-Kuegelchens traegt die gemischte Farbe der beiden Stoffe. */
