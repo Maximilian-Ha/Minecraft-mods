@@ -1107,10 +1107,9 @@ public class NtmItems {
      * vollem Zierat. Balefire-Pulver stand schon, die drei anderen kommen hier dazu.
      * ---------------------------------------------------------------------------------- */
 
-    /* Im Original ein ItemBook, das beim Rechtsklick eine Lesemaske oeffnet. Die Maske
-     * (GUIBook/ContainerBook) ist noch nicht portiert -- fuer den Zyklotron-Sockel wird sie
-     * nicht gebraucht. Das Buch traegt hier nur seinen Spruch. */
-    public static final DeferredItem<Item> BOOK_OF_ = ITEMS.register("book_of_", () -> new Item(new Item.Properties().stacksTo(1)));
+    /* Das Buch oeffnet beim Rechtsklick seine eigene Werkbank mit vier Plaetzen, auf der die
+     * Rezepte aus MagicRecipes liegen (Runde 170). */
+    public static final DeferredItem<Item> BOOK_OF_ = ITEMS.register("book_of_", () -> new BookItem(new Item.Properties().stacksTo(1)));
 
     /* "Deals as much damage as it needs to": der Hammer nimmt dem Ziel ein Drittel seiner
      * hoechsten Lebenspunkte ab, egal wie viel das ist. */
@@ -1123,6 +1122,32 @@ public class NtmItems {
                             .attributes(SwordItem.createAttributes(Tiers.DIAMOND, 3, -2.4F))
             ).setHurtEnemy(SpecialSwordItem.LAMBDA_GAVEL_HURT_ENEMY)
     );
+
+    /* Die beiden Vorstufen des Diamanthammers (Runde 170). Ohne sie ist der Diamanthammer
+     * im Ueberlebensmodus nicht zu bekommen: sein Rezept verlangt den Bleihammer. */
+    public static final DeferredItem<Item> WOOD_GAVEL = ITEMS.register(
+            "wood_gavel",
+            () -> new SpecialSwordItem(
+                    Tiers.WOOD,
+                    new Item.Properties()
+                            .stacksTo(1)
+                            .attributes(SwordItem.createAttributes(Tiers.WOOD, 3, -2.4F))
+            ).setHurtEnemy(SpecialSwordItem.LAMBDA_GAVEL_WOOD_HURT_ENEMY)
+    );
+
+    public static final DeferredItem<Item> LEAD_GAVEL = ITEMS.register(
+            "lead_gavel",
+            () -> new SpecialSwordItem(
+                    NtmTiers.STEEL,
+                    new Item.Properties()
+                            .stacksTo(1)
+                            .attributes(SwordItem.createAttributes(NtmTiers.STEEL, 3, -2.4F))
+            ).setHurtEnemy(SpecialSwordItem.LAMBDA_GAVEL_LEAD_HURT_ENEMY)
+    );
+
+    /* Die Schrotkugeln aus dem Rezept des Bleihammers. Das Original nimmt fuer sie die
+     * Textur pellets_lead. */
+    public static final DeferredItem<Item> PELLET_BUCKSHOT = ITEMS.register("pellet_buckshot", () -> new Item(new Item.Properties()));
 
     public static final DeferredItem<Item> COIN_MASKMAN = ITEMS.register("coin_maskman", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON)));
 

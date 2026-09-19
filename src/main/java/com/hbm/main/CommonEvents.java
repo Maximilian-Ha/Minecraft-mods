@@ -25,6 +25,7 @@ import com.hbm.inventory.FluidContainerRegistry;
 import com.hbm.inventory.NtmMenuTypes;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.recipes.GasCentrifugeRecipes;
+import com.hbm.inventory.recipes.MagicRecipes;
 import com.hbm.inventory.recipes.loader.SerializableRecipe;
 import com.hbm.items.machine.MoldItem;
 import com.hbm.blocks.generic.ToolConversionBlock;
@@ -100,6 +101,10 @@ public class CommonEvents {
              * Quelltext, wie im Original. Nur die Zuordnung Fluid -> Kette wird hier gebaut,
              * und die braucht Fluids.init() davor. */
             GasCentrifugeRecipes.register();
+
+            /* Die Rezepte des Buchs stehen wie im Original fest im Quelltext; sie haben keine
+             * Form, sondern nur eine Reihenfolge, und passen deshalb in kein Rezeptdatenblatt. */
+            MagicRecipes.register();
 
             HTTPHandler.loadStats();
             FalloutConfigJSON.initialize();
@@ -336,6 +341,7 @@ public class CommonEvents {
         event.register(NtmMenuTypes.REACTOR_CONTROL.get(), ReactorControlScreen::new);
         event.register(NtmMenuTypes.WEAPON_TABLE.get(), WeaponTableScreen::new);
         event.register(NtmMenuTypes.ARMOR_TABLE.get(), ArmorTableScreen::new);
+        event.register(NtmMenuTypes.BOOK.get(), BookScreen::new);
 
         event.register(NtmMenuTypes.BATTERY_SOCKET.get(), BatterySocketScreen::new);
         event.register(NtmMenuTypes.BATTERY_REDD.get(), BatteryREDDScreen::new);

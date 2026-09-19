@@ -3482,6 +3482,42 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .define('B', NtmItems.INGOT_BISMUTH_BRONZE.get())
                 .unlockedBy("has_cobalt_powder", has(NtmItems.POWDER_COBALT.get()))
                 .save(recipeOutput);
+
+        /* ---- Runde 170: die Hammerkette und das Buch ---- */
+
+        /* Der Holzhammer. Das Original nimmt KEY_SLAB, KEY_LOG und KEY_STICK -- also jede
+         * Holzart; im Port stehen dafuer die Sammelbegriffe. */
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.WOOD_GAVEL.get(), 1)
+                .pattern("SWS")
+                .pattern(" R ")
+                .pattern(" R ")
+                .define('S', ItemTags.WOODEN_SLABS)
+                .define('W', ItemTags.LOGS)
+                .define('R', Items.STICK)
+                .unlockedBy("has_stick", has(Items.STICK))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.LEAD_GAVEL.get(), 1)
+                .pattern("PIP")
+                .pattern("IGI")
+                .pattern("PIP")
+                .define('P', NtmItems.PELLET_BUCKSHOT.get())
+                .define('I', NtmItems.INGOT_LEAD.get())
+                .define('G', NtmItems.WOOD_GAVEL.get())
+                .unlockedBy("has_wood_gavel", has(NtmItems.WOOD_GAVEL.get()))
+                .save(recipeOutput);
+
+        /* Das Buch. Ohne dieses Rezept gaebe es das Buch nur aus Beute und vom Bobmazon --
+         * und damit auch den Diamanthammer nicht, dessen Rezept im Buch steht. */
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.BOOK_OF_.get(), 1)
+                .pattern("BGB")
+                .pattern("GAG")
+                .pattern("BGB")
+                .define('B', NtmItems.EGG_BALEFIRE_SHARD.get())
+                .define('G', Items.GOLD_INGOT)
+                .define('A', Items.BOOK)
+                .unlockedBy("has_balefire_shard", has(NtmItems.EGG_BALEFIRE_SHARD.get()))
+                .save(recipeOutput);
     }
 
 }

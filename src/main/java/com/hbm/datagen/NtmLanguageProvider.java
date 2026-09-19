@@ -1628,6 +1628,12 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.BOOK_OF_, DESC, "Edition 4, gold lined pages");
         this.add(NtmItems.DIAMOND_GAVEL, "Diamond Gavel");
         this.add(NtmItems.DIAMOND_GAVEL, DESC, "The joke! It makes sense now!!$$Deals as much damage as it needs to.");
+        this.add(NtmItems.WOOD_GAVEL, "Wooden Gavel");
+        this.add(NtmItems.WOOD_GAVEL, DESC, "Thunk!");
+        this.add(NtmItems.LEAD_GAVEL, "Lead Gavel");
+        this.add(NtmItems.LEAD_GAVEL, DESC, "You are hereby sentenced to lead poisoning.");
+        this.add(NtmItems.PELLET_BUCKSHOT, "Buckshot Pellets");
+        this.add("container.book_of_", "Book of ");
         this.add(NtmItems.COIN_MASKMAN, "Maskman Coin");
         this.add(NtmItems.BOTTLE_OPENER, "Hbm's Own Self-Made Bottle Opener");
         this.add(NtmItems.BOTTLE_OPENER, DESC, "My very own bottle opener.$Use with caution!");
@@ -2662,6 +2668,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("jei.category.hbmsntm.compressor", "Compressor");
         this.add("jei.category.hbmsntm.gas_centrifuge", "Gas Centrifuge");
         this.add("jei.category.hbmsntm.cyclotron", "Cyclotron");
+        this.add("jei.category.hbmsntm.book", "Black Book");
         this.add("jei.hbmsntm.cyclotron.antimatter", "%s mB antimatter");
         this.add("jei.hbmsntm.gas_centrifuge.exhausted", "Depleted");
         this.add("jei.hbmsntm.gas_centrifuge.fast", "Requires overclocking upgrade");

@@ -4434,3 +4434,58 @@ Port, sondern in der Liste**: das Original schreibt `glScaled(4 * 0.95, …)`, u
 der Sollwerte las nur die erste Zahl. Er wertet solche Produkte jetzt aus; `tools/inventory-list.txt`
 ändert sich dadurch in genau einer Zeile. Eine Liste mit einem Wert, von dem ich weiß, dass er
 falsch ist, wird nicht ausgeliefert — dieselbe Regel wie in Runde 164.
+
+## Runde 170: das schwarze Buch und die Hammerkette
+
+Nach Runde 169 waren als offene Punkte noch `book_of_` und `diamond_gavel` gemeldet: beide
+waren registriert, aber im Überlebensmodus **nicht zu bekommen**, und mit ihnen zwei der vier
+Zyklotron-Sockel. Diese Runde schließt das.
+
+### Was dem Buch fehlte
+
+Drei Dinge, und nur eins davon war das Buch selbst:
+
+1. **Die Lese-Oberfläche.** Das Buch ist im Original keine Lektüre, sondern eine Werkbank:
+   Rechtsklick öffnet vier Plätze und ein Ergebnis. Portiert als `BookMenu` / `BookScreen`,
+   alle Platzkoordinaten unverändert aus `ContainerBook` und `GUIBook`.
+2. **Die Rezepte.** `MagicRecipes` kennt keine Form — es zählt allein, welche Gegenstände in
+   den belegten Plätzen liegen, in Leserichtung. Das ist kein Werkbankrezept und passt in kein
+   Rezeptdatenblatt, deshalb steht die Liste wie im Original fest im Quelltext.
+3. **Ein Weg zum Buch.** Das Original hat dafür drei: ein verstecktes Bobmazon-Angebot, zwei
+   Beutetöpfe und ein Werkbankrezept (Balefire-Scherben in den Ecken, Gold an den Kanten, ein
+   Buch in der Mitte). Bobmazon und die Beutetöpfe sind nicht portiert, **das Rezept schon** —
+   es reicht.
+
+Die Oberfläche hängt an keinem Block. Sie ist damit das erste Menü im Port, das ein Gegenstand
+öffnet; `stillValid` prüft deshalb, ob der Spieler das Buch noch bei sich hat, und beim
+Schließen fällt heraus, was auf den vier Plätzen liegt — wie im Original.
+
+### Der Diamanthammer brauchte eine ganze Kette
+
+Sein Rezept im Buch lautet: drei Diamantkies und **ein Bleihammer**. Den gab es im Port nicht,
+und der Bleihammer wiederum braucht einen Holzhammer und Schrotkugeln. Also drei neue
+Gegenstände:
+
+| Gegenstand | Herkunft | Wirkung |
+| --- | --- | --- |
+| Holzhammer | Werkbank (Holzstufe, Stamm, zwei Stöcke) | "Thunk!" — nur Krach |
+| Bleihammer | Werkbank (vier Schrotkugeln, vier Bleibarren, Holzhammer) | 15 s Bleivergiftung, Stufe 5 |
+| Schrotkugeln | Montagefabrik (sechs Bleinuggets) | — |
+
+Die drei Hämmer sind wie im Original in keinem Kreativreiter; `tools/tab-check.sh` führt sie
+als begründete Ausnahmen. Der Hinweis dort, sie seien im Überleben unerreichbar, ist mit dieser
+Runde hinfällig und wurde ersetzt.
+
+### Drei der sieben Buchrezepte fehlen noch
+
+Portiert sind Balefire-Zünder, Elektronium und der Diamanthammer. Die übrigen vier hängen an
+Gegenständen, die es im Port noch nicht gibt: `rod_of_discord`, `mysteryshovel` und der
+Mese-Hammer samt `shimmer_handle`. Das vierte ist ein Sonderfall — das Original verlangt
+dreimal `ingot_u238m2` mit **verschiedenen Metadaten**; Metadaten gibt es in 1.21 nicht mehr,
+und ohne die Vorlage, wie die drei Zustände im Port heißen sollen, wird hier nichts geraten.
+
+Für die Übersicht kam die JEI-Kategorie **Black Book** dazu, die das Original als NEI-Handler
+führt. Als Hintergrund dient wie dort die Oberfläche des Buchs; der Ausschnitt beginnt bei
+(5|11), und genau darauf beziehen sich die Platzkoordinaten des Originals — die vier Eingänge
+bei (25|6) im Abstand 36, das Ergebnis bei (119|24). Nachgerechnet gegen die Oberfläche:
+30−5 = 25, 17−11 = 6, 124−5 = 119, 35−11 = 24.

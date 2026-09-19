@@ -710,6 +710,12 @@ public class AssemblyMachineRecipes extends GenericRecipes<GenericRecipe> {
                 )
         );
 
+        this.register(new GenericRecipe("ass.buckshot").setup(50, 100).outputItems(new ItemStack(NtmItems.PELLET_BUCKSHOT.get(), 1))
+                .inputItems(
+                        new ComparableStack(NtmItems.NUGGET_LEAD.get(), 6)
+                )
+        );
+
         this.register(new GenericRecipe("ass.pellet_cluster").setup(40, 100).outputItems(new ItemStack(NtmItems.PELLET_CLUSTER.get(), 1))
                 .inputItems(
                         new ComparableStack(NtmItems.PLATE_STEEL.get(), 4),

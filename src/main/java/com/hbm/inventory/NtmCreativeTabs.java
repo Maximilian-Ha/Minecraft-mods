@@ -366,6 +366,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.BALL_TNT.get());
                         output.accept(NtmItems.BALL_TATB.get());
                         output.accept(NtmItems.PELLET_CLUSTER.get());
+                        output.accept(NtmItems.PELLET_BUCKSHOT.get());
                         output.accept(NtmItems.MAGNETRON.get());
                         output.accept(NtmItems.PHOTO_PANEL.get());
                         output.accept(NtmItems.MISSILE_ASSEMBLY.get());

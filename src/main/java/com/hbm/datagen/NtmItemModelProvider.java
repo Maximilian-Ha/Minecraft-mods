@@ -955,6 +955,10 @@ public class NtmItemModelProvider extends ItemModelProvider {
         // Die vier Stecker des Zyklotrons (Runde 163); der Hammer haelt sich wie ein Werkzeug.
         this.basicItem(NtmItems.BOOK_OF_.get());
         this.handheldItem(NtmItems.DIAMOND_GAVEL.get());
+        this.handheldItem(NtmItems.WOOD_GAVEL.get());
+        this.handheldItem(NtmItems.LEAD_GAVEL.get());
+        /* Das Original nimmt fuer die Schrotkugeln die Textur der Bleikugeln. */
+        this.basicCustomLayerItem(NtmItems.PELLET_BUCKSHOT.get(), "pellets_lead");
         this.basicItem(NtmItems.COIN_MASKMAN.get());
         this.handheldItem(NtmItems.STEEL_PICKAXE.get());
         this.handheldItem(NtmItems.STEEL_AXE.get());

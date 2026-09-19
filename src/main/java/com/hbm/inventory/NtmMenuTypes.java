@@ -131,6 +131,9 @@ public class NtmMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<WeaponTableMenu>> WEAPON_TABLE = reg("weapon_table", WeaponTableMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<ArmorTableMenu>> ARMOR_TABLE = reg("armor_table", ArmorTableMenu::new);
 
+    /* Die Werkbank des Buchs haengt an keinem Block -- sie wird vom Gegenstand geoeffnet. */
+    public static final DeferredHolder<MenuType<?>, MenuType<BookMenu>> BOOK = reg("book", BookMenu::new);
+
     public static final DeferredHolder<MenuType<?>, MenuType<MachineFluidTankMenu>> FLUID_TANK = reg("fluid_tank", MachineFluidTankMenu::new);
 
     public static final DeferredHolder<MenuType<?>, MenuType<BatterySocketMenu>> BATTERY_SOCKET = reg("battery_socket", BatterySocketMenu::new);

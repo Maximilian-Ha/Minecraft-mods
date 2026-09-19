@@ -1,6 +1,7 @@
 package com.hbm.items.tools;
 
 import com.hbm.blocks.ITooltipProvider;
+import com.hbm.lib.ModEffect;
 import com.hbm.registry.NtmSoundEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -31,6 +32,30 @@ public class SpecialSwordItem extends SwordItem {
             if(i == 2) target.addEffect(new MobEffectInstance(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 5 * 60 * 20, 2)));
             if(i == 3) target.addEffect(new MobEffectInstance(new MobEffectInstance(MobEffects.CONFUSION, 1 * 60 * 20, 0)));
             level.playSound(null, target.getX(), target.getY(), target.getZ(), SoundEvents.ANVIL_LAND, SoundSource.AMBIENT, 3.0F, 1.0F);
+        }
+    };
+
+    /** Der Holzhammer kann nichts ausser Krach machen -- "Thunk!". */
+    public static final Consumer<LivingEntity> LAMBDA_GAVEL_WOOD_HURT_ENEMY = (target) -> {
+        Level level = target.level;
+
+        if(!level.isClientSide) {
+            level.playSound(null, target.getX(), target.getY(), target.getZ(),
+                    NtmSoundEvents.WEAPON_WHACK.get(), SoundSource.PLAYERS, 3.0F, 1.0F);
+        }
+    };
+
+    /**
+     * Der Bleihammer spricht das Urteil: fuenfzehn Sekunden Bleivergiftung der fuenften Stufe.
+     * Das Original schreibt dafuer HbmPotion.lead mit Amplifier 4.
+     */
+    public static final Consumer<LivingEntity> LAMBDA_GAVEL_LEAD_HURT_ENEMY = (target) -> {
+        Level level = target.level;
+
+        if(!level.isClientSide) {
+            level.playSound(null, target.getX(), target.getY(), target.getZ(),
+                    NtmSoundEvents.WEAPON_WHACK.get(), SoundSource.PLAYERS, 3.0F, 1.0F);
+            target.addEffect(new MobEffectInstance(ModEffect.LEAD, 15 * 20, 4));
         }
     };
 
