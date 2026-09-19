@@ -1,5 +1,6 @@
 package com.hbm.registry;
 
+import com.hbm.lib.ModEffect;
 import com.hbm.main.NuclearTechMod;
 
 import net.minecraft.core.Holder;
@@ -7,6 +8,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -46,6 +48,23 @@ public class NtmMobEffects {
 
     public static boolean hasPotionSickness(LivingEntity entity) {
         return entity.hasEffect(POTION_SICKNESS);
+    }
+
+    /**
+     * Nimmt die acht schaedlichen Wirkungen samt der Verstrahlung weg. Genau diese Liste
+     * steht im Original zweimal wortgleich da -- einmal in ItemSyringe fuer den
+     * Sanitaetsbeutel, einmal in ItemPill fuer die Jodtablette. Hier steht sie einmal.
+     */
+    public static void clearNegativeEffects(LivingEntity entity) {
+        entity.removeEffect(MobEffects.BLINDNESS);
+        entity.removeEffect(MobEffects.CONFUSION);
+        entity.removeEffect(MobEffects.DIG_SLOWDOWN);
+        entity.removeEffect(MobEffects.HUNGER);
+        entity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
+        entity.removeEffect(MobEffects.POISON);
+        entity.removeEffect(MobEffects.WEAKNESS);
+        entity.removeEffect(MobEffects.WITHER);
+        entity.removeEffect(ModEffect.RADIATION);
     }
 
     public static void register(IEventBus eventBus) {

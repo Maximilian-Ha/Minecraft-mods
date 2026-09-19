@@ -7865,3 +7865,45 @@ Gewicht 3. Von den sieben Einträgen, die dort als blockiert standen, sind noch 
 `definitelyfood`, `pill_iodine`, `canister_full`, `gun_henry`, `gun_n_i_4_n_i`.
 
 Alle 34 Tore grün.
+
+## Jodtablette und Feldration — und die Bilanz der sieben
+
+Nach dem Sanitätsbeutel standen noch fünf Einträge der C-130 als blockiert da. Diesmal habe
+ich nachgesehen, bevor ich etwas behauptet habe, und zwei davon waren ebenfalls keine Blockade:
+
+* `definitelyfood` ist im Original ein `ItemLemon(3, 0.5F, false)` — drei Punkte,
+  Sättigungsfaktor ein halb, sonst nichts. Kein Sondertext, keine Wirkung. Auf 1.21 sind das
+  vier Zeilen `FoodProperties`.
+* `pill_iodine` ist ein `ItemPill(0)`: eine Tablette, die nicht sättigt und sich deshalb immer
+  schlucken lässt, und die dieselben neun Wirkungen wegnimmt wie der Sanitätsbeutel.
+
+Damit steht diese Liste am Ende so da: **von den sieben Einträgen, mit denen sie anfing, waren
+vier ein Irrtum und nur drei eine Blockade.** Übrig bleiben `canister_full` (braucht die
+Flüssigkeitsbehälter), `gun_henry` und `gun_n_i_4_n_i` (beide eigene Sedna-Runden).
+
+### Die Übelkeitssperre wirkt bei Tabletten anders
+
+Die Spritze prüft vor dem Stechen, ob die Übelkeit schon anliegt, und tut nichts, wenn ja. Die
+Tablette prüft **nicht** — sie legt die Sperre nur an. Man kann Tabletten also hintereinander
+schlucken; sie sperren bloß die Spritzen aus. Das ist im Original genauso und sieht nach einem
+Versehen aus, ist aber übernommen wie es dort steht.
+
+### Eine Liste, die zweimal wortgleich dastand
+
+Die neun Wirkungen, die Beutel und Tablette wegnehmen, stehen im Original zweimal Zeile für
+Zeile identisch da — einmal in `ItemSyringe`, einmal in `ItemPill`. Hier stehen sie einmal, als
+`NtmMobEffects.clearNegativeEffects`.
+
+### Vier Baupläne, die ich beim ersten Mal übersehen hatte
+
+Im Commit des Sanitätsbeutels steht, das Original habe „die beiden Baupläne aus
+`ConsumableRecipes` Z. 137 und 140". Es hat **sechs**: je drei mit Leder und mit Kautschuk, und
+in der Mitte steht entweder das Gegenmittel, die Jodtablette oder Radaway. Die beiden mit
+Radaway waren die einzigen, die ich gesehen hatte, weil ich nach `med_bag` in der Nähe von
+`radaway` gesucht hatte statt nach `med_bag`. Die vier übrigen sind jetzt da — zwei davon
+hätten schon in der letzten Runde gehen können, das Gegenmittel liegt seit Langem im Port.
+
+Dazu der Bauplan der Jodtablette (acht Stück aus Jod- und Fluoritstaub) und die beiden der
+Feldration, die sich nur darin unterscheiden, ob ein Setzling oder drei Weizensamen hineingehen.
+
+Alle 34 Tore grün.

@@ -2305,6 +2305,41 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_radaway", has(NtmItems.RADAWAY.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "med_bag_from_rubber"));
 
+        /* Die vier uebrigen Bauplaene des Sanitaetsbeutels, ConsumableRecipes Z. 135/136 und
+         * 138/139. Das Original hat SECHS: je drei mit Leder und mit Kautschuk, und in der
+         * Mitte steht entweder das Gegenmittel, die Jodtablette oder Radaway. Die beiden mit
+         * Radaway stehen oben, diese vier kommen mit der Jodtablette dazu. */
+        this.medBagGross(recipeOutput, Items.LEATHER, NtmItems.SYRINGE_ANTIDOTE.get(), "med_bag_antidote");
+        this.medBagGross(recipeOutput, NtmItems.INGOT_RUBBER.get(), NtmItems.SYRINGE_ANTIDOTE.get(), "med_bag_antidote_from_rubber");
+        this.medBagGross(recipeOutput, Items.LEATHER, NtmItems.PILL_IODINE.get(), "med_bag_iodine");
+        this.medBagGross(recipeOutput, NtmItems.INGOT_RUBBER.get(), NtmItems.PILL_IODINE.get(), "med_bag_iodine_from_rubber");
+
+        /* Die Jodtablette, ConsumableRecipes Z. 118: acht Stueck aus Jod- und Fluoritstaub. */
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.PILL_IODINE.get(), 8)
+                .pattern("IF")
+                .define('I', NtmItems.POWDER_IODINE.get())
+                .define('F', NtmItems.FLUORITE.get())
+                .unlockedBy("has_powder_iodine", has(NtmItems.POWDER_IODINE.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "pill_iodine"));
+
+        /* Die Feldration, CraftingManager Z. 193/194. Das Original hat den Bauplan zweimal:
+         * einmal mit einem Setzling, einmal mit drei Weizensamen. */
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.FOOD, NtmItems.DEFINITELYFOOD.get(), 4)
+                .requires(NtmItems.INGOT_RUBBER.get())
+                .requires(Items.WHEAT)
+                .requires(Items.ROTTEN_FLESH)
+                .requires(ItemTags.SAPLINGS)
+                .unlockedBy("has_rotten_flesh", has(Items.ROTTEN_FLESH))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "definitelyfood"));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.FOOD, NtmItems.DEFINITELYFOOD.get(), 4)
+                .requires(NtmItems.INGOT_RUBBER.get())
+                .requires(Items.WHEAT)
+                .requires(Items.ROTTEN_FLESH)
+                .requires(Items.WHEAT_SEEDS, 3)
+                .unlockedBy("has_rotten_flesh", has(Items.ROTTEN_FLESH))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "definitelyfood_from_seeds"));
+
         // ---- Runde 7: restliche Netzbauteile und Kondensatoren ----
 
         // Original CraftingManager Z. 237: " Q " / "CAC" / " Q "
@@ -3016,6 +3051,23 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .requires(result)
                 .unlockedBy("has_" + resultName, has(result))
                 .save(recipeOutput, recipeId);
+    }
+
+    /**
+     * Die grosse Bauform des Sanitaetsbeutels: "LLL" / "SIS" / "LLL", mit dem Stimpak an den
+     * Seiten. Das Original hat sie viermal -- zwei Huellen mal zwei Mittelstuecke --, und weil
+     * sich nur zwei Zutaten unterscheiden, steht sie hier einmal.
+     */
+    private void medBagGross(RecipeOutput recipeOutput, ItemLike huelle, ItemLike mitte, String name) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.MED_BAG.get(), 1)
+                .pattern("LLL")
+                .pattern("SIS")
+                .pattern("LLL")
+                .define('L', huelle)
+                .define('S', NtmItems.SYRINGE_METAL_STIMPAK.get())
+                .define('I', mitte)
+                .unlockedBy("has_syringe_metal_stimpak", has(NtmItems.SYRINGE_METAL_STIMPAK.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", name));
     }
 
     private void addOreSmelting(RecipeOutput recipeOutput, Block input, Block deepslateInput, Item result, float experience) {

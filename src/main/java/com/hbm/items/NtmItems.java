@@ -14,6 +14,7 @@ import com.hbm.items.ItemEnums.CapType;
 import com.hbm.items.ItemEnums.U238M2Type;
 import com.hbm.items.ItemEnums.CasingType;
 import com.hbm.items.armor.ArmorFSBItem;
+import com.hbm.items.food.PillItem;
 import com.hbm.items.special.SimpleConsumableItem;
 import com.hbm.items.special.SyringeItem;
 import com.hbm.items.armor.ArmorHEVItem;
@@ -1484,6 +1485,11 @@ public class NtmItems {
 
     /** Der Sanitaetsbeutel. Im Original eine Spritze, keine Konserve -- er laesst nichts zurueck. */
     public static final DeferredItem<Item> MED_BAG = ITEMS.register("med_bag", () -> SyringeItem.medBag(new Item.Properties()));
+
+    /** Die Jodtablette. Dieselben neun Wirkungen wie der Sanitaetsbeutel, ohne die Heilung. */
+    public static final DeferredItem<Item> PILL_IODINE = ITEMS.register("pill_iodine", () -> PillItem.jod(new Item.Properties()));
+    /** Die Feldration der C-130. Im Original nur ein ItemLemon(3, 0.5F) ohne weitere Wirkung. */
+    public static final DeferredItem<Item> DEFINITELYFOOD = ITEMS.register("definitelyfood", () -> new Item(new Item.Properties().food(NtmFoods.DEFINITELY_FOOD)));
 
     /** Der Kronkorken. Im Original das Zahlungsmittel des Oedlands, hier vorerst nur Beute. */
     public static final DeferredItem<Item> CAP_NUKA = ITEMS.register("cap_nuka", () -> new Item(new Item.Properties()));

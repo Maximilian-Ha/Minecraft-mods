@@ -1,7 +1,6 @@
 package com.hbm.items.special;
 
 import com.hbm.items.NtmItems;
-import com.hbm.lib.ModEffect;
 import com.hbm.registry.NtmMobEffects;
 import com.hbm.registry.NtmSoundEvents;
 
@@ -121,16 +120,7 @@ public class SyringeItem extends Item {
     public static SyringeItem medBag(Properties properties) {
         return new SyringeItem(properties, player -> {
             player.setHealth(player.getMaxHealth());
-
-            player.removeEffect(MobEffects.BLINDNESS);
-            player.removeEffect(MobEffects.CONFUSION);
-            player.removeEffect(MobEffects.DIG_SLOWDOWN);
-            player.removeEffect(MobEffects.HUNGER);
-            player.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
-            player.removeEffect(MobEffects.POISON);
-            player.removeEffect(MobEffects.WEAKNESS);
-            player.removeEffect(MobEffects.WITHER);
-            player.removeEffect(ModEffect.RADIATION);
+            NtmMobEffects.clearNegativeEffects(player);
         }, 15, (Supplier<Item>) null, "desc.item.med_bag.heal", "desc.item.med_bag.cure");
     }
 

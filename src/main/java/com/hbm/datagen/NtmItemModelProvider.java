@@ -1031,6 +1031,8 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicItem(NtmItems.RADAWAY_STRONG.get());
         this.basicItem(NtmItems.RADAWAY_FLUSH.get());
         this.basicItem(NtmItems.MED_BAG.get());
+        this.basicItem(NtmItems.PILL_IODINE.get());
+        this.basicItem(NtmItems.DEFINITELYFOOD.get());
         this.basicItem(NtmItems.MYSTERYSHOVEL.get());
         this.basicItem(NtmItems.FLAME_PONY.get());
         this.basicItem(NtmItems.CHOCOLATE_MILK.get());

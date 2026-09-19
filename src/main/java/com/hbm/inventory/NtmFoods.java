@@ -12,6 +12,10 @@ public class NtmFoods {
     public static final FoodProperties BIO_WAFER = new FoodProperties.Builder().nutrition(4).saturationModifier(2F).build();
     /* Portiert aus 1.7.10: ItemLemon(6, 1F, false). Der Pudding aus der Dosenkiste. */
     public static final FoodProperties PUDDING = new FoodProperties.Builder().nutrition(6).saturationModifier(1F).build();
+    /* Portiert aus 1.7.10: ItemLemon(3, 0.5F, false) -- die Feldration aus der C-130. */
+    public static final FoodProperties DEFINITELY_FOOD = new FoodProperties.Builder().nutrition(3).saturationModifier(0.5F).build();
+    /* Portiert aus 1.7.10: ItemPill(0) mit setAlwaysEdible. Eine Tablette saettigt nicht. */
+    public static final FoodProperties PILL = new FoodProperties.Builder().nutrition(0).saturationModifier(0F).alwaysEdible().build();
     public static final FoodProperties CHOCOLATE = new FoodProperties.Builder()
             .nutrition(1)
             .saturationModifier(0F)

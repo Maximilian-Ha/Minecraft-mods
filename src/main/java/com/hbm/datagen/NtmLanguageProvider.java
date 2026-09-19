@@ -1804,6 +1804,9 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.MED_BAG, "First Aid Kit");
         this.add("desc.item.med_bag.heal", "Full heal, regardless of max health");
         this.add("desc.item.med_bag.cure", "Removes negative effects");
+        this.add(NtmItems.PILL_IODINE, "Iodine Pill");
+        this.add("desc.item.pill_iodine", "Removes negative effects");
+        this.add(NtmItems.DEFINITELYFOOD, "MRE");
         this.add(NtmItems.AMMO_CONTAINER, this.getName(AmmoContainerType.STANDARD), "Ammo Container");
         this.add(NtmItems.AMMO_CONTAINER, this.getName(AmmoContainerType.MAKESHIFT), "Makeshift Ammo Container");
         this.add("desc.item.ammo_container.standard", "Supplies ammunition for up to three of your guns");
