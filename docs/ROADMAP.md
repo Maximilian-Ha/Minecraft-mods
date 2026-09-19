@@ -7501,3 +7501,41 @@ heraus, meldet das Tor genau ihn — und zwar lokal, in einer Sekunde, statt nac
 Minuten CI.
 
 Alle 33 Tore grün.
+
+## Berichtigung: der Protégé war auch nicht blockiert
+
+Dritte falsche „blockiert"-Behauptung in Folge, und dieselbe Ursache. In `XFactory44` stand:
+
+> **NICHT ÜBERNOMMEN: der Protégé**, die Schwesterwaffe mit `m44_equestrian_mn7`. Die schießt
+> Torpedos, und `EntityTorpedo` hat der Port nicht.
+
+Der zweite Halbsatz stimmt — die Klasse gab es nicht. Der Schluss daraus war falsch:
+`EntityTorpedo` ist fast dasselbe wie der Güterwagen und das Luftschiff, die ich in derselben
+Sitzung portiert habe. Ein Ding fällt vom Himmel, und beim Aufsetzen passiert etwas. Beim
+Torpedo ist dieses Etwas eine gewöhnliche Explosion der Stärke zwanzig — `ExplosionVNT`
+mit `makeStandard()`, beides seit Langem im Port.
+
+Der Torpedo fällt schneller als seine Geschwister: zweieinhalb Blöcke je Tick statt anderthalb,
+Beschleunigung 0,04 statt 0,03. Und er kippt im Fall nach vorn, drei Grad je Tick bis
+fünfundachtzig — das ist der einzige Unterschied im Zeichner.
+
+Der Protégé selbst ist der Li'l Mac mit drei Abweichungen: andere Signaturpatrone, kein
+Zielfernrohr, und sein Schuss klingt tiefer (dieselbe Aufnahme mit Tonhöhe 0,8 statt 1,0).
+
+### Was ich daraus mitnehme
+
+Dreimal in einer Sitzung habe ich „blockiert" geschrieben, ohne nachzusehen — Schredder,
+`DetonatableBlock` samt Teleport-Kniff, Protégé. Jedes Mal war der Baustein schon da, und jedes
+Mal hat das Nachmessen unter einer Minute gedauert.
+
+Das Muster ist klar: **ich habe aus dem Namen auf den Zustand geschlossen.** „`EntityTorpedo`
+gibt es nicht" stimmte; „also ist der Protégé blockiert" war ein Sprung. Die richtige Frage ist
+nicht, ob die Klasse fehlt, sondern **woraus sie besteht** — und das steht im Original, fünfzig
+Zeilen weit.
+
+Damit bleibt von den Waffen, die ich als blockiert notiert habe, nur noch eine Gruppe übrig,
+und die ist nachgemessen: Stinger, Quadro und Raketenwerfer. Der Stinger braucht
+`ItemGunStinger` samt Zielerfassung, die beiden anderen lenkbare Raketen (`rocket_qd`,
+`rocket_ml`) — das sind eigene Teilsysteme, keine einzelnen Klassen.
+
+Alle 33 Tore grün.

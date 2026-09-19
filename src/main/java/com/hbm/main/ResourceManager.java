@@ -359,8 +359,10 @@ public class ResourceManager {
     public static final ResourceLocation PANZERSCHRECK_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/panzerschreck.png");
     public static final ResourceLocation BOXCAR_TEX = NuclearTechMod.withDefaultNamespace("textures/models/boxcar.png");
     public static final ResourceLocation DUCHESSGAMBIT_TEX = NuclearTechMod.withDefaultNamespace("textures/models/duchessgambit.png");
+    public static final ResourceLocation TORPEDO_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/torpedo.png");
     public static final ResourceLocation SHREDDER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/shredder.png");
     public static final ResourceLocation LILMAC_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/lilmac.png");
+    public static final ResourceLocation PROTEGE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/protege.png");
     public static final ResourceLocation LILMAC_SCOPE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/lilmac_scope.png");
     public static final ResourceLocation DOUBLE_BARREL_SACRED_DRAGON_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/double_barrel_sacred_dragon.png");
     public static final ResourceLocation N_I_4_N_I_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/n_i_4_n_i.png");
@@ -691,6 +693,7 @@ public class ResourceManager {
     public static IModelCustom panzerschreck;
     public static IModelCustom boxcar;
     public static IModelCustom duchessgambit;
+    public static IModelCustom torpedo;
     public static IModelCustom shredder;
     public static IModelCustom n_i_4_n_i;
 
@@ -980,6 +983,7 @@ public class ResourceManager {
         panzerschreck = new HFRWavefrontObject("models/obj/weapons/panzerschreck.obj").asVBO();
         boxcar = new HFRWavefrontObject("models/obj/boxcar.obj").asVBO();
         duchessgambit = new HFRWavefrontObject("models/obj/duchessgambit.obj").asVBO();
+        torpedo = new HFRWavefrontObject("models/obj/weapons/torpedo.obj").asVBO();
         shredder = new HFRWavefrontObject("models/obj/weapons/shredder.obj").asVBO();
         n_i_4_n_i = new HFRWavefrontObject("models/obj/weapons/n_i_4_n_i.obj").asVBO();
 

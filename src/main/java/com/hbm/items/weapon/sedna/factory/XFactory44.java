@@ -3,6 +3,7 @@ package com.hbm.items.weapon.sedna.factory;
 import com.hbm.items.ItemEnums.CasingType;
 import com.hbm.entity.NtmEntityTypes;
 import com.hbm.entity.projectile.Boxcar;
+import com.hbm.entity.projectile.Torpedo;
 import com.hbm.entity.projectile.BulletBaseMK4;
 import com.hbm.main.ResourceManager;
 import com.hbm.util.SoundUtils;
@@ -42,6 +43,8 @@ public class XFactory44 {
     public static BulletConfig m44_express;
     /** Die Signaturpatrone des Lilmac. Sie macht keinen Schaden -- sie ruft einen Gueterwagen. */
     public static BulletConfig m44_equestrian_pip;
+    /** Die Signaturpatrone des Protege. Dieselbe Patrone, ein anderer Gegenstand vom Himmel. */
+    public static BulletConfig m44_equestrian_mn7;
 
     /**
      * Was die Signaturpatrone des Lilmac anrichtet: fuenfzig Bloecke ueber dem Getroffenen
@@ -65,6 +68,24 @@ public class XFactory44 {
         geschoss.discard();
     };
 
+    /**
+     * Was die Signaturpatrone des Protege anrichtet: derselbe Ablauf wie beim Lilmac, nur faellt
+     * hier ein Torpedo statt eines Gueterwagens -- und ohne Ankuendigung. Das Original spielt
+     * an dieser Stelle keinen Klang.
+     */
+    public static BiConsumer<BulletBaseMK4, HitResult> LAMBDA_TORPEDO = (geschoss, treffer) -> {
+
+        Vec3 stelle = treffer.getLocation();
+        Level level = geschoss.level;
+
+        Torpedo torpedo = new Torpedo(NtmEntityTypes.TORPEDO.get(), level);
+        torpedo.setPos(stelle.x, stelle.y + 50, stelle.z);
+        torpedo.setOwner(geschoss.getOwner());
+        level.addFreshEntity(torpedo);
+
+        geschoss.discard();
+    };
+
     public static void init(DeferredRegister.Items registry) {
 
         SpentCasing casing44 = new SpentCasing(SpentCasingType.STRAIGHT).setColor(SpentCasing.COLOR_CASE_BRASS).setupSmoke(1F, 0.5D, 60, 20);
@@ -82,6 +103,8 @@ public class XFactory44 {
                 .setCasing(casing44.clone().register("m44express"));
         m44_equestrian_pip = new BulletConfig().setItem(AmmoSecret.M44_EQUESTRIAN).setDamage(0F).setOnImpact(LAMBDA_BOXCAR)
                 .setCasing(casing44.clone().setColor(SpentCasing.COLOR_CASE_EQUESTRIAN).register("m44equestrianPip"));
+        m44_equestrian_mn7 = new BulletConfig().setItem(AmmoSecret.M44_EQUESTRIAN).setDamage(0F).setOnImpact(LAMBDA_TORPEDO)
+                .setCasing(casing44.clone().setColor(SpentCasing.COLOR_CASE_EQUESTRIAN).register("m44equestrianMn7"));
 
         /*
          * Der schwere Revolver, XFactory44 Z. 110 des Originals. Er teilt sich das Modell mit
@@ -107,14 +130,29 @@ public class XFactory44 {
          * anderer Textur, innerlich eine ganz andere Waffe: einunddreissigtausend Schuss
          * Haltbarkeit, doppelter Schaden -- und eine Patrone, die Gueterwagen vom Himmel holt.
          *
-         * NICHT UEBERNOMMEN: der Protege, die Schwesterwaffe mit m44_equestrian_mn7. Die
-         * schiesst Torpedos, und EntityTorpedo hat der Port nicht.
          */
         NtmItems.GUN_HEAVY_REVOLVER_LILMAC = registry.register("gun_heavy_revolver_lilmac", () -> new GunBaseNTItem(WeaponQuality.LEGENDARY, new GunConfig()
                 .dura(31_000).draw(10).inspect(23).crosshair(Crosshair.L_CLASSIC).scopeTexture(ResourceManager.LILMAC_SCOPE_TEX).smoke(Lego.LAMBDA_STANDARD_SMOKE)
                 .rec(new Receiver(0)
                         .dmg(30F).delay(14).reload(46).jam(23).sound(NtmSoundEvents.GUN_HEAVY_REVOLVER_FIRE, 1.0F, 1.0F)
                         .mag(new MagazineFullReload(0, 6).addConfigs(m44_equestrian_pip, m44_bp, m44_sp, m44_fmj, m44_jhp, m44_ap, m44_express))
+                        .offset(0.75, -0.0625, -0.3125D)
+                        .setupStandardFire().recoil(LAMBDA_RECOIL_NOPIP))
+                .setupStandardConfiguration()
+                .anim(LAMBDA_LILMAC_ANIMS).orchestra(Orchestras.ORCHESTRA_NOPIP)
+        ).setDefaultAmmo(Ammo.M44_JHP, 12));
+
+        /*
+         * Der Protege, XFactory44 Z. 131 des Originals. Die Schwesterwaffe des Lilmac, bis auf
+         * zwei Dinge baugleich: ihre Signaturpatrone laesst einen Torpedo statt eines
+         * Gueterwagens fallen, und sie hat kein Zielfernrohr. Auch ihr Schuss klingt tiefer --
+         * dieselbe Aufnahme, mit Tonhoehe 0,8 statt 1,0.
+         */
+        NtmItems.GUN_HEAVY_REVOLVER_PROTEGE = registry.register("gun_heavy_revolver_protege", () -> new GunBaseNTItem(WeaponQuality.LEGENDARY, new GunConfig()
+                .dura(31_000).draw(10).inspect(23).crosshair(Crosshair.L_CLASSIC).smoke(Lego.LAMBDA_STANDARD_SMOKE)
+                .rec(new Receiver(0)
+                        .dmg(30F).delay(14).reload(46).jam(23).sound(NtmSoundEvents.GUN_HEAVY_REVOLVER_FIRE, 1.0F, 0.8F)
+                        .mag(new MagazineFullReload(0, 6).addConfigs(m44_equestrian_mn7, m44_bp, m44_sp, m44_fmj, m44_jhp, m44_ap, m44_express))
                         .offset(0.75, -0.0625, -0.3125D)
                         .setupStandardFire().recoil(LAMBDA_RECOIL_NOPIP))
                 .setupStandardConfiguration()

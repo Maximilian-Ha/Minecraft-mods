@@ -1963,6 +1963,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.GUN_HEAVY_REVOLVER, "Heavy Revolver");
         this.add(NtmItems.GUN_LIBERATOR, "Liberator");
         this.add(NtmItems.GUN_HEAVY_REVOLVER_LILMAC, "Li'l Mac");
+        this.add(NtmItems.GUN_HEAVY_REVOLVER_PROTEGE, "Protege");
         this.add(NtmItems.GUN_MARESLEG, "Lever Action Shotgun");
         this.add(NtmItems.GUN_MARESLEG_AKIMBO, "Lever Action Shotguns");
         this.add(NtmItems.GUN_MARESLEG_BROKEN, "Broken");
