@@ -2311,6 +2311,11 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.RED_WIRE_COATED, "Coated Red Copper Cable");
         this.add(NtmBlocks.STEEL_BEAM, "Steel Beam");
         this.add(NtmBlocks.STEEL_GRATE, "Steel Grate");
+        this.add(NtmBlocks.STEEL_GRATE_WIDE, "Wide Steel Grate");
+        this.add(NtmBlocks.WOOD_BARRIER, "Wooden Barrier");
+        this.add(NtmBlocks.WOOD_STRUCTURE_ROOF, "Wooden Roof");
+        this.add(NtmBlocks.WOOD_STRUCTURE_SCAFFOLD, "Wooden Scaffold");
+        this.add(NtmBlocks.WOOD_STRUCTURE_CEILING, "Wooden Ceiling");
         this.add(NtmBlocks.STONE_GNEISS, "Gneiss");
         this.add(NtmBlocks.MACHINE_ASHPIT, "Ashpit");
         this.add(NtmBlocks.MACHINE_ASHPIT, DESC, "Collects ashes from fireboxes and heating ovens");

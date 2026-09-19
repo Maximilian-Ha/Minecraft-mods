@@ -1147,6 +1147,11 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.RED_WIRE_COATED);
                         output.accept(NtmBlocks.STEEL_BEAM);
                         output.accept(NtmBlocks.STEEL_GRATE);
+                        output.accept(NtmBlocks.STEEL_GRATE_WIDE);
+                        output.accept(NtmBlocks.WOOD_BARRIER);
+                        output.accept(NtmBlocks.WOOD_STRUCTURE_ROOF);
+                        output.accept(NtmBlocks.WOOD_STRUCTURE_SCAFFOLD);
+                        output.accept(NtmBlocks.WOOD_STRUCTURE_CEILING);
                         output.accept(NtmBlocks.STONE_GNEISS);
                         output.accept(NtmBlocks.CABLE_SWITCH);
                         output.accept(NtmBlocks.CABLE_DIODE);

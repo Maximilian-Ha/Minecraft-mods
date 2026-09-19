@@ -620,7 +620,9 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.simpleCubeAllBlock(NtmBlocks.RED_WIRE_COATED);
         this.simpleCubeAllBlock(NtmBlocks.STEEL_BEAM);
         this.simpleCubeAllBlock(NtmBlocks.STONE_GNEISS);
-        this.registerSteelGrate();
+        this.registerSteelGrate(NtmBlocks.STEEL_GRATE.get(), "grate_top");
+        this.registerWoodStructures();
+        this.registerSteelGrate(NtmBlocks.STEEL_GRATE_WIDE.get(), "grate_wide_top");
         this.simpleCubeAllBlock(NtmBlocks.MACHINE_CONVERTER_HE_RF);
         this.simpleCubeAllBlock(NtmBlocks.MACHINE_CONVERTER_RF_HE);
         this.particleOnlyBlock(NtmBlocks.RED_CONNECTOR, modLoc("block/red_connector"));
@@ -1095,8 +1097,41 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         return builder.end();
     }
 
-    private void registerSteelGrate() {
-        Block block = NtmBlocks.STEEL_GRATE.get();
+    /**
+     * Die Holzteile der Bauwerke. Alle vier tragen im Original dasselbe Bild (wood_barrier);
+     * sie unterscheiden sich nur in der Form. Die Bohle steht ungedreht an der Nordseite und
+     * wird ueber die Blickrichtung herumgedreht.
+     */
+    private void registerWoodStructures() {
+
+        ResourceLocation tex = this.modLoc("block/wood_barrier");
+
+        ModelFile barrier = this.models().withExistingParent("wood_barrier", this.mcLoc("block/block"))
+                .texture("all", tex).texture("particle", tex)
+                .element().from(0, 0, 0).to(16, 16, 2).allFaces((dir, face) -> face.texture("#all")).end();
+
+        this.getVariantBuilder(NtmBlocks.WOOD_BARRIER.get()).forAllStates(state -> ConfiguredModel.builder()
+                .modelFile(barrier)
+                .rotationY((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot())
+                .build());
+        this.simpleBlockItem(NtmBlocks.WOOD_BARRIER.get(), barrier);
+
+        this.registerWoodStructure(NtmBlocks.WOOD_STRUCTURE_ROOF.get(), tex, 0, 0, 0, 16, 3, 16);
+        this.registerWoodStructure(NtmBlocks.WOOD_STRUCTURE_SCAFFOLD.get(), tex, 1, 0, 1, 15, 16, 15);
+        this.registerWoodStructure(NtmBlocks.WOOD_STRUCTURE_CEILING.get(), tex, 0, 14, 0, 16, 16, 16);
+    }
+
+    private void registerWoodStructure(Block block, ResourceLocation tex, int x1, int y1, int z1, int x2, int y2, int z2) {
+
+        ModelFile model = this.models().withExistingParent(this.name(block), this.mcLoc("block/block"))
+                .texture("all", tex).texture("particle", tex)
+                .element().from(x1, y1, z1).to(x2, y2, z2).allFaces((dir, face) -> face.texture("#all")).end();
+
+        this.simpleBlock(block, model);
+        this.simpleBlockItem(block, model);
+    }
+
+    private void registerSteelGrate(Block block, String topTexture) {
         String blockName = this.name(block);
         ModelFile first = null;
 
@@ -1107,9 +1142,9 @@ public class NtmBlockStateProvider extends BlockStateProvider {
 
             ModelFile model = this.models()
                     .withExistingParent(blockName + "_" + layer, this.mcLoc("block/block"))
-                    .texture("top", this.modLoc("block/grate_top"))
+                    .texture("top", this.modLoc("block/" + topTexture))
                     .texture("side", this.modLoc("block/grate_side"))
-                    .texture("particle", this.modLoc("block/grate_top"))
+                    .texture("particle", this.modLoc("block/" + topTexture))
                     .renderType("cutout")
                     .element()
                     .from(0, from, 0)

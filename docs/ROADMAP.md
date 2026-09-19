@@ -4514,3 +4514,42 @@ Vanilla, bekommt er ein Präfix** — und bei der CI als Fangnetz.
 
 Die übrigen fünf neuen Klassen dieser Runde sind unkritisch: keine von ihnen importiert
 irgendetwas mit Stern.
+
+## Stufe 5, Schritt 2: die ersten Bauteile der Bauwerke
+
+Nach Runde 170 ist die Weltgenerierung der letzte offene Punkt. `tools/structure-gap.py` misst
+die Lücke: **79 Bauwerke, 185 darin benutzte Blocknamen, davon 56 im Port gar nicht vorhanden.**
+Diese 56 zerfallen in Gruppen — Beutekisten, Bauteile, Beleuchtung, Deko und Elektronik,
+Fässer, Weltgen-Werkzeug. Abgearbeitet wird gruppenweise, und zwar die vollständig portierbaren
+zuerst.
+
+Den Anfang machen fünf Blöcke ohne jede Abhängigkeit:
+
+| Block | Form |
+| --- | --- |
+| `steel_grate_wide` | dieselbe Platte wie `steel_grate`, nur mit dem groberen Bild |
+| `wood_barrier` | zwei Pixel dicke Bohle an einer der vier Seitenflächen |
+| `wood_structure_roof` | Brett am Boden, drei Pixel hoch |
+| `wood_structure_scaffold` | Pfosten über die ganze Höhe, einen Pixel von jeder Seite |
+| `wood_structure_ceiling` | Platte oben, zwei Pixel dick |
+
+Das breite Gitter brauchte keine neue Klasse: `registerSteelGrate` im Blockstate-Geber nimmt
+jetzt Block und Oberseitentextur als Parameter und bedient beide Gitter. `wood_structure` hält
+das Original als drei Metadaten eines Blocks; im Port sind es drei Blöcke, wie bei allen
+Metadatenfamilien — im Messskript steht der Name deshalb jetzt unter `FAMILIEN`.
+
+Die Ausrichtung der Bohle ist übernommen, nicht neu erfunden: `FACING` benennt die Seite, **an
+der** sie klebt. Klickt man eine Seitenfläche an, sitzt sie an dieser Fläche
+(`getClickedFace().getOpposite()`); von oben oder unten gesetzt, richtet sie sich nach der
+Blickrichtung. Das entspricht Zeile für Zeile dem `onBlockPlaced`/`onBlockPlacedBy` des
+Originals, dessen Metadaten 2–5 dieselbe Zuordnung tragen.
+
+**Beinahe derselbe Fehler wie in Runde 170:** die Klasse hieß zuerst `BarrierBlock` — und
+`NtmBlocks` importiert `com.hbm.blocks.generic.*` **und** `net.minecraft.world.level.block.*`
+mit Stern, wo Vanilla ein `BarrierBlock` hat. Diesmal vor dem Übersetzen bemerkt; sie heißt
+`WoodBarrierBlock`. Zwei Beinahe-Fehler derselben Art sind genug: die Vanilla-Wildcards in
+`NtmBlocks` und `NtmItems` werden in einer eigenen Runde durch explizite Importe ersetzt. Dann
+ist die Fehlerklasse strukturell ausgeschlossen, und daraus wird ein Tor, das sich messen lässt
+— anders als die Namensprüfung, für die offline die Vanilla-Klassenliste fehlt.
+
+Die Lücke steht damit bei **53**.

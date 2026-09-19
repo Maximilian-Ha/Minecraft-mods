@@ -52,6 +52,7 @@ FAMILIEN = {
     "concrete_colored":     "concrete_white ... concrete_black (sechzehn Farben)",
     "concrete_colored_ext": "concrete_ext_machine ... concrete_ext_bronze (acht Toene)",
     "reinforced_lamp_off":  "reinforced_lamp mit lit=false",
+    "wood_structure":       "wood_structure_roof, wood_structure_scaffold, wood_structure_ceiling",
 }
 
 

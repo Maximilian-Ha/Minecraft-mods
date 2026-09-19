@@ -466,6 +466,7 @@ public class NtmBlockTagProvider extends BlockTagsProvider {
                         NtmBlocks.RED_WIRE_COATED.get(),
                         NtmBlocks.STEEL_BEAM.get(),
                         NtmBlocks.STEEL_GRATE.get(),
+                        NtmBlocks.STEEL_GRATE_WIDE.get(),
                         NtmBlocks.STONE_GNEISS.get(),
                         NtmBlocks.CABLE_SWITCH.get(),
                         NtmBlocks.RED_CONNECTOR.get(),
@@ -663,7 +664,11 @@ public class NtmBlockTagProvider extends BlockTagsProvider {
                         NtmBlocks.WASTE_LOG.get(),
                         NtmBlocks.WASTE_PLANKS.get(),
                         NtmBlocks.FROZEN_LOG.get(),
-                        NtmBlocks.FROZEN_PLANKS.get()
+                        NtmBlocks.FROZEN_PLANKS.get(),
+                        NtmBlocks.WOOD_BARRIER.get(),
+                        NtmBlocks.WOOD_STRUCTURE_ROOF.get(),
+                        NtmBlocks.WOOD_STRUCTURE_SCAFFOLD.get(),
+                        NtmBlocks.WOOD_STRUCTURE_CEILING.get()
                 );
 
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL)

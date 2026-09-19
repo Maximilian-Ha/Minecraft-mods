@@ -277,6 +277,15 @@ public class NtmBlocks {
     // Runde 10: Rezeptbaustein beider Schornsteine. Im Original BlockGrate, eine zwei Pixel
     // hohe Platte auf einer von zehn Hoehen im Block.
     public static final DeferredBlock<Block> STEEL_GRATE = register("steel_grate", () -> new GrateBlock(BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops().noOcclusion()));
+    /* Stufe 5: das breite Gitter der Bauwerke. Dieselbe Platte, nur mit dem groberen Bild --
+     * im Original derselbe BlockGrate, der seine Oberseitentextur am Block festmacht. */
+    public static final DeferredBlock<Block> STEEL_GRATE_WIDE = register("steel_grate_wide", () -> new GrateBlock(BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops().noOcclusion()));
+
+    /* Stufe 5: die Holzteile der Bauwerke. Werte 1:1 aus ModBlocks.java:1461 f. des Originals. */
+    public static final DeferredBlock<Block> WOOD_BARRIER = register("wood_barrier", () -> new WoodBarrierBlock(BlockBehaviour.Properties.of().strength(5.0F, 15.0F).sound(SoundType.WOOD).mapColor(MapColor.WOOD).noOcclusion()));
+    public static final DeferredBlock<Block> WOOD_STRUCTURE_ROOF = register("wood_structure_roof", () -> new WoodStructureBlock(BlockBehaviour.Properties.of().strength(5.0F, 15.0F).sound(SoundType.WOOD).mapColor(MapColor.WOOD).noOcclusion(), WoodStructureBlock.Type.ROOF));
+    public static final DeferredBlock<Block> WOOD_STRUCTURE_SCAFFOLD = register("wood_structure_scaffold", () -> new WoodStructureBlock(BlockBehaviour.Properties.of().strength(5.0F, 15.0F).sound(SoundType.WOOD).mapColor(MapColor.WOOD).noOcclusion(), WoodStructureBlock.Type.SCAFFOLD));
+    public static final DeferredBlock<Block> WOOD_STRUCTURE_CEILING = register("wood_structure_ceiling", () -> new WoodStructureBlock(BlockBehaviour.Properties.of().strength(5.0F, 15.0F).sound(SoundType.WOOD).mapColor(MapColor.WOOD).noOcclusion(), WoodStructureBlock.Type.CEILING));
 
     // Bricks
     public static final DeferredBlock<Block> BRICK_CONCRETE =         registerBlastInfoBlock("brick_concrete",         () -> new NoSpawnBlock(BlockBehaviour.Properties.of().strength(15.0F, 160.0F).mapColor(MapColor.STONE)));
