@@ -52,6 +52,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 /**
  * Portiert aus 1.7.10: com.hbm.items.weapon.sedna.factory.XFactory40mm.

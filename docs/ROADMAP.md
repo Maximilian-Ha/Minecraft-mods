@@ -7590,3 +7590,73 @@ Zustand geschlossen; bei der C-130 habe ich nicht einmal nachgesehen, ob ihr Mod
 liegt. **Es lag da, seit jemand es hineinkopiert hat.**
 
 Alle 33 Tore grün.
+
+## Die Ölpfütze des Ablasses
+
+Das fünfte Fehlurteil dieser Sitzung, und es stand nicht bei einer Waffe, sondern in einer
+Maschine. In `MachineDrainBlockEntity` stand seit der Portierung:
+
+> NICHT ÜBERNOMMEN: die Öllache. […] Der Block `oil_spill` fehlt dem Port noch; die Lache
+> kommt mit ihm.
+
+`NtmBlocks.OIL_SPILL` liegt im Baum, mit Blockzustand, Modell und Textur. Der Satz war nie
+wahr — er war beim Portieren des Ablasses geschrieben und danach nie wieder nachgemessen
+worden, obwohl der Block in einer späteren Runde dazukam. Genau dieselbe Mechanik wie bei
+Schredder, Protégé und C-130, nur andersherum: dort habe ich aus einem fehlenden Namen auf
+einen fehlenden Baustein geschlossen, hier habe ich einen einmal geschriebenen Satz nicht
+mehr angefasst.
+
+Jetzt läuft sie. Zähe, brennbare Flüssigkeiten hinterlassen mit einer Wahrscheinlichkeit von
+eins zu zwanzig einen Ölfleck — aber nur, wenn auf einmal mindestens hundert Millibar
+auslaufen, sonst tropft der Ablass die Welt voll. Die Stelle sucht ein Strahl, der **drei
+Blöcke hinter dem Auslass** ansetzt, fünfundzwanzig Blöcke tief fällt und dabei seitlich
+streut. Er zählt nur, wenn er auf eine **Oberseite** trifft: an einer Wand läuft nichts
+zusammen. Darüber muss Platz sein, kein Fluid stehen, und der Fleck muss dort halten können.
+
+## Der CI-Lauf `fe2afaf0` — und eine Ferndiagnose, die daneben lag
+
+Der C-130-Lauf ist an zwei Übersetzungsfehlern gescheitert. Das Fenster, das ich mir aus dem
+Job-Protokoll geholt hatte, endete über den Fehlerzeilen — es zeigte siebenunddreißig
+Verfallswarnungen und die Schlusszeile „2 errors", aber nicht die Fehler selbst.
+
+**Und dann habe ich geraten.** Aus der Form der Änderung habe ich mir eine Erklärung gebaut:
+das Feld `NtmEntityTypes.C130` heiße wie seine eigene Klasse und verdecke sie, `C130::new`
+löse also auf das Feld statt auf den Typ auf. Ich habe das Feld in `C130_PLANE` umbenannt und
+die Begründung als Kommentar dazugeschrieben, so als wäre sie gemessen.
+
+Sie war falsch, und zwar zweifach. Erstens steht in `C130::new` links eine `ClassType` —
+die Grammatik lässt dort gar nichts anderes zu, ein gleichnamiges Feld kann eine
+Konstruktorreferenz nicht verdecken. Zweitens waren es ganz andere Zeilen:
+
+```
+XFactory40mm.java:387: error: cannot find symbol
+    public static Consumer<Entity> LAMBDA_SPAWN_C130_SUPPLIES = …
+                  ^   symbol: class Consumer
+```
+
+Ein vergessener Import, `java.util.function.Consumer`. Die Datei importiert `BiConsumer` und
+`BiFunction`, und weil die beiden Lambdas der C-130 nur ein Argument nehmen, brauchte es den
+dritten — den hatte ich nicht geschrieben.
+
+Die Umbenennung ist zurückgenommen. Ein Kommentar, der einen Übersetzungsfehler behauptet,
+den es nicht gibt, ist schlimmer als gar keiner: die nächste Runde hätte ihn geglaubt.
+
+### Das Tor, das danebenschaute
+
+`import-check` kannte seit Runde 180 zwei Deklarationsformen: den nackten Typ
+(`Vec3 stelle = …`) und das Generikum-**Argument** (`BiConsumer<A, B>` → `A`, `B`). Dazwischen
+klaffte die dritte, und genau sie stand hier: das Generikum als **Kopf** einer Deklaration.
+`Consumer<Entity> LAMBDA_X = …` — hinter `Consumer` steht kein Leerzeichen, sondern ein `<`,
+also griff die erste Regel nicht; und die zweite liest die Klammer von innen, also nannte sie
+`Entity`, nie `Consumer`.
+
+Die Form ist jetzt an allen drei Prüfungen des Werkzeugs nachgetragen (Projekttypen,
+Fremdtypen, verschachtelte Projekttypen). Die Zeichenklasse zwischen den spitzen Klammern
+enthält weder `=` noch `;` noch `(` — der Ausdruck kann damit keine Anweisungsgrenze
+überspringen.
+
+**Nachgemessen in beide Richtungen:** über alle 2.056 Dateien meldet die Regel null Funde.
+Nimmt man den Import wieder heraus, meldet sie genau eine Zeile — `Consumer` in
+`XFactory40mm` — und sonst nichts.
+
+Alle 33 Tore grün.

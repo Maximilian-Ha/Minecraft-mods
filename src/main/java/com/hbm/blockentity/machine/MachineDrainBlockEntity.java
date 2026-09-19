@@ -5,20 +5,29 @@ import com.hbm.blockentity.IFluidCopiable;
 import com.hbm.blockentity.NtmBlockEntityTypes;
 import com.hbm.blockentity.TickingBaseBlockEntity;
 import com.hbm.blocks.DummyableBlock;
+import com.hbm.blocks.NtmBlocks;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.tank.FluidTank;
+import com.hbm.inventory.fluid.trait.FT_Flammable;
 import com.hbm.inventory.fluid.trait.FluidTrait;
 import com.hbm.inventory.fluid.trait.FluidTrait.FluidReleaseType;
 import com.hbm.inventory.fluid.trait.FluidTraitSimple.FT_Amat;
+import com.hbm.inventory.fluid.trait.FluidTraitSimple.FT_Liquid;
+import com.hbm.inventory.fluid.trait.FluidTraitSimple.FT_Viscous;
 import com.hbm.util.fauxpointtwelve.DirPos;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
 
 /**
  * Portiert aus 1.7.10: com.hbm.tileentity.machine.TileEntityMachineDrain.
@@ -38,9 +47,11 @@ import net.minecraft.world.level.block.state.BlockState;
  * ER GIBT JE TICK DIE HAELFTE dessen ab, was im Tank steht, mindestens aber ein Millibar. So
  * leert er sich schnell, wenn viel kommt, und tropft, wenn wenig kommt.
  *
- * NICHT UEBERNOMMEN: die Oellache. Das Original laesst zaehe, brennbare Fluessigkeiten mit
- * einer Wahrscheinlichkeit von eins zu zwanzig einen Oelfleck-Block in der Naehe hinterlassen.
- * Der Block oil_spill fehlt dem Port noch; die Lache kommt mit ihm.
+ * DIE OELLACHE. Zaehe, brennbare Fluessigkeiten hinterlassen mit einer Wahrscheinlichkeit von
+ * eins zu zwanzig einen Oelfleck in der Naehe -- aber nur, wenn mindestens hundert Millibar auf
+ * einmal auslaufen. Gesucht wird die Stelle mit einem Strahl, der drei Bloecke HINTER dem
+ * Auslass ansetzt und schraeg nach unten laeuft; er muss auf eine Oberseite treffen, und ueber
+ * ihr muss Platz sein.
  *
  * NICHT UEBERNOMMEN: die Spritzer- und Dampfwolken, die das Original ueber dem Auslass zeichnet.
  */
@@ -76,6 +87,48 @@ public class MachineDrainBlockEntity extends TickingBaseBlockEntity implements I
         this.tank.setFill(this.tank.getFill() - toSpill);
 
         FluidTrait.onRelease(this.level, this.worldPosition, this.tank.getTankType(), this.tank, FluidReleaseType.SPILL, toSpill);
+
+        FluidType sorte = this.tank.getTankType();
+        if(toSpill >= 100 && this.level.random.nextInt(20) == 0
+                && sorte.hasTrait(FT_Liquid.class) && sorte.hasTrait(FT_Viscous.class) && sorte.hasTrait(FT_Flammable.class)) {
+            this.hinterlasseLache();
+        }
+    }
+
+    /**
+     * Sucht eine Stelle fuer den Oelfleck und setzt ihn dorthin.
+     *
+     * DER STRAHL SETZT HINTER DEM AUSLASS AN, drei Bloecke in Gegenrichtung, und faellt
+     * fuenfundzwanzig Bloecke tief bei einer seitlichen Streuung von fuenf. Er zaehlt nur,
+     * wenn er auf eine OBERSEITE trifft -- an einer Wand laeuft nichts zusammen.
+     */
+    private void hinterlasseLache() {
+
+        Direction front = this.getBlockState().getValue(DummyableBlock.FACING);
+
+        Vec3 start = new Vec3(
+                this.worldPosition.getX() + 0.5 - front.getStepX() * 3,
+                this.worldPosition.getY() + 0.5,
+                this.worldPosition.getZ() + 0.5 - front.getStepZ() * 3);
+
+        Vec3 ende = start.add(this.level.random.nextGaussian() * 5, -25, this.level.random.nextGaussian() * 5);
+
+        BlockHitResult treffer = this.level.clip(new ClipContext(start, ende,
+                ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, CollisionContext.empty()));
+
+        if(treffer.getType() != HitResult.Type.BLOCK) return;
+        if(treffer.getDirection() != Direction.UP) return;
+
+        BlockPos stelle = treffer.getBlockPos().above();
+        BlockState daueber = this.level.getBlockState(stelle);
+
+        if(!daueber.canBeReplaced()) return;
+        if(!daueber.getFluidState().isEmpty()) return;
+
+        BlockState lache = NtmBlocks.OIL_SPILL.get().defaultBlockState();
+        if(!lache.canSurvive(this.level, stelle)) return;
+
+        this.level.setBlockAndUpdate(stelle, lache);
     }
 
     /**

@@ -167,6 +167,15 @@ for path, pkg, raw in files:
     # Runde 45: die beiden Formen, die bis dahin durchrutschten und einen CI-Lauf kosteten --
     # der Typ als Generikum-Argument (BlockEntityType<Foo>) und als Methodenreferenz (Foo::new).
     used |= set(re.findall(r'(?<=[<,])\s*([A-Z]\w*)\s*(?=[>,])', body))
+    # Runde 181: die dritte Deklarationsform -- ein GENERISCHER Typ als KOPF einer
+    # Deklaration (Consumer<Entity> LAMBDA_X = ...). Die Form aus Runde 180 verlangt
+    # hinter dem Namen ein Leerzeichen, hier steht dort das '<'; die Generikum-Regel
+    # darueber liest nur die ARGUMENTE, nicht den Kopf. Zwischen beiden klaffte eine
+    # Luecke, und sie kostete den CI-Lauf fe2afaf0: in XFactory40mm standen zwei Felder
+    # vom Typ Consumer<Entity>, ohne dass java.util.function.Consumer importiert war.
+    # Die Zeichenklasse enthaelt weder '=' noch ';' noch '(' -- der Ausdruck kann damit
+    # keine Anweisungsgrenze ueberspringen.
+    used |= set(re.findall(r'(?<![.\w])([A-Z]\w*)\s*<[\w\s,<>?\[\]@.]*>\s+\w+\s*[=;),]', body))
     used |= set(re.findall(r'(?<![.\w])([A-Z]\w*)\s*::', body))
     # Runde 182: instanceof. Der Ausdruck fuer die Deklaration ("Typ name =") trifft die Form
     # "instanceof Typ name ?" nicht -- danach steht ein Fragezeichen, kein =, ; oder ). In
@@ -354,6 +363,8 @@ for path, pkg, raw in files:
     # diese drei Namen ohne Import; die Formen oben nennen keinen davon.
     used |= set(re.findall(r'(?<![.\w])([A-Z]\w*)\s+\w+\s*[=;)]', body))
     used |= set(re.findall(r'(?<=[<,])\s*([A-Z]\w*)\s*(?=[>,])', body))
+    # Dieselbe Regel wie oben, siehe Runde 181.
+    used |= set(re.findall(r'(?<![.\w])([A-Z]\w*)\s*<[\w\s,<>?\[\]@.]*>\s+\w+\s*[=;),]', body))
 
     for name in sorted(used):
         if name in own or name in explicit: continue
@@ -440,6 +451,8 @@ for path, pkg, raw in files:
     used |= set(re.findall(r'\binstanceof\s+([A-Z]\w*)', body))
     used |= set(re.findall(r'(?<![.\w])([A-Z]\w*)\s+\w+\s*[=;)]', body))
     used |= set(re.findall(r'(?<=[<,])\s*([A-Z]\w*)\s*(?=[>,])', body))
+    # Dieselbe Regel wie oben, siehe Runde 181.
+    used |= set(re.findall(r'(?<![.\w])([A-Z]\w*)\s*<[\w\s,<>?\[\]@.]*>\s+\w+\s*[=;),]', body))
 
     for name in sorted(used):
         if name in own or name in explicit: continue
