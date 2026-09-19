@@ -5513,3 +5513,34 @@ der Ziegelofen anders als der Eisen- oder Stahlofen daneben.
 Ein Tor hat wieder etwas gefunden: `loot-check` meldete, dass der Block
 `requiresCorrectToolForDrops()` trägt, aber in keinem `mineable`-Tag steht — er wäre mit
 keinem Werkzeug abbaubar gewesen, und seine Beutetabelle wäre tote Ladung. Nachgetragen.
+
+### Eine Kennzahl, die überschätzt hat
+
+Beim Suchen des nächsten Kandidaten ist etwas aufgefallen: `port-gap.py` führte
+`TileEntityDecon` als fehlend — dabei steht der Dekontaminator längst im Port, nur unter dem
+Namen `DecontaminatorBlockEntity`. Das Werkzeug ordnet über eine Kernregel zu
+(`TileEntityFoo` → `FooBlockEntity`, mit und ohne `Machine` davor), und die greift bei einer
+echten Umbenennung nicht.
+
+Nachgemessen, wie viele solcher Fälle es gibt: von 133 als fehlend gemeldeten
+Blockentitäten haben 19 einen Namensverwandten im Port. Aber nur fünf davon sind wirklich
+dieselbe Sache — die übrigen vierzehn sind Zufallstreffer der Suche. `TileEntityCore` ist
+der Bombenkern und **nicht** `PileCoreBlockEntity`; `TileEntityCharge` ist die Sprengladung
+und **nicht** das Ladegerät.
+
+Die fünf belegten Umbenennungen stehen jetzt als Tabelle im Werkzeug, jede einzeln
+nachgesehen:
+
+| Original | Port | Warum |
+|---|---|---|
+| `TileEntityCableBaseNT` | `CableBaseBlockEntity` | das „NT" fällt im Port weg |
+| `TileEntityPipeBaseNT` | `PipeBaseBlockEntity` | dito |
+| `TileEntityTurretBaseNT` | `TurretBaseBlockEntity` | dito, im Klassenkommentar belegt |
+| `TileEntityDecon` | `DecontaminatorBlockEntity` | ausgeschriebener Name, gleiche Wirkung |
+| `TileEntityRBMKControlManual` | `RBMKControlBlockEntity` | der Port fasst Hand- und Normalsteuerung zusammen |
+
+Der Kommentar über der Tabelle sagt ausdrücklich, was **nicht** hineingehört: bloße
+Namensähnlichkeit. Sonst schrumpft die Lücke auf dem Papier, während die Arbeit bleibt.
+
+Blockentitäten stehen damit bei **128** statt 133 — und der Ziegelofen ist da schon
+abgezogen.
