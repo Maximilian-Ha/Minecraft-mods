@@ -32,6 +32,7 @@ public class GunFactoryClient {
         registerGunItemRenderer(event, new ItemRenderHangman(), NtmItems.GUN_HANGMAN.get());
         registerGunItemRenderer(event, new ItemRenderHeavyRevolver(ResourceManager.HEAVY_REVOLVER_TEX), NtmItems.GUN_HEAVY_REVOLVER.get());
         registerGunItemRenderer(event, new ItemRenderLiberator(), NtmItems.GUN_LIBERATOR.get());
+        registerGunItemRenderer(event, new ItemRenderHeavyRevolver(ResourceManager.LILMAC_TEX), NtmItems.GUN_HEAVY_REVOLVER_LILMAC.get());
         registerGunItemRenderer(event, new ItemRenderGreasegun(), NtmItems.GUN_GREASEGUN.get());
         registerGunItemRenderer(event, new ItemRenderPepperbox(), NtmItems.GUN_PEPPERBOX.get());
         registerGunItemRenderer(event, new ItemRenderAtlas(ResourceManager.BIO_REVOLVER_TEX), NtmItems.GUN_LIGHT_REVOLVER.get());
@@ -100,6 +101,7 @@ public class GunFactoryClient {
         ((GunBaseNTItem) NtmItems.GUN_HANGMAN.get())					.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_HEAVY_REVOLVER.get())			.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_LIBERATOR.get())				.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
+        ((GunBaseNTItem) NtmItems.GUN_HEAVY_REVOLVER_LILMAC.get())	.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_PANZERSCHRECK.get())			.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_GREASEGUN.get())				.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
     }

@@ -357,6 +357,9 @@ public class ResourceManager {
     public static final ResourceLocation DOUBLE_BARREL_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/double_barrel.png");
     public static final ResourceLocation LIBERATOR_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/liberator.png");
     public static final ResourceLocation PANZERSCHRECK_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/panzerschreck.png");
+    public static final ResourceLocation BOXCAR_TEX = NuclearTechMod.withDefaultNamespace("textures/models/boxcar.png");
+    public static final ResourceLocation LILMAC_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/lilmac.png");
+    public static final ResourceLocation LILMAC_SCOPE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/lilmac_scope.png");
     public static final ResourceLocation DOUBLE_BARREL_SACRED_DRAGON_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/double_barrel_sacred_dragon.png");
     public static final ResourceLocation N_I_4_N_I_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/n_i_4_n_i.png");
     public static final ResourceLocation N_I_4_N_I_GREYSCALE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/n_i_4_n_i_greyscale.png");
@@ -684,6 +687,7 @@ public class ResourceManager {
     public static IModelCustom double_barrel;
     public static IModelCustom liberator;
     public static IModelCustom panzerschreck;
+    public static IModelCustom boxcar;
     public static IModelCustom n_i_4_n_i;
 
     public static HashMap<String, BusAnimation> spas_12_anim;
@@ -970,6 +974,7 @@ public class ResourceManager {
         double_barrel = new HFRWavefrontObject("models/obj/weapons/sacred_dragon.obj").asVBO();
         liberator = new HFRWavefrontObject("models/obj/weapons/liberator.obj").asVBO();
         panzerschreck = new HFRWavefrontObject("models/obj/weapons/panzerschreck.obj").asVBO();
+        boxcar = new HFRWavefrontObject("models/obj/boxcar.obj").asVBO();
         n_i_4_n_i = new HFRWavefrontObject("models/obj/weapons/n_i_4_n_i.obj").asVBO();
 
         spas_12_anim = AnimationLoader.load(NuclearTechMod.withDefaultNamespace("models/animations/spas12.json"));

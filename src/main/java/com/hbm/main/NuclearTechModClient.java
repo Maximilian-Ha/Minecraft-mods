@@ -1120,7 +1120,9 @@ public class NuclearTechModClient {
                 }
             }
 
-            if ("muke".contains(type)) {
+            /* equals, nicht contains: "muke".contains(type) trifft auf jede Teilzeichenkette
+             * zu -- auch auf "uk" oder die leere Zeichenkette. */
+            if ("muke".equals(type)) {
 
                 ParticleEngineNT.INSTANCE.add(new MukeFlashParticle(level, x, y, z, data.getBoolean("balefire")));
                 ParticleEngineNT.INSTANCE.add(new MukeWaveParticle(level, x, y, z));
@@ -1135,7 +1137,7 @@ public class NuclearTechModClient {
                 }
             }
 
-            if ("tinytot".contains(type)) {
+            if ("tinytot".equals(type)) {
                 ParticleEngineNT.INSTANCE.add(new MukeWaveParticle(level, x, y, z));
 
                 for (double d = 0.0D; d <= 1.6D; d += 0.1) {

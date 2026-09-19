@@ -1,6 +1,12 @@
 package com.hbm.items.weapon.sedna.factory;
 
 import com.hbm.items.ItemEnums.CasingType;
+import com.hbm.entity.NtmEntityTypes;
+import com.hbm.entity.projectile.Boxcar;
+import com.hbm.entity.projectile.BulletBaseMK4;
+import com.hbm.main.ResourceManager;
+import com.hbm.util.SoundUtils;
+import net.minecraft.sounds.SoundSource;
 import com.hbm.items.NtmItems;
 import com.hbm.items.weapon.sedna.*;
 import com.hbm.items.weapon.sedna.GunBaseNTItem.GunState;
@@ -30,6 +36,30 @@ public class XFactory44 {
     public static BulletConfig m44_jhp;
     public static BulletConfig m44_ap;
     public static BulletConfig m44_express;
+    /** Die Signaturpatrone des Lilmac. Sie macht keinen Schaden -- sie ruft einen Gueterwagen. */
+    public static BulletConfig m44_equestrian_pip;
+
+    /**
+     * Was die Signaturpatrone des Lilmac anrichtet: fuenfzig Bloecke ueber dem Getroffenen
+     * erscheint ein Gueterwagen, und ein Signalhorn kuendigt ihn an. Den Rest erledigt die
+     * Schwerkraft.
+     *
+     * Der Klang heisst im Original GUN_GO_GO_GADGET_FUCK_EVERYTHING_IN_THIS_GENERAL_DIRECTION
+     * und zeigt auf das Zughorn; im Port steht er unter TRAIN_HORN.
+     */
+    public static BiConsumer<BulletBaseMK4, HitResult> LAMBDA_BOXCAR = (geschoss, treffer) -> {
+
+        Vec3 stelle = treffer.getLocation();
+        Level level = geschoss.level;
+
+        Boxcar wagen = new Boxcar(NtmEntityTypes.BOXCAR.get(), level);
+        wagen.setPos(stelle.x, stelle.y + 50, stelle.z);
+        wagen.setOwner(geschoss.getOwner());
+        level.addFreshEntity(wagen);
+
+        SoundUtils.playAtVec3(level, wagen.position(), NtmSoundEvents.TRAIN_HORN.get(), SoundSource.HOSTILE, 100F, 1F);
+        geschoss.discard();
+    };
 
     public static void init(DeferredRegister.Items registry) {
 
@@ -46,6 +76,8 @@ public class XFactory44 {
                 .setCasing(casing44.clone().setColor(SpentCasing.COLOR_CASE_44).register("m44ap"));
         m44_express = new BulletConfig().setItem(Ammo.M44_EXPRESS).setCasing(CasingType.SMALL, 6).setDoesPenetrate(true).setDamage(1.5F).setThresholdNegation(3F).setArmorPiercing(0.1F).setWear(1.5F)
                 .setCasing(casing44.clone().register("m44express"));
+        m44_equestrian_pip = new BulletConfig().setItem(AmmoSecret.M44_EQUESTRIAN).setDamage(0F).setOnImpact(LAMBDA_BOXCAR)
+                .setCasing(casing44.clone().setColor(SpentCasing.COLOR_CASE_EQUESTRIAN).register("m44equestrianPip"));
 
         /*
          * Der schwere Revolver, XFactory44 Z. 110 des Originals. Er teilt sich das Modell mit
@@ -65,6 +97,25 @@ public class XFactory44 {
                 .setupStandardConfiguration()
                 .anim(LAMBDA_NOPIP_ANIMS).orchestra(Orchestras.ORCHESTRA_NOPIP)
         ).setDefaultAmmo(Ammo.M44_SP, 12));
+
+        /*
+         * Der Lilmac, XFactory44 Z. 121 des Originals. Aeusserlich der schwere Revolver mit
+         * anderer Textur, innerlich eine ganz andere Waffe: einunddreissigtausend Schuss
+         * Haltbarkeit, doppelter Schaden -- und eine Patrone, die Gueterwagen vom Himmel holt.
+         *
+         * NICHT UEBERNOMMEN: der Protege, die Schwesterwaffe mit m44_equestrian_mn7. Die
+         * schiesst Torpedos, und EntityTorpedo hat der Port nicht.
+         */
+        NtmItems.GUN_HEAVY_REVOLVER_LILMAC = registry.register("gun_heavy_revolver_lilmac", () -> new GunBaseNTItem(WeaponQuality.LEGENDARY, new GunConfig()
+                .dura(31_000).draw(10).inspect(23).crosshair(Crosshair.L_CLASSIC).scopeTexture(ResourceManager.LILMAC_SCOPE_TEX).smoke(Lego.LAMBDA_STANDARD_SMOKE)
+                .rec(new Receiver(0)
+                        .dmg(30F).delay(14).reload(46).jam(23).sound(NtmSoundEvents.GUN_HEAVY_REVOLVER_FIRE, 1.0F, 1.0F)
+                        .mag(new MagazineFullReload(0, 6).addConfigs(m44_equestrian_pip, m44_bp, m44_sp, m44_fmj, m44_jhp, m44_ap, m44_express))
+                        .offset(0.75, -0.0625, -0.3125D)
+                        .setupStandardFire().recoil(LAMBDA_RECOIL_NOPIP))
+                .setupStandardConfiguration()
+                .anim(LAMBDA_LILMAC_ANIMS).orchestra(Orchestras.ORCHESTRA_NOPIP)
+        ).setDefaultAmmo(Ammo.M44_JHP, 12));
 
         NtmItems.GUN_HANGMAN = registry.register("gun_hangman", () -> new GunBaseNTItem(WeaponQuality.LEGENDARY, new GunConfig()
                 .dura(600).draw(10).inspect(31).inspectCancel(false).crosshair(Crosshair.CIRCLE).smoke(Lego.LAMBDA_STANDARD_SMOKE)
@@ -93,6 +144,15 @@ public class XFactory44 {
 
     public static BiConsumer<ItemStack, LambdaContext> LAMBDA_RECOIL_HANGMAN = (stack, ctx) -> {
         GunBaseNTItem.setupRecoil(5, (float) (ctx.getPlayer().random.nextGaussian() * 1));
+    };
+
+    /**
+     * Der Lilmac bewegt sich wie der schwere Revolver -- nur beim Ziehen wirbelt er einmal um
+     * sich selbst. Alles andere reicht er an LAMBDA_NOPIP_ANIMS weiter.
+     */
+    public static BiFunction<ItemStack, GunAnimation, BusAnimation> LAMBDA_LILMAC_ANIMS = (stack, type) -> {
+        if(type == GunAnimation.EQUIP) return new BusAnimation().addBus("SPIN", new BusAnimationSequence().addPos(-360, 0, 0, 350));
+        return LAMBDA_NOPIP_ANIMS.apply(stack, type);
     };
 
     public static BiFunction<ItemStack, GunAnimation, BusAnimation> LAMBDA_NOPIP_ANIMS = (stack, type) -> {

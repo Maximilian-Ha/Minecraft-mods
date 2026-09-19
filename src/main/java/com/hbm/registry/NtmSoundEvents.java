@@ -61,6 +61,12 @@ public class NtmSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_ROCKET_FIRE = reg("weapon.rpg_shoot");
     /** Das Aufsetzen einer geworfenen Granate -- im Original "hbm:weapon.grenadeBounce". */
     public static final DeferredHolder<SoundEvent, SoundEvent> GRENADE_BOUNCE = reg("weapon.grenade_bounce");
+    /** Der Gueterwagen schlaegt auf -- im Original "hbm:weapon.trainImpact". */
+    public static final DeferredHolder<SoundEvent, SoundEvent> TRAIN_IMPACT = reg("weapon.train_impact");
+    /** Das Signalhorn, mit dem der Lilmac seinen Gueterwagen ankuendigt. Im Original heisst die
+     *  Konstante GUN_GO_GO_GADGET_FUCK_EVERYTHING_IN_THIS_GENERAL_DIRECTION und zeigt auf
+     *  "hbm:alarm.trainHorn". */
+    public static final DeferredHolder<SoundEvent, SoundEvent> TRAIN_HORN = reg("alarm.train_horn");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SWITCHMODE_1 = reg("weapon.switchmode1");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SWITCHMODE_2 = reg("weapon.switchmode2");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SILENCER_SHOOT = reg("weapon.fire.silencer_shoot");

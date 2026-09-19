@@ -1556,6 +1556,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.CRATE_METAL);
                         output.accept(NtmBlocks.CRATE);
                         output.accept(NtmBlocks.CRATE_WEAPON);
+                        output.accept(NtmBlocks.BOXCAR);
                         output.accept(NtmBlocks.MACHINE_SATLINKER);
                         output.accept(NtmBlocks.MACHINE_SAT_LINK);
                         output.accept(NtmBlocks.MACHINE_SAT_DOCK);
@@ -1778,6 +1779,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.GUN_HANGMAN);
                         output.accept(NtmItems.GUN_HEAVY_REVOLVER);
                         output.accept(NtmItems.GUN_LIBERATOR);
+                        output.accept(NtmItems.GUN_HEAVY_REVOLVER_LILMAC);
                         output.accept(NtmItems.GUN_GREASEGUN);
                         output.accept(NtmItems.GUN_AM180);
                         output.accept(NtmItems.GUN_STAR_F);

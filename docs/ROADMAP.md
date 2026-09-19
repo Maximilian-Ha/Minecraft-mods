@@ -7059,3 +7059,65 @@ Das ist keine falsche Zusage — `asset-check` behauptet nichts über sie —, a
 Lücke. Sie ist hier vermerkt und gehört geschlossen, sobald die roten Kiste durch ist.
 
 Alle 30 Tore grün.
+
+## Der Güterwagen und der Li'l Mac
+
+Neunte von zehn Einträgen der roten Kiste — und der aufwendigste, weil die Waffe ohne ihre
+Munition sinnlos wäre und die Munition eine eigene Entität braucht.
+
+### Was die Signaturpatrone tut
+
+`m44_equestrian_pip` macht null Schaden. Sie ruft stattdessen fünfzig Blöcke über dem
+Getroffenen einen **Güterwagen** herbei, kündigt ihn mit einem Signalhorn an und überlässt den
+Rest der Schwerkraft. Beim Aufschlag: ein schwerer Knall, drei Druckwellen übereinander,
+tausend Punkte Schaden auf alles im Umkreis von zwei Blöcken — absolut und
+rüstungsdurchdringend, dagegen hilft nichts — und wo er liegen bleibt, steht danach ein
+Güterwagenblock.
+
+Dafür sind neu: die Entität `Boxcar`, der Block `boxcar`, die Schadensart `boxcar`, zwei Klänge
+(`train_impact` und das Signalhorn) und ein Zeichner, der das Wellenfrontmodell des Originals
+zeigt.
+
+Der Klang des Horns heißt im Original
+`GUN_GO_GO_GADGET_FUCK_EVERYTHING_IN_THIS_GENERAL_DIRECTION`. Im Port steht er schlicht unter
+`TRAIN_HORN`; der Name des Originals ist im Vermerk festgehalten, damit die Zuordnung
+nachvollziehbar bleibt.
+
+**Zwei Abweichungen beim Fall.** Das Original streut beim Erscheinen fünfzig
+Balefire-Partikel um den Wagen — die Partikelart `bf` hat der Port nicht, der Wagen fällt hier
+ohne dieses Vorspiel. Und es setzt Ort und Geschwindigkeit von Hand, um die übliche Bewegung zu
+umgehen; hier genügt die Schwerkraft von `ProjectileNT`, begrenzt auf dieselbe
+Endgeschwindigkeit von anderthalb Blöcken je Tick.
+
+### Die Waffe
+
+Äußerlich der schwere Revolver mit anderer Textur — dasselbe `lilmac.obj`, das der Port seit
+dessen Runde hat, und derselbe Zeichner, der seine Textur schon damals im Konstruktor
+entgegennahm. Innerlich eine andere Waffe: einunddreißigtausend Schuss Haltbarkeit, doppelter
+Schaden, ein Zielfernrohr — und die Patrone oben.
+
+Die Bewegung ist die des schweren Revolvers, nur wirbelt er beim Ziehen einmal um sich selbst;
+alles andere reicht `LAMBDA_LILMAC_ANIMS` unverändert weiter.
+
+**Nicht übernommen: der Protégé.** Die Schwesterwaffe verschießt `m44_equestrian_mn7`, und die
+lässt statt eines Güterwagens einen Torpedo fallen. `EntityTorpedo` hat der Port nicht, und ein
+Protégé ohne seinen Torpedo wäre ein zweiter Li'l Mac mit anderem Namen.
+
+### Nebenbei: ein Vergleich, der zu viel getroffen hätte
+
+Im Partikelverteiler des Ports stand:
+
+```java
+if ("muke".contains(type)) {
+```
+
+Das ist verdreht. `"muke".contains(type)` prüft, ob **type** eine Teilzeichenkette von "muke"
+ist — auf `"uk"`, `"e"` und die leere Zeichenkette trifft das ebenso zu wie auf `"muke"`. Mit
+den heutigen Aufrufern fällt es nicht auf, weil alle die vollen Namen schicken; es wartet nur
+darauf, dass einmal etwas Kürzeres kommt. Dasselbe stand eine Zeile tiefer für `"tinytot"`.
+Beide sind jetzt `equals`.
+
+Nach dieser Runde fehlt der roten Kiste nur noch `gun_autoshotgun_sexy` — und dafür die
+Autoschrotflinte, die der Port ganz nicht hat.
+
+Alle 30 Tore grün.

@@ -34,6 +34,9 @@ public interface NtmDamageTypes {
     ResourceKey<DamageType> ELECTRICITY = key("electricity");
     /** Der verseuchte Rundfunksender. Im Original ModDamageSource.broadcast. */
     ResourceKey<DamageType> BROADCAST = key("broadcast");
+    /** Der Gueterwagen aus der Luft. Im Original ModDamageSource.boxcar: absolut und
+     *  ruestungsdurchdringend -- wer darunter steht, hat verloren. */
+    ResourceKey<DamageType> BOXCAR = key("boxcar");
 
     ResourceKey<DamageType> PHYSICAL = key("physical");
     ResourceKey<DamageType> FIRE = key("fire");
@@ -65,6 +68,7 @@ public interface NtmDamageTypes {
         context.register(METEORITE, new DamageType("meteorite", 0.1F));
         context.register(ELECTRICITY, new DamageType("electricity", 0.1F));
         context.register(BROADCAST, new DamageType("broadcast", 0.1F));
+        context.register(BOXCAR, new DamageType("boxcar", 0.1F));
         context.register(MUD_POISONING, new DamageType("mudPoisoning", 0.1F));
 
         context.register(PHYSICAL, new DamageType("sednaPhysical", 0.1F));

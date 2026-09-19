@@ -587,6 +587,7 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.simpleCubeAllBlock(NtmBlocks.CRATE_METAL);
         this.simpleCubeAllBlock(NtmBlocks.CRATE);
         this.simpleCubeAllBlock(NtmBlocks.CRATE_WEAPON);
+        this.simpleCubeAllBlock(NtmBlocks.BOXCAR);
 
         this.particleOnlyBlock(NtmBlocks.GEIGER, blockTexture(NtmBlocks.GEIGER));
 

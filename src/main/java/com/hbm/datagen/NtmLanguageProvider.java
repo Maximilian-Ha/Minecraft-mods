@@ -1960,6 +1960,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.GUN_HANGMAN, "Hangman");
         this.add(NtmItems.GUN_HEAVY_REVOLVER, "Heavy Revolver");
         this.add(NtmItems.GUN_LIBERATOR, "Liberator");
+        this.add(NtmItems.GUN_HEAVY_REVOLVER_LILMAC, "Li'l Mac");
         this.add(NtmItems.GUN_MARESLEG, "Lever Action Shotgun");
         this.add(NtmItems.GUN_MARESLEG_AKIMBO, "Lever Action Shotguns");
         this.add(NtmItems.GUN_MARESLEG_BROKEN, "Broken");
@@ -2402,6 +2403,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.CRATE_METAL, "Metal Crate");
         this.add(NtmBlocks.CRATE, "Supply Crate");
         this.add(NtmBlocks.CRATE_WEAPON, "Weapon Crate");
+        this.add(NtmBlocks.BOXCAR, "Boxcar");
         this.add("container.crateIron", "Iron Crate");
         this.add("container.crateTungsten", "Tungsten Crate");
         this.add("container.crateSteel", "Steel Crate");
@@ -3704,6 +3706,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.addDamagePlayer("sednaExplosion", "%1$s was blown up by %2$s.");
         this.addDamage("sednaElectric", "%1$s was fried");
         this.addDamagePlayer("sednaElectric", "%1$s was fried by %2$s");
+        this.addDamage("boxcar", "%1$s was run over");
+        this.addDamagePlayer("boxcar", "%1$s was run over by %2$s");
         this.addDamage("sednaPlasma", "%1$s was immolated");
         this.addDamagePlayer("sednaPlasma", "%1$s was immolated by %2$s.");
         this.addDamage("sednaLaser", "%1$s was pulverized");
