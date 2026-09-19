@@ -981,6 +981,9 @@ public class NtmBlocks {
      * Aus ModBlocks.java:2164 f. des Originals. */
     public static final DeferredBlock<Block> CRATE = register("crate", () -> new LootCrateBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.WOOD).mapColor(MapColor.WOOD), LootCrateBlock.Art.NACHSCHUB));
     public static final DeferredBlock<Block> CRATE_WEAPON = register("crate_weapon", () -> new LootCrateBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.WOOD).mapColor(MapColor.WOOD), LootCrateBlock.Art.WAFFEN));
+    /* Die rote Kiste. Metall wie Blei- und Metallkiste, Werte aus ModBlocks.java:2168.
+     * Sie steht in keinem Kreativ-Reiter -- das Original gibt ihr setCreativeTab(null). */
+    public static final DeferredBlock<Block> CRATE_RED = register("crate_red", () -> new LootCrateBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL), LootCrateBlock.Art.ROT));
     /* Was vom Gueterwagen uebrig bleibt, wo er aufgeschlagen ist. Im Original ein DecoBlock,
      * Werte aus ModBlocks.java:2179. */
     public static final DeferredBlock<Block> BOXCAR = register("boxcar", () -> new Block(BlockBehaviour.Properties.of().strength(10.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL)));

@@ -9,6 +9,8 @@ import com.hbm.items.weapon.grenade.GrenadeFuzeItem.GrenadeFuze;
 import com.hbm.items.weapon.grenade.GrenadeShellItem.GrenadeShell;
 import com.hbm.items.weapon.grenade.GrenadeUniversalItem;
 import com.hbm.items.machine.BatteryPackItem.BatteryPackType;
+import com.hbm.items.food.DrinkItem.DrinkType;
+import com.hbm.items.weapon.sedna.factory.GunFactory.AmmoSecret;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -25,8 +27,11 @@ import java.util.function.Supplier;
  * aufsummiert -- dieselbe Verteilung, ohne die Liste aufzublaehen. Das Original baut die
  * Listen ausserdem bei jedem Oeffnen neu auf; hier entstehen sie einmal beim ersten Zugriff.
  *
- * STAND: Blei-, Metall-, Nachschub- und Waffenliste sind vollstaendig -- jeder Eintrag des
- * Originals ist da. Es fehlt nur die rote Kiste; ihr fehlen die meisten Sonderwaffen.
+ * STAND: alle fuenf Listen sind vollstaendig -- jeder Eintrag des Originals ist da.
+ *
+ * DIE ROTE LISTE spielt nach anderen Regeln: aus ihr wird nicht gezogen. Die rote Kiste kippt
+ * jeden ihrer Eintraege genau einmal aus, deshalb steht sie hier ohne Gewichte und wird als
+ * fertige Liste herausgegeben statt ueber zieh().
  */
 public class CrateLoot {
 
@@ -37,6 +42,7 @@ public class CrateLoot {
     private static List<Eintrag> metall;
     private static List<Eintrag> nachschub;
     private static List<Eintrag> waffen;
+    private static List<Supplier<ItemStack>> rot;
 
     private static void lege(List<Eintrag> liste, Supplier<? extends ItemLike> was, int gewicht) {
         liste.add(new Eintrag(() -> new ItemStack(was.get()), gewicht));
@@ -135,6 +141,42 @@ public class CrateLoot {
         lege(liste, NtmItems.GUN_PANZERSCHRECK, 1);
 
         return waffen = liste;
+    }
+
+    /**
+     * Die rote Kiste. Vierzehn Sonderstuecke, jedes genau einmal -- das Original zieht hier
+     * nicht, es leert die ganze Liste aus (BlockCrate.java:168 ff.).
+     *
+     * Drei davon sind Metadatenstapel: die drei Geheimpatronen des ammo_secret, und die beiden
+     * Flaschen, die im Port Untertypen desselben Getraenks sind.
+     */
+    private static List<Supplier<ItemStack>> rot() {
+        if(rot != null) return rot;
+
+        List<Supplier<ItemStack>> liste = new ArrayList<>();
+        liste.add(() -> new ItemStack(NtmItems.MYSTERYSHOVEL.get()));
+        liste.add(() -> new ItemStack(NtmItems.GUN_HEAVY_REVOLVER_LILMAC.get()));
+        liste.add(() -> new ItemStack(NtmItems.GUN_AUTOSHOTGUN_SEXY.get()));
+        liste.add(() -> new ItemStack(NtmItems.GUN_MARESLEG_BROKEN.get()));
+        liste.add(() -> MetaHelper.newStack(NtmItems.AMMO_SECRET.get(), 1, AmmoSecret.M44_EQUESTRIAN.ordinal()));
+        liste.add(() -> MetaHelper.newStack(NtmItems.AMMO_SECRET.get(), 1, AmmoSecret.G12_EQUESTRIAN.ordinal()));
+        liste.add(() -> MetaHelper.newStack(NtmItems.AMMO_SECRET.get(), 1, AmmoSecret.BMG50_EQUESTRIAN.ordinal()));
+        liste.add(() -> new ItemStack(NtmItems.BATTERY_SPARK.get()));
+        liste.add(() -> MetaHelper.newStack(NtmItems.DRINK.get(), 1, DrinkType.SPARKLE.ordinal()));
+        liste.add(() -> MetaHelper.newStack(NtmItems.DRINK.get(), 1, DrinkType.RAD.ordinal()));
+        liste.add(() -> new ItemStack(NtmItems.RING_STARMETAL.get()));
+        liste.add(() -> new ItemStack(NtmItems.FLAME_PONY.get()));
+        liste.add(() -> new ItemStack(NtmBlocks.NTM_DIRT.get()));
+        liste.add(() -> new ItemStack(NtmBlocks.BROADCASTER_PC.get()));
+
+        return rot = liste;
+    }
+
+    /** Gibt den ganzen Inhalt der roten Kiste heraus -- jeden Eintrag genau einmal. */
+    public static List<ItemStack> alleRot() {
+        List<ItemStack> inhalt = new ArrayList<>();
+        for(Supplier<ItemStack> eintrag : rot()) inhalt.add(eintrag.get());
+        return inhalt;
     }
 
     /** Zieht einen Gegenstand aus der Bleikiste. */

@@ -7212,3 +7212,46 @@ und mit der alten Fassung von `XFactory44` melden sie genau die vier Fehler, die
 gemeldet hat — und sonst nichts.
 
 Alle 31 Tore grün.
+
+## Die rote Kiste
+
+Vierzehn Sonderstücke, und jedes war schon da — bis auf `gun_autoshotgun_sexy` aus der Runde
+davor. Zwei, die ich zwischendurch für fehlend gehalten hatte, sind es nicht: `bottle_sparkle`
+und `bottle_rad` stehen im Port nicht als eigene Gegenstände, sondern als Untertypen `SPARKLE`
+und `RAD` des Getränks. Die Flaschenfamilie ist seit der Dosenrunde vollständig.
+
+**Die rote Kiste zieht nicht.** Alle anderen vier würfeln eine Anzahl und ziehen so oft aus
+ihrer Liste; die rote kippt jeden ihrer vierzehn Einträge genau einmal aus. Das Original tut
+das auf einem Umweg — es würfelt erst eine Anzahl und zieht, leert die Liste danach aber wieder
+und füllt sie mit dem ganzen Inhalt (`BlockCrate.java:168 ff.`). Hier steht gleich das
+Ergebnis.
+
+Daraus folgt, dass `CrateLoot.rot()` keine Gewichte trägt. Die vier anderen Listen sind
+gewichtet, weil aus ihnen gezogen wird; aus dieser nicht.
+
+**Kein Kreativ-Reiter.** Im Original hat sie `setCreativeTab(null)` — sie steht nur in
+Weltbauwerken. Das ist damit die zweite ehrliche Ausnahme in `tab-check`, neben dem
+Geheimspaten, der in ihr liegt.
+
+### Ein Torfehler, den die rote Kiste ans Licht gebracht hat
+
+`api-check` kennt seit Runde 60 die Regel „`.length` auf einer Sammlung statt `.size()`". Sie
+meldet einen Namen nur dann, wenn er im ganzen Projekt ausschließlich als Sammlung deklariert
+ist — eine vorsichtige Regel, die genau deshalb jahrelang still blieb.
+
+In `LootCrateBlock` entstand jetzt eine `List<ItemStack> inhalt`. Damit galt der Name
+projektweit als Sammlung, und die Regel meldete fünf Fundstellen in `RadioTelexScreen` — wo
+`inhalt` ein `String` ist und `inhalt.length()` völlig richtig. Der Ausdruck endete auf
+`length\b`, und das trifft auch den **Methodenaufruf**.
+
+Eine Vorausschau `(?!\s*\()` dahinter, und der Fall ist sauber getrennt. Nachgemessen: der Baum
+ist still, und eine untergeschobene Datei mit echtem `.length` auf einer `List` wird weiterhin
+gemeldet.
+
+Der Fehler war die ganze Zeit da; er brauchte nur einen zweiten Namensträger, um sichtbar zu
+werden. Das ist die unangenehme Eigenschaft von Regeln, die sich auf den ganzen Baum stützen:
+sie können durch eine Änderung an ganz anderer Stelle erst falsch werden.
+
+Damit steht die Kistenfamilie bis auf `crate_supply` vollständig.
+
+Alle 31 Tore grün.

@@ -585,6 +585,7 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.simpleBlockWithItem(NtmBlocks.CRATE_AMMO.get(), this.models().cubeBottomTop(this.name(NtmBlocks.CRATE_AMMO.get()), modLoc("block/crate_ammo_side"), modLoc("block/crate_ammo_bottom"), modLoc("block/crate_ammo_top")));
         this.simpleCubeAllBlock(NtmBlocks.CRATE_LEAD);
         this.simpleCubeAllBlock(NtmBlocks.CRATE_METAL);
+        this.simpleCubeAllBlock(NtmBlocks.CRATE_RED);
         this.simpleCubeAllBlock(NtmBlocks.CRATE);
         this.simpleCubeAllBlock(NtmBlocks.CRATE_WEAPON);
         this.simpleCubeAllBlock(NtmBlocks.BOXCAR);

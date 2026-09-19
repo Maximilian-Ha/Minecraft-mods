@@ -2403,6 +2403,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.CRATE_TEMPLATE, "Template Crate");
         this.add(NtmBlocks.CRATE_LEAD, "Lead-Lined Crate");
         this.add(NtmBlocks.CRATE_METAL, "Metal Crate");
+        this.add(NtmBlocks.CRATE_RED, "Red Crate");
         this.add(NtmBlocks.CRATE, "Supply Crate");
         this.add(NtmBlocks.CRATE_WEAPON, "Weapon Crate");
         this.add(NtmBlocks.BOXCAR, "Boxcar");

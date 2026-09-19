@@ -269,6 +269,11 @@ def collect_length_on_collections(root):
     einer Klasse, deren Oberklasse fehlt, ungeprueft -- und das sind fast alle Klassen dieses
     Ports. Runde 60 kostete genau das einen CI-Durchlauf.
 
+    Runde 180: ".length" darf nicht auf eine Klammer folgen. Sonst trifft der Ausdruck auch
+    den METHODENAUFRUF String.length(), und der ist richtig. Aufgefallen ist das, als in einer
+    anderen Datei eine Liste namens "inhalt" entstand -- damit galt der Name projektweit als
+    Sammlung, und fuenf voellig richtige String-Aufrufe in RadioTelexScreen wurden gemeldet.
+
     Gesucht wird rein textuell und deshalb vorsichtig: gemeldet wird ein Name nur dann, wenn
     er IM GANZEN PROJEKT ausschliesslich als Sammlung erklaert ist. Sobald irgendwo auch ein
     Feld gleichen Namens als Array steht -- vertices, pollution und blueprintPools gibt es in
@@ -293,7 +298,7 @@ def collect_length_on_collections(root):
 
     for path, src in sources.items():
         for name in unambiguous:
-            for m in re.finditer(r'\b' + re.escape(name) + r'\s*\.\s*length\b', src):
+            for m in re.finditer(r'\b' + re.escape(name) + r'\s*\.\s*length\b(?!\s*\()', src):
                 line = src.count('\n', 0, m.start()) + 1
                 findings.append((path, line,
                     name + ' ist im Projekt ausschliesslich als Sammlung erklaert, .length gibt es darauf nicht',
