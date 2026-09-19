@@ -6612,3 +6612,68 @@ Bleiben für Aufgabe #80 noch `crate`, `crate_supply`, `crate_red` und `crate_we
 nur noch als Block, ihre drei Waffen stehen seit der vorigen Runde.
 
 Alle 29 Tore grün.
+
+## Berichtigung: die Dosenkiste ließ das Spiel nicht starten
+
+Der erste Anlauf der Dosenkiste (Commit `07157e25`) war grün durch alle 29 Tore und ist
+trotzdem in der CI durchgefallen — mit einem Absturz beim Laden:
+
+```
+Caused by: java.lang.NullPointerException: Trying to access unbound value:
+           ResourceKey[minecraft:item / hbmsntm:drink]
+    at com.hbm.items.food.DrinkItem$DrinkType.<clinit>(DrinkItem.java:39)
+    at com.hbm.blocks.generic.CanCrateBlock.<clinit>(CanCrateBlock.java:45)
+    at com.hbm.blocks.NtmBlocks.lambda$static$552(NtmBlocks.java:978)
+```
+
+Die Ursache steht Zeile für Zeile in der Spur. `CanCrateBlock` hatte die acht Dosensorten als
+statisches Feld:
+
+```java
+private static final DrinkType[] DOSEN = { DrinkType.SMART, ... };
+```
+
+Das Registrieren des Blocks lädt die Klasse, das Laden führt ihren Klasseninitialisierer aus,
+und der greift auf `DrinkType` zu — wodurch **dessen** Klasseninitialisierer läuft. `DrinkType`
+legt aber für jede Sorte gleich die leere Dose und den Ringzug als Gegenstandsstapel an, und
+zu diesem Zeitpunkt ist `NtmItems.DRINK` noch gar nicht gebunden. Blöcke werden vor
+Gegenständen registriert.
+
+Die Behebung ist eine Verschiebung: die Liste entsteht jetzt in `topf()`, also erst beim ersten
+Öffnen einer Kiste — lange nach der Registrierung. Ein Verweis im Rumpf einer Methode lädt die
+fremde Klasse nicht mit.
+
+### Warum kein Tor das gefunden hat
+
+Die 29 Tore prüfen den ruhenden Quelltext: Syntax, Importe, Modellverweise, Registriernamen.
+Dies hier ist kein Fehler im Quelltext, sondern in der **Reihenfolge zur Ladezeit** — sichtbar
+erst, wenn wirklich jemand den Mod lädt. Genau das tut die CI, und genau das hat sie gemeldet.
+Ein statischer Ersatz dafür müsste der Kette „Blockklasse → Klasseninitialisierer → fremder
+Klasseninitialisierer → ungebundener Gegenstand" folgen; das ließe sich nur raten, und ein Tor,
+das rät, ist schlimmer als keines. Die Lehre steht deshalb hier und nicht in `tools/`:
+
+> In einer Block- oder Gegenstandsklasse gehört in ein statisches Feld nichts, was auf einen
+> anderen registrierten Gegenstand führt — auch nicht mittelbar über eine fremde Aufzählung.
+
+Nachgesehen, ob es die Stelle noch woanders gibt: nein. `AmmoCrateBlock` hält zwar ebenfalls
+ein statisches Feld mit Aufzählungswerten (`Ammo`), aber `Ammo` ist eine reine Datenaufzählung
+ohne eigenen Initialisierer — sie ist seit ihrer Runde grün.
+
+## Ein Strahl, der sich selbst aufgerufen hat
+
+Beim Nachmessen der Abhängigkeiten für die Granaten (Aufgabe #104) fiel in
+`BulletBeamBase.tick()` auf:
+
+```java
+if(config.onUpdate != null) config.onUpdate.accept(this);
+this.tick();                                    // <-- ruft sich selbst
+```
+
+Das Original ruft an dieser Stelle `super.onUpdate()`. Die Übertragung hat daraus `this.tick()`
+gemacht — eine Endlosschleife, die beim ersten Tick mit einem Stapelüberlauf abbricht.
+
+Sie ist nie aufgefallen, weil die Klasse im Port bislang nirgends erzeugt wird: `new
+BulletBeamBase` kommt kein einziges Mal vor. Der Fehler lag also still da und hätte beim ersten
+Strahl zugeschlagen. Jetzt steht dort `super.tick()`, mit Vermerk.
+
+Alle 29 Tore grün.

@@ -82,7 +82,9 @@ public class BulletBeamBase extends Entity implements IEntityWithComplexSpawn {
 
         if(config.onUpdate != null) config.onUpdate.accept(this);
 
-        this.tick();
+        /* super, nicht this: das Original ruft hier super.onUpdate(). Ein this.tick() ruft sich
+         * selbst und bricht beim ersten Tick mit einem Stapelueberlauf ab. */
+        super.tick();
 
         if(!level.isClientSide && this.tickCount > config.expires) this.discard();
     }

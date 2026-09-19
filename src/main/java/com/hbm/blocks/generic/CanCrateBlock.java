@@ -40,12 +40,6 @@ public class CanCrateBlock extends Block {
 
     public static final MapCodec<CanCrateBlock> CODEC = simpleCodec(CanCrateBlock::new);
 
-    /** Die acht Dosengetraenke. Die uebrigen Spielarten des Gegenstands stehen in Flaschen
-     *  oder Bechern und gehoeren nicht in eine Dosenkiste. */
-    private static final DrinkType[] DOSEN = {
-            DrinkType.SMART, DrinkType.CREATURE, DrinkType.REDBOMB, DrinkType.MRSUGAR,
-            DrinkType.OVERCHARGE, DrinkType.LUNA, DrinkType.BREEN, DrinkType.BEPIS };
-
     public CanCrateBlock(Properties properties) {
         super(properties);
     }
@@ -79,12 +73,30 @@ public class CanCrateBlock extends Block {
         return beute;
     }
 
+    /**
+     * Der Topf, aus dem gezogen wird.
+     *
+     * ER ENTSTEHT ERST BEIM OEFFNEN, und das mit Absicht: DrinkType legt in seinem
+     * Klasseninitialisierer Gegenstandsstapel an (die leere Dose, den Ringzug). Stuende die
+     * Liste der acht Dosen als statisches Feld dieser Klasse, wuerde schon das Registrieren des
+     * Blocks DrinkType laden -- und zu diesem Zeitpunkt ist NtmItems.DRINK noch nicht gebunden.
+     * Das Spiel bricht dann beim Start ab. Innerhalb einer Methode laedt DrinkType erst, wenn
+     * die Methode das erste Mal laeuft, also lange nach der Registrierung.
+     */
     private static List<ItemStack> topf() {
 
         List<ItemStack> topf = new ArrayList<>();
 
         for(ConserveType sorte : ConserveType.values()) topf.add(MetaHelper.newStack(NtmItems.CANNED_CONSERVE.get(), sorte));
-        for(DrinkType sorte : DOSEN) topf.add(MetaHelper.newStack(NtmItems.DRINK.get(), sorte));
+
+        /* Die acht Dosengetraenke. Die uebrigen Spielarten stehen in Flaschen oder Bechern und
+         * gehoeren nicht in eine Dosenkiste. */
+        for(DrinkType sorte : new DrinkType[] {
+                DrinkType.SMART, DrinkType.CREATURE, DrinkType.REDBOMB, DrinkType.MRSUGAR,
+                DrinkType.OVERCHARGE, DrinkType.LUNA, DrinkType.BREEN, DrinkType.BEPIS }) {
+            topf.add(MetaHelper.newStack(NtmItems.DRINK.get(), sorte));
+        }
+
         topf.add(new ItemStack(NtmItems.PUDDING.get()));
 
         return topf;
