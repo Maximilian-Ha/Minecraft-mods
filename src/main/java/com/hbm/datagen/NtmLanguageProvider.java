@@ -2369,6 +2369,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.BROADCASTER_PC, DESC, "Makes everything within 25 blocks dizzy$and everything within 15 blocks hurt.");
         this.add(NtmBlocks.LAMP_DEMON, "Demon Core Lamp");
         this.add(NtmBlocks.LAMP_DEMON, DESC, "Irradiates everything in sight.$Walls help, but not much.");
+        this.add(NtmBlocks.RADIO_TORCH_COUNTER, "Redstone-over-Radio Item Counter");
+        this.add(NtmBlocks.RADIO_TORCH_COUNTER, DESC, "Counts matching items in the inventory$behind it and broadcasts the number.");
         this.add(NtmBlocks.TESLA, "Tesla Coil");
         this.add(NtmBlocks.TESLA, DESC, "Zaps every living thing in range.$Wear a full set of metal armor$to stay out of the circuit.");
         this.add(NtmBlocks.SKELETON_HOLDER, "Oh, that's a dead guy");
@@ -3249,6 +3251,10 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("container.machineTurbine", "Steam Turbine");
         this.add("container.furnaceIron", "Iron Furnace");
         this.add("container.furnaceBrick", "Brick Furnace");
+        this.add("container.rttyCounter", "Redstone-over-Radio Item Counter");
+        this.add("rtty.polling", "Polling");
+        this.add("rtty.stateChange", "State Change");
+        this.add("rtty.saveSettings", "Save Settings");
         this.add("container.furnaceSteel", "Steel Furnace");
         this.add("container.machineRockMill", "Rock Mill");
         this.add("rock.crushing", "Crushing of %s");

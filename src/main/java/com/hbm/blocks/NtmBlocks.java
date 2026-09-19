@@ -1038,6 +1038,9 @@ public class NtmBlocks {
     public static final DeferredBlock<Block> FLUID_COUNTER_VALVE = register("fluid_counter_valve", () -> new FluidCounterValveBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(ModSoundTypes.PIPE).mapColor(MapColor.METAL)));
     public static final DeferredBlock<Block> RADIO_TORCH_SENDER = register("radio_torch_sender", () -> new RadioTorchSenderBlock(BlockBehaviour.Properties.of().noOcclusion().strength(1.0F, 10.0F).sound(ModSoundTypes.PIPE).mapColor(MapColor.METAL)));
     public static final DeferredBlock<Block> RADIO_TORCH_RECEIVER  = register("radio_torch_receiver", () -> new RadioTorchReceiverBlock(BlockBehaviour.Properties.of().noOcclusion().strength(1.0F, 10.0F).sound(ModSoundTypes.PIPE).mapColor(MapColor.METAL)));
+    /* Der Zaehler: dieselbe Fackel, aber mit drei Musterfaechern und einem Menue.
+     * Werte wie bei Sender und Empfaenger. */
+    public static final DeferredBlock<Block> RADIO_TORCH_COUNTER = register("radio_torch_counter", () -> new RadioTorchCounterBlock(BlockBehaviour.Properties.of().noOcclusion().strength(1.0F, 10.0F).sound(ModSoundTypes.PIPE).mapColor(MapColor.METAL)));
 
     public static final DeferredBlock<Block> MACHINE_BATTERY_SOCKET = register("machine_battery_socket", () -> new MachineBatterySocketBlock(BlockBehaviour.Properties.of().noOcclusion().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL)));
     public static final DeferredBlock<Block> MACHINE_BATTERY_REDD = register("machine_battery_redd", () -> new MachineBatteryREDDBlock(BlockBehaviour.Properties.of().noOcclusion().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL)));

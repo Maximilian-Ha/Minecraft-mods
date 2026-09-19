@@ -55,6 +55,7 @@ public class NtmMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<MachineTurbineMenu>> MACHINE_TURBINE = reg("machine_turbine", MachineTurbineMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<FurnaceIronMenu>> FURNACE_IRON = reg("furnace_iron", FurnaceIronMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<FurnaceBrickMenu>> FURNACE_BRICK = reg("furnace_brick", FurnaceBrickMenu::new);
+    public static final DeferredHolder<MenuType<?>, MenuType<RadioTorchCounterMenu>> RADIO_TORCH_COUNTER = reg("radio_torch_counter", RadioTorchCounterMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<FurnaceSteelMenu>> FURNACE_STEEL = reg("furnace_steel", FurnaceSteelMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<MachineRockMillMenu>> MACHINE_ROCK_MILL = reg("machine_rock_mill", MachineRockMillMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<MachineOilWellMenu<?>>> MACHINE_OIL_WELL = reg("machine_oil_well", MachineOilWellMenu::new);

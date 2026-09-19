@@ -5668,3 +5668,23 @@ und `PneumaticNode` (7× zusammen, die Rohrpost).
 Die Tabellen beider Werkzeuge stehen jetzt gemeinsam in `tools/portmap.py`, damit sie nicht
 auseinanderlaufen. Der Kommentar darüber sagt, was hineingehört und was nicht — jede Zeile
 nachgesehen, Namensähnlichkeit reicht nicht.
+
+### Die erste Runde nach dem Wegweiser: der Zähler
+
+`radio_torch_counter` stand als erster auf der Liste der sofort portierbaren — und die Liste
+hat recht behalten: es fehlte kein einziger Baustein.
+
+Die Fackel sieht in das Inventar hinter sich, zählt darin alles, was auf eines ihrer drei
+Muster passt, und funkt jede der drei Zahlen auf einen eigenen Kanal. Zwei Betriebsarten:
+standardmäßig sendet sie nur bei einer Änderung, auf Knopfdruck jeden Tick.
+
+Bemerkenswert ist, wie wenig zu schreiben war. Der Port hat für Musterfilter längst einen
+eigenen Unterbau — `FilterMenuBase` fängt den Klick auf ein Musterfach ab, `FilterScreen`
+zeichnet den Hinweis, welche Vergleichsart eingestellt ist, `ModulePatternMatcher` macht den
+Vergleich, `SlotPattern` das Fach. Vom Container und der Oberfläche des Originals blieb
+danach fast nichts übrig, das hier noch einmal hätte stehen müssen: das Menü sind
+**vier Zeilen**, und die kleine Eigenheit des Zählers (er schaltet `forceUpdate`, wenn man
+ein Muster oder einen Kanal ändert) sitzt in der Blockentität, wo sie hingehört.
+
+Die zwei verbleibenden Funkfackeln des Originals — `radio_torch_logic` und
+`radio_torch_reader` — stehen weiter offen; sie bringen je eigene Oberflächen mit.
