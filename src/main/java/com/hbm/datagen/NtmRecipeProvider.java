@@ -2224,6 +2224,24 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_steel_beam", has(NtmBlocks.STEEL_BEAM.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "steel_grate"));
 
+        /* Original CraftingManager Z. 466/467: die beiden Gitter lassen sich ineinander
+         * umlegen -- zwei schmale ergeben vier breite, zwei breite ein schmales. Die Zahlen
+         * sind die des Originals und nicht ausgeglichen; sie bleiben, wie sie dort stehen.
+         *
+         * Der zweite Bauplan braucht einen eigenen Namen: sein Ergebnis ist steel_grate, und
+         * unter diesem Namen liegt schon der Bauplan aus Stahltraegern darueber. */
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, NtmBlocks.STEEL_GRATE_WIDE.get(), 4)
+                .pattern("SS")
+                .define('S', NtmBlocks.STEEL_GRATE.get())
+                .unlockedBy("has_steel_grate", has(NtmBlocks.STEEL_GRATE.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "steel_grate_wide"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, NtmBlocks.STEEL_GRATE.get(), 1)
+                .pattern("SS")
+                .define('S', NtmBlocks.STEEL_GRATE_WIDE.get())
+                .unlockedBy("has_steel_grate_wide", has(NtmBlocks.STEEL_GRATE_WIDE.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "steel_grate_from_wide"));
+
         // ---- Runde 7: restliche Netzbauteile und Kondensatoren ----
 
         // Original CraftingManager Z. 237: " Q " / "CAC" / " Q "

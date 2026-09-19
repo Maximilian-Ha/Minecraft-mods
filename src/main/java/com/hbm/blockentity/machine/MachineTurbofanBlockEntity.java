@@ -16,6 +16,7 @@ import com.hbm.inventory.fluid.trait.FT_Combustible;
 import com.hbm.inventory.fluid.trait.FT_Combustible.FuelGrade;
 import com.hbm.inventory.fluid.trait.FluidTrait.FluidReleaseType;
 import com.hbm.inventory.menus.MachineTurbofanMenu;
+import com.hbm.items.NtmItems;
 import com.hbm.items.machine.IItemFluidIdentifier;
 import com.hbm.items.machine.MachineUpgradeItem;
 import com.hbm.items.machine.MachineUpgradeItem.UpgradeType;
@@ -64,9 +65,12 @@ import java.util.List;
  * angesaugt und im Einlass selbst geschreddert; das Blut sammelt sich in einem
  * eigenen Tank, der abgepumpt werden kann.
  *
- * Nicht uebernommen: IInfoProviderEC (CompatEnergyControl) gibt es im Port nicht,
- * ebenso wenig den Gegenstand flame_pony (Nachbrennerstufe 100) und die
- * Metadaten-Migration alter Mehrblock-Anordnungen aus 1.7.10.
+ * Nicht uebernommen: IInfoProviderEC (CompatEnergyControl) gibt es im Port nicht, und die
+ * Metadaten-Migration alter Mehrblock-Anordnungen aus 1.7.10 braucht er nicht.
+ *
+ * BERICHTIGUNG: hier stand, es gebe den Gegenstand flame_pony im Port nicht. Das war beim
+ * Portieren wahr und ist es seit der Runde der roten Kiste nicht mehr -- der Satz ist
+ * stehen geblieben, statt nachgemessen zu werden. Die Nachbrennerstufe 100 ist da.
  */
 public class MachineTurbofanBlockEntity extends MachinePollutingBlockEntity
         implements IEnergyProviderMK2, IFluidStandardTransceiverMK2, IUpgradeInfoProvider, IFluidCopiable {
@@ -153,6 +157,12 @@ public class MachineTurbofanBlockEntity extends MachinePollutingBlockEntity
 
             this.upgradeManager.checkSlots(this.slots, SLOT_UPGRADE, SLOT_UPGRADE);
             this.afterburner = this.upgradeManager.getLevel(UpgradeType.AFTERBURN);
+
+            /* DAS FEUERPONY IST KEIN UPGRADE, sondern ein Beutestueck aus der roten Kiste.
+             * Liegt es im Upgradeschacht, steht der Nachbrenner auf 100 -- weit ueber den
+             * drei Stufen, die es zu kaufen gibt. Erst dadurch werden die beiden Zweige
+             * "afterburner > 90" weiter unten ueberhaupt erreichbar. */
+            if(this.slots.get(SLOT_UPGRADE).is(NtmItems.FLAME_PONY.get())) this.afterburner = 100;
 
             long burnValue = 0;
             int amount = 1 + this.afterburner;
@@ -502,7 +512,8 @@ public class MachineTurbofanBlockEntity extends MachinePollutingBlockEntity
     @Override
     public boolean canPlaceItem(int slot, ItemStack stack) {
         if(slot == SLOT_FLUID_IN) return true;
-        if(slot == SLOT_UPGRADE) return stack.getItem() instanceof MachineUpgradeItem item && this.getValidUpgrades().containsKey(item.type);
+        if(slot == SLOT_UPGRADE) return stack.is(NtmItems.FLAME_PONY.get())
+                || (stack.getItem() instanceof MachineUpgradeItem item && this.getValidUpgrades().containsKey(item.type));
         if(slot == SLOT_BATTERY) return stack.getItem() instanceof IBatteryItem;
         if(slot == SLOT_IDENTIFIER) return stack.getItem() instanceof IItemFluidIdentifier;
         return false;

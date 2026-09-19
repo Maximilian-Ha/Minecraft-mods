@@ -152,7 +152,11 @@ public class CrystallizerRecipes extends SerializableRecipe {
         /* Original: plant_item MUSTARDWILLOW -> powder_cadmium (setReq 10, RADIOSOLVENT 250) --
          * plant_item hat im Port keine Varianten, Rezept ausgelassen. */
         /* Original: scrap_oil -> nugget_arsenic (setReq 16, RADIOSOLVENT 100) -- scrap_oil fehlt im Port. */
-        /* Original: powder_ash FULLERENE -> ingot_cft (setReq 4, XYLENE 1000) -- beide Items fehlen im Port. */
+        /* Original: powder_ash FULLERENE -> ingot_cft (prod 0.1, setReq 4, XYLENE 1000).
+         * BERICHTIGT: hier stand "beide Items fehlen im Port". ingot_cft gibt es sehr wohl
+         * (NtmItems.INGOT_CTF). Was fehlt, ist die Fullerenasche -- der Port hat die fuenf
+         * Aschesorten als eigene Gegenstaende, und FULLERENE ist nicht darunter. Ihre einzige
+         * Quelle im Original ist der SILEX, und der ist nicht portiert; mit ihm kommt sie. */
 
         registerRecipe(new ComparableStack(NtmItems.POWDER_DIAMOND.get()),
                 new CrystallizerRecipe(Items.DIAMOND, utilityTime));

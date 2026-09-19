@@ -1,8 +1,12 @@
 package com.hbm.blocks.generic;
 
+import com.hbm.blocks.NtmBlocks;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -14,6 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -30,9 +35,10 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * Block darueber (8, Hoehe 1.0) hinein -- aber nur, wenn dieser Nachbar dort ueberhaupt
  * Platz laesst. Wird er spaeter zu einem vollen Block, bricht das Gitter ab.
  *
- * Nicht portiert ist das breite Gitter (steel_grate_wide), durch das Gegenstaende und
- * Erfahrungskugeln fallen -- es steht im Port noch nicht zur Verfuegung und wird hier
- * auch von nichts gebraucht.
+ * DAS BREITE GITTER (steel_grate_wide) benutzt dieselbe Klasse und unterscheidet sich nur
+ * darin, dass Gegenstaende und Erfahrungskugeln hindurchfallen. Hier stand bis zuletzt, es
+ * sei "nicht portiert"; der Block war da, nur sein Verhalten fehlte -- der Satz ist beim
+ * Nachreichen des Blocks stehen geblieben, statt nachgemessen zu werden.
  *
  * Ebenfalls weggelassen: das Original meldet den Block als ITooltipProvider an und blendet
  * damit einen Beschreibungstext ein -- fuer steel_grate gibt es in en_US.lang aber gar keinen,
@@ -67,6 +73,42 @@ public class GrateBlock extends Block {
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         float fy = getY(state.getValue(LAYER));
         return Shapes.box(0D, fy, 0D, 1D, fy + 0.125D, 1D);
+    }
+
+    /**
+     * DAS BREITE GITTER LAESST GEGENSTAENDE UND ERFAHRUNGSKUGELN DURCH, alles andere nicht.
+     * Das Original unterscheidet die beiden Gitter an genau dieser Stelle und ebenso, wie es
+     * hier steht: ueber die Blockinstanz (BlockGrate.addCollisionBoxesToList Z. 151). Auf 1.21
+     * traegt der Kollisionszusammenhang die Entitaet mit, das Abfragen ist also dasselbe.
+     *
+     * NICHT UEBERNOMMEN: das Original macht den Kasten des breiten Gitters um ein Tausendstel
+     * flacher, damit Gegenstaende darauf einsinken. Bei einem LEEREN Kollisionskasten braucht
+     * es den Kniff nicht mehr, und die Auswahlbox bliebe sonst sichtbar schief.
+     */
+    @Override
+    protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        if(this == NtmBlocks.STEEL_GRATE_WIDE.get() && context instanceof EntityCollisionContext ecc
+                && (ecc.getEntity() instanceof ItemEntity || ecc.getEntity() instanceof ExperienceOrb)) {
+            return Shapes.empty();
+        }
+
+        return this.getShape(state, level, pos, context);
+    }
+
+    /**
+     * Und es zieht sie nach unten durch, statt sie liegen zu lassen: das Original setzt
+     * Bewegung und Stellung von Hand, sobald der Gegenstand unterhalb der Gitterebene plus
+     * drei Achteln steht. Ohne das bleibt ein Gegenstand, der auf dem Gitter abgelegt wurde,
+     * im Kasten stecken, weil er sich selbst nicht mehr bewegt.
+     */
+    @Override
+    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+        if(this != NtmBlocks.STEEL_GRATE_WIDE.get()) return;
+        if(!(entity instanceof ItemEntity || entity instanceof ExperienceOrb)) return;
+        if(entity.getY() >= pos.getY() + state.getValue(LAYER) * 0.125D + 0.375D) return;
+
+        entity.setDeltaMovement(0D, -0.25D, 0D);
+        entity.setPos(entity.getX(), entity.getY() - 0.125D, entity.getZ());
     }
 
     @Override

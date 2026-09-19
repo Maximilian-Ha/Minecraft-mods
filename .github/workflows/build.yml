@@ -144,6 +144,56 @@ jobs:
           chmod +x ./tools/rotation-check.sh
           ./tools/rotation-check.sh
 
+      # Das einzige Tor, das nicht den Quelltext prueft, sondern das, was ueber ihn BEHAUPTET
+      # wird: ein Kommentar, der einen Gegenstand fuer fehlend erklaert, den es laengst gibt.
+      - name: Check stale "not ported" claims
+        run: |
+          chmod +x ./tools/claim-check.sh
+          ./tools/claim-check.sh
+
+      # DIESE SIEBEN LIEFEN BIS HIERHER NUR OERTLICH. Damit stand "alle Tore gruen" auf einem
+      # Wort statt auf einer Messung -- wer sie vor dem Schieben vergisst, merkt nichts. Sie
+      # kosten zusammen keine zwei Minuten und melden ihren Fund mit einer genauen Zeile,
+      # waehrend derselbe Fehler im Bau erst vier Minuten spaeter als javac-Meldung auftaucht.
+      #
+      # NICHT dabei ist tools/syntax-check.sh: es uebersetzt ohne Minecraft-Klassenpfad und ist
+      # damit ein schwaecherer Abklatsch des Bauschritts weiter unten, der wirklich uebersetzt.
+      # Oertlich ist es die einzige Moeglichkeit, hier waere es nur Wartezeit.
+      - name: Check registry field access
+        run: |
+          chmod +x ./tools/registry-check.sh
+          ./tools/registry-check.sh
+
+      - name: Check method signatures
+        run: |
+          chmod +x ./tools/signature-check.sh
+          ./tools/signature-check.sh
+
+      - name: Check forward references
+        run: |
+          chmod +x ./tools/forward-check.sh
+          ./tools/forward-check.sh
+
+      - name: Check enum usage
+        run: |
+          chmod +x ./tools/enum-check.sh
+          ./tools/enum-check.sh
+
+      - name: Check per-meta item textures
+        run: |
+          chmod +x ./tools/metatex-check.sh
+          ./tools/metatex-check.sh
+
+      - name: Check sound events
+        run: |
+          chmod +x ./tools/sound-check.sh
+          ./tools/sound-check.sh
+
+      - name: Check API usage
+        run: |
+          chmod +x ./tools/api-check.sh
+          ./tools/api-check.sh
+
       # Die Datengenerierung laeuft VOR dem Bau, und zwar aus zwei Gruenden:
       #
       # 1. Sie ist der beste Ersatz fuer einen Client-Start, den CI leisten kann. Sie faehrt den

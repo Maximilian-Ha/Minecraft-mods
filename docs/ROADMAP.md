@@ -7660,3 +7660,117 @@ Nimmt man den Import wieder heraus, meldet sie genau eine Zeile — `Consumer` i
 `XFactory40mm` — und sonst nichts.
 
 Alle 33 Tore grün.
+
+## Ein Tor auf die Kommentare
+
+Fünf Fehlurteile in einer Sitzung, alle nach demselben Muster: ein Satz, der beim Schreiben
+wahr war und beim Lesen falsch. Dagegen hilft keine Sorgfalt, sondern nur eine Messung — also
+gibt es jetzt ein vierunddreißigstes Tor, und es ist das einzige, das nicht den Quelltext
+prüft, sondern das, was über ihn **behauptet** wird.
+
+Es sammelt jeden Registriernamen, den der Port wirklich vergibt, zerlegt jeden Kommentar in
+Sätze, sucht die Sätze mit einer Verneinung („fehlt", „nicht übernommen", „gibt es nicht") und
+schlägt an, wenn in so einem Satz ein Name steht, den es gibt. Drei Filter halten die
+Fehlalarme heraus, und jeder war nötig:
+
+* Kommentare über **Rezepte und Tabelleneinträge**. „insert_doxium hat auch im Original kein
+  Rezept" sagt nichts über den Gegenstand aus. Gewertet wird der ganze Kommentar, nicht der
+  einzelne Satz — in einer Aufzählung steht das Wort „Rezept" oft erst in der Überschrift.
+* Sätze, in denen **auch ein unbekannter Name** steht. „ore_nether_fire -> crystal_phosphorus
+  — der Block fehlt im Port" meint den Eingang, nicht den Ausgang.
+* Nur **Registriernamen**. Ein Vorversuch nahm auch CamelCase-Klassennamen und kam damit auf
+  sieben Fehlalarme, weil Kommentare ständig über Klassen des Originals reden.
+
+**Nachgemessen in beide Richtungen:** über den ganzen Baum prüft es 490 Sätze mit einer
+Verneinung und meldet keinen. Setzt man die vier historischen Sätze wieder ein — `oil_spill`
+im Ablass, `flame_pony` im Turbofan, `ingot_cft` im Kristallisator, `steel_grate_wide` im
+Gitter —, meldet es genau diese vier und sonst nichts.
+
+### Die Gegenprobe hat zuerst das Tor widerlegt, nicht den Baum
+
+Die erste Fassung war auf dem sauberen Baum still und sah bei der Gegenprobe **einen von drei**
+Sätzen. Zwei Löcher:
+
+1. Sie sammelte Registriernamen aus `.register("...")` — mit Punkt. Blöcke laufen aber über
+   den bloßen Helfer `register("oil_spill", …)`. Das Tor war damit für den **gesamten
+   Blockbestand** blind, also genau dort, wo der Satz stand, der es überhaupt ausgelöst hat.
+   Von 1.569 bekannten Namen wurden es nach der Reparatur 1.992.
+2. Sie verlangte „gibt es" als Wortpaar und sah „**Es gibt** den Gegenstand … **nicht**" nicht,
+   weil sich die Wortstellung dreht.
+
+Ein Tor, das nur behauptet zu messen, ist genau der Fehler, gegen den es gebaut wurde. Beide
+Löcher sind in seinem Kopf vermerkt, damit die nächste Fassung nicht wieder dort hineinfällt.
+
+### Was es nicht sieht
+
+Behauptungen über **Klassen, Mechaniken und Teilsysteme** — alles ohne Registriernamen. Vier
+der fünf Fehlurteile dieser Sitzung waren von dieser Art; das Tor hätte nur das fünfte
+gefunden. Es deckt den billigsten Teil des Problems ab, nicht den ganzen. Und `docs/ROADMAP.md`
+sieht es nicht an; dort stehen dieselben Behauptungen in Prosa, das ist eine eigene Runde.
+
+## Was es im ersten Lauf gefunden hat
+
+Drei Sätze, die niemandem aufgefallen waren.
+
+### Die Nachbrennerstufe 100
+
+Im Turbofan stand, den Gegenstand `flame_pony` gebe es im Port nicht. Er liegt seit der Runde
+der roten Kiste da. Im Original setzt er, in den Upgradeschacht gelegt, den Nachbrenner auf
+**100** — weit über die drei Stufen hinaus, die es zu kaufen gibt.
+
+Das Bemerkenswerte: der Port hatte die Folgen längst portiert und die Ursache nicht. Zwei
+Zweige fragen `afterburner > 90` ab — ein Knirschen im Triebwerk und eine Flammenfahne —, und
+beide waren **unerreichbar**, weil der höchste kaufbare Wert 3 ist. Sie standen als toter Code
+da, ohne dass es auffiel. Jetzt nimmt der Schacht das Pony an, und die beiden Zweige laufen.
+
+### Das breite Gitter
+
+Im Gitterblock stand, das breite Gitter (`steel_grate_wide`) sei „nicht portiert". Der Block
+ist vollständig da: registriert, mit Blockzustand, Beutetabelle, Sprachschlüssel und
+Kreativreiter. Was fehlte, war sein einziger Unterschied zum schmalen — **Gegenstände und
+Erfahrungskugeln fallen hindurch**. Der Satz ist stehen geblieben, als der Block nachgereicht
+wurde.
+
+Das Original unterscheidet die beiden Gitter an der Blockinstanz, und genauso steht es jetzt
+auch hier: der Kollisionskasten ist leer, wenn die fragende Entität ein Gegenstand oder eine
+Erfahrungskugel ist, und `entityInside` zieht sie nach unten durch, statt sie liegen zu lassen.
+Ohne das Zweite bliebe ein abgelegter Gegenstand im Kasten stecken, weil er sich selbst nicht
+mehr bewegt.
+
+Nicht übernommen ist ein Kniff des Originals: dort ist der Kasten des breiten Gitters ein
+Tausendstel flacher, damit Gegenstände einsinken. Bei einem leeren Kollisionskasten braucht es
+ihn nicht, und die Auswahlbox bliebe sonst sichtbar schief.
+
+Dazu die beiden Baupläne aus `CraftingManager` Z. 466/467, die der Port noch nicht hatte: zwei
+schmale Gitter ergeben vier breite, zwei breite ein schmales. Die Zahlen sind die des Originals
+und nicht ausgeglichen; sie bleiben, wie sie dort stehen.
+
+### `ingot_cft` — halb falsch, und das ist der interessantere Fall
+
+Im Kristallisator stand zu einem ausgelassenen Rezept: „beide Items fehlen im Port". Eines der
+beiden gibt es sehr wohl (`NtmItems.INGOT_CTF`). Was wirklich fehlt, ist die **Fullerenasche** —
+der Port hat die fünf Aschesorten als eigene Gegenstände, und `FULLERENE` ist nicht darunter.
+Ihre einzige Quelle im Original ist der SILEX, und der ist nicht portiert.
+
+Der Satz war also nicht erfunden, sondern **ungenau**, und die Ungenauigkeit hat das Rezept
+unter einer falschen Begründung liegen lassen. Die richtige steht jetzt da: mit dem SILEX kommt
+die Asche, mit der Asche das Rezept.
+
+## Sieben Tore liefen nie in der CI
+
+Beim Einhängen des neuen Tores ist aufgefallen, dass acht der bisherigen dreiunddreißig in
+`build.yml` überhaupt nicht vorkommen — darunter ausgerechnet die vier, die ich in dieser und
+der vorigen Sitzung **als Antwort auf einen CI-Fehlschlag** gebaut habe: `registry-check`,
+`signature-check`, `forward-check`, `metatex-check`. Sie liefen nur, wenn ich sie von Hand
+aufrief. „Alle Tore grün" stand damit auf meinem Wort statt auf einer Messung.
+
+Sieben davon hängen jetzt drin. Gemessen kosten sie zusammen knapp zwei Minuten (`api-check`
+64 s und `forward-check` 42 s sind die schweren, die übrigen fünf zusammen sechs Sekunden) —
+und sie melden ihren Fund mit einer genauen Zeile, während derselbe Fehler sonst vier Minuten
+später als `javac`-Meldung auftaucht.
+
+Das achte, `syntax-check`, bleibt draußen, und zwar begründet: es übersetzt **ohne**
+Minecraft-Klassenpfad und ist damit ein schwächerer Abklatsch des Bauschritts, der weiter unten
+richtig übersetzt. Örtlich ist es die einzige Möglichkeit, in der CI wäre es nur Wartezeit.
+
+Alle 34 Tore grün.
