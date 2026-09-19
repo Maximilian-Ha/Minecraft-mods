@@ -5350,3 +5350,50 @@ bereits greift, bleibt es stehen.
 
 Die Lücke bei den Blöcken bleibt bei **16** — diese Runde hat keine Blöcke nachgereicht,
 sondern eine Lücke *neben* der Liste geschlossen.
+
+### Die Teslaspule
+
+`tesla` galt bisher als blockiert — angeblich brauchte sie die FSB-Rüstung. Das war nur
+zur Hälfte richtig: **`hev_battery`** braucht sie (`ArmorFSB.hasFSBArmorIgnoreCharge` plus
+`ArmorFSBPowered` am Helm, beides im Port nicht vorhanden), die Spule dagegen nicht. Sie
+braucht nur `ArmorUtil.checkForFaraday`, und das ist keine Rüstungsklasse, sondern eine
+Namensprüfung: enthält der Name eines Rüstungsteils eines von 27 Wörtern — `iron`, `steel`,
+`rubber`, `hazmat` und so weiter —, leitet oder isoliert es. Erst wenn alle vier Teile
+bestehen, steht der faradaysche Käfig.
+
+Beim Nachbauen ist eine Feinheit aufgefallen: das Original prüft den *unlokalisierten*
+Namen. Der Kettenhelm heißt dort `item.helmetChain` — und `chain` trifft den Listeneintrag
+`chainmail` nicht. Kettenrüstung schützt im Original also nicht, obwohl sie in der Liste
+steht. Der Port prüft stattdessen den Pfad im Gegenstandsverzeichnis, wo sie
+`chainmail_helmet` heißt und folglich schützt. Das ist die Abweichung, und sie ist
+beabsichtigt: die Liste sagt, was gemeint war.
+
+Was sonst dazukam:
+
+- **Eine neue Schadensart** `electricity`. Das Original nimmt
+  `setDamageIsAbsolute().setDamageBypassesArmor()`; im Port sind das die drei Tags
+  `BYPASSES_ARMOR`, `BYPASSES_EFFECTS` und `BYPASSES_RESISTANCE`. Die vorhandene
+  `sednaElectric` passt nicht — die gehört zum Waffensystem und geht durch die Rüstung
+  *nicht* hindurch.
+- **Der Darsteller** zeichnet das OBJ-Modell und je einen `BeamPronter`-Blitz zu jedem
+  Ziel, das der Server gemeldet hat. Die Zahl der Abschnitte wächst mit der Entfernung.
+- **Vier Tondateien** im Wechsel, wie im Original.
+
+**Drei Tore haben zugeschlagen**, und alle drei zu Recht:
+
+| Tor | Befund |
+|---|---|
+| `inventory-check` | Inventarbild mit `scale 1.5` statt `scale 6` — ein Pünktchen statt einer Spule |
+| `offscreen-check` | `shouldRenderOffScreen` fehlte: die Blitze wären verschwunden, sobald man von der Spule wegschaut |
+| `tab-check` | der Block war in keinem Kreativreiter |
+
+Der Schaden folgt weiter der Rechnung des Originals: die halbe Lebenskraft des Getroffenen,
+begrenzt auf drei bis zwanzig, geteilt durch die Zahl **aller** Lebewesen im Suchkasten —
+auch derer, die der Blitz gar nicht erreicht, weil eine Wand dazwischensteht. Je voller der
+Raum, desto schwächer der einzelne Schlag. Das ist im Original so und bleibt so.
+
+**Nicht übernommen:** die drei Sonderfälle für Krabben. Im Original heilen Taint- und
+Teslakrabbe am Blitz, die Cyberkrabbe bleibt unbehelligt; die drei Wesen gibt es im Port
+noch nicht. Der Kommentar in der Blockentität sagt, wohin sie gehören, wenn sie kommen.
+
+Die Lücke steht bei **15**.

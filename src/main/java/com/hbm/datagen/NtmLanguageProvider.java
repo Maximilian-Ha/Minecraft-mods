@@ -2363,6 +2363,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.RADIO_TELEX, DESC, "Types messages onto a channel$and prints what it receives.");
         this.add(NtmBlocks.RADIOREC, "Radio Receiver");
         this.add(NtmBlocks.RADIOREC, DESC, "Turns what it hears on its channel$into note block sounds.");
+        this.add(NtmBlocks.TESLA, "Tesla Coil");
+        this.add(NtmBlocks.TESLA, DESC, "Zaps every living thing in range.$Wear a full set of metal armor$to stay out of the circuit.");
         this.add(NtmBlocks.MACHINE_MICROWAVE, "Microwave");
         this.add(NtmBlocks.MACHINE_MICROWAVE, DESC, "Heats up food using the regular$smelting recipes.$Do not run it at full power.");
         this.add(NtmBlocks.CHARGER, "Charging Station");
@@ -3545,6 +3547,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.addDamage("monoxide", "%1$s forgot to change the batteries in their carbon monoxide detector");
         this.addDamage("cloud", "%1$s inhaled something nasty");
         this.addDamage("meteorite", "%1$s was hit by a falling rock from outer space");
+        this.addDamage("electricity", "%1$s was electrocuted.");
 
         this.addDamage("sednaPhysical", "%1$s was shot");
         this.addDamagePlayer("sednaPhysical", "%1$s was shot by %2$s");

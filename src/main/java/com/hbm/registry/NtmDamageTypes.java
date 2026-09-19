@@ -30,6 +30,8 @@ public interface NtmDamageTypes {
     /** Runde 14: Giftgaswolken. Im Original ModDamageSource.cloud, ruestungsdurchdringend. */
     ResourceKey<DamageType> CLOUD = key("cloud");
     ResourceKey<DamageType> METEORITE = key("meteorite");
+    /** Die Teslaspule. Im Original ModDamageSource.electricity: absolut und ruestungsdurchdringend. */
+    ResourceKey<DamageType> ELECTRICITY = key("electricity");
 
     ResourceKey<DamageType> PHYSICAL = key("physical");
     ResourceKey<DamageType> FIRE = key("fire");
@@ -58,6 +60,7 @@ public interface NtmDamageTypes {
         context.register(MONOXIDE, new DamageType("monoxide", 0.1F));
         context.register(CLOUD, new DamageType("cloud", 0.1F));
         context.register(METEORITE, new DamageType("meteorite", 0.1F));
+        context.register(ELECTRICITY, new DamageType("electricity", 0.1F));
         context.register(MUD_POISONING, new DamageType("mudPoisoning", 0.1F));
 
         context.register(PHYSICAL, new DamageType("sednaPhysical", 0.1F));

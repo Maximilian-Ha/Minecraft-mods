@@ -1967,6 +1967,19 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_crt_display", has(NtmItems.CRT_DISPLAY.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "radio_telex"));
 
+        // Original CraftingManager Z. 717: "CCC" / "PIP" / "WTW".
+        // ANY_PLASTIC.ingot() -> INGOT_POLYMER, KEY_PLANKS -> ItemTags.PLANKS,
+        // machine_transformer heisst im Port TRANSFORMER.
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.TESLA.get(), 1)
+                .pattern("CCC").pattern("PIP").pattern("WTW")
+                .define('C', NtmItems.COIL_COPPER.get())
+                .define('P', NtmItems.INGOT_POLYMER.get())
+                .define('I', Items.IRON_INGOT)
+                .define('W', ItemTags.PLANKS)
+                .define('T', NtmBlocks.TRANSFORMER.get())
+                .unlockedBy("has_coil_copper", has(NtmItems.COIL_COPPER.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "tesla"));
+
         // Original CraftingManager Z. 293. Bisher fehlte dem Heliostatspiegel das Rezept,
         // weil steel_beam im Port nicht existierte.
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.SOLAR_MIRROR.get(), 3)

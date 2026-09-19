@@ -98,6 +98,7 @@ public class ResourceManager {
     public static final ResourceLocation HEATER_OILBURNER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/oilburner.png");
     public static final ResourceLocation HEATER_ELECTRIC_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/electric_heater.png");
     public static final ResourceLocation HEATER_HEATEX_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/heater_heatex.png");
+    public static final ResourceLocation TESLA_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/tesla.png");
     public static final ResourceLocation BATTERY_SC_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/battery_sc.png");
     public static final ResourceLocation BATTERY_REDD_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/fensu2.png");
 
@@ -560,6 +561,7 @@ public class ResourceManager {
     public static IModelCustom heater_oilburner;
     public static IModelCustom heater_electric;
     public static IModelCustom heater_heatex;
+    public static IModelCustom tesla;
 
     // Radar
     public static IModelCustom radar_body;
@@ -846,6 +848,7 @@ public class ResourceManager {
         heater_oilburner = new HFRWavefrontObject("models/obj/machines/oilburner.obj").asVBO();
         heater_electric = new HFRWavefrontObject("models/obj/machines/electric_heater.obj").asVBO();
         heater_heatex = new HFRWavefrontObject("models/obj/machines/heatex.obj").asVBO();
+        tesla = new HFRWavefrontObject("models/obj/machines/tesla.obj").asVBO();
 
         radar_body = new HFRWavefrontObject("models/obj/radar_base.obj").noSmooth().asVBO();
         radar = new HFRWavefrontObject("models/obj/machines/radar.obj").noSmooth().asVBO();

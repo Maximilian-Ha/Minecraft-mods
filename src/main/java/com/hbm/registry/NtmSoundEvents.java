@@ -28,6 +28,8 @@ public class NtmSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_DRY_FIRE = reg("weapon.reload.dry_fire_click");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_HEAVY_REVOLVER_FIRE = reg("weapon.fire.44_shoot");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SHOTGUN_FIRE = reg("weapon.fire.shotgun");
+    /** Der Schlag der Teslaspule, vier Aufnahmen im Wechsel. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> WEAPON_TESLA = reg("weapon.tesla");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_GREASEGUN_FIRE = reg("weapon.fire.greasegun");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_POWDER_FIRE = reg("weapon.fire.black_powder");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_PISTOL_FIRE = reg("weapon.fire.pistol");

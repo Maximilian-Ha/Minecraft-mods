@@ -54,6 +54,14 @@ public class NtmSoundDefinitionsProvider extends SoundDefinitionsProvider {
                         sound(NuclearTechMod.withDefaultNamespace("weapon/reload/shotgun_reload3"))
                 )
         );
+        this.add(NtmSoundEvents.WEAPON_TESLA, SoundDefinition.definition()
+                .with(
+                        sound(NuclearTechMod.withDefaultNamespace("weapon/tesla1")),
+                        sound(NuclearTechMod.withDefaultNamespace("weapon/tesla2")),
+                        sound(NuclearTechMod.withDefaultNamespace("weapon/tesla3")),
+                        sound(NuclearTechMod.withDefaultNamespace("weapon/tesla4"))
+                )
+        );
         this.add(NtmSoundEvents.GUN_SHOTGUN_OPEN, SoundDefinition.definition()
                 .with(sound(NuclearTechMod.withDefaultNamespace("weapon/reload/shotgun_cock_open")))
         );

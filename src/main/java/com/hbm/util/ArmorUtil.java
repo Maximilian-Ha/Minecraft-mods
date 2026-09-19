@@ -2,9 +2,11 @@ package com.hbm.util;
 
 import api.hbm.item.IGasMask;
 import com.hbm.handler.ArmorModHandler;
+import com.hbm.handler.HazmatRegistry;
 import com.hbm.items.NtmItems;
 import com.hbm.util.ArmorRegistry.HazardClass;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -16,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 public class ArmorUtil {
@@ -68,6 +71,51 @@ public class ArmorUtil {
 
     public static boolean checkArmorEmpty(LivingEntity player, EquipmentSlot slot) {
         return player.getItemBySlot(slot).isEmpty();
+    }
+
+    /**
+     * Portiert aus 1.7.10: ArmorUtil.metals.
+     *
+     * Der faradaysche Kaefig entsteht im Original nicht ueber ein Merkmal am Gegenstand,
+     * sondern ueber den Namen: enthaelt der Name eines der folgenden Woerter, leitet das
+     * Teil. Gummi und Hazmat sind mit derselben Begruendung dabei wie im Original --
+     * sie isolieren, statt zu leiten, und schuetzen deshalb ebenso.
+     *
+     * ABWEICHUNG: das Original prueft den unlokalisierten Namen ("item.armor_steel_helmet"),
+     * der Port den Pfad im Gegenstandsverzeichnis ("armor_steel_helmet"). Dasselbe Ergebnis,
+     * aber unabhaengig von der Sprachdatei -- bis auf einen Fall: die Kettenruestung heisst
+     * in 1.7.10 "item.helmetChain", und "chain" allein trifft den Listeneintrag "chainmail"
+     * nicht. Im Original schuetzt Kettenruestung also trotz Eintrag nicht. In 1.21 heisst
+     * sie "chainmail_helmet" und schuetzt. Das ist gewollt: die Liste sagt, was gemeint war.
+     */
+    private static final String[] LEITENDE_NAMEN = {
+            "chainmail", "iron", "silver", "gold", "platinum", "tin", "lead", "liquidator",
+            "schrabidium", "euphemium", "steel", "cmb", "titanium", "alloy", "copper",
+            "bronze", "electrum", "t45", "t51", "bj", "starmetal",
+            "hazmat", // zaehlt mit, weil Gummi isoliert
+            "rubber", "hev", "ajr", "rpa", "spacesuit"
+    };
+
+    /** Ein einzelnes Ruestungsteil, das den Strom ableitet oder abhaelt. */
+    public static boolean isFaradayArmor(Level level, ItemStack stack) {
+
+        if(stack.isEmpty()) return false;
+
+        String name = BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath().toLowerCase(Locale.US);
+        for(String metall : LEITENDE_NAMEN) if(name.contains(metall)) return true;
+
+        return HazmatRegistry.getCladding(level, stack) > 0;
+    }
+
+    /** Erst wenn alle vier Teile leiten, steht der Kaefig -- eine Luecke genuegt. */
+    public static boolean checkForFaraday(Player player) {
+
+        for(EquipmentSlot slot : new EquipmentSlot[] {
+                EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET }) {
+            if(!isFaradayArmor(player.level(), player.getItemBySlot(slot))) return false;
+        }
+
+        return true;
     }
 
     public static void damageSuit(LivingEntity entity, EquipmentSlot slot, int amount) {
