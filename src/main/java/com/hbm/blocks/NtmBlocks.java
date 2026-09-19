@@ -856,6 +856,13 @@ public class NtmBlocks {
     /* Der Ausguss: dieselben Werte wie die uebrige Giesserei, er ist ja aus derselben Rinne
      * gebaut. */
     public static final DeferredBlock<Block> FOUNDRY_OUTLET = register("foundry_outlet", () -> new FoundryOutletBlock(BlockBehaviour.Properties.of().strength(2.0F, 10.0F).sound(SoundType.STONE).mapColor(MapColor.STONE).requiresCorrectToolForDrops().noOcclusion()));
+    /* Der Schlackenabstich: derselbe Bau wie der Ausguss, nur laesst er die Schmelze fallen,
+     * statt sie einem Abnehmer zu reichen. */
+    public static final DeferredBlock<Block> FOUNDRY_SLAGTAP = register("foundry_slagtap", () -> new FoundrySlagtapBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.STONE).mapColor(MapColor.STONE).requiresCorrectToolForDrops().noOcclusion()));
+    /* Die Schlackenpfuetze. Kein Kreativreiter und kein Gegenstand -- sie entsteht nur unter
+     * dem Abstich und gibt beim Abbauen ihren Inhalt als Schrottklumpen zurueck, nicht sich
+     * selbst. Darum noLootTable: die Beute steht in SlagBlock.getDrops. */
+    public static final DeferredBlock<Block> SLAG = BLOCKS.register("slag", () -> new SlagBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.STONE).mapColor(MapColor.STONE).noOcclusion().noLootTable()));
     /* Der Lagerbehaelter. Mehrere nebeneinander laufen ineinander -- was die tausend
      * Blockzustaende erklaert, die er dafuer braucht. */
     public static final DeferredBlock<Block> FOUNDRY_TANK = register("foundry_tank", () -> new FoundryTankBlock(BlockBehaviour.Properties.of().strength(2.0F, 10.0F).sound(SoundType.STONE).mapColor(MapColor.STONE).requiresCorrectToolForDrops().noOcclusion()));

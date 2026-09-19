@@ -16,6 +16,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -50,7 +51,12 @@ public class FoundryOutletBlockEntity extends FoundryBaseBlockEntity {
     public boolean invertRedstone = false;
 
     public FoundryOutletBlockEntity(BlockPos pos, BlockState state) {
-        super(NtmBlockEntityTypes.FOUNDRY_OUTLET.get(), pos, state);
+        this(NtmBlockEntityTypes.FOUNDRY_OUTLET.get(), pos, state);
+    }
+
+    /** Fuer den Schlackenabstich, der dieselbe Blockentitaet mit eigenem Typ braucht. */
+    protected FoundryOutletBlockEntity(BlockEntityType<? extends FoundryOutletBlockEntity> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
     /** Solange TRUE, geht gar nichts hindurch, und der Riegel wird gezeichnet. */

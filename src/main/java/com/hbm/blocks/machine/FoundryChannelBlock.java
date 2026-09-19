@@ -83,18 +83,33 @@ public class FoundryChannelBlock extends BaseEntityBlock implements ICrucibleAcc
 
     @Override protected RenderShape getRenderShape(BlockState state) { return RenderShape.MODEL; }
 
-    /** Angedockt wird an andere Rinnen und an Giessformen -- beides nimmt seitlichen Zulauf an. */
-    public boolean canConnectTo(LevelReader level, BlockPos pos) {
-        Block block = level.getBlockState(pos).getBlock();
+    /**
+     * Angedockt wird an andere Rinnen und an Giessformen -- beides nimmt seitlichen Zulauf an --
+     * und an Ausguss und Schlackenabstich, sofern die von der Rinne WEGZEIGEN. Deren FACING ist
+     * die Richtung, in der sie stehen, von der Rinne aus gesehen; nur dann ist die Seite, an der
+     * ihr Trog haengt, die der Rinne zugewandte, und nur dann nimmt ihre Blockentitaet den
+     * Zulauf ueberhaupt an (siehe FoundryOutletBlockEntity.canAcceptPartialFlow).
+     *
+     * Das Original prueft dasselbe: canConnectTo verlangt dort meta == dir.ordinal(). Im Port
+     * fehlte der Ausguss hier bisher ganz -- die Schmelze floss hinein, aber die Rinne zeichnete
+     * keinen Stutzen dorthin.
+     */
+    public boolean canConnectTo(LevelReader level, BlockPos pos, Direction dir) {
+
+        BlockState state = level.getBlockState(pos);
+        Block block = state.getBlock();
+
+        if(block instanceof FoundryOutletBlock) return state.getValue(FoundryOutletBlock.FACING) == dir;
+
         return block == NtmBlocks.FOUNDRY_CHANNEL.get() || block == NtmBlocks.FOUNDRY_MOLD.get();
     }
 
     private BlockState withConnections(BlockState state, LevelReader level, BlockPos pos) {
         return state
-                .setValue(NORTH, this.canConnectTo(level, pos.north()))
-                .setValue(SOUTH, this.canConnectTo(level, pos.south()))
-                .setValue(EAST, this.canConnectTo(level, pos.east()))
-                .setValue(WEST, this.canConnectTo(level, pos.west()));
+                .setValue(NORTH, this.canConnectTo(level, pos.north(), Direction.NORTH))
+                .setValue(SOUTH, this.canConnectTo(level, pos.south(), Direction.SOUTH))
+                .setValue(EAST, this.canConnectTo(level, pos.east(), Direction.EAST))
+                .setValue(WEST, this.canConnectTo(level, pos.west(), Direction.WEST));
     }
 
     @Override

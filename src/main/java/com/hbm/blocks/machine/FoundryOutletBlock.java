@@ -83,7 +83,9 @@ public class FoundryOutletBlock extends BaseEntityBlock implements ICrucibleAcce
                 .setValue(CLOSED, Boolean.FALSE));
     }
 
-    @Override public MapCodec<FoundryOutletBlock> codec() { return CODEC; }
+    /* Platzhalter, weil der Schlackenabstich von dieser Klasse erbt: MapCodec ist invariant,
+     * eine Ableitung koennte den festen Typ nicht verengen. */
+    @Override public MapCodec<? extends FoundryOutletBlock> codec() { return CODEC; }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {

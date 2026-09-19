@@ -1,0 +1,20 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "particle": "hbmsntm:block/slag",
+    "all": "hbmsntm:block/slag"
+  },
+  "elements": [
+    {
+      "from": [0, 0, 0], "to": [16, 16, 16],
+      "faces": {
+        "down": { "texture": "#all", "tintindex": 0, "cullface": "down" },
+        "up": { "texture": "#all", "tintindex": 0, "cullface": "up" },
+        "north": { "texture": "#all", "tintindex": 0, "cullface": "north" },
+        "south": { "texture": "#all", "tintindex": 0, "cullface": "south" },
+        "east": { "texture": "#all", "tintindex": 0, "cullface": "east" },
+        "west": { "texture": "#all", "tintindex": 0, "cullface": "west" }
+      }
+    }
+  ]
+}

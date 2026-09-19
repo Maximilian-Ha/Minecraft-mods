@@ -6106,3 +6106,84 @@ Gemessen: sofort portierbar **15 → 13**. Die zwei, die herausfallen, sind beid
 `TileEntityPipeAnchor` (erbt `TileEntityPipelineBase`) und `TileEntityRequestNetworkContainer`
 (erbt `TileEntityRequestNetwork`), beide gleiches Paket, beide im Port nicht vorhanden. Kein
 Eintrag fällt zu Unrecht heraus.
+
+## Der Schlackenabstich und die Pfütze darunter (Aufgabe #96)
+
+Der letzte offene Punkt der Gießerei. Der Abstich selbst ist im Original nichts als der
+Ausguss mit fünf anderen Texturen und einer anderen Blockentität — im Port genauso: er erbt
+von `FoundryOutletBlock`, Form, Filter, Riegel, Werkzeugverhalten und Kopiervorlage kommen
+unverändert von dort. Blockiert war er nie an sich selbst, sondern an dem, wohin er abläuft:
+`BlockDynamicSlag` samt `TileEntitySlag`, die der Port gar nicht hatte.
+
+### Die Pfütze
+
+`slag` ist eine Lache, die nach unten fällt, sich mit der Lache darunter vereinigt und sich zur
+Seite ausbreitet, sobald ein Fünftel beisammen ist. Sie hat keinen Gegenstand und steht in
+keinem Reiter; abgebaut gibt sie ihren ganzen Inhalt als Schrottklumpen zurück, nicht sich
+selbst.
+
+**Zwei Abweichungen, beide bewusst.**
+
+*Die Höhe.* Das Original liest die Blockgrenzen bei jedem Bild aus der Blockentität. Auf 1.21
+wäre das ein dynamischer Umriss samt eigenem Renderer. Im Port steht die Höhe in Sechzehnteln
+als `LEVEL` im Blockzustand: sechzehn winzige Modelle, ein normal zwischenspeicherbarer Umriss,
+kein Renderer. Die genaue Menge bleibt in der Blockentität — gerundet wird nur, was man sieht.
+
+*Die Farbe.* Das Original baut sich beim Laden für jedes Material eine eigene Textur und bildet
+Weiß auf die helle, `0x505050` auf die dunkle Materialfarbe ab. Ein Farbhandler kann nur
+multiplizieren, nicht zwei Stützstellen abbilden, also bleibt es bei der hellen Farbe auf einer
+Graustufentextur. Das ist dasselbe Verfahren, das der Port schon für den Schrottklumpen benutzt,
+und dort schon so begründet.
+
+### Der Strahl, der auch ins Leere treffen darf
+
+Der Abstich sucht sein Ziel fünfzehn Blöcke weit nach unten. Das Original benutzt dafür
+`func_147447_a(..., returnLastUncollidedBlock = true)` — der entscheidende Teil ist das letzte
+Argument: läuft der Strahl ins Leere, kommt trotzdem eine Blockstelle zurück, nämlich die
+zuletzt durchquerte. Genau darauf beruht der Zweig `hit.isReplaceable(...)`, der sonst nie
+anspringen würde.
+
+Auf 1.21 tut `level.clip` dasselbe: ein Fehlschlag trägt die Stelle am Strahlende. Deshalb
+prüft der Port hier **nicht** auf `HitResult.Type.BLOCK`, sondern benutzt Treffer und Fehlschlag
+gleichermaßen. Wer die Prüfung einbaute, hätte den ganzen Freifall-Zweig stillgelegt und es nie
+gemerkt — die Schlacke bliebe einfach am Abstich hängen.
+
+Dazu eine Schranke, die das Original nicht braucht: `setze` setzt nichts außerhalb der
+Weltgrenzen. Auf 1.7.10 liegt der Boden bei y = 0, auf 1.21 kann der Strahl unter die
+Untergrenze laufen — `setBlock` scheitert dann still, und das anschließende `getBlockEntity`
+griffe ins Leere.
+
+### Ein Loch aus Runde #90, das erst jetzt auffiel
+
+Die Rinne hat sich im Port nie mit dem Ausguss verbunden. Die Schmelze floss hinein — das läuft
+über `ICrucibleAcceptor` am Block und war richtig —, aber `canConnectTo` kannte nur Rinnen und
+Formen, zeichnete also keinen Stutzen dorthin. Das Original prüft an derselben Stelle
+`meta == dir.ordinal()`: der Ausguss zählt, wenn er von der Rinne **wegzeigt**, denn nur dann
+hängt sein Trog auf der der Rinne zugewandten Seite, und nur dann nimmt seine Blockentität den
+Zulauf überhaupt an. Jetzt prüft der Port dasselbe, und der Abstich zählt mit.
+
+### Zwei Tore haben zugeschlagen
+
+`api-check` fand, dass `FoundryOutletBlock.codec()` den eigenen Typ ohne Platzhalter festlegt.
+Solange niemand von der Klasse erbte, war das harmlos; mit dem Abstich als Ableitung nicht mehr,
+denn `MapCodec` ist invariant. Richtig ist `MapCodec<? extends FoundryOutletBlock>`.
+
+`model-resolve-check` fand, dass `slag` mit blankem `BLOCKS.register` angelegt ist, also keinen
+Gegenstand bekommt, und verlangte den Eintrag samt Begründung in `OHNE_GEGENSTAND` — genau
+wofür die Prüfung seit dem Giftblock da ist.
+
+### Ein Nachtrag zur Baseline des Syntax-Tors
+
+Beim Durchlauf meldete `syntax-check` zwei neue Fundstellen, beide aus der Deuteriumrunde:
+`DeuteriumExtractorBlockEntity` und `DeuteriumTowerBlockEntity`, jeweils *types
+IFluidStandardSenderMK2 and IFluidStandardSenderMK2 are incompatible*. Dieselbe Schnittstelle
+auf beiden Seiten — die längst belegte Kategorie 1 der Baseline, ein Folgefehler der fehlenden
+Fremd-API. Gegenprobe wie dort beschrieben: `javac -sourcepath src/main/java
+src/main/java/api/hbm/fluidmk2/*.java` übersetzt dieselbe Hierarchie fehlerfrei, null Meldungen.
+
+Bemerkenswert ist, dass die CI die Deuteriumrunde grün gemeldet hat. Die Meldung hängt daran,
+in welcher Reihenfolge `find` die Dateien liefert; javac meldet den vermeintlichen Konflikt nur
+in einer der Übersetzungseinheiten, und welche das ist, entscheidet die Dateireihenfolge. Mit
+den beiden Zeilen in der Baseline ist das dauerhaft erledigt.
+
+Stand danach: Aufgabe #96 abgeschlossen, die Gießerei damit vollständig.

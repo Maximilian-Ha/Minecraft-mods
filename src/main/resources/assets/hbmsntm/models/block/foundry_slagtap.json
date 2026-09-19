@@ -1,0 +1,44 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "particle": "hbmsntm:block/foundry_slagtap_side",
+    "top": "hbmsntm:block/foundry_slagtap_top",
+    "side": "hbmsntm:block/foundry_slagtap_side",
+    "bottom": "hbmsntm:block/foundry_slagtap_bottom",
+    "inner": "hbmsntm:block/foundry_slagtap_inner",
+    "front": "hbmsntm:block/foundry_slagtap_front"
+  },
+  "elements": [
+    {
+      "from": [5, 0, 10], "to": [11, 2, 16],
+      "faces": {
+        "down": { "texture": "#bottom" },
+        "up": { "texture": "#bottom" },
+        "north": { "texture": "#front" },
+        "south": { "texture": "#front" },
+        "east": { "texture": "#side" },
+        "west": { "texture": "#side" }
+      }
+    },
+    {
+      "from": [5, 2, 10], "to": [6, 8, 16],
+      "faces": {
+        "up": { "texture": "#top" },
+        "west": { "texture": "#side" },
+        "east": { "texture": "#inner" },
+        "north": { "texture": "#front" },
+        "south": { "texture": "#front" }
+      }
+    },
+    {
+      "from": [10, 2, 10], "to": [11, 8, 16],
+      "faces": {
+        "up": { "texture": "#top" },
+        "east": { "texture": "#side" },
+        "west": { "texture": "#inner" },
+        "north": { "texture": "#front" },
+        "south": { "texture": "#front" }
+      }
+    }
+  ]
+}

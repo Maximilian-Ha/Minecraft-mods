@@ -1,5 +1,6 @@
 package com.hbm.main;
 
+import com.hbm.blockentity.SlagBlockEntity;
 import com.hbm.blockentity.network.PipeBaseBlockEntity;
 import com.hbm.blocks.ICustomBlockHighlight;
 import com.hbm.blocks.ILookOverlay;
@@ -627,6 +628,21 @@ public class NuclearTechModClient {
                     return 0xFF000000 | type.getColor();
                 },
                 NtmBlocks.FLUID_DUCT_NEO.get()
+        );
+        /*
+         * Die Schlackenpfuetze: eine Graustufentextur, eingefaerbt nach dem Material, das in
+         * ihrer Blockentitaet steht. Das Original baut sich dafuer beim Laden je Material eine
+         * eigene Textur und bildet Weiss auf die helle, 0x505050 auf die dunkle Materialfarbe
+         * ab -- ein Farbhandler kann nur multiplizieren, also bleibt es bei der hellen Farbe.
+         * Dasselbe Verfahren benutzt der Port schon fuer den Schrottklumpen.
+         */
+        event.register(
+                (state, level, pos, tintIndex) -> {
+                    if(level == null || pos == null) return 0xFFFFFFFF;
+                    if(!(level.getBlockEntity(pos) instanceof SlagBlockEntity slag) || slag.mat == null) return 0xFFFFFFFF;
+                    return 0xFF000000 | slag.mat.solidColorLight;
+                },
+                NtmBlocks.SLAG.get()
         );
     }
 

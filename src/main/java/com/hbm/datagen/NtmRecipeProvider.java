@@ -2050,6 +2050,13 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_foundry_channel", has(NtmBlocks.FOUNDRY_CHANNEL.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "foundry_outlet"));
 
+        /* Der Schlackenabstich, CraftingManager Z. 925: formlos aus Rinne und Steinziegeln. */
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, NtmBlocks.FOUNDRY_SLAGTAP.get(), 1)
+                .requires(NtmBlocks.FOUNDRY_CHANNEL.get())
+                .requires(Blocks.STONE_BRICKS)
+                .unlockedBy("has_foundry_channel", has(NtmBlocks.FOUNDRY_CHANNEL.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "foundry_slagtap"));
+
         /*
          * Die Zapfsaeule, CraftingManager Z. 849: "SS" / "HC" / "SS". TI.plate() ist die
          * Titanplatte, EnumPartType.PISTON_HYDRAULIC der Hydraulikkolben, EnumCircuitType.BASIC

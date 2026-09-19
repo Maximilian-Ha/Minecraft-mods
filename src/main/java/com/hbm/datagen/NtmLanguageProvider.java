@@ -1093,6 +1093,11 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.FOUNDRY_MOLD, "Casting Mold");
         this.add(NtmBlocks.FOUNDRY_BASIN, "Casting Basin");
         this.add(NtmBlocks.FOUNDRY_OUTLET, "Casting Outlet");
+        this.add(NtmBlocks.FOUNDRY_SLAGTAP, "Slag Tap");
+        /* Die Pfuetze hat im Original gar keinen Namen -- sie ist in keinem Reiter und
+         * traegt keinen Gegenstand. Einen braucht sie trotzdem, sonst steht der rohe
+         * Schluessel in der Anzeige beim Hinsehen. */
+        this.add(NtmBlocks.SLAG, "Molten Slag");
         this.add(NtmBlocks.FOUNDRY_TANK, "Casting Tank");
         this.add(NtmBlocks.RBMK_GAUGE, "RBMK Gauge Panel");
         this.add(NtmBlocks.RBMK_INDICATOR, "RBMK Indicator Panel");

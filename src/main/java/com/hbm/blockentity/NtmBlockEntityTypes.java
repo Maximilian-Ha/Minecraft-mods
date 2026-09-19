@@ -638,6 +638,18 @@ public class NtmBlockEntityTypes {
                             FoundryOutletBlockEntity::new,
                             NtmBlocks.FOUNDRY_OUTLET.get())
                     .build(null));
+    public static final Supplier<BlockEntityType<FoundrySlagtapBlockEntity>> FOUNDRY_SLAGTAP = BLOCK_ENTITY_TYPES.register(
+            "foundry_slagtap",
+            () -> BlockEntityType.Builder.of(
+                            FoundrySlagtapBlockEntity::new,
+                            NtmBlocks.FOUNDRY_SLAGTAP.get())
+                    .build(null));
+    public static final Supplier<BlockEntityType<SlagBlockEntity>> SLAG = BLOCK_ENTITY_TYPES.register(
+            "slag",
+            () -> BlockEntityType.Builder.of(
+                            SlagBlockEntity::new,
+                            NtmBlocks.SLAG.get())
+                    .build(null));
     public static final Supplier<BlockEntityType<FoundryTankBlockEntity>> FOUNDRY_TANK = BLOCK_ENTITY_TYPES.register(
             "foundry_tank",
             () -> BlockEntityType.Builder.of(

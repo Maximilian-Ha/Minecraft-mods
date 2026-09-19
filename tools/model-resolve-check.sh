@@ -132,6 +132,9 @@ OHNE_GEGENSTAND = {
     'mud', 'pile_block', 'rad_lava', 'spotlight_beam', 'toxic_block', 'volcanic_lava',
     # Der Lichtfleck des Flutlichts: wie spotlight_beam nur Licht, nichts zum Anfassen.
     'floodlight_beam',
+    # Die Schlackenpfuetze: entsteht nur unter dem Schlackenabstich und gibt beim Abbauen
+    # einen Schrottklumpen her, nicht sich selbst. Im Original ebenso ohne Kreativreiter.
+    'slag',
 }
 
 def registry_namen(quelle='src/main/java'):
