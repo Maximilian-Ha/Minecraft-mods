@@ -4792,3 +4792,24 @@ dass die Datengenerierung das Modell schreibt, dass es auflöst und dass der Ser
 Bild selbst sieht nur, wer es sich ansieht.
 
 Die Lücke steht bei **42**.
+
+### Totes Gewächs
+
+Fünf Formen — Gewächs, Gras, Blume, große Blume, Farn. Im Original ein Block mit fünf
+Metadaten, im Port fünf Blöcke, wie bei allen Metadatenfamilien; im Messskript steht der Name
+entsprechend unter `FAMILIEN`.
+
+Wo sie stehen dürfen, steht in `canPlaceBlockOn` des Originals und ist unverändert übernommen:
+Gras, Erde, Ödland, öliger und toter Boden. Dazu kam `ntm_dirt`, weil die Bauwerke genau diese
+Erde setzen — ohne sie stünde das Gewächs in den eigenen Ruinen auf unzulässigem Grund.
+
+**Das Modell-Tor hat hier gearbeitet**, und zwar lokal statt in der CI: `basicItem` erwartet
+eine Item-Textur `item/plant_dead_*.png`, die es nicht gibt — im Original trägt der Gegenstand
+die Blocktextur. Das Tor nennt beim Fund gleich den Grund („runData bricht dafür ab") und die
+zwei Auswege. Item-Modell auf `block/plant_dead_*` gezeigt, Sache erledigt, kein Lauf verbrannt.
+
+Die Lücke steht bei **41**.
+
+Der Pilz (`mush`) bleibt vorerst liegen: Er wächst im Original zu einem Riesenpilz, und der
+Generator dafür gehört zur Weltgenerierung, die noch nicht portiert ist. Ihn ohne sein Wachstum
+hinzustellen wäre eine halbe Sache — er kommt, wenn die Generatoren dran sind.

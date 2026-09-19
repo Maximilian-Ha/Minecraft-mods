@@ -856,6 +856,16 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         );
 
         this.registerPwr();
+        this.simpleBlock(NtmBlocks.PLANT_DEAD_GENERIC.get(), this.models().withExistingParent("plant_dead_generic", mcLoc("block/cross")).renderType("cutout").texture("cross", modLoc("block/plant_dead_generic")));
+        this.itemModels().withExistingParent("plant_dead_generic", mcLoc("item/generated")).texture("layer0", modLoc("block/plant_dead_generic"));
+        this.simpleBlock(NtmBlocks.PLANT_DEAD_GRASS.get(), this.models().withExistingParent("plant_dead_grass", mcLoc("block/cross")).renderType("cutout").texture("cross", modLoc("block/plant_dead_grass")));
+        this.itemModels().withExistingParent("plant_dead_grass", mcLoc("item/generated")).texture("layer0", modLoc("block/plant_dead_grass"));
+        this.simpleBlock(NtmBlocks.PLANT_DEAD_FLOWER.get(), this.models().withExistingParent("plant_dead_flower", mcLoc("block/cross")).renderType("cutout").texture("cross", modLoc("block/plant_dead_flower")));
+        this.itemModels().withExistingParent("plant_dead_flower", mcLoc("item/generated")).texture("layer0", modLoc("block/plant_dead_flower"));
+        this.simpleBlock(NtmBlocks.PLANT_DEAD_BIGFLOWER.get(), this.models().withExistingParent("plant_dead_bigflower", mcLoc("block/cross")).renderType("cutout").texture("cross", modLoc("block/plant_dead_bigflower")));
+        this.itemModels().withExistingParent("plant_dead_bigflower", mcLoc("item/generated")).texture("layer0", modLoc("block/plant_dead_bigflower"));
+        this.simpleBlock(NtmBlocks.PLANT_DEAD_FERN.get(), this.models().withExistingParent("plant_dead_fern", mcLoc("block/cross")).renderType("cutout").texture("cross", modLoc("block/plant_dead_fern")));
+        this.itemModels().withExistingParent("plant_dead_fern", mcLoc("item/generated")).texture("layer0", modLoc("block/plant_dead_fern"));
         this.simpleBlock(NtmBlocks.BALEFIRE.get(), this.models().withExistingParent("balefire", mcLoc("block/cross")).renderType("cutout_mipped").texture("cross", modLoc("block/balefire")));
         this.simpleBlock(NtmBlocks.FIRE_DIGAMMA.get(), this.models().withExistingParent("fire_digamma", mcLoc("block/cross")).renderType("cutout_mipped").texture("cross", modLoc("block/fire_digamma")));
         // VOLCANO_CORE uses custom register!

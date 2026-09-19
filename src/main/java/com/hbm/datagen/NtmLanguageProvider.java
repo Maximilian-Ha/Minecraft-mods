@@ -2317,6 +2317,11 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.STEEL_WALL, "Steel Wall");
         this.add(NtmBlocks.STEEL_CORNER, "Steel Corner");
         this.add(NtmBlocks.STEEL_POLES, "Steel Poles");
+        this.add(NtmBlocks.PLANT_DEAD_GENERIC, "Dead Plant");
+        this.add(NtmBlocks.PLANT_DEAD_GRASS, "Dead Grass");
+        this.add(NtmBlocks.PLANT_DEAD_FLOWER, "Dead Flower");
+        this.add(NtmBlocks.PLANT_DEAD_BIGFLOWER, "Dead Large Flower");
+        this.add(NtmBlocks.PLANT_DEAD_FERN, "Dead Fern");
         this.add(NtmBlocks.BLOCK_STARMETAL, "Block of Starmetal");
         this.add(NtmBlocks.BLOCK_ELECTRICAL_SCRAP, "Block of Electrical Scrap");
         this.add(NtmBlocks.NTM_DIRT, "Dirt");

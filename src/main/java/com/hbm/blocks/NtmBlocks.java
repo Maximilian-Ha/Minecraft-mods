@@ -300,6 +300,14 @@ public class NtmBlocks {
     /* BERICHTIGT (Stufe 5): der Traeger ist im Original kein Wuerfel, sondern eine duenne
      * Saeule mit eigenem Modell (beam.obj). Werte aus ModBlocks.java:1601. */
     public static final DeferredBlock<Block> STEEL_BEAM = register("steel_beam", () -> new SteelBeamBlock(BlockBehaviour.Properties.of().strength(5.0F, 15.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion()));
+    /* Stufe 5: totes Gewaechs, fuenf Formen. Im Original ein Block mit Metadaten
+     * (ModBlocks.java:1657), im Port fuenf Bloecke. */
+    public static final DeferredBlock<Block> PLANT_DEAD_GENERIC = register("plant_dead_generic", () -> new DeadPlantBlock(deadPlant()));
+    public static final DeferredBlock<Block> PLANT_DEAD_GRASS = register("plant_dead_grass", () -> new DeadPlantBlock(deadPlant()));
+    public static final DeferredBlock<Block> PLANT_DEAD_FLOWER = register("plant_dead_flower", () -> new DeadPlantBlock(deadPlant()));
+    public static final DeferredBlock<Block> PLANT_DEAD_BIGFLOWER = register("plant_dead_bigflower", () -> new DeadPlantBlock(deadPlant()));
+    public static final DeferredBlock<Block> PLANT_DEAD_FERN = register("plant_dead_fern", () -> new DeadPlantBlock(deadPlant()));
+
     /* Stufe 5: die Masten der Bauwerke. Werte aus ModBlocks.java:1595. */
     public static final DeferredBlock<Block> STEEL_POLES = register("steel_poles", () -> new SteelPolesBlock(BlockBehaviour.Properties.of().strength(5.0F, 15.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion()));
     public static final DeferredBlock<Block> STONE_GNEISS = register("stone_gneiss", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE).mapColor(MapColor.STONE)));
@@ -1080,4 +1088,16 @@ public class NtmBlocks {
     public static void register(IEventBus eventBus) {
         BLOCKS.register(eventBus);
     }
+
+    /** Die Eigenschaften aller fuenf toten Gewaechse: zerbrechlich, ohne Kollision, wie im Original. */
+    private static BlockBehaviour.Properties deadPlant() {
+        return BlockBehaviour.Properties.of()
+                .instabreak()
+                .noCollission()
+                .noOcclusion()
+                .sound(SoundType.GRASS)
+                .mapColor(MapColor.PLANT)
+                .pushReaction(PushReaction.DESTROY);
+    }
+
 }

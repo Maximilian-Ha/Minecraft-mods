@@ -1151,6 +1151,11 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.STEEL_WALL);
                         output.accept(NtmBlocks.STEEL_CORNER);
                         output.accept(NtmBlocks.STEEL_POLES);
+                        output.accept(NtmBlocks.PLANT_DEAD_GENERIC);
+                        output.accept(NtmBlocks.PLANT_DEAD_GRASS);
+                        output.accept(NtmBlocks.PLANT_DEAD_FLOWER);
+                        output.accept(NtmBlocks.PLANT_DEAD_BIGFLOWER);
+                        output.accept(NtmBlocks.PLANT_DEAD_FERN);
                         output.accept(NtmBlocks.BLOCK_STARMETAL);
                         output.accept(NtmBlocks.BLOCK_ELECTRICAL_SCRAP);
                         output.accept(NtmBlocks.WOOD_BARRIER);

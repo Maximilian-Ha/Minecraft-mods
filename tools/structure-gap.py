@@ -55,6 +55,7 @@ FAMILIEN = {
     "concrete_colored_ext": "concrete_ext_machine ... concrete_ext_bronze (acht Toene)",
     "reinforced_lamp_off":  "reinforced_lamp mit lit=false",
     "wood_structure":       "wood_structure_roof, wood_structure_scaffold, wood_structure_ceiling",
+    "plant_dead":           "plant_dead_generic, _grass, _flower, _bigflower, _fern",
     "machine_electric_furnace_off": "machine_electric_furnace mit lit=false",
 }
 
