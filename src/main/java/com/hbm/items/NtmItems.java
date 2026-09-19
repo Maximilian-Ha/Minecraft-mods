@@ -12,6 +12,8 @@ import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.ItemEnums.CapType;
 import com.hbm.items.ItemEnums.CasingType;
+import com.hbm.items.armor.ArmorFSBItem;
+import com.hbm.items.armor.ArmorHEVItem;
 import com.hbm.items.armor.ArmorNo9;
 import com.hbm.items.armor.FilterItem;
 import com.hbm.items.armor.GasMaskItem;
@@ -66,6 +68,8 @@ import com.hbm.items.weapon.MissileItem.MissileFuel;
 import com.hbm.items.weapon.MissileItem.MissileTier;
 import com.hbm.items.weapon.sedna.factory.GunFactory;
 import com.hbm.main.NuclearTechMod;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.AxeItem;
@@ -1381,6 +1385,30 @@ public class NtmItems {
     public static final DeferredItem<Item> GAS_MASK_FILTER_COMBO = ITEMS.register("gas_mask_filter_combo", () -> new FilterItem(new Item.Properties()));
     public static final DeferredItem<Item> GAS_MASK_FILTER_RAG = ITEMS.register("gas_mask_filter_rag", () -> new FilterItem(new Item.Properties()));
     public static final DeferredItem<Item> GAS_MASK_FILTER_PISS = ITEMS.register("gas_mask_filter_piss", () -> new FilterItem(new Item.Properties()));
+
+    /*
+     * Der HEV-Anzug. Die vier Zahlen stehen genauso in ModItemsArmor: eine Million HE
+     * Fassungsvermoegen, zehntausend Ladegeschwindigkeit, 2500 HE je Schadenspunkt und
+     * null Dauerverbrauch -- der Anzug zehrt also nicht von selbst, er zahlt nur, wenn
+     * er etwas abbekommt.
+     *
+     * ABWEICHUNG: das Original schreibt die Eigenschaften nur am Helm aus und laesst die
+     * drei anderen Teile sie mit cloneStats vom fertigen Helm abschreiben. Das setzt eine
+     * Reihenfolge voraus -- der Helm muss schon angemeldet sein. Der Port baut alle vier
+     * aus derselben Vorschrift, damit bleibt die Anmeldung reihenfolgefrei.
+     */
+    public static final DeferredItem<Item> HEV_HELMET = ITEMS.register("hev_helmet", () -> hev(ArmorItem.Type.HELMET));
+    public static final DeferredItem<Item> HEV_PLATE = ITEMS.register("hev_plate", () -> hev(ArmorItem.Type.CHESTPLATE));
+    public static final DeferredItem<Item> HEV_LEGS = ITEMS.register("hev_legs", () -> hev(ArmorItem.Type.LEGGINGS));
+    public static final DeferredItem<Item> HEV_BOOTS = ITEMS.register("hev_boots", () -> hev(ArmorItem.Type.BOOTS));
+
+    private static ArmorFSBItem hev(ArmorItem.Type type) {
+        return new ArmorHEVItem(NtmArmorMaterials.HEV, type, new Item.Properties().durability(type.getDurability(NtmArmorMaterials.DURABILITY_HEV)), 1_000_000, 10_000, 2_500, 0)
+                .addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 20, 1))
+                .addEffect(new MobEffectInstance(MobEffects.JUMP, 20, 0))
+                .setHasGeigerSound(true)
+                .setHasCustomGeiger(true);
+    }
 
     private static Item.Properties hazmatProperties(ArmorItem.Type type) {
         return new Item.Properties().durability(type.getDurability(NtmArmorMaterials.DURABILITY_HAZMAT));

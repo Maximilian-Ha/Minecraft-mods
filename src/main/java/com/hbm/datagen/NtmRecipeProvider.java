@@ -2058,6 +2058,29 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "foundry_slagtap"));
 
         /*
+         * Der HEV-Akku, CraftingManager Z. 532 f. Es sind zwei Rezepte, die sich nur darin
+         * unterscheiden, ob Redstone oben und Kohle unten sitzt oder umgekehrt -- beide
+         * geben vier Stueck.
+         */
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.HEV_BATTERY.get(), 4)
+                .pattern(" W ").pattern("IEI").pattern("ICI")
+                .define('W', NtmItems.WIRE_GOLD.get())
+                .define('I', NtmItems.PLATE_POLYMER.get())
+                .define('E', Items.REDSTONE)
+                .define('C', NtmItems.POWDER_COAL.get())
+                .unlockedBy("has_plate_polymer", has(NtmItems.PLATE_POLYMER.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "hev_battery"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.HEV_BATTERY.get(), 4)
+                .pattern(" W ").pattern("ICI").pattern("IEI")
+                .define('W', NtmItems.WIRE_GOLD.get())
+                .define('I', NtmItems.PLATE_POLYMER.get())
+                .define('E', Items.REDSTONE)
+                .define('C', NtmItems.POWDER_COAL.get())
+                .unlockedBy("has_plate_polymer", has(NtmItems.PLATE_POLYMER.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "hev_battery_alt"));
+
+        /*
          * Die Zapfsaeule, CraftingManager Z. 849: "SS" / "HC" / "SS". TI.plate() ist die
          * Titanplatte, EnumPartType.PISTON_HYDRAULIC der Hydraulikkolben, EnumCircuitType.BASIC
          * die integrierte Leiterplatte.

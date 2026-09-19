@@ -49,11 +49,18 @@ public class NtmArmorMaterials {
     /* Die Gasmasken nehmen im Original schlicht ArmorMaterial.IRON. */
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> MASK = register("mask", LAYER_INVISIBLE, 9, 2, 6, 5, 2, () -> Ingredient.of(Items.IRON_INGOT));
 
+    /* Der HEV-Anzug. Er wird nicht als Ruestungsschicht gezeichnet, sondern als eigenes
+     * Wellenfrontmodell (ModelArmorHEV) -- die Schicht bleibt darum unsichtbar.
+     * Werte aus ModItemsArmor: HBM_HEV, Haltbarkeitsfaktor 150, {3, 8, 6, 3}, ohne
+     * Verzauberbarkeit. */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> HEV = register("hev", LAYER_INVISIBLE, 0, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.PLATE_ARMOR_HEV.get()));
+
     /** Haltbarkeitsfaktoren aus dem Original, gebraucht fuer Item.Properties.durability. */
     public static final int DURABILITY_HAZMAT = 60;
     public static final int DURABILITY_PAA = 75;
     public static final int DURABILITY_RAGS = 150;
     public static final int DURABILITY_MASK = 15;
+    public static final int DURABILITY_HEV = 150;
 
     private static DeferredHolder<ArmorMaterial, ArmorMaterial> register(String name, String layer, int enchantability, int helmet, int chest, int legs, int boots, Supplier<Ingredient> repair) {
         return ARMOR_MATERIALS.register(name, () -> {

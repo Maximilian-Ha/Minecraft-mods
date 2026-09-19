@@ -6187,3 +6187,102 @@ in einer der Übersetzungseinheiten, und welche das ist, entscheidet die Dateire
 den beiden Zeilen in der Baseline ist das dauerhaft erledigt.
 
 Stand danach: Aufgabe #96 abgeschlossen, die Gießerei damit vollständig.
+
+## Die FSB-Rüstung, der HEV-Anzug und der Akku (Aufgaben #101 und #84)
+
+`hev_battery` war der letzte Block, der an einem ganzen Teilsystem hing: der
+Vollsatz-Rüstung. Der Block prüft `ArmorFSB.hasFSBArmorIgnoreCharge` und ob am Körper ein
+bestromtes Teil sitzt — beides gab es im Port nicht. Diese Runde legt die Grundlage und
+reicht mit dem HEV-Anzug den Satz nach, für den der Akku gemacht ist.
+
+### Was „Full Set Bonus" heißt
+
+`ArmorFSBItem` ist die Wurzel. Getragen werden die Teile einzeln, aber Trankwirkungen und
+Geigerton springen erst an, wenn alle vier aus demselben Material am Körper sind. Geprüft wird
+das an der **Brustplatte** — nur sie weiß, ob ihr Satz überhaupt einen Helm vorsieht
+(`noHelmet`). Zwei Prüfungen gibt es: `hasFSBArmor` verlangt zusätzlich, dass jedes Teil
+arbeitsfähig ist (bei bestromten also Ladung hat), `hasFSBArmorIgnoreCharge` nicht. Genau diese
+zweite fragt der Akku ab, denn einen leeren Anzug soll man ja gerade aufladen können.
+
+**Zwei Abweichungen bei der Anmeldung.**
+
+Das Original hängt Gefahrenklassen und Strahlenschutz mit Baukastenmethoden an den Gegenstand
+(`setHazardClass`, `setRadResist`) und sammelt sie in Listen, die später abgearbeitet werden.
+Der Port hat dafür längst zwei zentrale Stellen — `ArmorUtil.register` und
+`HazmatRegistry.initDefault` —, und dort steht der HEV-Anzug jetzt auch. Zwei Wege für
+dieselbe Sache wären einer zu viel.
+
+Das Original schreibt außerdem die Eigenschaften nur am Helm aus und lässt die drei anderen
+Teile sie mit `cloneStats` vom **fertigen** Helm abschreiben. Das setzt eine Reihenfolge
+voraus. Im Port baut eine private Vorschrift alle vier gleich, `cloneStats` gibt es gar nicht
+erst — eine Methode ohne Aufrufer wäre toter Code.
+
+**Was bewusst fehlt:** VATS, Wärmesicht, der Sprung („dash"), Schritt- und Sprunggeräusche und
+die Helmscheibe. Alle fünf hängen an Teilsystemen, die der Port nicht hat. Sie stehen hier auch
+nicht als Schalter herum — ein Feld, das niemand liest, ist toter Zustand.
+
+### Der Akku als Haltbarkeit
+
+`ArmorFSBPoweredItem` ist die bestromte Fassung. Ohne Ladung liefert `isArmorEnabled` falsch,
+und damit fällt der ganze Satzbonus weg.
+
+Die Feinheit steckt im Schaden: das Original leitet `setDamage` auf den Akku um, ein Teil
+nutzt sich also nie ab, sondern verliert Ladung (2500 HE je Schadenspunkt). Auf 1.21 ist das
+`damageItem`, das schlicht null zurückgibt und stattdessen entlädt. Damit der Balken nicht
+lügt, zeigen `isBarVisible`, `getBarWidth` **und `getBarColor`** die Ladung statt der
+Haltbarkeit — die Farbe gehört dazu, sonst bliebe der Balken immer grün, weil der Schadenswert
+sich nie ändert.
+
+Der Akku-Aufsatz `ItemModBattery`, der im Original das Fassungsvermögen vergrößert, fehlt dem
+Port noch; `getMaxCharge` gibt darum den festen Wert.
+
+### Der HEV-Anzug
+
+Das Modell war der einfachste Teil: `armor_hev` samt vier Texturen liegt seit der
+Texturrunde im Port, und `ModelArmorBase` bringt sogar schon `leftFoot`/`rightFoot` und die
+Kniebeuge mit — es war für genau solche Anzüge geschrieben. `ModelArmorHEV` ist deshalb
+kaum mehr als die Zuordnung Platz → Modellteile.
+
+Eine Abweichung: das Original setzt die Drehpunkte von Armen und Beinen von Hand
+(`setRotationPoint(5, 2, 0)` und so weiter). Der Port übernimmt sie aus dem Spielermodell, und
+damit sitzen sie auch beim knienden Spieler und beim Kindmodell richtig, was die festen Werte
+nicht leisten.
+
+Die **Anzeige** ersetzt Herzen und Rüstungsbalken durch Lebenspunkte und Ladung als Zahl, dazu
+einen Strahlungsbalken und die Dosisrate. Das Original fängt dafür die Teilereignisse `ARMOR`
+und `HEALTH` ab; auf 1.21 sind das `VanillaGuiLayers.ARMOR_LEVEL` und
+`VanillaGuiLayers.PLAYER_HEALTH` in `RenderGuiLayerEvent.Pre`, beide `setCanceled`. Eine
+Kleinigkeit: der Balken beginnt im Original mit dem Zeichen ☢. Quelldateien dieses Ports
+enthalten keine Sonderzeichen, hier steht deshalb `RAD [`.
+
+### Der Akku: zwei Dinge mit einem Namen
+
+Und hier lag die eigentliche Überraschung. Im Original sind `hev_battery` **zwei** Einträge:
+ein Block (`ModBlocks.hev_battery`) und ein Gegenstand (`ModItems.hev_battery`), die sich per
+formlosem Rezept ineinander umwandeln lassen. Auf 1.7.10 geht das, weil Blöcke und Gegenstände
+getrennte Namensräume haben (`tile.` und `item.`); auf 1.21 wären es zwei Einträge auf
+demselben Schlüssel `hbmsntm:hev_battery`.
+
+Der Port legt beides in einen Gegenstand: `HEVBatteryItem` ist der Blockgegenstand des
+Wandakkus und lädt, in die Luft geklickt, denselben Satz auf wie der Block. Die beiden
+Umwandlungsrezepte entfallen — sie wären Rezepte von einem Gegenstand auf sich selbst.
+
+Beim Nachlesen fiel noch ein Widerspruch im Original auf: der **Block** prüft
+`armorInventory[3]`, also den Helm, auf `ArmorFSBPowered`, der **Gegenstand** dagegen
+`armorInventory[2]`, die Brustplatte. Bei einem einheitlichen Satz ist das dasselbe; der Port
+prüft an beiden Stellen die Brustplatte, weil sie ohnehin über den Satz entscheidet.
+
+Das Modell des Blocks ist im Original ein Wellenfrontmodell ohne Blockentität
+(`ISimpleBlockRenderingHandler`). Auf 1.21 gibt es diesen Weg nicht; eine Blockentität nur
+zum Zeichnen lehnt der Port ab (siehe die Gruppe „nur zum Zeichnen" in `be-blocker.py`). Also
+ein gebackenes JSON-Modell: zwei um 45 Grad gegeneinander gedrehte Kästen für das
+achteckige Prisma, ein Kasten für den Stutzen, einer für das Wandblech.
+
+### Was den HEV-Anzug noch nicht baubar macht
+
+Die vier Rezepte des Originals brauchen die Titanrüstung und den Deshmotor, beides fehlt dem
+Port. Solange steht der Anzug im Kreativreiter — im Original steht er in keinem, weil man ihn
+dort bauen kann. Ohne beides wäre er sonst gar nicht zu bekommen, und genau dafür gibt es das
+Reiter-Tor.
+
+Stand danach: Aufgabe #84 abgeschlossen, die Liste der blockierten Blöcke steht bei elf.

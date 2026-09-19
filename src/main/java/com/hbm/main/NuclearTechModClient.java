@@ -1,6 +1,7 @@
 package com.hbm.main;
 
 import com.hbm.blockentity.SlagBlockEntity;
+import com.hbm.items.armor.ArmorHEVItem;
 import com.hbm.blockentity.network.PipeBaseBlockEntity;
 import com.hbm.blocks.ICustomBlockHighlight;
 import com.hbm.blocks.ILookOverlay;
@@ -342,6 +343,9 @@ public class NuclearTechModClient {
         Player player = NuclearTechMod.proxy.me();
         ItemStack stack = player.getMainHandItem();
         if(stack.getItem() instanceof IHUDItem hudItem) hudItem.renderHUD(event, player, stack);
+
+        /* Der HEV-Anzug ersetzt Herzen und Ruestungsbalken durch seine eigene Anzeige. */
+        ArmorHEVItem.handleOverlay(event, player);
     }
 
     /*

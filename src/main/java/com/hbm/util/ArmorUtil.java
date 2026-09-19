@@ -47,7 +47,21 @@ public class ArmorUtil {
         ArmorRegistry.registerHazard(NtmItems.HAZMAT_HELMET_RED.get(), HazardClass.SAND);
         ArmorRegistry.registerHazard(NtmItems.HAZMAT_HELMET_GREY.get(), HazardClass.SAND);
         ArmorRegistry.registerHazard(NtmItems.HAZMAT_PAA_HELMET.get(), HazardClass.LIGHT, HazardClass.SAND);
+
+        /* Der HEV-Anzug haelt alles ab, was es gibt. Das Original schreibt dafuer
+         * ArmorUtil.FULL_PACKAGE an jedes der vier Teile. */
+        for(Item teil : new Item[] { NtmItems.HEV_HELMET.get(), NtmItems.HEV_PLATE.get(), NtmItems.HEV_LEGS.get(), NtmItems.HEV_BOOTS.get() }) {
+            ArmorRegistry.registerHazard(teil, FULL_PACKAGE);
+        }
     }
+
+    /**
+     * Alles, wogegen ein geschlossener Anzug schuetzt. Uebernommen aus ArmorUtil des
+     * Originals, wo dieselbe Liste unter demselben Namen steht.
+     */
+    public static final HazardClass[] FULL_PACKAGE = {
+            HazardClass.PARTICLE_COARSE, HazardClass.PARTICLE_FINE, HazardClass.GAS_LUNG, HazardClass.BACTERIA,
+            HazardClass.GAS_BLISTERING, HazardClass.GAS_MONOXIDE, HazardClass.LIGHT, HazardClass.SAND };
 
     public static boolean checkArmor(LivingEntity entity, Item... armor) {
         EquipmentSlot[] slots = {

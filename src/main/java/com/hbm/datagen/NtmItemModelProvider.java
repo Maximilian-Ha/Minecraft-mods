@@ -821,6 +821,10 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicItem(NtmItems.HAZMAT_PAA_PLATE.get());
         this.basicItem(NtmItems.HAZMAT_PAA_LEGS.get());
         this.basicItem(NtmItems.HAZMAT_PAA_BOOTS.get());
+        this.basicItem(NtmItems.HEV_HELMET.get());
+        this.basicItem(NtmItems.HEV_PLATE.get());
+        this.basicItem(NtmItems.HEV_LEGS.get());
+        this.basicItem(NtmItems.HEV_BOOTS.get());
         this.basicItem(NtmItems.GAS_MASK.get());
         this.basicItem(NtmItems.GAS_MASK_M65.get());
         this.basicItem(NtmItems.GAS_MASK_MONO.get());

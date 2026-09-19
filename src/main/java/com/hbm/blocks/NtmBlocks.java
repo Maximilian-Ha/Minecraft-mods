@@ -92,6 +92,7 @@ import com.hbm.fluids.NtmFluids;
 import com.hbm.items.NtmItems;
 import com.hbm.items.block.BlastInfoBlockItem;
 import com.hbm.items.block.BlockItemBase;
+import com.hbm.items.tools.HEVBatteryItem;
 import com.hbm.items.block.LoreBlockItem;
 import com.hbm.main.NuclearTechMod;
 import net.minecraft.core.BlockPos;
@@ -856,6 +857,10 @@ public class NtmBlocks {
     /* Der Ausguss: dieselben Werte wie die uebrige Giesserei, er ist ja aus derselben Rinne
      * gebaut. */
     public static final DeferredBlock<Block> FOUNDRY_OUTLET = register("foundry_outlet", () -> new FoundryOutletBlock(BlockBehaviour.Properties.of().strength(2.0F, 10.0F).sound(SoundType.STONE).mapColor(MapColor.STONE).requiresCorrectToolForDrops().noOcclusion()));
+    /* Der HEV-Akku an der Wand. Er leuchtet schwach (10/15 im Original), ist mit einem Schlag
+     * abzubauen und traegt seinen eigenen Blockgegenstand, der zugleich der tragbare Akku ist
+     * -- siehe HEVBatteryItem. */
+    public static final DeferredBlock<Block> HEV_BATTERY = register("hev_battery", () -> new HEVBatteryBlock(BlockBehaviour.Properties.of().strength(0.5F, 0.25F).sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().lightLevel(state -> 10)), HEVBatteryItem.class, new Properties().stacksTo(4));
     /* Der Schlackenabstich: derselbe Bau wie der Ausguss, nur laesst er die Schmelze fallen,
      * statt sie einem Abnehmer zu reichen. */
     public static final DeferredBlock<Block> FOUNDRY_SLAGTAP = register("foundry_slagtap", () -> new FoundrySlagtapBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.STONE).mapColor(MapColor.STONE).requiresCorrectToolForDrops().noOcclusion()));

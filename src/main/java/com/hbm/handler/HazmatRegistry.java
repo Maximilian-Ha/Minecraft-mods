@@ -82,6 +82,15 @@ public class HazmatRegistry {
         HazmatRegistry.registerHazmat(NtmItems.HAZMAT_PAA_LEGS.get(), paa * legs);
         HazmatRegistry.registerHazmat(NtmItems.HAZMAT_PAA_BOOTS.get(), paa * boots);
 
+        /* Der HEV-Anzug: 2,3 auf den ganzen Satz, im Original als Kommentar "99,5%".
+         * Die Aufteilung auf die vier Teile ist dieselbe wie ueberall hier. */
+        double hev = 2.3D;
+
+        HazmatRegistry.registerHazmat(NtmItems.HEV_HELMET.get(), hev * helmet);
+        HazmatRegistry.registerHazmat(NtmItems.HEV_PLATE.get(), hev * chest);
+        HazmatRegistry.registerHazmat(NtmItems.HEV_LEGS.get(), hev * legs);
+        HazmatRegistry.registerHazmat(NtmItems.HEV_BOOTS.get(), hev * boots);
+
         /* Die beiden Masken schirmen auch ein wenig ab, ganz ohne Anzug. */
         HazmatRegistry.registerHazmat(NtmItems.GAS_MASK.get(), 0.07D);
         HazmatRegistry.registerHazmat(NtmItems.GAS_MASK_M65.get(), 0.095D);

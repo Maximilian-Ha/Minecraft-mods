@@ -1526,6 +1526,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.FOUNDRY_BASIN);
                         output.accept(NtmBlocks.FOUNDRY_OUTLET);
                         output.accept(NtmBlocks.FOUNDRY_SLAGTAP);
+                        output.accept(NtmBlocks.HEV_BATTERY);
                         output.accept(NtmBlocks.FOUNDRY_TANK);
                         output.accept(NtmBlocks.TRANSFORMER);
 
@@ -1848,6 +1849,14 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.HAZMAT_PAA_PLATE);
                         output.accept(NtmItems.HAZMAT_PAA_LEGS);
                         output.accept(NtmItems.HAZMAT_PAA_BOOTS);
+                        /* Der HEV-Anzug. Im Original steht er in keinem Reiter, weil man ihn
+                         * baut; das Rezept braucht aber die Titanruestung und den Deshmotor,
+                         * und beide hat der Port noch nicht. Bis dahin waere er sonst gar
+                         * nicht zu bekommen. */
+                        output.accept(NtmItems.HEV_HELMET);
+                        output.accept(NtmItems.HEV_PLATE);
+                        output.accept(NtmItems.HEV_LEGS);
+                        output.accept(NtmItems.HEV_BOOTS);
                         output.accept(NtmItems.GAS_MASK);
                         output.accept(NtmItems.GAS_MASK_M65);
                         output.accept(NtmItems.GAS_MASK_MONO);

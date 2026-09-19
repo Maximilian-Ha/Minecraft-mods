@@ -634,6 +634,12 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.RBMK_PELLET_ZFB_PU241, "Pu-241 ZFB Pellet");
         this.add(NtmItems.RBMK_PELLET_ZFB_AM_MIX, "Fuel Grade Americium ZFB Pellet");
         this.add(NtmItems.RBMK_PELLET_DRX, "Digamma Fuel Pellet");
+        /* Die Zeilen des Vollsatzbonus -- ArmorFSBItem baut seinen Hinweis daraus. */
+        this.add("armor.fullSetBonus", "Full Set Bonus:");
+        this.add("desc.item.hevBattery.charge", "Charges all worn armor pieces by %sHE");
+        this.add("desc.item.hevBattery.requires", "[Requires full electric set to be worn]");
+        this.add("armor.geigerSound", "  Auditory Geiger Counter");
+        this.add("armor.geigerHUD", "  Built-In Geiger Counter HUD");
         this.add("trait.rbmk.pellet", "Pellet for recycling");
         this.add("trait.rbmk.pellet.depletion0", "Brand New");
         this.add("trait.rbmk.pellet.depletion1", "Barely Depleted");
@@ -1094,6 +1100,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.FOUNDRY_BASIN, "Casting Basin");
         this.add(NtmBlocks.FOUNDRY_OUTLET, "Casting Outlet");
         this.add(NtmBlocks.FOUNDRY_SLAGTAP, "Slag Tap");
+        this.add(NtmBlocks.HEV_BATTERY, "HEV Suit Battery");
         /* Die Pfuetze hat im Original gar keinen Namen -- sie ist in keinem Reiter und
          * traegt keinen Gegenstand. Einen braucht sie trotzdem, sonst steht der rohe
          * Schluessel in der Anzeige beim Hinsehen. */
@@ -3807,6 +3814,10 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.RAG, ".desc", "Drop into water to make damp cloth.$Right-click to urinate on the cloth.");
         this.add(NtmItems.RAG_DAMP, "Damp Cloth");
         this.add(NtmItems.RAG_PISS, "Piss-Soaked Rag");
+        this.add(NtmItems.HEV_HELMET, "HEV Mark IV Helmet");
+        this.add(NtmItems.HEV_PLATE, "HEV Mark IV Chestplate");
+        this.add(NtmItems.HEV_LEGS, "HEV Mark IV Leggings");
+        this.add(NtmItems.HEV_BOOTS, "HEV Mark IV Boots");
         this.add(NtmItems.HAZMAT_HELMET, "Hazmat Helmet");
         this.add(NtmItems.HAZMAT_PLATE, "Hazmat Chestplate");
         this.add(NtmItems.HAZMAT_LEGS, "Hazmat Leggings");
