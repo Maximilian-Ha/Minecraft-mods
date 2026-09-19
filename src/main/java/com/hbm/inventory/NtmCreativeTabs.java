@@ -1553,6 +1553,8 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.DET_MINER);
 
                         output.accept(NtmBlocks.BARREL_RED);
+                        output.accept(NtmBlocks.YELLOW_BARREL);
+                        output.accept(NtmBlocks.VITRIFIED_BARREL);
                         output.accept(NtmBlocks.BARREL_PINK);
                         output.accept(NtmBlocks.BARREL_LOX);
                         output.accept(NtmBlocks.BARREL_TAINT);

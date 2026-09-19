@@ -403,6 +403,8 @@ public class NtmBlockLootTableProvider extends BlockLootSubProvider {
         this.dropSelf(NtmBlocks.DET_NUKE.get());
         this.dropSelf(NtmBlocks.DET_MINER.get());
         this.dropSelf(NtmBlocks.BARREL_RED.get());
+        this.dropSelf(NtmBlocks.YELLOW_BARREL.get());
+        this.dropSelf(NtmBlocks.VITRIFIED_BARREL.get());
         this.dropSelf(NtmBlocks.BARREL_PINK.get());
         this.dropSelf(NtmBlocks.BARREL_LOX.get());
         this.dropSelf(NtmBlocks.BARREL_TAINT.get());

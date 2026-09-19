@@ -150,5 +150,27 @@ public class NtmFluidTypes {
                     .motionScale(0.0023333333333333335D)
             ));
 
+    /**
+     * Die Giftbruehe aus dem gelben Fass.
+     *
+     * Die Zahlen stehen so im Original (ToxicFluid): Dichte 2500, Zaehigkeit 2000,
+     * Leuchtkraft 15, Temperatur 2773.
+     */
+    public static final DeferredHolder<FluidType, FluidType> TOXIC_TYPE = FLUID_TYPES.register(
+            "toxic_fluid",
+            () -> new FluidType(FluidType.Properties.create()
+                    .canSwim(false)
+                    .canDrown(false)
+                    .pathType(PathType.LAVA)
+                    .adjacentPathType(null)
+                    .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL_LAVA)
+                    .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY_LAVA)
+                    .lightLevel(15)
+                    .density(2500)
+                    .viscosity(2000)
+                    .temperature(2773)
+                    .motionScale(0.0023333333333333335D)
+            ));
+
     public static void register(IEventBus eventBus) { FLUID_TYPES.register(eventBus); }
 }

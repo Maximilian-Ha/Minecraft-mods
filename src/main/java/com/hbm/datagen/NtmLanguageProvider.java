@@ -2256,6 +2256,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.DET_MINER, "Mining Charge");
         this.add("block.hbmsntm.obj_red_barrel.desc", "Static Fluid Barrel");
         this.add(NtmBlocks.BARREL_RED, "Explosive Barrel");
+        this.add(NtmBlocks.YELLOW_BARREL, "Radioactive Waste Barrel");
+        this.add(NtmBlocks.VITRIFIED_BARREL, "Vitrified Waste Barrel");
         this.add(NtmBlocks.BARREL_PINK, "Kerosene Barrel");
         this.add(NtmBlocks.BARREL_LOX, "LOX Barrel");
         this.add(NtmBlocks.BARREL_TAINT, "IMP Residue Barrel");
@@ -2317,6 +2319,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.BLOCK_STARMETAL, "Block of Starmetal");
         this.add(NtmBlocks.BLOCK_ELECTRICAL_SCRAP, "Block of Electrical Scrap");
         this.add(NtmBlocks.NTM_DIRT, "Dirt");
+        this.add(NtmBlocks.TOXIC_BLOCK, "Toxic Sludge");
         this.add(NtmBlocks.WOOD_BARRIER, "Wooden Barrier");
         this.add(NtmBlocks.WOOD_STRUCTURE_ROOF, "Wooden Roof");
         this.add(NtmBlocks.WOOD_STRUCTURE_SCAFFOLD, "Wooden Scaffold");

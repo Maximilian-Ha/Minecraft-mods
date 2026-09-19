@@ -76,6 +76,7 @@ public class NtmBlockStateProvider extends BlockStateProvider {
          * Ohne diese Zeilen hat der Block gar keine Blockstate -- das Spiel meldet ein
          * fehlendes Modell und zeichnet schwarz-violette Partikel. */
         this.fluidBlock(NtmBlocks.CORIUM, "corium_still");
+        this.fluidBlock(NtmBlocks.TOXIC_BLOCK, "toxic_still");
         this.fluidBlock(NtmBlocks.MUD, "mud_still");
         this.fluidBlock(NtmBlocks.RAD_LAVA, "rad_lava_still");
         this.fluidBlock(NtmBlocks.VOLCANIC_LAVA, "volcanic_lava_still");
@@ -547,6 +548,9 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.cubeTop(NtmBlocks.DET_NUKE);
         this.cubeTop(NtmBlocks.DET_MINER);
         this.barrelLoaderBlockItem(NtmBlocks.BARREL_RED.get(), blockTexture(NtmBlocks.BARREL_RED));
+        /* Das Original nimmt fuer die beiden Strahlenfaesser barrel_yellow und barrel_vitrified. */
+        this.barrelLoaderBlockItem(NtmBlocks.YELLOW_BARREL.get(), this.modLoc("block/barrel_yellow"));
+        this.barrelLoaderBlockItem(NtmBlocks.VITRIFIED_BARREL.get(), this.modLoc("block/barrel_vitrified"));
         this.barrelLoaderBlockItem(NtmBlocks.BARREL_PINK.get(), blockTexture(NtmBlocks.BARREL_PINK));
         this.barrelLoaderBlockItem(NtmBlocks.BARREL_LOX.get(), blockTexture(NtmBlocks.BARREL_LOX));
         this.barrelLoaderBlockItem(NtmBlocks.BARREL_TAINT.get(), blockTexture(NtmBlocks.BARREL_TAINT));

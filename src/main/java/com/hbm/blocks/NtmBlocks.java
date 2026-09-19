@@ -22,6 +22,7 @@ import com.hbm.blocks.machine.WatzStructBlock;
 import com.hbm.blocks.generic.ToolConversionBlock;
 import com.hbm.blocks.fluids.CoriumLiquidBlock;
 import com.hbm.blocks.fluids.MudLiquidBlock;
+import com.hbm.blocks.fluids.ToxicLiquidBlock;
 import com.hbm.blocks.fluids.VolcanicLiquidBlock;
 import com.hbm.blocks.gas.*;
 import com.hbm.blocks.generic.*;
@@ -592,6 +593,10 @@ public class NtmBlocks {
     public static final DeferredBlock<Block> DET_NUKE =    register("det_nuke",    () -> new ExplosiveChargeBlock(BlockBehaviour.Properties.of().strength(0.1F, 0.0F).sound(SoundType.METAL)));
     public static final DeferredBlock<Block> DET_MINER =   register("det_miner",   () -> new ExplosiveChargeBlock(BlockBehaviour.Properties.of().strength(0.1F, 0.0F).sound(SoundType.METAL)));
     public static final DeferredBlock<Block> BARREL_RED =   register("barrel_red",   () -> new RedBarrelBlock(BlockBehaviour.Properties.of().noOcclusion().strength(0.1F, 2.5F).sound(SoundType.METAL), true));
+    /* Stufe 5: die beiden Strahlenfaesser. Das gelbe strahlt zehnmal so stark wie das
+     * verglaste und zuendet als einziges mit, wenn nebenan etwas hochgeht. */
+    public static final DeferredBlock<Block> YELLOW_BARREL = register("yellow_barrel", () -> new YellowBarrelBlock(BlockBehaviour.Properties.of().noOcclusion().randomTicks().strength(0.5F, 2.5F).sound(SoundType.METAL), 5.0F, true));
+    public static final DeferredBlock<Block> VITRIFIED_BARREL = register("vitrified_barrel", () -> new YellowBarrelBlock(BlockBehaviour.Properties.of().noOcclusion().randomTicks().strength(0.5F, 2.5F).sound(SoundType.METAL), 0.5F, false));
     public static final DeferredBlock<Block> BARREL_PINK =  register("barrel_pink",  () -> new RedBarrelBlock(BlockBehaviour.Properties.of().noOcclusion().strength(0.1F, 2.5F).sound(SoundType.METAL), true));
     public static final DeferredBlock<Block> BARREL_LOX =   register("barrel_lox",   () -> new RedBarrelBlock(BlockBehaviour.Properties.of().noOcclusion().strength(0.1F, 2.5F).sound(SoundType.METAL), false));
     public static final DeferredBlock<Block> BARREL_TAINT = register("barrel_taint", () -> new RedBarrelBlock(BlockBehaviour.Properties.of().noOcclusion().strength(0.1F, 2.5F).sound(SoundType.METAL), false));
@@ -1003,6 +1008,8 @@ public class NtmBlocks {
     public static final DeferredBlock<LiquidBlock> RAD_LAVA = BLOCKS.register("rad_lava", () -> new RadLiquidBlock(NtmFluids.RAD_LAVA.get(), BlockBehaviour.Properties.of().randomTicks().noCollission().replaceable().strength(500F).lightLevel(state -> 15).pushReaction(PushReaction.DESTROY).noLootTable().liquid().sound(SoundType.EMPTY)));
     public static final DeferredBlock<LiquidBlock> CORIUM = BLOCKS.register("corium", () -> new CoriumLiquidBlock(NtmFluids.CORIUM.get(), BlockBehaviour.Properties.of().randomTicks().noCollission().replaceable().strength(500F).lightLevel(state -> 10).pushReaction(PushReaction.DESTROY).noLootTable().liquid().sound(SoundType.EMPTY)));
     public static final DeferredBlock<LiquidBlock> MUD = BLOCKS.register("mud", () -> new MudLiquidBlock(NtmFluids.MUD.get(), BlockBehaviour.Properties.of().randomTicks().noCollission().replaceable().strength(500F).lightLevel(state -> 5).pushReaction(PushReaction.DESTROY).noLootTable().liquid().sound(SoundType.EMPTY)));
+    /* Stufe 5: die Giftbruehe aus dem gelben Fass. Leuchtkraft 15 wie im Original. */
+    public static final DeferredBlock<LiquidBlock> TOXIC_BLOCK = BLOCKS.register("toxic_block", () -> new ToxicLiquidBlock(NtmFluids.TOXIC.get(), BlockBehaviour.Properties.of().randomTicks().noCollission().replaceable().strength(500F).lightLevel(state -> 15).pushReaction(PushReaction.DESTROY).noLootTable().liquid().sound(SoundType.EMPTY)));
 
     // Other Technical Blocks
     public static final DeferredBlock<Block> GAS_RADON =       register("gas_radon",       () -> new GasRadonBlock(      BlockBehaviour.Properties.of().replaceable().noCollission().noOcclusion().noLootTable()));

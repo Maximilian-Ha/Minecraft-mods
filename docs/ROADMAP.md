@@ -4693,3 +4693,49 @@ misst es sauber.
 
 **Gemessen:** 1893 Dateien, null Funde. Nimmt man den `LiquidBlock`-Import wieder heraus,
 meldet das Tor genau diese eine Stelle.
+
+## Stufe 5: die Giftbrühe und die beiden Strahlenfässer
+
+Drei Blöcke, die zusammenhängen: das gelbe Fass hinterlässt beim Bersten mit einem Drittel
+Wahrscheinlichkeit `toxic_block` — ohne die Giftbrühe wäre das Fass unvollständig, und ohne das
+Fass hätte die Brühe keine Quelle.
+
+### Die Giftbrühe
+
+Ein neues Fluid, das erste seit dem Rotschlamm. Die Werte stehen im Original (`ToxicFluid`):
+Dichte 2500, Zähigkeit 2000, Leuchtkraft 15, Temperatur 2773. Der Block hält fest wie ein
+Spinnennetz, verstrahlt wer darin steht, und erstarrt zu gelöschtem Sellafit, sobald er eine
+andere Flüssigkeit berührt.
+
+Beide Texturen sind aus dem Original übernommen (in CE unverändert) und haben dasselbe Maß wie
+die des Rotschlamms — 16×320 für die ruhende, 32×512 für die fließende, also 20 und 16 Bilder.
+Die Animationsdaten sind entsprechend angelegt.
+
+**Abweichung wie beim Rotschlamm:** das Original ist ein `BlockFluidClassic` mit vier Stufen
+und eigener Verdrängungslogik; auf 1.21 übernimmt das Fluidsystem das Fließen, die vier Stufen
+entsprechen dem Stufenabfall von zwei je Block.
+
+### Die beiden Fässer
+
+Im Original sind beide dieselbe Klasse `YellowBarrel`, die sich an drei Stellen selbst
+abfragt. Im Port ist daraus **ein** Block mit zwei Parametern geworden:
+
+| | gelbes Fass | verglastes Fass |
+| --- | --- | --- |
+| Strahlung je Takt | 5 | 0,5 |
+| zündet mit, wenn nebenan etwas hochgeht | ja | **nein** |
+
+Das dritte Verhalten teilen sie: beim Bersten wird zu einem Drittel Giftbrühe gesetzt, sonst
+eine Explosion der Stärke 12 ausgelöst; dazu Fallout im Radius 35 und Radongas im Umkreis von
+fünf Blöcken, jeder Platz mit einer Chance von 1 zu 5.
+
+Dass das verglaste Fass nicht mitzündet, steht im Original als
+`if(this != ModBlocks.yellow_barrel) return;` in `onBlockDestroyedByExplosion`. In 1.21 heißt
+die Stelle `wasExploded`; das verglaste Fass kehrt dort einfach zurück und wird von der
+Explosion nur zerstört.
+
+**Beinahe falsch abgeschrieben:** Härte und Widerstand hatte ich vom roten Fass übernommen
+(0,1 / 2,5). Das Original setzt für beide Strahlenfässer 0,5 / 2,5 — berichtigt, bevor es in
+die CI ging.
+
+Die Lücke steht bei **43**.

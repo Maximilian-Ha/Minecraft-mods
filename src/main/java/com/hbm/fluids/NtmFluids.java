@@ -29,6 +29,8 @@ public class NtmFluids {
     public static final DeferredHolder<Fluid, CoriumBaseFlowing> CORIUM_FLOWING = FLUIDS.register("corium_flowing", () -> new CoriumBaseFlowing(coriumProps()));
     public static final DeferredHolder<Fluid, MudBaseSource> MUD = FLUIDS.register("mud", () -> new MudBaseSource(mudProps()));
     public static final DeferredHolder<Fluid, MudBaseFlowing> MUD_FLOWING = FLUIDS.register("mud_flowing", () -> new MudBaseFlowing(mudProps()));
+    public static final DeferredHolder<Fluid, BaseFlowingFluid.Source> TOXIC = FLUIDS.register("toxic", () -> new BaseFlowingFluid.Source(toxicProps()));
+    public static final DeferredHolder<Fluid, BaseFlowingFluid.Flowing> TOXIC_FLOWING = FLUIDS.register("toxic_flowing", () -> new BaseFlowingFluid.Flowing(toxicProps()));
 
     private static BaseFlowingFluid.Properties volcanicLavaProps() {
         return new BaseFlowingFluid.Properties(NtmFluidTypes.VOLCANIC_LAVA_TYPE, NtmFluids.VOLCANIC_LAVA, NtmFluids.VOLCANIC_LAVA_FLOWING)
@@ -66,6 +68,16 @@ public class NtmFluids {
         return new BaseFlowingFluid.Properties(NtmFluidTypes.MUD_TYPE, NtmFluids.MUD, NtmFluids.MUD_FLOWING)
                 .bucket(() -> Items.LAVA_BUCKET)
                 .block(NtmBlocks.MUD)
+                /* Vier Stufen wie im Original (setQuantaPerBlock(4)), Takt 15. */
+                .levelDecreasePerBlock(2)
+                .explosionResistance(500F)
+                .tickRate(15);
+    }
+
+    private static BaseFlowingFluid.Properties toxicProps() {
+        return new BaseFlowingFluid.Properties(NtmFluidTypes.TOXIC_TYPE, NtmFluids.TOXIC, NtmFluids.TOXIC_FLOWING)
+                .bucket(() -> Items.LAVA_BUCKET)
+                .block(NtmBlocks.TOXIC_BLOCK)
                 /* Vier Stufen wie im Original (setQuantaPerBlock(4)), Takt 15. */
                 .levelDecreasePerBlock(2)
                 .explosionResistance(500F)
