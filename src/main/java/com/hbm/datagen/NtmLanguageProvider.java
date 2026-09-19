@@ -1055,6 +1055,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.COIL_MAGNETIZED_TUNGSTEN, "4000K High Temperature Super Conducting Coil");
         this.add(NtmItems.COIL_TUNGSTEN, "Heating Coil");
         this.add(NtmItems.MOTOR, "Motor");
+        this.add(NtmItems.CENTRIFUGE_ELEMENT, "Centrifuge Element");
+        this.add(NtmItems.PISTON_SELENIUM, "Combustion Engine Piston");
         this.add(NtmItems.CAST_PLATE_WELDED, "Welded Plate");
         this.add(NtmItems.CAST_PLATE, "Cast Plate");
         this.add(NtmItems.PIPES_STEEL, "Steel Pipes");

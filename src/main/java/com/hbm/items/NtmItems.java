@@ -442,6 +442,11 @@ public class NtmItems {
     public static final DeferredItem<Item> COIL_MAGNETIZED_TUNGSTEN = ITEMS.register("coil_magnetized_tungsten", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> COIL_TUNGSTEN = ITEMS.register("coil_tungsten", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> MOTOR = ITEMS.register("motor", () -> new Item(new Item.Properties()));
+    /* Zwei Maschinenbauteile, die bisher fehlten: das Zentrifugenelement (Aufsatz und
+     * Gaszentrifuge) und der Selenkolben (Kettensaege, Bohrer, Motoraufsaetze). Beide sind
+     * im Original schlichte Items ohne eigene Klasse. */
+    public static final DeferredItem<Item> CENTRIFUGE_ELEMENT = ITEMS.register("centrifuge_element", () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> PISTON_SELENIUM = ITEMS.register("piston_selenium", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> CAST_PLATE_WELDED = ITEMS.register("cast_plate_welded", () -> new CastPlateItem(new Item.Properties(), true));
     public static final DeferredItem<Item> CAST_PLATE = ITEMS.register("cast_plate", () -> new CastPlateItem(new Item.Properties(), false));
     public static final DeferredItem<Item> PIPES_STEEL = ITEMS.register("pipes_steel", () -> new Item(new Item.Properties()));

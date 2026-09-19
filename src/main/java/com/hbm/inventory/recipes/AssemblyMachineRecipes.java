@@ -63,6 +63,17 @@ public class AssemblyMachineRecipes extends GenericRecipes<GenericRecipe> {
                         new ComparableStack(NtmItems.CIRCUIT_INTEGRATED_BOARD.get(), 2)
                 ));
 
+        /*
+         * Original "ass.centrifugetower": vier Durastahlplatten, vier Titanplatten, ein Motor.
+         * Das Element hat bis Runde 172 gefehlt, und mit ihm dieses Rezept.
+         */
+        this.register(new GenericRecipe("ass.centrifugetower").setup(100, 100).outputItems(new ItemStack(NtmItems.CENTRIFUGE_ELEMENT.get(), 1))
+                .inputItems(
+                        new ComparableStack(NtmItems.PLATE_DURA_STEEL.get(), 4),
+                        new ComparableStack(NtmItems.PLATE_TITANIUM.get(), 4),
+                        new ComparableStack(NtmItems.MOTOR.get(), 1)
+                ));
+
         // ---- Runde 7 ----
         // Original "ass.thermoelement". Die zweite Variante (Golddraht + Siliziumbillet)
         // entfaellt, BILLET_SILICON gibt es im Port nicht.

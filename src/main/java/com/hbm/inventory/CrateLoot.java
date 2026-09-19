@@ -2,6 +2,7 @@ package com.hbm.inventory;
 
 import com.hbm.blocks.NtmBlocks;
 import com.hbm.items.NtmItems;
+import com.hbm.items.machine.RTGPelletItem.RTGPelletType;
 import com.hbm.items.machine.BatteryPackItem.BatteryPackType;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
@@ -62,6 +63,10 @@ public class CrateLoot {
         lege(liste, NtmItems.CELL_UF6, 8);
         lege(liste, NtmItems.CELL_PUF6, 8);
         lege(liste, NtmItems.PELLET_RTG, 6);
+        /* Das schwache Pellet ist im Port kein eigener Gegenstand, sondern der Untertyp WEAK
+         * desselben -- deshalb hier als Metadatenstapel und nicht ueber lege(). */
+        liste.add(new Eintrag(
+                () -> MetaHelper.newStack(NtmItems.PELLET_RTG.get(), 1, RTGPelletType.WEAK.ordinal()), 7));
         lege(liste, NtmItems.POWDER_YELLOWCAKE, 10);
         return blei = liste;
     }
@@ -81,11 +86,13 @@ public class CrateLoot {
         lege(liste, NtmBlocks.MACHINE_ELECTRIC_FURNACE, 8);
         lege(liste, NtmBlocks.MACHINE_ASSEMBLY_MACHINE, 10);
         lege(liste, NtmBlocks.MACHINE_FLUID_TANK, 7);
+        lege(liste, NtmItems.CENTRIFUGE_ELEMENT, 6);
         lege(liste, NtmItems.MOTOR, 8);
         lege(liste, NtmItems.COIL_TUNGSTEN, 7);
         lege(liste, NtmItems.PHOTO_PANEL, 3);
         lege(liste, NtmItems.COIL_COPPER, 10);
         lege(liste, NtmItems.BLADE_TITANIUM, 3);
+        lege(liste, NtmItems.PISTON_SELENIUM, 6);
         return metall = liste;
     }
 

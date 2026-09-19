@@ -1057,11 +1057,25 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_upgrade_smelter", has(NtmItems.UPGRADE_SMELTER.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "upgrade_shredder"));
 
+        /*
+         * Der Selenkolben, CraftingManager Z. 596: "SSS" / "STS" / " D " aus Stahlplatte,
+         * Wolframbarren und einem Durastahlbolzen.
+         */
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.PISTON_SELENIUM.get(), 1)
+                .pattern("SSS").pattern("STS").pattern(" D ")
+                .define('S', NtmItems.PLATE_STEEL.get())
+                .define('T', NtmItems.INGOT_TUNGSTEN.get())
+                .define('D', DataComponentIngredient.of(false, NtmDataComponents.META, BoltItem.Type.DURA_STEEL.meta, NtmItems.BOLT.get()))
+                .unlockedBy("has_ingot_tungsten", has(NtmItems.INGOT_TUNGSTEN.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "piston_selenium"));
+
+        /* Bis Runde 172 stand hier die Durastahlplatte, weil es das Zentrifugenelement im Port
+         * nicht gab. Jetzt gibt es eines, und das Rezept nimmt wieder das des Originals. */
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.UPGRADE_CENTRIFUGE.get(), 1)
                 .pattern("PHP")
                 .pattern("PUP")
                 .pattern("DTD")
-                .define('P', NtmItems.PLATE_DURA_STEEL.get())
+                .define('P', NtmItems.CENTRIFUGE_ELEMENT.get())
                 .define('H', Items.HOPPER)
                 .define('U', NtmItems.UPGRADE_SHREDDER.get())
                 .define('D', NtmItems.INGOT_POLYMER.get())

@@ -317,6 +317,8 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.COIL_MAGNETIZED_TUNGSTEN.get());
                         output.accept(NtmItems.COIL_TUNGSTEN.get());
                         output.accept(NtmItems.MOTOR.get());
+                        output.accept(NtmItems.CENTRIFUGE_ELEMENT.get());
+                        output.accept(NtmItems.PISTON_SELENIUM.get());
                         addMetaItems(output, NtmItems.CAST_PLATE_WELDED.get());
                         addMetaItems(output, NtmItems.CAST_PLATE.get());
                         output.accept(NtmItems.PIPES_STEEL.get());

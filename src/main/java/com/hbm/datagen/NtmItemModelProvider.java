@@ -432,6 +432,8 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicItem(NtmItems.ARC_ELECTRODE_SATURNITE_BURNT.get());
 
         this.basicItem(NtmItems.MOTOR.get());
+        this.basicItem(NtmItems.CENTRIFUGE_ELEMENT.get());
+        this.basicItem(NtmItems.PISTON_SELENIUM.get());
         this.basicItem(NtmItems.CAST_PLATE_WELDED.get());
         this.basicItem(NtmItems.CAST_PLATE.get());
         this.basicItem(NtmItems.PIPES_STEEL.get());

@@ -5045,7 +5045,9 @@ gehalten:
 | Nachschubkiste | 6 | **0** |
 
 Der Bleikiste fehlt ein einziger Eintrag (`pellet_rtg_weak`), der Metallkiste zwei
-(`centrifuge_element`, `piston_selenium`). Die beiden habe ich portiert. Der Nachschubkiste
+(`centrifuge_element`, `piston_selenium`). ~~Die beiden habe ich portiert.~~ **Das stimmte
+nicht** — siehe die Berichtigung in Runde 172 weiter unten; nachgereicht sind sie erst dort.
+Der Nachschubkiste
 fehlt **jeder** Eintrag — sie zieht aus Spritzen und Granaten, und beides gibt es im Port
 noch gar nicht. Eine Kiste, die nichts ausspuckt, ist schlimmer als keine Kiste; deshalb
 bleiben `crate`, `crate_weapon`, `crate_red`, `crate_can`, `crate_ammo` und `crate_supply`
@@ -6286,3 +6288,36 @@ dort bauen kann. Ohne beides wäre er sonst gar nicht zu bekommen, und genau daf
 Reiter-Tor.
 
 Stand danach: Aufgabe #84 abgeschlossen, die Liste der blockierten Blöcke steht bei elf.
+
+## Berichtigung: die zwei Bauteile, die gar nicht portiert waren
+
+Beim Nachmessen für Aufgabe #80 — welche Beuteeinträge der Kisten hat der Port inzwischen? —
+stand oben im Abschnitt über die Beutekisten der Satz „der Metallkiste [fehlen] zwei
+(`centrifuge_element`, `piston_selenium`). **Die beiden habe ich portiert.**"
+
+Das war schlicht falsch. Keiner der beiden Gegenstände existierte im Port, und die Liste der
+Metallkiste in `CrateLoot` zählte entsprechend fünfzehn Einträge statt siebzehn. Der Satz hat
+seitdem dagestanden und niemanden gestört, weil niemand nachgezählt hat.
+
+Beim Nachreichen kam ein zweiter Fund dazu: das Rezept für den **Zentrifugenaufsatz** nahm
+ersatzweise die Durastahlplatte, wo das Original das Zentrifugenelement verlangt — ohne
+Vermerk. Eine stille Ersetzung ist schlimmer als eine offene Lücke, denn sie sieht im
+Rezeptbuch aus wie das Original.
+
+Nachgereicht sind daher:
+
+- `centrifuge_element` samt Montagerezept (`ass.centrifugetower`: vier Durastahlplatten, vier
+  Titanplatten, ein Motor) und das berichtigte Rezept des Zentrifugenaufsatzes.
+- `piston_selenium` samt Werkbankrezept (`CraftingManager` Z. 596).
+- Beide in der Metallkiste, mit den Gewichten des Originals (je 6).
+
+**Der dritte Eintrag, `pellet_rtg_weak`, war kein Fehler, sondern eine Namensfrage.** Im Port
+ist das schwache Pellet kein eigener Gegenstand, sondern der Untertyp `WEAK` von `pellet_rtg`
+— die Metadatenfaltung, die der Port überall anwendet. Es fehlte trotzdem in der Bleikiste,
+weil dort nur der Grundtyp stand. Jetzt steht es als Metadatenstapel daneben, Gewicht 7 wie im
+Original.
+
+Damit sind Blei- und Metallkiste **vollständig**: 23 und 17 Einträge, genau die des Originals.
+Die sechs blockierten Kisten hängen weiter an Spritzen, Granaten, `ammo_container`, drei Waffen
+(`gun_heavy_revolver`, `gun_liberator`, `gun_panzerschreck`) und den zehn Sonderstücken der
+roten Kiste.
