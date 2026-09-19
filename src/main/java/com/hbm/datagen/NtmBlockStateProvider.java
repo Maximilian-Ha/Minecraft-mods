@@ -622,7 +622,19 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.registerCableSwitch();
         this.particleOnlyBlock(NtmBlocks.MACHINE_DIFURNACE_EXTENSION, modLoc("block/difurnace_extension"));
         this.simpleCubeAllBlock(NtmBlocks.RED_WIRE_COATED);
-        this.simpleCubeAllBlock(NtmBlocks.STEEL_BEAM);
+        /* Traeger und Masten kommen aus OBJ-Modellen, wie im Original. Der Traeger traegt
+         * seine eigene Textur, die Masten die des Traegers -- so steht es in ModBlocks. */
+        this.simpleBlock(NtmBlocks.STEEL_BEAM.get(), this.models().getBuilder("steel_beam")
+                .customLoader(SteelBeamModelBuilder::new).texture("texture", this.modLoc("block/steel_beam")).end());
+        this.blockItem(NtmBlocks.STEEL_BEAM);
+
+        ModelFile poles = this.models().getBuilder("steel_poles")
+                .customLoader(SteelPolesModelBuilder::new).texture("texture", this.modLoc("block/steel_beam")).end();
+        this.getVariantBuilder(NtmBlocks.STEEL_POLES.get()).forAllStates(state -> ConfiguredModel.builder()
+                .modelFile(poles)
+                .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180) % 360)
+                .build());
+        this.blockItem(NtmBlocks.STEEL_POLES);
         this.simpleCubeAllBlock(NtmBlocks.BLOCK_STARMETAL);
         /* ntm_dirt traegt im Original die Textur der gewoehnlichen Erde. */
         this.simpleBlockWithItem(NtmBlocks.NTM_DIRT.get(), this.models().cubeAll("ntm_dirt", this.mcLoc("block/dirt")));
@@ -2408,6 +2420,18 @@ public class NtmBlockStateProvider extends BlockStateProvider {
             super(parent, helper);
         }
         @Override public BakedModelType getType() { return BakedModelType.PIPE; }
+    }
+    protected static class SteelBeamModelBuilder extends BlockModelBuilderBase {
+        public SteelBeamModelBuilder(BlockModelBuilder parent, ExistingFileHelper helper) {
+            super(parent, helper);
+        }
+        @Override public BakedModelType getType() { return BakedModelType.STEEL_BEAM; }
+    }
+    protected static class SteelPolesModelBuilder extends BlockModelBuilderBase {
+        public SteelPolesModelBuilder(BlockModelBuilder parent, ExistingFileHelper helper) {
+            super(parent, helper);
+        }
+        @Override public BakedModelType getType() { return BakedModelType.STEEL_POLES; }
     }
     protected static class BarrelBlockModelBuilder extends BlockModelBuilderBase {
         public BarrelBlockModelBuilder(BlockModelBuilder parent, ExistingFileHelper helper) {

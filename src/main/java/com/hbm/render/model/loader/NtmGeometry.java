@@ -34,7 +34,9 @@ public class NtmGeometry implements IUnbakedGeometry<NtmGeometry> {
         CABLE,
         DET_CORD,
         PIPE,
-        ANVIL
+        ANVIL,
+        STEEL_BEAM,
+        STEEL_POLES
     }
 
     private final BakedModelType type;
@@ -60,6 +62,8 @@ public class NtmGeometry implements IUnbakedGeometry<NtmGeometry> {
             case DET_CORD -> new DetCordBakedModel(new HFRWavefrontObject("models/obj/block/cable_neo.obj"), textureSprite);
             case PIPE -> new PipeNeoBakedModel(new HFRWavefrontObject("models/obj/block/pipe_neo.obj"), textureSprite, overlaySprite);
             case ANVIL -> new AnvilBakedModel(new HFRWavefrontObject("models/obj/block/anvil.obj"), textureSprite);
+            case STEEL_BEAM -> new SimpleWavefrontBakedModel(new HFRWavefrontObject("models/obj/block/beam.obj"), textureSprite);
+            case STEEL_POLES -> new SimpleWavefrontBakedModel(new HFRWavefrontObject("models/obj/block/pole.obj"), textureSprite);
         };
     }
 }

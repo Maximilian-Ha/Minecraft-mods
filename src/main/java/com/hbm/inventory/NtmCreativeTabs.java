@@ -1150,6 +1150,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.STEEL_GRATE_WIDE);
                         output.accept(NtmBlocks.STEEL_WALL);
                         output.accept(NtmBlocks.STEEL_CORNER);
+                        output.accept(NtmBlocks.STEEL_POLES);
                         output.accept(NtmBlocks.BLOCK_STARMETAL);
                         output.accept(NtmBlocks.BLOCK_ELECTRICAL_SCRAP);
                         output.accept(NtmBlocks.WOOD_BARRIER);

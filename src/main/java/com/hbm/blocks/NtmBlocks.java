@@ -297,7 +297,11 @@ public class NtmBlocks {
     public static final DeferredBlock<Block> ASPHALT_LIGHT = registerBlastInfoBlock("asphalt_light", () -> new SpeedyBlock(1.5, BlockBehaviour.Properties.of().strength(15.0F, 120.0F).lightLevel(state -> 15).mapColor(MapColor.SAND)));
     public static final DeferredBlock<Block> STEEL_SCAFFOLD = register("steel_scaffold", () -> new Block(BlockBehaviour.Properties.of().strength(1.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL)));
     // Werte 1:1 aus ModBlocks.java:1601 bzw. :1269 des Originals.
-    public static final DeferredBlock<Block> STEEL_BEAM = register("steel_beam", () -> new Block(BlockBehaviour.Properties.of().strength(5.0F, 15.0F).sound(SoundType.METAL).mapColor(MapColor.METAL)));
+    /* BERICHTIGT (Stufe 5): der Traeger ist im Original kein Wuerfel, sondern eine duenne
+     * Saeule mit eigenem Modell (beam.obj). Werte aus ModBlocks.java:1601. */
+    public static final DeferredBlock<Block> STEEL_BEAM = register("steel_beam", () -> new SteelBeamBlock(BlockBehaviour.Properties.of().strength(5.0F, 15.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion()));
+    /* Stufe 5: die Masten der Bauwerke. Werte aus ModBlocks.java:1595. */
+    public static final DeferredBlock<Block> STEEL_POLES = register("steel_poles", () -> new SteelPolesBlock(BlockBehaviour.Properties.of().strength(5.0F, 15.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion()));
     public static final DeferredBlock<Block> STONE_GNEISS = register("stone_gneiss", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE).mapColor(MapColor.STONE)));
     // Runde 10: Rezeptbaustein beider Schornsteine. Im Original BlockGrate, eine zwei Pixel
     // hohe Platte auf einer von zehn Hoehen im Block.

@@ -4763,3 +4763,32 @@ die Liste — in beide Richtungen. Fehlt einer, sagt er das; steht einer zu viel
 
 **Gemessen** (Exit-Code direkt, nicht durch eine Pipe): 10 Blöcke im Quelltext, alle in der
 Liste, `rc=0`. Nimmt man `toxic_block` heraus, meldet er genau diesen einen und gibt `rc=1`.
+
+## Stufe 5: der Stahlträger stimmt wieder, die Masten kommen dazu
+
+Die Berichtigung aus dem Fund weiter oben ist eingelöst — und sie war leichter als gedacht,
+weil der Port das Werkzeug längst hat: `NtmGeometryLoader` samt `SimpleWavefrontBakedModel`
+backt OBJ-Dateien als ganz gewöhnliche Blockmodelle. Genutzt hatten das bisher Stacheldraht,
+Fass, Kabel, Rohr und Amboss; jetzt auch Träger und Masten. Ein `neoforge:obj` braucht es
+dafür nicht.
+
+**`steel_beam`** war seit Runde 9 ein Vollwürfel. Im Original ist er eine dünne Säule:
+Kollisionsform (7\|0\|7)-(9\|16\|9) aus `DecoBlock`, Aussehen aus `beam.obj`, das
+`RenderSteelBeam` zeichnet. Nachgesehen, was in dieser Datei steht: ein Quader von
+−0,0625 bis 0,0625 in x und z, 0 bis 1 in y — also genau dieselben zwei mal sechzehn mal zwei
+Pixel. Form und Modell stimmen jetzt beide und, was wichtiger ist, sie stimmen **miteinander**.
+
+**`steel_poles`** ist neu: zwei Masten mit Querstrebe, gedreht nach der Blickrichtung. Sein
+Modell hat 84 Dreiecke, davon 40 schräge — als JSON-Quader wäre das nicht nachzubauen gewesen,
+über den OBJ-Lader ist es eine Zeile. Das Original gibt ihm keine eigene Kollisionsform; er
+behält deshalb volle Würfelmaße, obwohl das Modell schlank ist.
+
+Damit ist von der Gruppe nur noch `steel_roof` offen, und der geht einen anderen Weg: sein
+Aussehen steckt nicht in einer OBJ-Datei, sondern in einer Java-Modellklasse, die das Original
+über eine Blockentität zeichnet.
+
+**Was die CI hier nicht prüfen kann:** dass das Modell im Spiel richtig aussteht. Sie prüft,
+dass die Datengenerierung das Modell schreibt, dass es auflöst und dass der Server lädt — das
+Bild selbst sieht nur, wer es sich ansieht.
+
+Die Lücke steht bei **42**.
