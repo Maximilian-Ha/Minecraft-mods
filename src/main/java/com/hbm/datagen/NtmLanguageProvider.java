@@ -2040,6 +2040,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.GUN_CONGOLAKE, "Congo Lake");
         this.add(NtmItems.GUN_MK108, "Grenade Machinegun");
         this.add(NtmItems.GUN_PANZERSCHRECK, "Panzerschreck");
+        this.add(NtmItems.GUN_QUADRO, "Quad Rocket Launcher");
+        this.add(NtmItems.GUN_MISSILE_LAUNCHER, "Missile Launcher");
         this.add(NtmBlocks.WEAPON_TABLE, "Weapon Modification Table");
         this.add(NtmBlocks.ARMOR_TABLE, "Armor Modification Table");
         this.add("container.weaponTable", "Weapon Modification Table");

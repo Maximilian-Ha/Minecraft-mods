@@ -113,17 +113,20 @@ public class XWeaponModManager {
         new WeaponModDefinition(ModGeneric.WSTEEL_DAMAGE).addMod(wsteelGuns, new WeaponModGenericDamage(108));
         new WeaponModDefinition(ModGeneric.WSTEEL_DURA).addMod(wsteelGuns, new WeaponModGenericDurability(109));
 
-        /* Ferrouranium passt an das Antimateriegewehr, die M2 und die beiden Flinten. */
+        /* Ferrouranium passt an das Antimateriegewehr, die M2, die beiden Flinten und den
+         * Quadro. */
         Item[] ferroGuns = new Item[] {
                 NtmItems.GUN_AMAT.get(),
                 NtmItems.GUN_M2.get(),
-                NtmItems.GUN_AUTOSHOTGUN.get(), NtmItems.GUN_AUTOSHOTGUN_SHREDDER.get() };
+                NtmItems.GUN_AUTOSHOTGUN.get(), NtmItems.GUN_AUTOSHOTGUN_SHREDDER.get(),
+                NtmItems.GUN_QUADRO.get() };
         new WeaponModDefinition(ModGeneric.FERRO_DAMAGE).addMod(ferroGuns, new WeaponModGenericDamage(110));
         new WeaponModDefinition(ModGeneric.FERRO_DURA).addMod(ferroGuns, new WeaponModGenericDurability(111));
 
-        /* Technetiumstahl passt an die Minigun und die Teslakanone. */
+        /* Technetiumstahl passt an die Minigun, den Raketenwerfer und die Teslakanone. */
         Item[] tcalloyGuns = new Item[] {
                 NtmItems.GUN_MINIGUN.get(),
+                NtmItems.GUN_MISSILE_LAUNCHER.get(),
                 NtmItems.GUN_TESLA_CANNON.get() };
         new WeaponModDefinition(ModGeneric.TCALLOY_DAMAGE).addMod(tcalloyGuns, new WeaponModGenericDamage(112));
         new WeaponModDefinition(ModGeneric.TCALLOY_DURA).addMod(tcalloyGuns, new WeaponModGenericDurability(113));

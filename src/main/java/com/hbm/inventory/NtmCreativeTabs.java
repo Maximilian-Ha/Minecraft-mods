@@ -1852,6 +1852,8 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.GUN_CONGOLAKE);
                         output.accept(NtmItems.GUN_MK108);
                         output.accept(NtmItems.GUN_PANZERSCHRECK);
+                        output.accept(NtmItems.GUN_QUADRO);
+                        output.accept(NtmItems.GUN_MISSILE_LAUNCHER);
                         output.accept(NtmItems.GUN_MARESLEG);
                         output.accept(NtmItems.GUN_MARESLEG_AKIMBO);
                         output.accept(NtmItems.GUN_SPAS12);

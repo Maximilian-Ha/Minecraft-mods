@@ -4751,6 +4751,27 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_mechanism", has(NtmItems.PART_MECHANISM.get()))
                 .save(recipeOutput);
 
+        /*
+         * Quadro und Raketenwerfer. Muster und Zutaten wortgetreu aus WeaponRecipes des
+         * Originals; EnumCircuitType.ADVANCED ist dort das "Military Grade Circuit Board",
+         * im Port ein eigener Gegenstand.
+         */
+        gun(NtmItems.GUN_QUADRO, "BCB", "BMB", "GG ")
+                .define('B', heavyBarrel(Mats.MAT_FERRO))
+                .define('C', NtmItems.CIRCUIT_MILITARY_GRADE_BOARD.get())
+                .define('M', mechanism(Mats.MAT_WEAPONSTEEL))
+                .define('G', anyPlasticGrip())
+                .unlockedBy("has_circuit", has(NtmItems.CIRCUIT_MILITARY_GRADE_BOARD.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_MISSILE_LAUNCHER, " CM", "BBB", "G  ")
+                .define('C', NtmItems.CIRCUIT_MILITARY_GRADE_BOARD.get())
+                .define('M', mechanism(Mats.MAT_WEAPONSTEEL))
+                .define('B', anyResistantAlloyHeavyBarrel())
+                .define('G', anyPlasticGrip())
+                .unlockedBy("has_circuit", has(NtmItems.CIRCUIT_MILITARY_GRADE_BOARD.get()))
+                .save(recipeOutput);
+
         gun(NtmItems.GUN_STAR_F, "BRM", "  G")
                 .define('B', lightBarrel(Mats.MAT_WEAPONSTEEL))
                 .define('R', lightReceiver(Mats.MAT_WEAPONSTEEL))

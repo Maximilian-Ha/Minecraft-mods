@@ -8994,3 +8994,74 @@ und eigene Schritt- und Sprungklänge. Diese Baukastenteile gibt es im Port noch
 ist, ist übernommen; was fehlt, fehlt sichtbar und nicht still.
 
 Alle 36 Tore grün.
+
+---
+
+## Runde 197 — Eine Zahl zu breit, und zwei Werfer, die nie blockiert waren
+
+Zwei Dinge in einer Runde: ein CI-Lauf, der an einem einzigen Zeichen scheiterte, und die
+letzten beiden Raketenwaffen, die seit Runde 192 als blockiert geführt wurden.
+
+### Der CI-Fehler und das 37. Tor
+
+`ModelArmorRPA` ließ den Lüfter der Panzerrüstung mit
+
+```java
+Axis.ZP.rotationDegrees(-(System.currentTimeMillis() / 2D % 360D))
+```
+
+drehen. `rotationDegrees` nimmt ein `float`, der Ausdruck ist ein `double` — javac lehnt ab.
+**Keines der sechsunddreißig Tore sah es**: die Signatur der gerufenen Methode steht in der
+Bibliothek, nicht im Port, und `syntax-check.sh` übersetzt ohne Minecraft-Klassenpfad.
+
+Das war der **zweite CI-Lauf in vier Runden**, den eine reine Typfrage kostete — Runde 193 war
+die Stelligkeit eines Konstruktors, diese die Breite einer Zahl. Beide Male stand die Antwort
+im Projekt selbst.
+
+`tools/narrow-check.sh` misst sie, nach dem Mehrheitsprinzip von `signature-check.sh`:
+übergibt eine Aufrufstelle ein `double`, wo alle anderen Aufrufstellen derselben Methode
+desselben Empfängertyps ein `float` übergeben, ist sie es, die falsch ist. Bei
+`Axis.rotationDegrees` stehen **1090 Belege gegen diesen einen**.
+
+Vier Bedingungen halten die Fehlalarme heraus, und jede war nötig:
+
+* **Der Empfängertyp gehört in den Schlüssel.** Über den nackten Namen gemessen kollidieren
+  `Vec3.scale(double)` und `RenderContext.scale(float)` — zwölf Fehlalarme.
+* Mindestens acht Belege, sonst ist „die Mehrheit" nichts wert.
+* Höchstens ein Zehntel Abweichler, sonst ist es eine Überladung, die beides nimmt.
+* Nur zweifelsfreie Ausdrücke — was ein Cast berührt, zählt gar nicht.
+
+**Gruppierungsklammern sind keine Aufrufklammern**, und der erste Entwurf verwechselte beides:
+`-(a / 2D)` ist ein `double`, obwohl die Zahl in Klammern steht, `foo(2D)` dagegen nicht. So
+verdeckt gemessen fand das Tor genau den Fehler nicht, gegen den es gebaut wurde.
+
+Gemessen: 38 980 Aufrufstellen mit Empfängertyp, null Funde; Cast wieder weg, genau eine Zeile.
+
+### Quadro und Raketenwerfer
+
+Der Kopf von `XFactoryRocket` sagte, beide seien nicht übernommen, weil ihnen die lenkbaren
+Raketen fehlten „und Lenkung im Port nicht vorhanden" sei. **Beides nachgemessen und falsch:**
+
+* `makeML` ist im Original eine **reine Kopie** ohne jede Lenkung. Der Raketenwerfer lenkt gar
+  nicht über die Rakete, sondern über die **Zielerfassung an der Waffe** — und die liest
+  `BulletBaseMK4.lockonTarget` längst aus.
+* `Library.rayTrace(Player, double, float)`, das die Lenkung des Quadro braucht, steht im Port
+  seit jeher.
+
+Die Zielsuche des Stingers (`sucheZiel`) ist mitgekommen, weil der Raketenwerfer sie braucht:
+ein Kasten um den Blickstrahl als Vorauswahl, die Entscheidung fällt der Winkel. Der Stinger
+selbst bleibt offen — er braucht eine eigene Klasse mit zweitem Tastenpaar zum Aufschalten.
+
+**Ein Fund in der eigenen Arbeit:** meine erste Fassung ließ die Quadro-Rakete bedingungslos
+lenken. Im Original hängt sie am Zielen — lässt der Schütze die Zieltaste los oder wechselt die
+Waffe, fliegt sie geradeaus weiter. Das ist der ganze Unterschied zur NCR-Rakete, die ohne
+Bedingung lenkt: die Rüstung hat keine Zieltaste, die man loslassen könnte.
+
+### Abweichungen
+
+`setupModTable` ist bei beiden Renderern nicht übernommen — der Waffentisch des Ports zeigt
+statt der Waffe ihr Gegenstandsbild, und das ist im Port überall so. Die leuchtende Schrift am
+Visier (drehendes `">> <<"` beim Quadro, flackerndes `"AUTO"` beim Raketenwerfer) steht im
+Original als Block aus Lichtkarten-Rechnerei; der Port hat dafür `FullBright`.
+
+Alle 37 Tore grün.

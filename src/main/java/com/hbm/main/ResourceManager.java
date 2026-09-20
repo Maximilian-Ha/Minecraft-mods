@@ -385,6 +385,9 @@ public class ResourceManager {
     public static final ResourceLocation DOUBLE_BARREL_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/double_barrel.png");
     public static final ResourceLocation LIBERATOR_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/liberator.png");
     public static final ResourceLocation PANZERSCHRECK_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/panzerschreck.png");
+    public static final ResourceLocation QUADRO_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/quadro.png");
+    public static final ResourceLocation QUADRO_ROCKET_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/quadro_rocket.png");
+    public static final ResourceLocation MISSILE_LAUNCHER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/missile_launcher.png");
     public static final ResourceLocation BOXCAR_TEX = NuclearTechMod.withDefaultNamespace("textures/models/boxcar.png");
     public static final ResourceLocation DUCHESSGAMBIT_TEX = NuclearTechMod.withDefaultNamespace("textures/models/duchessgambit.png");
     public static final ResourceLocation TORPEDO_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/torpedo.png");
@@ -739,6 +742,8 @@ public class ResourceManager {
     public static IModelCustom double_barrel;
     public static IModelCustom liberator;
     public static IModelCustom panzerschreck;
+    public static IModelCustom quadro;
+    public static IModelCustom missile_launcher;
     public static IModelCustom boxcar;
     public static IModelCustom duchessgambit;
     public static IModelCustom torpedo;
@@ -1044,6 +1049,8 @@ public class ResourceManager {
         double_barrel = new HFRWavefrontObject("models/obj/weapons/sacred_dragon.obj").asVBO();
         liberator = new HFRWavefrontObject("models/obj/weapons/liberator.obj").asVBO();
         panzerschreck = new HFRWavefrontObject("models/obj/weapons/panzerschreck.obj").asVBO();
+        quadro = new HFRWavefrontObject("models/obj/weapons/quadro.obj").asVBO();
+        missile_launcher = new HFRWavefrontObject("models/obj/weapons/missile_launcher.obj").asVBO();
         boxcar = new HFRWavefrontObject("models/obj/boxcar.obj").asVBO();
         duchessgambit = new HFRWavefrontObject("models/obj/duchessgambit.obj").asVBO();
         torpedo = new HFRWavefrontObject("models/obj/weapons/torpedo.obj").asVBO();

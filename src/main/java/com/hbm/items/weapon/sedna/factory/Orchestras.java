@@ -328,6 +328,50 @@ public class Orchestras {
      * Das Original schreibt den Namen ORCHESTRA_PANERSCHRECK; das fehlende Z ist ein Vertipper
      * und steht hier richtig, weil der Name nirgends als Zeichenkette auftaucht.
      */
+    /** Der Quadro: Muendungsfeuer bei jedem Schuss, ein Einsetzen beim Nachladen des Blocks. */
+    public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_QUADRO = (stack, ctx) -> {
+        LivingEntity entity = ctx.entity;
+        Level level = entity.level;
+        if(!(level instanceof ServerLevel serverLevel)) return;
+        GunAnimation type = GunBaseNTItem.getLastAnim(stack, ctx.configIndex);
+        int timer = GunBaseNTItem.getAnimTimer(stack, ctx.configIndex);
+
+        if(type == GunAnimation.CYCLE && timer == 0) {
+            PacketDistributor.sendToPlayersNear(serverLevel, null, entity.getX(), entity.getY(), entity.getZ(), 100, new MuzzleFlashPacket(entity.getId()));
+        }
+
+        if(type == GunAnimation.RELOAD && timer == 30) {
+            SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_CANISTER_INSERT.get(), entity.getSoundSource());
+        }
+    };
+
+    /**
+     * Der Raketenwerfer. Anders als Panzerschreck und Quadro hat er einen Leerschlag -- ein
+     * hoeheres Klicken, wenn das Rohr leer ist -- und das Nachladen ist dreiteilig: Verschluss
+     * auf, Rakete hinein, Verschluss zu.
+     */
+    public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_MISSILE_LAUNCHER = (stack, ctx) -> {
+        LivingEntity entity = ctx.entity;
+        Level level = entity.level;
+        if(!(level instanceof ServerLevel serverLevel)) return;
+        GunAnimation type = GunBaseNTItem.getLastAnim(stack, ctx.configIndex);
+        int timer = GunBaseNTItem.getAnimTimer(stack, ctx.configIndex);
+
+        if(type == GunAnimation.CYCLE && timer == 0) {
+            PacketDistributor.sendToPlayersNear(serverLevel, null, entity.getX(), entity.getY(), entity.getZ(), 100, new MuzzleFlashPacket(entity.getId()));
+        }
+
+        if(type == GunAnimation.CYCLE_DRY && timer == 0) {
+            SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_DRY_FIRE.get(), entity.getSoundSource(), 1F, 1.25F);
+        }
+
+        if(type == GunAnimation.RELOAD) {
+            if(timer == 0) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_BOLT_OPEN.get(), entity.getSoundSource(), 1F, 0.9F);
+            if(timer == 30) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_CANISTER_INSERT.get(), entity.getSoundSource());
+            if(timer == 42) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_BOLT_CLOSE.get(), entity.getSoundSource(), 1F, 0.9F);
+        }
+    };
+
     public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_PANZERSCHRECK = (stack, ctx) -> {
         LivingEntity entity = ctx.entity;
         Level level = entity.level;
