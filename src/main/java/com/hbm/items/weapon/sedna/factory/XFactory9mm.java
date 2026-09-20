@@ -13,6 +13,7 @@ import com.hbm.items.weapon.sedna.Receiver;
 import com.hbm.items.weapon.sedna.factory.GunFactory.Ammo;
 import com.hbm.items.weapon.sedna.mags.MagazineFullReload;
 import com.hbm.main.NuclearTechMod;
+import com.hbm.main.ResourceManager;
 import com.hbm.particle.SpentCasing;
 import com.hbm.particle.SpentCasing.SpentCasingType;
 import com.hbm.items.weapon.sedna.mods.XWeaponModManager;
@@ -70,6 +71,21 @@ public class XFactory9mm {
          * Die Uzi: dreissig Schuss, zwei Ticks Abstand, drei Schaden je Treffer. Mit Schalldaempfer
          * traegt sie einen anderen Namen.
          */
+        /*
+         * Die LAG. Eine schwere Selbstladepistole: siebzehn Schuss, fuenfundzwanzig Schaden,
+         * und ein Rueckstoss, der fuenfmal so stark ist wie der der Uzi.
+         */
+        NtmItems.GUN_LAG = registry.register("gun_lag", () -> new GunBaseNTItem(WeaponQuality.A_SIDE, new GunConfig()
+                .dura(1_700).draw(7).inspect(31).crosshair(Crosshair.CIRCLE).smoke(LAMBDA_SMOKE)
+                .rec(new Receiver(0)
+                        .dmg(25F).delay(4).dry(10).spread(0.005F).reload(53).jam(44).sound(NtmSoundEvents.GUN_PISTOL_FIRE, 1.0F, 1.0F)
+                        .mag(new MagazineFullReload(0, 17).addConfigs(p9_sp, p9_fmj, p9_jhp, p9_ap))
+                        .offset(1, -0.0625 * 2.5, -0.25D)
+                        .setupStandardFire().recoil(LAMBDA_RECOIL_LAG))
+                .setupStandardConfiguration()
+                .anim(LAMBDA_LAG_ANIMS).orchestra(Orchestras.ORCHESTRA_LAG)
+        ).setDefaultAmmo(Ammo.P9_JHP, 17));
+
         NtmItems.GUN_UZI = registry.register("gun_uzi", () -> new GunBaseNTItem(WeaponQuality.A_SIDE, new GunConfig()
                 .dura(3_000).draw(15).inspect(31).crosshair(Crosshair.CIRCLE).smoke(LAMBDA_SMOKE)
                 .rec(new Receiver(0)
@@ -180,6 +196,29 @@ public class XFactory9mm {
                     .addBus("FLAP", new BusAnimationSequence().addPos(0, 0, 0, 300).addPos(0, 0, 180, 150).addPos(0, 0, 180, 850).addPos(0, 0, 0, 150));
             default -> null;
         };
+    };
+
+    public static BiConsumer<ItemStack, LambdaContext> LAMBDA_RECOIL_LAG = (stack, ctx) -> {
+        GunBaseNTItem.setupRecoil(5, (float) (ctx.getPlayer().random.nextGaussian() * 1.5));
+    };
+
+    /**
+     * Die LAG ist die einzige Waffe der 9 mm, deren Bewegungen NICHT im Quelltext stehen:
+     * bis auf das Ziehen kommen alle aus models/animations/lag.json. Beim Nachsehen legt das
+     * Original zwei Busse obendrauf, die die ganze Waffe naeher heranholen und kippen --
+     * ADD_TRANS und ADD_ROT; die liest der Renderer aus.
+     */
+    public static BiFunction<ItemStack, GunAnimation, BusAnimation> LAMBDA_LAG_ANIMS = (stack, type) -> switch(type) {
+        case EQUIP -> new BusAnimation()
+                .addBus("EQUIP", new BusAnimationSequence().addPos(-90, 0, 0, 0).addPos(0, 0, 0, 350, IType.SIN_DOWN));
+        case CYCLE -> ResourceManager.lag_anim.get("Firing");
+        case CYCLE_DRY -> ResourceManager.lag_anim.get("Dryfire");
+        case RELOAD -> ResourceManager.lag_anim.get("Reload");
+        case JAMMED -> ResourceManager.lag_anim.get("Jam");
+        case INSPECT -> ResourceManager.lag_anim.get("Inspect")
+                .addBus("ADD_TRANS", new BusAnimationSequence().addPos(-4, 0, -3, 500).addPos(-4, 0, -3, 2000).addPos(0, 0, 0, 500))
+                .addBus("ADD_ROT", new BusAnimationSequence().addPos(0, -2, 5, 500).addPos(0, -2, 5, 2000).addPos(0, 0, 0, 500));
+        default -> null;
     };
 
     public static BiFunction<ItemStack, GunAnimation, BusAnimation> LAMBDA_UZI_ANIMS = (stack, type) -> {

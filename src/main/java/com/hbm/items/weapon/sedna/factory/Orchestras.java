@@ -846,6 +846,44 @@ public class Orchestras {
     };
 
     /** Die Uzi. Beim Ziehen schnappt der Schulterstuetzenbuegel auf. */
+    /**
+     * Die LAG. Wie die Uzi, nur langsamer und mit dem Hahn der Revolver: nach dem Leerschlag
+     * spannt sie hoerbar nach (GUN_REVOLVER_COCK statt GUN_PISTOL_COCK), und beim Klemmen
+     * schlaegt der Schuetze einmal aufs Gehaeuse, bevor das Magazin zurueckkommt.
+     */
+    public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_LAG = (stack, ctx) -> {
+
+        LivingEntity entity = ctx.entity;
+        Level level = entity.level;
+        if(!(level instanceof ServerLevel)) return;
+
+        GunAnimation type = GunBaseNTItem.getLastAnim(stack, ctx.configIndex);
+        int timer = GunBaseNTItem.getAnimTimer(stack, ctx.configIndex);
+        boolean aiming = GunBaseNTItem.getIsAiming(stack);
+
+        if(type == GunAnimation.CYCLE) {
+            if(timer == 1) {
+                SpentCasing casing = ctx.config.getReceivers(stack)[0].getMagazine(stack).getCasing(stack, ctx.container);
+                if(casing != null) CasingCreator.composeEffect(level, entity, 0.375, aiming ? 0 : -0.0625, aiming ? 0 : -0.25D, 0, 0.18, -0.12, 0.01,
+                        -10F + (float) entity.random.nextGaussian() * 5F, 10F + entity.random.nextFloat() * 10F, casing.getName());
+            }
+        }
+        if(type == GunAnimation.CYCLE_DRY) {
+            if(timer == 0) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_DRY_FIRE.get(), entity.getSoundSource());
+            if(timer == 8) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_COCK.get(), entity.getSoundSource());
+        }
+        if(type == GunAnimation.RELOAD) {
+            if(timer == 8) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_REMOVE.get(), entity.getSoundSource());
+            if(timer == 26) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_INSERT.get(), entity.getSoundSource());
+            if(timer == 40) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_PISTOL_COCK.get(), entity.getSoundSource());
+        }
+        if(type == GunAnimation.JAMMED) {
+            if(timer == 8) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_REMOVE.get(), entity.getSoundSource());
+            if(timer == 20) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_IMPACT.get(), entity.getSoundSource(), 0.5F, 1.6F);
+            if(timer == 36) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_INSERT.get(), entity.getSoundSource());
+        }
+    };
+
     public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_UZI = (stack, ctx) -> {
 
         LivingEntity entity = ctx.entity;

@@ -9250,3 +9250,39 @@ Das Rückstoßlambda des Lacunae ist im Original leer und hängt hier gar nicht 
 Abweichung wie bei den Raketen.
 
 Alle 38 Tore grün.
+
+---
+
+## Runde 201 — Die LAG, und ein Modell, das nach einer anderen Waffe heißt
+
+Von den sechs gemessenen Lücken in den Waffenfabriken war die LAG die einzige **ohne jede
+Begründung** — `XFactory9mm` sagt nichts über sie. Sie war schlicht unportiert, und nichts stand
+ihr im Weg: die vier 9-mm-Sätze (`p9_sp`, `p9_fmj`, `p9_jhp`, `p9_ap`) stehen seit jeher da, der
+Animationslader auch, und die CE-Abspaltung hat alles, was sie braucht.
+
+### Das Modell heißt nicht nach ihr
+
+`ItemRenderLAG` zeichnet sie mit **`mike_hawk.obj`** und legt `lag.png` darüber. Der Mike Hawk
+ist eine andere Waffe; die LAG teilt sich sein Modell. Das steht so im Original, und beides ist
+übernommen — ein umbenanntes Modell wäre eine stille Abweichung gewesen.
+
+### Ihre Bewegungen stehen nicht im Quelltext
+
+Bis auf das Ziehen kommen alle aus `models/animations/lag.json` — dem zweiten Bewegungssystem,
+das der Port seit dem Flammenwerfer kennt. Fünf Teile bewegen sich einzeln: Griff, Schlitten,
+Hahn, Magazin und die sichtbare Patrone, die nur gezeichnet wird, wenn eine geladen ist.
+
+Beim Nachsehen legt das Original zwei Busse obendrauf, die die ganze Waffe näher heranholen und
+kippen (`ADD_TRANS`, `ADD_ROT`); der Renderer liest sie aus. Der Hahn hat einen eigenen
+Drehpunkt hinten oben am Schlitten.
+
+### Nebenbei nachgereicht
+
+`anyResistantAlloyLightReceiver` fehlte in `NtmRecipeProvider` — es gab den schweren Empfänger
+aus beiden Legierungen, den leichten nicht. Das Rezept der LAG braucht ihn.
+
+Alle 38 Tore grün.
+
+**Damit fehlen von den Waffenfabriken noch drei:** Spulenkanone und Tau-Kanone
+(`XFactoryAccelerator`, Begründung noch ungeprüft) und der Fatman (`XFactoryCatapult`) — der
+braucht die gesamte Mininuke-Munitionsfamilie und ist eine eigene Runde.

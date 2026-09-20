@@ -4239,6 +4239,7 @@ public class NtmRecipeProvider extends RecipeProvider {
     private static Ingredient anyBismoidBronzeLightReceiver() { return CompoundIngredient.of(lightReceiver(Mats.MAT_BBRONZE), lightReceiver(Mats.MAT_ABRONZE)); }
     private static Ingredient anyBismoidBronzeHeavyReceiver() { return CompoundIngredient.of(heavyReceiver(Mats.MAT_BBRONZE), heavyReceiver(Mats.MAT_ABRONZE)); }
     private static Ingredient anyResistantAlloyLightBarrel() { return CompoundIngredient.of(lightBarrel(Mats.MAT_TCALLOY), lightBarrel(Mats.MAT_CDALLOY)); }
+    private static Ingredient anyResistantAlloyLightReceiver() { return CompoundIngredient.of(lightReceiver(Mats.MAT_TCALLOY), lightReceiver(Mats.MAT_CDALLOY)); }
     private static Ingredient anyResistantAlloyHeavyReceiver() { return CompoundIngredient.of(heavyReceiver(Mats.MAT_TCALLOY), heavyReceiver(Mats.MAT_CDALLOY)); }
     private static Ingredient anyResistantAlloyHeavyBarrel() { return CompoundIngredient.of(heavyBarrel(Mats.MAT_TCALLOY), heavyBarrel(Mats.MAT_CDALLOY)); }
     private static Ingredient anyResistantAlloyCastPlate() { return CompoundIngredient.of(castPlate(CastPlateItem.Type.TCALLOY), castPlate(CastPlateItem.Type.CDALLOY)); }
@@ -4792,6 +4793,14 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .define('G', grip(Mats.MAT_WEAPONSTEEL))
                 .define('M', mechanism(Mats.MAT_WEAPONSTEEL))
                 .unlockedBy("has_circuit", has(NtmItems.CIRCUIT_MILITARY_GRADE_BOARD.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_LAG, "BRM", "  G")
+                .define('B', anyResistantAlloyLightBarrel())
+                .define('R', anyResistantAlloyLightReceiver())
+                .define('M', mechanism(Mats.MAT_WEAPONSTEEL))
+                .define('G', anyPlasticGrip())
+                .unlockedBy("has_mechanism", has(NtmItems.PART_MECHANISM.get()))
                 .save(recipeOutput);
 
         gun(NtmItems.GUN_STAR_F, "BRM", "  G")

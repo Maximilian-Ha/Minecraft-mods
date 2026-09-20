@@ -347,6 +347,8 @@ public class ResourceManager {
     public static final ResourceLocation CARBINE_BAYONET_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/carbine_bayonet.png");
     public static final ResourceLocation MAS36_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/mas36.png");
     public static final ResourceLocation MINIGUN_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/minigun.png");
+    /* Die LAG traegt ihre eigene Textur, aber das Modell des Mike Hawk -- so steht es im Original. */
+    public static final ResourceLocation LAG_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/lag.png");
     public static final ResourceLocation MINIGUN_LACUNAE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/minigun_lacunae.png");
     public static final ResourceLocation MINIGUN_DUAL_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/minigun_dual.png");
     public static final ResourceLocation BOLTER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/bolter.png");
@@ -746,6 +748,7 @@ public class ResourceManager {
     public static IModelCustom double_barrel;
     public static IModelCustom liberator;
     public static IModelCustom panzerschreck;
+    public static IModelCustom mike_hawk;
     public static IModelCustom stinger;
     public static IModelCustom boltgun;
     public static IModelCustom quadro;
@@ -757,6 +760,7 @@ public class ResourceManager {
     public static IModelCustom n_i_4_n_i;
 
     public static HashMap<String, BusAnimation> spas_12_anim;
+    public static HashMap<String, BusAnimation> lag_anim;
     public static HashMap<String, BusAnimation> am180_anim;
     public static HashMap<String, BusAnimation> stg77_anim;
     public static HashMap<String, BusAnimation> congolake_anim;
@@ -1055,6 +1059,7 @@ public class ResourceManager {
         double_barrel = new HFRWavefrontObject("models/obj/weapons/sacred_dragon.obj").asVBO();
         liberator = new HFRWavefrontObject("models/obj/weapons/liberator.obj").asVBO();
         panzerschreck = new HFRWavefrontObject("models/obj/weapons/panzerschreck.obj").asVBO();
+        mike_hawk = new HFRWavefrontObject("models/obj/weapons/mike_hawk.obj").asVBO();
         stinger = new HFRWavefrontObject("models/obj/weapons/stinger.obj").asVBO();
         boltgun = new HFRWavefrontObject("models/obj/weapons/boltgun.obj").asVBO();
         quadro = new HFRWavefrontObject("models/obj/weapons/quadro.obj").asVBO();
@@ -1066,6 +1071,7 @@ public class ResourceManager {
         n_i_4_n_i = new HFRWavefrontObject("models/obj/weapons/n_i_4_n_i.obj").asVBO();
 
         spas_12_anim = AnimationLoader.load(NuclearTechMod.withDefaultNamespace("models/animations/spas12.json"));
+        lag_anim = AnimationLoader.load(NuclearTechMod.withDefaultNamespace("models/animations/lag.json"));
         am180_anim = AnimationLoader.load(NuclearTechMod.withDefaultNamespace("models/animations/am180.json"));
         stg77_anim = AnimationLoader.load(NuclearTechMod.withDefaultNamespace("models/animations/stg77.json"));
         congolake_anim = AnimationLoader.load(NuclearTechMod.withDefaultNamespace("models/animations/congolake.json"));
