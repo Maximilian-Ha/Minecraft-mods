@@ -3,6 +3,7 @@ package com.hbm.items.weapon.sedna.factory;
 import com.hbm.entity.projectile.BulletBeamBase;
 import com.hbm.entity.projectile.BulletBaseMK4;
 import com.hbm.explosion.vanillant.ExplosionVNT;
+import com.hbm.explosion.vanillant.standard.PlayerProcessorStandard;
 import com.hbm.explosion.vanillant.standard.EntityProcessorCrossSmooth;
 import com.hbm.explosion.vanillant.standard.ExplosionEffectTiny;
 import com.hbm.explosion.vanillant.standard.ExplosionEffectWeapon;
@@ -290,6 +291,7 @@ public class Lego {
         Vec3 position = hr.getLocation();
         ExplosionVNT vnt = new ExplosionVNT(bullet.level, position.x, position.y, position.z, range, bullet.getOwner())
                 .setEntityProcessor(new EntityProcessorCrossSmooth(1, bullet.damage * damageMod).setupPiercing(bullet.config.armorThresholdNegation, bullet.config.armorPiercingPercent))
+                .setPlayerProcessor(new PlayerProcessorStandard())
                 .setSFX(new ExplosionEffectWeapon(10, 2.5F, 1F));
         vnt.explode();
     }
@@ -309,6 +311,7 @@ public class Lego {
         ExplosionVNT vnt = new ExplosionVNT(bullet.level, position.x, position.y, position.z, range, bullet.getOwner())
                 .setEntityProcessor(new EntityProcessorCrossSmooth(0.5, bullet.damage * damageMod)
                         .setupPiercing(bullet.config.armorThresholdNegation, bullet.config.armorPiercingPercent).setKnockback(0.25D))
+                .setPlayerProcessor(new PlayerProcessorStandard())
                 .setSFX(new ExplosionEffectTiny());
         vnt.explode();
     }

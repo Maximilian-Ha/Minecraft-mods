@@ -23,6 +23,7 @@ import com.hbm.main.NuclearTechMod;
 import com.hbm.main.ResourceManager;
 import com.hbm.particle.SpentCasing;
 import com.hbm.particle.SpentCasing.SpentCasingType;
+import com.hbm.particle.helper.PlasmaBlastCreator;
 import com.hbm.registry.NtmSoundEvents;
 import com.hbm.render.anim.AnimationEnums.GunAnimation;
 import com.hbm.render.anim.BusAnimation;
@@ -290,9 +291,10 @@ public class XFactory12ga {
      *
      * XFactory12ga Z. 105 des Originals (makeShredderConfig).
      *
-     * ABWEICHUNG, der Schauwert: das Original streut an der Aufschlagstelle einen
-     * "plasmablast"-Partikelfaecher. Diese Partikelart hat der Port nicht -- dieselbe
-     * Abweichung steht schon bei der Plasmafuellung der Granate.
+     * An der Aufschlagstelle steht ein "plasmablast"-Schockfaecher, wie im Original -- seit
+     * Runde 189, in der der Erzeuger dafuer nachgereicht wurde. Bis dahin stand hier, diese
+     * Partikelart habe der Port nicht; das war falsch, die Klasse lag die ganze Zeit im Baum
+     * und niemand hat je eine erzeugt.
      */
     public static BulletConfig schredder(BulletConfig original, BulletConfig splitter) {
 
@@ -318,6 +320,7 @@ public class XFactory12ga {
                 Direction seite = bhr.getDirection();
                 Vec3 stelle = bhr.getLocation().add(seite.getStepX() * 0.1, seite.getStepY() * 0.1, seite.getStepZ() * 0.1);
 
+                schockfaecher(level, bhr, strahl.yRot, strahl.xRot);
                 schadenImUmkreis(strahl, strahl.getThrower(), strahl.damage, stelle, 0.75, DamageClass.LASER);
                 streuSplitter(level, strahl, splitter, anzahl, stelle,
                         i -> new Vec3(seite.getStepX(), seite.getStepY(), seite.getStepZ()));
@@ -327,12 +330,44 @@ public class XFactory12ga {
 
                 /* Im Getroffenen gibt es keine Flaeche, von der die Splitter wegfliegen
                  * koennten -- sie stieben in alle Richtungen auseinander. */
+                schockfaecher(level, ehr, strahl.yRot, strahl.xRot);
                 streuSplitter(level, strahl, splitter, anzahl, ehr.getLocation(),
                         i -> new Vec3(level.random.nextGaussian(), level.random.nextGaussian(), level.random.nextGaussian()).normalize());
             }
         });
 
         return cfg;
+    }
+
+    /**
+     * Der Schockfaecher an der Aufschlagstelle. XFactory12ga Z. 228 des Originals
+     * (spawnPulse).
+     *
+     * AN EINER WAND LIEGT DIE SCHEIBE AUF DER WAND, nicht in Flugrichtung: dafuer die feste
+     * Zuordnung von Seite zu Gier und Neigung. Oben und unten liegt sie flach (beides null),
+     * an den vier Waenden steht sie senkrecht (Neigung 90) und dreht sich mit der Seite.
+     * Nur im Wesen zaehlt der Flugwinkel des Geschosses.
+     */
+    private static void schockfaecher(Level level, HitResult treffer, float gier, float neigung) {
+
+        Vec3 stelle = treffer.getLocation();
+
+        if(treffer instanceof BlockHitResult bhr) {
+
+            Direction seite = bhr.getDirection();
+
+            switch(seite) {
+                case UP, DOWN -> { gier = 0F; neigung = 0F; }
+                case NORTH -> { gier = 0F; neigung = 90F; }
+                case SOUTH -> { gier = 180F; neigung = 90F; }
+                case EAST -> { gier = 90F; neigung = 90F; }
+                case WEST -> { gier = 270F; neigung = 90F; }
+            }
+
+            stelle = stelle.add(seite.getStepX() * 0.05, seite.getStepY() * 0.05, seite.getStepZ() * 0.05);
+        }
+
+        PlasmaBlastCreator.composeEffect(level, stelle.x, stelle.y, stelle.z, 0.5F, 0.5F, 1.0F, neigung, gier, 0.75F);
     }
 
     /** Die Splitter eines zerfallenen Strahls in die Welt setzen. */
@@ -372,8 +407,7 @@ public class XFactory12ga {
      * 1.21 nicht mehr ueber ein Material erkennen, und deco_crt hat der Port nicht. Der dritte
      * Sonderfall, das Zuenden eines DetonatableBlock, steht dagegen drin -- den Block gibt es.
      *
-     * NICHT UEBERNOMMEN, der Schauwert: der "plasmablast"-Partikelfaecher bei jedem Absprung,
-     * aus demselben Grund wie oben.
+     * Der "plasmablast"-Schockfaecher bei jedem Absprung ist seit Runde 189 dabei.
      */
     public static BiConsumer<BulletBaseMK4, BlockHitResult> LAMBDA_SHREDDER_RICOCHET = (geschoss, bhr) -> {
 
@@ -393,6 +427,7 @@ public class XFactory12ga {
             return;
         }
 
+        schockfaecher(geschoss.level, bhr, geschoss.getYRot(), geschoss.getXRot());
         schadenImUmkreis(geschoss, geschoss.getOwner(), geschoss.damage, geschoss.position(), 0.5, DamageClass.PLASMA);
 
         geschoss.ricochets++;

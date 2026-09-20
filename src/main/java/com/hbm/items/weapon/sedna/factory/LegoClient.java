@@ -90,9 +90,13 @@ public class LegoClient {
     }
 
     private static void zeichneStrahl(BulletBeamBase strahl, float partialTick, int dunkel, int hell) {
+        zeichneStrahl(strahl, partialTick, dunkel, hell, 5F);
+    }
+
+    private static void zeichneStrahl(BulletBeamBase strahl, float partialTick, int dunkel, int hell, float breitenfaktor) {
 
         float alter = strahlAlter(strahl, partialTick);
-        float breite = alter * 5F;
+        float breite = alter * breitenfaktor;
 
         RenderContext.pushPose();
         RenderContext.mulPose(Axis.YP.rotationDegrees(180F - strahl.yRot));
@@ -115,6 +119,25 @@ public class LegoClient {
     /** Der Lichtbogen der NI4NI: weiss mit blauem Kern. */
     public static BiConsumer<BulletBeamBase, Float> RENDER_NI4NI_BOLT = (strahl, partialTick) ->
             zeichneStrahl(strahl, partialTick, 0xFF3C6BE0, 0xFFFFFFFF);
+
+    /**
+     * Der Blitz der Teslakanone.
+     *
+     * ABWEICHUNG: das Original legt dafuer drei gewellte Schlaeuche uebereinander (BeamPronter
+     * mit EnumWaveType.RANDOM), einen duennen im Kern und zwei breite darum. Den BeamPronter
+     * hat der Port nicht; gezeichnet wird deshalb wie jeder andere Strahl hier, mit dunklem
+     * Kern und hellem Saum. Die Kernfarbe ist die des Originals (0x202040); der Saum nimmt die
+     * Farbe, die derselbe Einschlag seinen Schockfaechern mitgibt (0,5 / 0,5 / 1,0).
+     */
+    public static BiConsumer<BulletBeamBase, Float> RENDER_LIGHTNING = (strahl, partialTick) ->
+            zeichneStrahl(strahl, partialTick, 0xFF202040, 0xFF8080FF);
+
+    /**
+     * Der Sprungblitz, der vom getroffenen Wesen weiterspringt. Derselbe Blitz, nur deutlich
+     * duenner -- im Original ueber einen kleineren Grundmassstab (0,15 statt 0,5).
+     */
+    public static BiConsumer<BulletBeamBase, Float> RENDER_LIGHTNING_SUB = (strahl, partialTick) ->
+            zeichneStrahl(strahl, partialTick, 0xFF202040, 0xFF8080FF, 1.5F);
 
     /**
      * Die Laserstrahlen. Das Original zieht sie mit BeamPronter als gewellten Schlauch; der

@@ -6,6 +6,7 @@ import com.hbm.entity.effect.Mist;
 import com.hbm.config.NtmConfig;
 import com.hbm.entity.logic.NukeExplosionMK5;
 import com.hbm.explosion.vanillant.ExplosionVNT;
+import com.hbm.explosion.vanillant.standard.PlayerProcessorStandard;
 import com.hbm.explosion.vanillant.standard.*;
 import com.hbm.items.special.PolaroidItem;
 import com.hbm.network.toclient.AuxParticle;
@@ -47,6 +48,7 @@ public class BombletZeta extends ThrowableProjectile {
                     vnt.setBlockAllocator(new BlockAllocatorStandard());
                     vnt.setBlockProcessor(new BlockProcessorStandard());
                     vnt.setEntityProcessor(new EntityProcessorCrossSmooth(1, 100));
+                    vnt.setPlayerProcessor(new PlayerProcessorStandard());
                     vnt.setSFX(new ExplosionEffectWeapon(15, 3.5F, 1.25F));
                     vnt.explode();
                 }
@@ -55,6 +57,7 @@ public class BombletZeta extends ThrowableProjectile {
                     vnt.setBlockAllocator(new BlockAllocatorStandard());
                     vnt.setBlockProcessor(new BlockProcessorStandard().withBlockEffect(new BlockMutatorFire()));
                     vnt.setEntityProcessor(new EntityProcessorCrossSmooth(1, 100));
+                    vnt.setPlayerProcessor(new PlayerProcessorStandard());
                     vnt.setSFX(new ExplosionEffectWeapon(15, 5F, 1.75F));
                     vnt.explode();
                 }

@@ -5,6 +5,7 @@ import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.entity.projectile.ProjectileLerping;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.explosion.vanillant.ExplosionVNT;
+import com.hbm.explosion.vanillant.standard.PlayerProcessorStandard;
 import com.hbm.explosion.vanillant.standard.BlockAllocatorStandard;
 import com.hbm.explosion.vanillant.standard.BlockMutatorFire;
 import com.hbm.explosion.vanillant.standard.BlockProcessorStandard;
@@ -313,7 +314,8 @@ public abstract class MissileBase extends ProjectileLerping implements IRadarDet
         ExplosionVNT vnt = new ExplosionVNT(this.level(), this.getX(), this.getY(), this.getZ(), strength)
                 .setBlockAllocator(new BlockAllocatorStandard(resolution))
                 .setBlockProcessor(new BlockProcessorStandard().setNoDrop().withBlockEffect(fire ? new BlockMutatorFire() : null))
-                .setEntityProcessor(new EntityProcessorCross(7.5D).withRangeMod(2));
+                .setEntityProcessor(new EntityProcessorCross(7.5D).withRangeMod(2))
+                .setPlayerProcessor(new PlayerProcessorStandard());
         vnt.explode();
     }
 

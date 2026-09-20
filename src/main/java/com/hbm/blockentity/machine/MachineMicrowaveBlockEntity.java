@@ -5,6 +5,7 @@ import api.hbm.energymk2.IEnergyReceiverMK2;
 import com.hbm.blockentity.MachineBaseBlockEntity;
 import com.hbm.blockentity.NtmBlockEntityTypes;
 import com.hbm.explosion.vanillant.ExplosionVNT;
+import com.hbm.explosion.vanillant.standard.PlayerProcessorStandard;
 import com.hbm.explosion.vanillant.standard.EntityProcessorCrossSmooth;
 import com.hbm.explosion.vanillant.standard.ExplosionEffectWeapon;
 import com.hbm.interfaces.IControlReceiver;
@@ -83,6 +84,7 @@ public class MachineMicrowaveBlockEntity extends MachineBaseBlockEntity implemen
                 new ExplosionVNT(this.level,
                         this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 0.5, this.worldPosition.getZ() + 0.5, 5)
                         .setEntityProcessor(new EntityProcessorCrossSmooth(1, 50))
+                        .setPlayerProcessor(new PlayerProcessorStandard())
                         .setSFX(new ExplosionEffectWeapon(10, 2.5F, 1F))
                         .explode();
                 return;

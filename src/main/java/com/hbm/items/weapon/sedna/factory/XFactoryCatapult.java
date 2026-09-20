@@ -2,6 +2,7 @@ package com.hbm.items.weapon.sedna.factory;
 
 import com.hbm.entity.projectile.BulletBaseMK4;
 import com.hbm.explosion.vanillant.ExplosionVNT;
+import com.hbm.explosion.vanillant.standard.PlayerProcessorStandard;
 import com.hbm.explosion.vanillant.standard.BlockAllocatorStandard;
 import com.hbm.explosion.vanillant.standard.BlockProcessorStandard;
 import com.hbm.explosion.vanillant.standard.EntityProcessorCrossSmooth;
@@ -22,6 +23,7 @@ public class XFactoryCatapult {
         vnt.setBlockAllocator(new BlockAllocatorStandard());
         vnt.setBlockProcessor(new BlockProcessorStandard());
         vnt.setEntityProcessor(new EntityProcessorCrossSmooth(1, bullet.damage));
+        vnt.setPlayerProcessor(new PlayerProcessorStandard());
         vnt.setSFX(new ExplosionEffectWeapon(10, 2.5F, 1F));
         vnt.explode();
         bullet.discard();

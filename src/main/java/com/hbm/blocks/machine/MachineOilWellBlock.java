@@ -7,6 +7,7 @@ import com.hbm.blocks.DummyBlockType;
 import com.hbm.blocks.DummyableBlock;
 import com.hbm.blocks.IPersistentInfoProvider;
 import com.hbm.explosion.vanillant.ExplosionVNT;
+import com.hbm.explosion.vanillant.standard.PlayerProcessorStandard;
 import com.hbm.explosion.vanillant.standard.BlockAllocatorStandard;
 import com.hbm.explosion.vanillant.standard.BlockProcessorStandard;
 import com.hbm.explosion.vanillant.standard.EntityProcessorCross;
@@ -126,7 +127,8 @@ public class MachineOilWellBlock extends DummyableBlock implements IPersistentIn
             ExplosionVNT xnt = new ExplosionVNT(level, corePos.getX() + 0.5, corePos.getY() + 0.5, corePos.getZ() + 0.5, 15F)
                     .setBlockAllocator(new BlockAllocatorStandard(24))
                     .setBlockProcessor(new BlockProcessorStandard().setNoDrop())
-                    .setEntityProcessor(new EntityProcessorCross(0.5));
+                    .setEntityProcessor(new EntityProcessorCross(0.5))
+                    .setPlayerProcessor(new PlayerProcessorStandard());
             xnt.explode();
 
             ExplosionCreator.composeEffect(level, corePos.getX() + 0.5, corePos.getY() + 0.5, corePos.getZ() + 0.5, 10, 2F, 0.5F, 25F, 5, 8, 20, 0.75F, 1F, -2F, 150);

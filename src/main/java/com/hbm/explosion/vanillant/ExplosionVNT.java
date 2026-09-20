@@ -2,6 +2,7 @@ package com.hbm.explosion.vanillant;
 
 import com.hbm.explosion.vanillant.interfaces.IBlockAllocator;
 import com.hbm.explosion.vanillant.interfaces.IBlockProcessor;
+import com.hbm.explosion.vanillant.interfaces.IPlayerProcessor;
 import com.hbm.explosion.vanillant.interfaces.IEntityProcessor;
 import com.hbm.explosion.vanillant.interfaces.IExplosionSFX;
 import com.hbm.explosion.vanillant.standard.*;
@@ -23,6 +24,19 @@ public class ExplosionVNT {
     private IBlockAllocator blockAllocator;
     private IEntityProcessor entityProcessor;
     private IBlockProcessor blockProcessor;
+    /*
+     * RUNDE 189: der Spielerverarbeiter. Die Schnittstelle IPlayerProcessor lag seit jeher im
+     * Baum, aber niemand hat sie je aufgerufen -- explode() sammelte die getroffenen Spieler
+     * ein und liess sie dann liegen. Damit hat KEINE Explosion dieser Bauart je einen Spieler
+     * zurueckgeworfen. Aufgefallen ist es an der Teslakanone, die den Verarbeiter
+     * ausdruecklich setzt.
+     *
+     * NACHGEMESSEN: das Original setzt ihn an 55 seiner 65 Explosionen. Im Port sind es jetzt
+     * 30 -- ueberall dort, wo die Explosion eine Entsprechung im Original hat, die ihn setzt.
+     * Die zehn Ausnahmen des Originals (Semtex, Sprengknete, Foerderwagen, Flugzeug, Torpedo,
+     * die beiden Ablaesse, der Fluidtank) bleiben auch hier ohne.
+     */
+    private IPlayerProcessor playerProcessor;
     //since we want to reduce each effect to the bare minimum (sound, particles, etc. being separate) we definitely need multiple most of the time
     private IExplosionSFX[] sfx;
 
@@ -86,6 +100,7 @@ public class ExplosionVNT {
 
         //serverside processing
         if(processBlocks) blockProcessor.process(this, level, x, y, z, affectedBlocks);
+        if(processEntities && playerProcessor != null) playerProcessor.process(this, level, x, y, z, affectedPlayers);
 
         //from server to client
         if(sfx != null) {
@@ -103,6 +118,11 @@ public class ExplosionVNT {
 
     public ExplosionVNT setEntityProcessor(IEntityProcessor entityProcessor) {
         this.entityProcessor = entityProcessor;
+        return this;
+    }
+
+    public ExplosionVNT setPlayerProcessor(IPlayerProcessor playerProcessor) {
+        this.playerProcessor = playerProcessor;
         return this;
     }
 

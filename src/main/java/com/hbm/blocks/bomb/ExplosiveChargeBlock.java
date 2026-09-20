@@ -6,6 +6,7 @@ import com.hbm.entity.item.TNTPrimedBase;
 import com.hbm.entity.logic.NukeExplosionMK5;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.explosion.vanillant.ExplosionVNT;
+import com.hbm.explosion.vanillant.standard.PlayerProcessorStandard;
 import com.hbm.explosion.vanillant.standard.BlockAllocatorStandard;
 import com.hbm.explosion.vanillant.standard.BlockProcessorStandard;
 import com.hbm.explosion.vanillant.standard.EntityProcessorCrossSmooth;
@@ -51,7 +52,8 @@ public class ExplosiveChargeBlock extends DetonatableBlock implements IBomb, IDe
                 ExplosionVNT vnt = new ExplosionVNT(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 15F)
                         .setBlockAllocator(new BlockAllocatorStandard(64))
                         .setBlockProcessor(new BlockProcessorStandard())
-                        .setEntityProcessor(new EntityProcessorCrossSmooth(2.0, 999).setDamageClass(DamageClass.LASER));
+                        .setEntityProcessor(new EntityProcessorCrossSmooth(2.0, 999).setDamageClass(DamageClass.LASER))
+                        .setPlayerProcessor(new PlayerProcessorStandard());
                 ExplosionCreator.composeEffectStandard(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                 vnt.explode();
             }

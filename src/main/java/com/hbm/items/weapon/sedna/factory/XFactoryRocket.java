@@ -3,6 +3,7 @@ package com.hbm.items.weapon.sedna.factory;
 import com.hbm.entity.effect.FireLingering;
 import com.hbm.entity.projectile.BulletBaseMK4;
 import com.hbm.explosion.vanillant.ExplosionVNT;
+import com.hbm.explosion.vanillant.standard.PlayerProcessorStandard;
 import com.hbm.explosion.vanillant.standard.BlockAllocatorStandard;
 import com.hbm.explosion.vanillant.standard.BlockProcessorStandard;
 import com.hbm.explosion.vanillant.standard.EntityProcessorCrossSmooth;
@@ -140,6 +141,7 @@ public class XFactoryRocket {
                 .setBlockAllocator(new BlockAllocatorStandard())
                 .setBlockProcessor(new BlockProcessorStandard())
                 .setEntityProcessor(new EntityProcessorCrossSmooth(1, bullet.damage))
+                .setPlayerProcessor(new PlayerProcessorStandard())
                 .setSFX(new ExplosionEffectWeapon(10, 2.5F, 1F))
                 .explode();
 

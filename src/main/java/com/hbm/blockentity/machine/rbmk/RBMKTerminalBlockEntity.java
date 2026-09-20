@@ -6,6 +6,7 @@ import com.hbm.blockentity.LoadedBaseBlockEntity;
 import com.hbm.blockentity.NtmBlockEntityTypes;
 import com.hbm.blockentity.network.RTTYSystem;
 import com.hbm.explosion.vanillant.ExplosionVNT;
+import com.hbm.explosion.vanillant.standard.PlayerProcessorStandard;
 import com.hbm.explosion.vanillant.standard.EntityProcessorCrossSmooth;
 import com.hbm.explosion.vanillant.standard.ExplosionEffectWeapon;
 import com.hbm.interfaces.IControlReceiver;
@@ -132,6 +133,7 @@ public class RBMKTerminalBlockEntity extends LoadedBaseBlockEntity implements IT
 
         ExplosionVNT vnt = new ExplosionVNT(this.level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 5)
                 .setEntityProcessor(new EntityProcessorCrossSmooth(1, 50).setupPiercing(5F, 0.5F))
+                .setPlayerProcessor(new PlayerProcessorStandard())
                 .setSFX(new ExplosionEffectWeapon(10, 2.5F, 1F));
         vnt.explode();
     }

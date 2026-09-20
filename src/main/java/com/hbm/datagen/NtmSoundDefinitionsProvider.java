@@ -102,6 +102,12 @@ public class NtmSoundDefinitionsProvider extends SoundDefinitionsProvider {
         this.add(NtmSoundEvents.GUN_FLAMER_LOOP, SoundDefinition.definition()
                 .with(sound(NuclearTechMod.withDefaultNamespace("weapon/fire/flameloop")))
         );
+        this.add(NtmSoundEvents.GUN_TESLA_FIRE, SoundDefinition.definition()
+                .with(sound(NuclearTechMod.withDefaultNamespace("weapon/fire/tesla")))
+        );
+        this.add(NtmSoundEvents.GUN_TESLA_BLAST, SoundDefinition.definition()
+                .with(sound(NuclearTechMod.withDefaultNamespace("entity/ufoblast")))
+        );
         this.add(NtmSoundEvents.GUN_LASER_PISTOL_FIRE, SoundDefinition.definition()
                 .with(sound(NuclearTechMod.withDefaultNamespace("weapon/fire/laserpistol")))
         );

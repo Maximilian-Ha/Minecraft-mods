@@ -18,5 +18,6 @@ public class ParticleCreators {
         // Kein Partikel, sondern ein Rahmen mit Beschriftung -- haengt aber am selben Verteiler.
         particleCreators.put("marker", new MarkerCreator());
         particleCreators.put("foundry", new FoundryCreator());
+        particleCreators.put("plasmablast", new PlasmaBlastCreator());
     }
 }

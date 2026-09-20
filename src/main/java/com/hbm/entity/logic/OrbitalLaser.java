@@ -2,6 +2,7 @@ package com.hbm.entity.logic;
 
 import com.hbm.entity.NtmEntityTypes;
 import com.hbm.explosion.vanillant.ExplosionVNT;
+import com.hbm.explosion.vanillant.standard.PlayerProcessorStandard;
 import com.hbm.explosion.vanillant.standard.BlockAllocatorStandard;
 import com.hbm.explosion.vanillant.standard.BlockProcessorStandard;
 import com.hbm.explosion.vanillant.standard.EntityProcessorCrossSmooth;
@@ -41,6 +42,7 @@ public class OrbitalLaser extends Entity {
                 .setBlockAllocator(new BlockAllocatorStandard())
                 .setBlockProcessor(new BlockProcessorStandard())
                 .setEntityProcessor(new EntityProcessorCrossSmooth(1, 1_000F).setupPiercing(50F, 0.5F).setDamageClass(DamageClass.LASER))
+                .setPlayerProcessor(new PlayerProcessorStandard())
                 .setSFX(new ExplosionEffectWeapon(15, 3.5F, 1.25F));
         vnt.explode();
     }

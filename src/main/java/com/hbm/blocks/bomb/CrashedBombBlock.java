@@ -7,6 +7,7 @@ import com.hbm.config.NtmConfig;
 import com.hbm.entity.logic.NukeExplosionBalefire;
 import com.hbm.entity.logic.NukeExplosionMK5;
 import com.hbm.explosion.vanillant.ExplosionVNT;
+import com.hbm.explosion.vanillant.standard.PlayerProcessorStandard;
 import com.hbm.explosion.vanillant.standard.BlockAllocatorStandard;
 import com.hbm.explosion.vanillant.standard.BlockProcessorStandard;
 import com.hbm.explosion.vanillant.standard.EntityProcessorCross;
@@ -66,7 +67,8 @@ public class CrashedBombBlock extends MultiBlock implements EntityBlock, IBomb {
         ExplosionVNT vnt = new ExplosionVNT(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 35F)
                 .setBlockAllocator(new BlockAllocatorStandard(24))
                 .setBlockProcessor(new BlockProcessorStandard().setNoDrop())
-                .setEntityProcessor(new EntityProcessorCross(5D).withRangeMod(1.5F));
+                .setEntityProcessor(new EntityProcessorCross(5D).withRangeMod(1.5F))
+                .setPlayerProcessor(new PlayerProcessorStandard());
         ExplosionCreator.composeEffectLarge(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
         vnt.explode();
     };

@@ -1611,6 +1611,31 @@ public class Orchestras {
      * Die drei Laserpistolen. Der Laser hat keinen Auswurf und keine Huelse -- was hier
      * passiert, ist die Muendungswolke beim Schuss und die vier Griffe des Magazinwechsels.
      */
+    /**
+     * Die Teslakanone. Sie laedt nie nach, also hat sie nur drei Toene: das Weiterdrehen des
+     * Zahnrads beim Schuss, den Leerschlag, und -- beim Begutachten -- das Quietschtier.
+     */
+    public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_TESLA = (stack, ctx) -> {
+
+        LivingEntity entity = ctx.entity;
+        Level level = entity.level;
+        if(level.isClientSide) return;
+
+        GunAnimation type = GunBaseNTItem.getLastAnim(stack, ctx.configIndex);
+        int timer = GunBaseNTItem.getAnimTimer(stack, ctx.configIndex);
+
+        if(type == GunAnimation.CYCLE && timer == 2) {
+            SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_SHREDDER_CYCLE.get(), entity.getSoundSource(), 0.25F, 1.25F);
+        }
+        if(type == GunAnimation.CYCLE_DRY) {
+            if(timer == 0) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_DRY_FIRE.get(), entity.getSoundSource());
+            if(timer == 2) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_SHREDDER_CYCLE.get(), entity.getSoundSource(), 0.25F, 1.25F);
+        }
+        if(type == GunAnimation.INSPECT && timer == 12) {
+            SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.SQUEAKY_TOY.get(), entity.getSoundSource(), 0.25F, 1F);
+        }
+    };
+
     public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_LASER_PISTOL = (stack, ctx) -> {
 
         LivingEntity entity = ctx.entity;
@@ -1632,6 +1657,15 @@ public class Orchestras {
             if(timer == 10) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_SMALL_REMOVE.get(), entity.getSoundSource(), 1F, 1.25F);
             if(timer == 34) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_SMALL_INSERT.get(), entity.getSoundSource(), 1F, 1.25F);
             if(timer == 40) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_CLOSE.get(), entity.getSoundSource(), 1F, 1.25F);
+        }
+
+        /* RUNDE 189 NACHGETRAGEN: das Klemmen. Die Bewegung dazu gab es seit Runde 187 nicht,
+         * weil die Bewegungsvorschrift der Waffe erfunden statt uebertragen war -- und mit ihr
+         * fehlte hier der Ton. Beides steht jetzt so da wie im Original. */
+        if(type == GunAnimation.JAMMED) {
+            if(timer == 10) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_COCK.get(), entity.getSoundSource());
+            if(timer == 15) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_CLOSE.get(), entity.getSoundSource(), 1F, 1.25F);
+            if(timer == 30) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_IMPACT.get(), entity.getSoundSource(), 0.25F, 1.5F);
         }
     };
 
@@ -1657,6 +1691,19 @@ public class Orchestras {
             if(timer == 18) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_IMPACT.get(), entity.getSoundSource(), 0.25F, 1F);
             if(timer == 30) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_INSERT.get(), entity.getSoundSource());
             if(timer == 38) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_CLOSE.get(), entity.getSoundSource());
+        }
+
+        /* RUNDE 189 NACHGETRAGEN, aus demselben Grund wie bei der Laserpistole. */
+        if(type == GunAnimation.INSPECT) {
+            if(timer == 2) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_SMALL_REMOVE.get(), entity.getSoundSource());
+            if(timer == 12) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_INSERT.get(), entity.getSoundSource());
+            if(timer == 20) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_CLOSE.get(), entity.getSoundSource());
+        }
+
+        if(type == GunAnimation.JAMMED) {
+            if(timer == 2) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_SMALL_REMOVE.get(), entity.getSoundSource());
+            if(timer == 22) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_MAG_INSERT.get(), entity.getSoundSource());
+            if(timer == 30) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_REVOLVER_CLOSE.get(), entity.getSoundSource());
         }
     };
 

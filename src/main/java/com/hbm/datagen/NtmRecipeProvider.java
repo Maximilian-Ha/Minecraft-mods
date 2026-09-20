@@ -4106,6 +4106,7 @@ public class NtmRecipeProvider extends RecipeProvider {
     private static Ingredient anyBismoidBronzeLightReceiver() { return CompoundIngredient.of(lightReceiver(Mats.MAT_BBRONZE), lightReceiver(Mats.MAT_ABRONZE)); }
     private static Ingredient anyResistantAlloyLightBarrel() { return CompoundIngredient.of(lightBarrel(Mats.MAT_TCALLOY), lightBarrel(Mats.MAT_CDALLOY)); }
     private static Ingredient anyResistantAlloyHeavyReceiver() { return CompoundIngredient.of(heavyReceiver(Mats.MAT_TCALLOY), heavyReceiver(Mats.MAT_CDALLOY)); }
+    private static Ingredient anyResistantAlloyHeavyBarrel() { return CompoundIngredient.of(heavyBarrel(Mats.MAT_TCALLOY), heavyBarrel(Mats.MAT_CDALLOY)); }
     private static Ingredient anyResistantAlloyCastPlate() { return CompoundIngredient.of(castPlate(CastPlateItem.Type.TCALLOY), castPlate(CastPlateItem.Type.CDALLOY)); }
     private static Ingredient anyBismoidBronzeCastPlate() { return CompoundIngredient.of(castPlate(CastPlateItem.Type.BISMUTH_BRONZE), castPlate(CastPlateItem.Type.ARSENIC_BRONZE)); }
 
@@ -4300,12 +4301,13 @@ public class NtmRecipeProvider extends RecipeProvider {
      * Die Waffenbauplaene.
      *
      * Wortgetreu aus WeaponRecipes des Originals, in der Reihenfolge des Originals. Von den
-     * 46 Bauplaenen dort bleiben hier 35 uebrig; der Rest faellt aus zwei gemessenen Gruenden
+     * 46 Bauplaenen dort bleiben hier 36 uebrig; der Rest faellt aus zwei gemessenen Gruenden
      * weg:
      *
-     * ES GIBT DIE WAFFE NICHT: Stinger, Quadro, LAG, Raketenwerfer, Teslakanone, Fat Man,
-     * Tau, Ladungswerfer und die beiden Panzerruestungswaffen. Sie sind im Port nicht
-     * angelegt; ein Bauplan auf ein nicht vorhandenes Erzeugnis waere kein Rezept.
+     * ES GIBT DIE WAFFE NICHT: Stinger, Quadro, LAG, Raketenwerfer, Fat Man, Tau,
+     * Ladungswerfer und die beiden Panzerruestungswaffen. Sie sind im Port nicht angelegt;
+     * ein Bauplan auf ein nicht vorhandenes Erzeugnis waere kein Rezept. Die Teslakanone
+     * stand bis Runde 188 auch hier; sie gibt es seit Runde 189.
      *
      * ES GIBT DIE ZUTAT NICHT:
      * - gun_double_barrel_sacred_dragon braucht item_secret in der Ausfuehrung
@@ -4319,8 +4321,11 @@ public class NtmRecipeProvider extends RecipeProvider {
      * NICHT UEBERNOMMEN, WEIL DER AUFSATZ SELBST FEHLT: LAS_SHOTGUN, LAS_CAPACITOR,
      * LAS_AUTO, DRILL_*, ENGINE_*, MAGNET, SIFTER und CANISTERS. Sie stehen zwar in der
      * Aufzaehlung ModSpecial, sind aber nicht im XWeaponModManager angemeldet -- ein
-     * solcher Aufsatz liesse sich bauen und anbringen und taete nichts. Beim Lasergewehr
-     * fehlt ausserdem die Waffe; beim Bohrer nicht mehr, seit Runde 186.
+     * solcher Aufsatz liesse sich bauen und anbringen und taete nichts. Die Waffen dazu gibt
+     * es inzwischen alle (den Bohrer seit Runde 186, das Lasergewehr seit Runde 187); was
+     * fehlt, sind die Aufsatzklassen selbst -- WeaponModLasShotgun, WeaponModLasCapacitor,
+     * WeaponModLasAuto, WeaponModDrill, WeaponModEngine, WeaponModDrillFortune und
+     * WeaponModCanisters. Das ist eine eigene Stufe.
      */
     private void gunRecipes(RecipeOutput recipeOutput) {
 
@@ -4577,6 +4582,20 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .define('R', anyResistantAlloyHeavyReceiver())
                 .define('E', NtmItems.MOTOR_DESH.get())
                 .unlockedBy("has_motor_desh", has(NtmItems.MOTOR_DESH.get()))
+                .save(recipeOutput);
+
+        /*
+         * Die Teslakanone: drei Kupferspulen als Kranz, darunter Lauf und Verschluss aus
+         * Technetiumstahl oder Chromdioxid, und unten Mechanik, Griff und die Platine.
+         */
+        gun(NtmItems.GUN_TESLA_CANNON, "CCC", "BRB", "MGE")
+                .define('C', NtmItems.COIL_COPPER.get())
+                .define('B', anyResistantAlloyHeavyBarrel())
+                .define('R', anyResistantAlloyHeavyReceiver())
+                .define('M', mechanism(Mats.MAT_WEAPONSTEEL))
+                .define('G', anyPlasticGrip())
+                .define('E', NtmItems.CIRCUIT_MILITARY_GRADE_BOARD.get())
+                .unlockedBy("has_coil_copper", has(NtmItems.COIL_COPPER.get()))
                 .save(recipeOutput);
 
         gun(NtmItems.GUN_LASER_PISTOL, "CRM", "GG ")

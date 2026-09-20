@@ -5,6 +5,7 @@ import com.hbm.blockentity.machine.MachineRadarBlockEntity;
 import com.hbm.entity.projectile.ProjectileLerping;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.explosion.vanillant.ExplosionVNT;
+import com.hbm.explosion.vanillant.standard.PlayerProcessorStandard;
 import com.hbm.explosion.vanillant.standard.EntityProcessorCross;
 import com.hbm.explosion.vanillant.standard.ExplosionEffectWeapon;
 import com.hbm.particle.NtmParticleTypes;
@@ -114,6 +115,7 @@ public class MissileAntiBallistic extends ProjectileLerping implements IRadarDet
             this.discard();
             ExplosionVNT vnt = new ExplosionVNT(this.level, this.position().x, this.position().y, this.position().z, 15F)
                     .setEntityProcessor(new EntityProcessorCross(7.5D).withRangeMod(2))
+                    .setPlayerProcessor(new PlayerProcessorStandard())
                     .setSFX(new ExplosionEffectWeapon(15, 5F, 2F));
             vnt.explode();
         }

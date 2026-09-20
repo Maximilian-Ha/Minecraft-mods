@@ -52,49 +52,93 @@ public class XWeaponModManager {
         new WeaponModDefinition(ModGeneric.IRON_DURA)
                 .addMod(NtmItems.GUN_PEPPERBOX.get(), new WeaponModGenericDurability(101));
 
-        /* Stahl passt an die beiden Revolver, die M3 und die Mare's Legs. */
+        /*
+         * DIE ACHT WERKSTOFFLISTEN. Jede Waffe des Originals, die es im Port gibt, steht hier
+         * in derselben Liste wie dort; fehlt eine Waffe im Port, faellt sie ersatzlos weg.
+         *
+         * RUNDE 189 NACHGEMESSEN UND NACHGETRAGEN: die Listen waren seit Runde 118 nicht mehr
+         * mit dem gewachsenen Waffenbestand abgeglichen worden. Vierzehn Waffen, die es im
+         * Port laengst gibt, standen in keiner -- an ihnen liess sich kein Werkstoffaufsatz
+         * anbringen, obwohl das Original ihn vorsieht. Der schwerste Fall war die
+         * Bronzeliste: sie fehlte GANZ, und damit hatten BRONZE_DAMAGE und BRONZE_DURA
+         * ueberhaupt keinen Eintrag -- zwei Aufsaetze mit Rezept, die sich bauen liessen und
+         * an keiner einzigen Waffe etwas taten.
+         *
+         * NICHT DABEI, weil die Waffe im Port fehlt: gun_flaregun (Steel), gun_quadro
+         * (Ferro), gun_lag und gun_missile_launcher (TcAlloy), gun_fatman und gun_tau (BigMT).
+         */
+
+        /* Stahl passt an die beiden Revolver, die M3, die Mare's Legs und die beiden Henry. */
         Item[] steelGuns = new Item[] {
                 NtmItems.GUN_LIGHT_REVOLVER.get(), NtmItems.GUN_LIGHT_REVOLVER_ATLAS.get(),
+                NtmItems.GUN_HENRY.get(), NtmItems.GUN_HENRY_LINCOLN.get(),
                 NtmItems.GUN_GREASEGUN.get(),
-                NtmItems.GUN_MARESLEG.get(), NtmItems.GUN_MARESLEG_AKIMBO.get() };
+                NtmItems.GUN_MARESLEG.get(), NtmItems.GUN_MARESLEG_AKIMBO.get(),
+                NtmItems.GUN_FLAREGUN.get() };
         new WeaponModDefinition(ModGeneric.STEEL_DAMAGE).addMod(steelGuns, new WeaponModGenericDamage(102));
         new WeaponModDefinition(ModGeneric.STEEL_DURA).addMod(steelGuns, new WeaponModGenericDurability(103));
 
-        /* Schnellarbeitsstahl passt an die AM180. */
-        Item[] duraGuns = new Item[] { NtmItems.GUN_AM180.get() };
+        /* Schnellarbeitsstahl passt an die AM180, den Liberator, den Congo Lake und die
+         * beiden ersten Flammenwerfer. Der Daybreaker steht auch im Original in keiner
+         * Liste. */
+        Item[] duraGuns = new Item[] {
+                NtmItems.GUN_AM180.get(),
+                NtmItems.GUN_LIBERATOR.get(),
+                NtmItems.GUN_CONGOLAKE.get(),
+                NtmItems.GUN_FLAMER.get(),
+                NtmItems.GUN_FLAMER_TOPAZ.get() };
         new WeaponModDefinition(ModGeneric.DURA_DAMAGE).addMod(duraGuns, new WeaponModGenericDamage(104));
         new WeaponModDefinition(ModGeneric.DURA_DURA).addMod(duraGuns, new WeaponModGenericDurability(105));
 
-        /* Desh passt an die Uzi, die SPAS-12 und den Karabiner. */
+        /* Desh passt an den schweren Revolver, den Karabiner, die Uzi, die SPAS-12 und die
+         * Panzerschreck. Die beiden Sonderfassungen des schweren Revolvers, Lil' Mac und
+         * Protege, stehen auch im Original nicht dabei. */
         Item[] deshGuns = new Item[] {
+                NtmItems.GUN_HEAVY_REVOLVER.get(),
+                NtmItems.GUN_CARBINE.get(),
                 NtmItems.GUN_UZI.get(), NtmItems.GUN_UZI_AKIMBO.get(),
                 NtmItems.GUN_SPAS12.get(),
-                NtmItems.GUN_CARBINE.get() };
+                NtmItems.GUN_PANZERSCHRECK.get() };
         new WeaponModDefinition(ModGeneric.DESH_DAMAGE).addMod(deshGuns, new WeaponModGenericDamage(106));
         new WeaponModDefinition(ModGeneric.DESH_DURA).addMod(deshGuns, new WeaponModGenericDurability(107));
 
-        /* Waffenstahl passt an die beiden Star-F und an die beiden G3. */
+        /* Waffenstahl passt an die beiden Star-F, die beiden G3, die MK 108 und den
+         * Chemiewerfer. */
         Item[] wsteelGuns = new Item[] {
                 NtmItems.GUN_STAR_F.get(), NtmItems.GUN_STAR_F_AKIMBO.get(),
-                NtmItems.GUN_G3.get(), NtmItems.GUN_G3_ZEBRA.get() };
+                NtmItems.GUN_G3.get(), NtmItems.GUN_G3_ZEBRA.get(),
+                NtmItems.GUN_MK108.get(),
+                NtmItems.GUN_CHEMTHROWER.get() };
         new WeaponModDefinition(ModGeneric.WSTEEL_DAMAGE).addMod(wsteelGuns, new WeaponModGenericDamage(108));
         new WeaponModDefinition(ModGeneric.WSTEEL_DURA).addMod(wsteelGuns, new WeaponModGenericDurability(109));
 
-        /* Ferrouranium passt an das Antimateriegewehr und die M2. */
+        /* Ferrouranium passt an das Antimateriegewehr, die M2 und die beiden Flinten. */
         Item[] ferroGuns = new Item[] {
-                NtmItems.GUN_AMAT.get(), NtmItems.GUN_M2.get() };
+                NtmItems.GUN_AMAT.get(),
+                NtmItems.GUN_M2.get(),
+                NtmItems.GUN_AUTOSHOTGUN.get(), NtmItems.GUN_AUTOSHOTGUN_SHREDDER.get() };
         new WeaponModDefinition(ModGeneric.FERRO_DAMAGE).addMod(ferroGuns, new WeaponModGenericDamage(110));
         new WeaponModDefinition(ModGeneric.FERRO_DURA).addMod(ferroGuns, new WeaponModGenericDurability(111));
 
-        /* Technetiumstahl passt an die Minigun. */
-        Item[] tcalloyGuns = new Item[] { NtmItems.GUN_MINIGUN.get() };
+        /* Technetiumstahl passt an die Minigun und die Teslakanone. */
+        Item[] tcalloyGuns = new Item[] {
+                NtmItems.GUN_MINIGUN.get(),
+                NtmItems.GUN_TESLA_CANNON.get() };
         new WeaponModDefinition(ModGeneric.TCALLOY_DAMAGE).addMod(tcalloyGuns, new WeaponModGenericDamage(112));
         new WeaponModDefinition(ModGeneric.TCALLOY_DURA).addMod(tcalloyGuns, new WeaponModGenericDurability(113));
 
-        /* Die Legierung des grossen Berges passt an die StG 77. */
-        Item[] bigmtGuns = new Item[] { NtmItems.GUN_STG77.get() };
+        /* Die Legierung des grossen Berges passt an die beiden Laserpistolen und die StG 77.
+         * Die Morning Glory steht auch im Original nicht dabei. */
+        Item[] bigmtGuns = new Item[] {
+                NtmItems.GUN_LASER_PISTOL.get(), NtmItems.GUN_LASER_PISTOL_PEW_PEW.get(),
+                NtmItems.GUN_STG77.get() };
         new WeaponModDefinition(ModGeneric.BIGMT_DAMAGE).addMod(bigmtGuns, new WeaponModGenericDamage(114));
         new WeaponModDefinition(ModGeneric.BIGMT_DURA).addMod(bigmtGuns, new WeaponModGenericDurability(115));
+
+        /* Wismutbronze passt an das Lasergewehr -- an nichts sonst, im Original wie hier. */
+        Item[] bronzeGuns = new Item[] { NtmItems.GUN_LASRIFLE.get() };
+        new WeaponModDefinition(ModGeneric.BRONZE_DAMAGE).addMod(bronzeGuns, new WeaponModGenericDamage(116));
+        new WeaponModDefinition(ModGeneric.BRONZE_DURA).addMod(bronzeGuns, new WeaponModGenericDurability(117));
 
         /* Der Schalldaempfer: er macht die Waffe leiser und benennt sie um. */
         new WeaponModDefinition(ModSpecial.SILENCER)

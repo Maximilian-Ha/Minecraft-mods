@@ -34,6 +34,7 @@ public class GunFactoryClient {
         registerGunItemRenderer(event, new ItemRenderNI4NI(), NtmItems.GUN_N_I_4_N_I.get());
         registerGunItemRenderer(event, new ItemRenderHenry(ResourceManager.HENRY_TEX), NtmItems.GUN_HENRY.get());
         registerGunItemRenderer(event, new ItemRenderDrill(), NtmItems.GUN_DRILL.get());
+        registerGunItemRenderer(event, new ItemRenderTeslaCannon(), NtmItems.GUN_TESLA_CANNON.get());
         registerGunItemRenderer(event, new ItemRenderChemthrower(), NtmItems.GUN_CHEMTHROWER.get());
         registerGunItemRenderer(event, new ItemRenderLaserPistol(ResourceManager.LASER_PISTOL_TEX), NtmItems.GUN_LASER_PISTOL.get());
         registerGunItemRenderer(event, new ItemRenderLaserPistol(ResourceManager.LASER_PISTOL_PEW_PEW_TEX), NtmItems.GUN_LASER_PISTOL_PEW_PEW.get());
@@ -119,6 +120,10 @@ public class GunFactoryClient {
 
         for(BulletConfig schredder : XFactory12ga.SCHREDDER_STRAHLEN) schredder.setRendererBeam(LegoClient.RENDER_SHREDDER);
         XFactoryAccelerator.ni4ni_arc.setRendererBeam(LegoClient.RENDER_NI4NI_BOLT);
+        XFactoryEnergy.energy_tesla.setRendererBeam(LegoClient.RENDER_LIGHTNING);
+        XFactoryEnergy.energy_tesla_overcharge.setRendererBeam(LegoClient.RENDER_LIGHTNING);
+        XFactoryEnergy.energy_tesla_ir.setRendererBeam(LegoClient.RENDER_LIGHTNING);
+        XFactoryEnergy.energy_tesla_ir_sub.setRendererBeam(LegoClient.RENDER_LIGHTNING_SUB);
         XFactoryEnergy.energy_las.setRendererBeam(LegoClient.RENDER_LASER_RED);
         XFactoryEnergy.energy_las_overcharge.setRendererBeam(LegoClient.RENDER_LASER_RED);
         XFactoryEnergy.energy_las_ir.setRendererBeam(LegoClient.RENDER_LASER_RED);
@@ -131,6 +136,7 @@ public class GunFactoryClient {
         ((GunBaseNTItem) NtmItems.GUN_MARESLEG.get())					.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_HENRY.get())						.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_DRILL.get())						.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
+        ((GunBaseNTItem) NtmItems.GUN_TESLA_CANNON.get())				.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_CHEMTHROWER.get())				.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_LASER_PISTOL.get())				.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_LASER_PISTOL_PEW_PEW.get())		.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);

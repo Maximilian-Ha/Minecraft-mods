@@ -5,6 +5,7 @@ import com.hbm.entity.grenade.GrenadeUniversal;
 import com.hbm.entity.projectile.BulletBaseMK4;
 import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.explosion.vanillant.ExplosionVNT;
+import com.hbm.explosion.vanillant.standard.PlayerProcessorStandard;
 import com.hbm.explosion.vanillant.standard.BlockAllocatorStandard;
 import com.hbm.explosion.vanillant.standard.BlockMutatorFire;
 import com.hbm.explosion.vanillant.standard.BlockProcessorStandard;
@@ -17,6 +18,7 @@ import com.hbm.items.weapon.grenade.GrenadeShellItem.GrenadeShell;
 import com.hbm.items.weapon.sedna.BulletConfig;
 import com.hbm.items.weapon.sedna.factory.Lego;
 import com.hbm.network.toclient.AuxParticle;
+import com.hbm.particle.helper.PlasmaBlastCreator;
 import com.hbm.registry.NtmSoundEvents;
 import com.hbm.saveddata.satellite.SatelliteDetector;
 import com.hbm.saveddata.satellite.SatelliteDetector.BurstIntensity;
@@ -133,15 +135,17 @@ public class GrenadeFillingItem extends EnumMultiItem {
     /**
      * Die Abbruchfuellung. Sie ist die einzige, die wirklich Bloecke herausreisst.
      *
-     * ABWEICHUNG: das Original setzt hier einen PlayerProcessorStandard, der dem Spieler eigene
-     * Regeln fuer Schaden und Rueckstoss gibt. Der fehlt im Port; ohne ihn behandelt die
-     * Explosion den Spieler wie jedes andere Wesen. Das gilt fuer alle Fuellungen hier.
+     * Der PlayerProcessorStandard steht seit Runde 189 an jeder Fuellung hier, so wie im
+     * Original. Ohne ihn behielt der Spieler bei jeder dieser Explosionen seine Bewegung --
+     * nicht weil er anders behandelt worden waere, sondern weil sein Rechner die vom Server
+     * gesetzte Geschwindigkeit verwirft, wenn sie ihm niemand schickt.
      */
     public static final Consumer<GrenadeUniversal> EXPLODE_DEMO = (granate) -> {
         new ExplosionVNT(granate.level, granate.getX(), granate.getY(), granate.getZ(), 5F, granate.getOwner())
                 .setBlockAllocator(new BlockAllocatorStandard())
                 .setBlockProcessor(new BlockProcessorStandard())
                 .setEntityProcessor(new EntityProcessorCrossSmooth(1, 10F))
+                .setPlayerProcessor(new PlayerProcessorStandard())
                 .setSFX(new ExplosionEffectWeapon(10, 2.5F, 1F))
                 .explode();
     };
@@ -188,15 +192,16 @@ public class GrenadeFillingItem extends EnumMultiItem {
     }
 
     public static final Consumer<GrenadeUniversal> EXPLODE_EMP = (granate) -> {
-        energieExplosion(granate, 15F, 3F, DamageClass.ELECTRIC);
+        energieExplosion(granate, 15F, 3F, DamageClass.ELECTRIC, 0.5F, 0.5F, 1F, 3F);
         ExplosionNukeGeneric.empBlast(granate.level, BlockPos.containing(granate.position()), 5);
     };
 
-    public static final Consumer<GrenadeUniversal> EXPLODE_PLASMA = (granate) -> energieExplosion(granate, 50F, 5F, DamageClass.PLASMA);
+    public static final Consumer<GrenadeUniversal> EXPLODE_PLASMA = (granate) -> energieExplosion(granate, 50F, 5F, DamageClass.PLASMA, 0.5F, 1F, 0.5F, 4F);
 
     public static final Consumer<GrenadeUniversal> EXPLODE_NUKE = (granate) -> {
         new ExplosionVNT(granate.level, granate.getX(), granate.getY(), granate.getZ(), 10F, granate.getOwner())
                 .setEntityProcessor(new EntityProcessorCrossSmooth(2, 100).withRangeMod(1.5F))
+                .setPlayerProcessor(new PlayerProcessorStandard())
                 .explode();
         ExplosionNukeGeneric.incrementRad(granate.level, granate.getX(), granate.getY(), granate.getZ(), 1F);
         pilz(granate);
@@ -207,6 +212,7 @@ public class GrenadeFillingItem extends EnumMultiItem {
                 .setBlockAllocator(new BlockAllocatorStandard(64))
                 .setBlockProcessor(new BlockProcessorStandard().withBlockEffect(new BlockMutatorFire()))
                 .setEntityProcessor(new EntityProcessorCrossSmooth(2, 50).withRangeMod(1.5F))
+                .setPlayerProcessor(new PlayerProcessorStandard())
                 .explode();
         ExplosionNukeGeneric.incrementRad(granate.level, granate.getX(), granate.getY(), granate.getZ(), 1.5F);
         pilz(granate);
@@ -235,23 +241,31 @@ public class GrenadeFillingItem extends EnumMultiItem {
 
     /**
      * EMP- und Plasmafuellung. Sie reissen keine Bloecke heraus und machen keinen Rauch --
-     * nur einen Schlag und zwei Toene.
+     * nur einen Schlag, zwei Toene und drei Schockfaecher.
      *
-     * ABWEICHUNG: das Original zeichnet dazu drei "plasmablast"-Partikelfaecher. Diese
-     * Partikelart hat der Port nicht.
+     * RUNDE 189 VERVOLLSTAENDIGT. Bis dahin fehlten drei Dinge, und alle drei standen als
+     * "hat der Port nicht" im Kommentar, obwohl sie nur nicht verdrahtet waren: der
+     * Spielerverarbeiter (die Schnittstelle lag im Baum, ExplosionVNT rief sie nie auf), der
+     * Ufo-Schlag (der Ton kam mit der Teslakanone) und die drei "plasmablast"-Faecher (die
+     * Partikelklasse lag ebenfalls im Baum, ohne Erzeuger). Die Farbe unterscheidet die
+     * beiden Fuellungen: EMP blau, Plasma gruen.
      */
-    private static void energieExplosion(GrenadeUniversal granate, float schaden, float reichweite, DamageClass art) {
+    private static void energieExplosion(GrenadeUniversal granate, float schaden, float reichweite, DamageClass art,
+                                         float r, float g, float b, float faecherGroesse) {
 
         Level level = granate.level;
         Vec3 pos = granate.position();
 
         new ExplosionVNT(level, pos.x, pos.y, pos.z, reichweite, granate.getOwner())
                 .setEntityProcessor(new EntityProcessorCrossSmooth(1, schaden).setDamageClass(art))
+                .setPlayerProcessor(new PlayerProcessorStandard())
                 .explode();
 
-        /* ABWEICHUNG: das Original legt hier zwei Toene uebereinander, den Ufo-Schlag und den
-         * Feuerwerksknall. Den Ufo-Schlag hat der Port nicht; der Knall bleibt. */
+        level.playSound(null, pos.x, pos.y, pos.z, NtmSoundEvents.GUN_TESLA_BLAST.get(), SoundSource.BLOCKS,
+                5.0F, 0.9F + level.random.nextFloat() * 0.2F);
         level.playSound(null, pos.x, pos.y, pos.z, SoundEvents.FIREWORK_ROCKET_BLAST, SoundSource.BLOCKS, 5.0F, 0.5F);
+
+        PlasmaBlastCreator.composeEffectTriple(level, pos.x, pos.y + 0.125, pos.z, r, g, b, faecherGroesse);
     }
 
     public static final BiConsumer<BulletBaseMK4, HitResult> LAMBDA_TINY_EXPLODE = (geschoss, treffer) -> {
@@ -273,6 +287,7 @@ public class GrenadeFillingItem extends EnumMultiItem {
     public static void standardExplode(GrenadeUniversal granate, float reichweite, float schaden, float dt, float dr) {
         new ExplosionVNT(granate.level, granate.getX(), granate.getY(), granate.getZ(), reichweite, granate.getOwner())
                 .setEntityProcessor(new EntityProcessorCrossSmooth(1, schaden).setupPiercing(dt, dr))
+                .setPlayerProcessor(new PlayerProcessorStandard())
                 .setSFX(new ExplosionEffectWeapon(10, 2.5F, 1F))
                 .explode();
     }
@@ -280,6 +295,7 @@ public class GrenadeFillingItem extends EnumMultiItem {
     public static void tinyExplode(GrenadeUniversal granate, float reichweite, float schaden) {
         new ExplosionVNT(granate.level, granate.getX(), granate.getY(), granate.getZ(), reichweite, granate.getOwner())
                 .setEntityProcessor(new EntityProcessorCrossSmooth(0.5, schaden).setKnockback(0.25D))
+                .setPlayerProcessor(new PlayerProcessorStandard())
                 .setSFX(new ExplosionEffectTiny())
                 .explode();
     }

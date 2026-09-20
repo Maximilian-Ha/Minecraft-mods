@@ -8446,3 +8446,95 @@ schiefging, und wächst mit jedem weiteren Fall. Gegengemessen in beide Richtung
 
 Alle 35 Tore grün.
 
+
+## Runde 189 — Die Teslakanone, und vier Dinge, die es längst gab
+
+Die Teslakanone schließt `XFactoryEnergy` ab. Sie ist die einzige Waffe des Ports, die **kein
+Magazin hat**: `MagazineBelt` frisst unmittelbar aus dem Rucksack, und welche der drei
+Kondensatorarten gerade läuft, entscheidet sich Schuss für Schuss neu. Wer die Munition
+wechseln will, wirft die alte weg.
+
+Das sieht man ihr an. Der Bus `COUNT` ihrer Bewegungsvorschrift trägt keine Bewegung, sondern
+eine **Zahl** — wie viele Kondensatoren im Rucksack liegen —, und der Zeichner steckt so viele
+auf das Zahnrad, höchstens acht. Beim Schuss dreht sich das Zahnrad um 22,5 Grad weiter, und
+die aufgesteckten Kondensatoren mit. Obendrauf sitzt ein Yomi-Plüschtier, das beim Begutachten
+quietscht.
+
+Der gewöhnliche und der überladene Kondensator schlagen als kleine Explosion ein. Der
+**Brandkondensator** bleibt im getroffenen Wesen stecken und springt von dort auf *jedes*
+Lebewesen im Umkreis von zwanzig Blöcken weiter — jeder Sprung ein eigener Strahl mit halbem
+Schaden, der wiederum trifft.
+
+### Beim Bauen fiel auf, dass drei Bausteine schon im Baum lagen
+
+Die Runde davor hatte die Teslakanone mit der Begründung zurückgestellt, ihr fehlten
+Spielerverarbeiter und Partikelpaket. **Beides stimmte nicht.**
+
+**Erstens der Spielerverarbeiter.** `IPlayerProcessor` lag seit jeher im Baum, aber
+`ExplosionVNT.explode()` hat ihn nie aufgerufen: es sammelte die getroffenen Spieler ein und
+ließ sie dann liegen. Damit hat **keine Explosion dieser Bauart je einen Spieler
+zurückgeworfen** — nicht weil der Spieler anders behandelt worden wäre, sondern weil sein
+Rechner die vom Server gesetzte Geschwindigkeit verwirft, wenn sie ihm niemand schickt.
+
+Nachgemessen: das Original setzt den Verarbeiter an **55 seiner 65** Explosionen. Im Port sind
+es jetzt **30** — überall dort, wo die Explosion eine Entsprechung im Original hat, die ihn
+setzt. Die zehn Ausnahmen des Originals (Semtex, Sprengknete, Förderwagen, Flugzeug, Torpedo,
+die beiden Abläufe, der Fluidtank) bleiben auch hier ohne. Betroffen sind unter anderem **alle
+Sprenggeschosse** (`Lego.standardExplode`/`tinyExplode`), alle Granatenfüllungen, alle Minen,
+die Raketen und der Orbitallaser.
+
+*Abweichung:* das Original verschickt dafür ein eigenes Paket (`ExplosionKnockbackPacket`). In
+1.21 tut es das Bordmittel `ClientboundSetEntityMotionPacket`.
+
+**Zweitens das Partikelpaket.** `PlasmaBlastParticle` war vollständig geschrieben, samt
+Textur — und **niemand hat je eine erzeugt**: kein Verteilereintrag, kein Aufrufer. An drei
+Stellen stand im Kommentar, diese Partikelart habe der Port nicht. Das war nie wahr. Mit
+`PlasmaBlastCreator` hängt sie jetzt am Verteiler und wird an allen vier Stellen des Originals
+gezogen: Teslaeinschlag, EMP- und Plasmagranate, Schredderstrahl und Schreddersplitter.
+
+**Drittens der Ufo-Schlag.** Der Ton kam mit der Teslakanone; die Energiegranaten hatten ihn
+im Original schon immer und im Port bis hierher nicht.
+
+### Zwei erfundene Bewegungsvorschriften, berichtigt
+
+`LAMBDA_LASER_PISTOL` und `LAMBDA_LASRIFLE` waren in Runde 187 **nicht übertragen, sondern
+erfunden**. Sie sahen plausibel aus und waren falsch: die Laserpistole klappt beim Nachladen
+einen Riegel auf, hebt den Lauf, rüttelt die Batterie heraus und schiebt eine neue ein
+(`LATCH`/`LIFT`/`JOLT`/`BATTERY`); das Lasergewehr arbeitet mit Hebel und Magazin
+(`LEVER`/`MAG`/`EQUIP`). Beiden fehlten außerdem die Zweige für Klemmen und Begutachten ganz.
+
+Das ist jetzt Zeile für Zeile das Original — und weil die Bewegungen fehlten, fehlten auch die
+dazugehörigen Töne: `ORCHESTRA_LASER_PISTOL` bekommt seinen `JAMMED`-Block, `ORCHESTRA_LASRIFLE`
+seine `INSPECT`- und `JAMMED`-Blöcke.
+
+### Die acht Werkstofflisten, nachgemessen
+
+`XWeaponModManager` ordnet jeder Waffe zu, welcher Werkstoffaufsatz an sie passt. Diese Listen
+waren seit Runde 118 nicht mehr mit dem gewachsenen Waffenbestand abgeglichen worden.
+**Vierzehn Waffen, die es im Port längst gibt, standen in keiner** — an ihnen ließ sich kein
+Aufsatz anbringen, obwohl das Original ihn vorsieht: die beiden Henry, die Leuchtpistole, der
+Liberator, der Congo Lake, die beiden ersten Flammenwerfer, der schwere Revolver, die
+Panzerschreck, die MK 108, der Chemiewerfer, die beiden Flinten und die beiden Laserpistolen.
+
+Der schwerste Fall war die **Bronzeliste: sie fehlte ganz.** `BRONZE_DAMAGE` und `BRONZE_DURA`
+hatten damit überhaupt keinen Eintrag — zwei Aufsätze mit Rezept, die sich bauen ließen und an
+keiner einzigen Waffe etwas taten. Genau der Fehler, der in Runde 187 schon einmal bei
+`SPEEDLOADER`, `CHOKE` und `STACK_MAG` stand.
+
+Nicht dabei, weil die Waffe im Port fehlt: `gun_quadro`, `gun_lag`, `gun_missile_launcher`,
+`gun_fatman`, `gun_tau`.
+
+### Abweichungen
+
+* Der Blitz wird gezeichnet wie jeder andere Strahl hier — dunkler Kern, heller Saum. Das
+  Original legt drei gewellte Schläuche übereinander (`BeamPronter`, `EnumWaveType.RANDOM`);
+  den gibt es im Port nicht. Die Kernfarbe ist die des Originals, der Saum nimmt die Farbe,
+  die derselbe Einschlag seinen Schockfächern mitgibt.
+* `setupModTable` ist nicht übernommen — der Waffentisch des Ports zeigt statt der Waffe ihr
+  Gegenstandsbild, wie bei allen übrigen Waffen.
+
+**36 von 46 Bauplänen.** Der Bauplan der Teslakanone ist wortgetreu der des Originals: drei
+Kupferspulen als Kranz, Lauf und Verschluss aus Technetiumstahl oder Chromdioxid, darunter
+Mechanik, Griff und die Militärplatine.
+
+Alle 35 Tore grün.
