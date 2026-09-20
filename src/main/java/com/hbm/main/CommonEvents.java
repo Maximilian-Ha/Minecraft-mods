@@ -65,6 +65,7 @@ import com.hbm.util.DamageResistanceHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -80,7 +81,9 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -420,16 +423,22 @@ public class CommonEvents {
          * prueft dafuer eigens, ob der Erfolg schon steht (ModEventHandler.java:1168) -- sonst
          * waere ein Gneisbruch eine Erfahrungsmuehle. Auf 1.21 steht dieselbe Auskunft im
          * Fortschrittsblatt des Spielers.
+         *
+         * DIE ERFAHRUNG WIRD GELEGT, NICHT GESETZT. BlockEvent.BreakEvent hatte in Forge ein
+         * setExpToDrop; NeoForge hat es auf 1.21 herausgenommen und der Erfahrung ein eigenes
+         * Ereignis gegeben (BlockDropsEvent.setDroppedExperience). Fuer eine feste Zahl
+         * genuegt ExperienceOrb.award -- dasselbe Ergebnis, ein Ereignis weniger.
          */
         if(!level.isClientSide && event.getState().is(NtmBlocks.STONE_GNEISS.get())
-                && event.getPlayer() instanceof ServerPlayer spieler) {
+                && event.getPlayer() instanceof ServerPlayer spieler
+                && level instanceof ServerLevel serverLevel) {
 
             AdvancementHolder erfolg = spieler.server.getAdvancements()
                     .get(NuclearTechMod.withDefaultNamespace("stratum"));
 
             if(erfolg == null || !spieler.getAdvancements().getOrStartProgress(erfolg).isDone()) {
                 NtmCriteria.marke(spieler, "stratum");
-                event.setExpToDrop(500);
+                ExperienceOrb.award(serverLevel, Vec3.atCenterOf(pos), 500);
             }
         }
 
