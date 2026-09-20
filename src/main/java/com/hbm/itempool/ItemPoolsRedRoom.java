@@ -18,16 +18,16 @@ import net.minecraft.world.level.Level;
  * steinernen Zimmers, die Tafel des Ziegelzimmers und dessen vier Beisockel.
  *
  * DER ERSTE VORRAT IST FAST VOLLSTAENDIG, und was fehlt, steht hier statt im Verborgenen.
- * Von den fuenfundzwanzig Eintraegen des Originals stehen seit Runde 241 dreiundzwanzig;
- * ZWEI Gegenstaende gibt es im Port nicht -- gemessen ueber den Registriernamen, nicht
- * ueber den Feldnamen:
+ * Von den fuenfundzwanzig Eintraegen des Originals stehen seit Runde 243 vierundzwanzig;
+ * EIN Gegenstand fehlt noch -- gemessen ueber den Registriernamen, nicht ueber den
+ * Feldnamen:
  *
- *   starmetal_sword, flask_infusion
+ *   flask_infusion
  *
- * Die zehn Ruestungsaufsaetze, die bis Runde 240 gefehlt haben, sind nachgekommen und mit
- * ihren Gewichten aus dem Original eingetragen. Die Gewichte der uebrigen bleiben, wie sie
- * sind: sie umzurechnen, damit die Summe wieder stimmt, waere eine Erfindung, und sobald
- * die zwei nachkommen, muesste man zweimal umrechnen. Was fehlt, fehlt sichtbar.
+ * Runde 241 hat die zehn Ruestungsaufsaetze nachgereicht, Runde 243 das Sternmetallschwert;
+ * beide mit ihren Gewichten aus dem Original. Das Gewicht des letzten bleibt, wie es ist:
+ * die uebrigen umzurechnen, damit die Summe stimmt, waere eine Erfindung. Was fehlt, fehlt
+ * sichtbar.
  *
  * DER ZWEITE VORRAT stand in Runde 233 noch leer da: er besteht im Original aus einem
  * einzigen Eintrag, der Tontafel, und die kam erst in Runde 234. Jetzt ist er vollstaendig.
@@ -60,6 +60,7 @@ public class ItemPoolsRedRoom {
                 .add(NtmItems.SCRUMPY.get(), 1, 1, 10)
 
                 .add(NtmItems.WILD_P.get(), 1, 1, 5)
+                .add(NtmItems.STARMETAL_SWORD.get(), 1, 1, 5)
                 .add(NtmItems.CARD_AOS.get(), 1, 1, 5)
                 .add(NtmItems.CARD_QOS.get(), 1, 1, 5)
                 .add(NtmItems.GEM_ALEXANDRITE.get(), 1, 1, 5)

@@ -1,5 +1,8 @@
 package com.hbm.handler.ability;
 
+import com.hbm.blocks.NtmBlocks;
+import com.hbm.blocks.generic.BobbleBlock.BobbleType;
+import com.hbm.inventory.MetaHelper;
 import com.hbm.lib.ModEffect;
 import com.hbm.util.ContaminationUtil;
 import net.minecraft.core.component.DataComponents;
@@ -247,7 +250,41 @@ public interface IWeaponAbility extends IBaseAbility {
         }
     };
 
-    IWeaponAbility[] abilities = { NONE, RADIATION, VAMPIRE, STUN, PHOSPHORUS, FIRE, /*CHAINSAW,*/ BEHEADER, /*BOBBLE*/ };
+    /**
+     * Portiert aus 1.7.10, Runde 243. Der Wackelkopf: ein erschlagenes Ungeheuer laesst mit
+     * kleiner Wahrscheinlichkeit einen fallen.
+     *
+     * DIE ZAHLEN SIND DIE DES ORIGINALS: eins zu tausend, und eins zu siebenhundertfuenfzig,
+     * wenn das Ungeheuer mehr als zwanzig Lebenspunkte hat -- also ein staerkeres Ungeheuer
+     * etwas eher. Gezogen wird aus den Metadaten eins bis (Anzahl - 1); die Null bleibt aus,
+     * weil sie im Original der leere Sockel ist.
+     */
+    IWeaponAbility BOBBLE = new IWeaponAbility() {
+        @Override
+        public String getName() {
+            return "weapon.ability.bobble";
+        }
+
+        @Override
+        public int sortOrder() {
+            return SORT_ORDER_BASE + 9;
+        }
+
+        @Override
+        public void onHit(int lvl, Level level, Player player, Entity victim, Item tool) {
+
+            if(!(victim instanceof Monster ungeheuer) || ungeheuer.getHealth() > 0.0F) return;
+
+            int chance = ungeheuer.getMaxHealth() > 20 ? 750 : 1000;
+
+            if(level.random.nextInt(chance) != 0) return;
+
+            int meta = level.random.nextInt(BobbleType.values().length - 1) + 1;
+            ungeheuer.spawnAtLocation(MetaHelper.newStack(NtmBlocks.BOBBLEHEAD.get(), meta), 0.0F);
+        }
+    };
+
+    IWeaponAbility[] abilities = { NONE, RADIATION, VAMPIRE, STUN, PHOSPHORUS, FIRE, /*CHAINSAW,*/ BEHEADER, BOBBLE };
 
     static IWeaponAbility getByName(String name) {
         for(IWeaponAbility ability : abilities) {

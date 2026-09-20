@@ -1127,6 +1127,15 @@ public class NtmItemModelProvider extends ItemModelProvider {
         /* Das Original nimmt fuer die Schrotkugeln die Textur der Bleikugeln. */
         this.basicCustomLayerItem(NtmItems.PELLET_BUCKSHOT.get(), "pellets_lead");
         this.basicItem(NtmItems.COIN_MASKMAN.get());
+        this.handheldItem(NtmItems.STEEL_SWORD.get());
+        this.handheldItem(NtmItems.TITANIUM_SWORD.get());
+        this.handheldItem(NtmItems.DESH_SWORD.get());
+        this.handheldItem(NtmItems.COBALT_SWORD.get());
+        this.handheldItem(NtmItems.COBALT_DECORATED_SWORD.get());
+        this.handheldItem(NtmItems.CMB_SWORD.get());
+        this.handheldItem(NtmItems.STARMETAL_SWORD.get());
+        this.handheldItem(NtmItems.SCHRABIDIUM_SWORD.get());
+        this.handheldItem(NtmItems.DNT_SWORD.get());
         this.handheldItem(NtmItems.STEEL_PICKAXE.get());
         this.handheldItem(NtmItems.STEEL_AXE.get());
         this.handheldItem(NtmItems.STEEL_SHOVEL.get());

@@ -11384,3 +11384,80 @@ Das Muster ist jetzt `new \w+\(\s*ToolType\.X` -- der Klassenname spielt keine R
 Gemessen: im ganzen Baum gibt es fünf Stellen dieser Form, und alle fünf sind
 Gegenstandsanmeldungen; das breitere Muster fängt nichts Falsches ein. Gegenprobe: nimmt
 man dem Entschärfer seine Sorte wieder, meldet das Tor ihn sofort.
+
+### Runde 243: die Schwertfamilie — acht Materialien hatten je vier Werkzeuge und kein Schwert
+
+**Gemessen: das Original hat 25 Gegenstände mit `sword` im Registriernamen. Keiner davon
+war im Port angemeldet.** `SwordAbilityItem` steht seit der Werkzeugrunde in
+`items/tools/` -- eine vollständige Klasse mit Fähigkeitenliste, Trefferbehandlung und
+Hinweistext, die **kein einziger Gegenstand benutzte**. Kein Tor hat das gesehen: sie
+zählen Blöcke ohne Blockentität, Werkzeugsorten ohne Träger und Sprachschlüssel ohne
+Namenszeile, aber keine Item-Klasse ohne Anmeldung.
+
+Sichtbar wurde es von unten: `starmetal_sword` ist eines der beiden letzten fehlenden
+Beutestücke des Roten Zimmers. Die Frage „warum fehlt das eine Schwert" war die falsche --
+es fehlten alle.
+
+#### Der Schnitt
+
+| Material | Werkzeuge im Port | Schwert |
+|---|---|---|
+| Stahl, Titan, Desh, Kobalt, verzierter Kobalt, CMB, Sternmetall, Schrabidium | je 4 | fehlte |
+| Mese (`TOOL_ZERO_POWER`) | Spitzhacke | fehlte |
+| Legierung, Elektrik | keine | — |
+
+Acht Materialien standen mit **genau vier** Werkzeugen da -- Spitzhacke, Axt, Schaufel,
+Hacke -- und das fünfte fehlte durchweg. Neun Schwerter schließen diese Lücke, mit den
+Schadenswerten und Fähigkeiten des Originals:
+
+`steel` 6F (STUN), `titanium` 6.5F, `desh` 12.5F (STUN), `cobalt` 12F,
+`cobalt_decorated` 15F (BOBBLE), `cmb` 35F (STUN, VAMPIRE), `starmetal` 25F (BEHEADER,
+STUN 1, BOBBLE), `schrabidium` 75F (RADIATION 1, VAMPIRE, selten), `dnt` 12F.
+
+`alloy_sword` und `elec_sword` bleiben: deren Materialien haben im Port **überhaupt keine**
+Werkzeuge, und das Elektroschwert braucht zusätzlich das Energiewerkzeug. `big_sword` und
+`redstone_sword` sind eigene Klassen. Die elf Meteoritenschwert-Stufen sind ein eigenes
+System (Amboss-Aufwertung) und gehören nicht in dieselbe Runde.
+
+#### Die Angriffsgeschwindigkeit kennt das Original nicht
+
+1.7.10 hat keine: jeder Gegenstand schlägt gleich schnell. Der Port muss eine Zahl setzen
+und nimmt `-2.4F`, den Wert, den Vanilla jedem Schwert gibt -- die Werkzeuge nehmen aus
+demselben Grund `-2.8F`, den Wert der Vanilla-Werkzeuge. Die Alternative wäre gewesen, eine
+Zahl zu erfinden.
+
+#### Die neunte Fähigkeit
+
+`IWeaponAbility` hatte `/*CHAINSAW,*/` und `/*BOBBLE*/` auskommentiert in seiner Liste
+stehen -- zurückgestellt, nicht vergessen. `BOBBLE` kommt jetzt nach, weil der Wackelkopf
+seit der Blockrunde da ist: ein erschlagenes Ungeheuer lässt mit einer Wahrscheinlichkeit
+von eins zu tausend einen fallen, bei mehr als zwanzig Lebenspunkten eins zu
+siebenhundertfünfzig. Der Sprachschlüssel `weapon.ability.bobble` („Luck of the
+Collector") lag seit Runden bereit. `CHAINSAW` bleibt aus: die Kettensäge ist nicht
+portiert.
+
+Der Sockel des Roten Zimmers steht damit bei **24 von 25** Einträgen. Was noch fehlt, ist
+`flask_infusion` -- `ItemFlask` mit `EnumInfusion.SHIELD`; das Schildsystem dafür steht
+bereits in `HbmPlayerAttachments` (`maxShield`, `shieldCap`).
+
+#### CI-Fix zu Runde 242: `ItemTags.MUSIC_DISCS` gibt es nicht
+
+Der erste Durchgang von Runde 242 ist an **einem** Fehler gescheitert -- nicht am
+Zugriffstransformer, der einwandfrei durchging, sondern an der Zutat des Rezepts:
+
+```
+NtmRecipeProvider.java:5267: error: cannot find symbol
+                .define('R', ItemTags.MUSIC_DISCS)
+```
+
+Der Datentag `minecraft:music_discs` existiert, aber **Vanilla führt ihn nur als
+Datendatei, nicht als Feld in `ItemTags`** -- der Quelltext referenziert ihn nirgends,
+also gibt es keine Konstante dafür. Der Port geht jetzt denselben Weg wie beim
+RBMK-Moderator: `ItemTags.create(ResourceLocation…)`.
+
+**Dafür lässt sich kein Tor bauen, und das ist der ehrliche Befund.** Die Tore laufen
+ohne Minecraft auf der Platte -- `maven.neoforged.net` ist hier nicht erreichbar, alles
+Übersetzen geschieht in der CI. Ein Tor kann nicht wissen, welche Felder `ItemTags`
+führt. Was es stattdessen gibt: der Serverlauf der CI zählt `/ERROR]`-Zeilen, und ein
+Rezept mit unbekanntem Tag erzeugt eine. Der Weg über `create` ist also nicht stiller als
+der über ein Feld -- er scheitert nur später und lauter statt früher.

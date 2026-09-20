@@ -814,6 +814,15 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("weapon.ability.fire", "Flaming");
         this.add("weapon.ability.bobble", "Luck of the Collector");
         this.add("weapon.ability.chainsaw", "Painsaw");
+        this.add(NtmItems.STEEL_SWORD, "Steel Sword");
+        this.add(NtmItems.TITANIUM_SWORD, "Titanium Sword");
+        this.add(NtmItems.DESH_SWORD, "Desh Sword");
+        this.add(NtmItems.COBALT_SWORD, "Cobalt Sword");
+        this.add(NtmItems.COBALT_DECORATED_SWORD, "Decorated Cobalt Sword");
+        this.add(NtmItems.CMB_SWORD, "CMB Steel Sword");
+        this.add(NtmItems.STARMETAL_SWORD, "Starmetal Sword");
+        this.add(NtmItems.SCHRABIDIUM_SWORD, "Schrabidium Sword");
+        this.add(NtmItems.DNT_SWORD, "dinuatureum sword");
         this.add(NtmItems.STEEL_PICKAXE, "Steel Pickaxe");
         this.add(NtmItems.STEEL_AXE, "Steel Axe");
         this.add(NtmItems.STEEL_SHOVEL, "Steel Shovel");

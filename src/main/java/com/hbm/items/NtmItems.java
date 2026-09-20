@@ -1197,16 +1197,21 @@ public class NtmItems {
 
     // Tools
     public static final DeferredItem<Item> BALEFIRE_AND_STEEL = ITEMS.register("balefire_and_steel", () -> new BalefireAndSteelItem(new Item.Properties().stacksTo(1).durability(256)));
+    public static final DeferredItem<Item> STEEL_SWORD = registerSword("steel_sword", NtmTiers.TOOL_STEEL, 6F,
+            sword -> sword.addAbility(IWeaponAbility.STUN, 0));
     public static final DeferredItem<Item> STEEL_PICKAXE = registerPickaxe("steel_pickaxe", NtmTiers.TOOL_STEEL, 4, -2.8F, tool -> tool.addAbility(IToolAreaAbility.RECURSION, 0));
     public static final DeferredItem<Item> STEEL_AXE = registerAxe("steel_axe", NtmTiers.TOOL_STEEL, 5.0F, -2.8F, tool -> tool.addAbility(IToolAreaAbility.RECURSION, 0).addAbility(IWeaponAbility.BEHEADER, 0));
     public static final DeferredItem<Item> STEEL_SHOVEL = registerShovel("steel_shovel", NtmTiers.TOOL_STEEL, 3.0F, -2.8F, tool -> tool.addAbility(IToolAreaAbility.RECURSION, 0));
     public static final DeferredItem<Item> STEEL_HOE = registerHoe("steel_hoe", NtmTiers.TOOL_STEEL, 0, -2.8F);
 
+    public static final DeferredItem<Item> TITANIUM_SWORD = registerSword("titanium_sword", NtmTiers.TOOL_TITANIUM, 6.5F);
     public static final DeferredItem<Item> TITANIUM_PICKAXE = registerPickaxe("titanium_pickaxe", NtmTiers.TOOL_TITANIUM, 4, -2.8F);
     public static final DeferredItem<Item> TITANIUM_AXE = registerAxe("titanium_axe", NtmTiers.TOOL_TITANIUM, 5.5F, -2.8F);
     public static final DeferredItem<Item> TITANIUM_SHOVEL = registerShovel("titanium_shovel", NtmTiers.TOOL_TITANIUM, 3.5F, -2.8F);
     public static final DeferredItem<Item> TITANIUM_HOE = registerHoe("titanium_hoe", NtmTiers.TOOL_TITANIUM, 0, -2.8F);
 
+    public static final DeferredItem<Item> DESH_SWORD = registerSword("desh_sword", NtmTiers.TOOL_DESH, 12.5F,
+            sword -> sword.addAbility(IWeaponAbility.STUN, 0));
     public static final DeferredItem<Item> DESH_PICKAXE = registerPickaxe("desh_pickaxe", NtmTiers.TOOL_DESH, 5, -2.8F,
             tool -> tool.addAbility(IToolAreaAbility.RECURSION, 0).addAbility(IToolAreaAbility.HAMMER, 0).addAbility(IToolAreaAbility.HAMMER_FLAT, 0).addAbility(IToolHarvestAbility.SILK, 0).addAbility(IToolHarvestAbility.LUCK, 1));
     public static final DeferredItem<Item> DESH_AXE = registerAxe("desh_axe", NtmTiers.TOOL_DESH, 6.5F, -2.8F,
@@ -1215,6 +1220,7 @@ public class NtmItems {
             tool -> tool.addAbility(IToolAreaAbility.RECURSION, 0).addAbility(IToolAreaAbility.HAMMER, 0).addAbility(IToolAreaAbility.HAMMER_FLAT, 0).addAbility(IToolHarvestAbility.SILK, 0).addAbility(IToolHarvestAbility.LUCK, 1));
     public static final DeferredItem<Item> DESH_HOE = registerHoe("desh_hoe", NtmTiers.TOOL_DESH, 0, -2.8F);
 
+    public static final DeferredItem<Item> COBALT_SWORD = registerSword("cobalt_sword", NtmTiers.TOOL_COBALT, 12F);
     public static final DeferredItem<Item> COBALT_PICKAXE = registerPickaxe("cobalt_pickaxe", NtmTiers.TOOL_COBALT, 4, -2.8F,
             tool -> tool.addAbility(IToolAreaAbility.RECURSION, 1).addAbility(IToolHarvestAbility.SILK, 0).addAbility(IToolHarvestAbility.LUCK, 0));
     public static final DeferredItem<Item> COBALT_AXE = registerAxe("cobalt_axe", NtmTiers.TOOL_COBALT, 6.0F, -2.8F,
@@ -1223,6 +1229,8 @@ public class NtmItems {
             tool -> tool.addAbility(IToolAreaAbility.RECURSION, 1).addAbility(IToolHarvestAbility.SILK, 0).addAbility(IToolHarvestAbility.LUCK, 0));
     public static final DeferredItem<Item> COBALT_HOE = registerHoe("cobalt_hoe", NtmTiers.TOOL_COBALT, 0, -2.8F);
 
+    public static final DeferredItem<Item> COBALT_DECORATED_SWORD = registerSword("cobalt_decorated_sword", NtmTiers.TOOL_DECORATED_COBALT, 15F,
+            sword -> sword.addAbility(IWeaponAbility.BOBBLE, 0));
     public static final DeferredItem<Item> COBALT_DECORATED_PICKAXE = registerPickaxe("cobalt_decorated_pickaxe", NtmTiers.TOOL_DECORATED_COBALT, 6, -2.8F,
             tool -> tool.addAbility(IToolAreaAbility.RECURSION, 1).addAbility(IToolAreaAbility.HAMMER, 0).addAbility(IToolAreaAbility.HAMMER_FLAT, 0).addAbility(IToolHarvestAbility.SILK, 0).addAbility(IToolHarvestAbility.LUCK, 2));
     public static final DeferredItem<Item> COBALT_DECORATED_AXE = registerAxe("cobalt_decorated_axe", NtmTiers.TOOL_DECORATED_COBALT, 8.0F, -2.8F,
@@ -1231,6 +1239,8 @@ public class NtmItems {
             tool -> tool.addAbility(IToolAreaAbility.RECURSION, 1).addAbility(IToolAreaAbility.HAMMER, 0).addAbility(IToolAreaAbility.HAMMER_FLAT, 0).addAbility(IToolHarvestAbility.SILK, 0).addAbility(IToolHarvestAbility.LUCK, 2));
     public static final DeferredItem<Item> COBALT_DECORATED_HOE = registerHoe("cobalt_decorated_hoe", NtmTiers.TOOL_DECORATED_COBALT, 0, -2.8F);
 
+    public static final DeferredItem<Item> CMB_SWORD = registerSword("cmb_sword", NtmTiers.TOOL_CMB, 35F,
+            sword -> sword.addAbility(IWeaponAbility.STUN, 0).addAbility(IWeaponAbility.VAMPIRE, 0));
     public static final DeferredItem<Item> CMB_PICKAXE = registerPickaxe("cmb_pickaxe", NtmTiers.TOOL_CMB, 10, -2.8F,
             tool -> tool.addAbility(IToolAreaAbility.RECURSION, 2).addAbility(IToolHarvestAbility.SMELTER, 0).addAbility(IToolHarvestAbility.SILK, 0).addAbility(IToolHarvestAbility.LUCK, 2));
     public static final DeferredItem<Item> CMB_AXE = registerAxe("cmb_axe", NtmTiers.TOOL_CMB, 30.0F, -2.8F,
@@ -1244,6 +1254,8 @@ public class NtmItems {
     public static final DeferredItem<Item> BISMUTH_AXE = registerAxe("bismuth_axe", NtmTiers.TOOL_BISMUTH, 25.0F, -2.8F,
             tool -> tool.addAbility(IToolAreaAbility.HAMMER, 1).addAbility(IToolAreaAbility.HAMMER_FLAT, 1).addAbility(IToolAreaAbility.RECURSION, 1).addAbility(IToolHarvestAbility.SHREDDER, 0).addAbility(IToolHarvestAbility.LUCK, 1).addAbility(IToolHarvestAbility.SILK, 0).addAbility(IWeaponAbility.STUN, 3).addAbility(IWeaponAbility.VAMPIRE, 1).addAbility(IWeaponAbility.BEHEADER, 0));
 
+    public static final DeferredItem<Item> STARMETAL_SWORD = registerSword("starmetal_sword", NtmTiers.TOOL_STARMETAL, 25F,
+            sword -> sword.addAbility(IWeaponAbility.BEHEADER, 0).addAbility(IWeaponAbility.STUN, 1).addAbility(IWeaponAbility.BOBBLE, 0));
     public static final DeferredItem<Item> STARMETAL_PICKAXE = registerPickaxe("starmetal_pickaxe", NtmTiers.TOOL_STARMETAL, 8, -2.8F,
             tool -> tool.addAbility(IToolAreaAbility.RECURSION, 3).addAbility(IToolAreaAbility.HAMMER, 1).addAbility(IToolAreaAbility.HAMMER_FLAT, 1).addAbility(IToolHarvestAbility.SILK, 0).addAbility(IToolHarvestAbility.LUCK, 4).addAbility(IWeaponAbility.STUN, 1));
     public static final DeferredItem<Item> STARMETAL_AXE = registerAxe("starmetal_axe", NtmTiers.TOOL_STARMETAL, 12.0F, -2.8F,
@@ -1252,6 +1264,8 @@ public class NtmItems {
             tool -> tool.addAbility(IToolAreaAbility.RECURSION, 3).addAbility(IToolAreaAbility.HAMMER, 1).addAbility(IToolAreaAbility.HAMMER_FLAT, 1).addAbility(IToolHarvestAbility.SILK, 0).addAbility(IToolHarvestAbility.LUCK, 4).addAbility(IWeaponAbility.STUN, 1));
     public static final DeferredItem<Item> STARMETAL_HOE = registerHoe("starmetal_hoe", NtmTiers.TOOL_STARMETAL, 0, -2.8F);
 
+    public static final DeferredItem<Item> SCHRABIDIUM_SWORD = registerSword("schrabidium_sword", NtmTiers.TOOL_SCHRABIDIUM, 75F, Rarity.RARE,
+            sword -> sword.addAbility(IWeaponAbility.RADIATION, 1).addAbility(IWeaponAbility.VAMPIRE, 0));
     public static final DeferredItem<Item> SCHRABIDIUM_PICKAXE = registerPickaxe("schrabidium_pickaxe", NtmTiers.TOOL_SCHRABIDIUM, 20, -2.8F, Rarity.RARE,
             tool -> tool.addAbility(IWeaponAbility.RADIATION, 0).addAbility(IToolAreaAbility.RECURSION, 6).addAbility(IToolAreaAbility.HAMMER, 1).addAbility(IToolAreaAbility.HAMMER_FLAT, 1).addAbility(IToolHarvestAbility.SILK, 0).addAbility(IToolHarvestAbility.LUCK, 4).addAbility(IToolHarvestAbility.SMELTER, 0).addAbility(IToolHarvestAbility.SHREDDER, 0));
     public static final DeferredItem<Item> SCHRABIDIUM_AXE = registerAxe("schrabidium_axe", NtmTiers.TOOL_SCHRABIDIUM, 25.0F, -2.8F, Rarity.RARE,
@@ -1260,6 +1274,9 @@ public class NtmItems {
             tool -> tool.addAbility(IWeaponAbility.RADIATION, 0).addAbility(IToolAreaAbility.RECURSION, 6).addAbility(IToolAreaAbility.HAMMER, 1).addAbility(IToolAreaAbility.HAMMER_FLAT, 1).addAbility(IToolHarvestAbility.SILK, 0).addAbility(IToolHarvestAbility.LUCK, 4).addAbility(IToolHarvestAbility.SMELTER, 0).addAbility(IToolHarvestAbility.SHREDDER, 0));
     public static final DeferredItem<Item> SCHRABIDIUM_HOE = registerHoe("schrabidium_hoe", NtmTiers.TOOL_SCHRABIDIUM, 0, -2.8F, Rarity.RARE);
 
+    /* Das Original nennt es dnt_sword und baut es aus matMese -- derselben Stufe, die der
+     * Port TOOL_ZERO_POWER nennt und der die Mese-Spitzhacke darunter schon folgt. */
+    public static final DeferredItem<Item> DNT_SWORD = registerSword("dnt_sword", NtmTiers.TOOL_ZERO_POWER, 12F);
     public static final DeferredItem<Item> MESE_PICKAXE = registerPickaxe("mese_pickaxe", NtmTiers.TOOL_ZERO_POWER, 35, -2.8F,
             tool -> tool.addAbility(IToolAreaAbility.HAMMER, 2).addAbility(IToolAreaAbility.HAMMER_FLAT, 2).addAbility(IToolAreaAbility.RECURSION, 2).addAbility(IToolHarvestAbility.CRYSTALLIZER, 0).addAbility(IToolHarvestAbility.SILK, 0).addAbility(IToolHarvestAbility.LUCK, 5).addAbility(IToolAreaAbility.EXPLOSION, 3).addAbility(IWeaponAbility.STUN, 3).addAbility(IWeaponAbility.PHOSPHORUS, 0).addAbility(IWeaponAbility.BEHEADER, 0).setDepthRockBreaker());
     public static final DeferredItem<Item> MESE_AXE = registerAxe("mese_axe", NtmTiers.TOOL_ZERO_POWER, 75.0F, -2.8F,
@@ -2426,6 +2443,36 @@ public class NtmItems {
     private static DeferredItem<Item> registerNugget(String name) {
         return ITEMS.register(name, () -> new Item(new Item.Properties()));
     }
+
+    /**
+     * Die Schwerter, Runde 243. Dasselbe Muster wie registerPickaxe: der Schadenswert ist
+     * der des Originals, unveraendert durchgereicht, und SwordAbilityItem zaehlt den
+     * Materialbonus selbst dazu -- genau wie PickaxeItem.createAttributes es tut.
+     *
+     * DIE ANGRIFFSGESCHWINDIGKEIT KENNT DAS ORIGINAL NICHT. 1.7.10 hat keine; jeder
+     * Gegenstand schlaegt gleich schnell. Der Port setzt hier -2.4F, den Wert, den Vanilla
+     * jedem Schwert gibt -- die Werkzeuge nehmen aus demselben Grund -2.8F, den Wert der
+     * Vanilla-Werkzeuge. Eine Zahl zu erfinden waere die Alternative gewesen.
+     */
+    private static DeferredItem<Item> registerSword(String name, Tier tier, float damage) {
+        return registerSword(name, tier, damage, Rarity.COMMON, sword -> {});
+    }
+
+    private static DeferredItem<Item> registerSword(String name, Tier tier, float damage, Consumer<SwordAbilityItem> configure) {
+        return registerSword(name, tier, damage, Rarity.COMMON, configure);
+    }
+
+    private static DeferredItem<Item> registerSword(String name, Tier tier, float damage, Rarity rarity, Consumer<SwordAbilityItem> configure) {
+        return ITEMS.register(name, () -> {
+            SwordAbilityItem item = new SwordAbilityItem(
+                    new Item.Properties().stacksTo(1).durability(tier.getUses()).rarity(rarity), tier, damage, SCHWERTTEMPO);
+            configure.accept(item);
+            return item;
+        });
+    }
+
+    /** Vanillas Angriffsgeschwindigkeit fuer Schwerter. Siehe registerSword. */
+    private static final float SCHWERTTEMPO = -2.4F;
 
     private static DeferredItem<Item> registerPickaxe(String name, Tier tier, int damage, float speed) {
         return registerPickaxe(name, tier, damage, speed, Rarity.COMMON, tool -> {});

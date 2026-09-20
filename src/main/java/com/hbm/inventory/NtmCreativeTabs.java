@@ -2161,6 +2161,15 @@ public class NtmCreativeTabs {
 
                         addMetaItems(output, NtmItems.BOMB_CALLER.get());
 
+                        output.accept(NtmItems.STEEL_SWORD);
+                        output.accept(NtmItems.TITANIUM_SWORD);
+                        output.accept(NtmItems.DESH_SWORD);
+                        output.accept(NtmItems.COBALT_SWORD);
+                        output.accept(NtmItems.COBALT_DECORATED_SWORD);
+                        output.accept(NtmItems.CMB_SWORD);
+                        output.accept(NtmItems.STARMETAL_SWORD);
+                        output.accept(NtmItems.SCHRABIDIUM_SWORD);
+                        output.accept(NtmItems.DNT_SWORD);
                         output.accept(NtmItems.STEEL_PICKAXE);
                         output.accept(NtmItems.STEEL_AXE);
                         output.accept(NtmItems.STEEL_SHOVEL);
