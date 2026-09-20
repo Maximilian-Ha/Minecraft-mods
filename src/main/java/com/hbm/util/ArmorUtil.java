@@ -68,6 +68,11 @@ public class ArmorUtil {
                 NtmItems.AJRO_HELMET.get(), NtmItems.AJRO_PLATE.get(), NtmItems.AJRO_LEGS.get(), NtmItems.AJRO_BOOTS.get() }) {
             ArmorRegistry.registerHazard(teil, FULL_PACKAGE);
         }
+
+        /* Die Taurun-Ruestung ebenso -- auch sie traegt im Original FULL_PACKAGE. */
+        for(Item teil : new Item[] { NtmItems.TAURUN_HELMET.get(), NtmItems.TAURUN_PLATE.get(), NtmItems.TAURUN_LEGS.get(), NtmItems.TAURUN_BOOTS.get() }) {
+            ArmorRegistry.registerHazard(teil, FULL_PACKAGE);
+        }
     }
 
     /**

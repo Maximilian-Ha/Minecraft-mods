@@ -425,6 +425,11 @@ public class ResourceManager {
     public static final ResourceLocation AJRO_ARM = NuclearTechMod.withDefaultNamespace("textures/armor/ajro_arm.png");
     public static final ResourceLocation AJRO_LEG = NuclearTechMod.withDefaultNamespace("textures/armor/ajro_leg.png");
 
+    public static final ResourceLocation TAURUN_HELMET = NuclearTechMod.withDefaultNamespace("textures/armor/taurun_helmet.png");
+    public static final ResourceLocation TAURUN_CHEST = NuclearTechMod.withDefaultNamespace("textures/armor/taurun_chest.png");
+    public static final ResourceLocation TAURUN_ARM = NuclearTechMod.withDefaultNamespace("textures/armor/taurun_arm.png");
+    public static final ResourceLocation TAURUN_LEG = NuclearTechMod.withDefaultNamespace("textures/armor/taurun_leg.png");
+
     /** Die Aschebrille -- im Original heisst die Datei ebenso. */
     public static final ResourceLocation ARMOR_GOGGLES = NuclearTechMod.withDefaultNamespace("textures/armor/goggles.png");
     public static final ResourceLocation HEV_LEG = NuclearTechMod.withDefaultNamespace("textures/armor/hev_leg.png");
@@ -797,6 +802,7 @@ public class ResourceManager {
     public static IModelCustom armor_goggles;
     public static IModelCustom armor_t51;
     public static IModelCustom armor_ajr;
+    public static IModelCustom armor_taurun;
 
     public static IObjRenderer sphere;
     public static IModelCustom sphere_new;
@@ -1113,6 +1119,7 @@ public class ResourceManager {
         armor_goggles = new HFRWavefrontObject("models/obj/armor/goggles.obj").asVBO();
         armor_t51 = new HFRWavefrontObject("models/obj/armor/t51.obj").asVBO();
         armor_ajr = new HFRWavefrontObject("models/obj/armor/ajr.obj").asVBO();
+        armor_taurun = new HFRWavefrontObject("models/obj/armor/taurun.obj").asVBO();
 
         sphere = new HFRWavefrontObject("models/obj/sphere.obj").getRenderer();
         sphere_new = new HFRWavefrontObject("models/obj/sphere_new.obj").asVBO();

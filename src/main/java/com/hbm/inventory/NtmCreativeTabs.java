@@ -2034,6 +2034,10 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.AJRO_PLATE);
                         output.accept(NtmItems.AJRO_LEGS);
                         output.accept(NtmItems.AJRO_BOOTS);
+                        output.accept(NtmItems.TAURUN_HELMET);
+                        output.accept(NtmItems.TAURUN_PLATE);
+                        output.accept(NtmItems.TAURUN_LEGS);
+                        output.accept(NtmItems.TAURUN_BOOTS);
                         output.accept(NtmItems.MASK_RAG);
                         output.accept(NtmItems.MASK_PISS);
                         output.accept(NtmItems.GAS_MASK_FILTER);

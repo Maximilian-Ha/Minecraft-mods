@@ -117,6 +117,14 @@ public class HazmatRegistry {
         HazmatRegistry.registerHazmat(NtmItems.AJRO_LEGS.get(), ajr * legs);
         HazmatRegistry.registerHazmat(NtmItems.AJRO_BOOTS.get(), ajr * boots);
 
+        /* Die Taurun-Ruestung haelt nur ein Viertel der Strahlung ab -- setRadResist(0.125)
+         * im Original, der niedrigste Wert aller Wellenfront-Ruestungen. */
+        double taurun = 0.125D;     // 25%
+        HazmatRegistry.registerHazmat(NtmItems.TAURUN_HELMET.get(), taurun * helmet);
+        HazmatRegistry.registerHazmat(NtmItems.TAURUN_PLATE.get(), taurun * chest);
+        HazmatRegistry.registerHazmat(NtmItems.TAURUN_LEGS.get(), taurun * legs);
+        HazmatRegistry.registerHazmat(NtmItems.TAURUN_BOOTS.get(), taurun * boots);
+
         /* Euphemium: Faktor 10, im Original mit dem Vermerk "<100%" -- der Satz haelt viel
          * ab, aber nicht alles. */
         double euph = 10D;

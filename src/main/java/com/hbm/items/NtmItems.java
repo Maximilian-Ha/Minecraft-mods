@@ -25,6 +25,7 @@ import com.hbm.items.armor.ArmorRPAItem;
 import com.hbm.items.armor.ArmorAJRItem;
 import com.hbm.items.armor.ArmorEuphemiumItem;
 import com.hbm.items.armor.ArmorT51Item;
+import com.hbm.items.armor.ArmorTaurunItem;
 import com.hbm.items.armor.ArmorHEVItem;
 import com.hbm.items.armor.ArmorNo9;
 import com.hbm.items.armor.FilterItem;
@@ -1711,6 +1712,16 @@ public class NtmItems {
     public static final DeferredItem<Item> AJRO_LEGS = ITEMS.register("ajro_legs", () -> ajr(ArmorItem.Type.LEGGINGS, true));
     public static final DeferredItem<Item> AJRO_BOOTS = ITEMS.register("ajro_boots", () -> ajr(ArmorItem.Type.BOOTS, true));
 
+    /*
+     * DIE TAURUN-RUESTUNG. Beute, keine Bauruestung: der Untote Soldat traegt sie, und sie
+     * liegt in den Beutetoepfen der Halde. Staerke I fuer den Satz, voller Gefahrenschutz,
+     * ein Viertel der Strahlung abgehalten -- und ohne Haltbarkeit, siehe ArmorTaurunItem.
+     */
+    public static final DeferredItem<Item> TAURUN_HELMET = ITEMS.register("taurun_helmet", () -> taurun(ArmorItem.Type.HELMET));
+    public static final DeferredItem<Item> TAURUN_PLATE = ITEMS.register("taurun_plate", () -> taurun(ArmorItem.Type.CHESTPLATE));
+    public static final DeferredItem<Item> TAURUN_LEGS = ITEMS.register("taurun_legs", () -> taurun(ArmorItem.Type.LEGGINGS));
+    public static final DeferredItem<Item> TAURUN_BOOTS = ITEMS.register("taurun_boots", () -> taurun(ArmorItem.Type.BOOTS));
+
     public static final DeferredItem<Item> HEV_HELMET = ITEMS.register("hev_helmet", () -> hev(ArmorItem.Type.HELMET));
     public static final DeferredItem<Item> HEV_PLATE = ITEMS.register("hev_plate", () -> hev(ArmorItem.Type.CHESTPLATE));
     public static final DeferredItem<Item> HEV_LEGS = ITEMS.register("hev_legs", () -> hev(ArmorItem.Type.LEGGINGS));
@@ -1775,6 +1786,12 @@ public class NtmItems {
                 .addEffect(new MobEffectInstance(MobEffects.JUMP, 20, 0))
                 .addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20, 0))
                 .setHasGeigerSound(true);
+    }
+
+    /** Die Taurun-Ruestung. Ohne durability(...), weil das Original setMaxDamage(0) setzt. */
+    private static ArmorFSBItem taurun(ArmorItem.Type type) {
+        return new ArmorTaurunItem(NtmArmorMaterials.TAURUN, type, new Item.Properties().stacksTo(1))
+                .addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20, 0));
     }
 
     private static ArmorFSBItem hev(ArmorItem.Type type) {

@@ -10072,3 +10072,55 @@ Ding ist schlimmer als keiner; beide stehen wieder bei dem, was sie beschreiben.
 Nach dieser Runde sind **38** Rüstungsnamen offen.
 
 Alle 39 Tore grün.
+
+## Runde 217 — Die Taurun-Rüstung, und ein Satz ohne Bauplan
+
+Vier Namen, und zum ersten Mal in dieser Reihe eine Garnitur, die im Original **kein einziges
+Werkbankrezept** hat. Das ist keine Lücke: die Taurun-Rüstung ist Beute. Der Untote Soldat
+trägt sie (`EntityUndeadSoldier`), und sie liegt in den Beutetöpfen der Halde
+(`ItemPoolsPile`). Dazu passt, dass ihr Konstruktor `setMaxDamage(0)` setzt — sie geht nie
+kaputt, weil man sie nicht nachbauen kann.
+
+Der Port gibt ihr deshalb keine Haltbarkeit statt einer, die nie sinkt. Gleiches Ergebnis am
+Spieler, und der Grund steht in der Klasse.
+
+### Was sie kann
+
+| | |
+|---|---|
+| Schutz | `{3, 8, 6, 3}`, Verzauberbarkeit 10, Reparatur mit der Eisenplatte |
+| Wirkung | Stärke I für den Satz |
+| Gefahren | `FULL_PACKAGE` |
+| Strahlung | 25 % — der niedrigste Wert aller Wellenfront-Rüstungen |
+| Haltbarkeit | keine |
+
+### Die Beine stehen einen Hauch auseinander
+
+Das Original schiebt vor dem linken Bein um −0,01 und vor dem rechten um +0,01 Welteinheiten
+zur Seite, damit die Hälften nicht ineinander flimmern; dasselbe bei den Stiefeln. Im Port
+zählt ein Drehpunkt in Sechzehnteln einer Welteinheit, also sind das ±0,16 — derselbe
+Versatz, andere Einheit. Umgerechnet statt geschätzt, und die Rechnung steht im Modell.
+
+### Nicht übernommen
+
+`setStepSize(1)` und `hides(EnumPlayerPart.HAT)`. Eine Schritthöhe kennt der Port an Rüstung
+nirgends (nachgemessen: kein einziges Vorkommen), das Ausblenden von Spielerteilen ebenso
+wenig. Beides wäre ein Schalter, den niemand liest.
+
+### Ein Namensdoppel im Original
+
+`aMatTaurun` und `aMatTrench` werden beide als `"HBM_TRENCH"` angelegt. Im Port bekommt jeder
+Werkstoff seinen eigenen Namen; festgehalten, weil es beim Grabenmeister wieder auffallen
+wird.
+
+### Wismut ist gemessen, aber blockiert
+
+Die Wismut-Garnitur wäre die nächste kleine gewesen. Ihre Brustplatte braucht
+`laser_crystal_bismuth`, und die ganze FEL-Kristallfamilie fehlt dem Port noch. Der Kristall
+ist **nicht** unerreichbar — er hat ein eigenes Werkbankrezept (`CraftingManager` Z. 341:
+Quarzglas, Uranbarren, Thorium-232, Wismutnugget, seltener Kristall) —, aber er ist ein
+eigener Gegenstand und gehört in seine eigene Runde, nicht als Beifang in diese.
+
+Nach dieser Runde sind **34** Rüstungsnamen offen.
+
+Alle 39 Tore grün.

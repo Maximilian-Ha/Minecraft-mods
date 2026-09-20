@@ -111,6 +111,16 @@ public class NtmArmorMaterials {
      */
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> EUPHEMIUM = register("euphemium", "euphemium", 100, 3, 8, 6, 3, () -> Ingredient.EMPTY);
 
+    /*
+     * Taurun. Im Original heisst der Werkstoff "HBM_TRENCH" -- denselben Namen traegt auch
+     * der des Grabenmeisters ein paar Zeilen weiter; im Port bekommt jeder seinen eigenen.
+     * {3, 8, 6, 3}, Verzauberbarkeit 10, Reparatur mit der Eisenplatte. Ein
+     * Haltbarkeitsfaktor steht zwar im Original, bleibt aber ohne Wirkung: der Konstruktor
+     * setzt setMaxDamage(0). Gezeichnet wird sie als Wellenfrontmodell, die Schicht bleibt
+     * unsichtbar.
+     */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> TAURUN = register("taurun", LAYER_INVISIBLE, 10, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.PLATE_IRON.get()));
+
     public static final int DURABILITY_T51 = 150;
     public static final int DURABILITY_ASBESTOS = 20;
     public static final int DURABILITY_CMB = 60;
