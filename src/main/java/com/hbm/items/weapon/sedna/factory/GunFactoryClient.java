@@ -35,6 +35,7 @@ public class GunFactoryClient {
         registerGunItemRenderer(event, new ItemRenderHenry(ResourceManager.HENRY_TEX), NtmItems.GUN_HENRY.get());
         registerGunItemRenderer(event, new ItemRenderDrill(), NtmItems.GUN_DRILL.get());
         registerGunItemRenderer(event, new ItemRenderTeslaCannon(), NtmItems.GUN_TESLA_CANNON.get());
+        registerGunItemRenderer(event, new ItemRenderFolly(), NtmItems.GUN_FOLLY.get());
         registerGunItemRenderer(event, new ItemRenderChemthrower(), NtmItems.GUN_CHEMTHROWER.get());
         registerGunItemRenderer(event, new ItemRenderLaserPistol(ResourceManager.LASER_PISTOL_TEX), NtmItems.GUN_LASER_PISTOL.get());
         registerGunItemRenderer(event, new ItemRenderLaserPistol(ResourceManager.LASER_PISTOL_PEW_PEW_TEX), NtmItems.GUN_LASER_PISTOL_PEW_PEW.get());
@@ -137,6 +138,7 @@ public class GunFactoryClient {
         ((GunBaseNTItem) NtmItems.GUN_HENRY.get())						.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_DRILL.get())						.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_TESLA_CANNON.get())				.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
+        ((GunBaseNTItem) NtmItems.GUN_FOLLY.get())						.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_CHEMTHROWER.get())				.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_LASER_PISTOL.get())				.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_LASER_PISTOL_PEW_PEW.get())		.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);

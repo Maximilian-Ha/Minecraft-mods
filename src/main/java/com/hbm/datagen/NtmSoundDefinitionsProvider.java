@@ -105,6 +105,15 @@ public class NtmSoundDefinitionsProvider extends SoundDefinitionsProvider {
         this.add(NtmSoundEvents.GUN_TESLA_FIRE, SoundDefinition.definition()
                 .with(sound(NuclearTechMod.withDefaultNamespace("weapon/fire/tesla")))
         );
+        this.add(NtmSoundEvents.GUN_FOLLY_FIRE, SoundDefinition.definition()
+                .with(sound(NuclearTechMod.withDefaultNamespace("weapon/fire/loudestnoiseonearth")))
+        );
+        this.add(NtmSoundEvents.GUN_SCREW, SoundDefinition.definition()
+                .with(sound(NuclearTechMod.withDefaultNamespace("weapon/reload/screw")))
+        );
+        this.add(NtmSoundEvents.GUN_ROCKET_INSERT, SoundDefinition.definition()
+                .with(sound(NuclearTechMod.withDefaultNamespace("weapon/reload/insertrocket")))
+        );
         this.add(NtmSoundEvents.GUN_TESLA_BLAST, SoundDefinition.definition()
                 .with(sound(NuclearTechMod.withDefaultNamespace("entity/ufoblast")))
         );

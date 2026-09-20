@@ -1372,6 +1372,7 @@ public class NtmItems {
     public static DeferredItem<Item> GUN_HENRY;
     public static DeferredItem<Item> GUN_DRILL;
     public static DeferredItem<Item> GUN_TESLA_CANNON;
+    public static DeferredItem<Item> GUN_FOLLY;
     public static DeferredItem<Item> GUN_LASER_PISTOL;
     public static DeferredItem<Item> GUN_LASER_PISTOL_PEW_PEW;
     public static DeferredItem<Item> GUN_LASER_PISTOL_MORNING_GLORY;

@@ -8538,3 +8538,61 @@ Kupferspulen als Kranz, Lauf und Verschluss aus Technetiumstahl oder Chromdioxid
 Mechanik, Griff und die Militärplatine.
 
 Alle 35 Tore grün.
+
+## Runde 190 — Die Folly, und noch eine Behauptung, die nicht stimmte
+
+`XFactoryFolly` stand in der Restliste mit der Begründung, ihr fehlten
+`EntityNukeExplosionMK5` und `EntityNukeTorex`. **Nachgemessen: beides ist da** —
+`com.hbm.entity.logic.NukeExplosionMK5` mit `statFac`, und `NukeTorexCreator` mit
+`statFacStandard`. Ebenso vorhanden waren `AmmoSecret.FOLLY_SM`/`FOLLY_NUKE` samt Texturen,
+`setChunkloading`, `setSpectral`, `Crosshair.NONE`, `GunAnimation.SPINUP`, `GunConfig.pt`,
+`Receiver.dryfire`, `WeaponQuality.SECRET` und `MagazineSingleReload`. Es fehlte nichts außer
+der Fabrik selbst.
+
+Das ist die zweite Runde in Folge, in der eine Zurückstellung sich als Irrtum erweist. Beide
+Male lag die Ursache im selben: die Begründung wurde beim Schreiben geprüft und danach nie
+wieder, während der Port darunter weiterwuchs.
+
+### Der SM-Strahl ist kein Strahl
+
+Er tastet nicht ab wie die Laser, er **fährt**: ein spektrales Geschoss mit Schwerkraft, das im
+zweiten Tick über seine volle Länge eine drei mal drei Blöcke dicke Röhre aus der Welt löscht
+und alles darin erschlägt (100 Punkte Durchschlag, 99 % Panzerbruch). Deshalb steht die ganze
+Wirkung in `setOnUpdate` und nicht in einem Einschlaghaken. Der Schütze zahlt mit 150 Punkten
+Strahlung — dieselbe Dosis, die das Original verlangt.
+
+Bis zum fünfzigsten Tick wandert dabei ein Schockfächer die Flugbahn entlang und wird immer
+größer. Genau der Fächer, der in Runde 189 erst erzeugbar geworden ist.
+
+Der Atomkopf ist dagegen schlicht: Kernexplosion der Stärke 100 samt Pilz.
+
+### Zielen ist ein eigener Zustand
+
+Die Folly schießt nicht aus der Hüfte. Die mittlere Maustaste schaltet das Zielen um, dabei
+läuft die `SPINUP`-Bewegung an — und `LAMBDA_CAN_FIRE` verlangt, dass sie die letzte Bewegung
+war und mindestens **hundert Ticks** läuft. Vorher passiert gar nichts.
+
+Was in diesen fünf Sekunden geschieht, ist der eigentliche Witz der Waffe: auf dem Visier
+fährt ein Rechner hoch. Erst ein Selbsttest (`POST successful - Code 0`, `8,388,608 bytes of
+RAM installed`, `No keyboard found!`), dann zeichnet sich `VStarOS` Buchstabe für Buchstabe
+auf, und ab der fünften Sekunde zeigt das Gerät laufend Ziel und Winkel an. Das Fadenkreuz ist
+ebenfalls Schrift: ein `+`, oder `No ammo`.
+
+### Woher sie kommt — und woher nicht
+
+Im Original stammen Waffe und Munition ausschließlich aus dem **roten Raum**
+(`PedestalRecipes`, Vollmond-Bedingung). Den hat der Port nicht, also ist die Folly wie die
+übrigen Geheimwaffen des Ports (Aberrator, NI4NI) vorerst nur über den Kreativreiter zu
+bekommen. Das ist keine neue Lücke, sondern dieselbe, die der rote Raum überall reißt.
+
+### Abweichungen
+
+* **Der Jingle beim Hochfahren ist nicht übernommen.** Das Original spielt dazu einen eigenen
+  Tonschnipsel; die Datei liegt weder im Original noch in der CE-Abspaltung, das Feld zeigt
+  dort auf einen Namen ohne Datei.
+* Die Modelltextur heißt im Original `moonlight.png`. Der Port benennt sie nach der Waffe, wie
+  alle übrigen Waffentexturen.
+* `setupModTable` ist nicht übernommen — der Waffentisch des Ports zeigt statt der Waffe ihr
+  Gegenstandsbild.
+
+Alle 35 Tore grün.
