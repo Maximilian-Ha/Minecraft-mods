@@ -108,7 +108,7 @@ public class XFactoryEnergy {
         vnt.setPlayerProcessor(new PlayerProcessorStandard());
         vnt.explode();
 
-        SoundUtils.playAtVec3(level, ort, NtmSoundEvents.GUN_TESLA_BLAST.get(), SoundSource.BLOCKS,
+        SoundUtils.playAtVec3(level, ort, NtmSoundEvents.UFO_BLAST.get(), SoundSource.BLOCKS,
                 5.0F, 0.9F + level.random.nextFloat() * 0.2F);
         /* Der Feuerwerksknall geht unmittelbar ueber level.playSound, nicht ueber SoundUtils:
          * genau diese Form steht schon an der Energiegranate und uebersetzt. */

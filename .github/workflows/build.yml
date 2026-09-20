@@ -212,6 +212,13 @@ jobs:
           chmod +x ./tools/ctorarg-check.sh
           ./tools/ctorarg-check.sh
 
+      # Ein zweites register() mit demselben Namen uebersetzt sauber und wirft erst beim
+      # Hochfahren des Mods -- in CI vier Minuten spaeter, im runData-Schritt.
+      - name: Check duplicate registry names
+        run: |
+          chmod +x ./tools/dupreg-check.sh
+          ./tools/dupreg-check.sh
+
       - name: Check API usage
         run: |
           chmod +x ./tools/api-check.sh

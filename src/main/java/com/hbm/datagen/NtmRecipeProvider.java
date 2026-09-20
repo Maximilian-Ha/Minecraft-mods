@@ -4795,6 +4795,20 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_circuit", has(NtmItems.CIRCUIT_MILITARY_GRADE_BOARD.get()))
                 .save(recipeOutput);
 
+        /*
+         * Der Fatman. Saturnit durchweg -- im Original heisst das Material BIGMT, im Port
+         * MAT_SATURN. Der Griff ist als einziger aus hartem Kunststoff.
+         */
+        gun(NtmItems.GUN_FATMAN, "PPP", "BSR", "G M")
+                .define('P', NtmItems.PLATE_SATURNITE.get())
+                .define('B', heavyBarrel(Mats.MAT_SATURN))
+                .define('S', NtmItems.SHELL_SATURNITE.get())
+                .define('R', heavyReceiver(Mats.MAT_SATURN))
+                .define('G', anyHardPlasticGrip())
+                .define('M', mechanism(Mats.MAT_SATURN))
+                .unlockedBy("has_shell", has(NtmItems.SHELL_SATURNITE.get()))
+                .save(recipeOutput);
+
         gun(NtmItems.GUN_LAG, "BRM", "  G")
                 .define('B', anyResistantAlloyLightBarrel())
                 .define('R', anyResistantAlloyLightReceiver())

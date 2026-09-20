@@ -172,6 +172,23 @@ public class Orchestras {
      * Wache steht so im Original; bis Runde 202 fehlte sie hier, weil nur die NI4NI portiert
      * war und die Frage sich nicht stellte.
      */
+    /**
+     * Der Fatman. Ein einziger Ton, und der auch nur am Anfang des Nachladens: das Einlegen
+     * des Sprengkopfes. Das Original macht es genauso knapp -- der Abschuss selbst kommt
+     * ueber den Empfaenger, und einen Auswurf gibt es nicht, weil nichts ausgeworfen wird.
+     */
+    public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_FATMAN = (stack, ctx) -> {
+        LivingEntity entity = ctx.entity;
+        Level level = entity.level;
+        if(!(level instanceof ServerLevel)) return;
+        GunAnimation type = GunBaseNTItem.getLastAnim(stack, ctx.configIndex);
+        int timer = GunBaseNTItem.getAnimTimer(stack, ctx.configIndex);
+
+        if(type == GunAnimation.RELOAD) {
+            if(timer == 0) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_FATMAN_RELOAD.get(), entity.getSoundSource(), 1F, 1F);
+        }
+    };
+
     public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_COILGUN = (stack, ctx) -> {
         LivingEntity entity = ctx.entity;
         Level level = entity.level;

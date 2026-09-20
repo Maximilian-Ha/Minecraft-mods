@@ -72,7 +72,7 @@ public class GunFactory {
         XFactoryBlackPowder.init(itemRegistry);
         XFactory357.init(itemRegistry);
         XFactory22lr.init(itemRegistry);
-        XFactoryCatapult.init();
+        XFactoryCatapult.init(itemRegistry);
         XFactory50.init(itemRegistry);
         XFactory556mm.init(itemRegistry);
         XFactory762mm.init(itemRegistry);

@@ -51,9 +51,9 @@ import java.util.function.Consumer;
  * samt Eintrag in ORDER und damit im Kreativreiter. Es fehlten nur die BulletConfigs, die sie
  * an ein Verhalten binden.
  *
- * DIE SPULENKANONE kam in Runde 202 dazu. OFFEN BLEIBT DIE TAU-KANONE: sie hat ein Aufladewerk
- * -- der Zweitdruck laedt auf, der Erstdruck feuert, und ein aufgeladener Schuss kommt aus
- * einem zweiten, eigenen Magazin. Das ist eine eigene Runde.
+ * DIE SPULENKANONE kam in Runde 202 dazu, DIE TAU-KANONE in Runde 203: sie hat ein
+ * Aufladewerk -- der Zweitdruck laedt auf, der Erstdruck feuert, und ein aufgeladener Schuss
+ * kommt aus einem zweiten, eigenen Magazin. Alle drei Waffen stehen damit.
  *
  * DIE NI4NI IST EINE MUENZWAFFE. Sie hat unendlich Munition und keine Haltbarkeit; ihr Witz
  * liegt darin, dass der Zweitdruck eine Muenze in die Luft wirft und der Strahl an ihr

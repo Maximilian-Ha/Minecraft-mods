@@ -90,6 +90,7 @@ public class GunFactoryClient {
         registerGunItemRenderer(event, new ItemRenderLAG(), NtmItems.GUN_LAG.get());
         registerGunItemRenderer(event, new ItemRenderCoilgun(), NtmItems.GUN_COILGUN.get());
         registerGunItemRenderer(event, new ItemRenderTau(), NtmItems.GUN_TAU.get());
+        registerGunItemRenderer(event, new ItemRenderFatman(), NtmItems.GUN_FATMAN.get());
         registerGunItemRenderer(event, new ItemRenderMK108(), NtmItems.GUN_MK108.get());
         registerGunItemRenderer(event, new ItemRenderShredder(ResourceManager.SHREDDER_TEX), NtmItems.GUN_AUTOSHOTGUN.get());
         registerGunItemRenderer(event, new ItemRenderShredder(ResourceManager.SHREDDER_TEX), NtmItems.GUN_AUTOSHOTGUN_SHREDDER.get());
@@ -181,6 +182,7 @@ public class GunFactoryClient {
         ((GunBaseNTItem) NtmItems.GUN_LAG.get())					.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_COILGUN.get())				.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_TAU.get())					.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
+        ((GunBaseNTItem) NtmItems.GUN_FATMAN.get())				.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_GREASEGUN.get())				.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
     }
 

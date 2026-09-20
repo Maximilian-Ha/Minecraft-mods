@@ -48,7 +48,12 @@ public class NtmSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_CHARGE_FIRE = reg("weapon.fire.grenade");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SCREW = reg("weapon.reload.screw");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_ROCKET_INSERT = reg("weapon.reload.insert_rocket");
-    public static final DeferredHolder<SoundEvent, SoundEvent> GUN_TESLA_BLAST = reg("entity.ufo_blast");
+    /**
+     * Der Knall der Ueberladung -- im Original HBMSoundHandler.ufoBlast. Nicht nur die
+     * Teslakanone benutzt ihn: auch die Schockgranate und die ueberladene Tau-Kanone.
+     * Deshalb traegt das Feld den Namen des Klangs, nicht den einer Waffe.
+     */
+    public static final DeferredHolder<SoundEvent, SoundEvent> UFO_BLAST = reg("entity.ufo_blast");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_LASER_PISTOL_FIRE = reg("weapon.fire.laser_pistol");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_LASER_RIFLE_FIRE = reg("weapon.fire.laser");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_VALVE = reg("weapon.reload.pressure_valve");
@@ -101,8 +106,9 @@ public class NtmSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_TAU_FIRE = reg("weapon.fire.tau");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_TAU_LOOP = reg("weapon.fire.tau_loop");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_TAU_RELEASE = reg("weapon.fire.tau_release");
-    /** Der Knall der Ueberladung -- im Original HBMSoundHandler.ufoBlast. */
-    public static final DeferredHolder<SoundEvent, SoundEvent> UFO_BLAST = reg("entity.ufo_blast");
+    /* Der Fatman: der Abschuss und das Einlegen des Sprengkopfes. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> GUN_FATMAN_FIRE = reg("weapon.fire.fatman");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GUN_FATMAN_RELOAD = reg("weapon.reload.fatmanfull");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SWITCHMODE_1 = reg("weapon.switchmode1");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SWITCHMODE_2 = reg("weapon.switchmode2");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SILENCER_SHOOT = reg("weapon.fire.silencer_shoot");

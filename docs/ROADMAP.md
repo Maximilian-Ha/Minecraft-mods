@@ -9377,3 +9377,94 @@ Kreativreiter zu haben.
 **Damit ist `XFactoryAccelerator` vollständig** — Tau-Kanone, Spulenkanone und NI4NI.
 
 Alle 38 Tore grün.
+
+## Runde 204 — Der Fatman, und ein Name, den es zweimal gab
+
+Zwei Dinge in einer Runde: der **CI-Fix zu Runde 203**, der einen ganz neuen Fehlertyp
+aufdeckte, und **der Fatman** — die letzte Waffenlücke des Ports.
+
+### Der Fehler, den kein Tor sah
+
+Runde 203 war rot, und zwar nicht beim Übersetzen, sondern beim `runData`-Lauf:
+
+```
+Caused by: java.lang.IllegalArgumentException: Duplicate registration entity.ufo_blast
+    at com.hbm.registry.NtmSoundEvents.reg(NtmSoundEvents.java:283)
+    at com.hbm.registry.NtmSoundEvents.<clinit>(NtmSoundEvents.java:105)
+```
+
+Der Klang `entity.ufo_blast` stand zweimal da: seit der Teslakanone als `GUN_TESLA_BLAST`, und
+seit Runde 203 noch einmal als frisch angelegtes `UFO_BLAST` für die überladene Tau-Kanone. Ein
+`DeferredRegister` nimmt jeden Namen genau einmal; das zweite `register()` wirft aus dem
+statischen Anfangsblock heraus, **noch bevor der Mod hochfährt**.
+
+Für `javac` ist das unsichtbar — zwei Felder mit verschiedenen Bezeichnern, die zufällig
+dieselbe Zeichenkette weiterreichen, sind gültiges Java. Alle 38 Tore waren grün. Auch das
+Ton-Tor sah nichts, obwohl es genau diese Datei liest: es schreibt Feldname → Klangname in eine
+Abbildung, und zwei Felder auf denselben Namen fallen darin **lautlos zusammen**.
+
+Der Name ist jetzt einmal da und heißt nach dem Klang, nicht nach einer Waffe — drei Stellen
+benutzen ihn: Teslakanone, Schockgranate und die überladene Tau-Kanone.
+
+### Das 39. Tor: `dupreg-check.sh`
+
+Es liest alle `DeferredRegister`-Felder des Baums und sammelt jeden Namen, der bei ihnen
+ankommt — unmittelbar über `ANMELDER.register("name", …)` und über **Weiterreicher**: Methoden,
+deren erster Parameter ein String ist und die genau diesen Parameter weitergeben
+(`NtmBlocks.register`, `NtmSoundEvents.reg`, `NtmItems.registerPickaxe` und neun weitere). Ein
+Weiterreicher wird bei seiner *erklärenden Datei* geführt, nicht bei seinem bloßen Namen, sonst
+zieht irgendein `register(` im Baum Namen in ein Register, mit dem es nichts zu tun hat.
+
+`NtmBlocks.register` meldet in **zwei** Register an — den Block und seinen BlockItem. Beide
+Seiten werden geführt, damit auch ein Blockname auffällt, der mit einem Gegenstandsnamen
+zusammenfällt.
+
+**Gemessen:** 16 Anmelder, 12 Weiterreicher, 3346 Anmeldenamen, null Funde. Zwei Stellen kann
+das Tor nicht lesen — die Schleife in `NtmFluidBridge` über `Fluids.metaOrder` — und **es sagt
+sie am Ende selbst an**. Mit dem wieder eingesetzten zweiten `entity.ufo_blast`: genau ein Fund,
+an den beiden richtigen Zeilen.
+
+### Der Fatman
+
+`XFactoryCatapult` enthielt nur `cluster_submunition` — das Geschoss, das die Streumunition des
+Granatwerfers ausspuckt. Der Werfer selbst fehlte **ohne jede Begründung im Quelltext**.
+
+Die Munition gab es längst: `NtmItems.AMMO_STANDARD` ist ein `EnumMultiItem` über
+`GunFactory.Ammo`, und alle sechs `NUKE_`-Werte stehen dort samt Platz in `ORDER` und damit im
+Kreativreiter. Es fehlte nur das Sprengverhalten. Auch Modell (`fatman.obj`, sechs Teile) und
+alle drei Texturen lagen seit Runde 155 im Baum und in `ResourceManager`.
+
+**Die sechs Sprengköpfe** unterscheiden sich nur im Aufschlag, nicht im Flug:
+
+| Kopf | Wirkung |
+|---|---|
+| `NUKE_STANDARD` | Kugelblitz ohne Blockschaden, Strahlung über fünf mal fünf Chunks |
+| `NUKE_DEMO` | größer, setzt Blöcke in Brand, anderthalbfache Strahlung |
+| `NUKE_HIGH` | eine wirkliche Kernexplosion — `NukeExplosionMK5` mit Stärke 35 |
+| `NUKE_TOTS` | acht kleine Köpfe auf einmal, je 35 % Schaden |
+| `NUKE_HIVE` | zwölf noch kleinere, **ohne Strahlung und ohne Pilz** |
+| `NUKE_BALEFIRE` | Blauflamme: verwandelt Blöcke, statt sie wegzureißen |
+
+Der Pilz kommt über das `AuxParticle`-Paket mit `"type"="muke"` beziehungsweise `"tinytot"`,
+genau wie bei der Granate und den Bomben — `NukeTorexCreator` bleibt den großen Sprengköpfen
+vorbehalten, der Fatman benutzt ihn auch im Original nicht. Blau brennt der Pilz bei Polaroid 11
+oder mit einem Prozent Glück; **nur der Blauflammen-Kopf erzwingt ihn.**
+
+**Der Renderer** hat fünf einzeln bewegliche Teile. Der Zeiger sitzt am Griff und geht mit ihm
+mit; der Stempel steht drei Einheiten vorn, wenn das Rohr leer ist — daran sieht man der Waffe
+an, ob sie geladen ist. Der Blauflammen-Kopf **glitzert**: das Original malt ihn dreimal mit
+verschobener Texturmatrix übereinander, der Port hat dafür `RenderMiscEffects.renderClassicGlint`,
+das schon am Blauflammen-Sprengsatz hängt.
+
+Zwei Klänge sind nachgereicht (`weapon.fire.fatman`, `weapon.reload.fatmanfull`), und **einen
+Bauplan hat er** — anders als Tau- und Spulenkanone: Saturnit durchweg, der Griff aus hartem
+Kunststoff.
+
+**Damit stehen alle Waffenfabriken des Ports.**
+
+Zur Bauplan-Lage aus Runde 203, jetzt nachgemessen: die **Spulenkanone hat auch im Original
+keinen** — dass sie im Port nur im Kreativreiter liegt, ist also keine Abweichung. Die
+**Tau-Kanone hat einen**, und er ist blockiert: er verlangt `coil_copper_torus`, und der Port
+kennt nur `coil_copper` und `coil_copper_ring`. Das ist eine eigene, kleine Runde.
+
+Alle 39 Tore grün.

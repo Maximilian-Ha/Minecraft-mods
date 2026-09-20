@@ -117,7 +117,13 @@ public class NtmSoundDefinitionsProvider extends SoundDefinitionsProvider {
         this.add(NtmSoundEvents.GUN_ROCKET_INSERT, SoundDefinition.definition()
                 .with(sound(NuclearTechMod.withDefaultNamespace("weapon/reload/insertrocket")))
         );
-        this.add(NtmSoundEvents.GUN_TESLA_BLAST, SoundDefinition.definition()
+        this.add(NtmSoundEvents.GUN_FATMAN_FIRE, SoundDefinition.definition()
+                .with(sound(NuclearTechMod.withDefaultNamespace("weapon/fire/fatman")))
+        );
+        this.add(NtmSoundEvents.GUN_FATMAN_RELOAD, SoundDefinition.definition()
+                .with(sound(NuclearTechMod.withDefaultNamespace("weapon/reload/fatmanfull")))
+        );
+        this.add(NtmSoundEvents.UFO_BLAST, SoundDefinition.definition()
                 .with(sound(NuclearTechMod.withDefaultNamespace("entity/ufoblast")))
         );
         this.add(NtmSoundEvents.GUN_LASER_PISTOL_FIRE, SoundDefinition.definition()
@@ -258,9 +264,6 @@ public class NtmSoundDefinitionsProvider extends SoundDefinitionsProvider {
                 .with(sound(NuclearTechMod.withDefaultNamespace("weapon/fire/taurelease1")))
                 .with(sound(NuclearTechMod.withDefaultNamespace("weapon/fire/taurelease2")))
                 .with(sound(NuclearTechMod.withDefaultNamespace("weapon/fire/taurelease3")))
-        );
-        this.add(NtmSoundEvents.UFO_BLAST, SoundDefinition.definition()
-                .with(sound(NuclearTechMod.withDefaultNamespace("entity/ufoblast")))
         );
         /* Drei Aufnahmen, wie im Original -- welche kommt, entscheidet das Spiel. */
         this.add(NtmSoundEvents.GRENADE_BOUNCE, SoundDefinition.definition()

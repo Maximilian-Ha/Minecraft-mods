@@ -261,7 +261,7 @@ public class GrenadeFillingItem extends EnumMultiItem {
                 .setPlayerProcessor(new PlayerProcessorStandard())
                 .explode();
 
-        level.playSound(null, pos.x, pos.y, pos.z, NtmSoundEvents.GUN_TESLA_BLAST.get(), SoundSource.BLOCKS,
+        level.playSound(null, pos.x, pos.y, pos.z, NtmSoundEvents.UFO_BLAST.get(), SoundSource.BLOCKS,
                 5.0F, 0.9F + level.random.nextFloat() * 0.2F);
         level.playSound(null, pos.x, pos.y, pos.z, SoundEvents.FIREWORK_ROCKET_BLAST, SoundSource.BLOCKS, 5.0F, 0.5F);
 
