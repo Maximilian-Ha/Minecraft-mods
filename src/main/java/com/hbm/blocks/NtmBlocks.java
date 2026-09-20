@@ -1032,6 +1032,13 @@ public class NtmBlocks {
     public static final DeferredBlock<Block> CRATE_IRON = registerNew("crate_iron", () -> new CrateBlock(BlockBehaviour.Properties.of().strength(0.6F, 6.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops(), CrateBlock.Type.IRON));
     public static final DeferredBlock<Block> CRATE_TUNGSTEN = registerNew("crate_tungsten", () -> new CrateBlock(BlockBehaviour.Properties.of().strength(0.6F, 6.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops(), CrateBlock.Type.TUNGSTEN));
     public static final DeferredBlock<Block> CRATE_STEEL = registerNew("crate_steel", () -> new CrateBlock(BlockBehaviour.Properties.of().strength(0.6F, 6.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops(), CrateBlock.Type.STEEL));
+    /*
+     * Runde 256: der TRESOR. Im Original dieselbe Klasse wie die Vorratskisten, nur mit
+     * fuenfzehn Faechern und einem Bild auf der Vorderseite statt auf dem Deckel. Seine
+     * Sprengfestigkeit von 10000 ist die des Originals (ModBlocks.java:2176) -- er soll eine
+     * Kernwaffe ueberstehen.
+     */
+    public static final DeferredBlock<Block> SAFE = registerNew("safe", () -> new CrateBlock(BlockBehaviour.Properties.of().strength(7.5F, 10000.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops(), CrateBlock.Type.SAFE));
     public static final DeferredBlock<Block> CRATE_DESH = registerNew("crate_desh", () -> new CrateBlock(BlockBehaviour.Properties.of().strength(0.6F, 6.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops(), CrateBlock.Type.DESH));
     public static final DeferredBlock<Block> CRATE_TEMPLATE = registerNew("crate_template", () -> new CrateBlock(BlockBehaviour.Properties.of().strength(0.6F, 6.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops(), CrateBlock.Type.TEMPLATE));
 

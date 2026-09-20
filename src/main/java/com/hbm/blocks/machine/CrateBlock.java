@@ -7,6 +7,7 @@ import com.hbm.blockentity.machine.storage.CrateIronBlockEntity;
 import com.hbm.blockentity.machine.storage.CrateSteelBlockEntity;
 import com.hbm.blockentity.machine.storage.CrateTemplateBlockEntity;
 import com.hbm.blockentity.machine.storage.CrateTungstenBlockEntity;
+import com.hbm.blockentity.machine.storage.SafeBlockEntity;
 import com.hbm.config.NtmConfig;
 import com.hbm.blocks.IPersistentInfoProvider;
 import com.hbm.util.TagsUtil;
@@ -81,6 +82,7 @@ public class CrateBlock extends BaseEntityBlock implements IPersistentInfoProvid
             case STEEL -> new CrateSteelBlockEntity(pos, state);
             case DESH -> new CrateDeshBlockEntity(pos, state);
             case TEMPLATE -> new CrateTemplateBlockEntity(pos, state);
+            case SAFE -> new SafeBlockEntity(pos, state);
         };
     }
 
@@ -190,7 +192,9 @@ public class CrateBlock extends BaseEntityBlock implements IPersistentInfoProvid
         TUNGSTEN(27),
         STEEL(54),
         DESH(104),
-        TEMPLATE(27);
+        TEMPLATE(27),
+        /* Runde 256: der Tresor. Im Original dieselbe Klasse, nur fuenfzehn Faecher. */
+        SAFE(15);
 
         private final int slots;
 

@@ -1600,6 +1600,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.CRATE_IRON);
                         output.accept(NtmBlocks.CRATE_TUNGSTEN);
                         output.accept(NtmBlocks.CRATE_STEEL);
+                        output.accept(NtmBlocks.SAFE);
                         output.accept(NtmBlocks.CRATE_DESH);
                         output.accept(NtmBlocks.CRATE_TEMPLATE);
                         output.accept(NtmBlocks.CRATE_LEAD);

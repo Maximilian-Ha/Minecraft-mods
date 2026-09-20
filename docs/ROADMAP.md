@@ -12049,3 +12049,25 @@ Zwei Beutestäbe nennen ihren Ersatzblock als **Zahl** — 557 und 683. 1.7.10 l
 Blocknamen, der eine Zahl ist, über die Blockkennziffer auf, und die galt nur in der Welt des
 Urhebers. Sie sind nicht auflösbar und bleiben ein Fehler des Umsetzers, kein stiller Ersatz.
 Die dritte solche Zahl, 54, ist die Vanilla-Truhe und damit eindeutig.
+
+## Runde 256 — Der Tresor steht selbst da
+
+Runde 251 hat im Meteoritenverlies eine Vanilla-Truhe an die Stelle des Tresors gesetzt, weil
+es den Block im Port nicht gab, und das dort als Abweichung vermerkt. Jetzt gibt es ihn.
+
+**Er war nie eine eigene Klasse.** Im Original ist `safe` dasselbe `BlockStorageCrate` wie die
+Vorratskisten — nur mit fünfzehn Fächern statt sechsunddreißig und mit dem Bild auf der
+**Vorderseite** statt auf dem Deckel. Genau dafür hat `BlockStorageCrate.getIcon` einen eigenen
+Zweig: `side == metadata` statt der sonstigen Deckelprüfung.
+
+Im Port heißt das: eine Art mehr in `CrateBlock.Type`, eine Blockentität von fünfzehn Fächern
+in drei Reihen zu fünf (eingerückt um zwei Fachbreiten, wie in `ContainerSafe`), und ein
+Modell, das sein Bild vorne trägt. Das Schloss kommt mit — jede Kiste des Ports stammt von
+`LockableBaseBlockEntity` ab.
+
+Seine Sprengfestigkeit von **10000** ist die des Originals: er soll eine Kernwaffe überstehen.
+
+Der Umsetzer setzt jetzt den Tresor statt der Truhe; genau eine der 38 Vorlagendateien ändert
+sich dadurch (`meteor-3-book`).
+
+`tools/structure-gap.py`: **zwei echte Lücken** statt drei — `filing_cabinet` und `wand_logic`.

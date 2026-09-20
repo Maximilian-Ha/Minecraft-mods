@@ -2629,6 +2629,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.CRATE_IRON, "Iron Crate");
         this.add(NtmBlocks.CRATE_TUNGSTEN, "Tungsten Crate");
         this.add(NtmBlocks.CRATE_STEEL, "Steel Crate");
+        this.add(NtmBlocks.SAFE, "Safe");
         this.add(NtmBlocks.CRATE_DESH, "Desh Crate");
         this.add(NtmBlocks.CRATE_TEMPLATE, "Template Crate");
         this.add(NtmBlocks.CRATE_LEAD, "Lead-Lined Crate");
@@ -2641,6 +2642,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("container.crateIron", "Iron Crate");
         this.add("container.crateTungsten", "Tungsten Crate");
         this.add("container.crateSteel", "Steel Crate");
+        this.add("container.safe", "Safe");
         this.add("container.crateDesh", "Desh Crate");
         this.add("container.crateTemplate", "Template Crate");
         this.add("desc.slots", "Slots: %s");

@@ -877,14 +877,13 @@ def uebersetze_ersatzblock(name, meta):
     return '%s[%s]' % (blockname, ','.join('%s=%s' % kv for kv in sorted(eigenschaften.items())))
 
 
-# Welcher Block aus einem wand_loot wird. Der Tresor fehlt dem Port; die Truhe tut dasselbe
-# und haelt denselben Vorrat.
+# Welcher Block aus einem wand_loot wird.
 ERSATZ_BEUTE = {
     'hbm:tile.deco_loot': MODID + ':deco_loot',
     'minecraft:chest': 'minecraft:chest',
     'hbm:tile.crate_steel': MODID + ':crate_steel',
     'hbm:tile.crate_iron': MODID + ':crate_iron',
-    'hbm:tile.safe': 'minecraft:chest',
+    'hbm:tile.safe': MODID + ':safe',
     # 1.7.10 loest einen Blocknamen, der eine Zahl ist, ueber die Blockkennziffer auf
     # (Block.getBlockFromName). 54 ist die Truhe. Die beiden anderen Zahlen, die in den
     # Dateien stehen -- 557 und 683 --, zeigen auf Bloecke, deren Kennziffer nur in der

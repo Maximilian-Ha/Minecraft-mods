@@ -9,10 +9,8 @@ import com.hbm.items.NtmItems;
  * Hier stehen sie beieinander, weil sie zusammengehoeren: der eine fuellt die Truhen der
  * Drachenkammern, der andere den Tresor im Buecherstueck.
  *
- * DER TRESOR IST IM PORT EINE TRUHE. Den Block hbm:tile.safe gibt es hier noch nicht; er ist
- * im Original ein abschliessbarer Behaelter mit eigener Oberflaeche. Bis dahin steht an seiner
- * Stelle eine Vanilla-Truhe mit demselben Vorrat -- die Beute ist erreichbar, das Schloss
- * fehlt.
+ * DER TRESOR STEHT SEIT RUNDE 256 SELBST DA. Bis dahin vertrat ihn eine Vanilla-Truhe, weil
+ * es den Block im Port nicht gab.
  *
  * WAS AUS DEN VORRAETEN FEHLT, steht namentlich an der jeweiligen Stelle. Kein Eintrag
  * verschwindet stillschweigend.
@@ -55,7 +53,7 @@ public class ItemPoolsMeteor {
                 .add(NtmItems.GEM_ALEXANDRITE.get(), 1, 1, 1);
 
         /*
-         * DER TRESOR. Zwei bis drei Zuege.
+         * DER TRESOR. Zwei bis drei Zuege in fuenfzehn Faecher.
          *
          * Im Original neun Eintraege: das Buch und acht Spielarten des Stempelbuchs. Die
          * Stempelbuecher gibt es im Port nicht -- damit bleibt ein einziger Eintrag, und der

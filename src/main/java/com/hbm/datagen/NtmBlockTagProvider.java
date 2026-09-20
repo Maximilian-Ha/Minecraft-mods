@@ -601,6 +601,7 @@ public class NtmBlockTagProvider extends BlockTagsProvider {
                         NtmBlocks.CRATE_IRON.get(),
                         NtmBlocks.CRATE_TUNGSTEN.get(),
                         NtmBlocks.CRATE_STEEL.get(),
+                        NtmBlocks.SAFE.get(),
                         NtmBlocks.CRATE_DESH.get(),
                         NtmBlocks.CRATE_TEMPLATE.get(),
                         NtmBlocks.CRATE_LEAD.get(),

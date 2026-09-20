@@ -819,6 +819,12 @@ public class NtmBlockEntityTypes {
                             CrateSteelBlockEntity::new,
                             NtmBlocks.CRATE_STEEL.get())
                     .build(null));
+    public static final Supplier<BlockEntityType<SafeBlockEntity>> SAFE = BLOCK_ENTITY_TYPES.register(
+            "safe",
+            () -> BlockEntityType.Builder.of(
+                            SafeBlockEntity::new,
+                            NtmBlocks.SAFE.get())
+                    .build(null));
     public static final Supplier<BlockEntityType<CrateDeshBlockEntity>> CRATE_DESH = BLOCK_ENTITY_TYPES.register(
             "crate_desh",
             () -> BlockEntityType.Builder.of(

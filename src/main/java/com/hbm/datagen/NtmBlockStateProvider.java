@@ -591,6 +591,7 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.crateBlock(NtmBlocks.CRATE_IRON.get(), "crate_iron_side", "crate_iron_top");
         this.crateBlock(NtmBlocks.CRATE_TUNGSTEN.get(), "crate_tungsten_side", "crate_tungsten_top");
         this.crateBlock(NtmBlocks.CRATE_STEEL.get(), "crate_steel_side", "crate_steel_top");
+        this.safeBlock(NtmBlocks.SAFE.get(), "safe_side", "safe_front");
         this.crateBlock(NtmBlocks.CRATE_DESH.get(), "crate_desh_side", "crate_desh_top");
         this.crateBlock(NtmBlocks.CRATE_TEMPLATE.get(), "crate_template", "crate_template");
 
@@ -2374,6 +2375,27 @@ public class NtmBlockStateProvider extends BlockStateProvider {
 
     private void entityBlockItem(Block block, boolean frontLight) {
         this.itemModels().getBuilder(this.key(block).getPath()).parent(new ModelFile.UncheckedModelFile("builtin/entity")).guiLight(frontLight ? BlockModel.GuiLight.FRONT : BlockModel.GuiLight.SIDE);
+    }
+
+    /**
+     * Der Tresor dreht sich wie eine Kiste, traegt sein eigenes Bild aber VORNE. Im Original
+     * steht das in BlockStorageCrate.getIcon als eigener Zweig: "side == metadata" statt der
+     * sonstigen Deckelpruefung.
+     */
+    private void safeBlock(Block block, String sideTexture, String frontTexture) {
+        String blockName = this.key(block).getPath();
+        ModelFile model = this.models().orientable(blockName, modLoc("block/" + sideTexture),
+                modLoc("block/" + frontTexture), modLoc("block/" + sideTexture));
+        this.getVariantBuilder(block).forAllStates(state -> {
+            int y = switch(state.getValue(com.hbm.blocks.machine.CrateBlock.FACING)) {
+                case EAST -> 90;
+                case SOUTH -> 180;
+                case WEST -> 270;
+                default -> 0;
+            };
+            return ConfiguredModel.builder().modelFile(model).rotationY(y).build();
+        });
+        this.simpleBlockItem(block, model);
     }
 
     private void crateBlock(Block block, String sideTexture, String topTexture) {
