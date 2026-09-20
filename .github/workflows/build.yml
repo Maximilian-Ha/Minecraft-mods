@@ -192,6 +192,11 @@ jobs:
           chmod +x ./tools/synched-check.sh
           ./tools/synched-check.sh
 
+      - name: Check block entity bindings
+        run: |
+          chmod +x ./tools/beblock-check.sh
+          ./tools/beblock-check.sh
+
       - name: Check per-meta item textures
         run: |
           chmod +x ./tools/metatex-check.sh

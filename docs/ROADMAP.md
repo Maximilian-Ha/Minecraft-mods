@@ -11255,3 +11255,20 @@ Knall.
 löst zwei Ticks vor dem gewöhnlichen Knall aus. Das kostet ein Zehntel einer Sekunde Lunte;
 dafür geht jeder Creeper dieser Mod auf jedem Weg so hoch, wie er soll. Der Phosgencreeper
 bekommt darüber auch seine kurze Lunte -- `maxSwell` ist in 1.21 ebenfalls privat.
+
+### Das 41. Tor: Blöcke, die eine Blockentität tragen, aber keine herausgeben
+
+Runde 240 hat einen Fehler gemacht, den kein Tor gesehen hat: beim Anlegen des festen
+Schlackeblocks wurde `SlagBlock.java` überschrieben -- der Name war längst vergeben, nämlich
+an die Schlackenpfütze unter dem Abstich. Die neue Fassung war gültiges Java und hätte
+übersetzt; aus der Pfütze wäre still ein gewöhnlicher Block geworden. Gefunden hat es nur
+`git status`, weil die Datei als *geändert* statt als *neu* dastand.
+
+`beblock-check.sh` schaut jetzt darauf: `BlockEntityType.Builder.of(X::new, NtmBlocks.Y.get())`
+sagt nur, welche Blöcke diese Art tragen dürfen -- ob der Block selbst eine Blockentität
+erzeugt, prüfte niemand. Das Tor sucht für jeden gebundenen Block seine Klasse aus
+`NtmBlocks` heraus und läuft die Vererbungskette hinauf.
+
+Gemessen: 260 Arten, 283 gebundene Blöcke, null Funde. Zwei Gegenproben: meldet man den
+Schlackenabstich als schlichten `Block` an, meldet das Tor genau ihn; stellt man den Unfall
+selbst nach und nimmt `SlagBlock` sein `newBlockEntity`, meldet es die Schlackenpfütze.
