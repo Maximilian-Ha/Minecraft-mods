@@ -4105,6 +4105,7 @@ public class NtmRecipeProvider extends RecipeProvider {
     private static Ingredient anyHardPlasticGrip() { return CompoundIngredient.of(grip(Mats.MAT_HARDPLASTIC), grip(Mats.MAT_PVC)); }
     private static Ingredient anyBismoidBronzeLightBarrel() { return CompoundIngredient.of(lightBarrel(Mats.MAT_BBRONZE), lightBarrel(Mats.MAT_ABRONZE)); }
     private static Ingredient anyBismoidBronzeLightReceiver() { return CompoundIngredient.of(lightReceiver(Mats.MAT_BBRONZE), lightReceiver(Mats.MAT_ABRONZE)); }
+    private static Ingredient anyBismoidBronzeHeavyReceiver() { return CompoundIngredient.of(heavyReceiver(Mats.MAT_BBRONZE), heavyReceiver(Mats.MAT_ABRONZE)); }
     private static Ingredient anyResistantAlloyLightBarrel() { return CompoundIngredient.of(lightBarrel(Mats.MAT_TCALLOY), lightBarrel(Mats.MAT_CDALLOY)); }
     private static Ingredient anyResistantAlloyHeavyReceiver() { return CompoundIngredient.of(heavyReceiver(Mats.MAT_TCALLOY), heavyReceiver(Mats.MAT_CDALLOY)); }
     private static Ingredient anyResistantAlloyHeavyBarrel() { return CompoundIngredient.of(heavyBarrel(Mats.MAT_TCALLOY), heavyBarrel(Mats.MAT_CDALLOY)); }
@@ -4300,6 +4301,31 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_saturnite", has(NtmItems.INGOT_SATURNITE.get()))
                 .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_skin_saturnite"));
 
+        /* Die drei Aufsaetze des Lasergewehrs. */
+        modSpecial(GunFactory.ModSpecial.LAS_SHOTGUN)
+                .pattern("PPP").pattern("RCR").pattern("PPP")
+                .define('P', anyHardPlasticIngot())
+                .define('R', NtmItems.CRYSTAL_REDSTONE.get())
+                .define('C', NtmItems.CIRCUIT_MILITARY_GRADE_BOARD.get())
+                .unlockedBy("has_crystal", has(NtmItems.CRYSTAL_REDSTONE.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_las_shotgun"));
+
+        modSpecial(GunFactory.ModSpecial.LAS_CAPACITOR)
+                .pattern("CCC").pattern("PIP")
+                .define('C', NtmItems.CIRCUIT_TANTALIUM_CAPACITOR.get())
+                .define('P', anyHardPlasticIngot())
+                .define('I', NtmItems.CIRCUIT_VERSATILE_INTEGRATED.get())
+                .unlockedBy("has_capacitor", has(NtmItems.CIRCUIT_TANTALIUM_CAPACITOR.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_las_capacitor"));
+
+        modSpecial(GunFactory.ModSpecial.LAS_AUTO)
+                .pattern(" C ").pattern("RFR").pattern(" C ")
+                .define('C', NtmItems.CIRCUIT_VERSATILE_INTEGRATED.get())
+                .define('R', NtmItems.CRYSTAL_REDSTONE.get())
+                .define('F', anyBismoidBronzeHeavyReceiver())
+                .unlockedBy("has_crystal", has(NtmItems.CRYSTAL_REDSTONE.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_las_auto"));
+
         /*
          * DIE ELF AUFSAETZE DES BOHRERS. Vier Bohrkoepfe nach demselben Muster -- je fester
          * das Metall, desto mehr Schaden, Reichweite und Kantenlaenge --, vier Motoren nach
@@ -4421,13 +4447,11 @@ public class NtmRecipeProvider extends RecipeProvider {
      *   wohl -- pipe_rubber ist angemeldet, hat ein Ambossrezept und liegt im Reiter. Der
      *   Satz war falsch; es fehlt nur noch das eine Werkzeug.
      *
-     * NICHT UEBERNOMMEN, WEIL DER AUFSATZ SELBST FEHLT: LAS_SHOTGUN, LAS_CAPACITOR und
-     * LAS_AUTO. Sie stehen in der Aufzaehlung ModSpecial, sind aber nicht im
-     * XWeaponModManager angemeldet -- ein solcher Aufsatz liesse sich bauen und anbringen und
-     * taete nichts. Die Waffe dazu steht seit Runde 187; was fehlt, sind die drei
-     * Aufsatzklassen WeaponModLasShotgun, WeaponModLasCapacitor und WeaponModLasAuto.
-     * Die elf Aufsaetze des Bohrers standen bis Runde 191 in derselben Liste; seither sind
-     * sie angemeldet und haben hier ihre Bauplaene.
+     * SEIT RUNDE 191 GIBT ES KEINEN AUFSATZ MEHR OHNE KLASSE. Bis dahin standen hier
+     * vierzehn -- die elf des Bohrers und die drei des Lasergewehrs --, die sich zwar in die
+     * Aufzaehlung ModSpecial eingetragen hatten, aber nicht im XWeaponModManager: ein solcher
+     * Aufsatz liesse sich bauen und anbringen und taete nichts. Alle vierzehn sind jetzt
+     * angemeldet und haben hier ihre Bauplaene.
      */
     private void gunRecipes(RecipeOutput recipeOutput) {
 

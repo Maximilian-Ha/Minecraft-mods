@@ -4,6 +4,7 @@ import com.hbm.items.weapon.sedna.Receiver;
 import com.hbm.items.weapon.sedna.mags.MagazineFullReload;
 import com.hbm.items.weapon.sedna.mags.MagazineSingleReload;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 /**
  * Portiert aus 1.7.10: com.hbm.items.weapon.sedna.mods.WeaponModStackMag.
@@ -49,6 +50,6 @@ public class WeaponModStackMag extends WeaponModBase {
         return base;
     }
 
-    @Override public void onInstall(ItemStack gun, ItemStack mod, int index) { XWeaponModManager.changedMagState(); }
-    @Override public void onUninstall(ItemStack gun, ItemStack mod, int index) { XWeaponModManager.changedMagState(); }
+    @Override public void onInstall(Level level, ItemStack gun, ItemStack mod, int index) { XWeaponModManager.changedMagState(); }
+    @Override public void onUninstall(Level level, ItemStack gun, ItemStack mod, int index) { XWeaponModManager.changedMagState(); }
 }

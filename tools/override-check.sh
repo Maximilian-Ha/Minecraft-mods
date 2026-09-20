@@ -240,7 +240,7 @@ METHOD_RE = re.compile(
     r'(?P<mods>(?:public|protected|private|static|final|abstract|synchronized|native|default|\s)*)'
     r'(?:@\w+(?:\([^)]*\))?[ \t]*)*'                              # siehe oben
     r'(?P<ret>[\w.$]+(?:<[^;{]*?>)?(?:\[\])*)\s+'
-    r'(?P<name>\w+)\s*\((?P<params>[^)]*)\)\s*(?P<tail>[;{])', re.M)
+    r'(?P<name>\w+)\s*\((?P<params>[^)]*)\)\s*(?:throws[ \t\r\n]+[\w.$,\s]+?)?\s*(?P<tail>[;{])', re.M)
 
 PKG_RE = re.compile(r'^\s*package\s+([\w.]+)\s*;', re.M)
 IMP_RE = re.compile(r'^\s*import\s+(?:static\s+)?([\w.]+)\s*;', re.M)
@@ -548,6 +548,91 @@ for key, ifaces in sorted(iface_keys.items()):
     problems.append('%s: @Override an %s() -- alle anderen Klassen erreichen die Methode ueber %s, diese erklaert sie nicht'
                     % (types[fq]['path'], key[0], sorted(ifaces)[0].rsplit('.', 1)[1]))
 
+# ---------------------------------------------------------------------------------------
+# Runde 191: ein @Override, das die PARAMETERZAHL verfehlt.
+#
+# In dieser Runde kostete das einen CI-Lauf. IWeaponMod.onInstall bekam einen Parameter mehr
+# (die Welt, weil 1.21 Verzauberungen nur ueber die Registry der laufenden Welt hergibt);
+# zwei der drei Aufsaetze mit dieser Methode wurden nachgezogen, der dritte nicht.
+#
+# KEIN EINZIGES DER BESTEHENDEN TORE SAH DAS:
+#   * syntax-check.sh filtert "does not override or implement a method from a supertype"
+#     WEG -- ohne Minecraft-Klassenpfad entsteht diese Meldung zu Tausenden als Folgefehler.
+#   * Der Durchgang aus Runde 110 fragt nach dem Ausreisser unter den Klassen, die DIESELBE
+#     (Name, Stelligkeit) erklaeren. Hier war die falsche Stelligkeit einmalig -- es gab
+#     keinen, mit dem sie haette verglichen werden koennen.
+#   * Die Durchgaenge 1 bis 3 fragen, ob eine geforderte Methode FEHLT, nicht ob eine
+#     vorhandene ins Leere zeigt.
+#
+# DIE REGEL IST EXAKT, KEINE FAUSTREGEL: geprueft werden nur Klassen, deren Vererbungskette
+# UND deren saemtliche Schnittstellen im Projekt liegen. Fuer die sieht dieses Skript genau
+# dieselbe Menge an Methoden wie javac -- was hier nicht gefunden wird, findet javac auch
+# nicht.
+#
+# Zwei Einschraenkungen, beide gemessen noetig:
+#   * Nur Methoden auf Klammertiefe 1, also die der Hauptklasse selbst. Ein @Override in einer
+#     inneren oder anonymen Klasse (Runnable.run, Iterator.next, Comparator.compare) gehoert
+#     nicht der Datei-Hauptklasse; ohne diese Grenze meldet die Regel 58 solcher Faelle.
+#   * Die Methoden von java.lang.Object. Sie stehen in keiner Projektklasse und sind doch
+#     ueberall ueberschreibbar; ohne sie meldet die Regel vier weitere Falschmeldungen.
+#
+# NACHGEMESSEN IN BEIDE RICHTUNGEN: ueber 457 Kandidatenklassen null Funde. Nimmt man den
+# Parameter aus WeaponModStackMag wieder heraus, meldet sie genau dessen zwei Zeilen.
+# ---------------------------------------------------------------------------------------
+
+OBJECT_METHODS = {('toString', 0), ('hashCode', 0), ('equals', 1), ('clone', 0), ('finalize', 0)}
+
+def klammertiefen(src):
+    """Zeichenweise Klammertiefe; Zeichenketten und Zeichenliterale werden uebersprungen."""
+    tiefe = [0] * (len(src) + 1)
+    d, i = 0, 0
+    while i < len(src):
+        c = src[i]
+        if c == '"' or c == "'":
+            q = c
+            i += 1
+            while i < len(src):
+                if src[i] == '\\': i += 2; continue
+                if src[i] == q: break
+                i += 1
+        elif c == '{': d += 1
+        elif c == '}': d -= 1
+        tiefe[i] = d
+        i += 1
+    tiefe[len(src)] = d
+    return tiefe
+
+kandidaten = 0
+
+for fq, info in sorted(types.items()):
+    if info['kind'] != 'class': continue
+    if has_external_root(fq): continue
+
+    chain = [fq] + supchain(fq)
+
+    # Nur wenn JEDE Schnittstelle der ganzen Kette im Projekt aufloesbar ist -- sonst kennt
+    # dieses Skript weniger Methoden als javac und wuerde falsch melden.
+    if any(resolve(i, c) is None for c in chain for i in types[c]['ifaces']): continue
+
+    kandidaten += 1
+
+    erreichbar = set()
+    for c in chain[1:]: erreichbar.update(types[c]['methods'].keys())
+    for i in own_closure.get(fq, set()): erreichbar.update(types[i]['methods'].keys())
+
+    src = strip_comments(open(info['path'], encoding='utf-8', errors='replace').read())
+    tiefe = klammertiefen(src)
+
+    for mm in OVERRIDE_RE.finditer(src):
+        if tiefe[mm.start()] != 1: continue
+        params = mm.group('params').strip()
+        key = (mm.group('name'), 0 if not params else params.count(',') + 1)
+        if key in OBJECT_METHODS: continue
+        if key in erreichbar: continue
+        problems.append('%s: @Override an %s() mit %d Parametern -- in der Verwandtschaft steht keine solche Methode'
+                        % (info['path'], key[0], key[1]))
+
+print('Pruefe @Override gegen die Verwandtschaft ... %d Klassen mit reiner Projektherkunft' % kandidaten)
 print('Pruefe Schnittstellen innerhalb des Projekts ... %d Typen' % len(types))
 if problems:
     print('  AUFFAELLIG: %d' % len(problems))

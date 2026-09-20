@@ -211,6 +211,19 @@ public class XWeaponModManager {
                 .addMod(new Item[] { NtmItems.GUN_UZI.get(), NtmItems.GUN_UZI_AKIMBO.get() }, new WeaponModUziSaturnite(ID_UZI_SATURN));
 
         /*
+         * DIE DREI AUFSAETZE DES LASERGEWEHRS. Auch sie standen bis Runde 191 ohne Klasse in
+         * der Aufzaehlung. Jeder belegt einen anderen Platz, also lassen sich alle drei
+         * zugleich anbringen -- und dann ist es eine ganz andere Waffe: drei Strahlen je
+         * Schuss, anderthalbfaches Magazin, Dauerfeuer ohne Fernrohr.
+         */
+        new WeaponModDefinition(ModSpecial.LAS_SHOTGUN)
+                .addMod(NtmItems.GUN_LASRIFLE.get(), new WeaponModLasShotgun(ID_LAS_SHOTGUN));
+        new WeaponModDefinition(ModSpecial.LAS_CAPACITOR)
+                .addMod(NtmItems.GUN_LASRIFLE.get(), new WeaponModLasCapacitor(ID_LAS_CAPACITOR));
+        new WeaponModDefinition(ModSpecial.LAS_AUTO)
+                .addMod(NtmItems.GUN_LASRIFLE.get(), new WeaponModLasAuto(ID_LAS_AUTO));
+
+        /*
          * DIE ELF AUFSAETZE DES BOHRERS. Sie stehen seit Runde 186 in der Aufzaehlung
          * ModSpecial, hatten aber bis Runde 191 keine Klasse -- und die vier Haken, die der
          * Bohrer dafuer mitbringt (D_REACH, F_DTNEG, F_PIERCE, I_AOE), hatten keinen Leser.
@@ -266,6 +279,9 @@ public class XWeaponModManager {
     public static final int ID_MAS_BAYONET = 213;
     public static final int ID_UZI_SATURN = 215;
     public static final int ID_CARBINE_BAYONET = 219;
+    public static final int ID_LAS_SHOTGUN = 216;
+    public static final int ID_LAS_CAPACITOR = 217;
+    public static final int ID_LAS_AUTO = 218;
     public static final int ID_DRILL_HSS = 222;
     public static final int ID_DRILL_WSTEEL = 223;
     public static final int ID_DRILL_TCALLOY = 224;

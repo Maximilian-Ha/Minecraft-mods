@@ -8659,3 +8659,51 @@ für den Saturnit-Bohrkopf PVC — das im Original ebenso zulässig ist. Kein Er
 kleinere von zwei zulässigen Möglichkeiten.
 
 **24 Aufsätze mit Wirkung** (13 + die elf dieser Runde). Alle 35 Tore grün.
+
+### Nachtrag zu Runde 191 — der CI-Fehlschlag und das Loch, das ihn durchließ
+
+Der erste Anlauf fiel durch, an zwei Zeilen:
+
+    WeaponModStackMag.java:52: error: method does not override or implement a method from a supertype
+
+`IWeaponMod.onInstall` bekam einen Parameter mehr; zwei der drei Aufsätze mit dieser Methode
+wurden nachgezogen, der dritte nicht. Das ist ein gewöhnlicher Flüchtigkeitsfehler — die
+Frage ist, warum **kein einziges der 35 Tore** ihn gesehen hat.
+
+* `syntax-check.sh` **filtert genau diese Meldung weg**. Der Grund ist gut: ohne
+  Minecraft-Klassenpfad entsteht sie zu Tausenden als Folgefehler, weil javac die
+  Oberklassen gar nicht kennt. Nur trifft der Filter eben auch die echten Fälle.
+* Der Durchgang aus Runde 110 in `override-check.sh` sucht den **Ausreißer** unter den
+  Klassen, die dieselbe (Name, Stelligkeit) erklären. Die falsche Stelligkeit war hier
+  einmalig — es gab keinen, mit dem sie hätte verglichen werden können.
+* Die Durchgänge 1 bis 3 fragen, ob eine geforderte Methode **fehlt**, nicht ob eine
+  vorhandene ins Leere zeigt.
+
+**Der fünfte Durchgang schließt das.** Er ist keine Faustregel, sondern exakt: geprüft werden
+nur Klassen, deren Vererbungskette *und* deren sämtliche Schnittstellen im Projekt liegen —
+für die sieht das Skript dieselbe Methodenmenge wie javac. Was es dort nicht findet, findet
+javac auch nicht.
+
+Zwei Einschränkungen, beide gemessen nötig: nur Methoden auf Klammertiefe 1 (ein `@Override`
+in einer inneren oder anonymen Klasse gehört nicht der Hauptklasse — ohne diese Grenze
+58 Falschmeldungen), und die Methoden von `java.lang.Object` (ohne sie vier weitere).
+
+**Nachgemessen in beide Richtungen:** über 457 Kandidatenklassen null Funde; nimmt man den
+Parameter aus `WeaponModStackMag` wieder heraus, meldet der Durchgang genau dessen zwei
+Zeilen, und der Rückgabewert ist 1.
+
+**Nebenbei behoben:** die Methodenerkennung des zweiten Durchgangs war für **jede Methode mit
+`throws`-Klausel blind** — der Ausdruck verlangte direkt hinter der Parameterklammer ein `;`
+oder `{`. Aufgefallen ist das beim Nachmessen des neuen Durchgangs: er meldete 45 Methoden wie
+`serializeJSON` und `writeRecipe` als "überschreibt nichts", obwohl die Oberklasse sie sehr
+wohl erklärt. Damit war auch der Schnittstellendurchgang für diese Methoden blind.
+
+### Die drei Aufsätze des Lasergewehrs
+
+Im selben Zug: `LAS_SHOTGUN` (drei Strahlen statt einem, je gut ein Drittel Schaden, keine
+Hüftstreuung mehr), `LAS_CAPACITOR` (anderthalbfaches Magazin, fünf Prozent mehr Schaden) und
+`LAS_AUTO` (Dauerfeuer alle fünf Ticks, zwei Drittel Schaden, kein Fernrohr mehr). Jeder
+belegt einen anderen Platz, alle drei lassen sich zugleich anbringen.
+
+**Damit gibt es im Port keinen Aufsatz mehr ohne Klasse.** Bis zu dieser Runde standen
+vierzehn in `ModSpecial`, die sich eingetragen hatten, ohne angemeldet zu sein.
