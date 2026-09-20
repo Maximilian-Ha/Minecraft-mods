@@ -894,6 +894,13 @@ public class NtmBlockEntityTypes {
                             NtmBlocks.WAND_LOOT.get())
                     .build(null));
 
+    public static final Supplier<BlockEntityType<WandLogicBlockEntity>> WAND_LOGIC = BLOCK_ENTITY_TYPES.register(
+            "wand_logic",
+            () -> BlockEntityType.Builder.of(
+                            WandLogicBlockEntity::new,
+                            NtmBlocks.WAND_LOGIC.get())
+                    .build(null));
+
     public static final Supplier<BlockEntityType<SupplyCrateBlockEntity>> SUPPLY_CRATE = BLOCK_ENTITY_TYPES.register(
             "supply_crate",
             () -> BlockEntityType.Builder.of(

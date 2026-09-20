@@ -12508,3 +12508,65 @@ Dateien, nicht vier Bauwerke.
 Dazu kommen die beiden, die im Original gar keine Vorlagendatei haben und deshalb nicht in
 diesen 34 stecken: Features und Bunker sind dort handgeschriebene Bauwerkskomponenten
 (`MapGenNTMFeatures`, `BunkerStart`) und gehören zu einer eigenen Aufgabe.
+
+## Runde 265 — Der Logikstab: die Falle als Block
+
+Der letzte der vier Zauberstäbe. Er ist die **Falle** in einem Bauwerk: in ihm stehen zwei
+Namen — eine Bedingung und eine Aktion —, und er führt sie aus, solange er steht.
+
+### Zwei Zähler sind der ganze Zustand
+
+`phase` zählt hoch, sooft die Bedingung zutrifft; `timer` zählt die Ticks seit dem letzten
+Zutreffen. Jede Aktion liest beide und entscheidet daran, was sie tut — deshalb brauchen
+Aktion und Bedingung kein eigenes Gedächtnis.
+
+**Erst die Aktion, dann die Bedingung.** Das Original macht es so, und es ist sichtbar: eine
+Aktion sieht in Phase 0 die Welt, *bevor* die Bedingung sie auf 1 stellt.
+
+### Ein unbekannter Name löscht den Block — und das ist die Vorlage
+
+`LogicBlock.java:113`: findet das Original Aktion oder Bedingung nicht in seiner Tabelle, setzt
+es an die Stelle des Stabes Luft. Das passiert dort auch im Spiel — der Turmsockel nennt
+`DEAD_GUY_BASE_TOWER`, und diese Aktion ist im Original **nirgends angemeldet**: die einzige
+`put()`-Zeile dafür ist auskommentiert **und** anders geschrieben (`DEAD_GUY_TOWER_BASE`,
+`LogicBlockActions.java:537`).
+
+Das macht einen Teil-Port sauber: ein Stab, dessen Aktion der Port noch nicht kennt, verhält
+sich genau wie im Original — er verschwindet. Kein stilles Loch, sondern dasselbe Verhalten.
+
+### Drei von neun Aktionen, und warum genau diese
+
+Nachgezählt über die drei Bauwerke mit Logikstäben nennen sie zehn Aktionen, von denen das
+Original neun auflösen kann. Diese Runde bringt die drei, die **ohne neue Hilfsklassen**
+auskommen:
+
+| Aktion | was sie tut |
+|---|---|
+| `COLLAPSE_ROOF_RAD_5` | die Decke fällt herunter |
+| `POWER_LOCK` | der Tresor nebenan schließt sich zu |
+| `DEAD_GUY_CRANE` | aus dem Stab wird ein Skeletthalter mit einer Waffe |
+
+Die übrigen sechs warten auf Teile, die der Port noch nicht hat: `MobUtil` samt
+Ausrüstungspools (fünf Mob-Aktionen), das KI-Ziel `EntityAIFireGun` (zwei davon zusätzlich) und
+die C4-Ladung mit Zeitzünder (`BOMB_CRANE`).
+
+**Die Kugel ist keine Kugel.** `COLLAPSE_ROOF_RAD_5` läuft von −4 bis unter +4 und vergleicht
+das Abstandsquadrat mit `r*r/2`, also 8 statt 16 — die Reichweite ist damit rund 2,8 statt 4,
+und die Schleife ist um einen halben Block versetzt. Beides übernommen: das Ergebnis ist genau
+die Deckenform, die man im Spiel sieht.
+
+**Fallende Blöcke brauchen nichts Neues.** Das Original hat dafür eine eigene Entität, weil
+Vanilla 1.7.10 nur Sand und Kies fallen lässt. In 1.21 nimmt `FallingBlockEntity.fall` jeden
+Zustand mit.
+
+### Der Umsetzer ist damit fertig
+
+**77 von 79 Rohdateien** — vorher 73. Die beiden übrigen sind Testdateien mit absichtlich
+unauflösbarem Inhalt: `test-rot` nennt eine Blocknummer, die nur in der Welt ihres Urhebers
+galt, und `test-tandem-core` den Tandemstab, den sonst keine Datei benutzt.
+
+**Jede Datei, die das Original tatsächlich benutzt, lässt sich jetzt umsetzen.**
+
+`unlock()` an `LockableBaseBlockEntity` ist neu — das Gegenstück zu `lock()`, im Original
+genauso benannt und an genau einer Stelle gebraucht: die Wechselwirkung `POWER_LOCK` sperrt den
+Tresor wieder auf, wenn nebenan mehr als 500 kHE stehen.

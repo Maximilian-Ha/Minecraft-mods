@@ -835,6 +835,26 @@ def pool_name(roh, praefix):
     return '%s:%s/%s' % (MODID, praefix, roh)
 
 
+def logikstab(te):
+    """Aus einem wand_logic wird der Logikstab des Ports -- derselbe Block, dieselben Felder.
+
+    Die Blockentitaet heisst im Original tileentity_wand_spawner; ihre Felder gehen eins zu
+    eins mit. Was ein Name bedeutet, entscheidet erst der Port beim Ticken: kennt er die
+    Aktion oder die Bedingung nicht, loescht sich der Stab. Genau so haelt es das Original
+    (LogicBlock.java:113), und darum steht hier keine Pruefung der Namen.
+    """
+
+    daten = {
+        'id': MODID + ':wand_logic',
+        'actionID': te.get('actionID', ''),
+        'conditionID': te.get('conditionID', ''),
+        'interactionID': te.get('interactionID', ''),
+        'rotation': Int(int(te.get('rotation', 1))),
+        'muffled': Int(int(te.get('muffled', 0))),
+    }
+    return (MODID + ':wand_logic', {}), daten
+
+
 def jigsaw(meta, te, praefix):
     """Aus einem wand_jigsaw wird der Jigsaw-Block von 1.21.
 
@@ -1098,6 +1118,10 @@ def umsetzen(quelle, praefix):
             if te is None:
                 raise ValueError('%s: wand_loot ohne Blockentitaet bei %s' % (quelle, list(pos)))
             zust, daten = beutestab(meta, te)
+        elif name == 'hbm:tile.wand_logic':
+            if te is None:
+                raise ValueError('%s: wand_logic ohne Blockentitaet bei %s' % (quelle, list(pos)))
+            zust, daten = logikstab(te)
         elif name == 'minecraft:skull':
             # Der Schaedel: die Drehung steht in der Blockentitaet, in 1.21 im Zustand.
             # SkullType 0 ist der Skelettschaedel -- alle Vorkommen der 79 Dateien sind das.
@@ -1174,7 +1198,7 @@ def fehlliste(quellverzeichnis):
             wurzel = laden(voll)
             for eintrag in wurzel['palette']:
                 blockname = eintrag['Name']
-                if blockname in ('hbm:tile.wand_jigsaw', 'hbm:tile.wand_loot'):
+                if blockname in ('hbm:tile.wand_jigsaw', 'hbm:tile.wand_loot', 'hbm:tile.wand_logic'):
                     continue
                 meta = int(eintrag.get('Properties', {}).get('meta', '0'))
                 if (blockname, meta) in TABELLE:

@@ -37,6 +37,16 @@ public abstract class LockableBaseBlockEntity extends LoadedBaseBlockEntity {
         setChanged();
     }
 
+    /**
+     * Das Gegenstueck zu lock(). Im Original heisst es genauso und wird an genau einer Stelle
+     * gebraucht: die Wechselwirkung POWER_LOCK des Logikstabs sperrt den Tresor wieder auf,
+     * wenn nebenan genug Strom steht.
+     */
+    public void unlock() {
+        isLocked = false;
+        setChanged();
+    }
+
     public void setPins(int pins) { lock = pins; this.setChanged(); }
     public int getPins() { return lock; }
     public void setMod(double mod) { lockMod = mod; this.setChanged(); }

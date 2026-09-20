@@ -310,6 +310,9 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.blockItem(NtmBlocks.LIGHTSTONE_BRICKS_STAIRS);
 
         /* Runde 251: der Beutestab. Seite und Deckel sind verschieden, wie im Original. */
+        /* Runde 265: der Logikstab. Wie der Beutestab Seite und Deckel verschieden. */
+        this.simpleBlockWithItem(NtmBlocks.WAND_LOGIC, this.models().cubeColumn(
+                name(NtmBlocks.WAND_LOGIC), blockTexture(NtmBlocks.WAND_LOGIC), modLoc("block/wand_logic_top")));
         this.simpleBlockWithItem(NtmBlocks.WAND_LOOT, this.models().cubeColumn(
                 name(NtmBlocks.WAND_LOOT), blockTexture(NtmBlocks.WAND_LOOT), modLoc("block/wand_loot_top")));
 

@@ -23,6 +23,7 @@ import com.hbm.blocks.generic.ToolConversionBlock;
 import com.hbm.blocks.generic.SteelRoofBlock;
 import com.hbm.blocks.generic.LootDecoBlock;
 import com.hbm.blocks.generic.FileCabinetBlock;
+import com.hbm.blocks.generic.WandLogicBlock;
 import com.hbm.blocks.generic.WandLootBlock;
 import com.hbm.blocks.generic.SupplyCrateBlock;
 import com.hbm.blocks.generic.DecoPoleSatelliteReceiverBlock;
@@ -1068,6 +1069,9 @@ public class NtmBlocks {
      * des Bauwerksbaus, nicht Ausstattung.
      */
     public static final DeferredBlock<Block> WAND_LOOT = register("wand_loot", () -> new WandLootBlock(BlockBehaviour.Properties.of().strength(1.0F, 1.0F).sound(SoundType.METAL).mapColor(MapColor.METAL)));
+    /* Der Logikstab, Runde 265 -- der zweite Zauberstab, den der Port als Block braucht. Er
+     * ist die Falle in einem Bauwerk und steht wie der Beutestab in keinem Reiter. */
+    public static final DeferredBlock<Block> WAND_LOGIC = register("wand_logic", () -> new WandLogicBlock(BlockBehaviour.Properties.of().strength(1.0F, 1.0F).sound(SoundType.METAL).mapColor(MapColor.METAL)));
     /* Die Nachschubkiste am Fallschirm. Holzwerte wie im Original (ModBlocks.java:2092),
      * und sie teilt sich das Modell der Dosenkiste -- dort ebenfalls, ueber denselben
      * Zeichnertyp und dieselbe Textur. */
