@@ -2066,6 +2066,10 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.DNS_PLATE);
                         output.accept(NtmItems.DNS_LEGS);
                         output.accept(NtmItems.DNS_BOOTS);
+                        output.accept(NtmItems.STEAMSUIT_HELMET);
+                        output.accept(NtmItems.STEAMSUIT_PLATE);
+                        output.accept(NtmItems.STEAMSUIT_LEGS);
+                        output.accept(NtmItems.STEAMSUIT_BOOTS);
                         output.accept(NtmItems.MASK_RAG);
                         output.accept(NtmItems.MASK_PISS);
                         output.accept(NtmItems.GAS_MASK_FILTER);

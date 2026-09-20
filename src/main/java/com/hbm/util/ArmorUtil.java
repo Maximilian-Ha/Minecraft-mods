@@ -93,6 +93,11 @@ public class ArmorUtil {
         for(Item teil : new Item[] { NtmItems.DNS_HELMET.get(), NtmItems.DNS_PLATE.get(), NtmItems.DNS_LEGS.get(), NtmItems.DNS_BOOTS.get() }) {
             ArmorRegistry.registerHazard(teil, FULL_PACKAGE);
         }
+
+        /* Der Dampfanzug ebenso -- sein Helm ist ausdruecklich ein Atemschutz. */
+        for(Item teil : new Item[] { NtmItems.STEAMSUIT_HELMET.get(), NtmItems.STEAMSUIT_PLATE.get(), NtmItems.STEAMSUIT_LEGS.get(), NtmItems.STEAMSUIT_BOOTS.get() }) {
+            ArmorRegistry.registerHazard(teil, FULL_PACKAGE);
+        }
     }
 
     /**

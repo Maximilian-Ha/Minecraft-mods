@@ -10452,3 +10452,48 @@ Nach dieser Runde sind **9** Rüstungsnamen offen: `dieselsuit_*`, `steamsuit_*`
 flüssigkeitsbetriebene Anzüge, die der Port noch nicht hat.
 
 Alle 39 Tore grün.
+
+## Runde 224 — Der Dampfanzug, und eine Grundklasse mit Tank
+
+Die letzten neun Namen teilten sich in „braucht nur Fleißarbeit" und „braucht erst eine
+Grundklasse". Diese Runde baut die Grundklasse und den ersten Anzug darauf.
+
+### `ArmorFSBFueledItem`
+
+Das Gegenstück zu `ArmorFSBPoweredItem` für Anzüge, die keinen Akku haben, sondern einen
+**Tank**. Ohne Füllung ist das Teil totes Blech, der ganze Satzbonus fällt weg. Nachgefüllt
+wird an der Zapfsäule, die jeden `IFillableItem` bedient — die gibt es im Port seit Runde 100.
+
+**Ein Unterschied, der leicht verlorengeht:** der Grundverbrauch läuft nur **jeden zehnten
+Tick**, nicht jeden. Im Original steht dafür `world.getTotalWorldTime() % 10 == 0`. Wer das
+überliest, baut einen Anzug, der zehnmal zu schnell leerläuft.
+
+Der Flüssigkeitstyp kommt als Lieferant herein statt als Feld: die Fluidtypen des Ports stehen
+erst nach dem Laden fest, ein Feld im Konstruktor wäre zu früh.
+
+### Der Dampfanzug
+
+| | |
+|---|---|
+| Tank | 64 000 Dampf, 500 je Füllschritt |
+| Verbrauch | 50 je Schadenspunkt, 1 je zehn Ticks |
+| Satzbonus | Eile V |
+| Strahlung | 95 %, `FULL_PACKAGE` |
+| **Temposchaden** | −0,025 an **jedem** Teil, dauerhaft |
+
+Der Temposchaden ist kein Versehen: ein Anzug voller Kessel und Rohre ist schwer. Im Original
+hängt er in `getItemAttributeModifiers`, im Port an den Eigenschaften des Gegenstands.
+
+### Noch einmal die Namensverschiebung
+
+Die Klasse heißt `ArmorDesh` und das Modell `ModelArmorDesh` — nach dem **Werkstoff**. Die
+Texturen und die Registriernamen heißen `steamsuit_*` — nach der **Garnitur**. Wer nach
+`steamsuit` sucht, findet die Klassen nicht.
+
+Das ist derselbe Fall wie `dnt_*` / `dns_*` aus Runde 223 und wie der Fehler aus Runde 215,
+bei dem genau diese Verschiebung mich drei Garnituren für modelllos halten ließ. Beim dritten
+Mal steht es jetzt in der Klasse.
+
+Nach dieser Runde sind **5** Rüstungsnamen offen: `dieselsuit_*` und `nossy_hat`.
+
+Alle 39 Tore grün.

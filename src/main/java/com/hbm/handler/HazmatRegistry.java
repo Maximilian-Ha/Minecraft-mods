@@ -164,6 +164,13 @@ public class HazmatRegistry {
         HazmatRegistry.registerHazmat(NtmItems.DNS_LEGS.get(), dns * legs);
         HazmatRegistry.registerHazmat(NtmItems.DNS_BOOTS.get(), dns * boots);
 
+        /* Der Dampfanzug: 1,3 auf den ganzen Satz, im Original als Kommentar "95%". */
+        double steam = 1.3D;        // 95%
+        HazmatRegistry.registerHazmat(NtmItems.STEAMSUIT_HELMET.get(), steam * helmet);
+        HazmatRegistry.registerHazmat(NtmItems.STEAMSUIT_PLATE.get(), steam * chest);
+        HazmatRegistry.registerHazmat(NtmItems.STEAMSUIT_LEGS.get(), steam * legs);
+        HazmatRegistry.registerHazmat(NtmItems.STEAMSUIT_BOOTS.get(), steam * boots);
+
         /* Euphemium: Faktor 10, im Original mit dem Vermerk "<100%" -- der Satz haelt viel
          * ab, aber nicht alles. */
         double euph = 10D;

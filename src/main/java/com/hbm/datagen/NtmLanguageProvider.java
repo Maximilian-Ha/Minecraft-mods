@@ -4125,6 +4125,11 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.DNS_LEGS, "DNT Nano Suit Leggings");
         this.add(NtmItems.DNS_BOOTS, "DNT Nano Suit Boots");
         this.add(NtmItems.COIN_WORM, "Balls-O-Tron Coin");
+
+        this.add(NtmItems.STEAMSUIT_HELMET, "Steam Suit Respirator Helmet");
+        this.add(NtmItems.STEAMSUIT_PLATE, "Steam Suit Chestplate");
+        this.add(NtmItems.STEAMSUIT_LEGS, "Steam Suit Leggings");
+        this.add(NtmItems.STEAMSUIT_BOOTS, "Steam Suit Boots");
         this.add("armor.electricJetpack", "Ion Jetpack");
         this.add("armor.glider", "Sneak to glide");
         this.add("armor.moreAmmo", "More Ammo");

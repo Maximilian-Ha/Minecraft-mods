@@ -465,6 +465,13 @@ public class ResourceManager {
     public static final ResourceLocation DNT_ARM = NuclearTechMod.withDefaultNamespace("textures/armor/dnt_arm.png");
     public static final ResourceLocation DNT_LEG = NuclearTechMod.withDefaultNamespace("textures/armor/dnt_leg.png");
 
+    /* Der Dampfanzug. Modell und Klasse heissen nach dem Werkstoff (Desh), die Texturen
+     * nach der Garnitur (steamsuit) -- so steht es im Original. */
+    public static final ResourceLocation STEAMSUIT_HELMET = NuclearTechMod.withDefaultNamespace("textures/armor/steamsuit_helmet.png");
+    public static final ResourceLocation STEAMSUIT_CHEST = NuclearTechMod.withDefaultNamespace("textures/armor/steamsuit_chest.png");
+    public static final ResourceLocation STEAMSUIT_ARM = NuclearTechMod.withDefaultNamespace("textures/armor/steamsuit_arm.png");
+    public static final ResourceLocation STEAMSUIT_LEG = NuclearTechMod.withDefaultNamespace("textures/armor/steamsuit_leg.png");
+
     /** Die Aschebrille -- im Original heisst die Datei ebenso. */
     public static final ResourceLocation ARMOR_GOGGLES = NuclearTechMod.withDefaultNamespace("textures/armor/goggles.png");
     public static final ResourceLocation HEV_LEG = NuclearTechMod.withDefaultNamespace("textures/armor/hev_leg.png");
@@ -844,6 +851,7 @@ public class ResourceManager {
     public static IModelCustom armor_envsuit;
     public static IModelCustom armor_bj;
     public static IModelCustom armor_dnt;
+    public static IModelCustom armor_steamsuit;
 
     public static IObjRenderer sphere;
     public static IModelCustom sphere_new;
@@ -1167,6 +1175,7 @@ public class ResourceManager {
         armor_envsuit = new HFRWavefrontObject("models/obj/armor/envsuit.obj").asVBO();
         armor_bj = new HFRWavefrontObject("models/obj/armor/bj.obj").asVBO();
         armor_dnt = new HFRWavefrontObject("models/obj/armor/dnt.obj").asVBO();
+        armor_steamsuit = new HFRWavefrontObject("models/obj/armor/steamsuit.obj").asVBO();
 
         sphere = new HFRWavefrontObject("models/obj/sphere.obj").getRenderer();
         sphere_new = new HFRWavefrontObject("models/obj/sphere_new.obj").asVBO();

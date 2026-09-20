@@ -4152,6 +4152,42 @@ public class NtmRecipeProvider extends RecipeProvider {
         dnsPiece(recipeOutput, NtmItems.DNS_BOOTS.get(), NtmItems.BJ_BOOTS.get(), Ingredient.of(NtmItems.DEMON_CORE_CLOSED.get()));
 
         /*
+         * DER DAMPFANZUG, ArmorRecipes.java Z. 90 bis 93. Jedes Stueck wird um das
+         * entsprechende Stahlstueck herumgebaut, mit Deshbarren und Kupferplatten; der Helm
+         * bekommt einen Filter, die Brustplatte einen Stahltank als Kessel.
+         */
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.STEAMSUIT_HELMET.get(), 1)
+                .pattern("DCD").pattern("CXC").pattern(" F ")
+                .define('D', NtmItems.INGOT_DESH.get())
+                .define('C', NtmItems.PLATE_COPPER.get())
+                .define('X', NtmItems.STEEL_HELMET.get())
+                .define('F', NtmItems.GAS_MASK_FILTER.get())
+                .unlockedBy("has_ingot_desh", has(NtmItems.INGOT_DESH.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.STEAMSUIT_PLATE.get(), 1)
+                .pattern("C C").pattern("DXD").pattern("CFC")
+                .define('D', NtmItems.INGOT_DESH.get())
+                .define('C', NtmItems.PLATE_COPPER.get())
+                .define('X', NtmItems.STEEL_PLATE.get())
+                .define('F', NtmItems.TANK_STEEL.get())
+                .unlockedBy("has_ingot_desh", has(NtmItems.INGOT_DESH.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.STEAMSUIT_LEGS.get(), 1)
+                .pattern("CCC").pattern("DXD").pattern("C C")
+                .define('D', NtmItems.INGOT_DESH.get())
+                .define('C', NtmItems.PLATE_COPPER.get())
+                .define('X', NtmItems.STEEL_LEGS.get())
+                .unlockedBy("has_ingot_desh", has(NtmItems.INGOT_DESH.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.STEAMSUIT_BOOTS.get(), 1)
+                .pattern("C C").pattern("DXD")
+                .define('D', NtmItems.INGOT_DESH.get())
+                .define('C', NtmItems.PLATE_COPPER.get())
+                .define('X', NtmItems.STEEL_BOOTS.get())
+                .unlockedBy("has_ingot_desh", has(NtmItems.INGOT_DESH.get()))
+                .save(recipeOutput);
+
+        /*
          * DIE AUFSTIEGSKETTE. Das Original bietet zwei Wege an und stellt ueber
          * enableLBSMSimpleArmorRecipes um: entweder jede Garnitur schlicht aus ihrem Barren,
          * oder jede aus der vorigen. Der Port nimmt die Kette -- sie ist der Standardfall,

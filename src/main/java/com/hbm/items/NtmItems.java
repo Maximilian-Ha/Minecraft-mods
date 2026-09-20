@@ -28,6 +28,7 @@ import com.hbm.items.armor.ArmorBJItem;
 import com.hbm.items.armor.ArmorBJJetpackItem;
 import com.hbm.items.armor.ArmorBismuthItem;
 import com.hbm.items.armor.ArmorDNTItem;
+import com.hbm.items.armor.ArmorDeshItem;
 import com.hbm.items.armor.ArmorDigammaItem;
 import com.hbm.items.armor.ArmorEnvsuitItem;
 import com.hbm.items.armor.ArmorEuphemiumItem;
@@ -1815,6 +1816,16 @@ public class NtmItems {
      */
     public static final DeferredItem<Item> COIN_WORM = ITEMS.register("coin_worm", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON)));
 
+    /*
+     * DER DAMPFANZUG. Der erste Satz des Ports mit einem TANK statt eines Akkus: er laeuft
+     * auf Dampf und wird an der Zapfsaeule nachgefuellt. Eile V fuer den Satz -- und ein
+     * Viertel Zehntel weniger Tempo an jedem Teil, weil er schwer ist.
+     */
+    public static final DeferredItem<Item> STEAMSUIT_HELMET = ITEMS.register("steamsuit_helmet", () -> steamsuit(ArmorItem.Type.HELMET));
+    public static final DeferredItem<Item> STEAMSUIT_PLATE = ITEMS.register("steamsuit_plate", () -> steamsuit(ArmorItem.Type.CHESTPLATE));
+    public static final DeferredItem<Item> STEAMSUIT_LEGS = ITEMS.register("steamsuit_legs", () -> steamsuit(ArmorItem.Type.LEGGINGS));
+    public static final DeferredItem<Item> STEAMSUIT_BOOTS = ITEMS.register("steamsuit_boots", () -> steamsuit(ArmorItem.Type.BOOTS));
+
     public static final DeferredItem<Item> HEV_HELMET = ITEMS.register("hev_helmet", () -> hev(ArmorItem.Type.HELMET));
     public static final DeferredItem<Item> HEV_PLATE = ITEMS.register("hev_plate", () -> hev(ArmorItem.Type.CHESTPLATE));
     public static final DeferredItem<Item> HEV_LEGS = ITEMS.register("hev_legs", () -> hev(ArmorItem.Type.LEGGINGS));
@@ -1940,6 +1951,29 @@ public class NtmItems {
                 .addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 20, 7))
                 .addEffect(new MobEffectInstance(MobEffects.JUMP, 20, 2))
                 .setHasGeigerSound(true);
+    }
+
+    /**
+     * Der Dampfanzug. 64 000 Dampf, 500 je Fuellschritt, 50 je Schadenspunkt, 1 je zehn
+     * Ticks Grundverbrauch.
+     *
+     * Der Temposchaden steht im Original in getItemAttributeModifiers und gilt fuer jedes
+     * Teil einzeln; in 1.21 haengt er an den Eigenschaften des Gegenstands.
+     */
+    private static ArmorFSBItem steamsuit(ArmorItem.Type type) {
+        EquipmentSlotGroup gruppe = EquipmentSlotGroup.bySlot(type.getSlot());
+
+        Item.Properties eigenschaften = new Item.Properties()
+                .stacksTo(1)
+                .durability(type.getDurability(NtmArmorMaterials.DURABILITY_DESH))
+                .attributes(ItemAttributeModifiers.builder()
+                        .add(Attributes.MOVEMENT_SPEED,
+                                new AttributeModifier(NuclearTechMod.withDefaultNamespace("steamsuit_speed_" + type.getName()),
+                                        -0.025D, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), gruppe)
+                        .build());
+
+        return new ArmorDeshItem(NtmArmorMaterials.DESH, type, eigenschaften, () -> Fluids.STEAM, 64_000, 500, 50, 1)
+                .addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 20, 4));
     }
 
     private static ArmorFSBItem hev(ArmorItem.Type type) {
