@@ -43,6 +43,10 @@ public interface NtmDamageTypes {
     /** Das Luftschiff aus der Luft. Im Original ModDamageSource.boat: wie der Gueterwagen
      *  absolut und ruestungsdurchdringend. */
     ResourceKey<DamageType> BOAT = key("boat");
+    /** Der BJ-Helm, wenn dem Satz der Strom ausgeht. Im Original ModDamageSource.lunar:
+     *  absolut und ruestungsdurchdringend -- die Kybernetik im Schaedel hoert auf zu
+     *  arbeiten, und dagegen hilft keine Panzerung. */
+    ResourceKey<DamageType> LUNAR = key("lunar");
 
     ResourceKey<DamageType> PHYSICAL = key("physical");
     ResourceKey<DamageType> FIRE = key("fire");
@@ -77,6 +81,7 @@ public interface NtmDamageTypes {
         context.register(BROADCAST, new DamageType("broadcast", 0.1F));
         context.register(BOXCAR, new DamageType("boxcar", 0.1F));
         context.register(BOAT, new DamageType("boat", 0.1F));
+        context.register(LUNAR, new DamageType("lunar", 0.1F));
         context.register(MUD_POISONING, new DamageType("mudPoisoning", 0.1F));
 
         context.register(PHYSICAL, new DamageType("sednaPhysical", 0.1F));

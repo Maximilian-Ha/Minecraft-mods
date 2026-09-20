@@ -23,6 +23,9 @@ import com.hbm.items.special.SyringeItem;
 import com.hbm.items.armor.ArmorNCRPAItem;
 import com.hbm.items.armor.ArmorRPAItem;
 import com.hbm.items.armor.ArmorAJRItem;
+import com.hbm.lib.ModEffect;
+import com.hbm.items.armor.ArmorBJItem;
+import com.hbm.items.armor.ArmorBJJetpackItem;
 import com.hbm.items.armor.ArmorBismuthItem;
 import com.hbm.items.armor.ArmorDigammaItem;
 import com.hbm.items.armor.ArmorEnvsuitItem;
@@ -1776,6 +1779,25 @@ public class NtmItems {
     public static final DeferredItem<Item> ENVSUIT_LEGS = ITEMS.register("envsuit_legs", () -> envsuit(ArmorItem.Type.LEGGINGS));
     public static final DeferredItem<Item> ENVSUIT_BOOTS = ITEMS.register("envsuit_boots", () -> envsuit(ArmorItem.Type.BOOTS));
 
+    /*
+     * DER BLACKJACK-ANZUG. Kybernetische Gliedmassen, eine Augenklappe mit Waermesensor und
+     * zehn Millionen Ladung. Geht ihm der Strom aus, waehrend der Satz vollstaendig getragen
+     * wird, stirbt der Traeger -- siehe ArmorBJItem.
+     *
+     * Die Brustplatte gibt es zweimal: schlicht und mit Rueckentriebwerk.
+     */
+    public static final DeferredItem<Item> BJ_HELMET = ITEMS.register("bj_helmet", () -> bj(ArmorItem.Type.HELMET));
+    public static final DeferredItem<Item> BJ_PLATE = ITEMS.register("bj_plate", () -> bj(ArmorItem.Type.CHESTPLATE));
+    public static final DeferredItem<Item> BJ_PLATE_JETPACK = ITEMS.register("bj_plate_jetpack", () ->
+            new ArmorBJJetpackItem(NtmArmorMaterials.BJ, ArmorItem.Type.CHESTPLATE, bjProperties(ArmorItem.Type.CHESTPLATE), 10_000_000, 10_000, 1_000, 100)
+                    .addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 20, 1))
+                    .addEffect(new MobEffectInstance(MobEffects.JUMP, 20, 0))
+                    .addEffect(new MobEffectInstance(MobEffects.SATURATION, 20, 0))
+                    .addEffect(new MobEffectInstance(ModEffect.RADX, 20, 0))
+                    .setHasGeigerSound(true));
+    public static final DeferredItem<Item> BJ_LEGS = ITEMS.register("bj_legs", () -> bj(ArmorItem.Type.LEGGINGS));
+    public static final DeferredItem<Item> BJ_BOOTS = ITEMS.register("bj_boots", () -> bj(ArmorItem.Type.BOOTS));
+
     public static final DeferredItem<Item> HEV_HELMET = ITEMS.register("hev_helmet", () -> hev(ArmorItem.Type.HELMET));
     public static final DeferredItem<Item> HEV_PLATE = ITEMS.register("hev_plate", () -> hev(ArmorItem.Type.CHESTPLATE));
     public static final DeferredItem<Item> HEV_LEGS = ITEMS.register("hev_legs", () -> hev(ArmorItem.Type.LEGGINGS));
@@ -1878,6 +1900,20 @@ public class NtmItems {
         return new ArmorEnvsuitItem(NtmArmorMaterials.ENVSUIT, type, new Item.Properties().stacksTo(1).durability(type.getDurability(NtmArmorMaterials.DURABILITY_ENVSUIT)), 100_000, 1_000, 250, 0)
                 .addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 20, 1))
                 .addEffect(new MobEffectInstance(MobEffects.JUMP, 20, 0));
+    }
+
+    private static Item.Properties bjProperties(ArmorItem.Type type) {
+        return new Item.Properties().stacksTo(1).durability(type.getDurability(NtmArmorMaterials.DURABILITY_BJ));
+    }
+
+    /** Der Blackjack-Anzug. Saettigung und Rad-X gehoeren im Original zum Satzbonus. */
+    private static ArmorFSBItem bj(ArmorItem.Type type) {
+        return new ArmorBJItem(NtmArmorMaterials.BJ, type, bjProperties(type), 10_000_000, 10_000, 1_000, 100)
+                .addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 20, 1))
+                .addEffect(new MobEffectInstance(MobEffects.JUMP, 20, 0))
+                .addEffect(new MobEffectInstance(MobEffects.SATURATION, 20, 0))
+                .addEffect(new MobEffectInstance(ModEffect.RADX, 20, 0))
+                .setHasGeigerSound(true);
     }
 
     private static ArmorFSBItem hev(ArmorItem.Type type) {

@@ -10342,3 +10342,62 @@ ohne Aufsatz, was nachgemessen dasselbe ist.
 Nach dieser Runde sind **18** Rüstungsnamen offen.
 
 Alle 39 Tore grün.
+
+## Runde 222 — Der Blackjack-Anzug, und ein eingelöstes Versprechen
+
+Fünf Namen auf einmal: die vier Stücke plus eine zweite Brustplatte mit Rückentriebwerk.
+
+### Wer ihn trägt und ihm geht der Strom aus, stirbt
+
+Trägt der Spieler einen vollständigen Satz, ist aber nicht jedes Teil geladen, dann nimmt ihm
+der Helm sich selbst ab, legt sich ins Gepäck (oder fällt zu Boden, wenn dort kein Platz ist)
+— und danach folgen **tausend Punkte Mondschaden**, die weder Panzerung noch Widerstandskraft
+aufhalten. Die Kybernetik im Schädel hört auf zu arbeiten.
+
+Dafür kam eine neue Schadensart dazu: `NtmDamageTypes.LUNAR`, mit den drei Kennungen, die im
+Original `setDamageIsAbsolute()` und `setDamageBypassesArmor()` entsprechen.
+
+### Das Triebwerk war nicht blockiert
+
+Ich hatte den Jetpack für blockiert gehalten: er fragt `HbmPlayerProps.isJetpackActive()`, und
+`HbmPlayerProps` gibt es im Port nicht. Nachgemessen ist diese Abfrage nur
+`enableBackpack && getKeyPressed(JETPACK)` — und **beides** liegt längst in
+`HbmPlayerAttachments`, samt Umschalttaste und Meldung „Jetpack ON". Der Anzug fliegt.
+
+Damit ist auch der Gleitflug da: ist das Triebwerk aus und der Träger geht in die Hocke, wird
+der Sturz auf vier Zehntel gebremst und die gewonnene Bewegung in Blickrichtung umgelenkt.
+
+Das ist wieder ein „blockiert", das beim Messen zerfiel — wie die Tau-Kanone, der Gasflaschen-
+Deskriptor und der Liquidator-Helm davor.
+
+### Ein Versprechen aus einer früheren Runde eingelöst
+
+In `NtmRecipeProvider` stand seit Langem:
+
+> *Der Desh-Motor fehlt im Port. Die Pumpe nimmt stattdessen den gewöhnlichen Motor […]
+> Fällt der Desh-Motor nach, gehören diese beiden Felder zurückgedreht.*
+
+Er kam in Runde 216 nach. Die Felder sind gedreht — die Watz-Pumpe nimmt jetzt den Deshmotor,
+wie im Original.
+
+Dieselbe Beschreibung stand außerdem **über der falschen Methode**: über `pileDevices` statt
+über `watzParts`, beschrieb also Rezepte, mit denen sie nichts zu tun hat. Das ist der zweite
+verirrte Kommentar dieser Reihe nach dem aus Runde 220.
+
+### Ein Tor hat einen echten Fehler gefunden
+
+Der geborgte Triebwerksklang heißt im Original `immolatorShoot`. In 1.21 sind in einem
+Ressourcenpfad nur `[a-z0-9/._-]` erlaubt — das große S hätte beim Nachschlagen eine
+`ResourceLocationException` geworfen. `location-check` hat das gemeldet, bevor es ins Spiel
+kam; Datei und Verweis heißen jetzt `immolator_shoot`.
+
+### Keine Gefahrenklasse, und das ist Absicht
+
+Der Blackjack-Anzug trägt im Original **kein** `setHazardClass` — als einziger der
+Wellenfront-Rüstungen mit Strom. Er steht deshalb nicht in `ArmorUtil`, nur in
+`HazmatRegistry` (90 %). Eine Abwesenheit mit Grund, wie bei der Wismut-Garnitur.
+
+Nach dieser Runde sind **13** Rüstungsnamen offen — und die DNS-Garnitur ist nicht mehr
+blockiert: ihre vier Baupläne brauchen genau diese BJ-Stücke.
+
+Alle 39 Tore grün.

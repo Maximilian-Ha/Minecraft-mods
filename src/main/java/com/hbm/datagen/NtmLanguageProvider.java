@@ -4113,6 +4113,14 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.ENVSUIT_PLATE, "M1TTY Environment Suit Chestplate");
         this.add(NtmItems.ENVSUIT_LEGS, "M1TTY Environment Suit Leggings");
         this.add(NtmItems.ENVSUIT_BOOTS, "M1TTY Environment Suit Boots");
+
+        this.add(NtmItems.BJ_HELMET, "Eyepatch with Thermal Sensor");
+        this.add(NtmItems.BJ_PLATE, "Lunar Cybernetic Plating");
+        this.add(NtmItems.BJ_PLATE_JETPACK, "Lunar Cybernetic Plating (Winged)");
+        this.add(NtmItems.BJ_LEGS, "Lunar Cybernetic Leg Replacements");
+        this.add(NtmItems.BJ_BOOTS, "Lunar Studded Boots");
+        this.add("armor.electricJetpack", "Ion Jetpack");
+        this.add("armor.glider", "Sneak to glide");
         this.add("armor.moreAmmo", "More Ammo");
         this.add(NtmItems.ASBESTOS_CLOTH, "Asbestos Cloth");
         this.add(NtmItems.MASK_RAG, "Crude Protective Mask");

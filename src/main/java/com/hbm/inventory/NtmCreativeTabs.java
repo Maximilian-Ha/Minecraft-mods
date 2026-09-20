@@ -2056,6 +2056,11 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.ENVSUIT_PLATE);
                         output.accept(NtmItems.ENVSUIT_LEGS);
                         output.accept(NtmItems.ENVSUIT_BOOTS);
+                        output.accept(NtmItems.BJ_HELMET);
+                        output.accept(NtmItems.BJ_PLATE);
+                        output.accept(NtmItems.BJ_PLATE_JETPACK);
+                        output.accept(NtmItems.BJ_LEGS);
+                        output.accept(NtmItems.BJ_BOOTS);
                         output.accept(NtmItems.MASK_RAG);
                         output.accept(NtmItems.MASK_PISS);
                         output.accept(NtmItems.GAS_MASK_FILTER);

@@ -146,6 +146,16 @@ public class HazmatRegistry {
         HazmatRegistry.registerHazmat(NtmItems.ENVSUIT_LEGS.get(), env * legs);
         HazmatRegistry.registerHazmat(NtmItems.ENVSUIT_BOOTS.get(), env * boots);
 
+        /* Der Blackjack-Anzug: 1,0 auf den ganzen Satz, im Original als Kommentar "90%".
+         * Er traegt KEINE Gefahrenklasse -- setHazardClass fehlt dort, anders als bei allen
+         * anderen Wellenfront-Ruestungen. Deshalb steht er nicht in ArmorUtil. */
+        double blackjack = 1.0D;    // 90%
+        HazmatRegistry.registerHazmat(NtmItems.BJ_HELMET.get(), blackjack * helmet);
+        HazmatRegistry.registerHazmat(NtmItems.BJ_PLATE.get(), blackjack * chest);
+        HazmatRegistry.registerHazmat(NtmItems.BJ_PLATE_JETPACK.get(), blackjack * chest);
+        HazmatRegistry.registerHazmat(NtmItems.BJ_LEGS.get(), blackjack * legs);
+        HazmatRegistry.registerHazmat(NtmItems.BJ_BOOTS.get(), blackjack * boots);
+
         /* Euphemium: Faktor 10, im Original mit dem Vermerk "<100%" -- der Satz haelt viel
          * ab, aber nicht alles. */
         double euph = 10D;

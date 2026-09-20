@@ -3592,19 +3592,6 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", tinyName + "_from_" + powderName));
     }
 
-    /**
-     * Die beiden Watz-Bauteile, die im Original auf der Werkbank entstehen.
-     *
-     * ABWEICHUNGEN:
-     * - ANY_RESISTANTALLOY des Originals ist im Port der Schnellarbeitsstahl, wie schon beim
-     *   Radiolyse-Rezept aus Runde 40.
-     * - EnumCircuitType.ADVANCED heisst im Original "Military Grade Circuit Board", BISMOID
-     *   "Versatile Circuit Board"; im Port sind das eigene Gegenstaende.
-     * - Der Desh-Motor fehlt im Port. Die Pumpe nimmt stattdessen den gewoehnlichen Motor und
-     *   wird dadurch guenstiger als gedacht. Beim PUREX-Rezept liess sich das ueber die
-     *   Stueckzahl ausgleichen; in einem Werkbankmuster mit zwei festen Feldern geht das nicht.
-     *   Faellt der Desh-Motor nach, gehoeren diese beiden Felder zurueckgedreht.
-     */
     /** Die drei Geraete des Chicago Pile. Muster und Zutaten unveraendert aus dem Original. */
     private void pileDevices(RecipeOutput recipeOutput) {
 
@@ -3634,11 +3621,27 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .save(recipeOutput);
     }
 
+    /**
+     * Die beiden Watz-Bauteile, die im Original auf der Werkbank entstehen.
+     *
+     * ABWEICHUNGEN:
+     * - ANY_RESISTANTALLOY des Originals ist im Port der Schnellarbeitsstahl, wie schon beim
+     *   Radiolyse-Rezept aus Runde 40.
+     * - EnumCircuitType.ADVANCED heisst im Original "Military Grade Circuit Board", BISMOID
+     *   "Versatile Circuit Board"; im Port sind das eigene Gegenstaende.
+     *
+     * EINGELOEST IN RUNDE 222: hier stand, der Desh-Motor fehle dem Port, die Pumpe nehme
+     * darum den gewoehnlichen Motor, und die beiden Felder gehoerten zurueckgedreht, sobald
+     * er nachkommt. Er kam in Runde 216 nach; die Felder sind gedreht.
+     *
+     * Die Beschreibung stand ausserdem ueber pileDevices statt ueber dieser Methode -- sie
+     * beschrieb also die falschen Rezepte. Auch das ist berichtigt.
+     */
     private void watzParts(RecipeOutput recipeOutput) {
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.WATZ_PUMP.get(), 1)
                 .pattern("MPM").pattern("PCP").pattern("PSP")
-                .define('M', NtmItems.MOTOR.get())
+                .define('M', NtmItems.MOTOR_DESH.get())
                 .define('P', DataComponentIngredient.of(false, NtmDataComponents.META, CastPlateItem.Type.DURA_STEEL.ordinal(), NtmItems.CAST_PLATE.get()))
                 .define('C', NtmItems.CIRCUIT_VERSATILE_BOARD.get())
                 .define('S', NtmItems.PIPE_DURA_STEEL.get())
@@ -4084,6 +4087,57 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .define('T', NtmItems.PLATE_TITANIUM.get())
                 .define('R', NtmItems.INGOT_RUBBER.get())
                 .unlockedBy("has_plate_titanium", has(NtmItems.PLATE_TITANIUM.get()))
+                .save(recipeOutput);
+
+        /*
+         * DER BLACKJACK-ANZUG, ArmorRecipes.java Z. 73 bis 77. Jedes Stueck ausser dem Helm
+         * wird um das entsprechende Sternmetallstueck herumgebaut; der Helm selbst ist eine
+         * Augenklappe aus Faden, schwarzer Wolle und einem Schaltkreis.
+         */
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.BJ_HELMET.get(), 1)
+                .pattern("SBS").pattern(" C ").pattern(" I ")
+                .define('S', Items.STRING)
+                .define('B', Blocks.BLACK_WOOL)
+                .define('C', NtmItems.CIRCUIT_MILITARY_GRADE_BOARD.get())
+                .define('I', NtmItems.INGOT_STARMETAL.get())
+                .unlockedBy("has_ingot_starmetal", has(NtmItems.INGOT_STARMETAL.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.BJ_PLATE.get(), 1)
+                .pattern("N N").pattern("MSM").pattern("NCN")
+                .define('N', NtmItems.PLATE_ARMOR_LUNAR.get())
+                .define('M', NtmItems.MOTOR_DESH.get())
+                .define('S', NtmItems.STARMETAL_PLATE.get())
+                .define('C', NtmItems.CIRCUIT_MILITARY_GRADE_BOARD.get())
+                .unlockedBy("has_plate_armor_lunar", has(NtmItems.PLATE_ARMOR_LUNAR.get()))
+                .save(recipeOutput);
+        /*
+         * Die Fluegel werden an die fertige Brustplatte angebaut, nicht nebenher gebaut --
+         * deshalb steht sie selbst in der Mitte des Musters. Der Xenontank ist der Treibstoff.
+         */
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.BJ_PLATE_JETPACK.get(), 1)
+                .pattern("NFN").pattern("TPT").pattern("ICI")
+                .define('N', NtmItems.PLATE_ARMOR_LUNAR.get())
+                .define('F', NtmItems.FINS_QUAD_TITANIUM.get())
+                .define('T', DataComponentIngredient.of(false, NtmDataComponents.META, Fluids.XENON.getID(), NtmItems.FLUID_TANK_FULL.get()))
+                .define('P', NtmItems.BJ_PLATE.get())
+                .define('I', NtmItems.MP_THRUSTER_10_XENON.get())
+                .define('C', NtmItems.CRYSTAL_PHOSPHORUS.get())
+                .unlockedBy("has_bj_plate", has(NtmItems.BJ_PLATE.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.BJ_LEGS.get(), 1)
+                .pattern("MBM").pattern("NSN").pattern("N N")
+                .define('N', NtmItems.PLATE_ARMOR_LUNAR.get())
+                .define('M', NtmItems.MOTOR_DESH.get())
+                .define('S', NtmItems.STARMETAL_LEGS.get())
+                .define('B', NtmBlocks.BLOCK_STARMETAL.get())
+                .unlockedBy("has_plate_armor_lunar", has(NtmItems.PLATE_ARMOR_LUNAR.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.BJ_BOOTS.get(), 1)
+                .pattern("N N").pattern("BSB")
+                .define('N', NtmItems.PLATE_ARMOR_LUNAR.get())
+                .define('S', NtmItems.STARMETAL_BOOTS.get())
+                .define('B', NtmBlocks.BLOCK_STARMETAL.get())
+                .unlockedBy("has_plate_armor_lunar", has(NtmItems.PLATE_ARMOR_LUNAR.get()))
                 .save(recipeOutput);
 
         /*

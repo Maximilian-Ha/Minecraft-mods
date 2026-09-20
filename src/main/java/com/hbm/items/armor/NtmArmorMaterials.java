@@ -150,7 +150,14 @@ public class NtmArmorMaterials {
      */
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> ENVSUIT = register("envsuit", LAYER_INVISIBLE, 10, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.PLATE_ARMOR_HEV.get()));
 
+    /*
+     * Blackjack: {3, 8, 6, 3}, ohne Verzauberbarkeit, Haltbarkeitsfaktor 150, Reparatur mit
+     * der Mond-Panzerplatte. Wellenfrontmodell, Schicht unsichtbar.
+     */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> BJ = register("bj", LAYER_INVISIBLE, 0, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.PLATE_ARMOR_LUNAR.get()));
+
     public static final int DURABILITY_T51 = 150;
+    public static final int DURABILITY_BJ = 150;
     public static final int DURABILITY_ENVSUIT = 150;
     public static final int DURABILITY_FAU = 150;
     public static final int DURABILITY_BISMUTH = 100;

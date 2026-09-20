@@ -28,6 +28,16 @@ public class NtmSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_DRY_FIRE = reg("weapon.reload.dry_fire_click");
     /** Der Faustschlag der Panzerruestung -- im Original NTMSounds "hbm:weapon.fire.smack". */
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SMACK = reg("weapon.fire.smack");
+    /**
+     * Das Zischen des Ionentriebwerks am Blackjack-Anzug. Im Original heisst der Klang
+     * "hbm:weapon.immolatorShoot" und gehoert eigentlich dem Flammenwerfer -- der Anzug
+     * borgt ihn sich, und der Port borgt ihn genauso.
+     *
+     * UMBENANNT: 1.21 laesst in einem Ressourcenpfad nur [a-z0-9/._-] zu, das grosse S aus
+     * immolatorShoot also nicht. Datei und Verweis heissen hier darum immolator_shoot. Das
+     * Tor location-check hat den Fehler gefunden, bevor er ins Spiel kam.
+     */
+    public static final DeferredHolder<SoundEvent, SoundEvent> WEAPON_IMMOLATOR_SHOOT = reg("weapon.immolator_shoot");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_HEAVY_REVOLVER_FIRE = reg("weapon.fire.44_shoot");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SHOTGUN_FIRE = reg("weapon.fire.shotgun");
     /* Im Original heisst die Datei shotgunAlt; der Port schreibt Dateinamen klein mit Unterstrich. */
