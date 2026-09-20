@@ -67,6 +67,14 @@ public class NtmTemplatePools {
     public static final ResourceKey<StructureTemplatePool> RUIN_I = registerKey("ruins/ruin_i");
     public static final ResourceKey<StructureTemplatePool> RUIN_J = registerKey("ruins/ruin_j");
 
+    /* Die Einzelbauwerke des flachen Landes, Runde 262. */
+    public static final ResourceKey<StructureTemplatePool> SPIRE = registerKey("land/spire");
+    public static final ResourceKey<StructureTemplatePool> FOREST_CHEM = registerKey("land/forest_chem");
+    public static final ResourceKey<StructureTemplatePool> FOREST_POST = registerKey("land/forest_post");
+    public static final ResourceKey<StructureTemplatePool> CRASHED_PLANE_1 = registerKey("land/crashed_plane_1");
+    public static final ResourceKey<StructureTemplatePool> CRASHED_PLANE_2 = registerKey("land/crashed_plane_2");
+    public static final ResourceKey<StructureTemplatePool> WATER_PUMP = registerKey("land/water_pump");
+
     public static void bootstrap(BootstrapContext<StructureTemplatePool> context) {
 
         HolderGetter<StructureTemplatePool> pools = context.lookup(Registries.TEMPLATE_POOL);
@@ -156,6 +164,13 @@ public class NtmTemplatePools {
         einzeln(context, leer, RUIN_H, "ruins/ruin_h", gelaende);
         einzeln(context, leer, RUIN_I, "ruins/ruin_i", gelaende);
         einzeln(context, leer, RUIN_J, "ruins/ruin_j", gelaende);
+
+        einzeln(context, leer, SPIRE, "land/spire");
+        einzeln(context, leer, FOREST_CHEM, "land/forest_chem");
+        einzeln(context, leer, FOREST_POST, "land/forest_post");
+        einzeln(context, leer, CRASHED_PLANE_1, "land/crashed_plane_1");
+        einzeln(context, leer, CRASHED_PLANE_2, "land/crashed_plane_2");
+        einzeln(context, leer, WATER_PUMP, "land/water_pump");
     }
 
     /**

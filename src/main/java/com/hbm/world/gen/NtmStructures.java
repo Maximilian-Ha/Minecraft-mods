@@ -67,6 +67,14 @@ public class NtmStructures {
     public static final ResourceKey<Structure> RUIN_I = registerKey("ruin_i");
     public static final ResourceKey<Structure> RUIN_J = registerKey("ruin_j");
 
+    /* Die Einzelbauwerke des flachen Landes, Runde 262. */
+    public static final ResourceKey<Structure> SPIRE = registerKey("spire");
+    public static final ResourceKey<Structure> FOREST_CHEM = registerKey("forest_chem");
+    public static final ResourceKey<Structure> FOREST_POST = registerKey("forest_post");
+    public static final ResourceKey<Structure> CRASHED_PLANE_1 = registerKey("crashed_plane_1");
+    public static final ResourceKey<Structure> CRASHED_PLANE_2 = registerKey("crashed_plane_2");
+    public static final ResourceKey<Structure> WATER_PUMP = registerKey("water_pump");
+
     public static void bootstrap(BootstrapContext<Structure> context) {
 
         HolderGetter<Biome> biome = context.lookup(Registries.BIOME);
@@ -93,12 +101,12 @@ public class NtmStructures {
          * das Heightmap-Argument waere die Zahl eine absolute Hoehe, und die Huetten staenden
          * auf Y=-7 im Grundgestein.
          */
-        einzeln(context, biome, pools, VERTIBIRD, NtmTemplatePools.VERTIBIRD, -3);
-        einzeln(context, biome, pools, CRASHED_VERTIBIRD, NtmTemplatePools.CRASHED_VERTIBIRD, -10);
-        einzeln(context, biome, pools, DESERT_SHACK_1, NtmTemplatePools.DESERT_SHACK_1, -7);
-        einzeln(context, biome, pools, DESERT_SHACK_2, NtmTemplatePools.DESERT_SHACK_2, -7);
-        einzeln(context, biome, pools, DESERT_SHACK_3, NtmTemplatePools.DESERT_SHACK_3, -5);
-        einzeln(context, biome, pools, DEAD_DISH_SMALL, NtmTemplatePools.DEAD_DISH_SMALL, -5);
+        einzeln(context, sandbiome(biome), pools, VERTIBIRD, NtmTemplatePools.VERTIBIRD, -3);
+        einzeln(context, sandbiome(biome), pools, CRASHED_VERTIBIRD, NtmTemplatePools.CRASHED_VERTIBIRD, -10);
+        einzeln(context, sandbiome(biome), pools, DESERT_SHACK_1, NtmTemplatePools.DESERT_SHACK_1, -7);
+        einzeln(context, sandbiome(biome), pools, DESERT_SHACK_2, NtmTemplatePools.DESERT_SHACK_2, -7);
+        einzeln(context, sandbiome(biome), pools, DESERT_SHACK_3, NtmTemplatePools.DESERT_SHACK_3, -5);
+        einzeln(context, sandbiome(biome), pools, DEAD_DISH_SMALL, NtmTemplatePools.DEAD_DISH_SMALL, -5);
 
         /*
          * DIE ZEHN RUINEN. Versatz null, obwohl das Original heightOffset = -1 nennt: der
@@ -115,16 +123,29 @@ public class NtmStructures {
         ruine(context, biome, pools, RUIN_H, NtmTemplatePools.RUIN_H);
         ruine(context, biome, pools, RUIN_I, NtmTemplatePools.RUIN_I);
         ruine(context, biome, pools, RUIN_J, NtmTemplatePools.RUIN_J);
+
+        /*
+         * DIE SECHS DES FLACHEN LANDES. Das Original unterscheidet sie ueber die
+         * Gelaenderauheit des Bioms -- biome.heightVariation -- und nicht ueber einen Typ:
+         * der Spire will hoechstens 0,05, die uebrigen vier hoechstens 0,3. Die Wasserpumpe
+         * fragt statt dessen die Typen PLAINS und SWAMP ab.
+         */
+        einzeln(context, sehrflach(biome), pools, SPIRE, NtmTemplatePools.SPIRE, -1);
+        einzeln(context, flach(biome), pools, FOREST_CHEM, NtmTemplatePools.FOREST_CHEM, -9);
+        einzeln(context, flach(biome), pools, FOREST_POST, NtmTemplatePools.FOREST_POST, -10);
+        einzeln(context, flach(biome), pools, CRASHED_PLANE_1, NtmTemplatePools.CRASHED_PLANE_1, -5);
+        einzeln(context, flach(biome), pools, CRASHED_PLANE_2, NtmTemplatePools.CRASHED_PLANE_2, -8);
+        einzeln(context, ebeneUndSumpf(biome), pools, WATER_PUMP, NtmTemplatePools.WATER_PUMP, -10);
     }
 
-    /** Ein Einzelbauwerk der Wueste: ein Stueck, an der Gelaendeoberkante, um Versatz tiefer. */
-    private static void einzeln(BootstrapContext<Structure> context, HolderGetter<Biome> biome,
+    /** Ein Einzelbauwerk: ein Stueck, an der Gelaendeoberkante, um Versatz tiefer. */
+    private static void einzeln(BootstrapContext<Structure> context, HolderSet<Biome> biome,
             HolderGetter<StructureTemplatePool> pools, ResourceKey<Structure> schluessel,
             ResourceKey<StructureTemplatePool> pool, int versatz) {
 
         context.register(schluessel, new JigsawStructure(
                 new Structure.StructureSettings(
-                        sandbiome(biome),
+                        biome,
                         Map.of(),
                         GenerationStep.Decoration.SURFACE_STRUCTURES,
                         TerrainAdjustment.NONE),
@@ -189,6 +210,79 @@ public class NtmStructures {
                 biome.getOrThrow(Biomes.CHERRY_GROVE),
                 biome.getOrThrow(Biomes.STONY_PEAKS),
                 biome.getOrThrow(Biomes.MUSHROOM_FIELDS));
+    }
+
+    /**
+     * biome.heightVariation <= 0.05F && !isWaterBiome -- das FLACHSTE Gelaende, das 1.7.10
+     * kennt. Nur der Spire verlangt es.
+     *
+     * Wie die SANDY-Liste weiter unten ist auch diese die Anwendung einer nachlesbaren Regel
+     * auf die Biome von 1.21, nicht eine Messung an Vanillas Zahlen: welche heightVariation
+     * ein Biom von 1.7.10 hat, steht in Vanilla 1.7.10 und nicht in diesem Baum. Drin ist,
+     * was im Spiel als Ebene durchgeht.
+     */
+    private static HolderSet<Biome> sehrflach(HolderGetter<Biome> biome) {
+        return HolderSet.direct(
+                biome.getOrThrow(Biomes.PLAINS),
+                biome.getOrThrow(Biomes.SUNFLOWER_PLAINS),
+                biome.getOrThrow(Biomes.SNOWY_PLAINS),
+                biome.getOrThrow(Biomes.DESERT),
+                biome.getOrThrow(Biomes.SAVANNA),
+                biome.getOrThrow(Biomes.SAVANNA_PLATEAU),
+                biome.getOrThrow(Biomes.BEACH),
+                biome.getOrThrow(Biomes.SNOWY_BEACH),
+                biome.getOrThrow(Biomes.MUSHROOM_FIELDS));
+    }
+
+    /**
+     * biome.heightVariation <= 0.3F && !isWaterBiome -- alles ausser Gebirge und Wasser.
+     *
+     * Die Schwelle 0,3 laesst in 1.7.10 fast jedes Oberflaechenbiom durch; hart ausgeschlossen
+     * sind die Extreme Hills und ihre Abkoemmlinge (0,5). Die Liste unten ist entsprechend
+     * weit: alles Land ausser den Gebirgsbiomen von 1.21. Dieselbe Einschraenkung wie oben --
+     * hergeleitet, nicht nachgemessen.
+     */
+    private static HolderSet<Biome> flach(HolderGetter<Biome> biome) {
+        return HolderSet.direct(
+                biome.getOrThrow(Biomes.PLAINS),
+                biome.getOrThrow(Biomes.SUNFLOWER_PLAINS),
+                biome.getOrThrow(Biomes.SNOWY_PLAINS),
+                biome.getOrThrow(Biomes.DESERT),
+                biome.getOrThrow(Biomes.SAVANNA),
+                biome.getOrThrow(Biomes.SAVANNA_PLATEAU),
+                biome.getOrThrow(Biomes.FOREST),
+                biome.getOrThrow(Biomes.FLOWER_FOREST),
+                biome.getOrThrow(Biomes.BIRCH_FOREST),
+                biome.getOrThrow(Biomes.OLD_GROWTH_BIRCH_FOREST),
+                biome.getOrThrow(Biomes.DARK_FOREST),
+                biome.getOrThrow(Biomes.TAIGA),
+                biome.getOrThrow(Biomes.SNOWY_TAIGA),
+                biome.getOrThrow(Biomes.OLD_GROWTH_PINE_TAIGA),
+                biome.getOrThrow(Biomes.OLD_GROWTH_SPRUCE_TAIGA),
+                biome.getOrThrow(Biomes.JUNGLE),
+                biome.getOrThrow(Biomes.SPARSE_JUNGLE),
+                biome.getOrThrow(Biomes.BAMBOO_JUNGLE),
+                biome.getOrThrow(Biomes.BADLANDS),
+                biome.getOrThrow(Biomes.ERODED_BADLANDS),
+                biome.getOrThrow(Biomes.WOODED_BADLANDS),
+                biome.getOrThrow(Biomes.SWAMP),
+                biome.getOrThrow(Biomes.MANGROVE_SWAMP),
+                biome.getOrThrow(Biomes.MEADOW),
+                biome.getOrThrow(Biomes.CHERRY_GROVE),
+                biome.getOrThrow(Biomes.BEACH),
+                biome.getOrThrow(Biomes.SNOWY_BEACH),
+                biome.getOrThrow(Biomes.MUSHROOM_FIELDS));
+    }
+
+    /** Type.PLAINS || Type.SWAMP -- die Bedingung der Wasserpumpe, und die einzige hier mit Typen. */
+    private static HolderSet<Biome> ebeneUndSumpf(HolderGetter<Biome> biome) {
+        return HolderSet.direct(
+                biome.getOrThrow(Biomes.PLAINS),
+                biome.getOrThrow(Biomes.SUNFLOWER_PLAINS),
+                biome.getOrThrow(Biomes.SNOWY_PLAINS),
+                biome.getOrThrow(Biomes.MEADOW),
+                biome.getOrThrow(Biomes.SWAMP),
+                biome.getOrThrow(Biomes.MANGROVE_SWAMP));
     }
 
     /**

@@ -57,6 +57,13 @@ public class NtmStructureSets {
     public static final ResourceKey<StructureSet> RUIN_I = registerKey("ruin_i");
     public static final ResourceKey<StructureSet> RUIN_J = registerKey("ruin_j");
 
+    public static final ResourceKey<StructureSet> SPIRE = registerKey("spire");
+    public static final ResourceKey<StructureSet> FOREST_CHEM = registerKey("forest_chem");
+    public static final ResourceKey<StructureSet> FOREST_POST = registerKey("forest_post");
+    public static final ResourceKey<StructureSet> CRASHED_PLANE_1 = registerKey("crashed_plane_1");
+    public static final ResourceKey<StructureSet> CRASHED_PLANE_2 = registerKey("crashed_plane_2");
+    public static final ResourceKey<StructureSet> WATER_PUMP = registerKey("water_pump");
+
     public static void bootstrap(BootstrapContext<StructureSet> context) {
 
         HolderGetter<Structure> strukturen = context.lookup(Registries.STRUCTURE);
@@ -107,6 +114,21 @@ public class NtmStructureSets {
         streuung(context, strukturen, RUIN_H, NtmStructures.RUIN_H, 71, 24, 996996996 + 14);
         streuung(context, strukturen, RUIN_I, NtmStructures.RUIN_I, 71, 24, 996996996 + 15);
         streuung(context, strukturen, RUIN_J, NtmStructures.RUIN_J, 71, 24, 996996996 + 16);
+
+        /*
+         * DIE SECHS DES FLACHEN LANDES. Nenner ist wieder das Gesamtgewicht der Ebene (422,
+         * mit derselben Einschraenkung wie oben bei den Ruinen); alle sechs duerfen dort
+         * stehen, die Ebene ist also fuer jedes von ihnen ein zulaessiger Ort.
+         *
+         * Der Spire ist mit Gewicht 2 das seltenste Bauwerk des Originals -- Abstand 174
+         * Chunks, also rund eines auf 2800 mal 2800 Bloecke.
+         */
+        streuung(context, strukturen, SPIRE, NtmStructures.SPIRE, 174, 58, 996996996 + 17);
+        streuung(context, strukturen, FOREST_CHEM, NtmStructures.FOREST_CHEM, 45, 15, 996996996 + 18);
+        streuung(context, strukturen, FOREST_POST, NtmStructures.FOREST_POST, 45, 15, 996996996 + 19);
+        streuung(context, strukturen, CRASHED_PLANE_1, NtmStructures.CRASHED_PLANE_1, 49, 16, 996996996 + 20);
+        streuung(context, strukturen, CRASHED_PLANE_2, NtmStructures.CRASHED_PLANE_2, 49, 16, 996996996 + 21);
+        streuung(context, strukturen, WATER_PUMP, NtmStructures.WATER_PUMP, 64, 21, 996996996 + 22);
     }
 
     /**

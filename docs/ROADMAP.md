@@ -12385,3 +12385,45 @@ Muster aus Runde 260 verlangte eine schließende Klammer direkt hinter dem Pfad.
 Dateien wurden wieder als „ohne Benutzer" gemeldet. Das Muster endet jetzt am Pfad.
 
 **Stand: 17 von 34 Bauwerken in der Welt.**
+
+## Runde 262 — Sechs auf flachem Land
+
+Die dritte Gruppe: Spire, Waldchemie, Waldposten, die beiden Flugzeugwracks und die
+Wasserpumpe. Sie haben alle **keine Höhenschranke** — deshalb gehen sie mit demselben
+Verfahren wie die Wüstengruppe, nur mit anderen Biomlisten.
+
+### Drei Bedingungen statt eines Typs
+
+Das Original unterscheidet fünf der sechs nicht über einen `BiomeDictionary`-Typ, sondern über
+die **Geländerauheit** `biome.heightVariation`:
+
+| Bedingung | wer |
+|---|---|
+| `≤ 0.05 && !isWaterBiome` | Spire |
+| `≤ 0.3 && !isWaterBiome` | Waldchemie, Waldposten, beide Flugzeugwracks |
+| `Type.PLAINS \|\| Type.SWAMP` | Wasserpumpe |
+
+Die Schwelle 0,3 lässt in 1.7.10 fast jedes Oberflächenbiom durch; hart ausgeschlossen sind
+die Extreme Hills und ihre Abkömmlinge (0,5). Die Liste im Quelltext ist entsprechend weit.
+
+Auch diese drei Listen sind **hergeleitet, nicht nachgemessen** — welche `heightVariation` ein
+Biom von 1.7.10 trägt, steht in Vanilla 1.7.10 und nicht in diesem Verzeichnisbaum. Sie tragen
+denselben Vermerk wie die SANDY-Liste aus Runde 260.
+
+### Der Spire ist das seltenste Bauwerk des Originals
+
+Gewicht 2 gegen ein Gesamtgewicht von 422 — Abstand **174 Chunks**, also rund einer auf 2800
+mal 2800 Blöcke. Das Verlies (Gewicht 1) ist noch seltener.
+
+### Ein Fund beim Einbau
+
+Die beiden Flugzeugwracks bekommen denselben Abstand (49) und die Waldstücke ebenfalls (45).
+Seit Runde 261 wird der Streuwert durchgezählt statt aus dem Abstand gebildet — sonst wäre hier
+genau derselbe Fehler noch einmal entstanden, diesmal doppelt. Gemessen: alle 22 Streuwerte
+verschieden.
+
+**Stand: 23 von 34 Bauwerken in der Welt.** Offen bleiben die vier mit Höhenschranke
+(Strandpatrouille, Flugzeugträger, Ölplattform, Leuchtturm — 1.21 kennt dafür keinen fertigen
+Bauwerkstyp), die Schüssel (auch Höhenschranke), die drei mit `isFlatBiome` (Labor, Funkhaus,
+Sendeturm), die vier, die `wand_logic` brauchen, und die beiden Nicht-NBT-Bauwerke (Features,
+Bunker), die im Original gar keine Vorlagendatei haben.
