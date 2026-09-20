@@ -296,6 +296,16 @@ public class EntityEffectHandler {
         if(!level.isClientSide) {
             float digamma = HbmLivingAttachments.getDigamma(entity);
 
+            /* DIE DREI DIGAMMA-ERFOLGE. Sie stehen VOR dem Ruecksprung, nicht dahinter: das
+             * Original verleiht "sehen" schon ab jedem Wert ueber null, der Schweisstropfen
+             * unten faengt erst bei 0,1 an. Haengt man sie hinter den Ruecksprung, bekommt
+             * niemand den ersten der drei, und niemand merkt es. */
+            if(entity instanceof ServerPlayer spieler) {
+                if(digamma > 0F) NtmCriteria.marke(spieler, "digamma_see");
+                if(digamma >= 2F) NtmCriteria.marke(spieler, "digamma_feel");
+                if(digamma >= 10F) NtmCriteria.marke(spieler, "digamma_know");
+            }
+
             if(digamma < 0.1F) return;
 
             int chance = Math.max(10 - (int) (digamma), 1);

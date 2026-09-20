@@ -12120,3 +12120,70 @@ dafür, dass gar kein `.pyc` mehr entsteht.
 (`dungeon_chain (ClimbableChainBlock): "axsi"`), Wiederherstellung **mit aufgeprägter
 Änderungszeit der verfälschten Fassung** wieder grün. Genau der Fall, der das Tor vorher
 getäuscht hat. Die 38 Meteorvorlagen setzt der Umsetzer weiterhin byte-identisch um.
+
+## Runde 258 — Sieben Erfolge, und drei, die im Original selbst niemand bekommt
+
+39 von 61 standen nach Runde 252 (die Runde selbst schrieb 40 -- sie zählte die eigene Wurzel
+mit, die das Original nicht hat). Diese Runde bringt sieben, und sie trennt dabei zwei Dinge,
+die bis hierher vermischt waren: was der Port **noch nicht kann**, und was das Original
+**selbst nicht tut**.
+
+### Vier mit neuem Auslöser
+
+**Die Digamma-Kette — sehen, fühlen, wissen.** Das Original hängt sie an drei Schwellen
+desselben Wertes: über null, ab zwei, ab zehn Drx. Der Port liest diesen Wert ohnehin jeden
+Tick, in `EntityEffectHandler.handleDigamma`. Ein Detail entscheidet dort über einen der drei:
+die Methode springt bei `digamma < 0.1F` zurück, der Schweißtropfen fängt erst dort an — die
+Erfolgsprüfung steht deshalb **vor** dem Rücksprung, sonst bekäme niemand den ersten der drei,
+und niemand merkte es.
+
+**Inferno** hängt am Flüssigkeitstank: gefüllt mit etwas Brennbarem, zerlegt von einem
+Zeta-Bomblet, verliehen an jeden Spieler im Umkreis von hundert Blöcken. Das Original hat
+dieselbe Stelle ein zweites Mal in der Raffinerie; im Port hat deren Block kein
+`onBlockExploded` — sie zerlegt sich nur selbst, von außen ist sie nicht sprengbar. Diese
+zweite Stelle kommt mit dem Verhalten, nicht vorher.
+
+### Einer, dessen Begründung nicht trug
+
+**Chicago Pile** stand seit Runde 247 als zurückgestellt vermerkt, weil sein Symbol
+`pile_rod_plutonium` im Port eine Metadatensorte von `PILE_ROD` ist. Das war ein Grund gegen
+das Symbol, nicht gegen den Erfolg: sein Auslöser ist das Bauen von `billet_pu_mix`, und genau
+den Gegenstand gibt es im Port. Er zeigt jetzt den Gegenstand, der ihn verleiht.
+
+### Zwei, die das Original nie vergibt
+
+Nachgemessen über den ganzen Quelltext des Originals: **`tasteofblood`, `c20_5` und
+`digammaUpOnTop` stehen in keinem `triggerAchievement`-Aufruf und in keiner Zeile des
+`AchievementHandler`.** Sie stehen auf der Erfolgsseite und sind dort genauso unerreichbar wie
+`impossible`. Das ist kein Loch im Port — es ist der Zustand der Vorlage.
+
+Die ersten beiden stehen jetzt da, mit demselben Kriterium wie `impossible`: dem Gegenstand
+`NOTHING`, den niemand bekommt. Eine Marke mit einer Kennung, die nirgends gefeuert wird, wäre
+dasselbe in umständlich — und sie sähe aus wie eine vergessene Verdrahtung. `digammaUpOnTop`
+fehlt weiter, aber aus einem anderen Grund: er hängt an `digammaKauaiMoho`, und den gibt es im
+Port noch nicht. Er kommt mit seinem Vorgänger.
+
+### Der Stand
+
+**46 von 61**, in 47 Knoten — der eigenen Wurzel, die 1.21 verlangt und die das Original nicht
+hat.
+
+*Berichtigung zur Zählung:* Runde 252 schrieb „40 von 61" und zählte diese Wurzel als einen der
+61 mit. Gemessen waren es 39. Die Zahl hier ist gegen die 61 Namen aus `MainRegistry` geprüft,
+Name für Name.
+
+Von den 32 getriggerten des Originals stehen **20**. Die fehlenden 15 warten nicht auf Arbeit am
+Erfolgssystem, sondern auf Dinge, die es im Port noch nicht gibt:
+
+| fehlt | wartet auf |
+|---|---|
+| `soyuz`, `space` | die Sojus-Rakete |
+| `bossMeltdown`, `bossMaskman`, `bossWorm`, `bossUFO` | vier der fünf Bosse |
+| `fiend`, `fiend2` | die Schimmerwaffen |
+| `someWounds` | das Injektormesser |
+| `radium` | den Radiumkaffee |
+| `sulfuric` | einen Säure-Flüssigkeitsblock |
+| `digammaKauaiMoho` | den Speer |
+| `digammaUpOnTop` | seinen Vorgänger `digammaKauaiMoho` |
+| `potato` | die Kartoffelbatterie |
+| `SILEX` | `machine_silex` |

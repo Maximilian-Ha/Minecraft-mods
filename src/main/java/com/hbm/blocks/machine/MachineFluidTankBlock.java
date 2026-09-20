@@ -14,8 +14,11 @@ import com.hbm.blocks.DummyableBlock;
 import com.hbm.blocks.ILookOverlay;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
+import com.hbm.entity.projectile.BombletZeta;
 import com.hbm.inventory.fluid.tank.FluidTank;
+import com.hbm.inventory.fluid.trait.FT_Flammable;
 import com.hbm.items.machine.IItemFluidIdentifier;
+import com.hbm.registry.NtmCriteria;
 import com.hbm.util.InventoryUtil;
 import com.hbm.util.TagsUtil;
 import com.mojang.serialization.MapCodec;
@@ -150,6 +153,18 @@ public class MachineFluidTankBlock extends DummyableBlock implements IToolable, 
 
         if(!be.hasExploded) {
             be.explode();
+
+            /* DER ERFOLG "INFERNO": ein Tank voll Brennbarem, zerlegt von einem Zeta-Bomblet
+             * -- der Streumunition des Bombers. Das Original prueft beides, den Ausloeser und
+             * den Inhalt, und verleiht ihn jedem Spieler im Umkreis von hundert Bloecken.
+             *
+             * Das Original hat dieselbe Stelle ein zweites Mal in der Raffinerie. Im Port hat
+             * ihr Block kein onBlockExploded -- sie zerlegt sich nur selbst, von aussen ist sie
+             * nicht sprengbar. Diese zweite Stelle kommt mit dem Verhalten, nicht vorher. */
+            if(explosion.getDirectSourceEntity() instanceof BombletZeta
+                    && be.tank.getTankType().hasTrait(FT_Flammable.class)) {
+                NtmCriteria.markeImUmkreis(level, corePos, 100D, "inferno");
+            }
         } else {
             level.setBlock(corePos, Blocks.AIR.defaultBlockState(), 3);
         }

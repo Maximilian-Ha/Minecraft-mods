@@ -26,6 +26,10 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 /**
  * Die Erfolge, Runde 247.
  *
+ * STAND NACH RUNDE 258: 46 der 61 Namen des Originals, in 47 Knoten -- der eigene Wurzelknoten
+ * kommt hinzu, den 1.21 verlangt und den das Original nicht hat. (Runde 252 schrieb "40 von
+ * 61" und zaehlte diese Wurzel mit; gemessen waren es 39.)
+ *
  * DAS ORIGINAL HAT 61, DER PORT HATTE EINEN -- und der war ein Platzhalter: root.json mit
  * dem Titel "test" und leerer Beschreibung, handgeschrieben in den Datenordner gelegt. Ein
  * Erfolgsbaum, der aus einer leeren Wurzel besteht, ist derselbe Fehler wie eine Klasse,
@@ -40,18 +44,24 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
  *
  * DIE GETRIGGERTEN KOMMEN MIT IHREN AUSLOESERN, NICHT VORHER: jeder von ihnen braucht eine
  * Stelle im Port, die ihn feuert -- den Tod durch Strahlung, das Betreten des roten Zimmers,
- * den Start einer Sojus. Nach Runde 252 stehen 17 der 32; die uebrigen 15 warten auf
- * Entitaeten und Gegenstaende, die der Port noch nicht hat (die Sojus, die vier uebrigen
- * Bosse, die Digamma-Kette, die Schimmerwaffen, das Messer, der Radiumkaffee, die Saeure).
+ * den Start einer Sojus. Nach Runde 258 stehen 20 der 32 (nachgezaehlt an den Aufrufen mit
+ * Kennung); die uebrigen 12 warten auf Entitaeten und Gegenstaende, die der Port noch nicht
+ * hat: die Sojus (soyuz, space), die vier Bosse, die Schimmerwaffen (fiend, fiend2), das
+ * Messer (someWounds), der Radiumkaffee, die Schwefelsaeure und der Speer (kauaiMoho).
+ *
+ * DREI DER EINUNDSECHZIG SIND IM ORIGINAL SELBST UNERREICHBAR: tasteofblood, c20_5 und
+ * digammaUpOnTop stehen in keinem triggerAchievement-Aufruf und in keiner Zeile des
+ * AchievementHandlers. Die ersten beiden stehen hier; digammaUpOnTop haengt im Original an
+ * digammaKauaiMoho, und den gibt es im Port noch nicht -- er kommt mit seinem Vorgaenger.
  *
  * GITTERPLAETZE GIBT ES IN 1.21 NICHT MEHR. Das Original setzt jeden Erfolg auf eine
  * Koordinate (x, y); 1.21 legt den Baum selbst aus der Vorgaengerkette. Die Kette ist
  * uebernommen, die Koordinaten entfallen ersatzlos.
  *
- * NICHT DABEI: achSILEX -- machine_silex gibt es im Port nicht. Und achChicagoPile, dessen
- * Symbol pile_rod_plutonium im Port die Metadatensorte PU239 von PILE_ROD ist; ein
- * Erfolg auf eine Metadatensorte braucht ein DataComponentPredicate und kommt mit der
- * naechsten Gruppe.
+ * NICHT DABEI: achSILEX -- machine_silex gibt es im Port nicht -- und achPotato, dem die
+ * Kartoffelbatterie fehlt. achChicagoPile steht seit Runde 258 dabei: sein Symbol war der
+ * Grund fuer die Zurueckstellung, nicht sein Ausloeser, und ein Symbol laesst sich
+ * ersetzen.
  *
  * SAVE NIMMT EINE ResourceLocation, KEINEN STRING. Das hat Runde 247 einen
  * CI-Durchgang gekostet: NeoForges Erweiterung von Advancement.Builder.save nimmt
@@ -171,6 +181,51 @@ public class NtmAdvancementProvider extends AdvancementProvider {
              * DER UNMOEGLICHE ERFOLG ist im Original auf "nothing" gesetzt -- einen
              * Gegenstand, den niemand bekommt. Das ist der Witz, und er bleibt.
              */
+            /*
+             * FUENF WEITERE, Runde 258.
+             *
+             * DIE DIGAMMA-KETTE -- sehen, fuehlen, wissen. Das Original haengt sie an drei
+             * Schwellen desselben Wertes: ueber null, ab zwei, ab zehn Drx. Die Schwellen
+             * stehen jetzt in EntityEffectHandler.handleDigamma, dort, wo der Port den Wert
+             * ohnehin jeden Tick liest.
+             *
+             * Ihre Symbole sind im Original drei Metadatensorten von achievement_icon, die
+             * der Port nicht hat; alle drei zeigen deshalb das Digamma-Teilchen selbst.
+             *
+             * INFERNO haengt am Tank voll Brennbarem, den ein Zeta-Bomblet zerlegt.
+             *
+             * CHICAGO PILE kommt ohne Marke aus: das Original verleiht ihn beim Bauen von
+             * billet_pu_mix, und genau den Gegenstand gibt es im Port. Sein Symbol ist im
+             * Original pile_rod_plutonium -- im Port eine Metadatensorte von PILE_ROD, die
+             * ein DataComponentPredicate braeuchte. Der Erfolg zeigt stattdessen den
+             * Gegenstand, der ihn verleiht.
+             */
+            AdvancementHolder digammaSee = erfolg(speichern, helper, wurzel, "digamma_see", NtmItems.PARTICLE_DIGAMMA.get(), false, "digamma_see");
+            AdvancementHolder digammaFeel = erfolg(speichern, helper, digammaSee, "digamma_feel", NtmItems.PARTICLE_DIGAMMA.get(), false, "digamma_feel");
+            erfolg(speichern, helper, digammaFeel, "digamma_know", NtmItems.PARTICLE_DIGAMMA.get(), true, "digamma_know");
+
+            erfolg(speichern, helper, wurzel, "inferno", NtmItems.CANISTER_NAPALM.get(), true, "inferno");
+            erfolg(speichern, helper, centrifuge, "chicago_pile", NtmItems.BILLET_PU_MIX.get(), false);
+
+            /*
+             * DIE ZWEI UNERREICHBAREN, ebenfalls Runde 258. Nachgemessen ueber den ganzen
+             * Quelltext des Originals: "tasteofblood" und "c20_5" stehen zwar auf seiner
+             * Erfolgsseite, aber in keinem triggerAchievement-Aufruf UND in keiner Zeile von
+             * AchievementHandler. Sie sind dort genauso unerreichbar wie "impossible" -- das
+             * ist kein Versehen des Ports, sondern der Zustand des Originals.
+             *
+             * Sie bekommen deshalb dasselbe Kriterium wie "impossible": den Gegenstand
+             * NOTHING, den niemand bekommt. Eine Marke mit einer Kennung, die nirgends
+             * gefeuert wird, waere dasselbe in umstaendlich -- und sie saehe aus wie eine
+             * vergessene Verdrahtung.
+             *
+             * Die Symbole sind im Original Metadatensorten, die der Port nicht hat:
+             *   fluid_icon ASCHRAB           -> das Antischrabidium-Teilchen, derselbe Stoff
+             *   achievement_icon QUESTIONMARK -> das Schwarze Buch, passend zum "Kapitel"
+             */
+            unerreichbar(speichern, helper, wurzel, "taste_of_blood", NtmItems.PARTICLE_ASCHRAB.get(), true);
+            unerreichbar(speichern, helper, wurzel, "c20_5", NtmItems.BOOK_OF_.get(), true);
+
             erfolg(speichern, helper, horizonsEnd, "horizons_bonus", NtmItems.SAT_GERALD.get(), true);
             erfolg(speichern, helper, wurzel, "sacrifice", NtmItems.BURNT_BARK.get(), true);
             erfolg(speichern, helper, wurzel, "impossible", NtmItems.NOTHING.get(), true);
@@ -187,6 +242,19 @@ public class NtmAdvancementProvider extends AdvancementProvider {
 
             return bauen(speichern, helper, vorgaenger, name, symbol, besonders,
                     "has_item", InventoryChangeTrigger.TriggerInstance.hasItems(symbol));
+        }
+
+        /**
+         * Ein Erfolg, den niemand bekommen kann: sein Kriterium ist NOTHING, der Gegenstand
+         * ohne Rezept und ohne Fundort. So steht er im Original auch da -- ohne Ausloeser und
+         * ohne Eintrag im AchievementHandler. Das Symbol bleibt frei waehlbar, damit der
+         * Erfolg im Baum das zeigt, wovon er handelt.
+         */
+        private static AdvancementHolder unerreichbar(Consumer<AdvancementHolder> speichern, ExistingFileHelper helper,
+                AdvancementHolder vorgaenger, String name, ItemLike symbol, boolean besonders) {
+
+            return bauen(speichern, helper, vorgaenger, name, symbol, besonders,
+                    "has_item", InventoryChangeTrigger.TriggerInstance.hasItems(NtmItems.NOTHING.get()));
         }
 
         /**
