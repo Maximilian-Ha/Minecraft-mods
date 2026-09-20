@@ -11712,3 +11712,46 @@ prüft, ob jeder benutzte **Typ** erreichbar ist, nicht jede benutzte **Methode*
 für Methodenaufrufe müsste den ganzen Baum typauflösen -- das ist ein Übersetzer, kein
 Tor. Was bleibt, ist die Regel: nach einem Skript, das abbricht, prüfen was davon lief,
 und nicht nur, was man sehen wollte.
+
+## Standortbestimmung nach Runde 249: was noch fehlt, hängt an einem Fundament
+
+Die Punkte, die seit Runden als offen geführt wurden, sind bis auf drei abgearbeitet. Diese
+drei hängen **alle am selben fehlenden Fundament** -- und das ist eine Messung, kein
+Eindruck:
+
+### Das NBT-Bauwerkssystem
+
+Das Original hat in `world/gen/nbt/` elf Dateien mit zusammen **1975 Zeilen**:
+`NBTStructure`, `JigsawPiece`, `JigsawPool`, `SpawnCondition`, `INBTBlockTransformable`
+(allein 233 Zeilen Drehlogik für jeden Blocktyp), `INBTTileEntityTransformable` und fünf
+Selektoren. Dazu **79 `.nbt`-Dateien** mit den Bauwerken selbst.
+
+**Der Port hat davon nichts, und auch keinen Ersatz.** Kein `StructureTemplate`, kein
+`StructurePiece`, kein `JigsawPlacement`; in `world/gen/` stehen nur die drei
+Feature-Provider, die Erze, Öl, Landminen und Bombenkrater setzen. Null `.nbt`-Dateien.
+
+### Was daran hängt
+
+1. **Das Meteoritenverlies.** `meteor_spawner` und `dungeon_spawner` setzt niemand, weil
+   es keine Struktur gibt, die sie enthält.
+2. **Die vier Bauzauberstäbe.** Eine frühere Notiz hielt fest, sie hingen *nicht* am
+   Bauwerkssystem. Nachgemessen: technisch richtig, sachlich irreführend.
+   `BlockWandLogic` und `BlockWandLoot` haben je **genau einen** Bezug -- die Methode
+   `transformTE`; die dreißig bzw. neununddreißig Treffer auf `nbt.` waren gewöhnliches
+   `NBTTagCompound`. Aber ihr **Zweck** ist das System: der Beutestab trägt den Hinweistext
+   *„Define loot crates/piles in .nbt structures"* und ersetzt sich, wenn eine Struktur ihn
+   platziert. Ohne Strukturen ist er ein Block, den nie etwas auslöst.
+3. **Ein Teil der 32 offenen Erfolge**, über `LogicBlock`: `LogicBlockConditions` stellt
+   den Sockel auf (*„Find a great ancient weapon"*) und ist ein Logikblock **in** einer
+   Struktur, der auf Redstone reagiert.
+
+### Warum das kein reines Portieren ist
+
+1.7.10 hat kein Bauwerkssystem, also hat das Original sich eines gebaut. **1.21 hat eines**
+-- `StructureTemplate`, `Structure`, `StructurePool`, Jigsaw, alles über Datenpakete und
+Datagen. Die 1975 Zeilen Zeile für Zeile zu übertragen wäre falsch; richtig ist, die
+Bauwerke des Originals in Vanillas System zu überführen. Das ist Neukonstruktion mit dem
+Original als Vorlage -- und der größte verbliebene Brocken des ganzen Ports.
+
+Erster Schritt beim Bau: prüfen, welche der 79 `.nbt`-Dateien 1.21 unverändert laden kann.
+Das Format hat sich geändert -- Palette statt Blockkennziffern.
