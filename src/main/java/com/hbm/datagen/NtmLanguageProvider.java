@@ -4017,6 +4017,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.GAS_MASK_M65, "M65 Gas Mask");
         this.add(NtmItems.GAS_MASK_MONO, "Half Mask");
         this.add(NtmItems.GAS_MASK_OLDE, "Leather Gas Mask");
+        this.add(NtmItems.GOGGLES, "Goggles");
         this.add(NtmItems.MASK_RAG, "Crude Protective Mask");
         this.add(NtmItems.MASK_PISS, "Trench Mask");
         this.add(NtmItems.GAS_MASK_FILTER, "Gas Mask Filter");

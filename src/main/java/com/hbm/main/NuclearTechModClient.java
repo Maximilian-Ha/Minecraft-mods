@@ -61,6 +61,7 @@ import com.hbm.render.entity.effect.SkeletonModel;
 import com.hbm.render.entity.projectile.ModelRubble;
 import com.hbm.render.entity.projectile.ModelShrapnel;
 import com.hbm.render.model.armor.ModelGasMaskHead;
+import com.hbm.render.model.armor.ModelGogglesHead;
 import com.hbm.render.model.armor.ModelM65Head;
 import com.hbm.render.item.weapon.sedna.ItemRenderWeaponBase;
 import com.hbm.render.loader.HFRModelReloader;
@@ -962,6 +963,7 @@ public class NuclearTechModClient {
          * an getGenericArmorModel -- gebacken werden sie trotzdem hier. */
         event.registerLayerDefinition(ModelGasMaskHead.LAYER, ModelGasMaskHead::createBodyLayer);
         event.registerLayerDefinition(ModelM65Head.LAYER, ModelM65Head::createBodyLayer);
+        event.registerLayerDefinition(ModelGogglesHead.LAYER, ModelGogglesHead::createBodyLayer);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)

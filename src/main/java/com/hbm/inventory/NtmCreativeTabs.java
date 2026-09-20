@@ -1971,6 +1971,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.GAS_MASK_M65);
                         output.accept(NtmItems.GAS_MASK_MONO);
                         output.accept(NtmItems.GAS_MASK_OLDE);
+                        output.accept(NtmItems.GOGGLES);
                         output.accept(NtmItems.MASK_RAG);
                         output.accept(NtmItems.MASK_PISS);
                         output.accept(NtmItems.GAS_MASK_FILTER);

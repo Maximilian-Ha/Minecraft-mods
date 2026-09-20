@@ -3784,6 +3784,18 @@ public class NtmRecipeProvider extends RecipeProvider {
         hazmatBoots(recipeOutput, NtmItems.HAZMAT_BOOTS_GREY.get(), NtmItems.HAZMAT_CLOTH_GREY.get());
 
         /*
+         * DIE SCHUTZBRILLE. Vier Stahlplatten und zwei Glasscheiben, wortgetreu aus
+         * ArmorRecipes des Originals; KEY_ANYPANE ist dort jede Glasscheibe.
+         */
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.GOGGLES.get(), 1)
+                .pattern("P P")
+                .pattern("GPG")
+                .define('P', NtmItems.PLATE_STEEL.get())
+                .define('G', Tags.Items.GLASS_PANES)
+                .unlockedBy("has_plate_steel", has(NtmItems.PLATE_STEEL.get()))
+                .save(recipeOutput);
+
+        /*
          * DIE LEERE GASFLASCHE. Muster und Zutaten wortgetreu aus CraftingManager des
          * Originals: zwei Stueck aus vier Stahlplatten und einer Kupferplatte, die oben
          * links als Ventil sitzt.

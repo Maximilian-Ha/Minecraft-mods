@@ -59,6 +59,7 @@ public class NtmArmorMaterials {
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> MASK_GAS = register("mask_gas", "gas_mask", 9, 2, 6, 5, 2, () -> Ingredient.of(Items.IRON_INGOT));
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> MASK_M65 = register("mask_m65", "gas_mask_m65", 9, 2, 6, 5, 2, () -> Ingredient.of(Items.IRON_INGOT));
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> MASK_MONO = register("mask_mono", "gas_mask_mono", 9, 2, 6, 5, 2, () -> Ingredient.of(Items.IRON_INGOT));
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> GOGGLES = register("goggles", "goggles", 9, 2, 6, 5, 2, () -> Ingredient.of(Items.IRON_INGOT));
 
     /*
      * DER BLEIANZUG DER LIQUIDATOREN. Im Original ein Werkstoff: HBM_LIQUIDATOR,

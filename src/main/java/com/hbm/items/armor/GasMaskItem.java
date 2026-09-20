@@ -3,6 +3,7 @@ package com.hbm.items.armor;
 import api.hbm.item.IGasMask;
 import com.hbm.items.IHelmetOverlayItem;
 import com.hbm.render.model.armor.ModelGasMaskHead;
+import com.hbm.render.model.armor.ModelGogglesHead;
 import com.hbm.render.model.armor.ModelM65Head;
 import com.hbm.main.NuclearTechMod;
 import com.hbm.render.util.RenderScreenOverlay;
@@ -84,7 +85,7 @@ public class GasMaskItem extends ArmorItem implements IGasMask, IHelmetOverlayIt
      * Welches Kopfmodell die Maske am Koerper traegt. KEINES heisst: sie bleibt am Koerper
      * unsichtbar, so wie alle Masken des Ports es bis Runde 206 waren.
      */
-    public enum Kopf { KEINES, GASMASKE, M65 }
+    public enum Kopf { KEINES, GASMASKE, M65, BRILLE }
 
     private final Kopf kopf;
 
@@ -114,6 +115,7 @@ public class GasMaskItem extends ArmorItem implements IGasMask, IHelmetOverlayIt
 
             private ModelGasMaskHead gasmaske;
             private ModelM65Head m65;
+            private ModelGogglesHead brille;
 
             @Override
             @OnlyIn(Dist.CLIENT)
@@ -127,6 +129,12 @@ public class GasMaskItem extends ArmorItem implements IGasMask, IHelmetOverlayIt
                     if(gasmaske == null) gasmaske = new ModelGasMaskHead(modelle.bakeLayer(ModelGasMaskHead.LAYER));
                     gasmaske.copyHeadFrom(original);
                     return gasmaske;
+                }
+
+                if(kopf == Kopf.BRILLE) {
+                    if(brille == null) brille = new ModelGogglesHead(modelle.bakeLayer(ModelGogglesHead.LAYER));
+                    brille.copyHeadFrom(original);
+                    return brille;
                 }
 
                 if(m65 == null) m65 = new ModelM65Head(modelle.bakeLayer(ModelM65Head.LAYER));

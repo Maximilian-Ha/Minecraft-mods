@@ -1499,12 +1499,15 @@ public class NtmItems {
 
     /* Rot und grau tragen im Original ein eigenes Kopfmodell und haben deshalb
      * keinen Sichtvorsatz. */
-    public static final DeferredItem<Item> HAZMAT_HELMET_RED = ITEMS.register("hazmat_helmet_red", () -> new GasMaskItem(NtmArmorMaterials.HAZMAT_RED, hazmatProperties(ArmorItem.Type.HELMET), List.of()));
+    /* BERICHTIGUNG RUNDE 209: die rote und die graue Haube hatten kein Schirmbild. Das
+     * Original legt ihnen dasselbe Brillenbild vor wie der Schutzbrille selbst
+     * (ArmorModel.renderHelmetOverlay prueft ausdruecklich auf beide). */
+    public static final DeferredItem<Item> HAZMAT_HELMET_RED = ITEMS.register("hazmat_helmet_red", () -> new GasMaskItem(NtmArmorMaterials.HAZMAT_RED, hazmatProperties(ArmorItem.Type.HELMET), List.of(), GasMaskItem.OVERLAY_GOGGLES));
     public static final DeferredItem<Item> HAZMAT_PLATE_RED = ITEMS.register("hazmat_plate_red", () -> new ArmorItem(NtmArmorMaterials.HAZMAT_RED, ArmorItem.Type.CHESTPLATE, hazmatProperties(ArmorItem.Type.CHESTPLATE)));
     public static final DeferredItem<Item> HAZMAT_LEGS_RED = ITEMS.register("hazmat_legs_red", () -> new ArmorItem(NtmArmorMaterials.HAZMAT_RED, ArmorItem.Type.LEGGINGS, hazmatProperties(ArmorItem.Type.LEGGINGS)));
     public static final DeferredItem<Item> HAZMAT_BOOTS_RED = ITEMS.register("hazmat_boots_red", () -> new ArmorItem(NtmArmorMaterials.HAZMAT_RED, ArmorItem.Type.BOOTS, hazmatProperties(ArmorItem.Type.BOOTS)));
 
-    public static final DeferredItem<Item> HAZMAT_HELMET_GREY = ITEMS.register("hazmat_helmet_grey", () -> new GasMaskItem(NtmArmorMaterials.HAZMAT_GREY, hazmatProperties(ArmorItem.Type.HELMET), List.of()));
+    public static final DeferredItem<Item> HAZMAT_HELMET_GREY = ITEMS.register("hazmat_helmet_grey", () -> new GasMaskItem(NtmArmorMaterials.HAZMAT_GREY, hazmatProperties(ArmorItem.Type.HELMET), List.of(), GasMaskItem.OVERLAY_GOGGLES));
     public static final DeferredItem<Item> HAZMAT_PLATE_GREY = ITEMS.register("hazmat_plate_grey", () -> new ArmorItem(NtmArmorMaterials.HAZMAT_GREY, ArmorItem.Type.CHESTPLATE, hazmatProperties(ArmorItem.Type.CHESTPLATE)));
     public static final DeferredItem<Item> HAZMAT_LEGS_GREY = ITEMS.register("hazmat_legs_grey", () -> new ArmorItem(NtmArmorMaterials.HAZMAT_GREY, ArmorItem.Type.LEGGINGS, hazmatProperties(ArmorItem.Type.LEGGINGS)));
     public static final DeferredItem<Item> HAZMAT_BOOTS_GREY = ITEMS.register("hazmat_boots_grey", () -> new ArmorItem(NtmArmorMaterials.HAZMAT_GREY, ArmorItem.Type.BOOTS, hazmatProperties(ArmorItem.Type.BOOTS)));
@@ -1531,6 +1534,12 @@ public class NtmItems {
     public static final DeferredItem<Item> GAS_MASK_M65 = ITEMS.register("gas_mask_m65", () -> new GasMaskItem(NtmArmorMaterials.MASK_M65, maskProperties(), GasMaskItem.Kopf.M65, GasMaskItem.standardBlacklist(), GasMaskItem.OVERLAY_GOGGLES));
     public static final DeferredItem<Item> GAS_MASK_MONO = ITEMS.register("gas_mask_mono", () -> new GasMaskItem(NtmArmorMaterials.MASK_MONO, maskProperties(), GasMaskItem.Kopf.M65, GasMaskItem.monoxideBlacklist()));
     public static final DeferredItem<Item> GAS_MASK_OLDE = ITEMS.register("gas_mask_olde", () -> new GasMaskItem(NtmArmorMaterials.MASK, maskProperties(), GasMaskItem.standardBlacklist()));
+
+    /*
+     * DIE SCHUTZBRILLE. Kein Filtergewinde, sondern nur Glas vor den Augen: sie haelt Licht
+     * und Sand ab und truebt die Sicht mit zunehmendem Verschleiss.
+     */
+    public static final DeferredItem<Item> GOGGLES = ITEMS.register("goggles", () -> new GasMaskItem(NtmArmorMaterials.GOGGLES, maskProperties(), GasMaskItem.Kopf.BRILLE, List.of(), GasMaskItem.OVERLAY_GOGGLES));
 
     /* Lappen vor dem Gesicht: kein Gewinde, kein Filter, nur der Schutz, den der
      * Lappen selbst mitbringt. */

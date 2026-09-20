@@ -40,6 +40,7 @@ public class ArmorUtil {
         /* Was die Maske von sich aus kann, ganz ohne Filter. */
         ArmorRegistry.registerHazard(NtmItems.GAS_MASK.get(), HazardClass.SAND, HazardClass.LIGHT);
         ArmorRegistry.registerHazard(NtmItems.GAS_MASK_M65.get(), HazardClass.SAND);
+        ArmorRegistry.registerHazard(NtmItems.GOGGLES.get(), HazardClass.LIGHT, HazardClass.SAND);
         ArmorRegistry.registerHazard(NtmItems.MASK_RAG.get(), HazardClass.PARTICLE_COARSE);
         ArmorRegistry.registerHazard(NtmItems.MASK_PISS.get(), HazardClass.PARTICLE_COARSE, HazardClass.GAS_LUNG);
 

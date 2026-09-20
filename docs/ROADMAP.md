@@ -9540,6 +9540,9 @@ ihr eigenes (`ModelGoggles`). `gas_mask_olde` hat im Original gar kein Modell, s
 gewöhnliche Rüstungsschicht; er bleibt deshalb auf dem unsichtbaren Werkstoff, bis seine
 Schichttextur nachgereicht ist.
 
+> **Die Schutzbrille kam in Runde 209.** Die Aschebrille gibt es im Original gar nicht als
+> eigenen Gegenstand — siehe dort.
+
 Alle 39 Tore grün.
 
 ## Runde 207 — Der Bleianzug der Liquidatoren
@@ -9632,5 +9635,52 @@ Das Original malt die volle Flasche in drei Darstellungsdurchgängen: Rumpf unge
 Flaschenkörper in `bottleColor`, Etikett in `labelColor`. In 1.21 sind das drei
 Texturschichten mit je einem eigenen Farbton — dieselbe Aufteilung, nur anders benannt. Der
 Kanister im Port hat genau zwei; die Flasche ist die erste Stelle, die eine dritte braucht.
+
+Alle 39 Tore grün.
+
+
+## Runde 209 — Die Schutzbrille, und ein Schirmbild, das zwei Hauben verloren hatten
+
+Der letzte offene Punkt aus Runde 136, und dazu ein Fund, den erst die Suche danach zutage
+gebracht hat.
+
+### Die Brille selbst
+
+`goggles` gab es im Port **gar nicht** — nicht nur ihr Modell fehlte, sondern der Gegenstand.
+Sie ist kein Filtergerät, sondern Glas vor den Augen: sie hält Licht und Sand ab, und mit
+zunehmendem Verschleiß trübt sie die Sicht über dieselbe sechsstufige Bildleiter, die auch die
+M65 benutzt.
+
+Das Modell sind fünf Kästen — Blende, Körper, zwei Gläser, Band — nach demselben
+Techne-Verfahren wie die beiden Masken in Runde 206, mit derselben `mirror`-Falle auf jedem
+Kasten. Anders als Gasmaske und M65 wird sie **unskaliert** gezeichnet: sie sitzt eng am Kopf,
+und genau so soll sie sitzen.
+
+Der Tippfehler des Originals ist nicht mitgekommen: dort heißt die Gruppe `google`.
+
+### Der Fund: zwei Hauben ohne Schirmbild
+
+Beim Nachlesen, welche Gegenstände das Brillenbild benutzen, zeigte sich etwas anderes.
+`ArmorModel.renderHelmetOverlay` prüft im Original auf **drei** Gegenstände:
+
+```java
+if(this != ModItems.goggles && this != ModItems.hazmat_helmet_red && this != ModItems.hazmat_helmet_grey) return;
+```
+
+Die rote und die graue Schutzhaube legen dem Träger also dasselbe Brillenbild vor wie die
+Brille. Im Port hatten beide **gar kein** Schirmbild — sie waren mit `List.of()` und ohne
+Vorsatz angemeldet. Das ist die stille Sorte Abweichung, die kein Tor sieht: der Gegenstand
+funktioniert, er sieht nur anders aus als er soll. Beide haben ihr Bild jetzt.
+
+### Die Aschebrille
+
+Die stand in der Liste aus Runde 136 („Schutzbrille und Aschebrille warten auf dieselben
+Modelle"). Nachgemessen: die Zeichenkette `ash_glasses` kommt **im ganzen Original nicht ein
+einziges Mal vor** — weder als Feld in `ModItems` noch als Registrierung. Der Name kam aus
+`port-gap.py`, das Klassennamen vergleicht.
+
+Im Original liegen eine Klasse `ArmorAshGlasses` und eine Textur `ashglasses.png` — beide
+gehören zu keinem Gegenstand. Das ist dort tote Ladung, nicht hier eine Lücke; es gibt nichts
+nachzureichen.
 
 Alle 39 Tore grün.
