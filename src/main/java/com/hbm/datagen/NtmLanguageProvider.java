@@ -878,6 +878,27 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("advancements.hbmsntm.boss_creeper.description", "'There is nuclear creepers? Those are a thing?!'");
         this.add("advancements.hbmsntm.manhattan.title", "The Manhattan Project");
         this.add("advancements.hbmsntm.manhattan.description", "8:15; August 6th, 1945");
+        /* Die elf aus Runde 252. */
+        this.add("advancements.hbmsntm.slimeball.title", "I should dip my balls in sulfuric acid.");
+        this.add("advancements.hbmsntm.slimeball.description", "Pick up a slimeball.");
+        this.add("advancements.hbmsntm.stratum.title", "Stratum");
+        this.add("advancements.hbmsntm.stratum.description", "Hit the brakes, Mitts.");
+        this.add("advancements.hbmsntm.hidden.title", "Hidden Catalog");
+        this.add("advancements.hbmsntm.hidden.description", "Kill a tainted creeper with a falling boxcar.");
+        this.add("advancements.hbmsntm.omega12.title", "Omega-12 Particle Accelerator");
+        this.add("advancements.hbmsntm.omega12.description", "Solve the problem of continued life on this wretched planet.");
+        this.add("advancements.hbmsntm.zirnox_boom.title", "CIRNOX");
+        this.add("advancements.hbmsntm.zirnox_boom.description", "cope, seethe, mald");
+        this.add("advancements.hbmsntm.horizons_start.title", "Apogee");
+        this.add("advancements.hbmsntm.horizons_start.description", "Send a lad to the moon.");
+        this.add("advancements.hbmsntm.horizons_end.title", "The Horizons");
+        this.add("advancements.hbmsntm.horizons_end.description", "Send Tom home.");
+        this.add("advancements.hbmsntm.horizons_bonus.title", "Slam Dunk Diarrhea");
+        this.add("advancements.hbmsntm.horizons_bonus.description", "honest to god what the hell is wrong with you");
+        this.add("advancements.hbmsntm.sacrifice.title", "Sororicide");
+        this.add("advancements.hbmsntm.sacrifice.description", "Face the fire and live.");
+        this.add("advancements.hbmsntm.impossible.title", "Literally impossible");
+        this.add("advancements.hbmsntm.impossible.description", "You can't get this achievement.");
         this.add("weapon.ability.bobble", "Luck of the Collector");
         this.add("weapon.ability.chainsaw", "Painsaw");
         this.add(NtmItems.STEEL_SWORD, "Steel Sword");

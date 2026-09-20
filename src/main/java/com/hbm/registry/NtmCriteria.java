@@ -15,6 +15,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -59,6 +60,16 @@ public class NtmCriteria {
         for(ServerPlayer spieler : level.getEntitiesOfClass(ServerPlayer.class, new AABB(pos).inflate(reichweite))) {
             marke(spieler, kennung);
         }
+    }
+
+    /**
+     * Feuert die Marke fuer JEDEN Spieler der Welt, ohne Umkreis. Das Original macht das an
+     * den Stellen, an denen ein Ereignis die ganze Welt angeht -- der Satellit, der in die
+     * Umlaufbahn kommt, der Gast, der nach Hause geschickt wird.
+     */
+    public static void markeFuerAlle(Level level, String kennung) {
+        if(!(level instanceof ServerLevel serverLevel)) return;
+        for(ServerPlayer spieler : serverLevel.players()) marke(spieler, kennung);
     }
 
     /** Dasselbe um eine Entitaet herum. */

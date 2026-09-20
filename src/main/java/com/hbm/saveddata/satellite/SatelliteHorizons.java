@@ -1,6 +1,7 @@
 package com.hbm.saveddata.satellite;
 
 import com.hbm.entity.projectile.Tom;
+import com.hbm.registry.NtmCriteria;
 import com.hbm.saveddata.SatelliteSavedData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -24,6 +25,16 @@ public class SatelliteHorizons extends SatelliteBase {
     public SatelliteHorizons() { }
 
     @Override public String getType() { return "PAYLOAD_UNKNOWN"; }
+
+    /**
+     * Schon das Erreichen der Umlaufbahn ist ein Erfolg: die Nutzlast ist ein Lebewesen,
+     * und es ist oben angekommen. Der Erfolg gilt allen Spielern der Welt, wie im Original.
+     */
+    @Override
+    public void onOrbit(Level level, double x, double y, double z) {
+        super.onOrbit(level, x, y, z);
+        NtmCriteria.markeFuerAlle(level, "horizons_start");
+    }
 
     /** Meldet zusaetzlich, ob die Nutzlast noch da ist -- siehe SatelliteBase.getInfo. */
     @Override
@@ -79,9 +90,7 @@ public class SatelliteHorizons extends SatelliteBase {
 
         level.addFreshEntity(tom);
 
-        // todo
-//        for(Object p : world.playerEntities)
-//            ((EntityPlayer)p).triggerAchievement(MainRegistry.horizonsEnd);
+        NtmCriteria.markeFuerAlle(level, "horizons_end");
 
         for(Player player : level.players()) {
             player.sendSystemMessage(Component.literal("Horizons has been activated.").withStyle(ChatFormatting.RED));

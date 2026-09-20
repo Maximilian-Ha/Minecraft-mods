@@ -5,6 +5,8 @@ import com.hbm.blockentity.NtmBlockEntityTypes;
 import com.hbm.blockentity.machine.albion.MachinePASourceBlockEntity.PAState;
 import com.hbm.blocks.DummyableBlock;
 import com.hbm.inventory.menus.MachinePADetectorMenu;
+import com.hbm.items.NtmItems;
+import com.hbm.registry.NtmCriteria;
 import com.hbm.inventory.recipes.ParticleAcceleratorRecipes;
 import com.hbm.inventory.recipes.ParticleAcceleratorRecipes.ParticleAcceleratorRecipe;
 import com.hbm.lib.Library;
@@ -39,9 +41,9 @@ import net.minecraft.world.phys.AABB;
  * Erfolg -- das Teilchen ist verbraucht. Das ist das Verhalten des Originals, und es ist
  * absichtlich so: ein voller Detektor haelt den Ring nicht an.
  *
- * NICHT UEBERNOMMEN: die Meldung an den Strahlenscanner-Satelliten (den es im Port nicht gibt)
- * und die Errungenschaft fuer das Digamma-Teilchen. Die Meldung an den Detektorsatelliten steht,
- * die gibt es.
+ * NICHT UEBERNOMMEN: die Meldung an den Strahlenscanner-Satelliten, den es im Port nicht gibt.
+ * Die Meldung an den Detektorsatelliten steht, die gibt es -- und seit Runde 252 auch der
+ * Erfolg fuer das Digamma-Teilchen.
  */
 public class MachinePADetectorBlockEntity extends CooledBaseBlockEntity implements IParticleUser {
 
@@ -167,6 +169,13 @@ public class MachinePADetectorBlockEntity extends CooledBaseBlockEntity implemen
                         this.slots.get(SLOT_OUTPUT_2).grow(recipe.output2.getCount());
                     }
                 }
+            }
+
+            /* Das Digamma-Teilchen ist der Erfolg des ganzen Rings. Der Umkreis ist der des
+             * Originals: hundert Bloecke weit, fuenfzig hoch. */
+            if(recipe.output1.is(NtmItems.PARTICLE_DIGAMMA.get())
+                    || (recipe.output2 != null && recipe.output2.is(NtmItems.PARTICLE_DIGAMMA.get()))) {
+                NtmCriteria.markeImUmkreis(this.level, this.worldPosition, 100, "omega12");
             }
 
             /* Ein Treffer ist laut genug, dass ein Satellit ihn sieht. */

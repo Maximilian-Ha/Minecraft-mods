@@ -38,9 +38,11 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
  * loest ihn aus. Genau diese Gruppe steht hier, mit InventoryChangeTrigger, der auf 1.21
  * dasselbe tut.
  *
- * DIE 32 GETRIGGERTEN FEHLEN NOCH, und das ist kein Versehen: jeder von ihnen braucht eine
- * Stelle im Port, die ihn feuert -- den Tod durch Strahlung, das Betreten des roten
- * Zimmers, den Start einer Sojus. Sie kommen mit ihren Ausloesern, nicht vorher.
+ * DIE GETRIGGERTEN KOMMEN MIT IHREN AUSLOESERN, NICHT VORHER: jeder von ihnen braucht eine
+ * Stelle im Port, die ihn feuert -- den Tod durch Strahlung, das Betreten des roten Zimmers,
+ * den Start einer Sojus. Nach Runde 252 stehen 17 der 32; die uebrigen 15 warten auf
+ * Entitaeten und Gegenstaende, die der Port noch nicht hat (die Sojus, die vier uebrigen
+ * Bosse, die Digamma-Kette, die Schimmerwaffen, das Messer, der Radiumkaffee, die Saeure).
  *
  * GITTERPLAETZE GIBT ES IN 1.21 NICHT MEHR. Das Original setzt jeden Erfolg auf eine
  * Koordinate (x, y); 1.21 legt den Baum selbst aus der Vorgaengerkette. Die Kette ist
@@ -136,6 +138,42 @@ public class NtmAdvancementProvider extends AdvancementProvider {
             erfolg(speichern, helper, wurzel, "watz_boom", NtmItems.WATZ_PELLET.get(), true, "watz_boom");
             erfolg(speichern, helper, wurzel, "boss_creeper", Items.CREEPER_HEAD, false, "boss_creeper");
             erfolg(speichern, helper, polymer, "manhattan", NtmBlocks.NUKE_LITTLE_BOY.get(), true, "manhattan");
+
+            /*
+             * ELF WEITERE, Runde 252 -- acht getriggerte und drei aus dem Inventar. Die acht
+             * sind genau die, deren Ausloeser diese Runde verdrahtet hat:
+             *
+             *   horizons_start  Satellit in der Umlaufbahn (SatelliteHorizons.onOrbit)
+             *   horizons_end    Tom faellt vom Himmel (SatelliteHorizons.theHorizons)
+             *   zirnox_boom     Zirnox zerlegt sich (ReactorZirnoxBlockEntity.meltdown)
+             *   omega12         Digamma-Teilchen im Detektor (MachinePADetectorBlockEntity)
+             *   hidden          verseuchter Creeper, erschlagen von einem Gueterwagen
+             *   stratum         der erste Gneis
+             *   slimeball       ein aufgehobener Schleimball
+             *
+             * Symbole, die der Port nicht hat, bekommen eines, das dasselbe meint:
+             *   achievement_icon ACID          -> der Schleimball selbst
+             *   achievement_icon QUESTIONMARK  -> der Gueterwagen-Sprengkopf
+             */
+            erfolg(speichern, helper, wurzel, "slimeball", Items.SLIME_BALL, false, "slimeball");
+            erfolg(speichern, helper, wurzel, "stratum", NtmBlocks.STONE_GNEISS.get(), true, "stratum");
+            erfolg(speichern, helper, wurzel, "hidden", NtmItems.MP_WARHEAD_15_BOXCAR.get(), false, "hidden");
+            erfolg(speichern, helper, wurzel, "omega12", NtmItems.PARTICLE_DIGAMMA.get(), true, "omega12");
+            erfolg(speichern, helper, centrifuge, "zirnox_boom", NtmItems.DEBRIS_ELEMENT.get(), true, "zirnox_boom");
+
+            AdvancementHolder horizonsStart = erfolg(speichern, helper, wurzel, "horizons_start", NtmItems.SAT_GERALD.get(), false, "horizons_start");
+            AdvancementHolder horizonsEnd = erfolg(speichern, helper, horizonsStart, "horizons_end", NtmItems.SAT_GERALD.get(), false, "horizons_end");
+
+            /*
+             * DREI OHNE AUSLOESER, die trotzdem gehen: das Original meldet sie ebenfalls
+             * ohne triggerAchievement an, ihr Symbolgegenstand im Inventar genuegt.
+             *
+             * DER UNMOEGLICHE ERFOLG ist im Original auf "nothing" gesetzt -- einen
+             * Gegenstand, den niemand bekommt. Das ist der Witz, und er bleibt.
+             */
+            erfolg(speichern, helper, horizonsEnd, "horizons_bonus", NtmItems.SAT_GERALD.get(), true);
+            erfolg(speichern, helper, wurzel, "sacrifice", NtmItems.BURNT_BARK.get(), true);
+            erfolg(speichern, helper, wurzel, "impossible", NtmItems.NOTHING.get(), true);
         }
 
         /**

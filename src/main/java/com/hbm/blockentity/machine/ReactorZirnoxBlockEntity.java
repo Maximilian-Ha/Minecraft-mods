@@ -8,6 +8,7 @@ import com.hbm.entity.projectile.ZirnoxDebris.DebrisType;
 import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.blocks.DummyableBlock;
 import com.hbm.blocks.NtmBlocks;
+import com.hbm.registry.NtmCriteria;
 import com.hbm.handler.MultiblockHandlerXR;
 import com.hbm.interfaces.IControlReceiver;
 import com.hbm.inventory.MetaHelper;
@@ -337,6 +338,10 @@ public class ReactorZirnoxBlockEntity extends MachineBaseBlockEntity implements 
         this.level.explode(null, position.x, position.y + 3, position.z, 12F, ExplosionInteraction.BLOCK);
         this.zirnoxDebris();
         ExplosionNukeGeneric.waste(this.level, this.getBlockPos(), 35);
+
+        /* Wer im Umkreis von hundert Bloecken stand, hat es miterlebt -- dieselbe Kugel wie
+         * im Original (TileEntityReactorZirnox.java:397). */
+        NtmCriteria.markeImUmkreis(this.level, this.getBlockPos(), 100, "zirnox_boom");
     }
 
     /** Was beim Zerlegen davonfliegt -- Anzahl und Sorten unveraendert aus dem Original. */

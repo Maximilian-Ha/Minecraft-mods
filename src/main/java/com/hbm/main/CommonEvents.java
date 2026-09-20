@@ -17,6 +17,8 @@ import com.hbm.entity.mob.CreeperNuclear;
 import com.hbm.entity.mob.CreeperGold;
 import com.hbm.entity.mob.CreeperPhosgene;
 import com.hbm.entity.mob.CreeperTainted;
+import com.hbm.registry.NtmCriteria;
+import com.hbm.registry.NtmDamageTypes;
 import com.hbm.entity.mob.CyberCrab;
 import com.hbm.entity.mob.TaintCrab;
 import com.hbm.entity.mob.TeslaCrab;
@@ -62,6 +64,7 @@ import com.hbm.util.ArmorUtil;
 import com.hbm.util.DamageResistanceHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -78,6 +81,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -96,6 +100,7 @@ import com.hbm.lib.ModAttachments;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
+import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent.BreakEvent;
 import net.minecraft.world.entity.monster.Creeper;
@@ -188,6 +193,16 @@ public class CommonEvents {
 
         LivingEntity gestorbener = event.getEntity();
         if(gestorbener.level().isClientSide) return;
+
+        /*
+         * DER VERSTECKTE KATALOG. Ein verseuchter Creeper, erschlagen von einem fallenden
+         * Gueterwagen -- eine Kombination, die niemand zufaellig hinbekommt, und genau darum
+         * geht es dem Original (ModEventHandler.java:309). Der Umkreis von fuenfzig Bloecken
+         * ist seiner.
+         */
+        if(gestorbener instanceof CreeperTainted && event.getSource().is(NtmDamageTypes.BOXCAR)) {
+            NtmCriteria.markeImUmkreis(gestorbener, 50, "hidden");
+        }
 
         for(EquipmentSlot platz : ArmorModHandler.ARMOR_SLOTS) {
             ItemStack teil = gestorbener.getItemBySlot(platz);
@@ -400,6 +415,24 @@ public class CommonEvents {
         BlockPos pos = event.getPos();
         Level level = (Level) event.getLevel();
 
+        /*
+         * DER GNEIS. Das Original gibt beim ersten Stueck fuenfhundert Erfahrung dazu und
+         * prueft dafuer eigens, ob der Erfolg schon steht (ModEventHandler.java:1168) -- sonst
+         * waere ein Gneisbruch eine Erfahrungsmuehle. Auf 1.21 steht dieselbe Auskunft im
+         * Fortschrittsblatt des Spielers.
+         */
+        if(!level.isClientSide && event.getState().is(NtmBlocks.STONE_GNEISS.get())
+                && event.getPlayer() instanceof ServerPlayer spieler) {
+
+            AdvancementHolder erfolg = spieler.server.getAdvancements()
+                    .get(NuclearTechMod.withDefaultNamespace("stratum"));
+
+            if(erfolg == null || !spieler.getAdvancements().getOrStartProgress(erfolg).isDone()) {
+                NtmCriteria.marke(spieler, "stratum");
+                event.setExpToDrop(500);
+            }
+        }
+
         if (!level.isClientSide) {
             if (event.getState() == Blocks.COAL_ORE.defaultBlockState() || event.getState() == Blocks.DEEPSLATE_COAL_ORE.defaultBlockState() || event.getState() == Blocks.COAL_BLOCK.defaultBlockState()) {
                 for (Direction dir : Direction.values()) {
@@ -410,6 +443,17 @@ public class CommonEvents {
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * DER SCHLEIMBALL. "I should dip my balls in sulfuric acid" -- das Aufheben eines
+     * Schleimballs genuegt, mehr will das Original nicht (ModEventHandler.java:1156).
+     */
+    @SubscribeEvent
+    public static void onItemPickup(ItemEntityPickupEvent.Post event) {
+        if(event.getPlayer() instanceof ServerPlayer spieler && event.getOriginalStack().is(Items.SLIME_BALL)) {
+            NtmCriteria.marke(spieler, "slimeball");
         }
     }
 

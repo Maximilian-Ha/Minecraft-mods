@@ -11867,3 +11867,52 @@ und `wand_tandem`.
 
 **Bauwerke in der Welt: 1 von 79.** Der Umsetzer gilt ab jetzt für alle; was den übrigen
 achtundsiebzig fehlt, ist je eine eigene Platzierung.
+
+## Runde 252 — Elf weitere Erfolge, acht davon mit neuem Auslöser
+
+Der Erfolgsbaum stand nach Runde 249 bei 29 von 61. Der Grund war nie die Datenerzeugung,
+sondern die Regel, die seit Runde 247 gilt: **ein getriggerter Erfolg kommt mit seinem
+Auslöser, nicht vorher.** Ein Erfolg ohne die Stelle, die ihn feuert, ist ein Eintrag im
+Fortschrittsblatt, den niemand jemals bekommt.
+
+Diese Runde verdrahtet acht Auslöser, die im Port längst standen — und in vier Fällen sogar
+als `// todo` im Quelltext:
+
+| Erfolg | Auslöser im Port |
+|---|---|
+| `horizons_start` | `SatelliteHorizons.onOrbit` — der Satellit erreicht die Umlaufbahn |
+| `horizons_end` | `SatelliteHorizons.theHorizons` — Tom fällt vom Himmel |
+| `zirnox_boom` | `ReactorZirnoxBlockEntity.meltdown` — hundert Blöcke Umkreis, wie im Original |
+| `omega12` | `MachinePADetectorBlockEntity` — ein Digamma-Teilchen im Detektor |
+| `hidden` | verseuchter Creeper, erschlagen von einem fallenden Güterwagen |
+| `stratum` | der erste Gneis, mit den fünfhundert Erfahrungspunkten des Originals |
+| `slimeball` | ein aufgehobener Schleimball |
+
+Beim Gneis prüft das Original eigens, ob der Erfolg schon steht — sonst wäre ein Gneisbruch
+eine Erfahrungsmühle. Auf 1.21 steht dieselbe Auskunft im Fortschrittsblatt des Spielers, und
+die Prüfung ist übernommen.
+
+Dazu drei, die keinen Auslöser brauchen, weil das Original sie ebenfalls ohne einen anmeldet:
+`horizons_bonus`, `sacrifice` und `impossible`. Der unmögliche Erfolg zeigt `nothing` — einen
+Gegenstand, den niemand bekommt. Das ist der Witz, und er bleibt.
+
+**Zwei Symbole gibt es im Port nicht**, und beide bekommen eines, das dasselbe meint: das
+`achievement_icon` mit Spielart ACID wird zum Schleimball selbst, das mit QUESTIONMARK zum
+Güterwagen-Sprengkopf.
+
+### Stand: 40 von 61
+
+Von den 32 getriggerten stehen **17**. Die fehlenden 15 warten auf Inhalte, die der Port noch
+nicht hat: die Sojus-Rakete (`soyuz`, `space`), vier der fünf Bosse, die vierteilige
+Digamma-Kette samt `HbmLivingProps`, die Schimmerwaffen (`fiend`, `fiend2`), das Injektormesser
+(`someWounds`), der Radiumkaffee (`radium`), der Speer (`digammaKauaiMoho`) und ein
+Säure-Flüssigkeitsblock (`sulfuric`).
+
+Von den 29 nicht getriggerten fehlen sechs: `tasteofblood` und `c20_5` (Symbolgegenstände, die
+der Port nicht hat), `potato` (Kartoffelbatterie), `SILEX` (`machine_silex`), `chicagoPile`
+(sein Symbol ist im Port eine Metadatensorte und braucht ein `DataComponentPredicate`) und
+`digammaUpOnTop` (hängt an der Digamma-Kette).
+
+`inferno` ist messbar nah: Güterwagen, Bomblet und beide Maschinen gibt es, aber der Port
+reicht bei einer Explosion den Verursacher nicht an die Maschine weiter. Das ist eine eigene
+Runde wert, keine Zeile.
