@@ -11,6 +11,7 @@ import com.hbm.items.NtmItems;
 import com.hbm.items.weapon.sedna.factory.ConfettiUtil;
 import com.hbm.items.weapon.sedna.factory.GunFactory.Ammo;
 import com.hbm.items.weapon.sedna.factory.GunFactory.Ammo240Shell;
+import com.hbm.items.weapon.sedna.factory.GunFactory.AmmoFireExt;
 import com.hbm.items.weapon.sedna.factory.GunFactory.AmmoSecret;
 import com.hbm.particle.SpentCasing;
 import com.hbm.registry.NtmDamageTypes;
@@ -122,6 +123,7 @@ public class BulletConfig implements Cloneable {
     public BulletConfig setItem(Ammo ammo) {										    return this.setItem(() -> new ComparableStack(NtmItems.AMMO_STANDARD.get(), 1, ammo)); }
     public BulletConfig setItem(AmmoSecret ammo) {									    return this.setItem(() -> new ComparableStack(NtmItems.AMMO_SECRET.get(), 1, ammo)); }
     public BulletConfig setItem(Ammo240Shell ammo) {								    return this.setItem(() -> new ComparableStack(NtmItems.AMMO_SHELL.get(), 1, ammo)); }
+    public BulletConfig setItem(AmmoFireExt ammo) {									    return this.setItem(() -> new ComparableStack(NtmItems.AMMO_FIREEXT.get(), 1, ammo)); }
     public BulletConfig setCasing(Supplier<ItemStack> supplier, int amount) {		    this.casingItemSupplier = supplier; this.casingAmount = amount; return this; }
     public BulletConfig setCasing(CasingType type, int amount) {		                return this.setCasing(() -> MetaHelper.newStack(NtmItems.CASING, type), amount); }
     public BulletConfig setReloadCount(int ammoReloadCount) {							this.ammoReloadCount = ammoReloadCount; return this; }

@@ -871,6 +871,9 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.REINFORCED_LAMINATE);
                         output.accept(NtmBlocks.STEEL_SCAFFOLD);
                         output.accept(NtmBlocks.SAND_QUARTZ);
+                        output.accept(NtmBlocks.SAND_BORON);
+                        output.accept(NtmBlocks.SAND_BORON_LAYER);
+                        output.accept(NtmBlocks.FOAM_LAYER);
                         output.accept(NtmBlocks.GLASS_QUARTZ);
                         output.accept(NtmBlocks.GLASS_LEAD);
                         output.accept(NtmBlocks.GLASS_BORON);
@@ -1805,6 +1808,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.GUN_TESLA_CANNON);
                         output.accept(NtmItems.GUN_FOLLY);
                         output.accept(NtmItems.GUN_CHARGE_THROWER);
+                        output.accept(NtmItems.GUN_FIREEXT);
                         output.accept(NtmItems.GUN_LASER_PISTOL);
                         output.accept(NtmItems.GUN_LASER_PISTOL_PEW_PEW);
                         output.accept(NtmItems.GUN_LASER_PISTOL_MORNING_GLORY);
@@ -1870,6 +1874,7 @@ public class NtmCreativeTabs {
                         addMetaItems(output, NtmItems.AMMO_STANDARD.get());
                         addMetaItems(output, NtmItems.AMMO_SECRET.get());
                         addMetaItems(output, NtmItems.AMMO_SHELL.get());
+                        addMetaItems(output, NtmItems.AMMO_FIREEXT.get());
                         output.accept(NtmItems.AMMO_DGK);
 
                         /* Die vier Bauteile einzeln, dann jede Granate, die sich daraus bauen

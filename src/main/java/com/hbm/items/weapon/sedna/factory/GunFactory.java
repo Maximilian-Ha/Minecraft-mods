@@ -34,6 +34,7 @@ public class GunFactory {
         NtmItems.WEAPON_MOD_CALIBER = itemRegistry.register("weapon_mod_caliber", () -> new EnumMultiItem(new Properties(), ModCaliber.class, true, true));
         NtmItems.AMMO_SECRET = itemRegistry.register("ammo_secret", () -> new EnumMultiItem(new Properties(), AmmoSecret.class, true, true));
         NtmItems.AMMO_SHELL = itemRegistry.register("ammo_shell", () -> new EnumMultiItem(new Properties(), Ammo240Shell.class, true, true));
+        NtmItems.AMMO_FIREEXT = itemRegistry.register("ammo_fireext", () -> new EnumMultiItem(new Properties(), AmmoFireExt.class, true, true));
         NtmItems.AMMO_DGK = itemRegistry.register("ammo_dgk", () -> new Item(new Properties()));
 
         ammo_debug = new BulletConfig().setItem(NtmItems.AMMO_DEBUG).setSpread(0.01F).setRicochetAngle(45).setCasing(CASING44.clone().register("DEBUG0"));
@@ -153,6 +154,15 @@ public class GunFactory {
     /** Die 240-mm-Granaten der Kanonentuerme. */
     public enum Ammo240Shell {
         STOCK, EXPLOSIVE, APFSDS_T, APFSDS_DU, W9
+    }
+
+    /**
+     * Die drei Fuellungen des Feuerloeschers. Anders als bei der uebrigen Munition zaehlt
+     * hier nicht der Schaden, sondern was am Einschlag liegenbleibt: Wasser loescht nur,
+     * Schaum und Borsand bauen sich Schicht um Schicht auf.
+     */
+    public enum AmmoFireExt {
+        WATER, FOAM, SAND
     }
 
     public enum AmmoSecret {

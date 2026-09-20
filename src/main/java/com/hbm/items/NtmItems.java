@@ -1352,6 +1352,7 @@ public class NtmItems {
     public static DeferredItem<Item> AMMO_DEBUG;
     public static DeferredItem<Item> AMMO_STANDARD;
     public static DeferredItem<Item> AMMO_SHELL;
+    public static DeferredItem<Item> AMMO_FIREEXT;
     public static DeferredItem<Item> AMMO_DGK;
     public static DeferredItem<Item> AMMO_SECRET;
     public static DeferredItem<Item> WEAPON_MOD_GENERIC;
@@ -1374,6 +1375,7 @@ public class NtmItems {
     public static DeferredItem<Item> GUN_TESLA_CANNON;
     public static DeferredItem<Item> GUN_FOLLY;
     public static DeferredItem<Item> GUN_CHARGE_THROWER;
+    public static DeferredItem<Item> GUN_FIREEXT;
     public static DeferredItem<Item> GUN_LASER_PISTOL;
     public static DeferredItem<Item> GUN_LASER_PISTOL_PEW_PEW;
     public static DeferredItem<Item> GUN_LASER_PISTOL_MORNING_GLORY;

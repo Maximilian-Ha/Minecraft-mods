@@ -1619,6 +1619,24 @@ public class Orchestras {
      * DER LEERSCHLAG SCHWEIGT, SOLANGE EIN HAKEN HAENGT. Wer am Seil haengt und die Taste
      * gedrueckt haelt, zieht sich heran -- das ist kein Fehlschuss, und es soll nicht klicken.
      */
+    /**
+     * Der Feuerloescher hat genau einen Klang ausserhalb des Schiessens: das Ventil, wenn man
+     * den Tank wechselt. Mehr macht das Original auch nicht.
+     */
+    public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_FIREEXT = (stack, ctx) -> {
+
+        LivingEntity entity = ctx.entity;
+        Level level = entity.level;
+        if(level.isClientSide) return;
+
+        GunAnimation type = GunBaseNTItem.getLastAnim(stack, ctx.configIndex);
+        int timer = GunBaseNTItem.getAnimTimer(stack, ctx.configIndex);
+
+        if(type == GunAnimation.RELOAD && timer == 0) {
+            SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_VALVE.get(), entity.getSoundSource());
+        }
+    };
+
     public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_CHARGE_THROWER = (stack, ctx) -> {
 
         LivingEntity entity = ctx.entity;

@@ -200,6 +200,7 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.simpleCubeAllBlock(NtmBlocks.REINFORCED_LAMINATE);
         this.simpleCubeAllBlock(NtmBlocks.STEEL_SCAFFOLD);
         this.simpleCubeAllBlock(NtmBlocks.SAND_QUARTZ);
+        this.simpleCubeAllBlock(NtmBlocks.SAND_BORON);
         this.simpleCubeAllBlock(NtmBlocks.GLASS_QUARTZ);
         this.simpleCubeAllBlock(NtmBlocks.GLASS_LEAD);
         this.simpleCubeAllBlock(NtmBlocks.GLASS_BORON);
@@ -513,6 +514,10 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.logBlock(NtmBlocks.FROZEN_LOG.get());
         this.simpleCubeAllBlock(NtmBlocks.FROZEN_PLANKS);
         this.layeringBlock(NtmBlocks.LEAVES_LAYER.get(), modLoc("block/waste_leaves"));
+        /* Die Schaumschicht traegt dieselbe Textur wie der volle Schaumblock -- so haelt es
+         * auch das Original, dort zeigen beide auf hbm:foam. */
+        this.layeringBlock(NtmBlocks.FOAM_LAYER.get(), modLoc("block/block_foam"));
+        this.layeringBlock(NtmBlocks.SAND_BORON_LAYER.get(), modLoc("block/sand_boron"));
         ResourceLocation texture = modLoc("block/ash");
         ModelFile falloutModel = models()
                 .getBuilder("fallout")

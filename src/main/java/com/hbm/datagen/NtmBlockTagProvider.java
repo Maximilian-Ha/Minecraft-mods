@@ -715,6 +715,9 @@ public class NtmBlockTagProvider extends BlockTagsProvider {
                         NtmBlocks.FALLOUT.get(),
                         NtmBlocks.MOON_TURF.get(),
                         NtmBlocks.SAND_QUARTZ.get(),
+                        NtmBlocks.SAND_BORON.get(),
+                        NtmBlocks.SAND_BORON_LAYER.get(),
+                        NtmBlocks.FOAM_LAYER.get(),
                         NtmBlocks.NTM_DIRT.get()
 
                 );

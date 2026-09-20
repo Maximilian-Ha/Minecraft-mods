@@ -226,6 +226,7 @@ public class NtmBlockLootTableProvider extends BlockLootSubProvider {
         this.dropSelf(NtmBlocks.REINFORCED_LAMINATE.get());
         this.dropSelf(NtmBlocks.STEEL_SCAFFOLD.get());
         this.dropSelf(NtmBlocks.SAND_QUARTZ.get());
+        this.dropSelf(NtmBlocks.SAND_BORON.get());
         this.dropSelf(NtmBlocks.GLASS_QUARTZ.get());
         this.dropSelf(NtmBlocks.GLASS_LEAD.get());
         this.dropSelf(NtmBlocks.GLASS_BORON.get());
@@ -368,6 +369,10 @@ public class NtmBlockLootTableProvider extends BlockLootSubProvider {
         this.add(NtmBlocks.FROZEN_LOG.get(), block -> createSingleItemTable(Items.SNOWBALL));
         this.add(NtmBlocks.FROZEN_PLANKS.get(), block -> createSingleItemTable(Items.SNOWBALL));
         this.add(NtmBlocks.LEAVES_LAYER.get(), BlockLootSubProvider::createShearsOnlyDrop);
+        /* Schaum und Borsand aus dem Loescher lassen sich nicht wieder einsammeln -- im
+         * Original gibt getItemDropped fuer beide null zurueck. */
+        this.add(NtmBlocks.FOAM_LAYER.get(), noDrop());
+        this.add(NtmBlocks.SAND_BORON_LAYER.get(), noDrop());
         this.dropSelf(NtmBlocks.FALLOUT.get()); // todo make item drop
         this.dropSelf(NtmBlocks.SELLAFIELD_SLAKED.get());
         this.add(NtmBlocks.ORE_SELLAFIELD_EMERALD.get(), block -> this.createOreDrop(block, Items.EMERALD));

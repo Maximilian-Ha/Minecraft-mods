@@ -50,6 +50,7 @@ public class NtmSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_LASER_PISTOL_FIRE = reg("weapon.fire.laser_pistol");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_LASER_RIFLE_FIRE = reg("weapon.fire.laser");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_VALVE = reg("weapon.reload.pressure_valve");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GUN_EXTINGUISHER_FIRE = reg("weapon.extinguisher");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_PISTOL_FIRE = reg("weapon.fire.pistol");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_STARF_FIRE = reg("weapon.fire.pistol_light");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SILENCED_FIRE = reg("weapon.fire.silenced");

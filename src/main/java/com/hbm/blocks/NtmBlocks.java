@@ -314,6 +314,13 @@ public class NtmBlocks {
     public static final DeferredBlock<Block> GRAVEL_DIAMOND = register("gravel_diamond", () -> new ColoredFallingBlock(new ColorRGBA(-8356741), BlockBehaviour.Properties.of().strength(0.6F).sound(SoundType.GRAVEL).mapColor(MapColor.STONE)), LoreBlockItem.class, new Properties().rarity(Rarity.RARE));
     public static final DeferredBlock<Block> MOON_TURF = register("moon_turf", () -> new ColoredFallingBlock(new ColorRGBA(-176741), BlockBehaviour.Properties.of().strength(0.6F).sound(SoundType.SAND).mapColor(MapColor.STONE)));
     public static final DeferredBlock<Block> SAND_QUARTZ = register("sand_quartz", () -> new ColoredFallingBlock(new ColorRGBA(-845741), BlockBehaviour.Properties.of().strength(0.6F).sound(SoundType.SAND).mapColor(MapColor.SNOW)));
+    /**
+     * Borsand -- der Sand, den der Feuerloescher verschiesst, sobald er aufgehaeuft eine
+     * volle Schicht erreicht hat. Im Original ist er eine Metadaten-Spielart von sand_mix;
+     * den gibt es hier nicht, und SAND_QUARTZ zeigt, wie der Port es sonst haelt: ein
+     * eigener Block mit eigenem Namen.
+     */
+    public static final DeferredBlock<Block> SAND_BORON = register("sand_boron", () -> new ColoredFallingBlock(new ColorRGBA(-2434342), BlockBehaviour.Properties.of().strength(0.6F).sound(SoundType.SAND).mapColor(MapColor.TERRACOTTA_WHITE)));
 
     // Reinforced Blocks
     public static final DeferredBlock<Block> ASPHALT =       registerBlastInfoBlock("asphalt",       () -> new SpeedyBlock(1.5, BlockBehaviour.Properties.of().strength(15.0F, 120.0F)                                  .mapColor(MapColor.COLOR_BLACK)));
@@ -516,6 +523,14 @@ public class NtmBlocks {
     public static final DeferredBlock<Block> FROZEN_GRASS =            register("frozen_grass",  () -> new FrozenBlock(        BlockBehaviour.Properties.of().strength(0.5F, 2.5F).sound(SoundType.GLASS).mapColor(DyeColor.WHITE)));
     public static final DeferredBlock<RotatedPillarBlock> FROZEN_LOG = register("frozen_log",    () -> new RotatedPillarBlock( BlockBehaviour.Properties.of().strength(0.5F, 2.5F).sound(SoundType.GLASS).mapColor(DyeColor.LIGHT_BLUE)));
     public static final DeferredBlock<Block> FROZEN_PLANKS =           register("frozen_planks", () -> new Block(              BlockBehaviour.Properties.of().strength(0.5F, 2.5F).sound(SoundType.GLASS).mapColor(DyeColor.LIGHT_BLUE)));
+    /**
+     * Die beiden Loeschschichten des Feuerloeschers. Beide wachsen von Schuss zu Schuss um
+     * eine Lage; auf die siebte folgt der volle Block -- aus dem Schaum BLOCK_FOAM, aus dem
+     * Sand SAND_BORON. Das uebernimmt nicht der Block, sondern die Trefferregel in
+     * XFactoryTool: die Schicht selbst weiss nichts vom Loeschen.
+     */
+    public static final DeferredBlock<Block> FOAM_LAYER = register("foam_layer", () -> new LayeringBlock(BlockBehaviour.Properties.of().strength(0.1F).mapColor(MapColor.SNOW).sound(SoundType.SNOW).noOcclusion().isValidSpawn(Blocks::never).isSuffocating(NtmBlocks::never).isViewBlocking(NtmBlocks::never).pushReaction(PushReaction.DESTROY).isRedstoneConductor(NtmBlocks::never)));
+    public static final DeferredBlock<Block> SAND_BORON_LAYER = register("sand_boron_layer", () -> new LayeringBlock(BlockBehaviour.Properties.of().strength(0.1F).mapColor(MapColor.TERRACOTTA_WHITE).sound(SoundType.SAND).noOcclusion().isValidSpawn(Blocks::never).isSuffocating(NtmBlocks::never).isViewBlocking(NtmBlocks::never).pushReaction(PushReaction.DESTROY).isRedstoneConductor(NtmBlocks::never)));
     public static final DeferredBlock<Block> LEAVES_LAYER = register("leaves_layer", () -> new LayeringBlock(BlockBehaviour.Properties.of().strength(0.2F).randomTicks().mapColor(MapColor.COLOR_BROWN).sound(SoundType.GRASS).noOcclusion().isValidSpawn(Blocks::never).isSuffocating(NtmBlocks::never).isViewBlocking(NtmBlocks::never).ignitedByLava().pushReaction(PushReaction.DESTROY).isRedstoneConductor(NtmBlocks::never)));
     public static final DeferredBlock<Block> FALLOUT = register("fallout", () -> new FalloutBlock(BlockBehaviour.Properties.of().replaceable().strength(0.1F).sound(SoundType.GRAVEL).mapColor(MapColor.STONE)));
     public static final DeferredBlock<Block> SELLAFIELD_SLAKED = register("sellafield_slaked", () -> new SellafieldSlakedBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).isValidSpawn(Blocks::never).requiresCorrectToolForDrops().strength(3.0F, 10.0F)));

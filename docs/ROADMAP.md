@@ -8815,3 +8815,49 @@ verlieren eine Zeile, nicht den Rest der Datei. Nachzählen:
 `grep -n '"[^"]*//' -r src/main/java --include=*.java`
 
 Alle 35 Tore grün.
+
+## Runde 194 — Der Feuerlöscher, und die Blöcke, die er hinterlässt
+
+Damit ist `XFactoryTool` vollständig. Die Behauptung aus Runde 192 — der Löscher brauche vier
+Blöcke, die es nicht gibt — hat zwei Teile, und **beide waren falsch**:
+
+- **`LayeringBlock` gibt es längst.** Der Port hat die Klasse samt `layeringBlock`-Helfer im
+  Blockstate-Erzeuger; `leaves_layer` und `oil_spill` benutzen sie. `foam_layer` und
+  `sand_boron_layer` sind damit zwei Zeilen, keine Runde.
+- **`volcanic_lava_block` war nie nötig.** Er kommt in genau einem optionalen Zweig vor, der
+  vulkanische Lava zu Obsidian macht — und dieser Zweig prüft im Original den Metadatenwert 0.
+  Den gibt es in 1.21 nicht. Der Zweig ist weggelassen, mit Begründung im Quelltext.
+
+Übrig blieb ein einziger echter Bedarf: **Borsand**. Das Original ist eine Metadaten-Spielart
+von `sand_mix`; hier steht `sand_boron` als eigener Block, genau wie `sand_quartz` es
+vormacht.
+
+### Was der Löscher tut
+
+Drei Tanks, kein Schaden, 300 Schuss. **Wasser** löscht in einem 3×3×3-Würfel alles Feuer und
+spült dabei auch Schaum weg — Schicht wie vollen Block. **Schaum** löscht nur den Treffer,
+bleibt dafür liegen. **Borsand** löscht gar nicht im Umkreis; er erstickt das Feuer dort, wo er
+liegenbleibt.
+
+Schaum und Sand wachsen Lage um Lage. Die **siebte Lage ist die letzte** — der nächste Schuss
+macht daraus den vollen Block. Das entspricht dem Original, wo die Metadaten von 0 bis 6 laufen.
+Die achte Lage, die `LayeringBlock` zulässt, erreicht der Löscher nie; von Hand gesetzt gibt es
+sie, und dann schlägt der nächste Schuss sie ebenfalls um.
+
+### Die einzige Stelle, die `tryExtinguish` je auslöst
+
+`IRepairable.tryExtinguish` samt `EnumExtinguishType` steht seit langem im Port, mit einem
+Aufrufer (`Chemical`) und einem Implementierer (`MachineFluidTankBlockEntity`). **`SAND` hatte
+bis heute keinen Erzeuger** — keine einzige Zeile im Port konnte diesen Wert je erreichen. Der
+Löscher schließt das: alle drei Tanks melden der getroffenen Maschine ihre Sorte.
+
+### Abweichungen
+
+- Der Sandtank wird aus `sand_boron` gebaut statt aus `sand_mix` mit Metadatenwert `BORON` —
+  derselbe Sand, anderer Name.
+- Das Inventarbild dreht sich nicht (`System.currentTimeMillis` im Original). Der Port zeichnet
+  Waffen im Inventar still, wie alle anderen auch.
+- Die Spur des Strahls zeichnet der Client selbst, statt ein Partikelpaket vom Server zu
+  erwarten: `onUpdate` läuft auf beiden Seiten, und `blockdust` fehlt in `effectNT`.
+
+**38 von 46 Bauplänen.**

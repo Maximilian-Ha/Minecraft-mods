@@ -1302,6 +1302,7 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.entityItem(NtmItems.GUN_TESLA_CANNON.get(), true);
         this.entityItem(NtmItems.GUN_FOLLY.get(), true);
         this.entityItem(NtmItems.GUN_CHARGE_THROWER.get(), true);
+        this.entityItem(NtmItems.GUN_FIREEXT.get(), true);
         this.entityItem(NtmItems.GUN_LASER_PISTOL.get(), true);
         this.entityItem(NtmItems.GUN_LASER_PISTOL_PEW_PEW.get(), true);
         this.entityItem(NtmItems.GUN_LASER_PISTOL_MORNING_GLORY.get(), true);
@@ -1351,6 +1352,8 @@ public class NtmItemModelProvider extends ItemModelProvider {
         // welp
         this.getBuilder(NtmBlocks.BASALT.getId().getPath()).parent(new ModelFile.UncheckedModelFile(modLoc("block/basalt")));
         this.getBuilder(NtmBlocks.LEAVES_LAYER.getId().getPath()).parent(new ModelFile.UncheckedModelFile(modLoc("block/leaves_layer_1")));
+        this.getBuilder(NtmBlocks.FOAM_LAYER.getId().getPath()).parent(new ModelFile.UncheckedModelFile(modLoc("block/foam_layer_1")));
+        this.getBuilder(NtmBlocks.SAND_BORON_LAYER.getId().getPath()).parent(new ModelFile.UncheckedModelFile(modLoc("block/sand_boron_layer_1")));
         this.getBuilder(NtmBlocks.OIL_SPILL.getId().getPath()).parent(new ModelFile.UncheckedModelFile(modLoc("block/oil_spill_1")));
         this.getBuilder(NtmBlocks.FALLOUT.getId().getPath()).parent(new ModelFile.UncheckedModelFile(modLoc("block/fallout")));
         this.getBuilder(NtmBlocks.WASTE_LOG.getId().getPath()).parent(new ModelFile.UncheckedModelFile(modLoc("block/waste_log")));

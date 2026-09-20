@@ -161,6 +161,42 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_cordite", has(NtmItems.CORDITE.get()))
                 .save(recipeOutput, NuclearTechMod.withDefaultNamespace("ammo_dgk"));
 
+        /*
+         * Die drei Tanks des Feuerloeschers. Der Wassertank ist der Anfang; Schaum und Sand
+         * entstehen daraus, indem man den gefuellten Tank mit dem Loeschmittel umgibt.
+         *
+         * ABWEICHUNG: das Original nimmt fuer den Sandtank sand_mix mit dem Metadatenwert
+         * BORON. Der Port hat dafuer den eigenstaendigen Block sand_boron -- derselbe Sand,
+         * anderer Name.
+         */
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MetaHelper.newStack(NtmItems.AMMO_FIREEXT.get(), 1, GunFactory.AmmoFireExt.WATER))
+                .pattern(" P ")
+                .pattern("BDB")
+                .pattern(" P ")
+                .define('P', NtmItems.PLATE_STEEL.get())
+                .define('B', DataComponentIngredient.of(false, NtmDataComponents.META, BoltItem.Type.STEEL.meta, NtmItems.BOLT.get()))
+                .define('D', DataComponentIngredient.of(false, NtmDataComponents.META, Fluids.WATER.getID(), NtmItems.FLUID_TANK_FULL.get()))
+                .unlockedBy("has_tank", has(NtmItems.FLUID_TANK_FULL.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("ammo_fireext_water"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MetaHelper.newStack(NtmItems.AMMO_FIREEXT.get(), 1, GunFactory.AmmoFireExt.FOAM))
+                .pattern(" N ")
+                .pattern("NFN")
+                .pattern(" N ")
+                .define('N', NtmItems.NITER.get())
+                .define('F', DataComponentIngredient.of(false, NtmDataComponents.META, GunFactory.AmmoFireExt.WATER.ordinal(), NtmItems.AMMO_FIREEXT.get()))
+                .unlockedBy("has_niter", has(NtmItems.NITER.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("ammo_fireext_foam"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MetaHelper.newStack(NtmItems.AMMO_FIREEXT.get(), 1, GunFactory.AmmoFireExt.SAND))
+                .pattern("NNN")
+                .pattern("NFN")
+                .pattern("NNN")
+                .define('N', NtmBlocks.SAND_BORON.get())
+                .define('F', DataComponentIngredient.of(false, NtmDataComponents.META, GunFactory.AmmoFireExt.WATER.ordinal(), NtmItems.AMMO_FIREEXT.get()))
+                .unlockedBy("has_sand_boron", has(NtmBlocks.SAND_BORON.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("ammo_fireext_sand"));
+
         /* Der Zielchip: ein Rechenwerk zwischen zwei Lagen Golddraht. */
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.TURRET_CHIP.get(), 1)
                 .pattern("WWW")
@@ -4429,13 +4465,17 @@ public class NtmRecipeProvider extends RecipeProvider {
      * Die Waffenbauplaene.
      *
      * Wortgetreu aus WeaponRecipes des Originals, in der Reihenfolge des Originals. Von den
-     * 46 Bauplaenen dort bleiben hier 37 uebrig; der Rest faellt aus zwei gemessenen Gruenden
+     * 46 Bauplaenen dort bleiben hier 38 uebrig; der Rest faellt aus zwei gemessenen Gruenden
      * weg:
      *
      * ES GIBT DIE WAFFE NICHT: Stinger, Quadro, LAG, Raketenwerfer, Fat Man, Tau und die
      * beiden Panzerruestungswaffen. Sie sind im Port nicht angelegt; ein Bauplan auf ein
-     * nicht vorhandenes Erzeugnis waere kein Rezept. Teslakanone und Ladungswerfer standen
-     * hier ebenfalls -- die eine bis Runde 188, der andere bis Runde 192.
+     * nicht vorhandenes Erzeugnis waere kein Rezept. Teslakanone, Ladungswerfer und
+     * Feuerloescher standen hier ebenfalls -- die Kanone bis Runde 188, der Werfer bis
+     * Runde 192, der Loescher bis Runde 193.
+     *
+     * DER FEUERLOESCHER STEHT NICHT IN DIESER LISTE, sondern oben bei seiner Munition: sein
+     * Bauplan braucht kein einziges Waffenbauteil und damit auch nicht den gun()-Helfer.
      *
      * ES GIBT DIE ZUTAT NICHT:
      * - gun_double_barrel_sacred_dragon braucht item_secret in der Ausfuehrung
@@ -4713,6 +4753,20 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .define('G', grip(Mats.MAT_STEEL))
                 .define('L', Ingredient.of(Items.LEATHER, NtmItems.INGOT_RUBBER.get()))
                 .unlockedBy("has_mechanism", has(NtmItems.PART_MECHANISM.get()))
+                .save(recipeOutput);
+
+        /*
+         * Der Feuerloescher braucht kein einziges Waffenbauteil -- ein Stahlrohr als Duese,
+         * ein Bolzen als Griff, ein Stahltank als Behaelter. Deshalb steht er hier ohne den
+         * gun()-Helfer: der setzt die Waffenbank voraus.
+         */
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.GUN_FIREEXT.get(), 1)
+                .pattern("HB")
+                .pattern(" T")
+                .define('H', NtmItems.PIPE_STEEL.get())
+                .define('B', DataComponentIngredient.of(false, NtmDataComponents.META, BoltItem.Type.STEEL.meta, NtmItems.BOLT.get()))
+                .define('T', NtmItems.TANK_STEEL.get())
+                .unlockedBy("has_tank_steel", has(NtmItems.TANK_STEEL.get()))
                 .save(recipeOutput);
 
         gun(NtmItems.GUN_MINIGUN, "BMG", "BRE", "BGM")

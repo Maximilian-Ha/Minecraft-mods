@@ -1992,6 +1992,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.GUN_TESLA_CANNON, "Tesla Cannon");
         this.add(NtmItems.GUN_FOLLY, "The Folly");
         this.add(NtmItems.GUN_CHARGE_THROWER, "Charge Thrower");
+        this.add(NtmItems.GUN_FIREEXT, "Fire Extinguisher");
         this.add(NtmItems.GUN_LASER_PISTOL, "Laser Pistol");
         this.add(NtmItems.GUN_LASER_PISTOL_PEW_PEW, "Pew Pew");
         this.add(NtmItems.GUN_LASER_PISTOL_MORNING_GLORY, "Morning Glory");
@@ -2207,6 +2208,9 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.DUCRETE_BRICK, "Ducrete Brick");
         this.add(NtmBlocks.STEEL_SCAFFOLD, "Steel Scaffold");
         this.add(NtmBlocks.SAND_QUARTZ, "Quartz Sand");
+        this.add(NtmBlocks.SAND_BORON, "Boron Sand");
+        this.add(NtmBlocks.SAND_BORON_LAYER, "Boron Sand Layer");
+        this.add(NtmBlocks.FOAM_LAYER, "Foam Layer");
         this.add(NtmBlocks.GLASS_QUARTZ, "Quartz Glass");
         this.add(NtmBlocks.GLASS_LEAD, "Lead Glass");
         this.add(NtmBlocks.GLASS_BORON, "Boron Glass");
@@ -3130,6 +3134,9 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("item.hbmsntm.ammo_shell.apfsds_t", "240mm APFSDS-T Shell");
         this.add("item.hbmsntm.ammo_shell.apfsds_du", "240mm APFSDS-DU Shell");
         this.add("item.hbmsntm.ammo_shell.w9", "240mm W9 Nuclear Shell");
+        this.add("item.hbmsntm.ammo_fireext.water", "Fire Extinguisher Water Tank");
+        this.add("item.hbmsntm.ammo_fireext.foam", "Fire Extinguisher Foam Tank");
+        this.add("item.hbmsntm.ammo_fireext.sand", "Fire Extinguisher Sand Tank");
         this.add("container.reactorControl", "Reactor Control Panel");
         this.add(NtmItems.REACTOR_SENSOR, "Reactor Sensor");
         this.add("item.hbmsntm.reactor_sensor.linked", "Reactor set to %s / %s / %s");
