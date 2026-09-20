@@ -11916,3 +11916,55 @@ der Port nicht hat), `potato` (Kartoffelbatterie), `SILEX` (`machine_silex`), `c
 `inferno` ist messbar nah: Güterwagen, Bomblet und beide Maschinen gibt es, aber der Port
 reicht bei einer Explosion den Verursacher nicht an die Maschine weiter. Das ist eine eigene
 Runde wert, keine Zeile.
+
+## Runde 253 — Der Tandemstab war nie gebraucht, und der Rest ist gezählt
+
+Die vier Bauzauberstäbe waren einer der drei offenen Punkte. Nachgemessen, in welcher der
+79 Bauwerksdateien jeder von ihnen überhaupt vorkommt:
+
+| Stab | Dateien | Folge |
+|---|---:|---|
+| `wand_jigsaw` | 42 | in 1.21 `minecraft:jigsaw`; kein eigener Block |
+| `wand_loot` | 34 | seit Runde 251 portiert |
+| `wand_logic` | 4 | `crane`, `crane_mod`, `factory`, `tower_base` |
+| `wand_tandem` | **1** | nur `test-tandem-core.nbt` |
+
+**Der Tandemstab steht in genau einer Probedatei des Urhebers**, die kein `SpawnCondition`
+benutzt. Kein Bauwerk, das der Mod setzt, braucht ihn. Seine Aufgabe — ein Anschlussstück erst
+setzen, wenn die Chunks davor geladen sind — beschreibt er selbst als Umgehung eines Fehlers im
+Vanilla-Bauwerkssystem von 1.7.10, und in 1.21 setzt dieses System seine Stücke ohnehin
+chunkweise. `tools/structure-gap.py` führt ihn jetzt mit dieser Begründung unter „kein Block
+nötig".
+
+**Damit bleibt von den vieren einer:** `wand_logic`. Er wird zum `logic_block` — dem Kopf eines
+eigenen Teilsystems von rund tausend Zeilen (`LogicBlockActions` allein 554), das Fallen,
+Wellen von Gegnern und einstürzende Decken in vier Bauwerken auslöst, die der Port noch nicht
+baut. Ihn jetzt anzulegen hieße, einen Block zu haben, den nichts setzt und nichts auslöst.
+
+### Zwei Verbesserungen am Umsetzer
+
+**Er liest jetzt alle 79 Dateien.** Mindestens eine (`crane.nbt`) hat hinter dem gzip-Strom noch
+Datenmüll stehen; Pythons `gzip.decompress` bricht darauf ab, Java liest den Strom bis zum Ende
+des NBT und schaut nicht weiter. `zlib.decompressobj` tut dasselbe. Nachgeprüft: die 38 bereits
+umgesetzten Dateien kommen danach Byte für Byte gleich heraus.
+
+**Luft mit Metadaten ist Luft.** In etlichen Dateien steht `minecraft:air` mit einer
+Metadaten-Zahl ungleich null — Reste davon, was vor dem Abspeichern an der Stelle stand.
+
+### Was noch vor dem Umsetzer liegt — gezählt, nicht geschätzt
+
+`tools/nbt2structure.py --fehlliste` zählt auf, welche `(Name, meta)`-Paare der Tabelle
+fehlen. Über alle 79 Dateien:
+
+| | |
+|---|---:|
+| offene Paare gesamt | **603** |
+| davon Vanilla | 168 auf 56 Blocknamen |
+| davon `hbm:` | 435 auf 161 Blocknamen |
+
+Für die 33 Bauwerke, die ein `SpawnCondition` wirklich baut (ohne das Verlies), sind es 502
+Paare. Von deren `hbm:`-Blocknamen sind **82 ohne Metadaten und im Port unter demselben Namen
+vorhanden** — die sind eine Zeile pro Stück. Die 73 Namen mit Metadaten sind die eigentliche
+Arbeit: Treppen und Stufen, die ganze Rohrfamilie, die sechzehn Betonfarben, Türen, Lampen.
+
+Das ist der nächste Brocken, und er ist jetzt jederzeit nachzählbar statt zu schätzen.

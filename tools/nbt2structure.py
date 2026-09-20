@@ -20,6 +20,7 @@ hbm:tile.ladder_tungsten, dessen Block es nicht mehr gibt (siehe LEITER unten).
 Aufruf:
     tools/nbt2structure.py <quellverzeichnis> <zielverzeichnis>
     tools/nbt2structure.py --pruefe <quellverzeichnis>     nur Tabelle pruefen, nichts schreiben
+    tools/nbt2structure.py --fehlliste <quellverzeichnis>  zaehlt auf, was der Tabelle fehlt
 
 Die Quelldateien liest man mit
     git show hbm-upstream/master:src/main/resources/assets/hbm/structures/<pfad>
@@ -31,6 +32,7 @@ import io
 import os
 import struct
 import sys
+import zlib
 
 # 1.21.1
 DATA_VERSION = 3955
@@ -91,7 +93,10 @@ class Liste(list):
 def laden(pfad):
     d = open(pfad, 'rb').read()
     if d[:2] == b'\x1f\x8b':
-        d = gzip.decompress(d)
+        # NICHT gzip.decompress: mindestens eine der 79 Dateien des Originals hat hinter dem
+        # gzip-Strom noch Datenmuell stehen, und darauf bricht gzip.decompress ab. Java liest
+        # den Strom bis zum Ende des NBT und schaut nicht weiter -- decompressobj tut dasselbe.
+        d = zlib.decompressobj(31).decompress(d)
     i = 0
     t = d[i]; i += 1
     ln = struct.unpack_from('>H', d, i)[0]; i += 2
@@ -203,8 +208,13 @@ TABELLE = {}
 for _n in GLEICH:
     TABELLE[('hbm:tile.' + _n, 0)] = zustand(MODID + ':' + _n)
 
+# LUFT MIT METADATEN. In etlichen Dateien steht Luft mit einer Metadaten-Zahl ungleich null --
+# Reste davon, was vor dem Abspeichern an der Stelle stand. Luft hat keine Spielarten; jede
+# davon ist Luft.
+for _m in range(16):
+    TABELLE[('minecraft:air', _m)] = zustand('minecraft:air')
+
 TABELLE.update({
-    ('minecraft:air', 0): zustand('minecraft:air'),
     ('minecraft:glowstone', 0): zustand('minecraft:glowstone'),
     # 1.7.10 zaehlt die Wollfarben umgekehrt: 15 ist schwarz.
     ('minecraft:wool', 15): zustand('minecraft:black_wool'),
@@ -535,7 +545,61 @@ def umsetzen(quelle, praefix):
     }
 
 
+def fehlliste(quellverzeichnis):
+    """Zaehlt auf, welche (Name, meta)-Paare der Tabelle noch fehlen.
+
+    Der Umsetzer selbst bricht beim ersten unbekannten Paar ab -- richtig so, beim Umsetzen.
+    Zum Planen braucht man aber die ganze Liste auf einmal: wie viel Arbeit liegt noch vor
+    einem, und in welchen Familien.
+    """
+    offen = {}
+    dateien = {}
+    for verzeichnis, _, namen in os.walk(quellverzeichnis):
+        for name in sorted(namen):
+            if not name.endswith('.nbt'):
+                continue
+            voll = os.path.join(verzeichnis, name)
+            rel = os.path.relpath(voll, quellverzeichnis)
+            wurzel = laden(voll)
+            for eintrag in wurzel['palette']:
+                blockname = eintrag['Name']
+                if blockname in ('hbm:tile.wand_jigsaw', 'hbm:tile.wand_loot'):
+                    continue
+                meta = int(eintrag.get('Properties', {}).get('meta', '0'))
+                if (blockname, meta) in TABELLE:
+                    continue
+                offen[(blockname, meta)] = offen.get((blockname, meta), 0) + 1
+                dateien.setdefault((blockname, meta), set()).add(rel)
+
+    vanilla = sorted(k for k in offen if k[0].startswith('minecraft:'))
+    eigen = sorted(k for k in offen if not k[0].startswith('minecraft:'))
+
+    print('Fehlliste der Umsetzungstabelle')
+    print('  offene Paare gesamt : %d' % len(offen))
+    print('  davon Vanilla       : %d  auf %d Blocknamen' % (len(vanilla), len({k[0] for k in vanilla})))
+    print('  davon hbm           : %d  auf %d Blocknamen' % (len(eigen), len({k[0] for k in eigen})))
+    print()
+    for gruppe, titel in ((vanilla, 'VANILLA'), (eigen, 'HBM')):
+        if not gruppe:
+            continue
+        print('--- %s ---' % titel)
+        letzter = None
+        for blockname, meta in gruppe:
+            if blockname != letzter:
+                print('  %s' % blockname)
+                letzter = blockname
+            print('      meta %-3d  %4dx  in %d Dateien' % (meta, offen[(blockname, meta)], len(dateien[(blockname, meta)])))
+    return 0
+
+
 def main(argv):
+    if '--fehlliste' in argv:
+        argv = [a for a in argv if a != '--fehlliste']
+        if len(argv) < 2:
+            print(__doc__)
+            return 2
+        return fehlliste(argv[1])
+
     nurpruefen = '--pruefe' in argv
     argv = [a for a in argv if a != '--pruefe']
 

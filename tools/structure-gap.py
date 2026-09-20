@@ -53,6 +53,11 @@ KEIN_BLOCK = {
     # Anschlussstelle zweier Bauwerksstuecke; beides tut dasselbe, und der Umsetzer
     # schreibt minecraft:jigsaw an seine Stelle.
     "wand_jigsaw",
+    # Der Tandemstab steht in genau EINER der 79 Dateien: test-tandem-core.nbt. Das ist
+    # eine Probedatei des Urhebers, die kein SpawnCondition benutzt -- kein Bauwerk, das
+    # der Mod setzt, braucht ihn. Seine Aufgabe (ein Anschlussstueck erst setzen, wenn die
+    # Chunks davor geladen sind) hat in 1.21 ohnehin das Bauwerkssystem selbst.
+    "wand_tandem",
 }
 
 # Metadaten-Bloecke des Originals, aus denen im Port mehrere Bloecke geworden sind.
