@@ -4091,6 +4091,12 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.TAURUN_PLATE, "Taurun Chestplate");
         this.add(NtmItems.TAURUN_LEGS, "Taurun Leggings");
         this.add(NtmItems.TAURUN_BOOTS, "Taurun Boots");
+
+        this.add(NtmItems.BISMUTH_HELMET, "Bismuth Headdress");
+        this.add(NtmItems.BISMUTH_PLATE, "Bismuth Shoulderpads, Necklace & Loincloth");
+        this.add(NtmItems.BISMUTH_LEGS, "Bismuth Kneeguards");
+        this.add(NtmItems.BISMUTH_BOOTS, "Bismuth Sandals");
+        this.add(NtmItems.LASER_CRYSTAL_BISMUTH, "BiSmUTh Laser Crystal");
         this.add(NtmItems.ASBESTOS_CLOTH, "Asbestos Cloth");
         this.add(NtmItems.MASK_RAG, "Crude Protective Mask");
         this.add(NtmItems.MASK_PISS, "Trench Mask");

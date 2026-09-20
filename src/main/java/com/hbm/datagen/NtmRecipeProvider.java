@@ -3961,6 +3961,57 @@ public class NtmRecipeProvider extends RecipeProvider {
         ajroUmlackieren(recipeOutput, NtmItems.AJRO_BOOTS.get(), NtmItems.AJR_BOOTS.get());
 
         /*
+         * Der Wismut-Laserkristall, CraftingManager.java Z. 341. Er ist das einzige Stueck
+         * der FEL-Kristallfamilie, das der Port kennt -- und er ist baubar, nicht bloss
+         * Zutat.
+         */
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.LASER_CRYSTAL_BISMUTH.get(), 1)
+                .pattern("QUQ").pattern("BCB").pattern("QTQ")
+                .define('Q', NtmBlocks.GLASS_QUARTZ.get())
+                .define('U', NtmItems.INGOT_URANIUM.get())
+                .define('T', NtmItems.INGOT_TH232.get())
+                .define('B', NtmItems.NUGGET_BISMUTH.get())
+                .define('C', NtmItems.CRYSTAL_RARE.get())
+                .unlockedBy("has_crystal_rare", has(NtmItems.CRYSTAL_RARE.get()))
+                .save(recipeOutput);
+
+        /*
+         * DIE WISMUT-GARNITUR, ArmorRecipes.java Z. 104 bis 107. Vier Muster, die mit keinem
+         * anderen Satz etwas gemein haben -- Zierat statt Panzerung, und entsprechend
+         * ungewoehnlich zusammengesetzt. Die Beinschuetzer bestehen sogar nur aus Lumpen und
+         * Sternmetallringen, ganz ohne Wismut.
+         */
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.BISMUTH_HELMET.get(), 1)
+                .pattern("GPP").pattern("P  ").pattern("FPP")
+                .define('G', Items.GOLD_INGOT)
+                .define('P', NtmItems.PLATE_BISMUTH.get())
+                .define('F', NtmItems.RAG.get())
+                .unlockedBy("has_plate_bismuth", has(NtmItems.PLATE_BISMUTH.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.BISMUTH_PLATE.get(), 1)
+                .pattern("RWR").pattern("PCP").pattern("SFS")
+                .define('R', NtmItems.CRYSTAL_RARE.get())
+                .define('W', NtmItems.WIRE_GOLD.get())
+                .define('P', NtmItems.PLATE_BISMUTH.get())
+                .define('C', NtmItems.LASER_CRYSTAL_BISMUTH.get())
+                .define('S', NtmItems.RING_STARMETAL.get())
+                .define('F', NtmItems.RAG.get())
+                .unlockedBy("has_plate_bismuth", has(NtmItems.PLATE_BISMUTH.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.BISMUTH_LEGS.get(), 1)
+                .pattern("FSF").pattern("   ").pattern("FSF")
+                .define('F', NtmItems.RAG.get())
+                .define('S', NtmItems.RING_STARMETAL.get())
+                .unlockedBy("has_ring_starmetal", has(NtmItems.RING_STARMETAL.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.BISMUTH_BOOTS.get(), 1)
+                .pattern("W W").pattern("P P")
+                .define('W', NtmItems.WIRE_GOLD.get())
+                .define('P', NtmItems.PLATE_BISMUTH.get())
+                .unlockedBy("has_plate_bismuth", has(NtmItems.PLATE_BISMUTH.get()))
+                .save(recipeOutput);
+
+        /*
          * DIE AUFSTIEGSKETTE. Das Original bietet zwei Wege an und stellt ueber
          * enableLBSMSimpleArmorRecipes um: entweder jede Garnitur schlicht aus ihrem Barren,
          * oder jede aus der vorigen. Der Port nimmt die Kette -- sie ist der Standardfall,

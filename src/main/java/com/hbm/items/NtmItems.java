@@ -23,6 +23,7 @@ import com.hbm.items.special.SyringeItem;
 import com.hbm.items.armor.ArmorNCRPAItem;
 import com.hbm.items.armor.ArmorRPAItem;
 import com.hbm.items.armor.ArmorAJRItem;
+import com.hbm.items.armor.ArmorBismuthItem;
 import com.hbm.items.armor.ArmorEuphemiumItem;
 import com.hbm.items.armor.ArmorT51Item;
 import com.hbm.items.armor.ArmorTaurunItem;
@@ -1722,6 +1723,27 @@ public class NtmItems {
     public static final DeferredItem<Item> TAURUN_LEGS = ITEMS.register("taurun_legs", () -> taurun(ArmorItem.Type.LEGGINGS));
     public static final DeferredItem<Item> TAURUN_BOOTS = ITEMS.register("taurun_boots", () -> taurun(ArmorItem.Type.BOOTS));
 
+    /*
+     * DIE WISMUT-GARNITUR. Kein Panzeranzug, sondern Zierat mit Wirkung: Sprungkraft VII,
+     * Tempo VII, Regeneration II und Nachtsicht fuer den ganzen Satz. Sie schirmt gegen
+     * nichts ab -- siehe ArmorBismuthItem.
+     */
+    public static final DeferredItem<Item> BISMUTH_HELMET = ITEMS.register("bismuth_helmet", () -> bismuth(ArmorItem.Type.HELMET));
+    public static final DeferredItem<Item> BISMUTH_PLATE = ITEMS.register("bismuth_plate", () -> bismuth(ArmorItem.Type.CHESTPLATE));
+    public static final DeferredItem<Item> BISMUTH_LEGS = ITEMS.register("bismuth_legs", () -> bismuth(ArmorItem.Type.LEGGINGS));
+    public static final DeferredItem<Item> BISMUTH_BOOTS = ITEMS.register("bismuth_boots", () -> bismuth(ArmorItem.Type.BOOTS));
+
+    /**
+     * Der Wismut-Laserkristall. Im Original einer von fuenf FEL-Kristallen; der Port hat nur
+     * diesen einen, weil nur er gebraucht wird -- er steckt in der Wismut-Brustplatte und
+     * hat ein eigenes Werkbankrezept. Die vier anderen gehoeren zum Freie-Elektronen-Laser,
+     * den der Port nicht hat, und kaemen sonst als Gegenstand ohne Zweck.
+     *
+     * Ebenso bleibt die Wellenlaengen-Anzeige der Originalklasse draussen: sie beschreibt,
+     * was der Kristall IM LASER tut, und das gibt es hier noch nicht.
+     */
+    public static final DeferredItem<Item> LASER_CRYSTAL_BISMUTH = ITEMS.register("laser_crystal_bismuth", () -> new Item(new Item.Properties().stacksTo(1)));
+
     public static final DeferredItem<Item> HEV_HELMET = ITEMS.register("hev_helmet", () -> hev(ArmorItem.Type.HELMET));
     public static final DeferredItem<Item> HEV_PLATE = ITEMS.register("hev_plate", () -> hev(ArmorItem.Type.CHESTPLATE));
     public static final DeferredItem<Item> HEV_LEGS = ITEMS.register("hev_legs", () -> hev(ArmorItem.Type.LEGGINGS));
@@ -1792,6 +1814,15 @@ public class NtmItems {
     private static ArmorFSBItem taurun(ArmorItem.Type type) {
         return new ArmorTaurunItem(NtmArmorMaterials.TAURUN, type, new Item.Properties().stacksTo(1))
                 .addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20, 0));
+    }
+
+    /** Die Wismut-Garnitur. Die Verstaerker stehen so im Original: 6, 6, 1 und 0. */
+    private static ArmorFSBItem bismuth(ArmorItem.Type type) {
+        return new ArmorBismuthItem(NtmArmorMaterials.BISMUTH, type, new Item.Properties().stacksTo(1).durability(type.getDurability(NtmArmorMaterials.DURABILITY_BISMUTH)))
+                .addEffect(new MobEffectInstance(MobEffects.JUMP, 20, 6))
+                .addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 20, 6))
+                .addEffect(new MobEffectInstance(MobEffects.REGENERATION, 20, 1))
+                .addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 15 * 20, 0));
     }
 
     private static ArmorFSBItem hev(ArmorItem.Type type) {

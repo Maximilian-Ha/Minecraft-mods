@@ -121,7 +121,15 @@ public class NtmArmorMaterials {
      */
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> TAURUN = register("taurun", LAYER_INVISIBLE, 10, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.PLATE_IRON.get()));
 
+    /*
+     * Wismut: {3, 8, 6, 3}, Verzauberbarkeit 100, Haltbarkeitsfaktor 100, Reparatur mit der
+     * Wismutplatte. Ein Wellenfrontmodell mit einer einzigen Textur, die Schicht bleibt
+     * unsichtbar.
+     */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> BISMUTH = register("bismuth", LAYER_INVISIBLE, 100, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.PLATE_BISMUTH.get()));
+
     public static final int DURABILITY_T51 = 150;
+    public static final int DURABILITY_BISMUTH = 100;
     public static final int DURABILITY_ASBESTOS = 20;
     public static final int DURABILITY_CMB = 60;
     public static final int DURABILITY_SCHRABIDIUM = 100;

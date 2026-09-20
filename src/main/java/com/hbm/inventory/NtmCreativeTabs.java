@@ -313,6 +313,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.CIRCUIT_QUANTUM_PROCESSING_UNIT.get());
                         output.accept(NtmItems.CIRCUIT_QUANTUM_COMPUTER.get());
                         output.accept(NtmItems.CIRCUIT_ATOMIC_CLOCK.get());
+                        output.accept(NtmItems.LASER_CRYSTAL_BISMUTH.get());
                         output.accept(NtmItems.COIL_COPPER.get());
                         output.accept(NtmItems.COIL_COPPER_RING.get());
                         output.accept(NtmItems.COIL_GOLD.get());
@@ -2038,6 +2039,10 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.TAURUN_PLATE);
                         output.accept(NtmItems.TAURUN_LEGS);
                         output.accept(NtmItems.TAURUN_BOOTS);
+                        output.accept(NtmItems.BISMUTH_HELMET);
+                        output.accept(NtmItems.BISMUTH_PLATE);
+                        output.accept(NtmItems.BISMUTH_LEGS);
+                        output.accept(NtmItems.BISMUTH_BOOTS);
                         output.accept(NtmItems.MASK_RAG);
                         output.accept(NtmItems.MASK_PISS);
                         output.accept(NtmItems.GAS_MASK_FILTER);

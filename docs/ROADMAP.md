@@ -10124,3 +10124,58 @@ eigener Gegenstand und gehört in seine eigene Runde, nicht als Beifang in diese
 Nach dieser Runde sind **34** Rüstungsnamen offen.
 
 Alle 39 Tore grün.
+
+## Runde 218 — Die Wismut-Garnitur, und der Kristall, der sie aufgeschlossen hat
+
+Runde 217 hat die Wismut-Garnitur als blockiert zurückgestellt: ihre Brustplatte braucht
+`laser_crystal_bismuth`, und die FEL-Kristallfamilie fehlt dem Port. Die Blockade war echt,
+aber klein — der Kristall hat ein eigenes Werkbankrezept, und alle fünf Zutaten liegen
+längst im Port.
+
+### Einer von fünf, und nur einer
+
+Das Original hat fünf FEL-Kristalle. Der Port bekommt genau den einen, der gebraucht wird:
+er steckt in der Wismut-Brustplatte und ist selbst baubar (`CraftingManager` Z. 341 —
+Quarzglas, Uranbarren, Thorium-232, Wismutnugget, seltener Kristall). Die vier anderen
+gehören zum Freie-Elektronen-Laser, den der Port nicht hat; sie wären Gegenstände ohne Zweck.
+
+Aus demselben Grund bleibt die Wellenlängen-Anzeige der Originalklasse draußen. Sie
+beschreibt, was der Kristall **im Laser** tut, und den gibt es hier noch nicht.
+
+### Zierat, nicht Panzerung
+
+Die Garnitur heißt im Spiel „Bismuth Headdress", „Shoulderpads, Necklace & Loincloth",
+„Kneeguards" und „Sandals" — und sie verhält sich auch so:
+
+| | |
+|---|---|
+| Satzbonus | Sprungkraft VII, Tempo VII, Regeneration II, Nachtsicht |
+| Gefahrenschutz | **keiner** |
+| Strahlung | **keine Abschirmung** |
+
+**Sie schirmt gegen nichts ab, und das ist kein vergessener Eintrag.** Als einzige
+Wellenfront-Rüstung des Ports trägt sie im Original weder `setHazardClass` noch
+`setRadResist`. Sie steht deshalb weder in `ArmorUtil` noch in `HazmatRegistry` — eine
+Abwesenheit mit Grund, festgehalten in der Klasse, damit sie niemand später „repariert".
+
+### Zwei Fallen im Modell
+
+- **Die Fußteile heißen `LeftFoot` und `RightFoot`**, nicht `LeftBoot`/`RightBoot` wie in
+  T-51, AJR und Taurun. Wer eines der anderen Modelle abschreibt, bekommt unsichtbare Schuhe.
+- **Eine einzige Textur für alle acht Teile**, statt der vier, die alle anderen haben. Sie
+  wird einmal am Anfang gebunden.
+
+Dazu zeichnet das Original hier als einzige Rüstung die Arme **vor** dem Rumpf. Übernommen,
+ohne sie umzusortieren.
+
+### Die Baupläne sind eigenwillig
+
+Vier Muster, die mit keinem anderen Satz etwas gemein haben. Die Beinschützer bestehen sogar
+nur aus Lumpen und Sternmetallringen — ganz ohne Wismut.
+
+`setDashCount(3)` ist nicht übernommen, wie schon bei HEV, T-51 und AJR: einen Sprung nach
+vorn kennt der Port nicht.
+
+Nach dieser Runde sind **30** Rüstungsnamen offen.
+
+Alle 39 Tore grün.

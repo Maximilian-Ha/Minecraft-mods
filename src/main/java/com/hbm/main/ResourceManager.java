@@ -430,6 +430,9 @@ public class ResourceManager {
     public static final ResourceLocation TAURUN_ARM = NuclearTechMod.withDefaultNamespace("textures/armor/taurun_arm.png");
     public static final ResourceLocation TAURUN_LEG = NuclearTechMod.withDefaultNamespace("textures/armor/taurun_leg.png");
 
+    /* Die Wismut-Garnitur kommt mit einer einzigen Textur fuer alle acht Teile aus. */
+    public static final ResourceLocation ARMOR_BISMUTH_TEX = NuclearTechMod.withDefaultNamespace("textures/armor/bismuth.png");
+
     /** Die Aschebrille -- im Original heisst die Datei ebenso. */
     public static final ResourceLocation ARMOR_GOGGLES = NuclearTechMod.withDefaultNamespace("textures/armor/goggles.png");
     public static final ResourceLocation HEV_LEG = NuclearTechMod.withDefaultNamespace("textures/armor/hev_leg.png");
@@ -803,6 +806,7 @@ public class ResourceManager {
     public static IModelCustom armor_t51;
     public static IModelCustom armor_ajr;
     public static IModelCustom armor_taurun;
+    public static IModelCustom armor_bismuth;
 
     public static IObjRenderer sphere;
     public static IModelCustom sphere_new;
@@ -1120,6 +1124,7 @@ public class ResourceManager {
         armor_t51 = new HFRWavefrontObject("models/obj/armor/t51.obj").asVBO();
         armor_ajr = new HFRWavefrontObject("models/obj/armor/ajr.obj").asVBO();
         armor_taurun = new HFRWavefrontObject("models/obj/armor/taurun.obj").asVBO();
+        armor_bismuth = new HFRWavefrontObject("models/obj/armor/bismuth.obj").asVBO();
 
         sphere = new HFRWavefrontObject("models/obj/sphere.obj").getRenderer();
         sphere_new = new HFRWavefrontObject("models/obj/sphere_new.obj").asVBO();
