@@ -1995,6 +1995,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.GUN_FOLLY, "The Folly");
         this.add(NtmItems.GUN_CHARGE_THROWER, "Charge Thrower");
         this.add(NtmItems.GUN_FIREEXT, "Fire Extinguisher");
+        this.add(NtmItems.GUN_PA_MELEE, "Power Armor Melee Controller");
+        this.add(NtmItems.GUN_PA_RANGED, "Power Armor Attack Remote");
         this.add(NtmItems.GUN_LASER_PISTOL, "Laser Pistol");
         this.add(NtmItems.GUN_LASER_PISTOL_PEW_PEW, "Pew Pew");
         this.add(NtmItems.GUN_LASER_PISTOL_MORNING_GLORY, "Morning Glory");
@@ -3962,6 +3964,17 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.RAG, ".desc", "Drop into water to make damp cloth.$Right-click to urinate on the cloth.");
         this.add(NtmItems.RAG_DAMP, "Damp Cloth");
         this.add(NtmItems.RAG_PISS, "Piss-Soaked Rag");
+        this.add("item.hbmsntm.parts_legendary.tier1", "Rare Parts");
+        this.add("item.hbmsntm.parts_legendary.tier2", "Epic Parts");
+        this.add("item.hbmsntm.parts_legendary.tier3", "Legendary Parts");
+        this.add(NtmItems.RPA_HELMET, "Remnant Power Armor Helmet");
+        this.add(NtmItems.RPA_PLATE, "Remnant Power Armor Chestplate");
+        this.add(NtmItems.RPA_LEGS, "Remnant Power Armor Leggings");
+        this.add(NtmItems.RPA_BOOTS, "Remnant Power Armor Boots");
+        this.add(NtmItems.NCRPA_HELMET, "NCR Power Armor Helmet");
+        this.add(NtmItems.NCRPA_PLATE, "NCR Power Armor Chestplate");
+        this.add(NtmItems.NCRPA_LEGS, "NCR Power Armor Leggings");
+        this.add(NtmItems.NCRPA_BOOTS, "NCR Power Armor Boots");
         this.add(NtmItems.HEV_HELMET, "HEV Mark IV Helmet");
         this.add(NtmItems.HEV_PLATE, "HEV Mark IV Chestplate");
         this.add(NtmItems.HEV_LEGS, "HEV Mark IV Leggings");

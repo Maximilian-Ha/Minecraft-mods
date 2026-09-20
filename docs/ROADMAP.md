@@ -8912,3 +8912,85 @@ Originals braucht `bolt_spike`, den Klang `RIVET_GUN` und die Schnittstelle `IAn
 nachgemessen, alle drei fehlen.
 
 Alle 36 Tore grün.
+
+## Runde 196 — Die Panzerrüstungen, und eine Behauptung, die zweimal falsch war
+
+`XFactoryPA` galt seit Runde 192 als **blockiert**: seine beiden Waffen delegieren an die
+getragene Rüstung, und `ArmorRPA`/`ArmorNCRPA` gibt es im Port nicht. Der erste Teil stimmt,
+der zweite ist eine Feststellung, keine Sperre — und die Schlussfolgerung war falsch.
+
+**Gemessen:** `ArmorFSBPoweredItem` steht seit Runde 101 im Port, `ModelArmorBase` und
+`ModelRendererObj` ebenso, die CE-Abspaltung hat `remnant.obj`, `ncrpa.obj` und alle acht
+Texturen. Es war Arbeit, kein Hindernis.
+
+### Warum die Waffen keine Waffen sind
+
+`gun_pa_melee` und `gun_pa_ranged` tun aus sich heraus **gar nichts**. Sie reichen jeden Klick,
+jeden Bewegungssatz und jeden Ton an die Brustplatte weiter. Der Nahkampf einer Panzerrüstung
+sind ihre Arme, und die gehören der Rüstung: die Remnant schlägt mit Fäusten, die NCR mit
+Klingen — andere Bewegungen, anderer Schaden, andere Klänge. Lägen sie in der Waffe, müsste
+jede Waffe jede Rüstung kennen.
+
+**Der Schaden entsteht nicht beim Klicken, sondern im Takt.** Die Orchestra prüft jeden Zug, ob
+die Bewegung dort ist, wo die Faust ankommt — Zug 3 und 9 beim Doppelschlag, Zug 8 bei der
+Ohrfeige — und schaut *dann* erst, was davorsteht. Man trifft, was beim Aufschlag da ist, nicht
+was beim Klicken da war.
+
+### Beide Rüstungen, nicht eine
+
+Die Remnant liefert nur das Nahkampfbauteil; **nur die NCR hat beides**. Hätte ich allein die
+Remnant portiert, wäre `gun_pa_ranged` eine Waffe ohne jeden Geber geworden — genau der Fehler,
+den die letzten Runden wiederholt aufgeräumt haben. Also beide.
+
+Dafür kamen die NCRPA-Raketen dazu (`rocket_ncrpa`, `rocket_ncrpa_steer`) samt der Lenkung:
+über hundert Blöcke Abstand hört sie auf, näher als drei Blöcke am Ziel wird nicht mehr
+korrigiert. `Library.rayTrace` stand dafür längst bereit.
+
+### Die Kette bis zum Ende
+
+Eine Rüstung, die man nicht bauen kann, hilft niemandem. Die vier Baupläne standen in
+`PrecAssRecipes` als auskommentierte Liste mit drei genannten Gründen — **zwei davon waren
+überholt**: den Deshmotor gibt es seit Runde 119, die Rüstung seit dieser Runde. Blieben die
+**Legendenteile**, und die sind ein Gegenstand mit drei Stufen und fünf formlosen Bauplänen.
+Sie sind mitgekommen.
+
+Ohne sie keine Brustplatte, ohne Brustplatte keine Panzerrüstungswaffen. Jetzt steht die Kette
+von Kettenstahl und Alexandrit bis zur Faust.
+
+Die NCR-Rüstung hat **absichtlich kein Rezept**: sie ist im Original ein Fundstück aus den
+Schlüsselloch-Truhen.
+
+### Ein Tor, das 131 Methoden nicht ansah
+
+Beim Gegenmessen fiel auf, dass `dist-check.sh` die neue Schnittstelle `IPAWeaponsProvider`
+**gar nicht prüft**: nimmt man dort die Kennzeichnung heraus, meldet das Tor nichts. Ursache
+ist der Methodenausdruck — er verlangt einen Sichtbarkeitsmodifikator:
+
+```
+((?:public|protected|private)\s[^;{}()\n]*\([^)]*\)…)\{
+```
+
+**Eine Schnittstellenmethode hat keinen.** `static IPAMelee getMeleeComponentClient() {` beginnt
+mit `static`, `default void onInstall(…) {` mit `default`. Damit war jeder `default`- und
+`static`-Rumpf im ganzen Baum unsichtbar: **131 Methoden in 45 Dateien**, darunter die
+vollständige `api/hbm`-Ebene.
+
+Ein zweiter, kleinerer Fehler steckte im Annotationsteil: er erzwang einen Zeilenumbruch
+zwischen `@OnlyIn(Dist.CLIENT)` und der Signatur. `IKeybindReceiver` schreibt beides in eine
+Zeile — die Methode galt als ungekennzeichnet.
+
+Beides ist berichtigt, und dahinter lag **ein echter Fund**: `ITooltipProvider.addStandardInfo`
+ist eine `default`-Methode, die `Screen.hasShiftDown()` ruft. Diese Schnittstelle implementieren
+Blöcke, und Blöcke lädt der dedizierte Server. Sie ist jetzt gekennzeichnet.
+
+**Gemessen in beide Richtungen:** 1079 statt 1066 Methoden angesehen, null Funde; nimmt man in
+`IPAWeaponsProvider` die Kennzeichnung wieder heraus, meldet das Tor genau diese Methode.
+
+### Abweichungen
+
+Das Original hängt an beiden Rüstungen VATS, Strahlungsklasse, Strahlenschutz, harte Landung
+und eigene Schritt- und Sprungklänge. Diese Baukastenteile gibt es im Port noch nicht —
+`ArmorFSBItem` kennt bisher Effekte, Geigerton und die Frage, ob ein Helm dazugehört. Was da
+ist, ist übernommen; was fehlt, fehlt sichtbar und nicht still.
+
+Alle 36 Tore grün.

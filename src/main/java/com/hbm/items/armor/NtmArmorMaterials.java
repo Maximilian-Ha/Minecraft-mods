@@ -55,12 +55,19 @@ public class NtmArmorMaterials {
      * Verzauberbarkeit. */
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> HEV = register("hev", LAYER_INVISIBLE, 0, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.PLATE_ARMOR_HEV.get()));
 
+    /* Die beiden Panzerruestungen teilen sich im Original den Werkstoff HBM_T45AJR:
+     * Haltbarkeitsfaktor 150, {3, 8, 6, 3}, ohne Verzauberbarkeit, Reparatur mit der
+     * AJR-Platte. Gezeichnet werden sie als eigenes Wellenfrontmodell, die Schicht bleibt
+     * darum unsichtbar. */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> AJR = register("ajr", LAYER_INVISIBLE, 0, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.PLATE_ARMOR_AJR.get()));
+
     /** Haltbarkeitsfaktoren aus dem Original, gebraucht fuer Item.Properties.durability. */
     public static final int DURABILITY_HAZMAT = 60;
     public static final int DURABILITY_PAA = 75;
     public static final int DURABILITY_RAGS = 150;
     public static final int DURABILITY_MASK = 15;
     public static final int DURABILITY_HEV = 150;
+    public static final int DURABILITY_AJR = 150;
 
     private static DeferredHolder<ArmorMaterial, ArmorMaterial> register(String name, String layer, int enchantability, int helmet, int chest, int legs, int boots, Supplier<Ingredient> repair) {
         return ARMOR_MATERIALS.register(name, () -> {

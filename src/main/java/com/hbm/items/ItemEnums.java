@@ -11,6 +11,15 @@ public class ItemEnums {
     }
 
     /**
+     * Die drei Stufen der Legendenteile. Sie sind Zutat, nicht Werkzeug: die zweite Stufe
+     * steckt in der Brustplatte der Remnant-Panzerruestung. Untereinander lassen sie sich in
+     * beide Richtungen tauschen -- drei der einen ergeben eine der naechsten und umgekehrt.
+     */
+    public enum LegendaryType {
+        TIER1, TIER2, TIER3
+    }
+
+    /**
      * Die Spielarten von ingot_u238m2. Nur die erste ist ein Barren; die drei uebrigen sind
      * Ostereier, die der bruechige Spaten aus der Erde der Bauwerke holt. Im Original sind es
      * die Metadaten eins bis drei desselben Gegenstands (ItemUnstable mit drei Ersatzbildern

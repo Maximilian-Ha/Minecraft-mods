@@ -10,6 +10,9 @@ import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.recipes.loader.GenericRecipe;
 import com.hbm.inventory.recipes.loader.GenericRecipes;
 import com.hbm.items.BrokenItem;
+import com.hbm.inventory.material.MatShapeItems;
+import com.hbm.inventory.material.Mats;
+import com.hbm.items.ItemEnums.LegendaryType;
 import com.hbm.items.NtmItems;
 import com.hbm.items.WireDenseItem;
 import com.hbm.items.machine.OrbitalAssemblyItem.EnumOrbitalAssembly;
@@ -221,20 +224,59 @@ public class PrecAssRecipes extends GenericRecipes<GenericRecipe> {
                         new ChanceOutput(new ItemStack(Items.PAPER, 24), 95))));
 
         /*
-         * NICHT UEBERNOMMEN, Originalzahlen zum Nachliefern:
-         *   precass.rpahelmet  3*min / 25_000  <- plate_armor_ajr 12, BIGMT.plateCast() 4,
-         *                                         circuit ADVANCED 4, plate_kevlar 8
-         *   precass.rpaplate   3*min / 25_000  <- plate_armor_ajr 24, BIGMT.plateCast() 8,
-         *                                         BIGMT.mechanism() 8, motor_desh 8,
-         *                                         plate_kevlar 16, parts_legendary TIER2 1
-         *   precass.rpalegs    3*min / 25_000  <- plate_armor_ajr 24, BIGMT.plateCast() 8,
-         *                                         motor_desh 8, plate_kevlar 16
-         *   precass.rpaboots   3*min / 25_000  <- plate_armor_ajr 12, BIGMT.plateCast() 4,
-         *                                         plate_kevlar 8
-         *   alle vier im Vorrat POOL_PREFIX_DISCOVER + ".rpa"
-         * Es fehlen: die RPA-Ruestung selbst, parts_legendary samt EnumLegendaryType und der
-         * Desh-Motor.
+         * DIE VIER TEILE DER REMNANT-PANZERRUESTUNG. Bis Runde 196 stand hier statt der
+         * Rezepte eine Liste mit der Begruendung, es fehlten die Ruestung selbst, die
+         * Legendenteile und der Deshmotor. Zwei der drei stimmten nicht mehr: den Deshmotor
+         * gibt es seit Runde 119, die Ruestung seit dieser Runde -- und die Legendenteile
+         * sind mit ihr gekommen.
+         *
+         * BIGMT des Originals ist Saturnit. Der Schaltkreis der Stufe ADVANCED heisst im Port
+         * circuit_advanced_control_unit.
+         *
+         * GUSSPLATTE UND MECHANIK SIND METAGEGENSTAENDE: castPlateOf und mechanismOf liefern
+         * einen Stapel MIT Metadatenwert. Wer daraus nur getItem() nimmt, verliert den Wert,
+         * und das Rezept naehme jede beliebige Gussplatte statt der aus Saturnit. Deshalb
+         * steht hier copyWithCount und der Konstruktor, der den ganzen Stapel nimmt.
+         *
+         * Die NCR-Panzerruestung hat hier KEIN Rezept, und das ist ebenfalls das Original:
+         * sie ist ein Fundstueck aus den Schluesselloch-Truhen, kein Bauteil.
          */
+        this.register(new GenericRecipe("precass.rpahelmet").setup(3 * min, 25_000L)
+                .inputItems(
+                        new ComparableStack(NtmItems.PLATE_ARMOR_AJR.get(), 12),
+                        new ComparableStack(MatShapeItems.castPlateOf(Mats.MAT_SATURN).copyWithCount(4)),
+                        new ComparableStack(NtmItems.CIRCUIT_ADVANCED_CONTROL_UNIT.get(), 4),
+                        new ComparableStack(NtmItems.PLATE_KEVLAR.get(), 8))
+                .outputItems(new ItemStack(NtmItems.RPA_HELMET.get()))
+                .setPools(POOL_PREFIX_DISCOVER + "rpa"));
+
+        this.register(new GenericRecipe("precass.rpaplate").setup(3 * min, 25_000L)
+                .inputItems(
+                        new ComparableStack(NtmItems.PLATE_ARMOR_AJR.get(), 24),
+                        new ComparableStack(MatShapeItems.castPlateOf(Mats.MAT_SATURN).copyWithCount(8)),
+                        new ComparableStack(MatShapeItems.mechanismOf(Mats.MAT_SATURN).copyWithCount(8)),
+                        new ComparableStack(NtmItems.MOTOR_DESH.get(), 8),
+                        new ComparableStack(NtmItems.PLATE_KEVLAR.get(), 16),
+                        new ComparableStack(NtmItems.PARTS_LEGENDARY.get(), 1, LegendaryType.TIER2))
+                .outputItems(new ItemStack(NtmItems.RPA_PLATE.get()))
+                .setPools(POOL_PREFIX_DISCOVER + "rpa"));
+
+        this.register(new GenericRecipe("precass.rpalegs").setup(3 * min, 25_000L)
+                .inputItems(
+                        new ComparableStack(NtmItems.PLATE_ARMOR_AJR.get(), 24),
+                        new ComparableStack(MatShapeItems.castPlateOf(Mats.MAT_SATURN).copyWithCount(8)),
+                        new ComparableStack(NtmItems.MOTOR_DESH.get(), 8),
+                        new ComparableStack(NtmItems.PLATE_KEVLAR.get(), 16))
+                .outputItems(new ItemStack(NtmItems.RPA_LEGS.get()))
+                .setPools(POOL_PREFIX_DISCOVER + "rpa"));
+
+        this.register(new GenericRecipe("precass.rpaboots").setup(3 * min, 25_000L)
+                .inputItems(
+                        new ComparableStack(NtmItems.PLATE_ARMOR_AJR.get(), 12),
+                        new ComparableStack(MatShapeItems.castPlateOf(Mats.MAT_SATURN).copyWithCount(4)),
+                        new ComparableStack(NtmItems.PLATE_KEVLAR.get(), 8))
+                .outputItems(new ItemStack(NtmItems.RPA_BOOTS.get()))
+                .setPools(POOL_PREFIX_DISCOVER + "rpa"));
     }
 
     public void addFirstUpgrade(Item lower, Item higher, String name) {

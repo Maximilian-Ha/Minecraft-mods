@@ -7,12 +7,21 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 public interface ITooltipProvider {
 
+    /*
+     * NUR AUF DEM CLIENT. Screen.hasShiftDown gibt es auf einem dedizierten Server nicht, und
+     * diese Methode wird ausschliesslich aus appendHoverText gerufen -- der Server zeigt
+     * keine Gegenstandshinweise. Gefunden in Runde 196, als das Dist-Tor endlich auch
+     * default-Methoden ansah.
+     */
+    @OnlyIn(Dist.CLIENT)
     default void addStandardInfo(List<Component> tooltip) {
         if(Screen.hasShiftDown()) {
             for(String s : I18nUtil.resolveKeyArray(((Block) this).getDescriptionId() + ".desc")) {

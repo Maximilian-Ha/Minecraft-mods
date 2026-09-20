@@ -81,6 +81,7 @@ public class GunFactory {
         XFactoryEnergy.init(itemRegistry);
         XFactoryFolly.init(itemRegistry);
         XFactoryTool.init(itemRegistry);
+        XFactoryPA.init(itemRegistry);
         XFactoryTurret.init();
     }
 

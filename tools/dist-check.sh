@@ -88,7 +88,16 @@ for p in dateien:
     if not typen: continue
 
     offen = []
-    for m in re.finditer(r'((?:@[\w.]+(?:\([^)]*\))?[ \t]*\n[ \t]*)*)((?:public|protected|private)\s[^;{}()\n]*\([^)]*\)\s*(?:throws [\w, .]+)?)\{', roh):
+    # Runde 196: static und default muessen mit. Eine Schnittstellenmethode traegt keinen
+    # Sichtbarkeitsmodifikator -- "static IPAMelee getMeleeComponentClient() {" beginnt mit
+    # static, "default void onInstall(...) {" mit default. Bis hierher hat dieses Tor JEDEN
+    # solchen Rumpf uebersehen: 131 Methoden in 45 Dateien, darunter die ganze api/hbm-Ebene.
+    # Aufgefallen ist es beim Gegenmessen -- nimmt man in IPAWeaponsProvider die Kennzeichnung
+    # heraus, meldete das Tor nichts.
+    # Und die Kennzeichnung darf auf DERSELBEN Zeile stehen. IKeybindReceiver schreibt
+    # "@OnlyIn(Dist.CLIENT) default void handleKeybindClient(...)" in eine Zeile; mit dem
+    # erzwungenen Zeilenumbruch galt die Methode als ungekennzeichnet.
+    for m in re.finditer(r'((?:@[\w.]+(?:\([^)]*\))?[ \t]*\n?[ \t]*)*)((?:public|protected|private|static|default)\s[^;{}()\n]*\([^)]*\)\s*(?:throws [\w, .]+)?)\{', roh):
         anns, sig = m.group(1), m.group(2)
         i = m.end() - 1
         tiefe = 0

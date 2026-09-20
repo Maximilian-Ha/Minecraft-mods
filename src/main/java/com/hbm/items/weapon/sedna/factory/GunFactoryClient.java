@@ -38,6 +38,7 @@ public class GunFactoryClient {
         registerGunItemRenderer(event, new ItemRenderFolly(), NtmItems.GUN_FOLLY.get());
         registerGunItemRenderer(event, new ItemRenderChargeThrower(), NtmItems.GUN_CHARGE_THROWER.get());
         registerGunItemRenderer(event, new ItemRenderFireExt(), NtmItems.GUN_FIREEXT.get());
+        registerGunItemRenderer(event, new ItemRenderPAMelee(), NtmItems.GUN_PA_MELEE.get());
         registerGunItemRenderer(event, new ItemRenderChemthrower(), NtmItems.GUN_CHEMTHROWER.get());
         registerGunItemRenderer(event, new ItemRenderLaserPistol(ResourceManager.LASER_PISTOL_TEX), NtmItems.GUN_LASER_PISTOL.get());
         registerGunItemRenderer(event, new ItemRenderLaserPistol(ResourceManager.LASER_PISTOL_PEW_PEW_TEX), NtmItems.GUN_LASER_PISTOL_PEW_PEW.get());

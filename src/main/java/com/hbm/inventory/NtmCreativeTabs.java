@@ -1811,6 +1811,8 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.GUN_FOLLY);
                         output.accept(NtmItems.GUN_CHARGE_THROWER);
                         output.accept(NtmItems.GUN_FIREEXT);
+                        output.accept(NtmItems.GUN_PA_MELEE);
+                        output.accept(NtmItems.GUN_PA_RANGED);
                         output.accept(NtmItems.GUN_LASER_PISTOL);
                         output.accept(NtmItems.GUN_LASER_PISTOL_PEW_PEW);
                         output.accept(NtmItems.GUN_LASER_PISTOL_MORNING_GLORY);
@@ -1929,6 +1931,15 @@ public class NtmCreativeTabs {
                          * baut; das Rezept braucht aber die Titanruestung und den Deshmotor,
                          * und beide hat der Port noch nicht. Bis dahin waere er sonst gar
                          * nicht zu bekommen. */
+                        addMetaItems(output, NtmItems.PARTS_LEGENDARY.get());
+                        output.accept(NtmItems.RPA_HELMET);
+                        output.accept(NtmItems.RPA_PLATE);
+                        output.accept(NtmItems.RPA_LEGS);
+                        output.accept(NtmItems.RPA_BOOTS);
+                        output.accept(NtmItems.NCRPA_HELMET);
+                        output.accept(NtmItems.NCRPA_PLATE);
+                        output.accept(NtmItems.NCRPA_LEGS);
+                        output.accept(NtmItems.NCRPA_BOOTS);
                         output.accept(NtmItems.HEV_HELMET);
                         output.accept(NtmItems.HEV_PLATE);
                         output.accept(NtmItems.HEV_LEGS);

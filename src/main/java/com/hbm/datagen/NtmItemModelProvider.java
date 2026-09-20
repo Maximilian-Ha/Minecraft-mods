@@ -836,6 +836,16 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicItem(NtmItems.HAZMAT_PAA_PLATE.get());
         this.basicItem(NtmItems.HAZMAT_PAA_LEGS.get());
         this.basicItem(NtmItems.HAZMAT_PAA_BOOTS.get());
+        this.basicItem(NtmItems.RPA_HELMET.get());
+        this.basicItem(NtmItems.RPA_PLATE.get());
+        this.basicItem(NtmItems.RPA_LEGS.get());
+        this.basicItem(NtmItems.RPA_BOOTS.get());
+        /* Die NCR-Ruestung hat im Original keine eigenen Gegenstandsbilder und nimmt die der
+         * Remnant -- vier Modelle, die auf fremde Texturen zeigen. */
+        this.withExistingParent("ncrpa_helmet", mcLoc("item/generated")).texture("layer0", modLoc("item/rpa_helmet"));
+        this.withExistingParent("ncrpa_plate", mcLoc("item/generated")).texture("layer0", modLoc("item/rpa_plate"));
+        this.withExistingParent("ncrpa_legs", mcLoc("item/generated")).texture("layer0", modLoc("item/rpa_legs"));
+        this.withExistingParent("ncrpa_boots", mcLoc("item/generated")).texture("layer0", modLoc("item/rpa_boots"));
         this.basicItem(NtmItems.HEV_HELMET.get());
         this.basicItem(NtmItems.HEV_PLATE.get());
         this.basicItem(NtmItems.HEV_LEGS.get());
@@ -1305,6 +1315,10 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.entityItem(NtmItems.GUN_FOLLY.get(), true);
         this.entityItem(NtmItems.GUN_CHARGE_THROWER.get(), true);
         this.entityItem(NtmItems.GUN_FIREEXT.get(), true);
+        this.entityItem(NtmItems.GUN_PA_MELEE.get(), true);
+        /* Die Fernwaffe hat keinen eigenen Zeichner -- im Original ein schlichtes
+         * Gegenstandsbild mit setFull3D. */
+        this.basicItem(NtmItems.GUN_PA_RANGED.get());
         this.entityItem(NtmItems.GUN_LASER_PISTOL.get(), true);
         this.entityItem(NtmItems.GUN_LASER_PISTOL_PEW_PEW.get(), true);
         this.entityItem(NtmItems.GUN_LASER_PISTOL_MORNING_GLORY.get(), true);

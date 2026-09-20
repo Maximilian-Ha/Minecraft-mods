@@ -400,6 +400,14 @@ public class ResourceManager {
     public static final ResourceLocation HEV_LEG = NuclearTechMod.withDefaultNamespace("textures/armor/hev_leg.png");
     public static final ResourceLocation HEV_CHEST = NuclearTechMod.withDefaultNamespace("textures/armor/hev_chest.png");
     public static final ResourceLocation HEV_ARM = NuclearTechMod.withDefaultNamespace("textures/armor/hev_arm.png");
+    public static final ResourceLocation RPA_HELMET = NuclearTechMod.withDefaultNamespace("textures/armor/rpa_helmet.png");
+    public static final ResourceLocation RPA_CHEST = NuclearTechMod.withDefaultNamespace("textures/armor/rpa_chest.png");
+    public static final ResourceLocation RPA_ARM = NuclearTechMod.withDefaultNamespace("textures/armor/rpa_arm.png");
+    public static final ResourceLocation RPA_LEG = NuclearTechMod.withDefaultNamespace("textures/armor/rpa_leg.png");
+    public static final ResourceLocation NCRPA_HELMET = NuclearTechMod.withDefaultNamespace("textures/armor/ncrpa_helmet.png");
+    public static final ResourceLocation NCRPA_CHEST = NuclearTechMod.withDefaultNamespace("textures/armor/ncrpa_chest.png");
+    public static final ResourceLocation NCRPA_ARM = NuclearTechMod.withDefaultNamespace("textures/armor/ncrpa_arm.png");
+    public static final ResourceLocation NCRPA_LEG = NuclearTechMod.withDefaultNamespace("textures/armor/ncrpa_leg.png");
 
     public static final ResourceLocation HAT_TEX = NuclearTechMod.withDefaultNamespace("textures/armor/hat.png");
     public static final ResourceLocation NO9_TEX = NuclearTechMod.withDefaultNamespace("textures/armor/no9.png");
@@ -744,6 +752,8 @@ public class ResourceManager {
     public static HashMap<String, BusAnimation> flamethrower_anim;
 
     public static IModelCustom armor_hev;
+    public static IModelCustom armor_remnant;
+    public static IModelCustom armor_ncrpa;
     public static IModelCustom armor_hat;
     public static IModelCustom armor_no9;
 
@@ -1047,6 +1057,8 @@ public class ResourceManager {
         flamethrower_anim = AnimationLoader.load(NuclearTechMod.withDefaultNamespace("models/animations/flamethrower.json"));
 
         armor_hev = new HFRWavefrontObject("models/obj/armor/hev.obj").asVBO();
+        armor_remnant = new HFRWavefrontObject("models/obj/armor/remnant.obj").asVBO();
+        armor_ncrpa = new HFRWavefrontObject("models/obj/armor/ncrpa.obj").asVBO();
         armor_hat = new HFRWavefrontObject("models/obj/armor/hat.obj").asVBO();
         armor_no9 = new HFRWavefrontObject("models/obj/armor/no9.obj").asVBO();
 

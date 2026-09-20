@@ -26,6 +26,8 @@ public class NtmSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SHOTGUN_CLOSE = reg("weapon.reload.shotgun_cock_close");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SHOTGUN_COCK = reg("weapon.reload.shotgun_cock");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_DRY_FIRE = reg("weapon.reload.dry_fire_click");
+    /** Der Faustschlag der Panzerruestung -- im Original NTMSounds "hbm:weapon.fire.smack". */
+    public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SMACK = reg("weapon.fire.smack");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_HEAVY_REVOLVER_FIRE = reg("weapon.fire.44_shoot");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SHOTGUN_FIRE = reg("weapon.fire.shotgun");
     /* Im Original heisst die Datei shotgunAlt; der Port schreibt Dateinamen klein mit Unterstrich. */

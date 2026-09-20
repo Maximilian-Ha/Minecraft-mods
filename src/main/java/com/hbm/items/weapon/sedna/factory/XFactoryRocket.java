@@ -28,14 +28,17 @@ import com.hbm.util.EntityDamageUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.damagesource.DamageSource;
+import com.hbm.lib.Library;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.BiConsumer;
@@ -73,6 +76,9 @@ public class XFactoryRocket {
 
     public static BulletConfig[] rocket_template;
     public static BulletConfig[] rocket_rpzb;
+    /** Die beiden Saetze der NCR-Ruestung: ungelenkt auf der linken, gelenkt auf der rechten Taste. */
+    public static BulletConfig[] rocket_ncrpa;
+    public static BulletConfig[] rocket_ncrpa_steer;
 
     /**
      * Der Antrieb. Eine Rakete startet mit Geschwindigkeit null und schiebt sich selbst auf
@@ -82,6 +88,40 @@ public class XFactoryRocket {
         BulletBaseMK4 bullet = (BulletBaseMK4) entity;
         if(bullet.accel < 7) bullet.accel += 0.4D;
     };
+
+    /**
+     * DIE GELENKTE RAKETE DER NCR-RUESTUNG. Sie beschleunigt langsamer als die uebrigen (bis
+     * 4 statt bis 7) und fragt dafuer jeden Zug, wohin ihr Schuetze gerade zielt -- und zieht
+     * dorthin. Zwei Grenzen stehen im Original und sind uebernommen:
+     *
+     *   * Ueber hundert Bloecke Abstand zum Schuetzen hoert die Lenkung auf. Die Rakete
+     *     fliegt dann geradeaus weiter.
+     *   * Naeher als drei Bloecke am Zielpunkt wird nicht mehr korrigiert, sonst taenzelt sie
+     *     um den Punkt herum, statt ihn zu treffen.
+     *
+     * Die Geschwindigkeit bleibt dabei gleich; gedreht wird nur die Richtung.
+     */
+    public static Consumer<Entity> LAMBDA_NCR_ACCELERATE = (entity) -> lenkendBeschleunigen(entity, false);
+
+    public static void lenkendBeschleunigen(Entity entity, boolean ohneLenkung) {
+
+        if(!(entity instanceof BulletBaseMK4 geschoss)) return;
+        if(geschoss.accel < 4) geschoss.accel += 0.4D;
+
+        if(!(geschoss.getOwner() instanceof Player spieler)) return;
+        if(geschoss.position().subtract(spieler.position()).length() > 100D) return;
+        if(ohneLenkung) return;
+
+        BlockHitResult ziel = Library.rayTrace(spieler, 200D, 1F);
+        if(ziel == null) return;
+
+        Vec3 nach = ziel.getLocation().subtract(geschoss.position());
+        if(nach.length() < 3D) return;
+        nach = nach.normalize();
+
+        double tempo = geschoss.getDeltaMovement().length();
+        geschoss.setDeltaMovement(nach.scale(tempo));
+    }
 
     /**
      * Der Wachposten vor jedem Aufschlag. Im Original stecken hier zwei getrennte Regeln: die
@@ -239,7 +279,16 @@ public class XFactoryRocket {
         rocket_template[4] = baseRocket.clone().setItem(Ammo.ROCKET_PHOSPHORUS).setDamage(0.75F).setOnImpact(LAMBDA_STANDARD_EXPLODE_PHOSPHORUS);
 
         rocket_rpzb = new BulletConfig[rocket_template.length];
-        for(int i = 0; i < rocket_template.length; i++) rocket_rpzb[i] = rocket_template[i].clone();
+        rocket_ncrpa = new BulletConfig[rocket_template.length];
+        rocket_ncrpa_steer = new BulletConfig[rocket_template.length];
+
+        for(int i = 0; i < rocket_template.length; i++) {
+            rocket_rpzb[i] = rocket_template[i].clone();
+            /* makeRPZB im Original: eine unveraenderte Kopie. */
+            rocket_ncrpa[i] = rocket_template[i].clone();
+            /* makeNCR im Original: laengere Lebensdauer und die Lenkung. */
+            rocket_ncrpa_steer[i] = rocket_template[i].clone().setLife(400).setOnUpdate(LAMBDA_NCR_ACCELERATE);
+        }
     }
 
     /**

@@ -13,6 +13,7 @@ import com.hbm.items.CastPlateItem;
 import com.hbm.items.ItemEnums.CasingType;
 import com.hbm.items.PartGenericItem;
 import com.hbm.items.WireDenseItem;
+import com.hbm.items.ItemEnums.LegendaryType;
 import com.hbm.items.NtmItems;
 import com.hbm.items.weapon.sedna.factory.GunFactory;
 import com.hbm.items.machine.BatteryPackItem;
@@ -176,6 +177,49 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .define('S', anyPlasticIngot())
                 .unlockedBy("has_desh", has(NtmItems.INGOT_DESH.get()))
                 .save(recipeOutput);
+
+        /*
+         * DIE LEGENDENTEILE. Fuenf formlose Bauplaene aus CraftingManager Z. 910 bis 914:
+         * jede Stufe entsteht aus Kettenstahl und Alexandrit, und drei einer Stufe lassen
+         * sich zu einer der naechsten zusammenlegen. Der Rueckweg steht ebenfalls im
+         * Original -- eine hoehere Stufe zerfaellt zu drei niedrigeren.
+         *
+         * Sie stehen hier, weil die Brustplatte der Remnant-Panzerruestung die zweite Stufe
+         * braucht: ohne sie keine Brustplatte, ohne Brustplatte keine Panzerruestungswaffen.
+         */
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MetaHelper.newStack(NtmItems.PARTS_LEGENDARY.get(), 1, LegendaryType.TIER1))
+                .requires(NtmItems.INGOT_CHAINSTEEL.get())
+                .requires(NtmItems.INGOT_ASBESTOS.get())
+                .requires(NtmItems.GEM_ALEXANDRITE.get())
+                .unlockedBy("has_alexandrite", has(NtmItems.GEM_ALEXANDRITE.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("parts_legendary_tier1"));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MetaHelper.newStack(NtmItems.PARTS_LEGENDARY.get(), 1, LegendaryType.TIER2))
+                .requires(NtmItems.INGOT_CHAINSTEEL.get())
+                .requires(NtmItems.INGOT_BISMUTH.get())
+                .requires(NtmItems.GEM_ALEXANDRITE.get())
+                .requires(NtmItems.GEM_ALEXANDRITE.get())
+                .unlockedBy("has_alexandrite", has(NtmItems.GEM_ALEXANDRITE.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("parts_legendary_tier2"));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MetaHelper.newStack(NtmItems.PARTS_LEGENDARY.get(), 1, LegendaryType.TIER3))
+                .requires(NtmItems.INGOT_CHAINSTEEL.get())
+                .requires(NtmItems.INGOT_SMORE.get())
+                .requires(NtmItems.GEM_ALEXANDRITE.get())
+                .requires(NtmItems.GEM_ALEXANDRITE.get())
+                .requires(NtmItems.GEM_ALEXANDRITE.get())
+                .unlockedBy("has_alexandrite", has(NtmItems.GEM_ALEXANDRITE.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("parts_legendary_tier3"));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MetaHelper.newStack(NtmItems.PARTS_LEGENDARY.get(), 3, LegendaryType.TIER1))
+                .requires(DataComponentIngredient.of(false, NtmDataComponents.META, LegendaryType.TIER2.ordinal(), NtmItems.PARTS_LEGENDARY.get()))
+                .unlockedBy("has_parts_legendary", has(NtmItems.PARTS_LEGENDARY.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("parts_legendary_tier2_split"));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MetaHelper.newStack(NtmItems.PARTS_LEGENDARY.get(), 3, LegendaryType.TIER2))
+                .requires(DataComponentIngredient.of(false, NtmDataComponents.META, LegendaryType.TIER3.ordinal(), NtmItems.PARTS_LEGENDARY.get()))
+                .unlockedBy("has_parts_legendary", has(NtmItems.PARTS_LEGENDARY.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("parts_legendary_tier3_split"));
 
         this.gunPartRecipes(recipeOutput);
         this.specialWeaponMods(recipeOutput);

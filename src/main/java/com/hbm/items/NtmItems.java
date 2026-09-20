@@ -11,6 +11,7 @@ import com.hbm.inventory.material.MaterialShapes;
 import com.hbm.inventory.NtmTiers;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.fluid.Fluids;
+import com.hbm.items.ItemEnums.LegendaryType;
 import com.hbm.items.ItemEnums.CapType;
 import com.hbm.items.ItemEnums.U238M2Type;
 import com.hbm.items.ItemEnums.CasingType;
@@ -19,6 +20,8 @@ import com.hbm.items.food.PillItem;
 import com.hbm.items.machine.GunPartItem;
 import com.hbm.items.special.SimpleConsumableItem;
 import com.hbm.items.special.SyringeItem;
+import com.hbm.items.armor.ArmorNCRPAItem;
+import com.hbm.items.armor.ArmorRPAItem;
 import com.hbm.items.armor.ArmorHEVItem;
 import com.hbm.items.armor.ArmorNo9;
 import com.hbm.items.armor.FilterItem;
@@ -1264,6 +1267,9 @@ public class NtmItems {
 
     // Money
     public static final DeferredItem<Item> CAP = ITEMS.register("cap", () -> new EnumMultiItem(new Item.Properties(), CapType.class, true, true));
+    /* Die Legendenteile. Ohne sie waere die Brustplatte der Remnant-Panzerruestung nicht
+     * baubar, und ohne die Brustplatte taeten beide Panzerruestungswaffen nichts. */
+    public static final DeferredItem<Item> PARTS_LEGENDARY = ITEMS.register("parts_legendary", () -> new EnumMultiItem(new Item.Properties(), LegendaryType.class, true, true));
     public static final DeferredItem<Item> RING_PULL = ITEMS.register("ring_pull", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> CAN_KEY = ITEMS.register("can_key", () -> new Item(new Item.Properties()));
 
@@ -1389,6 +1395,8 @@ public class NtmItems {
     public static DeferredItem<Item> GUN_FOLLY;
     public static DeferredItem<Item> GUN_CHARGE_THROWER;
     public static DeferredItem<Item> GUN_FIREEXT;
+    public static DeferredItem<Item> GUN_PA_MELEE;
+    public static DeferredItem<Item> GUN_PA_RANGED;
     public static DeferredItem<Item> GUN_LASER_PISTOL;
     public static DeferredItem<Item> GUN_LASER_PISTOL_PEW_PEW;
     public static DeferredItem<Item> GUN_LASER_PISTOL_MORNING_GLORY;
@@ -1505,6 +1513,33 @@ public class NtmItems {
     public static final DeferredItem<Item> HEV_PLATE = ITEMS.register("hev_plate", () -> hev(ArmorItem.Type.CHESTPLATE));
     public static final DeferredItem<Item> HEV_LEGS = ITEMS.register("hev_legs", () -> hev(ArmorItem.Type.LEGGINGS));
     public static final DeferredItem<Item> HEV_BOOTS = ITEMS.register("hev_boots", () -> hev(ArmorItem.Type.BOOTS));
+
+    /*
+     * DIE BEIDEN PANZERRUESTUNGEN. Werte aus ModItemsArmor des Originals: 2,5 Millionen
+     * Ladung, 10000 Ladegeschwindigkeit, 2000 Verbrauch, 25 Abfluss -- fuer beide gleich.
+     * Beide sind IPAWeaponsProvider und geben den Panzerruestungswaffen ihre Bauteile.
+     */
+    public static final DeferredItem<Item> RPA_HELMET = ITEMS.register("rpa_helmet", () -> rpa(ArmorItem.Type.HELMET));
+    public static final DeferredItem<Item> RPA_PLATE = ITEMS.register("rpa_plate", () -> rpa(ArmorItem.Type.CHESTPLATE));
+    public static final DeferredItem<Item> RPA_LEGS = ITEMS.register("rpa_legs", () -> rpa(ArmorItem.Type.LEGGINGS));
+    public static final DeferredItem<Item> RPA_BOOTS = ITEMS.register("rpa_boots", () -> rpa(ArmorItem.Type.BOOTS));
+
+    public static final DeferredItem<Item> NCRPA_HELMET = ITEMS.register("ncrpa_helmet", () -> ncrpa(ArmorItem.Type.HELMET));
+    public static final DeferredItem<Item> NCRPA_PLATE = ITEMS.register("ncrpa_plate", () -> ncrpa(ArmorItem.Type.CHESTPLATE));
+    public static final DeferredItem<Item> NCRPA_LEGS = ITEMS.register("ncrpa_legs", () -> ncrpa(ArmorItem.Type.LEGGINGS));
+    public static final DeferredItem<Item> NCRPA_BOOTS = ITEMS.register("ncrpa_boots", () -> ncrpa(ArmorItem.Type.BOOTS));
+
+    private static ArmorFSBItem rpa(ArmorItem.Type type) {
+        return new ArmorRPAItem(NtmArmorMaterials.AJR, type, new Item.Properties().durability(type.getDurability(NtmArmorMaterials.DURABILITY_AJR)), 2_500_000, 10_000, 2_000, 25)
+                .addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20, 3))
+                .setHasGeigerSound(true);
+    }
+
+    private static ArmorFSBItem ncrpa(ArmorItem.Type type) {
+        return new ArmorNCRPAItem(NtmArmorMaterials.AJR, type, new Item.Properties().durability(type.getDurability(NtmArmorMaterials.DURABILITY_AJR)), 2_500_000, 10_000, 2_000, 25)
+                .addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20, 3))
+                .setHasGeigerSound(true);
+    }
 
     private static ArmorFSBItem hev(ArmorItem.Type type) {
         return new ArmorHEVItem(NtmArmorMaterials.HEV, type, new Item.Properties().durability(type.getDurability(NtmArmorMaterials.DURABILITY_HEV)), 1_000_000, 10_000, 2_500, 0)
