@@ -45,6 +45,16 @@ public class NtmTemplatePools {
     public static final ResourceKey<StructureTemplatePool> ROOMBACK = registerKey("meteor/roomback");
     public static final ResourceKey<StructureTemplatePool> HEADBACK = registerKey("meteor/headback");
 
+    /* Die Einzelbauwerke der Wueste. Jedes ist im Original EIN JigsawPiece ohne Pools -- in
+     * 1.21 braucht auch das einen Pool, denn ein Jigsaw-Bauwerk faengt immer bei einem an.
+     * Ein Stueck, Gewicht eins, kein Ausweich. */
+    public static final ResourceKey<StructureTemplatePool> VERTIBIRD = registerKey("desert/vertibird");
+    public static final ResourceKey<StructureTemplatePool> CRASHED_VERTIBIRD = registerKey("desert/crashed_vertibird");
+    public static final ResourceKey<StructureTemplatePool> DESERT_SHACK_1 = registerKey("desert/desert_shack_1");
+    public static final ResourceKey<StructureTemplatePool> DESERT_SHACK_2 = registerKey("desert/desert_shack_2");
+    public static final ResourceKey<StructureTemplatePool> DESERT_SHACK_3 = registerKey("desert/desert_shack_3");
+    public static final ResourceKey<StructureTemplatePool> DEAD_DISH_SMALL = registerKey("desert/dead_dish_small");
+
     public static void bootstrap(BootstrapContext<StructureTemplatePool> context) {
 
         HolderGetter<StructureTemplatePool> pools = context.lookup(Registries.TEMPLATE_POOL);
@@ -115,6 +125,28 @@ public class NtmTemplatePools {
         Eintraege drachenwand = new Eintraege();
         drachenwand.add("meteor/room10/headloot/loot-fallback", kisten, 1);
         context.register(HEADBACK, new StructureTemplatePool(leer, drachenwand.liste(), StructureTemplatePool.Projection.RIGID));
+
+        einzeln(context, leer, VERTIBIRD, "desert/vertibird");
+        einzeln(context, leer, CRASHED_VERTIBIRD, "desert/crashed_vertibird");
+        einzeln(context, leer, DESERT_SHACK_1, "desert/desert_shack_1");
+        einzeln(context, leer, DESERT_SHACK_2, "desert/desert_shack_2");
+        einzeln(context, leer, DESERT_SHACK_3, "desert/desert_shack_3");
+        einzeln(context, leer, DEAD_DISH_SMALL, "desert/dead_dish_small");
+    }
+
+    /**
+     * Ein Pool aus genau einem Stueck -- die Form, die ein Einzelbauwerk in 1.21 braucht.
+     *
+     * RIGID heisst: das Stueck steht, wie es gebaut wurde, und bekommt keine Gelaendeanpassung.
+     * Das entspricht dem Original, das seine Einzelbauwerke ebenso unveraendert setzt; die
+     * Ausnahme sind die Ruinen mit conformToTerrain, und die kommen mit einem Prozessor.
+     */
+    private static void einzeln(BootstrapContext<StructureTemplatePool> context, Holder<StructureTemplatePool> leer,
+            ResourceKey<StructureTemplatePool> schluessel, String pfad) {
+
+        Eintraege eintrag = new Eintraege();
+        eintrag.add(pfad, 1);
+        context.register(schluessel, new StructureTemplatePool(leer, eintrag.liste(), StructureTemplatePool.Projection.RIGID));
     }
 
     /** Sammelt die gewichteten Stuecke eines Pools; nur damit die Aufrufe oben lesbar bleiben. */

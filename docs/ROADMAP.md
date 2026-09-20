@@ -12265,3 +12265,69 @@ Eintrag berichtigt, Darsteller auf die Zahlen des Originals gesetzt, Tor grün.
 `wand_logic` — der Einstieg in ein rund tausendzeiliges Fallensystem, das vier Bauwerke
 benutzen. Das ist kein Block, den man nachreicht, sondern ein Teilsystem; es bekommt eine eigene
 Runde.
+
+## Runde 260 — Die ersten sechs Einzelbauwerke stehen in der Welt
+
+Das Meteoritenverlies war seit Runde 251 das einzige Bauwerk, das der Port tatsächlich in die
+Welt setzt. Die übrigen ließen sich zwar umsetzen, lagen aber nur als Datei im Jar. Diese Runde
+bringt die erste Gruppe: die sechs, die das Original an **eine einzige Bedingung** hängt,
+`BiomeDictionary.isBiomeOfType(biome, Type.SANDY)` — Vertibird, sein Wrack, die drei
+Wüstenhütten und die tote Satellitenschüssel.
+
+### Die Höhe ist ein Versatz, keine Höhe
+
+Das Original gibt jedem `JigsawPiece` einen `heightOffset` — drittes Argument seines Erbauers —
+und setzt das Stück so viele Blöcke **unter** die Geländeoberkante: der Vertibird drei, sein
+Wrack zehn, die Hütten fünf bis sieben. In 1.21 heißt dasselbe: `projectStartToHeightmap` setzen
+und die Starthöhe als Versatz lesen. Ohne das Heightmap-Argument wäre die Zahl eine **absolute**
+Höhe, und die Hütten stünden auf Y = −7 im Grundgestein. Deshalb braucht es hier den
+sechsstelligen Erbauer von `JigsawStructure`, nicht den fünfstelligen des Verlieses.
+
+### Der Rasterabstand ist gerechnet, nicht gewählt
+
+Nach derselben Formel wie beim Verlies: Abstand = 12 · √(Gesamtgewicht / eigenem Gewicht),
+Zwischenraum ein Drittel davon.
+
+Das Gesamtgewicht der Wüste ist **ausgezählt, nicht geschätzt**: dort ziehen Spire (2), Features
+(50), Bunker (6), Vertibird (6), Wrack (10), Waldchemie (30), Waldposten (30), Fabrik (40), Kran
+(20), die zwei Flugzeugwracks (je 25), die drei Hütten (18, 20, 22), die tote Schüssel (15) und
+das Verlies (1) — zusammen **320**. Nicht dabei sind die Ruinen (sie verlangen
+`canSpawnLightningBolt()`, und in der Wüste regnet es nicht), alles mit `isFlatBiome` (die Wüste
+ist nicht SPARSE), der Turmsockel (er schließt SANDY ausdrücklich aus) und alles, was Ozean,
+Strand oder Ebene verlangt.
+
+| Bauwerk | Gewicht | Abstand | Zwischenraum |
+|---|---|---|---|
+| vertibird | 6 | 88 | 29 |
+| crashed_vertibird | 10 | 68 | 23 |
+| dead_dish_small | 15 | 55 | 18 |
+| desert_shack_1 | 18 | 51 | 17 |
+| desert_shack_2 | 20 | 48 | 16 |
+| desert_shack_3 | 22 | 46 | 15 |
+
+Jedes bekommt einen eigenen Streuwert. Das ist kein Schmuck: zwei Bauwerke mit demselben
+Streuwert **und** demselben Abstand landeten in jeder Rasterzelle auf demselben Feld und stünden
+ineinander.
+
+### Was an dieser Runde nicht gemessen ist -- und warum nicht
+
+Die Biomliste. Welche Biome Forge in 1.7.10 mit `SANDY` versieht, steht in Forges eigener
+`registerVanillaBiomes` — nicht im Quelltext des Originals und nicht in diesem Verzeichnisbaum.
+Nachlesbar ist nur, was der Typ bedeutet: Boden aus Sand oder Sandstein.
+
+Die Liste ist deshalb **bewusst eng**: Wüste und Mesa-Familie, wo der Sandboden außer Frage
+steht. Strände und Savannen stehen nicht drin — für den Strand hat das Original einen eigenen
+Typ (`BEACH`, den der Leuchtturm getrennt abfragt), und die Savanne hat Grasboden. Eine zu enge
+Liste lässt ein Bauwerk seltener stehen; eine zu weite setzt es an Orte, an denen es im Original
+nie stand. Im Zweifel ist das erste der kleinere Schaden, und es steht so im Quelltext
+vermerkt.
+
+### Ein Loch im Bauwerkstor, sofort gestopft
+
+`structure-check.sh` liest die benutzten Vorlagenpfade als `add("...")` aus `NtmTemplatePools`.
+Die sechs neuen Pools entstehen über eine Hilfe `einzeln(...)`, und die sah das Tor nicht: es
+meldete alle sechs Dateien als „ohne Benutzer", obwohl sie richtig im Pool lagen. Die Hilfsform
+steht jetzt mit in der Erkennung.
+
+**Stand: 7 von 34 Bauwerken in der Welt** (das Verlies und diese sechs), 73 von 79 Rohdateien
+umsetzbar.

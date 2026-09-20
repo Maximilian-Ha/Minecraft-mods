@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.heightproviders.ConstantHeight;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -45,6 +46,15 @@ public class NtmStructures {
 
     public static final ResourceKey<Structure> METEOR_DUNGEON = registerKey("meteor_dungeon");
 
+    /* Die sechs Einzelbauwerke der Wueste, Runde 260. Im Original haengen sie alle an
+     * derselben Bedingung: BiomeDictionary.isBiomeOfType(biome, Type.SANDY). */
+    public static final ResourceKey<Structure> VERTIBIRD = registerKey("vertibird");
+    public static final ResourceKey<Structure> CRASHED_VERTIBIRD = registerKey("crashed_vertibird");
+    public static final ResourceKey<Structure> DESERT_SHACK_1 = registerKey("desert_shack_1");
+    public static final ResourceKey<Structure> DESERT_SHACK_2 = registerKey("desert_shack_2");
+    public static final ResourceKey<Structure> DESERT_SHACK_3 = registerKey("desert_shack_3");
+    public static final ResourceKey<Structure> DEAD_DISH_SMALL = registerKey("dead_dish_small");
+
     public static void bootstrap(BootstrapContext<Structure> context) {
 
         HolderGetter<Biome> biome = context.lookup(Registries.BIOME);
@@ -60,6 +70,64 @@ public class NtmStructures {
                 7,
                 ConstantHeight.of(VerticalAnchor.absolute(32)),
                 false));
+
+        /*
+         * DIE SECHS DER WUESTE. Ein Stueck, keine Anschlussstellen, also Tiefe 1.
+         *
+         * DIE HOEHE IST EIN VERSATZ, KEINE HOEHE: das Original gibt dem JigsawPiece einen
+         * heightOffset (drittes Argument des Erbauers) und setzt das Stueck so viele Bloecke
+         * unter die Gelaendeoberkante -- der Vertibird drei, sein Wrack zehn. In 1.21 heisst
+         * dasselbe: projectStartToHeightmap setzen und die Starthoehe als Versatz lesen. Ohne
+         * das Heightmap-Argument waere die Zahl eine absolute Hoehe, und die Huetten staenden
+         * auf Y=-7 im Grundgestein.
+         */
+        einzeln(context, biome, pools, VERTIBIRD, NtmTemplatePools.VERTIBIRD, -3);
+        einzeln(context, biome, pools, CRASHED_VERTIBIRD, NtmTemplatePools.CRASHED_VERTIBIRD, -10);
+        einzeln(context, biome, pools, DESERT_SHACK_1, NtmTemplatePools.DESERT_SHACK_1, -7);
+        einzeln(context, biome, pools, DESERT_SHACK_2, NtmTemplatePools.DESERT_SHACK_2, -7);
+        einzeln(context, biome, pools, DESERT_SHACK_3, NtmTemplatePools.DESERT_SHACK_3, -5);
+        einzeln(context, biome, pools, DEAD_DISH_SMALL, NtmTemplatePools.DEAD_DISH_SMALL, -5);
+    }
+
+    /** Ein Einzelbauwerk der Wueste: ein Stueck, an der Gelaendeoberkante, um Versatz tiefer. */
+    private static void einzeln(BootstrapContext<Structure> context, HolderGetter<Biome> biome,
+            HolderGetter<StructureTemplatePool> pools, ResourceKey<Structure> schluessel,
+            ResourceKey<StructureTemplatePool> pool, int versatz) {
+
+        context.register(schluessel, new JigsawStructure(
+                new Structure.StructureSettings(
+                        sandbiome(biome),
+                        Map.of(),
+                        GenerationStep.Decoration.SURFACE_STRUCTURES,
+                        TerrainAdjustment.NONE),
+                pools.getOrThrow(pool),
+                1,
+                ConstantHeight.of(VerticalAnchor.absolute(versatz)),
+                false,
+                Heightmap.Types.WORLD_SURFACE_WG));
+    }
+
+    /**
+     * Was in 1.7.10 BiomeDictionary.Type.SANDY war.
+     *
+     * DIESE LISTE IST NICHT NACHGEMESSEN, UND DAS LAESST SICH HIER AUCH NICHT AENDERN: welche
+     * Biome Forge mit SANDY versieht, steht in Forges eigener registerVanillaBiomes -- nicht
+     * im Quelltext des Originals und nicht in diesem Verzeichnisbaum. Nachlesbar ist nur, was
+     * SANDY bedeutet: Boden aus Sand oder Sandstein.
+     *
+     * Die Liste hier ist deshalb bewusst eng gehalten -- die Wueste und die Mesa-Familie, bei
+     * denen der Sandboden ausser Frage steht. Straende und Savannen stehen NICHT drin: fuer
+     * den Strand gibt es im Original einen eigenen Typ (BEACH, den der Leuchtturm getrennt
+     * abfragt), und die Savanne hat Grasboden. Wer die Zuordnung spaeter an Forges Tabelle
+     * misst, erweitert hier -- eine zu enge Liste laesst ein Bauwerk seltener stehen, eine zu
+     * weite setzt es an Orte, an denen es im Original nie stand.
+     */
+    private static HolderSet<Biome> sandbiome(HolderGetter<Biome> biome) {
+        return HolderSet.direct(
+                biome.getOrThrow(Biomes.DESERT),
+                biome.getOrThrow(Biomes.BADLANDS),
+                biome.getOrThrow(Biomes.ERODED_BADLANDS),
+                biome.getOrThrow(Biomes.WOODED_BADLANDS));
     }
 
     /** Alles, was in 1.7.10 eine rootHeight von null oder mehr hatte, plus die Hoehlenbiome. */
