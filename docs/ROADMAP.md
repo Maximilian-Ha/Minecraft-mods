@@ -8861,3 +8861,54 @@ Löscher schließt das: alle drei Tanks melden der getroffenen Maschine ihre Sor
   erwarten: `onUpdate` läuft auf beiden Seiten, und `blockdust` fehlt in `effectNT`.
 
 **38 von 46 Bauplänen.**
+
+## Runde 195 — Werkzeuge ohne Maschinen, Maschinen ohne Werkzeug
+
+Drei Funde derselben Art, alle im Übergang zwischen `ToolType` und `onScrew` — der einzigen
+Verbindung zwischen einem Einstellwerkzeug und den Maschinen, die es bedient. Beide Seiten
+stehen weit auseinander, und **nichts im Bau verbindet sie**: fällt eine weg, meldet weder
+`javac` noch das Spiel etwas.
+
+### Der Handbohrer gab es gar nicht
+
+**Sechs Blöcke** fragen im Port nach `ToolType.HAND_DRILL` — beide Heizer, beide
+Reaktorstapel-Blöcke, die elektrische Presse und der Gießereiauslass — und **kein einziger
+Gegenstand hat diese Sorte je getragen**. Sechs Zweige, die nichts erreichen konnte.
+
+Das ist die zweite Hälfte des Fundes aus Runde 99. Dort fiel auf, dass die Schraubenzieher
+keine Werkzeuge *waren*; hier fällt auf, dass es die Handbohrer nicht *gab*.
+
+### Der Schraubenzieher war nicht herstellbar
+
+Schlimmer: `screwdriver` und `screwdriver_desh` waren im Port **Zutat, aber niemals
+Erzeugnis**. Sie gehen in den Dämonenkern und in die Raketenmontage hinein; es gab keinen
+Bauplan, keine Beutetabelle, keinen Weg. Fünfzehn Maschinen, das Schloss-System und beide
+Baupläne hingen an einem Gegenstand, den man nicht bekommen konnte.
+
+Alle vier Baupläne sind nachgereicht, wortgetreu aus `ToolRecipes` des Originals.
+
+### Der Entschärfer konnte nichts tun — und ein Zustand war unerreichbar
+
+`ToolType.DEFUSER` hatte einen Gegenstand und **keinen einzigen Block, der nach ihm fragt**.
+Gleichzeitig liest `TNTBaseBlock.playerWillDestroy` den Zustand `UNSTABLE` — wer einen so
+gestellten Sprengsatz abbaut, zündet ihn —, und **nichts konnte ihn auf `true` setzen**.
+
+`onScrew` gab dort nur `false` zurück. Eine einzige Methode schließt beides: der Entschärfer
+bricht den Satz ab und gibt ihn zurück, der Schraubenzieher schaltet die Zündung um.
+
+### Das 36. Tor
+
+`tools/tool-check.sh`. Für jede Sorte in `ToolType` gilt: entweder **beide** Seiten oder
+**keine**. Eine Sorte ganz ohne Träger und Abfrager ist kein Fehler — sie ist eine
+Aufzählungsstelle, die noch niemand benutzt (`WRENCH`). Eine Sorte mit nur einer Seite ist
+einer.
+
+**Gemessen in drei Richtungen:** nimmt man die Handbohrer wieder heraus, meldet das Tor sechs
+Blöcke namentlich; setzt man `onScrew` zurück auf `false`, meldet es den Entschärfer; trägt
+man eine Sorte fälschlich in die Ausnahmeliste ein, meldet es die veraltete Zeile.
+
+Die einzige Ausnahme ist `BOLT`: zwei Umwandlungen warten darauf, aber die Bolzenpistole des
+Originals braucht `bolt_spike`, den Klang `RIVET_GUN` und die Schnittstelle `IAnimatedItem` —
+nachgemessen, alle drei fehlen.
+
+Alle 36 Tore grün.

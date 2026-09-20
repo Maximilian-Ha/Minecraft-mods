@@ -884,6 +884,8 @@ public class NtmItemModelProvider extends ItemModelProvider {
 
         this.handheldItem(NtmItems.SCREWDRIVER.get());
         this.handheldItem(NtmItems.SCREWDRIVER_DESH.get());
+        this.handheldItem(NtmItems.HAND_DRILL.get());
+        this.handheldItem(NtmItems.HAND_DRILL_DESH.get());
         this.handheldItem(NtmItems.BLOWTORCH.get());
         this.handheldItem(NtmItems.ACETYLENE_TORCH.get());
         this.handheldItem(NtmItems.BLADES_STEEL.get());

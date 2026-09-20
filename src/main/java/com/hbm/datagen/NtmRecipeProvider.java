@@ -139,6 +139,44 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_motor", has(NtmItems.MOTOR.get()))
                 .save(recipeOutput);
 
+        /*
+         * DIE VIER EINSTELLWERKZEUGE. Zwei davon standen bis Runde 195 in keinem einzigen
+         * Bauplan: der Schraubenzieher und seine Desh-Fassung waren im Port ZUTAT, aber
+         * niemals ERZEUGNIS -- sie gehen in den Daemonenkern und in die Raketenmontage
+         * hinein, und es gab keinen Weg, an sie heranzukommen. Fuenfzehn Maschinen, das
+         * Schloss-System und beide Bauplaene haengen an einem Gegenstand, den man nicht
+         * bauen konnte.
+         *
+         * Muster aus ToolRecipes des Originals, Zeilen 139 bis 142.
+         */
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, NtmItems.SCREWDRIVER.get(), 1)
+                .pattern("  I").pattern(" I ").pattern("S  ")
+                .define('I', Items.IRON_INGOT)
+                .define('S', NtmItems.INGOT_STEEL.get())
+                .unlockedBy("has_steel", has(NtmItems.INGOT_STEEL.get()))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, NtmItems.SCREWDRIVER_DESH.get(), 1)
+                .pattern("  I").pattern(" I ").pattern("S  ")
+                .define('I', NtmItems.INGOT_DESH.get())
+                .define('S', anyPlasticIngot())
+                .unlockedBy("has_desh", has(NtmItems.INGOT_DESH.get()))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, NtmItems.HAND_DRILL.get(), 1)
+                .pattern(" D").pattern("S ").pattern(" S")
+                .define('D', NtmItems.INGOT_DURA_STEEL.get())
+                .define('S', Items.STICK)
+                .unlockedBy("has_dura_steel", has(NtmItems.INGOT_DURA_STEEL.get()))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, NtmItems.HAND_DRILL_DESH.get(), 1)
+                .pattern(" D").pattern("S ").pattern(" S")
+                .define('D', NtmItems.INGOT_DESH.get())
+                .define('S', anyPlasticIngot())
+                .unlockedBy("has_desh", has(NtmItems.INGOT_DESH.get()))
+                .save(recipeOutput);
+
         this.gunPartRecipes(recipeOutput);
         this.specialWeaponMods(recipeOutput);
         this.gunRecipes(recipeOutput);

@@ -197,6 +197,11 @@ jobs:
           chmod +x ./tools/sound-check.sh
           ./tools/sound-check.sh
 
+      - name: Check tool types
+        run: |
+          chmod +x ./tools/tool-check.sh
+          ./tools/tool-check.sh
+
       - name: Check API usage
         run: |
           chmod +x ./tools/api-check.sh

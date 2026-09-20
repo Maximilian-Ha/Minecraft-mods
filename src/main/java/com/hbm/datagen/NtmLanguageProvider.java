@@ -1468,6 +1468,8 @@ public class NtmLanguageProvider extends LanguageProvider {
 
         this.add(NtmItems.SCREWDRIVER, "Screwdriver");
         this.add(NtmItems.SCREWDRIVER_DESH, "Desh Screwdriver");
+        this.add(NtmItems.HAND_DRILL, "Hand Drill");
+        this.add(NtmItems.HAND_DRILL_DESH, "Desh Hand Drill");
         this.add(NtmItems.BLOWTORCH, "Blowtorch");
         this.add(NtmItems.ACETYLENE_TORCH, "Acetylene Welding Torch");
         this.add(NtmItems.BLADES_STEEL, "Steel Shredder Blades");

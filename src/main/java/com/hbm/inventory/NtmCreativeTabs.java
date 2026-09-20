@@ -779,6 +779,8 @@ public class NtmCreativeTabs {
                          * Blaupausen liegen ebenfalls hier. */
                         output.accept(NtmItems.SCREWDRIVER);
                         output.accept(NtmItems.SCREWDRIVER_DESH);
+                        output.accept(NtmItems.HAND_DRILL);
+                        output.accept(NtmItems.HAND_DRILL_DESH);
                         output.accept(NtmItems.BLOWTORCH);
                         output.accept(NtmItems.ACETYLENE_TORCH);
                         output.accept(NtmItems.BLADES_STEEL);

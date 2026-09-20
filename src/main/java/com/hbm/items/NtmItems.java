@@ -936,6 +936,19 @@ public class NtmItems {
      */
     public static final DeferredItem<Item> SCREWDRIVER = ITEMS.register("screwdriver", () -> new ToolingItem(ToolType.SCREWDRIVER, new Item.Properties().durability(100)));
     public static final DeferredItem<Item> SCREWDRIVER_DESH = ITEMS.register("screwdriver_desh", () -> new ToolingItem(ToolType.SCREWDRIVER, new Item.Properties()));
+    /*
+     * Runde 195: DIE HANDBOHRER SIND DIE ZWEITE HAELFTE DESSELBEN FUNDES aus Runde 99. Dort
+     * fiel auf, dass die Schraubenzieher keine Werkzeuge waren; hier faellt auf, dass es die
+     * Handbohrer gar nicht gab. SECHS BLOECKE fragen im Port nach ToolType.HAND_DRILL -- die
+     * beiden Heizer, die beiden Reaktorstapel-Bloecke, die elektrische Presse und der
+     * Giessereiauslass -- und kein einziger Gegenstand hat diese Sorte je getragen. Sechs
+     * Zweige, die nichts erreichen konnte.
+     *
+     * Haltbarkeit wie im Original und wie bei den Schraubenziehern: hundert Anwendungen fuer
+     * den aus Duraluminium, unbegrenzt fuer den aus Desh.
+     */
+    public static final DeferredItem<Item> HAND_DRILL = ITEMS.register("hand_drill", () -> new ToolingItem(ToolType.HAND_DRILL, new Item.Properties().durability(100)));
+    public static final DeferredItem<Item> HAND_DRILL_DESH = ITEMS.register("hand_drill_desh", () -> new ToolingItem(ToolType.HAND_DRILL, new Item.Properties()));
     public static final DeferredItem<Item> BLOWTORCH = ITEMS.register("blowtorch", () -> new BlowtorchItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> ACETYLENE_TORCH = ITEMS.register("acetylene_torch", () -> new BlowtorchItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> BLADES_STEEL = ITEMS.register("blades_steel", () -> new Item(new Item.Properties().stacksTo(1).durability(256)));

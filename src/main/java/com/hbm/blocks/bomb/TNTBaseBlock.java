@@ -2,8 +2,10 @@ package com.hbm.blocks.bomb;
 
 import api.hbm.block.IToolable;
 import com.hbm.entity.item.TNTPrimedBase;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -107,8 +109,41 @@ public abstract class TNTBaseBlock extends DetonatableBlock implements IToolable
         }
     }
 
+    /**
+     * DER SPRENGSATZ LIESS SICH BIS RUNDE 195 WEDER EINSTELLEN NOCH ENTSCHAERFEN -- diese
+     * Methode gab nur false zurueck. Zwei Dinge hingen daran, und beide waren tot:
+     *
+     *   * DER ENTSCHAERFER hatte im ganzen Port keinen einzigen Block, der nach ihm fragt.
+     *     Er war ein Werkzeug, das nichts tun konnte.
+     *   * DER ZUSTAND UNSTABLE wird in playerWillDestroy gelesen -- wer einen so gestellten
+     *     Sprengsatz abbaut, zuendet ihn. Nur konnte ihn nichts auf true setzen. Der Zweig
+     *     war nicht erreichbar.
+     *
+     * Beides schliesst dieselbe Methode, genau wie im Original (BlockTNTBase Z. 120 ff.):
+     * der Entschaerfer bricht den Satz ab und gibt ihn zurueck, der Schraubenzieher schaltet
+     * die Zuendung beim Abbauen um.
+     */
     @Override
     public boolean onScrew(Level level, Player player, BlockPos pos, Direction direction, ToolType tool) {
-        return false;
+
+        if(tool == ToolType.DEFUSER) {
+            if(!level.isClientSide) {
+                Block.popResource(level, pos, new ItemStack(this));
+                level.removeBlock(pos, false);
+            }
+            return true;
+        }
+
+        if(tool != ToolType.SCREWDRIVER) return false;
+
+        if(!level.isClientSide) {
+            BlockState state = level.getBlockState(pos);
+            boolean scharf = !state.getValue(BlockStateProperties.UNSTABLE);
+            level.setBlock(pos, state.setValue(BlockStateProperties.UNSTABLE, scharf), 3);
+            player.displayClientMessage(Component.literal("[ Ignite On Break: " + (scharf ? "Enabled" : "Disabled") + " ]")
+                    .withStyle(scharf ? ChatFormatting.RED : ChatFormatting.GREEN), true);
+        }
+
+        return true;
     }
 }
