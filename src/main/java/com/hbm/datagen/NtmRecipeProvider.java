@@ -4786,6 +4786,14 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_circuit", has(NtmItems.CIRCUIT_MILITARY_GRADE_BOARD.get()))
                 .save(recipeOutput);
 
+        gun(NtmItems.GUN_STINGER, "BBB", "PGM")
+                .define('B', heavyBarrel(Mats.MAT_WEAPONSTEEL))
+                .define('P', NtmItems.CIRCUIT_MILITARY_GRADE_BOARD.get())
+                .define('G', grip(Mats.MAT_WEAPONSTEEL))
+                .define('M', mechanism(Mats.MAT_WEAPONSTEEL))
+                .unlockedBy("has_circuit", has(NtmItems.CIRCUIT_MILITARY_GRADE_BOARD.get()))
+                .save(recipeOutput);
+
         gun(NtmItems.GUN_STAR_F, "BRM", "  G")
                 .define('B', lightBarrel(Mats.MAT_WEAPONSTEEL))
                 .define('R', lightReceiver(Mats.MAT_WEAPONSTEEL))

@@ -9148,3 +9148,58 @@ Schraubenschlüssel" verschraubt (es ist die Bolzenpistole).
 mehr.**
 
 Alle 38 Tore grün.
+
+---
+
+## Runde 199 — Der Stinger schließt die Raketenfamilie
+
+Er stand seit Runde 197 als einzige offene Stelle im Kopf von `XFactoryRocket`, und die
+Begründung war diesmal richtig: er braucht eine eigene Klasse. **Drei Bausteine fehlten**, alle
+drei gemessen:
+
+* `Receiver.setupLockonFire()` war im Port **auskommentiert** — es fehlte
+  `Lego.LAMBDA_LOCKON_CAN_FIRE`, eine einzige Zeile.
+* `Orchestras.ORCHESTRA_STINGER` fehlte samt dem Suchton `weapon.fire.lockon`.
+* `RenderScreenOverlay.renderStingerLockon` fehlte.
+
+Alles andere war da: die Zielsuche (`sucheZiel`, Runde 197), `rocket_rpzb`,
+`LAMBDA_PANZERSCHRECK_ANIMS`, `NtmSoundEvents.TECH_BLEEP`, `GunConfig.ps`/`rs`, `AudioWrapper`
+samt `loopedSounds`, und `stinger.obj`/`stinger.png` in der CE-Abspaltung.
+
+### Was ihn besonders macht
+
+**Er ist die einzige Waffe des Ports, bei der die linke Taste nicht immer feuert.** Die rechte
+hält den Sucher an; solange sie gedrückt bleibt, gezielt wird und eine Rakete im Rohr steckt,
+läuft er auf ein Ziel zu. Nach sechzig Zügen rastet er ein — und `setupLockonFire` lässt erst
+dann überhaupt schießen. Wer ohne Ziel abdrückt, bekommt nichts: keinen Schuss, keinen
+Leerschlag.
+
+Die Raketen sind dieselben wie die des Panzerschrecks. Sie lenken nicht selbst, sondern
+bekommen beim Abschuss das erfasste Ziel zugewiesen, und `BulletBaseMK4.lockonTarget` fliegt es
+an — derselbe Weg wie beim Raketenwerfer aus Runde 197.
+
+**Ein Klang, der an einem Zustand hängt statt an einer Bewegung:** der Suchton liegt auf dem Ohr
+des Schützen, solange gesucht und noch nicht eingerastet ist. Jede andere Schleife im Port hängt
+an einer Animation.
+
+### Zwei Funde in der eigenen Arbeit
+
+**Das Original führt ein `prevLockon` und benutzt es nirgends** — `renderStingerLockon` rechnet
+mit `lockon` allein. Ein totes Feld ist nicht mitgekommen.
+
+**`@OnlyIn(Dist.CLIENT)` an der falschen Stelle.** Mein erster Entwurf kennzeichnete das Feld
+`lockon` und die Methode, die es führt, als client-seitig. Beide werden aber aus
+`inventoryTick` gerufen, und das läuft auf beiden Seiten: auf einem dedizierten Server wären sie
+entfernt gewesen und der Aufruf ins Leere gegangen. Die Kennzeichnung steht jetzt nur an
+`renderHUD`, wo sie hingehört — dort überschreibt sie eine ohnehin client-seitige Methode.
+
+### Abweichungen
+
+Der Balken ist bei eins gedeckelt; das Original begrenzt ihn nicht, und weil der Zähler nach dem
+Einrasten weiterläuft, wäre er über seinen Rahmen hinausgewachsen. `setupModTable` ist wie bei
+allen Waffen des Ports nicht übernommen.
+
+**Damit ist `XFactoryRocket` vollständig:** fünf Gefechtsköpfe, fünf Raketensätze, und alle vier
+Werfer — Panzerschreck, Quadro, Raketenwerfer, Stinger — plus die Schulterrakete der NCR-Rüstung.
+
+Alle 38 Tore grün.

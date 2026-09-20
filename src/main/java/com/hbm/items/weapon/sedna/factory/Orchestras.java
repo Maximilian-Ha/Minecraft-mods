@@ -2,6 +2,7 @@ package com.hbm.items.weapon.sedna.factory;
 
 import com.hbm.items.NtmItems;
 import com.hbm.items.weapon.sedna.GunBaseNTItem;
+import com.hbm.items.weapon.sedna.impl.StingerGunItem;
 import com.hbm.items.weapon.sedna.GunBaseNTItem.LambdaContext;
 import com.hbm.items.weapon.sedna.impl.GunChargeThrowerItem;
 import com.hbm.items.weapon.sedna.Receiver;
@@ -369,6 +370,47 @@ public class Orchestras {
             if(timer == 0) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_BOLT_OPEN.get(), entity.getSoundSource(), 1F, 0.9F);
             if(timer == 30) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_CANISTER_INSERT.get(), entity.getSoundSource());
             if(timer == 42) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_BOLT_CLOSE.get(), entity.getSoundSource(), 1F, 0.9F);
+        }
+    };
+
+    /**
+     * Der Stinger. Solange der Sucher laeuft und noch nicht eingerastet ist, liegt ein Ton auf
+     * dem Ohr des Schuetzen -- er hoert auf, sobald es einrastet oder der Sucher aufgibt. Das
+     * ist der einzige Klang im Port, der an einem Zustand haengt statt an einer Bewegung.
+     *
+     * Beim Nachladen rastet der Kanister ein, wie beim Panzerschreck.
+     */
+    public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_STINGER = (stack, ctx) -> {
+
+        LivingEntity entity = ctx.entity;
+        Level level = entity.level;
+        GunAnimation type = GunBaseNTItem.getLastAnim(stack, ctx.configIndex);
+        int timer = GunBaseNTItem.getAnimTimer(stack, ctx.configIndex);
+
+        if(level.isClientSide) {
+
+            AudioWrapper laufend = GunBaseNTItem.loopedSounds.get(entity);
+            boolean sucht = StingerGunItem.getLockonProgress(stack) > 0 && !GunBaseNTItem.getIsLockedOn(stack);
+
+            if(sucht) {
+                if(laufend == null || !laufend.isPlaying()) {
+                    AudioWrapper ton = AudioWrapper.getLoopedSound(NtmSoundEvents.GUN_LOCKON.get(), entity.getSoundSource(),
+                            (float) entity.getX(), (float) entity.getY(), (float) entity.getZ(), 1F, 15F, 1F, 10);
+                    GunBaseNTItem.loopedSounds.put(entity, ton);
+                    ton.startSound();
+                    ton.attachTo(entity);
+                } else {
+                    laufend.keepAlive();
+                }
+            } else if(laufend != null && laufend.isPlaying()) {
+                laufend.stopSound();
+            }
+
+            return;
+        }
+
+        if(type == GunAnimation.RELOAD) {
+            if(timer == 30) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_CANISTER_INSERT.get(), entity.getSoundSource());
         }
     };
 

@@ -80,6 +80,15 @@ public class Lego {
     public static BiFunction<ItemStack, LambdaContext, Boolean> LAMBDA_STANDARD_CAN_FIRE = (stack, ctx) -> { return ctx.config.getReceivers(stack)[0].getMagazine(stack).getAmount(stack, ctx.container) > 0; };
     public static BiFunction<ItemStack, LambdaContext, Boolean> LAMBDA_SECOND_CAN_FIRE = (stack, ctx) -> { return ctx.config.getReceivers(stack)[1].getMagazine(stack).getAmount(stack, ctx.container) > 0; };
 
+    /**
+     * DIE FEUERBEDINGUNG DES STINGERS: Munition allein genuegt nicht, es muss auch
+     * aufgeschaltet sein. Wer ohne Ziel abdrueckt, bekommt nichts -- keinen Schuss und auch
+     * keinen Leerschlag. Das steht so im Original.
+     */
+    public static BiFunction<ItemStack, LambdaContext, Boolean> LAMBDA_LOCKON_CAN_FIRE = (stack, ctx) ->
+            ctx.config.getReceivers(stack)[0].getMagazine(stack).getAmount(stack, ctx.container) > 0
+                    && GunBaseNTItem.getIsLockedOn(stack);
+
     /** If IDLE and ammo is loaded, fire and set to JUST_FIRED. */
     public static BiConsumer<ItemStack, LambdaContext> LAMBDA_STANDARD_CLICK_PRIMARY = (stack, ctx) -> { clickReceiver(stack, ctx, 0); };
 

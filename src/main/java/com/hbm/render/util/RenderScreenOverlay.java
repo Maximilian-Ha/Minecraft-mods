@@ -6,6 +6,7 @@ import com.hbm.util.Clock;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.util.Mth;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -124,6 +125,26 @@ public class RenderScreenOverlay {
 
         RenderSystem.defaultBlendFunc();
         RenderSystem.disableBlend();
+        guiGraphics.pose().popPose();
+    }
+
+    /**
+     * Portiert aus 1.7.10: RenderScreenOverlay.renderStingerLockon.
+     *
+     * Der Aufschaltbalken des Stingers, unter dem Fadenkreuz. Zwei Bilder aus derselben
+     * Textur: der Rahmen und darin der Fuellstand, achtundzwanzig Bildpunkte breit bei voller
+     * Aufschaltung.
+     */
+    public static void renderStingerLockon(GuiGraphics guiGraphics, float progress) {
+
+        Window window = Minecraft.getInstance().getWindow();
+        int fuellung = (int) (Mth.clamp(progress, 0F, 1F) * 28F);
+
+        guiGraphics.pose().pushPose();
+        guiGraphics.blit(MISC_TEXTURE, window.getGuiScaledWidth() / 2 - 15, window.getGuiScaledHeight() / 2 + 18, 146, 18, 30, 10);
+        if(fuellung > 0) {
+            guiGraphics.blit(MISC_TEXTURE, window.getGuiScaledWidth() / 2 - 14, window.getGuiScaledHeight() / 2 + 19, 147, 29, fuellung, 8);
+        }
         guiGraphics.pose().popPose();
     }
 

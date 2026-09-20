@@ -1367,6 +1367,7 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.entityItem(NtmItems.GUN_PANZERSCHRECK.get(), true);
         this.entityItem(NtmItems.GUN_QUADRO.get(), true);
         this.entityItem(NtmItems.GUN_MISSILE_LAUNCHER.get(), true);
+        this.entityItem(NtmItems.GUN_STINGER.get(), true);
 
         // welp
         this.getBuilder(NtmBlocks.BASALT.getId().getPath()).parent(new ModelFile.UncheckedModelFile(modLoc("block/basalt")));

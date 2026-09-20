@@ -76,6 +76,8 @@ public class NtmSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_MK108_FIRE = reg("weapon.fire.mk108");
     /** Der Abschuss einer Rakete -- im Original NTMSounds.GUN_ROCKET_FIRE = "hbm:weapon.rpgShoot". */
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_ROCKET_FIRE = reg("weapon.rpg_shoot");
+    /** Der laufende Suchton des Stingers -- im Original HBMSoundHandler.lockon = "hbm:weapon.fire.lockon". */
+    public static final DeferredHolder<SoundEvent, SoundEvent> GUN_LOCKON = reg("weapon.fire.lockon");
     /** Das Aufsetzen einer geworfenen Granate -- im Original "hbm:weapon.grenadeBounce". */
     public static final DeferredHolder<SoundEvent, SoundEvent> GRENADE_BOUNCE = reg("weapon.grenade_bounce");
     /** Der Gueterwagen schlaegt auf -- im Original "hbm:weapon.trainImpact". */

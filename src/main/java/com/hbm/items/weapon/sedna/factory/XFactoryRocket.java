@@ -15,6 +15,7 @@ import com.hbm.items.weapon.sedna.GunBaseNTItem;
 import com.hbm.items.weapon.sedna.GunBaseNTItem.LambdaContext;
 import com.hbm.items.weapon.sedna.GunBaseNTItem.WeaponQuality;
 import com.hbm.items.weapon.sedna.GunConfig;
+import com.hbm.items.weapon.sedna.impl.StingerGunItem;
 import com.hbm.items.weapon.sedna.Receiver;
 import com.hbm.items.weapon.sedna.factory.GunFactory.Ammo;
 import com.hbm.items.weapon.sedna.mags.MagazineFullReload;
@@ -83,9 +84,10 @@ import java.util.function.Consumer;
  * aus (lockonTarget). Und Library.rayTrace(Player, double, float), das die Lenkung des Quadro
  * braucht, steht im Port seit jeher.
  *
- * NICHT UEBERNOMMEN bleibt allein der Stinger: er braucht ItemGunStinger als eigene Klasse mit
- * einem zweiten Tastenpaar zum Aufschalten. Seine Zielsuche ist hier als sucheZiel uebernommen,
- * weil der Raketenwerfer sie ebenfalls braucht.
+ * DER STINGER kam in Runde 199 dazu und schliesst die Familie: er ist die einzige Waffe des
+ * Ports mit einer Aufschaltung, und dafuer braucht er eine eigene Klasse (StingerGunItem) samt
+ * zweitem Tastenpaar. Seine Zielsuche steht seit Runde 197 hier, weil der Raketenwerfer sie
+ * ebenfalls braucht.
  */
 public class XFactoryRocket {
 
@@ -166,9 +168,10 @@ public class XFactoryRocket {
     }
 
     /**
-     * DIE ZIELSUCHE. Sie steht im Original in ItemGunStinger; der Stinger selbst ist nicht
-     * portiert, diese eine Methode aber braucht auch der Raketenwerfer -- und deshalb steht
-     * sie hier, wo beide Waffen sie finden.
+     * DIE ZIELSUCHE. Sie steht im Original in ItemGunStinger, wird hier aber von ZWEI Waffen
+     * gebraucht -- vom Stinger und vom Raketenwerfer --, und deshalb steht sie hier, wo beide
+     * sie finden. Sie kam in Runde 197 mit dem Raketenwerfer, ein Runde bevor es den Stinger
+     * gab.
      *
      * WIE SIE ARBEITET: vom Auge des Schuetzen geht ein Strahl in Blickrichtung. Um ihn wird
      * ein Kasten gespannt, der den Suchkegel grob umschliesst (der Strahl selbst, zweimal um
@@ -358,6 +361,25 @@ public class XFactoryRocket {
         ).setDefaultAmmo(Ammo.ROCKET_HE, 3));
 
         /*
+         * DER STINGER. Er ist die einzige Waffe des Ports mit einer Aufschaltung: die rechte
+         * Taste haelt den Sucher an, nach sechzig Zuegen rastet er ein, und erst dann feuert
+         * die linke ueberhaupt (setupLockonFire). Seine Raketen sind dieselben wie die des
+         * Panzerschrecks -- sie lenken nicht selbst, sondern bekommen beim Abschuss das
+         * erfasste Ziel zugewiesen, und BulletBaseMK4 fliegt es an.
+         */
+        NtmItems.GUN_STINGER = registry.register("gun_stinger", () -> new StingerGunItem(WeaponQuality.A_SIDE, new GunConfig()
+                .dura(300).draw(7).inspect(40).crosshair(Crosshair.L_BOX_OUTLINE)
+                .rec(new Receiver(0)
+                        .dmg(35F).delay(5).reload(50).jam(40).sound(NtmSoundEvents.GUN_ROCKET_FIRE, 1.0F, 1.0F)
+                        .mag(new MagazineSingleReload(0, 1).addConfigs(rocket_rpzb))
+                        .offset(1, -0.0625 * 1.5, -0.1875D)
+                        .setupLockonFire())
+                .setupStandardConfiguration()
+                .ps(LAMBDA_STINGER_SECONDARY_PRESS).rs(LAMBDA_STINGER_SECONDARY_RELEASE)
+                .anim(LAMBDA_PANZERSCHRECK_ANIMS).orchestra(Orchestras.ORCHESTRA_STINGER)
+        ).setDefaultAmmo(Ammo.ROCKET_HEAT, 3));
+
+        /*
          * Der Quadro. Vier Rohre in einem Block, der beim Nachladen als Ganzes getauscht
          * wird -- daher MagazineFullReload statt MagazineSingleReload.
          */
@@ -441,6 +463,13 @@ public class XFactoryRocket {
      * geloest. Das ist die Regel des Originals, und sie ist der ganze Unterschied zum
      * Stinger, der die Sperre haelt.
      */
+    /**
+     * Die rechte Taste des Stingers haelt den Sucher an. Sie tut sonst nichts: gesucht wird im
+     * Zug der Waffe, nicht im Klick.
+     */
+    public static BiConsumer<ItemStack, LambdaContext> LAMBDA_STINGER_SECONDARY_PRESS = (stack, ctx) -> StingerGunItem.setIsLockingOn(stack, true);
+    public static BiConsumer<ItemStack, LambdaContext> LAMBDA_STINGER_SECONDARY_RELEASE = (stack, ctx) -> StingerGunItem.setIsLockingOn(stack, false);
+
     public static BiConsumer<ItemStack, LambdaContext> LAMBDA_MISSILE_LAUNCHER_PRIMARY_PRESS = (stack, ctx) -> {
 
         if(GunBaseNTItem.getIsAiming(stack)) {

@@ -1452,6 +1452,7 @@ public class NtmItems {
     public static DeferredItem<Item> GUN_PANZERSCHRECK;
     public static DeferredItem<Item> GUN_QUADRO;
     public static DeferredItem<Item> GUN_MISSILE_LAUNCHER;
+    public static DeferredItem<Item> GUN_STINGER;
 
     public static final DeferredItem<Item> NO9 = ITEMS.register("no9", () -> new ArmorNo9(ArmorMaterials.IRON));
 

@@ -224,6 +224,9 @@ public class NtmSoundDefinitionsProvider extends SoundDefinitionsProvider {
         this.add(NtmSoundEvents.GUN_ROCKET_FIRE, SoundDefinition.definition()
                 .with(sound(NuclearTechMod.withDefaultNamespace("weapon/rpg_shoot")))
         );
+        this.add(NtmSoundEvents.GUN_LOCKON, SoundDefinition.definition()
+                .with(sound(NuclearTechMod.withDefaultNamespace("weapon/fire/lockon")))
+        );
         this.add(NtmSoundEvents.TRAIN_IMPACT, SoundDefinition.definition()
                 .with(sound(NuclearTechMod.withDefaultNamespace("weapon/train_impact")))
         );

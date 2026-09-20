@@ -385,6 +385,7 @@ public class ResourceManager {
     public static final ResourceLocation DOUBLE_BARREL_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/double_barrel.png");
     public static final ResourceLocation LIBERATOR_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/liberator.png");
     public static final ResourceLocation PANZERSCHRECK_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/panzerschreck.png");
+    public static final ResourceLocation STINGER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/stinger.png");
     public static final ResourceLocation BOLTGUN_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/boltgun.png");
     public static final ResourceLocation QUADRO_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/quadro.png");
     public static final ResourceLocation QUADRO_ROCKET_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/quadro_rocket.png");
@@ -743,6 +744,7 @@ public class ResourceManager {
     public static IModelCustom double_barrel;
     public static IModelCustom liberator;
     public static IModelCustom panzerschreck;
+    public static IModelCustom stinger;
     public static IModelCustom boltgun;
     public static IModelCustom quadro;
     public static IModelCustom missile_launcher;
@@ -1051,6 +1053,7 @@ public class ResourceManager {
         double_barrel = new HFRWavefrontObject("models/obj/weapons/sacred_dragon.obj").asVBO();
         liberator = new HFRWavefrontObject("models/obj/weapons/liberator.obj").asVBO();
         panzerschreck = new HFRWavefrontObject("models/obj/weapons/panzerschreck.obj").asVBO();
+        stinger = new HFRWavefrontObject("models/obj/weapons/stinger.obj").asVBO();
         boltgun = new HFRWavefrontObject("models/obj/weapons/boltgun.obj").asVBO();
         quadro = new HFRWavefrontObject("models/obj/weapons/quadro.obj").asVBO();
         missile_launcher = new HFRWavefrontObject("models/obj/weapons/missile_launcher.obj").asVBO();
