@@ -9552,12 +9552,18 @@ Die letzte fehlende Rüstungsgarnitur des Ports — und zwar gemessen, nicht ges
 ### Warum „73 fehlende Rüstungen" nicht stimmt
 
 `tools/port-gap.py` meldet 73 fehlende Rüstungsklassen. Die Zahl ist eine **obere Schranke aus
-einem Klassennamen-Vergleich**, und sie zählt weit zu hoch: `ArmorFSB` heißt im Port
-`ArmorFSBItem`, `ArmorHEV` heißt `ArmorHEVItem`, `ArmorHazmat` und `ArmorGasMask` sind zu
-einer Klasse `GasMaskItem` zusammengefallen. Der Vergleich über die **Registriernamen** der
-Rüstungs-Konstruktoren — also über das, was im Spiel wirklich ankommt — lässt genau eine
-Garnitur übrig: `liquidator_helmet`, `liquidator_plate`, `liquidator_legs`,
-`liquidator_boots`.
+einem Klassennamen-Vergleich**, und sie zählt zu hoch: `ArmorFSB` heißt im Port `ArmorFSBItem`,
+`ArmorHazmat` und `ArmorGasMask` sind zu einer Klasse `GasMaskItem` zusammengefallen. Der
+Vergleich über die **Registriernamen** der Rüstungs-Konstruktoren — also über das, was im Spiel
+wirklich ankommt — lässt den Liquidator-Anzug als nächste Lücke übrig: `liquidator_helmet`,
+`liquidator_plate`, `liquidator_legs`, `liquidator_boots`.
+
+> **BERICHTIGUNG AUS RUNDE 210.** Hier stand zuerst, der Liquidator sei die **einzige**
+> fehlende Garnitur. Das war falsch. Mein Muster las nur einzeilige Konstruktoren aus
+> `ModItems.java` und fand dort 17 Namen; die 124 weiteren stehen in `ModItemsArmor.java`,
+> vielzeilig, und blieben ungesehen. Richtig gemessen fehlen **103 von 141** Rüstungsnamen —
+> T-51, Schrabidium, Euphemium, die AJR-Reihe und zwei Dutzend weitere. Der Liquidator war die
+> nächste Lücke, nicht die letzte. `port-gap.py` misst das seit Runde 210 selbst.
 
 ### Der Anzug
 
@@ -9682,5 +9688,49 @@ einziges Mal vor** — weder als Feld in `ModItems` noch als Registrierung. Der 
 Im Original liegen eine Klasse `ArmorAshGlasses` und eine Textur `ashglasses.png` — beide
 gehören zu keinem Gegenstand. Das ist dort tote Ladung, nicht hier eine Lücke; es gibt nichts
 nachzureichen.
+
+Alle 39 Tore grün.
+
+
+## Runde 210 — Das Messwerkzeug log, und ich habe ihm geglaubt
+
+Keine neue Sache im Spiel, sondern eine Berichtigung und ein schärferes Werkzeug.
+
+### Was falsch war
+
+In Runde 207 steht: „Der Vergleich über die Registriernamen lässt genau eine Garnitur übrig."
+Das war **falsch**. Ich hatte die Namen mit einem Muster geholt, das `new Armor…(…)` und
+`setUnlocalizedName("…")` **auf derselben Zeile** verlangt. In `ModItems.java` stehen die
+Rüstungen so — 17 Stück, im Wesentlichen die Hazmat-Familie und der Liquidator. Die übrigen
+**124 stehen in `ModItemsArmor.java`**, über mehrere Zeilen verteilt, und mein Muster hat sie
+nicht gesehen.
+
+Richtig gemessen: **141 Rüstungsnamen im Original, 38 davon im Port, 103 fehlen** — T-51,
+Schrabidium, Euphemium, Cobalt, Titan, Stahl, die AJR-Reihe, der Trenchmaster und zwei Dutzend
+weitere. Der Liquidator war die *nächste* Lücke, nicht die letzte.
+
+Ärgerlich daran ist nicht der Irrtum, sondern dass er dieselbe Form hat wie die Irrtümer, die
+diese Runden sonst aufdecken: **eine Zahl, die aus einer zu engen Messung stammt und dann als
+Tatsache weitergereicht wird.** Nur kam sie diesmal von mir.
+
+### Was das Werkzeug jetzt tut
+
+`tools/port-gap.py` behauptete im Kopf, der Klassenvergleich sei „belastbar". Für
+Blockentitäten stimmt das meistens; für Rüstungen stimmt es nicht, weil der Port
+zusammenfasst, wo das Original je Anzug eine Klasse schreibt. Die Überschrift heißt jetzt
+**obere Schranke**, und der Kopf nennt die Messung, die das belegt.
+
+Dazu kommt ein dritter Block, **REGISTRIERNAMEN**, der zählt, was im Spiel ankommt statt
+Dateien im Baum. Er vergleicht gegen *alle* Gegenstandsnamen des Ports, nicht gegen die, deren
+Konstruktor nach Rüstung aussieht — sonst fielen `hev_helmet` und `rpa_helmet` durch, die der
+Port über Hilfsmethoden anmeldet.
+
+| Messung | meldet fehlend |
+|---|---|
+| Klassenvergleich | 73 |
+| Registriernamen | **103** |
+| meine Handmessung aus Runde 207 | 1 |
+
+Die dritte Zeile ist der Grund für diese Runde.
 
 Alle 39 Tore grün.

@@ -6,10 +6,19 @@ Maschinenzaehlung der Runde 135 etwa galt fuer TileEntityMachine*.java OHNE Unte
 meldete null fehlende Maschinen -- die breite Aufnahme zeigt ueber hundert. Dieses Skript
 rechnet beides aus und sagt dazu, wie belastbar die jeweilige Zahl ist.
 
-BELASTBAR sind die Klassenvergleiche. Dort steht im Original je Sache eine Datei, im Port
-ebenso, und die Namen unterscheiden sich nur nach festen Regeln (TileEntityX -> XBlockEntity,
-oft mit vorangestelltem "Machine"). Wo die Zuordnung scheitert, ist die Sache mit grosser
-Wahrscheinlichkeit wirklich nicht da.
+DER KLASSENVERGLEICH IST KEIN IST-WERT, auch wenn hier bis Runde 210 "belastbar" stand. Er
+setzt voraus, dass im Original je Sache eine Datei steht und im Port ebenso. Das gilt fuer
+Blockentitaeten meistens -- und fuer Ruestungen ueberhaupt nicht:
+
+  GEMESSEN IN RUNDE 207. Der Klassenvergleich meldete 73 fehlende Ruestungen. Der Vergleich
+  ueber die REGISTRIERNAMEN -- also ueber das, was im Spiel wirklich ankommt -- ergab genau
+  EINE fehlende Garnitur (den Liquidator-Anzug, vier Teile). Grund: der Port fasst zusammen,
+  wo das Original je Anzug eine Klasse schreibt. ArmorHazmat, ArmorGasMask und ArmorHazmatMask
+  sind im Port ein einziges GasMaskItem, das seine Unterschiede aus dem Bauaufruf bezieht.
+
+Darum steht der Namensvergleich jetzt gleichberechtigt daneben. Beide sind obere Schranken,
+und wo sie weit auseinanderliegen, ist die kleinere die ehrlichere: sie zaehlt Sachen, nicht
+Dateien.
 
 NUR EINE OBERE SCHRANKE sind die Namensvergleiche fuer Bloecke und Gegenstaende. Der Port
 faltet zusammen, was das Original ueber Metadaten trennt: aus sechzehn Metadaten-Werten eines
@@ -127,7 +136,7 @@ def main():
 
     print("Portierungsstand gegen %s" % UPSTREAM)
     print()
-    print("KLASSENVERGLEICH (belastbar)")
+    print("KLASSENVERGLEICH (obere Schranke -- der Port fasst Klassen zusammen)")
     print("  %-18s %8s %8s %8s" % ("Bereich", "Original", "Port", "fehlend"))
     for name, ordner in (('blockentities', 'blockentity'), ('entities', 'entity'),
                          ('armor', 'items/armor'), ('world', 'world')):
@@ -142,6 +151,8 @@ def main():
     pb = re.sub(r'//[^\n]*', '', open('src/main/java/com/hbm/blocks/NtmBlocks.java', encoding='utf-8').read())
     nb = {m.group(1) for m in re.finditer(r'\bregister\w*\(\s*"([^"]+)"', pb)}
 
+
+    # Alle Gegenstandsnamen des Ports, einmal berechnet -- zwei Vergleiche brauchen sie.
     ni = set()
     for wurzel, _, dateien in os.walk('src/main/java'):
         if '/blocks' in wurzel:
@@ -149,11 +160,31 @@ def main():
         for d in dateien:
             if not d.endswith('.java'):
                 continue
-            s = re.sub(r'//[^\n]*', '', open(os.path.join(wurzel, d), encoding='utf-8').read())
-            for m in re.finditer(r'\b(?:ITEMS|itemRegistry)\.register\(\s*"([^"]+)"', s):
-                ni.add(m.group(1))
-            for m in re.finditer(r'\bregister\w+\(\s*"([^"]+)"', s):
-                ni.add(m.group(1))
+            quelle = re.sub(r'//[^\n]*', '', open(os.path.join(wurzel, d), encoding='utf-8').read())
+            ni |= set(re.findall(r'\b(?:ITEMS|itemRegistry)\.register\(\s*"([^"]+)"', quelle))
+            ni |= set(re.findall(r'\bregister\w+\(\s*"([^"]+)"', quelle))
+
+    # --- Registriernamen: naeher an der Wahrheit als der Klassenvergleich ---------------
+    #
+    # Im Original traegt jeder Ruestungs-Konstruktor seinen Namen selbst; er steht oft ein
+    # paar Zeilen weiter als der new-Aufruf, deshalb liest das Muster bis zum Semikolon.
+    # WER NUR EINE ZEILE LIEST, sieht bloss die 17 Eintraege aus ModItems und uebersieht die
+    # 124 aus ModItemsArmor -- genau das ist mir in Runde 207 passiert, siehe Roadmap.
+    #
+    # Die Portseite vergleicht gegen ALLE Gegenstandsnamen, nicht gegen die, deren
+    # Konstruktor nach Ruestung aussieht: der Port meldet hev_helmet und rpa_helmet ueber
+    # Hilfsmethoden an, die kein Muster auf dem Konstruktornamen faengt.
+    up_armor = set()
+    for pfad in ('src/main/java/com/hbm/items/ModItems.java',
+                 'src/main/java/com/hbm/items/ModItemsArmor.java'):
+        roh = subprocess.run(['git', 'show', UPSTREAM + ':' + pfad], capture_output=True, text=True).stdout
+        for m in re.finditer(r'new (?:Armor|ItemArmor)\w*\((?:[^;]*?)setUnlocalizedName\("([^"]+)"\)', roh, re.S):
+            up_armor.add(m.group(1))
+
+    print()
+    print("REGISTRIERNAMEN (zaehlt Sachen statt Dateien)")
+    print("  %-18s %8s %8s %8s" % ("Bereich", "Original", "Port", "fehlend"))
+    print("  %-18s %8d %8d %8d" % ("ruestungsnamen", len(up_armor), len(up_armor & ni), len(up_armor - ni)))
 
     print()
     print("NAMENSVERGLEICH (obere Schranke -- der Port faltet Metadaten zusammen)")
