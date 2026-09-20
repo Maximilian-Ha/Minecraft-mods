@@ -112,7 +112,14 @@ public class XFactoryTool {
         geschoss.discard();
     };
 
-    /** Die grosse: Radius 15, kein Bruchstueck bleibt liegen, dafuer Schlacke. */
+    /**
+     * Die grosse: Radius 15, kein Bruchstueck bleibt liegen, dafuer Schlacke.
+     *
+     * ABWEICHUNG: das Original setzt die Schlacke mit Metadaten 1 -- das ist die gesprungene
+     * Fassung derselben Textur. Der Port hat block_slag als einen Block ohne Zustaende; die
+     * Textur block_slag_broken.png liegt zwar im Baum, aber kein Block zeigt sie. Bis es den
+     * gesprungenen Block gibt, bleibt hier die glatte Schlacke stehen.
+     */
     public static BiConsumer<BulletBaseMK4, HitResult> LAMBDA_MORTAR_CHARGE = (geschoss, treffer) -> {
 
         if(treffer instanceof EntityHitResult ehr && geschoss.tickCount < 3 && ehr.getEntity() == geschoss.getOwner()) return;
@@ -121,7 +128,7 @@ public class XFactoryTool {
         new ExplosionVNT(geschoss.level, ort.x, ort.y, ort.z, 15F, geschoss.getOwner())
                 .setBlockAllocator(new BlockAllocatorStandard())
                 .setBlockProcessor(new BlockProcessorStandard().setNoDrop()
-                        .withBlockEffect(new BlockMutatorDebris(NtmBlocks.BLOCK_SLAG.get(), 1)))
+                        .withBlockEffect(new BlockMutatorDebris(NtmBlocks.BLOCK_SLAG.get())))
                 .setEntityProcessor(new EntityProcessorCrossSmooth(1, geschoss.damage)
                         .setupPiercing(geschoss.config.armorThresholdNegation, geschoss.config.armorPiercingPercent))
                 .setPlayerProcessor(new PlayerProcessorStandard())

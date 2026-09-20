@@ -8768,3 +8768,50 @@ wären in 1.21 nur ein zweiter Eintrag mit gleichem Ergebnis.
 die sie je gerufen hätte, steht in `EntityEffectHandler` auskommentiert.
 
 **37 von 46 Bauplänen.** Alle 35 Tore grün.
+
+## Runde 193 — Ein Konstruktor mit einem Argument zuviel
+
+Der Ladungswerfer aus Runde 192 fiel im CI um, an genau einer Zeile: `new
+BlockMutatorDebris(NtmBlocks.BLOCK_SLAG.get(), 1)`. Die `1` sind die Metadaten aus 1.7.10 —
+dort ist Metadaten 1 die gesprungene Fassung derselben Schlackentextur. Der Port kennt nur
+`BlockMutatorDebris(Block)` und `BlockMutatorDebris(BlockState)`.
+
+Die Zeile ist berichtigt. Die gesprungene Schlacke bleibt eine Abweichung: die Textur
+`block_slag_broken.png` liegt im Baum, aber kein Block zeigt sie — das steht so im Quelltext.
+
+### Warum kein Tor das gesehen hat
+
+`syntax-check.sh` übersetzt ohne Minecraft-Klassenpfad; an einer Klasse mit Minecraft-Typen in
+der Signatur kommt es gar nicht so weit. Die fünf Durchgänge in `override-check.sh` prüfen
+ausschließlich **Methoden**, nie Konstruktoren.
+
+Dafür gibt es jetzt einen **sechsten Durchgang**. Er ist streng beweisbar, nicht heuristisch:
+Konstruktoren werden in Java nicht vererbt, also kennt das Skript bei einer Projektklasse
+*alle* ihre Konstruktoren — ohne Vererbungskette, ohne Minecraft. Was dort durchfällt, fällt
+auch bei `javac` durch. **Gemessen in beide Richtungen:** 6544 Konstruktoraufrufe, null Funde;
+setzt man die Metadatenzahl wieder ein, meldet die Regel genau diese eine Zeile.
+
+### Ein Tor, das blind war, ohne es zu sagen
+
+Beim Messen meldete die neue Regel zunächst **279** Stellen. 275 davon hatten eine gemeinsame
+Ursache, und die saß nicht in der neuen Regel, sondern im Kommentar-Entferner, den alle
+Durchgänge benutzen: `re.sub(r'//[^\n]*', '', src)` schneidet auch dort, wo das doppelte
+Schrägzeichen **innerhalb einer Zeichenkette** steht. In `HFRWavefrontObject` steht es in
+einem regulären Ausdruck (`"(f( \d+//\d+){3,4}")`). Zurück blieb ein offenes
+Anführungszeichen — und von da an verrutschte für den Rest der Datei jede Klammerzählung. Die
+Klasse war für den Klammerzähler komplett unsichtbar, ihre vier Konstruktoren standen
+scheinbar auf Tiefe 0.
+
+Der Entferner ist jetzt zeichenkettensicher und zeilentreu. Die restlichen vier Meldungen
+waren Generika-Kommas in Parameterlisten (`BiConsumer<ItemStack, Player>` ist ein Parameter,
+nicht zwei) — auch das ist berichtigt.
+
+Denselben Regelausdruck benutzen **16 weitere Tore**. Dort richtet er keinen Schaden an, und
+das ist nachgezählt statt behauptet: im ganzen Baum gibt es **sechs** Zeilen mit `//` in einer
+Zeichenkette (`HTTPHandler` 42/70/80, `HFRWavefrontObject` 35/308, `NtmEventHandler` 55), und
+was dort abgeschnitten wird, ist reiner Zeichenketteninhalt — Netzadressen und ein regulärer
+Ausdruck, kein einziger Bezeichner. Außerdem zählt keines dieser Tore Klammertiefen; sie
+verlieren eine Zeile, nicht den Rest der Datei. Nachzählen:
+`grep -n '"[^"]*//' -r src/main/java --include=*.java`
+
+Alle 35 Tore grün.

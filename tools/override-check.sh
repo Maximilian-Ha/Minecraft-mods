@@ -60,9 +60,41 @@ METHOD_RE = re.compile(
 classes = {}   # Name -> dict
 
 def strip_comments(src):
-    src = re.sub(r'/\*.*?\*/', '', src, flags=re.S)
-    src = re.sub(r'//[^\n]*', '', src)
-    return src
+    """Kommentare entfernen, OHNE in Zeichenketten hineinzuschneiden.
+
+    Runde 193: die vorherige Fassung war zwei Regeln lang -- /*...*/ und //... bis
+    Zeilenende. Die zweite schnitt mitten in Zeichenketten wie
+    Pattern.compile("(f( \\d+//\\d+){3,4}") -- das doppelte Schraegzeichen steht dort im
+    Text, nicht als Kommentar. Zurueck blieb ein offenes Anfuehrungszeichen, und von da an
+    verrutschte fuer den Rest der Datei jede Klammerzaehlung. HFRWavefrontObject war so
+    komplett unsichtbar: seine vier Konstruktoren standen scheinbar auf Klammertiefe 0.
+    Ein Tor, das an dieser Stelle blind ist, ohne es zu sagen, ist schlimmer als keines.
+
+    Die Zeilenzahl bleibt erhalten: fuer einen entfernten Blockkommentar bleiben seine
+    Zeilenumbrueche stehen.
+    """
+    out, i, n = [], 0, len(src)
+    while i < n:
+        c = src[i]
+        if c == '"' or c == "'":
+            j = i + 1
+            while j < n:
+                if src[j] == '\\': j += 2; continue
+                if src[j] == c: j += 1; break
+                if src[j] == '\n': break      # unbalanciert -- nicht ueber die Zeile hinaus
+                j += 1
+            out.append(src[i:j]); i = j
+        elif c == '/' and i + 1 < n and src[i + 1] == '/':
+            j = src.find('\n', i)
+            i = n if j < 0 else j
+        elif c == '/' and i + 1 < n and src[i + 1] == '*':
+            j = src.find('*/', i + 2)
+            j = n if j < 0 else j + 2
+            out.append('\n' * src.count('\n', i, j))
+            i = j
+        else:
+            out.append(c); i += 1
+    return ''.join(out)
 
 for dirpath, _, files in os.walk(ROOT):
     for fn in files:
@@ -251,8 +283,41 @@ IMP_RE = re.compile(r'^\s*import\s+(?:static\s+)?([\w.]+)\s*;', re.M)
 MC_PROVIDED = {'getName'}
 
 def strip_comments(src):
-    src = re.sub(r'/\*.*?\*/', '', src, flags=re.S)
-    return re.sub(r'//[^\n]*', '', src)
+    """Kommentare entfernen, OHNE in Zeichenketten hineinzuschneiden.
+
+    Runde 193: die vorherige Fassung war zwei Regeln lang -- /*...*/ und //... bis
+    Zeilenende. Die zweite schnitt mitten in Zeichenketten wie
+    Pattern.compile("(f( \\d+//\\d+){3,4}") -- das doppelte Schraegzeichen steht dort im
+    Text, nicht als Kommentar. Zurueck blieb ein offenes Anfuehrungszeichen, und von da an
+    verrutschte fuer den Rest der Datei jede Klammerzaehlung. HFRWavefrontObject war so
+    komplett unsichtbar: seine vier Konstruktoren standen scheinbar auf Klammertiefe 0.
+    Ein Tor, das an dieser Stelle blind ist, ohne es zu sagen, ist schlimmer als keines.
+
+    Die Zeilenzahl bleibt erhalten: fuer einen entfernten Blockkommentar bleiben seine
+    Zeilenumbrueche stehen.
+    """
+    out, i, n = [], 0, len(src)
+    while i < n:
+        c = src[i]
+        if c == '"' or c == "'":
+            j = i + 1
+            while j < n:
+                if src[j] == '\\': j += 2; continue
+                if src[j] == c: j += 1; break
+                if src[j] == '\n': break      # unbalanciert -- nicht ueber die Zeile hinaus
+                j += 1
+            out.append(src[i:j]); i = j
+        elif c == '/' and i + 1 < n and src[i + 1] == '/':
+            j = src.find('\n', i)
+            i = n if j < 0 else j
+        elif c == '/' and i + 1 < n and src[i + 1] == '*':
+            j = src.find('*/', i + 2)
+            j = n if j < 0 else j + 2
+            out.append('\n' * src.count('\n', i, j))
+            i = j
+        else:
+            out.append(c); i += 1
+    return ''.join(out)
 
 def split_types(s):
     """Typliste hinter extends/implements trennen, ohne an Generika-Kommas zu zerbrechen."""
@@ -631,6 +696,187 @@ for fq, info in sorted(types.items()):
         if key in erreichbar: continue
         problems.append('%s: @Override an %s() mit %d Parametern -- in der Verwandtschaft steht keine solche Methode'
                         % (info['path'], key[0], key[1]))
+
+# ---------------------------------------------------------------------------------------
+# Runde 193: ein "new" mit der falschen Anzahl Argumente.
+#
+# Auch das kostete einen CI-Lauf. XFactoryTool rief BlockMutatorDebris(Block, int) auf --
+# die Form aus 1.7.10, wo die zweite Zahl die Metadaten des Blocks waren. Der Port kennt
+# nur BlockMutatorDebris(Block) und BlockMutatorDebris(BlockState); Metadaten gibt es auf
+# 1.21 nicht mehr.
+#
+# KEIN BESTEHENDES TOR SAH DAS: syntax-check.sh laeuft ohne Minecraft-Klassenpfad, und
+# BlockMutatorDebris hat Minecraft-Typen in der Signatur -- javac faellt dort schon vorher
+# ueber die unbekannten Typen und meldet nichts Brauchbares mehr. Die Durchgaenge 1 bis 5
+# pruefen ausschliesslich Methoden, nie Konstruktoren.
+#
+# DIE REGEL IST EXAKT: Konstruktoren werden nicht vererbt. Wo der gerufene Typ eine
+# Projektklasse ist, kennt dieses Skript ALLE ihre Konstruktoren -- es braucht keine
+# Vererbungskette und keinen Minecraft-Klassenpfad. Was hier durchfaellt, faellt bei javac
+# genauso durch.
+#
+# Vier Einschraenkungen, alle gemessen noetig:
+#   * Anonyme Klassen (new Foo(...) { ... }) bleiben aussen vor. Sie sind zwar genauso
+#     pruefbar, aber ihr Rumpf verwirrt die Klammerzaehlung nicht wert.
+#   * Argumentlisten mit '<' werden uebersprungen. Ein Komma in <A, B> steht in keiner
+#     Klammer und wuerde als Argumentgrenze zaehlen.
+#   * Klassen, deren Konstruktoren dieses Skript nicht sicher liest (generische
+#     Konstruktoren etwa), werden ganz ausgelassen -- lieber keine Aussage als eine falsche.
+#   * Ein Konstruktor mit Restliste (...) nimmt jede Stelligkeit ab seiner vorletzten.
+#
+# NACHGEMESSEN IN BEIDE RICHTUNGEN: 6544 Konstruktoraufrufe, null Funde. Setzt man die
+# Metadatenzahl in XFactoryTool wieder ein, meldet die Regel genau diese eine Zeile.
+#
+# BEIM MESSEN FIEL DER KOMMENTAR-ENTFERNER AUF, siehe strip_comments weiter oben: er schnitt
+# in Zeichenketten hinein und machte damit HFRWavefrontObject fuer die Klammerzaehlung
+# unsichtbar. Vor der Reparatur meldete diese Regel 279 Stellen, davon 275 aus diesem einen
+# Grund. Denselben Regelausdruck benutzen 16 weitere Tore. Dort richtet er keinen Schaden an,
+# und das ist nachgezaehlt: im ganzen Baum gibt es SECHS Zeilen mit // innerhalb einer
+# Zeichenkette (HTTPHandler 42/70/80, HFRWavefrontObject 35/308, NtmEventHandler 55), und was
+# dort abgeschnitten wird, ist reiner Zeichenketteninhalt -- Netzadressen und ein regulaerer
+# Ausdruck, kein einziger Bezeichner. Die anderen Tore zaehlen ausserdem keine Klammertiefe;
+# sie verlieren eine Zeile, nicht den Rest der Datei. Nachzaehlen laesst sich das jederzeit:
+#   grep -n '"[^"]*//' -r src/main/java --include=*.java
+# ---------------------------------------------------------------------------------------
+
+def arg_stellen(s):
+    """Argumente einer Aufrufliste zaehlen, ohne an Kommas in Unterklammern zu zerbrechen."""
+    if not s.strip(): return 0
+    n, d, i = 1, 0, 0
+    while i < len(s):
+        c = s[i]
+        if c == '"' or c == "'":
+            q = c; i += 1
+            while i < len(s):
+                if s[i] == '\\': i += 2; continue
+                if s[i] == q: break
+                i += 1
+        elif c in '([{': d += 1
+        elif c in ')]}': d -= 1
+        elif c == ',' and d == 0: n += 1
+        i += 1
+    return n
+
+def param_stellen(s):
+    """Parameter einer ERKLAERUNG zaehlen. Anders als in einer Aufrufliste ist '<' hier
+    immer eine Generika-Klammer -- BiConsumer<ItemStack, Player> ist ein Parameter, nicht
+    zwei. Ohne diese Unterscheidung meldete die Regel vier Aufrufe, die voellig in Ordnung
+    sind (SimpleConsumableItem und das Bajonett)."""
+    if not s.strip(): return 0
+    n, d = 1, 0
+    for c in s:
+        if c in '([{<': d += 1
+        elif c in ')]}>': d -= 1
+        elif c == ',' and d == 0: n += 1
+    return n
+
+def klammer_ende(s, start):
+    """Index der schliessenden Klammer zu der oeffnenden an Stelle start, oder -1."""
+    d, i = 0, start
+    while i < len(s):
+        c = s[i]
+        if c == '"' or c == "'":
+            q = c; i += 1
+            while i < len(s):
+                if s[i] == '\\': i += 2; continue
+                if s[i] == q: break
+                i += 1
+        elif c == '(': d += 1
+        elif c == ')':
+            d -= 1
+            if d == 0: return i
+        i += 1
+    return -1
+
+# 1) Konstruktoren jeder Projektklasse einsammeln.
+ktoren = {}          # voll qualifizierter Name -> Menge der Stelligkeiten
+rest_ab = {}         # voll qualifizierter Name -> kleinste Stelligkeit mit Restliste
+unklar = set()       # Klassen, deren Konstruktoren nicht sicher gelesen wurden
+
+for fq, info in types.items():
+    if info['kind'] != 'class': continue
+    simple = fq.rsplit('.', 1)[1]
+    src = strip_comments(open(info['path'], encoding='utf-8', errors='replace').read())
+    tiefe = klammertiefen(src)
+
+    streng = re.compile(r'^[ \t]*(?:@\w+(?:\([^)]*\))?[ \t]*)*'
+                        r'(?:public|protected|private)?[ \t]*'
+                        + simple + r'[ \t]*\((?P<params>[^)]*)\)[ \t\r\n]*(?:throws[^{]*)?\{', re.M)
+    gefunden = {}
+    for mm in streng.finditer(src):
+        if tiefe[mm.start()] != 1: continue
+        params = mm.group('params').strip()
+        gefunden[mm.start()] = (param_stellen(params), '...' in params)
+
+    # Gegenprobe: jedes "Name(" auf Tiefe 1, das kein Aufruf ist, muss der strenge
+    # Ausdruck auch gesehen haben. Sonst weiss dieses Skript zu wenig ueber die Klasse.
+    lose = 0
+    for mm in re.finditer(r'\b' + simple + r'[ \t]*\(', src):
+        if tiefe[mm.start()] != 1: continue
+        davor = src[:mm.start()].rstrip()
+        if davor.endswith('.') or davor.endswith('new'): continue
+        lose += 1
+    if lose != len(gefunden):
+        unklar.add(fq)
+        continue
+
+    if not gefunden:
+        ktoren[fq] = {0}          # der stillschweigende Standardkonstruktor
+    else:
+        ktoren[fq] = {a for a, _ in gefunden.values()}
+        for a, rest in gefunden.values():
+            if rest: rest_ab[fq] = min(rest_ab.get(fq, 99), a - 1)
+
+# 2) Jede Quelldatei nach "new Projektklasse(...)" absuchen.
+NEU_RE = re.compile(r'\bnew[ \t\r\n]+(?P<name>[A-Z]\w*)[ \t]*(?:<[^<>()]*>[ \t]*)?\(')
+
+geprueft = 0
+
+for dirpath, _, files in os.walk(ROOT):
+    for fn in files:
+        if not fn.endswith('.java'): continue
+        path = os.path.join(dirpath, fn)
+        src = strip_comments(open(path, encoding='utf-8', errors='replace').read())
+        pm = PKG_RE.search(src)
+        pkg = pm.group(1) if pm else ''
+        imports = IMP_RE.findall(src)
+
+        for mm in NEU_RE.finditer(src):
+            auf = src.index('(', mm.end() - 1)
+            zu = klammer_ende(src, auf)
+            if zu < 0: continue
+            nach = src[zu + 1:zu + 40].lstrip()
+            if nach.startswith('{'): continue            # anonyme Klasse
+            args = src[auf + 1:zu]
+            if '<' in args: continue                     # Generika-Kommas
+
+            ref = mm.group('name')
+            ziel = None
+            if pkg + '.' + ref in types:
+                ziel = pkg + '.' + ref
+            else:
+                for imp in imports:
+                    if imp.rsplit('.', 1)[-1] == ref:
+                        ziel = imp if imp in types else None
+                        break
+                else:
+                    treffer = by_simple.get(ref, [])
+                    ziel = treffer[0] if len(treffer) == 1 else None
+
+            if ziel is None or ziel in unklar: continue
+            if types[ziel]['kind'] != 'class': continue
+
+            stellen = arg_stellen(args)
+            geprueft += 1
+            if stellen in ktoren[ziel]: continue
+            if ziel in rest_ab and stellen >= rest_ab[ziel]: continue
+
+            zeile = src[:mm.start()].count('\n') + 1
+            problems.append('%s:%d: new %s(...) mit %d Argumenten -- die Klasse erklaert nur %s'
+                            % (path, zeile, ref, stellen,
+                               ', '.join(str(a) for a in sorted(ktoren[ziel]))))
+
+print('Pruefe Konstruktoraufrufe auf Projektklassen ... %d Aufrufe, %d Klassen unklar' % (geprueft, len(unklar)))
 
 print('Pruefe @Override gegen die Verwandtschaft ... %d Klassen mit reiner Projektherkunft' % kandidaten)
 print('Pruefe Schnittstellen innerhalb des Projekts ... %d Typen' % len(types))
