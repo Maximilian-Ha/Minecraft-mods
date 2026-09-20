@@ -12570,3 +12570,29 @@ galt, und `test-tandem-core` den Tandemstab, den sonst keine Datei benutzt.
 `unlock()` an `LockableBaseBlockEntity` ist neu — das Gegenstück zu `lock()`, im Original
 genauso benannt und an genau einer Stelle gebraucht: die Wechselwirkung `POWER_LOCK` sperrt den
 Tresor wieder auf, wenn nebenan mehr als 500 kHE stehen.
+
+## Runde 266 — 34 von 34
+
+Kran, Fabrik und Turmsockel — die letzten drei. Sie waren nicht wegen ihrer Bedingungen offen
+(die sind gewöhnlich), sondern weil ihnen der Logikstab fehlte. Mit Runde 265 gibt es ihn.
+
+| Bauwerk | Bedingung | Gewicht | Abstand |
+|---|---|---|---|
+| Kran | Rauheit ≤ 0,2, kein Wasser | 20 | 55 |
+| Fabrik | Rauheit ≤ 0,2, kein Wasser | 40 | 39 |
+| Turmsockel | Rauheit ≤ 0,3, kein Wasser, **kein Sandboden** | 30 | 45 |
+
+Der Turmsockel ist das **einzige** Bauwerk des Originals, das einen Biomtyp *ausschließt*
+statt ihn zu verlangen: `!BiomeDictionary.isBiomeOfType(biome, Type.SANDY)`. Er steht nicht in
+der Wüste.
+
+Zwei neue Biomlisten: `mittelflach` (Rauheit ≤ 0,2) ist die von `flach` ohne die Pilzinsel —
+der Unterschied zwischen 0,2 und 0,3 ist in 1.7.10 genau diese eine —, und `flachOhneSand` ist
+`flach` ohne alles, was in `sandbiome` steht, plus ohne die Strände.
+
+Der Kran benutzt `crane_mod.nbt`, nicht `crane.nbt` (siehe Runde 264); im Port heißt die Datei
+trotzdem `crane.nbt`, weil der Name des Bauwerks zählt und nicht der der Vorlage im Original.
+
+**Damit stehen alle 34 NBT-Bauwerke des Originals in der Welt.** Offen bleiben aus dieser
+Gruppe nur noch die beiden, die im Original gar keine Vorlagendatei haben — Features und Bunker
+sind dort handgeschriebene Bauwerkskomponenten (`MapGenNTMFeatures`, `BunkerStart`).

@@ -87,6 +87,11 @@ public class NtmStructures {
     public static final ResourceKey<Structure> DISH = registerKey("dish");
     public static final ResourceKey<Structure> LABORATORY = registerKey("laboratory");
 
+    /* Die drei mit Logikstaeben, Runde 266 -- damit stehen alle 34. */
+    public static final ResourceKey<Structure> CRANE = registerKey("crane");
+    public static final ResourceKey<Structure> FACTORY = registerKey("factory");
+    public static final ResourceKey<Structure> TOWER_BASE = registerKey("tower_base");
+
     public static void bootstrap(BootstrapContext<Structure> context) {
 
         HolderGetter<Biome> biome = context.lookup(Registries.BIOME);
@@ -191,6 +196,16 @@ public class NtmStructures {
         einzeln(context, ozean(biome), pools, AIRCRAFT_CARRIER, NtmTemplatePools.AIRCRAFT_CARRIER, -6);
         einzeln(context, ebene(biome), pools, DISH, NtmTemplatePools.DISH, -10);
         einzeln(context, schuetter(biome), pools, LABORATORY, NtmTemplatePools.LABORATORY, -10);
+
+        /*
+         * DIE DREI MIT LOGIKSTAEBEN. Sie waren die letzten offenen, und nicht wegen ihrer
+         * Bedingungen -- die sind gewoehnlich -- sondern weil der Logikstab im Port fehlte
+         * (Runde 265). Kran und Fabrik wollen hoechstens 0,2 Rauheit, der Turmsockel
+         * hoechstens 0,3 UND keinen Sandboden: er steht nicht in der Wueste.
+         */
+        einzeln(context, mittelflach(biome), pools, CRANE, NtmTemplatePools.CRANE, -13);
+        einzeln(context, mittelflach(biome), pools, FACTORY, NtmTemplatePools.FACTORY, -10);
+        einzeln(context, flachOhneSand(biome), pools, TOWER_BASE, NtmTemplatePools.TOWER_BASE, -6);
     }
 
     /** Ein Bauwerk auf fester Hoehe, ohne Hoehenkarte -- fuer die, bei denen die Klemme immer greift. */
@@ -343,6 +358,78 @@ public class NtmStructures {
                 biome.getOrThrow(Biomes.CHERRY_GROVE),
                 biome.getOrThrow(Biomes.BEACH),
                 biome.getOrThrow(Biomes.SNOWY_BEACH),
+                biome.getOrThrow(Biomes.MUSHROOM_FIELDS));
+    }
+
+    /**
+     * biome.heightVariation <= 0.2F && !isWaterBiome -- eine Stufe strenger als flach().
+     *
+     * Der Unterschied zwischen 0,2 und 0,3 ist in 1.7.10 schmal: die Pilzinsel liegt bei 0,3,
+     * fast alles andere Oberflaechenbiom bei 0,2 oder darunter. Diese Liste ist deshalb die
+     * von flach() OHNE die Pilzinsel. Hergeleitet, nicht nachgemessen -- wie alle Biomlisten
+     * hier; die Begruendung steht bei sandbiome().
+     */
+    private static HolderSet<Biome> mittelflach(HolderGetter<Biome> biome) {
+        return HolderSet.direct(
+                biome.getOrThrow(Biomes.PLAINS),
+                biome.getOrThrow(Biomes.SUNFLOWER_PLAINS),
+                biome.getOrThrow(Biomes.SNOWY_PLAINS),
+                biome.getOrThrow(Biomes.DESERT),
+                biome.getOrThrow(Biomes.SAVANNA),
+                biome.getOrThrow(Biomes.SAVANNA_PLATEAU),
+                biome.getOrThrow(Biomes.FOREST),
+                biome.getOrThrow(Biomes.FLOWER_FOREST),
+                biome.getOrThrow(Biomes.BIRCH_FOREST),
+                biome.getOrThrow(Biomes.OLD_GROWTH_BIRCH_FOREST),
+                biome.getOrThrow(Biomes.DARK_FOREST),
+                biome.getOrThrow(Biomes.TAIGA),
+                biome.getOrThrow(Biomes.SNOWY_TAIGA),
+                biome.getOrThrow(Biomes.OLD_GROWTH_PINE_TAIGA),
+                biome.getOrThrow(Biomes.OLD_GROWTH_SPRUCE_TAIGA),
+                biome.getOrThrow(Biomes.JUNGLE),
+                biome.getOrThrow(Biomes.SPARSE_JUNGLE),
+                biome.getOrThrow(Biomes.BAMBOO_JUNGLE),
+                biome.getOrThrow(Biomes.BADLANDS),
+                biome.getOrThrow(Biomes.ERODED_BADLANDS),
+                biome.getOrThrow(Biomes.WOODED_BADLANDS),
+                biome.getOrThrow(Biomes.SWAMP),
+                biome.getOrThrow(Biomes.MANGROVE_SWAMP),
+                biome.getOrThrow(Biomes.MEADOW),
+                biome.getOrThrow(Biomes.CHERRY_GROVE),
+                biome.getOrThrow(Biomes.BEACH),
+                biome.getOrThrow(Biomes.SNOWY_BEACH));
+    }
+
+    /**
+     * Die Bedingung des Turmsockels: flach, kein Wasser und ausdruecklich KEIN Sandboden.
+     *
+     * Er ist das einzige Bauwerk des Originals, das einen Biomtyp ausschliesst statt ihn zu
+     * verlangen -- also die Liste von flach() ohne alles, was in sandbiome() steht, und ohne
+     * die Straende.
+     */
+    private static HolderSet<Biome> flachOhneSand(HolderGetter<Biome> biome) {
+        return HolderSet.direct(
+                biome.getOrThrow(Biomes.PLAINS),
+                biome.getOrThrow(Biomes.SUNFLOWER_PLAINS),
+                biome.getOrThrow(Biomes.SNOWY_PLAINS),
+                biome.getOrThrow(Biomes.SAVANNA),
+                biome.getOrThrow(Biomes.SAVANNA_PLATEAU),
+                biome.getOrThrow(Biomes.FOREST),
+                biome.getOrThrow(Biomes.FLOWER_FOREST),
+                biome.getOrThrow(Biomes.BIRCH_FOREST),
+                biome.getOrThrow(Biomes.OLD_GROWTH_BIRCH_FOREST),
+                biome.getOrThrow(Biomes.DARK_FOREST),
+                biome.getOrThrow(Biomes.TAIGA),
+                biome.getOrThrow(Biomes.SNOWY_TAIGA),
+                biome.getOrThrow(Biomes.OLD_GROWTH_PINE_TAIGA),
+                biome.getOrThrow(Biomes.OLD_GROWTH_SPRUCE_TAIGA),
+                biome.getOrThrow(Biomes.JUNGLE),
+                biome.getOrThrow(Biomes.SPARSE_JUNGLE),
+                biome.getOrThrow(Biomes.BAMBOO_JUNGLE),
+                biome.getOrThrow(Biomes.SWAMP),
+                biome.getOrThrow(Biomes.MANGROVE_SWAMP),
+                biome.getOrThrow(Biomes.MEADOW),
+                biome.getOrThrow(Biomes.CHERRY_GROVE),
                 biome.getOrThrow(Biomes.MUSHROOM_FIELDS));
     }
 

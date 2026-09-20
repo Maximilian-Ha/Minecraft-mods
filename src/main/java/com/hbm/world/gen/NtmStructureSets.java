@@ -74,6 +74,10 @@ public class NtmStructureSets {
     public static final ResourceKey<StructureSet> DISH = registerKey("dish");
     public static final ResourceKey<StructureSet> LABORATORY = registerKey("laboratory");
 
+    public static final ResourceKey<StructureSet> CRANE = registerKey("crane");
+    public static final ResourceKey<StructureSet> FACTORY = registerKey("factory");
+    public static final ResourceKey<StructureSet> TOWER_BASE = registerKey("tower_base");
+
     public static void bootstrap(BootstrapContext<StructureSet> context) {
 
         HolderGetter<Structure> strukturen = context.lookup(Registries.STRUCTURE);
@@ -162,6 +166,14 @@ public class NtmStructureSets {
         streuung(context, strukturen, LIGHTHOUSE, NtmStructures.LIGHTHOUSE, 31, 10, 996996996 + 28);
         streuung(context, strukturen, DISH, NtmStructures.DISH, 55, 18, 996996996 + 29);
         streuung(context, strukturen, LABORATORY, NtmStructures.LABORATORY, 55, 18, 996996996 + 30);
+
+        /*
+         * DIE DREI MIT LOGIKSTAEBEN schliessen die Liste: 34 von 34. Nenner ist wieder die
+         * 422 der Ebene, in der alle drei stehen duerfen.
+         */
+        streuung(context, strukturen, CRANE, NtmStructures.CRANE, 55, 18, 996996996 + 31);
+        streuung(context, strukturen, FACTORY, NtmStructures.FACTORY, 39, 13, 996996996 + 32);
+        streuung(context, strukturen, TOWER_BASE, NtmStructures.TOWER_BASE, 45, 15, 996996996 + 33);
     }
 
     /**

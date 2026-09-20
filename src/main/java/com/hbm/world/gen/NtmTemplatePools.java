@@ -87,6 +87,11 @@ public class NtmTemplatePools {
     public static final ResourceKey<StructureTemplatePool> DISH = registerKey("coast/dish");
     public static final ResourceKey<StructureTemplatePool> LABORATORY = registerKey("coast/laboratory");
 
+    /* Die drei mit Logikstaeben, Runde 266. */
+    public static final ResourceKey<StructureTemplatePool> CRANE = registerKey("logic/crane");
+    public static final ResourceKey<StructureTemplatePool> FACTORY = registerKey("logic/factory");
+    public static final ResourceKey<StructureTemplatePool> TOWER_BASE = registerKey("logic/tower_base");
+
     public static void bootstrap(BootstrapContext<StructureTemplatePool> context) {
 
         HolderGetter<StructureTemplatePool> pools = context.lookup(Registries.TEMPLATE_POOL);
@@ -193,6 +198,10 @@ public class NtmTemplatePools {
         einzeln(context, leer, LIGHTHOUSE, "coast/lighthouse");
         einzeln(context, leer, DISH, "coast/dish");
         einzeln(context, leer, LABORATORY, "coast/laboratory");
+
+        einzeln(context, leer, CRANE, "logic/crane");
+        einzeln(context, leer, FACTORY, "logic/factory");
+        einzeln(context, leer, TOWER_BASE, "logic/tower_base");
     }
 
     /**
