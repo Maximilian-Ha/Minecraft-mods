@@ -4796,6 +4796,28 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .save(recipeOutput);
 
         /*
+         * DIE TAU-KANONE. Muster und Zutaten wortgetreu aus WeaponRecipes des Originals.
+         *
+         * BERICHTIGUNG ZU RUNDE 204: dort stand, dieser Bauplan sei blockiert, weil er
+         * coil_copper_torus verlangt und der Port den nicht kennt. Nachgemessen falsch --
+         * der Port nennt denselben Gegenstand COIL_COPPER_RING, und zwar mit demselben
+         * Amboss-Rezept wie das Original (zwei Kupferspulen auf Stufe 1). Es war nur der Name.
+         *
+         * EnumCircuitType.BISMOID ist im Original das "Versatile Circuit Board", im Port ein
+         * eigener Gegenstand; BIGMT ist der Saturnit. Beides wie in allen Runden davor.
+         */
+        gun(NtmItems.GUN_TAU, " RD", "CTT", "GMS")
+                .define('R', lightReceiver(Mats.MAT_SATURN))
+                .define('D', NtmItems.CIRCUIT_VERSATILE_BOARD.get())
+                .define('C', NtmItems.PIPE_COPPER.get())
+                .define('T', NtmItems.COIL_COPPER_RING.get())
+                .define('G', anyHardPlasticGrip())
+                .define('M', mechanism(Mats.MAT_SATURN))
+                .define('S', anyHardPlasticStock())
+                .unlockedBy("has_circuit", has(NtmItems.CIRCUIT_VERSATILE_BOARD.get()))
+                .save(recipeOutput);
+
+        /*
          * Der Fatman. Saturnit durchweg -- im Original heisst das Material BIGMT, im Port
          * MAT_SATURN. Der Griff ist als einziger aus hartem Kunststoff.
          */

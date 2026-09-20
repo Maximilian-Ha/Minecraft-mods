@@ -9464,7 +9464,17 @@ Kunststoff.
 
 Zur Bauplan-Lage aus Runde 203, jetzt nachgemessen: die **Spulenkanone hat auch im Original
 keinen** — dass sie im Port nur im Kreativreiter liegt, ist also keine Abweichung. Die
-**Tau-Kanone hat einen**, und er ist blockiert: er verlangt `coil_copper_torus`, und der Port
-kennt nur `coil_copper` und `coil_copper_ring`. Das ist eine eigene, kleine Runde.
+**Tau-Kanone hat einen**, und er ist nachgereicht — siehe die Berichtigung unten.
+
+### Berichtigung, noch in derselben Runde
+
+Ich hatte hier zunächst geschrieben, der Tau-Bauplan sei blockiert: er verlangt
+`coil_copper_torus`, und der Port kenne nur `coil_copper` und `coil_copper_ring`. **Das war
+falsch, und zwar auf die immer gleiche Weise** — `COIL_COPPER_RING` *ist* der Torus, nur
+umbenannt, mit demselben Amboss-Rezept wie im Original (zwei Kupferspulen auf Stufe 1). Auch
+die übrigen sechs Zutaten lagen alle im Baum. Der Bauplan steht jetzt drin.
+
+Das ist in dieser Runde das zweite Mal, dass eine Begründung beim Nachmessen zerfällt — beim
+Fatman stand gar keine da, und die eine, die ich selbst geschrieben habe, hielt keine Stunde.
 
 Alle 39 Tore grün.
