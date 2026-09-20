@@ -89,6 +89,21 @@ public class NtmArmorMaterials {
     /* Zirkonium gibt es nur als Hose. Haltbarkeitsfaktor 1000, Verzauberbarkeit 1000. */
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> ZIRCONIUM = register("zirconium", "zirconium", 1000, 2, 5, 3, 1, () -> Ingredient.of(NtmItems.INGOT_ZIRCONIUM.get()));
 
+    /*
+     * VIER GARNITUREN MIT EINEM ZUSATZ. Auch sie sind ArmorFSB, aber jede bringt etwas mit:
+     * Asbest ein Schirmbild, CMB und Schrabidium Trankwirkungen fuer den ganzen Satz, die
+     * PAA-Ruestung eine Trankwirkung und die Eigenheit, dass sie OHNE HELM zaehlt.
+     */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> ASBESTOS = register("asbestos", "asbestos", 5, 1, 4, 3, 1, () -> Ingredient.of(NtmItems.ASBESTOS_CLOTH.get()));
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> CMB = register("cmb", "cmb", 50, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.INGOT_COMBINE_STEEL.get()));
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> SCHRABIDIUM = register("schrabidium", "schrabidium", 50, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.INGOT_SCHRABIDIUM.get()));
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> PAA = register("paa", "paa", 25, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.PLATE_PAA.get()));
+
+    public static final int DURABILITY_ASBESTOS = 20;
+    public static final int DURABILITY_CMB = 60;
+    public static final int DURABILITY_SCHRABIDIUM = 100;
+    public static final int DURABILITY_PAA_ARMOR = 75;
+
     public static final int DURABILITY_STEEL = 30;
     public static final int DURABILITY_TITANIUM = 25;
     public static final int DURABILITY_ALLOY = 40;

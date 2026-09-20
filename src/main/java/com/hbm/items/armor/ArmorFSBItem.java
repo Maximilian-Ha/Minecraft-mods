@@ -1,11 +1,15 @@
 package com.hbm.items.armor;
 
 import com.hbm.extprop.HbmLivingAttachments;
+import com.hbm.items.IHelmetOverlayItem;
+import com.hbm.render.util.RenderScreenOverlay;
 import com.hbm.items.NtmItems;
 import com.hbm.registry.NtmSoundEvents;
 import com.hbm.util.ContaminationUtil;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
@@ -19,6 +23,11 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +50,7 @@ import java.util.List;
  * Sprung ("dash"), Schritt- und Sprunggeraeusche sowie die Helmscheibe. Alle vier haengen an
  * Teilsystemen, die der Port nicht hat; ein Schalter, den niemand liest, waere toter Zustand.
  */
-public class ArmorFSBItem extends ArmorItem {
+public class ArmorFSBItem extends ArmorItem implements IHelmetOverlayItem {
 
     /** Was der ganze Satz dem Traeger dauerhaft gibt. */
     public final List<MobEffectInstance> effects = new ArrayList<>();
@@ -55,8 +64,26 @@ public class ArmorFSBItem extends ArmorItem {
     /** Ob der Helm eine eigene Strahlenanzeige einblendet. */
     public boolean customGeiger = false;
 
+    /**
+     * Das Bild, das der Helm ueber den Schirm legt. Im Original heisst die Baukastenmethode
+     * setOverlay; nur die Asbestruestung benutzt sie. Leer heisst kein Bild -- und dann
+     * zeichnet renderHelmetOverlay auch nichts.
+     */
+    private @Nullable ResourceLocation overlay;
+
     public ArmorFSBItem(Holder<ArmorMaterial> material, Type type, Properties properties) {
         super(material, type, properties);
+    }
+
+    public ArmorFSBItem setOverlay(ResourceLocation overlay) {
+        this.overlay = overlay;
+        return this;
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void renderHelmetOverlay(GuiGraphics guiGraphics, ItemStack stack) {
+        if(this.overlay != null) RenderScreenOverlay.renderHelmetOverlay(guiGraphics, this.overlay);
     }
 
     public ArmorFSBItem addEffect(MobEffectInstance effect) {

@@ -1481,6 +1481,10 @@ public class NtmItems {
     /* ---- Schutzkleidung: Schutzanzug, Gasmasken, Filter ---------------------------- */
 
     /* Das Tuch ist zugleich Baustoff und Reparaturmaterial des jeweiligen Anzugs. */
+    /* Das Asbesttuch. Es kam mit Runde 213, weil die Asbestruestung es braucht -- sowohl
+     * zum Bauen als auch zum Ausbessern. Gewebt wird es wie das Schutztuch in der
+     * Montagefabrik. */
+    public static final DeferredItem<Item> ASBESTOS_CLOTH = ITEMS.register("asbestos_cloth", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> HAZMAT_CLOTH = ITEMS.register("hazmat_cloth", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> HAZMAT_CLOTH_RED = ITEMS.register("hazmat_cloth_red", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> HAZMAT_CLOTH_GREY = ITEMS.register("hazmat_cloth_grey", () -> new Item(new Item.Properties()));
@@ -1583,6 +1587,47 @@ public class NtmItems {
 
     /* Zirkonium gibt es nur als Hose -- im Original ebenso, samt der einen Textur dafuer. */
     public static final DeferredItem<Item> ZIRCONIUM_LEGS = ITEMS.register("zirconium_legs", () -> new ArmorFSBItem(NtmArmorMaterials.ZIRCONIUM, ArmorItem.Type.LEGGINGS, plainArmorProperties(ArmorItem.Type.LEGGINGS, NtmArmorMaterials.DURABILITY_ZIRCONIUM)));
+
+    /*
+     * VIER GARNITUREN MIT EINEM ZUSATZ. Die Trankwirkungen haengen am ganzen Satz, nicht am
+     * einzelnen Stueck -- ArmorFSBItem prueft das an der Brustplatte. Werte und Stufen
+     * wortgetreu aus ModItemsArmor.
+     */
+    public static final DeferredItem<Item> ASBESTOS_HELMET = ITEMS.register("asbestos_helmet", () -> new ArmorFSBItem(NtmArmorMaterials.ASBESTOS, ArmorItem.Type.HELMET, plainArmorProperties(ArmorItem.Type.HELMET, NtmArmorMaterials.DURABILITY_ASBESTOS))
+            .setOverlay(NuclearTechMod.withDefaultNamespace("textures/misc/overlay_asbestos.png")));
+    public static final DeferredItem<Item> ASBESTOS_PLATE = ITEMS.register("asbestos_plate", () -> new ArmorFSBItem(NtmArmorMaterials.ASBESTOS, ArmorItem.Type.CHESTPLATE, plainArmorProperties(ArmorItem.Type.CHESTPLATE, NtmArmorMaterials.DURABILITY_ASBESTOS)));
+    public static final DeferredItem<Item> ASBESTOS_LEGS = ITEMS.register("asbestos_legs", () -> new ArmorFSBItem(NtmArmorMaterials.ASBESTOS, ArmorItem.Type.LEGGINGS, plainArmorProperties(ArmorItem.Type.LEGGINGS, NtmArmorMaterials.DURABILITY_ASBESTOS)));
+    public static final DeferredItem<Item> ASBESTOS_BOOTS = ITEMS.register("asbestos_boots", () -> new ArmorFSBItem(NtmArmorMaterials.ASBESTOS, ArmorItem.Type.BOOTS, plainArmorProperties(ArmorItem.Type.BOOTS, NtmArmorMaterials.DURABILITY_ASBESTOS)));
+
+    /* Der Kombinationsstahl: Tempo II, Eile II und Staerke V fuer den ganzen Satz. */
+    public static final DeferredItem<Item> CMB_HELMET = ITEMS.register("cmb_helmet", () -> new ArmorFSBItem(NtmArmorMaterials.CMB, ArmorItem.Type.HELMET, plainArmorProperties(ArmorItem.Type.HELMET, NtmArmorMaterials.DURABILITY_CMB))
+            .addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 20, 2))
+            .addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 20, 2))
+            .addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20, 4)));
+    public static final DeferredItem<Item> CMB_PLATE = ITEMS.register("cmb_plate", () -> new ArmorFSBItem(NtmArmorMaterials.CMB, ArmorItem.Type.CHESTPLATE, plainArmorProperties(ArmorItem.Type.CHESTPLATE, NtmArmorMaterials.DURABILITY_CMB)));
+    public static final DeferredItem<Item> CMB_LEGS = ITEMS.register("cmb_legs", () -> new ArmorFSBItem(NtmArmorMaterials.CMB, ArmorItem.Type.LEGGINGS, plainArmorProperties(ArmorItem.Type.LEGGINGS, NtmArmorMaterials.DURABILITY_CMB)));
+    public static final DeferredItem<Item> CMB_BOOTS = ITEMS.register("cmb_boots", () -> new ArmorFSBItem(NtmArmorMaterials.CMB, ArmorItem.Type.BOOTS, plainArmorProperties(ArmorItem.Type.BOOTS, NtmArmorMaterials.DURABILITY_CMB)));
+
+    /* Schrabidium: Eile III, Staerke III, Sprungkraft II und Tempo III. */
+    public static final DeferredItem<Item> SCHRABIDIUM_HELMET = ITEMS.register("schrabidium_helmet", () -> new ArmorFSBItem(NtmArmorMaterials.SCHRABIDIUM, ArmorItem.Type.HELMET, plainArmorProperties(ArmorItem.Type.HELMET, NtmArmorMaterials.DURABILITY_SCHRABIDIUM))
+            .addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 20, 2))
+            .addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20, 2))
+            .addEffect(new MobEffectInstance(MobEffects.JUMP, 20, 1))
+            .addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 20, 2)));
+    public static final DeferredItem<Item> SCHRABIDIUM_PLATE = ITEMS.register("schrabidium_plate", () -> new ArmorFSBItem(NtmArmorMaterials.SCHRABIDIUM, ArmorItem.Type.CHESTPLATE, plainArmorProperties(ArmorItem.Type.CHESTPLATE, NtmArmorMaterials.DURABILITY_SCHRABIDIUM)));
+    public static final DeferredItem<Item> SCHRABIDIUM_LEGS = ITEMS.register("schrabidium_legs", () -> new ArmorFSBItem(NtmArmorMaterials.SCHRABIDIUM, ArmorItem.Type.LEGGINGS, plainArmorProperties(ArmorItem.Type.LEGGINGS, NtmArmorMaterials.DURABILITY_SCHRABIDIUM)));
+    public static final DeferredItem<Item> SCHRABIDIUM_BOOTS = ITEMS.register("schrabidium_boots", () -> new ArmorFSBItem(NtmArmorMaterials.SCHRABIDIUM, ArmorItem.Type.BOOTS, plainArmorProperties(ArmorItem.Type.BOOTS, NtmArmorMaterials.DURABILITY_SCHRABIDIUM)));
+
+    /*
+     * DIE PAA-RUESTUNG HAT KEINEN HELM, und das ist kein Versehen: das Original setzt
+     * setNoHelmet(true), damit der Satzbonus schon mit Weste, Hose und Stiefeln zaehlt.
+     * Eile I fuer den Satz.
+     */
+    public static final DeferredItem<Item> PAA_PLATE = ITEMS.register("paa_plate", () -> new ArmorFSBItem(NtmArmorMaterials.PAA, ArmorItem.Type.CHESTPLATE, plainArmorProperties(ArmorItem.Type.CHESTPLATE, NtmArmorMaterials.DURABILITY_PAA_ARMOR))
+            .setNoHelmet(true)
+            .addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 20, 0)));
+    public static final DeferredItem<Item> PAA_LEGS = ITEMS.register("paa_legs", () -> new ArmorFSBItem(NtmArmorMaterials.PAA, ArmorItem.Type.LEGGINGS, plainArmorProperties(ArmorItem.Type.LEGGINGS, NtmArmorMaterials.DURABILITY_PAA_ARMOR)));
+    public static final DeferredItem<Item> PAA_BOOTS = ITEMS.register("paa_boots", () -> new ArmorFSBItem(NtmArmorMaterials.PAA, ArmorItem.Type.BOOTS, plainArmorProperties(ArmorItem.Type.BOOTS, NtmArmorMaterials.DURABILITY_PAA_ARMOR)));
 
     /*
      * DIE SCHUTZBRILLE. Kein Filtergewinde, sondern nur Glas vor den Augen: sie haelt Licht

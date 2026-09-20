@@ -9816,9 +9816,66 @@ nichts daran ist ein Tippfehler, den man glattziehen müsste.
 
 Legierung und Sternmetall haben im Original **keinen** Bauplan: die eine ist veraltet, die
 andere kommt aus Beute. Beide bleiben deshalb auch hier ohne — das ist der Stand des Originals.
+
+> **BERICHTIGUNG AUS RUNDE 213.** Für das Sternmetall stimmt das nicht. Es hat sogar **zwei**
+> Baupläne, je nach Einstellung. Mein Suchbefehl war auf zehn Zeilen gekürzt und hat die
+> Sternmetallzeilen gar nicht erst erreicht — derselbe Fehler wie in den Runden 207 und 209,
+> nur diesmal durch ein `head -10` statt durch eine falsche Schreibweise. Der Bauplan ist in
+> Runde 213 nachgereicht. Für die Legierung bleibt es richtig: sie hat keinen.
 Die übrigen sieben haben ihren, wortgetreu übernommen; Kobalt legt sich dabei Stück für Stück
 um die Stahlrüstung, was die Reihenfolge im Fortschritt festlegt.
 
 Damit sind von den 103 Namen aus Runde 210 noch **70** offen.
+
+Alle 39 Tore grün.
+
+
+## Runde 213 — Vier Garnituren mit je einem Zusatz, und die dritte Fehlmessung
+
+Die zweite Familie aus der 103er-Liste: fünfzehn Teile, die sich von den dreiunddreißig aus
+Runde 212 in genau einem Punkt unterscheiden — jede bringt etwas mit.
+
+| Garnitur | Zusatz |
+|---|---|
+| Asbest | ein Schirmbild (`overlay_asbestos`) |
+| Kombinationsstahl | Tempo II, Eile II, Stärke V für den Satz |
+| Schrabidium | Eile III, Stärke III, Sprungkraft II, Tempo III |
+| PAA | Eile I — **und kein Helm** |
+
+**Die PAA-Rüstung hat keinen Helm, und das ist Absicht.** Das Original setzt `setNoHelmet(true)`,
+damit der Satzbonus schon mit Weste, Hose und Stiefeln zählt. `ArmorFSBItem` kann das seit
+Runde 101; hier wird es zum ersten Mal benutzt. Nicht zu verwechseln mit `hazmat_paa_*`, dem
+Schutzanzug aus derselben Legierung — den hat der Port seit Runde 136.
+
+Das Schirmbild war das Einzige, was gefehlt hat: `ArmorFSBItem` kannte `addEffect` und
+`setNoHelmet`, aber keinen Vorsatz. Es implementiert jetzt `IHelmetOverlayItem` wie die Masken,
+mit einem `setOverlay` für die eine Rüstung, die es braucht.
+
+### Ein Gegenstand kam mit
+
+`asbestos_cloth` fehlte dem Port — die Asbestrüstung braucht ihn zum Bauen *und* zum
+Ausbessern. Gewebt wird er wie das Schutztuch in der Montagefabrik, ein Asbestbarren auf acht
+Faden (`ass.firecloth`).
+
+### Die dritte Fehlmessung in sieben Runden
+
+Runde 212 schrieb, Sternmetall habe im Original keinen Bauplan. Es hat zwei. Mein Suchbefehl
+endete auf `head -10` und hat bei Zeile 82 aufgehört — die Sternmetallzeilen stehen bei 165
+und 174.
+
+Das ist derselbe Fehler wie in Runde 207 (zu enges Muster) und Runde 209 (falsche
+Schreibweise), zum dritten Mal in sieben Runden, und jedes Mal in dieselbe Richtung: **eine
+Lücke wird für kleiner erklärt, als sie ist.** Die Lehre daraus steht schon in Runde 210 —
+sie war nur noch nicht auf meine eigenen Suchbefehle angewandt.
+
+### Die Aufstiegskette
+
+Das Original bietet zwei Wege an und stellt über `enableLBSMSimpleArmorRecipes` um: entweder
+jede Garnitur schlicht aus ihrem Barren, oder jede aus der vorigen. Der Port nimmt die Kette,
+weil sie der Standardfall ist und Runde 212 den Kobaltsatz schon so gebaut hat:
+
+**Stahl → Kobalt → Sternmetall → Schrabidium**
+
+Damit sind von den 103 Namen aus Runde 210 noch **55** offen.
 
 Alle 39 Tore grün.

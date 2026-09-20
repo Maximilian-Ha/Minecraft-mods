@@ -1168,6 +1168,14 @@ public class AssemblyMachineRecipes extends GenericRecipes<GenericRecipe> {
                         new ComparableStack(Items.STRING, 8)
                 ));
 
+        // Original "ass.firecloth": ein Asbestbarren in Faden eingewebt. Das Tuch ist die
+        // einzige Zutat der Asbestruestung und zugleich ihr Reparaturstueck.
+        this.register(new GenericRecipe("ass.firecloth").setup(50, 100).outputItems(new ItemStack(NtmItems.ASBESTOS_CLOTH.get(), 4))
+                .inputItems(
+                        new ComparableStack(NtmItems.INGOT_ASBESTOS.get(), 1),
+                        new ComparableStack(Items.STRING, 8)
+                ));
+
         // ---- Runde 139 ----
         // Original "ass.reformer".
         // ABWEICHUNGEN, wie in allen Runden davor: ANY_RESISTANTALLOY ist im Port derselbe

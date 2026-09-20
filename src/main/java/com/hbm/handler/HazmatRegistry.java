@@ -84,6 +84,19 @@ public class HazmatRegistry {
 
         /* Der Bleianzug der Liquidatoren. 2,4 heisst im Original 99,6 Prozent -- der beste
          * Strahlenschutz ausserhalb des HEV-Anzugs. */
+        /* Der Kombinationsstahl schirmt mit, ohne ein Schutzanzug zu sein: 95 Prozent.
+         * Die PAA-Ruestung teilt sich ihren Wert mit dem PAA-Schutzanzug -- 97 Prozent --,
+         * und zwar ohne Helm, weil sie keinen hat. */
+        double cmb = 1.3D;          // 95%
+        HazmatRegistry.registerHazmat(NtmItems.CMB_HELMET.get(), cmb * helmet);
+        HazmatRegistry.registerHazmat(NtmItems.CMB_PLATE.get(), cmb * chest);
+        HazmatRegistry.registerHazmat(NtmItems.CMB_LEGS.get(), cmb * legs);
+        HazmatRegistry.registerHazmat(NtmItems.CMB_BOOTS.get(), cmb * boots);
+
+        HazmatRegistry.registerHazmat(NtmItems.PAA_PLATE.get(), paa * chest);
+        HazmatRegistry.registerHazmat(NtmItems.PAA_LEGS.get(), paa * legs);
+        HazmatRegistry.registerHazmat(NtmItems.PAA_BOOTS.get(), paa * boots);
+
         double liquidator = 2.4D;   // 99,6%
         HazmatRegistry.registerHazmat(NtmItems.LIQUIDATOR_HELMET.get(), liquidator * helmet);
         HazmatRegistry.registerHazmat(NtmItems.LIQUIDATOR_PLATE.get(), liquidator * chest);

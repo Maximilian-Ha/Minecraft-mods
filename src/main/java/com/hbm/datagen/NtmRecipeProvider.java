@@ -3784,10 +3784,13 @@ public class NtmRecipeProvider extends RecipeProvider {
         hazmatBoots(recipeOutput, NtmItems.HAZMAT_BOOTS_GREY.get(), NtmItems.HAZMAT_CLOTH_GREY.get());
 
         /*
-         * DIE ACHT SCHLICHTEN GARNITUREN. Sieben davon haben im Original einen Bauplan,
-         * ALLOY und STARMETAL nicht -- der Legierungssatz ist dort als veraltet
-         * gekennzeichnet, der Sternmetallsatz kommt aus Beute. Beide bleiben darum auch hier
-         * ohne Bauplan; das ist der Stand des Originals, keine Luecke des Ports.
+         * DIE ACHT SCHLICHTEN GARNITUREN.
+         *
+         * BERICHTIGUNG ZU RUNDE 212: dort stand, ALLOY und STARMETAL haetten im Original
+         * keinen Bauplan. Fuer die Legierung stimmt das; fuer das Sternmetall NICHT -- es
+         * hat sogar zwei, je nach Einstellung. Mein Suchbefehl war damals auf zehn Zeilen
+         * gekuerzt und hat die Sternmetallzeilen gar nicht erst gesehen. Der Bauplan steht
+         * jetzt weiter unten bei der Aufstiegskette.
          */
         armorSet(recipeOutput, Ingredient.of(NtmItems.INGOT_STEEL.get()),
                 NtmItems.STEEL_HELMET.get(), NtmItems.STEEL_PLATE.get(), NtmItems.STEEL_LEGS.get(), NtmItems.STEEL_BOOTS.get());
@@ -3842,6 +3845,44 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .save(recipeOutput);
 
         armorPiece(recipeOutput, NtmItems.ZIRCONIUM_LEGS.get(), Ingredient.of(NtmItems.INGOT_ZIRCONIUM.get()), "EEE", "E E", "E E");
+
+        /*
+         * DIE AUFSTIEGSKETTE. Das Original bietet zwei Wege an und stellt ueber
+         * enableLBSMSimpleArmorRecipes um: entweder jede Garnitur schlicht aus ihrem Barren,
+         * oder jede aus der vorigen. Der Port nimmt die Kette -- sie ist der Standardfall,
+         * und Runde 212 hat den Kobaltsatz schon so gebaut (Kobalt um Stahl herum).
+         *
+         *   Stahl -> Kobalt -> Sternmetall -> Schrabidium
+         */
+        starmetalPiece(recipeOutput, NtmItems.STARMETAL_HELMET.get(), NtmItems.COBALT_HELMET.get(), "EEE", "ECE");
+        starmetalPiece(recipeOutput, NtmItems.STARMETAL_PLATE.get(), NtmItems.COBALT_PLATE.get(), "ECE", "EEE", "EEE");
+        starmetalPiece(recipeOutput, NtmItems.STARMETAL_LEGS.get(), NtmItems.COBALT_LEGS.get(), "EEE", "ECE", "E E");
+        starmetalPiece(recipeOutput, NtmItems.STARMETAL_BOOTS.get(), NtmItems.COBALT_BOOTS.get(), "E E", "ECE");
+
+        schrabPiece(recipeOutput, NtmItems.SCHRABIDIUM_HELMET.get(), NtmItems.STARMETAL_HELMET.get(), "EEE", "ESE", " P ");
+        schrabPiece(recipeOutput, NtmItems.SCHRABIDIUM_PLATE.get(), NtmItems.STARMETAL_PLATE.get(), "ESE", "EPE", "EEE");
+        schrabPiece(recipeOutput, NtmItems.SCHRABIDIUM_LEGS.get(), NtmItems.STARMETAL_LEGS.get(), "EEE", "ESE", "EPE");
+        schrabPiece(recipeOutput, NtmItems.SCHRABIDIUM_BOOTS.get(), NtmItems.STARMETAL_BOOTS.get(), "EPE", "ESE");
+
+        /* Der Kombinationsstahl geht schlicht aus dem Barren. */
+        armorSet(recipeOutput, Ingredient.of(NtmItems.INGOT_COMBINE_STEEL.get()),
+                NtmItems.CMB_HELMET.get(), NtmItems.CMB_PLATE.get(), NtmItems.CMB_LEGS.get(), NtmItems.CMB_BOOTS.get());
+
+        /* Asbest: der Helm braucht zusaetzlich eine Goldplatte als Stirnband. */
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.ASBESTOS_HELMET.get(), 1)
+                .pattern("EEE").pattern("EIE")
+                .define('E', NtmItems.ASBESTOS_CLOTH.get())
+                .define('I', NtmItems.PLATE_GOLD.get())
+                .unlockedBy("has_asbestos_cloth", has(NtmItems.ASBESTOS_CLOTH.get()))
+                .save(recipeOutput);
+        armorPiece(recipeOutput, NtmItems.ASBESTOS_PLATE.get(), Ingredient.of(NtmItems.ASBESTOS_CLOTH.get()), "E E", "EEE", "EEE");
+        armorPiece(recipeOutput, NtmItems.ASBESTOS_LEGS.get(), Ingredient.of(NtmItems.ASBESTOS_CLOTH.get()), "EEE", "E E", "E E");
+        armorPiece(recipeOutput, NtmItems.ASBESTOS_BOOTS.get(), Ingredient.of(NtmItems.ASBESTOS_CLOTH.get()), "E E", "E E");
+
+        /* Die PAA-Ruestung: Platten mit Neutronenspiegeln dazwischen, und kein Helm. */
+        paaPiece(recipeOutput, NtmItems.PAA_PLATE.get(), "E E", "NEN", "ENE");
+        paaPiece(recipeOutput, NtmItems.PAA_LEGS.get(), "EEE", "N N", "E E");
+        paaPiece(recipeOutput, NtmItems.PAA_BOOTS.get(), "E E", "N N");
 
         /*
          * DIE SCHUTZBRILLE. Vier Stahlplatten und zwei Glasscheiben, wortgetreu aus
@@ -4338,6 +4379,37 @@ public class NtmRecipeProvider extends RecipeProvider {
         for(String zeile : muster) bauer.pattern(zeile);
         bauer.define('E', zutat)
                 .unlockedBy("has_material", has(NtmItems.INGOT_STEEL.get()))
+                .save(recipeOutput);
+    }
+
+    /** Sternmetall: ein Barrenkranz um das entsprechende Kobaltstueck. */
+    private void starmetalPiece(RecipeOutput recipeOutput, Item ergebnis, Item kobalt, String... muster) {
+        ShapedRecipeBuilder bauer = ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ergebnis, 1);
+        for(String zeile : muster) bauer.pattern(zeile);
+        bauer.define('E', NtmItems.INGOT_STARMETAL.get())
+                .define('C', kobalt)
+                .unlockedBy("has_ingot_starmetal", has(NtmItems.INGOT_STARMETAL.get()))
+                .save(recipeOutput);
+    }
+
+    /** Schrabidium: Barren um das Sternmetallstueck, dazu eine geladene Kugel. */
+    private void schrabPiece(RecipeOutput recipeOutput, Item ergebnis, Item sternmetall, String... muster) {
+        ShapedRecipeBuilder bauer = ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ergebnis, 1);
+        for(String zeile : muster) bauer.pattern(zeile);
+        bauer.define('E', NtmItems.INGOT_SCHRABIDIUM.get())
+                .define('S', sternmetall)
+                .define('P', NtmItems.PELLET_CHARGED.get())
+                .unlockedBy("has_ingot_schrabidium", has(NtmItems.INGOT_SCHRABIDIUM.get()))
+                .save(recipeOutput);
+    }
+
+    /** Die PAA-Ruestung: Panzerplatten und Neutronenspiegel. */
+    private void paaPiece(RecipeOutput recipeOutput, Item ergebnis, String... muster) {
+        ShapedRecipeBuilder bauer = ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ergebnis, 1);
+        for(String zeile : muster) bauer.pattern(zeile);
+        bauer.define('E', NtmItems.PLATE_PAA.get())
+                .define('N', NtmItems.NEUTRON_REFLECTOR.get())
+                .unlockedBy("has_plate_paa", has(NtmItems.PLATE_PAA.get()))
                 .save(recipeOutput);
     }
 
