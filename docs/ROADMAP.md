@@ -10898,3 +10898,25 @@ schreiben: ein Tor, das man für den eigenen Text stummschaltet, schaut beim nä
 auch für einen echten Fehler weg.
 
 Alle 39 Tore grün.
+
+### Nachgemessen zu Runde 231: der Sockel ist noch unerreichbar
+
+Nach Runde 232 nachgesehen, und der Befund gehört hierher, weil er eine Lücke ist, die ich
+selbst aufgemacht habe: **das Ritual funktioniert, aber niemand kann den Altar bauen.**
+
+Der Sockel hat wie im Original weder Kreativreiter noch Werkbankrezept. Im Original setzt
+ihn die Welt an genau drei Stellen — und **keine** davon gibt es im Port:
+
+| Was ihn setzt | Im Port |
+|---|---|
+| `BlockKeyhole` (235 Zeilen) | fehlt — die Notiz in `XFactoryDrill` Z. 57 sagt es schon: „Diesen Block gibt es im Port nicht" |
+| `BlockRedBrickKeyhole` (161 Zeilen) | fehlt |
+| `LogicBlockConditions` | fehlt — gehört zu `wand_logic`, einem der vier Bauwerkzeuge aus Runde 227 |
+
+`tools/structure-gap.py` bestätigt es von der anderen Seite: `pedestal` steht in **keinem**
+der 79 Bauwerke, weil er dort nie direkt gesetzt wird, sondern immer durch eines dieser
+drei Stücke Laufzeitcode.
+
+Das Schlüsselloch ist damit die nächste Runde — es ist nicht bloß ein Platzierer, sondern
+ein eigenes Ritual (Kammer ausheben, Lava setzen, mit einem Zwanzigstel Wahrscheinlichkeit
+eine Beutekiste statt des Sockels) und hängt an den Beutetöpfen des Roten Zimmers.
