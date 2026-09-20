@@ -8,6 +8,7 @@ import com.hbm.blocks.machine.NTMAnvilBlock.Variant;
 import com.hbm.fluids.NtmFluidTypes;
 import com.hbm.items.CastPlateItem;
 import com.hbm.items.ItemEnums.CapType;
+import com.hbm.items.ItemEnums.SecretType;
 import com.hbm.items.machine.DriveItem.DriveType;
 import com.hbm.items.machine.PWRFuelItem.EnumPWRFuel;
 import com.hbm.items.machine.PileRodItem.EnumPileRod;
@@ -1786,6 +1787,13 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.CAP, this.getName(CapType.RAD), "S~Cola RAD Bottle Cap");
         this.add(NtmItems.CAP, this.getName(CapType.KORL), "Korl Bottle Cap");
         this.add(NtmItems.CAP, this.getName(CapType.FRITZ), "Fritz Cola Bottle Cap");
+        /* Die fuenf Geheimstuecke, wortgetreu aus en_US.lang des Originals. */
+        this.add(NtmItems.ITEM_SECRET, this.getName(SecretType.CANISTER), "Composition SB-26");
+        this.add(NtmItems.ITEM_SECRET, this.getName(SecretType.CONTROLLER), "Proprietary Control Unit");
+        this.add(NtmItems.ITEM_SECRET, this.getName(SecretType.SELENIUM_STEEL), "Selenium Steel");
+        this.add(NtmItems.ITEM_SECRET, this.getName(SecretType.ABERRATOR), "Aberrator Part");
+        this.add(NtmItems.ITEM_SECRET, this.getName(SecretType.FOLLY), "Folly Part");
+
         this.add(NtmItems.RING_PULL, "Ring Pull");
         this.add(NtmItems.CAN_KEY, "Winding Key");
 

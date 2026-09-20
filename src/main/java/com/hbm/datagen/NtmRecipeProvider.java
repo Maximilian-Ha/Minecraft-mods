@@ -12,6 +12,7 @@ import com.hbm.items.BoltItem;
 import com.hbm.items.CastPlateItem;
 import com.hbm.items.ItemEnums.CasingType;
 import com.hbm.items.PartGenericItem;
+import com.hbm.items.ItemEnums.SecretType;
 import com.hbm.items.WireDenseItem;
 import com.hbm.items.ItemEnums.LegendaryType;
 import com.hbm.items.NtmItems;
@@ -5198,13 +5199,14 @@ public class NtmRecipeProvider extends RecipeProvider {
      * und die beiden Panzerruestungswaffen. ALLE ACHT gibt es laengst -- die
      * Panzerruestungswaffen seit Runde 196, Quadro und Raketenwerfer seit 197, Stinger seit
      * 199, LAG seit 201, Tau seit 203, Fat Man seit 204. Sechs von ihnen hatten ihren Bauplan
-     * schon hier stehen; die beiden Panzerruestungswaffen bekommen ihn in dieser Runde.
+     * schon hier stehen; die beiden Panzerruestungswaffen bekamen ihn in Runde 229.
      * Damit ist die Gruppe "es gibt die Waffe nicht" leer bis auf gun_b92 und dessen Zelle
      * gun_b92_ammo.
      *
      * GEMESSEN IN RUNDE 229: WeaponRecipes baut 51 Mal eine Waffe, 50 verschiedene (der
      * Ladungswerfer steht zweimal da, einmal mit Leder und einmal mit Gummi). Dieser Erzeuger
-     * deckt 46 davon ab; fehlend sind genau vier, und jede hat ihren Grund unten stehen.
+     * deckte damals 46 davon ab, seit Runde 230 sind es 47 -- der Heilige Drache ist
+     * dazugekommen. Fehlend sind noch drei, und jede hat ihren Grund unten stehen.
      *
      * Teslakanone, Ladungswerfer und Feuerloescher standen hier ebenfalls einmal unter den
      * fehlenden -- die Kanone bis Runde 188, der Werfer bis Runde 192, der Loescher bis
@@ -5215,12 +5217,9 @@ public class NtmRecipeProvider extends RecipeProvider {
      * als schlichtes ShapedRecipeBuilder-Rezept. (Bis Runde 229 stand hier, er stehe gar
      * nicht in dieser Methode, sondern oben bei seiner Munition -- das war nicht wahr.)
      *
-     * ES GIBT DIE ZUTAT NICHT:
-     * - gun_double_barrel_sacred_dragon braucht item_secret in der Ausfuehrung
-     *   SELENIUM_STEEL. Die ganze Familie der Geheimstuecke fehlt im Port; die Waffe selbst
-     *   gibt es seit Runde 84. NACHGEMESSEN IN RUNDE 229: item_secret gibt es weiterhin
-     *   nicht, und es blockiert ausserdem den dungeon_spawner, der ein Geheimstueck in den
-     *   Skeletthalter legt.
+     * ES GIBT DIE ZUTAT NICHT -- seit Runde 230 nur noch EINMAL:
+     * - gun_double_barrel_sacred_dragon stand hier bis Runde 229, weil item_secret fehlte.
+     *   Runde 230 hat die Geheimstuecke angelegt; sein Bauplan steht jetzt weiter unten.
      * - gun_chemthrower braucht einen Schraubenschluessel, und den gibt es im Port nicht:
      *   ToolType.WRENCH steht in der Aufzaehlung, ein Gegenstand dazu fehlt. NACHGEMESSEN IN
      *   RUNDE 191: das Gummirohr, das hier bis dahin als zweiter Grund stand, gibt es sehr
@@ -5642,6 +5641,21 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .define('M', mechanism(Mats.MAT_SATURN))
                 .unlockedBy("has_scope", has(NtmItems.WEAPON_MOD_SPECIAL.get()))
                 .save(recipeOutput);
+
+        /*
+         * Der Heilige Drache, Runde 230. Ein formloses Rezept: Doppelflinte plus ein Stueck
+         * Selenstahl, und aus der Flinte wird die Waffe mit dem Namen. Im Original steht es
+         * unmittelbar hinter dem Lasergewehr.
+         *
+         * ER WAR DIE LETZTE BEHAUPTUNG DIESER ART. Der Bauplan fehlte seit Runde 118 mit der
+         * Begruendung, es gebe item_secret nicht -- die Waffe selbst gibt es seit Runde 84.
+         * Mit den Geheimstuecken dieser Runde ist die Begruendung fort.
+         */
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.COMBAT, NtmItems.GUN_DOUBLE_BARREL_SACRED_DRAGON.get())
+                .requires(NtmItems.GUN_DOUBLE_BARREL.get())
+                .requires(DataComponentIngredient.of(false, NtmDataComponents.META, SecretType.SELENIUM_STEEL.ordinal(), NtmItems.ITEM_SECRET.get()))
+                .unlockedBy("has_selenium_steel", has(NtmItems.ITEM_SECRET.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("gun_double_barrel_sacred_dragon"));
 
         /*
          * Die beiden Waffen der Panzerruestung, Runde 229. Sie stehen im Original ganz am

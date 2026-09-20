@@ -10745,3 +10745,52 @@ Anzug, keine Handfeuerwaffen. Motor, Schaltkreis und Dickdraht, mehr nicht — w
 dem Original, wo sie ebenfalls abgesetzt am Ende des Waffenblocks stehen.
 
 Alle 39 Tore grün.
+
+## Runde 230 — Die Geheimstücke, und was sie entsperren
+
+Fünf Sachen ohne Bauplan und ohne Kreativreiter: **Composition SB-26**, **Proprietary
+Control Unit**, **Selenium Steel**, **Aberrator Part**, **Folly Part**. Im Original tragen
+sie `setCreativeTab(null)` und stehen auf der NEI-Ausschlussliste — man soll nicht sehen,
+wozu sie gut sind, bevor man eines in der Hand hat. Sie liegen in Bauwerken, in Beutetöpfen,
+im Sockel des Skeletthalters.
+
+Der Port braucht dafür nur eine Aufzählung und eine Zeile: `EnumMultiItem` mit
+`multiName`/`multiTexture` ist genau das Gegenstück zu `ItemEnumMulti(…, true, true)`, und
+die Modelle entstehen von selbst über `ICustomItemModelRegister`. Die fünf Texturen kommen
+aus der CE-Abspaltung und heißen dort schon so, wie der Port sie sucht:
+`item_secret.<wert>.png`.
+
+### Zwei Wirkungen, eine Ursache
+
+Runde 229 hatte beim Nachmessen gesehen, dass `item_secret` an **zwei** Stellen als
+Begründung steht:
+
+| Was blockiert war | Seit wann |
+|---|---|
+| Bauplan des **Heiligen Drachen** (`gun_double_barrel_sacred_dragon`) | Runde 118 — die Waffe selbst gibt es seit Runde 84 |
+| der **`dungeon_spawner`** (legt ein Aberrator-Teil in den Skeletthalter) | Runde 227 als fehlender Bauwerksblock ausgewiesen |
+
+Der Bauplan des Heiligen Drachen steht jetzt da — ein formloses Rezept, Doppelflinte plus
+ein Stück Selenstahl. Damit deckt der Waffenbauplan-Erzeuger **47 von 50** ab; fehlend sind
+noch `gun_b92`, `gun_b92_ammo` (Waffe fehlt) und `gun_chemthrower` (Schraubenschlüssel
+fehlt).
+
+### Der Spawner bleibt trotzdem stehen — gemessen, nicht geraten
+
+Er ist damit **nicht** frei. Seine letzte Phase legt in vier von fünf Fällen eine
+**Tontafel** (`clay_tablet`, Metadaten 1) auf den Skeletthalter, und die Tontafel ist
+selbst blockiert: ihr einziger Zweck ist eine Oberfläche, die ein zufälliges
+**Sockelrezept** zeigt — `PedestalRecipes` gibt es im Port nicht. Dasselbe System fehlt
+schon dem Topas-Flammenwerfer (Notiz in `XFactoryFlamer`).
+
+Damit ist die Kette sauber vermessen:
+
+```
+dungeon_spawner  ->  UndeadSoldier   (Runde 228, da)
+                 ->  item_secret     (Runde 230, da)
+                 ->  clay_tablet     ->  PedestalRecipes   (fehlt)
+```
+
+Die Sockelrezepte sind also der nächste echte Knoten, nicht der Spawner.
+
+Alle 39 Tore grün.

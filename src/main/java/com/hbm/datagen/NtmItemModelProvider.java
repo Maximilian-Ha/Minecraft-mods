@@ -1168,6 +1168,7 @@ public class NtmItemModelProvider extends ItemModelProvider {
         // CANNED_CONSERVE uses ICustomItemModelRegister
 
         // CAP uses ICustomItemModelRegister
+        // ITEM_SECRET nutzt ICustomItemModelRegister (EnumMultiItem), fuenf Modelle
         this.basicItem(NtmItems.RING_PULL.get());
         this.basicItem(NtmItems.CAN_KEY.get());
 

@@ -28,4 +28,17 @@ public class ItemEnums {
     public enum U238M2Type {
         U238M2, ELEMENTS, ARSENIC, VAULT
     }
+
+    /**
+     * Die Geheimstuecke. Fuenf Sachen, die es nicht zu bauen gibt -- sie liegen in den
+     * Bauwerken, im Sockel des Skeletthalters, in Beutetoepfen. Im Original tragen sie
+     * setCreativeTab(null) und stehen auf der NEI-Ausschlussliste: man soll nicht sehen,
+     * wozu sie gut sind, bevor man eines in der Hand hat.
+     *
+     * Die Reihenfolge ist die des Originals und darf nicht wandern -- sie ist der
+     * Metadatenwert, auf den Rezepte und der Dungeon-Spawner zeigen.
+     */
+    public enum SecretType {
+        CANISTER, CONTROLLER, SELENIUM_STEEL, ABERRATOR, FOLLY
+    }
 }

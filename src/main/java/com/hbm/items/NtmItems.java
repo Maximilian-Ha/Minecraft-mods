@@ -15,6 +15,7 @@ import com.hbm.items.ItemEnums.LegendaryType;
 import com.hbm.items.ItemEnums.CapType;
 import com.hbm.items.ItemEnums.U238M2Type;
 import com.hbm.items.ItemEnums.CasingType;
+import com.hbm.items.ItemEnums.SecretType;
 import com.hbm.items.armor.ArmorFSBItem;
 import com.hbm.items.armor.ArmorHatItem;
 import com.hbm.items.food.PillItem;
@@ -1312,6 +1313,16 @@ public class NtmItems {
     /* Die Legendenteile. Ohne sie waere die Brustplatte der Remnant-Panzerruestung nicht
      * baubar, und ohne die Brustplatte taeten beide Panzerruestungswaffen nichts. */
     public static final DeferredItem<Item> PARTS_LEGENDARY = ITEMS.register("parts_legendary", () -> new EnumMultiItem(new Item.Properties(), LegendaryType.class, true, true));
+    /**
+     * DIE GEHEIMSTUECKE, Runde 230. Fuenf Sachen ohne Bauplan und ohne Kreativreiter -- so
+     * steht es im Original, das ihnen setCreativeTab(null) gibt und sie aus NEI nimmt.
+     *
+     * SIE WAREN ZWEIMAL DIE URSACHE: ohne sie gibt es weder den Bauplan des Heiligen Drachen
+     * (er braucht SELENIUM_STEEL) noch den dungeon_spawner (er legt ein ABERRATOR-Stueck in
+     * den Skeletthalter). Beide Luecken standen als Behauptung im Port, bis Runde 229 sie
+     * auf eine gemeinsame Ursache zurueckfuehrte.
+     */
+    public static final DeferredItem<Item> ITEM_SECRET = ITEMS.register("item_secret", () -> new EnumMultiItem(new Item.Properties(), SecretType.class, true, true));
     public static final DeferredItem<Item> RING_PULL = ITEMS.register("ring_pull", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> CAN_KEY = ITEMS.register("can_key", () -> new Item(new Item.Properties()));
 

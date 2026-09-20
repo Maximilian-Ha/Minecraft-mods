@@ -107,6 +107,7 @@ VERBORGENE_ITEMS = {
     'EUPHEMIUM_LEGS':      'wie EUPHEMIUM_HELMET (Original: setCreativeTab(null))',
     'EUPHEMIUM_BOOTS':     'wie EUPHEMIUM_HELMET (Original: setCreativeTab(null))',
     'WATCH':               'Bauteil der Euphemium-Brustplatte, selbst an der Werkbank zu bauen (Original: kein setCreativeTab)',
+    'ITEM_SECRET':         'die fuenf Geheimstuecke stehen in keinem Reiter und sind nicht zu bauen -- sie liegen in Bauwerken und Beutetoepfen (Original: setCreativeTab(null) und excludeNEI)',
 }
 
 fehlend_b = sorted(f for f in bloecke if f not in im_reiter_b and f not in VERBORGENE_BLOECKE)
