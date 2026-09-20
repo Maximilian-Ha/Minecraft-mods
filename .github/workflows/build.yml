@@ -187,6 +187,11 @@ jobs:
           chmod +x ./tools/enum-check.sh
           ./tools/enum-check.sh
 
+      - name: Check entity synched data
+        run: |
+          chmod +x ./tools/synched-check.sh
+          ./tools/synched-check.sh
+
       - name: Check per-meta item textures
         run: |
           chmod +x ./tools/metatex-check.sh

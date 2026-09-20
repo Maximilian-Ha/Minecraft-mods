@@ -4,6 +4,7 @@ import com.hbm.entity.NtmEntityTypes;
 import com.hbm.registry.NtmDamageTypes;
 
 import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -51,6 +52,13 @@ public class TauShot extends ProjectileNT {
         this.setOwner(schuetze);
         this.setPos(schuetze.getX(), schuetze.getEyeY() - 0.1, schuetze.getZ());
     }
+
+    /**
+     * Der Bolzen hat nichts zu uebertragen. Die Methode muss trotzdem stehen: Entity
+     * erklaert sie abstrakt, und weder Projectile noch ProjectileNT fuellen sie aus.
+     */
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) { }
 
     @Override
     protected void onHitEntity(EntityHitResult ehr) {
