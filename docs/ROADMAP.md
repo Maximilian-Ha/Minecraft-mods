@@ -11544,3 +11544,33 @@ Klasse, die niemand anmeldet.
 `ModelBullet` bringt dieselbe Falle mit wie die Krabbe in Runde 236: ein `mirror = true`
 **hinter** dem `addBox`. 1.7.10 liest das Feld zum Zeitpunkt des Aufrufs, also ist es
 wirkungslos, und der Kasten wird nicht gespiegelt.
+
+### Runde 246: Ballistit — und die Granate hatte die falsche Zahl
+
+Ballistit fehlte dem Port. Runde 240 hatte nachgemessen, dass es **kein Blocker** ist: die
+240-mm-Granaten und die DGK-Patrone ließen sich über Cordit bauen, und Cordit entsteht in
+der Chemiefabrik. Das stimmt -- und trotzdem fehlte mehr als ein Gegenstand.
+
+**Das Original legt jede 240-mm-Granate dreimal an** (`WeaponRecipes:223` bis `:234`):
+
+| Treibladung | Ausbeute |
+|---|---|
+| Schießpulver | 4 |
+| Ballistit | 4 |
+| Cordit | **6** |
+
+Der Port hatte davon einen Zweig: **Cordit mit vier**. Also die Zutat des besseren Pulvers
+und der Lohn des schlechteren -- wer den Weg über die Chemiefabrik ging, bekam nichts
+dafür. Jetzt stehen alle drei Zweige, jeder mit seiner Zahl.
+
+Die DGK-Patrone hat im Original zwei Zweige (`:250`, `:251`), beide zu einem Stück: dort
+lohnt das bessere Pulver tatsächlich nicht, und das bleibt so.
+
+Ballistit selbst kommt aus `PowderRecipes:28` -- Schießpulver, Kaliumnitrat, Zucker,
+formlos, drei Stück -- und trägt in der Gefahrenliste `EXPLOSIVE 1F` gegen die `2F` des
+Cordits.
+
+**Was diese Runde zeigt:** „kein Blocker" und „nicht nötig" sind zwei verschiedene Dinge.
+Die Messung von Runde 240 war richtig und hat trotzdem eine falsche Zahl stehen lassen,
+weil sie nur gefragt hat, ob sich etwas *bauen* lässt -- nicht, ob es sich so baut wie im
+Original.

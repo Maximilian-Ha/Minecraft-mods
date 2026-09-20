@@ -1205,6 +1205,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.PELLET_CHARGED, "Ionized Particles");
         this.add(NtmItems.SOLID_FUEL, "Solid Fuel");
         this.add(NtmItems.ROCKET_FUEL, "Solid Fuel (Rocket Propellant)");
+        this.add(NtmItems.BALLISTITE, "Ballistite");
         this.add(NtmItems.CORDITE, "Cordite");
         this.add(NtmItems.CHOCOLATE, "Ithis-Brand Radium Chocolate");
         this.add(NtmItems.BALL_DYNAMITE, "Dynamite");

@@ -380,6 +380,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.PELLET_CHARGED.get());
                         output.accept(NtmItems.SOLID_FUEL.get());
                         output.accept(NtmItems.ROCKET_FUEL.get());
+                        output.accept(NtmItems.BALLISTITE.get());
                         output.accept(NtmItems.CORDITE.get());
                         output.accept(NtmItems.CHOCOLATE.get());
                         output.accept(NtmItems.BALL_DYNAMITE.get());

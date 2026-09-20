@@ -176,6 +176,8 @@ public class HazardRegistry {
         HazardSystem.register(item(STICK_DYNAMITE), makeData(EXPLOSIVE, 1F));
         HazardSystem.register(item(STICK_TNT), makeData(EXPLOSIVE, 1.5F));
         HazardSystem.register(item(STICK_SEMTEX), makeData(EXPLOSIVE, 2.5F));
+        /* Ballistit ist halb so heftig wie Cordit -- 1F gegen 2F, beides aus dem Original. */
+        HazardSystem.register(item(BALLISTITE), makeData(EXPLOSIVE, 1F));
         HazardSystem.register(item(CORDITE), makeData(EXPLOSIVE, 2F));
 
         HazardSystem.register(item(CELL_TRITIUM), makeData(RADIATION, 0.001F));

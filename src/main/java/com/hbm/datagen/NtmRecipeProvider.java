@@ -34,6 +34,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import java.util.List;
 import java.util.Locale;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
@@ -244,6 +245,7 @@ public class NtmRecipeProvider extends RecipeProvider {
         this.casingAndStoneAmmo(recipeOutput);
         this.explosiveStickRecipes(recipeOutput);
         this.defuserGoldRecipe(recipeOutput);
+        this.ballistiteRecipe(recipeOutput);
 
         /* Die 240-mm-Granaten. Vier Ausfuehrungen; die W9 wird nicht gebaut, sie ist Fundstueck. */
         shell(recipeOutput, GunFactory.Ammo240Shell.STOCK, Blocks.TNT, NtmItems.SHELL_STEEL.get());
@@ -251,16 +253,28 @@ public class NtmRecipeProvider extends RecipeProvider {
         shell(recipeOutput, GunFactory.Ammo240Shell.APFSDS_T, NtmItems.INGOT_TUNGSTEN.get(), NtmItems.INGOT_TUNGSTEN.get());
         shell(recipeOutput, GunFactory.Ammo240Shell.APFSDS_DU, NtmItems.INGOT_U238.get(), NtmItems.INGOT_U238.get());
 
-        /* Die 20-mm-Patrone des Nahbereichsgeschuetzes: Blei, Treibladung, Messing. */
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.AMMO_DGK.get(), 1)
-                .pattern("LLL")
-                .pattern("GGG")
-                .pattern("CCC")
-                .define('L', NtmItems.PLATE_LEAD.get())
-                .define('G', NtmItems.CORDITE.get())
-                .define('C', NtmItems.INGOT_COPPER.get())
-                .unlockedBy("has_cordite", has(NtmItems.CORDITE.get()))
-                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("ammo_dgk"));
+        /*
+         * Die 20-mm-Patrone des Nahbereichsgeschuetzes: Blei, Treibladung, Messing.
+         *
+         * ZWEI TREIBLADUNGEN, ein Stueck je Bau. Das Original legt sie zweimal an
+         * (WeaponRecipes Z. 250 und 251), mit Ballistit und mit Cordit, und beide Male mit
+         * derselben Ausbeute -- anders als bei den 240ern lohnt das bessere Pulver hier
+         * nicht mehr. Der Port hatte bis Runde 246 nur den Corditzweig.
+         */
+        for(ItemLike treibladung : List.of(NtmItems.BALLISTITE.get(), NtmItems.CORDITE.get())) {
+
+            String kennung = BuiltInRegistries.ITEM.getKey(treibladung.asItem()).getPath();
+
+            ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.AMMO_DGK.get(), 1)
+                    .pattern("LLL")
+                    .pattern("GGG")
+                    .pattern("CCC")
+                    .define('L', NtmItems.PLATE_LEAD.get())
+                    .define('G', treibladung)
+                    .define('C', NtmItems.INGOT_COPPER.get())
+                    .unlockedBy("has_" + kennung, has(treibladung))
+                    .save(recipeOutput, NuclearTechMod.withDefaultNamespace("ammo_dgk_" + kennung));
+        }
 
         /*
          * Die drei Tanks des Feuerloeschers. Der Wassertank ist der Anfang; Schaum und Sand
@@ -3723,18 +3737,35 @@ public class NtmRecipeProvider extends RecipeProvider {
      * Eine 240-mm-Granate. Alle vier bauen sich gleich: oben der Sprengsatz oder der Wuchtkoerper,
      * in der Mitte die Treibladung um die Huelse, unten der Messingboden.
      */
+    /**
+     * Die 240-mm-Granate. Das Original kennt DREI Treibladungen je Granate, und bis Runde 246
+     * hatte der Port eine -- mit der falschen Zahl dazu.
+     *
+     * WeaponRecipes Z. 223 bis 234 legt jede Granate dreimal an: mit Schiesspulver zu vier
+     * Stueck, mit Ballistit zu vier, mit Cordit zu SECHS. Der Port hatte nur den
+     * Corditzweig, aber mit der Ausbeute des schwachen -- die Zutat des besseren Pulvers
+     * und der Lohn des schlechteren. Jetzt stehen alle drei, jeder mit seiner Zahl.
+     */
     private void shell(RecipeOutput recipeOutput, GunFactory.Ammo240Shell type, ItemLike head, ItemLike body) {
+        this.shellMitTreibladung(recipeOutput, type, head, body, Items.GUNPOWDER, 4, "gunpowder");
+        this.shellMitTreibladung(recipeOutput, type, head, body, NtmItems.BALLISTITE.get(), 4, "ballistite");
+        this.shellMitTreibladung(recipeOutput, type, head, body, NtmItems.CORDITE.get(), 6, "cordite");
+    }
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MetaHelper.newStack(NtmItems.AMMO_SHELL.get(), 4, type.ordinal()))
+    private void shellMitTreibladung(RecipeOutput recipeOutput, GunFactory.Ammo240Shell type, ItemLike head, ItemLike body,
+            ItemLike treibladung, int ausbeute, String kennung) {
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MetaHelper.newStack(NtmItems.AMMO_SHELL.get(), ausbeute, type.ordinal()))
                 .pattern(" T ")
                 .pattern("GHG")
                 .pattern("CCC")
                 .define('T', head)
-                .define('G', NtmItems.CORDITE.get())
+                .define('G', treibladung)
                 .define('H', body)
                 .define('C', NtmItems.INGOT_COPPER.get())
-                .unlockedBy("has_cordite", has(NtmItems.CORDITE.get()))
-                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("ammo_shell_" + type.name().toLowerCase(Locale.US)));
+                .unlockedBy("has_" + kennung, has(treibladung))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace(
+                        "ammo_shell_" + type.name().toLowerCase(Locale.US) + "_" + kennung));
     }
 
     private void weaponModShapeless(RecipeOutput recipeOutput, GunFactory.ModGeneric mod, ItemLike... ingredients) {
@@ -5294,6 +5325,25 @@ public class NtmRecipeProvider extends RecipeProvider {
      * nicht still: der Serverlauf der CI zaehlt ERROR-Zeilen, und ein Rezept mit
      * unbekanntem Tag erzeugt eine.
      */
+    /**
+     * Ballistit, Runde 246. Aus PowderRecipes Z. 28: Schiesspulver, Kaliumnitrat und Zucker,
+     * formlos, drei Stueck.
+     *
+     * ES IST DAS VORPRODUKT DES CORDITS und zugleich dessen schwaechere Alternative. Der
+     * Port hatte es nie -- die Behauptung, es sei ein Blocker, war falsch (die Munition
+     * liess sich ueber Cordit bauen), aber es fehlte eben doch: die ganze billige Haelfte
+     * des Treibladungszweigs.
+     */
+    private void ballistiteRecipe(RecipeOutput recipeOutput) {
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, NtmItems.BALLISTITE.get(), 3)
+                .requires(Items.GUNPOWDER)
+                .requires(NtmItems.NITER.get())
+                .requires(Items.SUGAR)
+                .unlockedBy("has_niter", has(NtmItems.NITER.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("ballistite"));
+    }
+
     private void defuserGoldRecipe(RecipeOutput recipeOutput) {
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.DEFUSER_GOLD.get(), 1)
