@@ -9286,3 +9286,49 @@ Alle 38 Tore grün.
 **Damit fehlen von den Waffenfabriken noch drei:** Spulenkanone und Tau-Kanone
 (`XFactoryAccelerator`, Begründung noch ungeprüft) und der Fatman (`XFactoryCatapult`) — der
 braucht die gesamte Mininuke-Munitionsfamilie und ist eine eigene Runde.
+
+---
+
+## Runde 202 — Die Spulenkanone, und Munition, die es längst gab
+
+`XFactoryAccelerator` sagte, Tau-Kanone und Spulenkanone brauchten „Munition, die der Port nicht
+hat (Tau-Ladungen und Spulengeschosse aus Wolfram und Ferrouran)".
+
+**Nachgemessen falsch, und zwar gründlich:** `NtmItems.AMMO_STANDARD` ist ein `EnumMultiItem`
+über `GunFactory.Ammo`, und dort stehen `TAU_URANIUM`, `COIL_TUNGSTEN` und `COIL_FERROURANIUM`
+seit jeher — samt Eintrag in `ORDER`, also **mit Textur und Platz im Kreativreiter**. Drei
+Munitionssorten, die man in die Hand nehmen kann und die nichts verschießt.
+
+Gefehlt haben nur die `BulletConfig`s, die sie an ein Verhalten binden. **Dasselbe gilt für die
+ganze `NUKE_*`-Familie des Fatman** — auch die steht in der Aufzählung.
+
+### Das Geschoss räumt sich den Weg frei
+
+Die beiden Spulengeschosse sind die einzigen des Ports, die **Blöcke zerbrechen, durch die sie
+fliegen**. Alle halbe Blocklänge wird geprüft; Wolfram räumt alles bis Härte 1,25 weg,
+Ferrouran bis 2,5. Sie sind dabei spektral — sie halten an Blöcken gar nicht erst an.
+
+Der Wortlaut des Originals prüft `isAir() && hardness < threshold`, was wie ein Widerspruch
+aussieht (Luft hat keine Härte). Er ist trotzdem übernommen: ohne eine Messung, die etwas
+anderes belegt, wird ein Original nicht „verbessert".
+
+### Ein Mündungsfeuer, das nicht hingehört
+
+`ORCHESTRA_COILGUN` teilen sich Spulenkanone und NI4NI. Im Original bekommt **nur die NI4NI**
+ein Mündungsfeuer — die Spulenkanone schießt mit Magnetfeldern. Diese Wache fehlte im Port,
+weil bisher nur die NI4NI portiert war und die Frage sich nicht stellte. Sie ist
+wiederhergestellt, bevor die Spulenkanone dazukam.
+
+### Abweichungen
+
+Die Spulenkanone hat **im Original keinen Bauplan und keine Beutetabelle** — sie steht auf
+`WeaponQuality.SPECIAL` und ist ein Fundstück; im Port damit vorerst nur im Kreativreiter. Der
+Renderer des Originals bindet am Anfang die Textur der Leuchtpistole und überschreibt sie drei
+Zeilen später — ein Rest, der nichts tut, und nicht übernommen. Der Funkenpartikel heißt in 1.21
+`ParticleTypes.FIREWORK`, im Original `EnumParticleTypes.FIREWORKS_SPARK`.
+
+**Offen bleibt die Tau-Kanone:** sie hat ein Aufladewerk — der Zweitdruck lädt auf, der
+Erstdruck feuert, und ein aufgeladener Schuss kommt aus einem zweiten, eigenen Magazin. Das ist
+eine eigene Runde.
+
+Alle 38 Tore grün.

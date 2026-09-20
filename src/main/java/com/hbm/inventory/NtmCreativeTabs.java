@@ -1859,6 +1859,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.GUN_MINIGUN_LACUNAE);
                         output.accept(NtmItems.GUN_AUTOSHOTGUN_HERETIC);
                         output.accept(NtmItems.GUN_LAG);
+                        output.accept(NtmItems.GUN_COILGUN);
                         output.accept(NtmItems.GUN_MARESLEG);
                         output.accept(NtmItems.GUN_MARESLEG_AKIMBO);
                         output.accept(NtmItems.GUN_SPAS12);

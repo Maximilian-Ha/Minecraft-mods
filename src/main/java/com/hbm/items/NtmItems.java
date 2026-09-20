@@ -1456,6 +1456,7 @@ public class NtmItems {
     public static DeferredItem<Item> GUN_MINIGUN_LACUNAE;
     public static DeferredItem<Item> GUN_AUTOSHOTGUN_HERETIC;
     public static DeferredItem<Item> GUN_LAG;
+    public static DeferredItem<Item> GUN_COILGUN;
 
     public static final DeferredItem<Item> NO9 = ITEMS.register("no9", () -> new ArmorNo9(ArmorMaterials.IRON));
 

@@ -349,6 +349,7 @@ public class ResourceManager {
     public static final ResourceLocation MINIGUN_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/minigun.png");
     /* Die LAG traegt ihre eigene Textur, aber das Modell des Mike Hawk -- so steht es im Original. */
     public static final ResourceLocation LAG_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/lag.png");
+    public static final ResourceLocation COILGUN_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/coilgun.png");
     public static final ResourceLocation MINIGUN_LACUNAE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/minigun_lacunae.png");
     public static final ResourceLocation MINIGUN_DUAL_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/minigun_dual.png");
     public static final ResourceLocation BOLTER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/bolter.png");
@@ -749,6 +750,7 @@ public class ResourceManager {
     public static IModelCustom liberator;
     public static IModelCustom panzerschreck;
     public static IModelCustom mike_hawk;
+    public static IModelCustom coilgun;
     public static IModelCustom stinger;
     public static IModelCustom boltgun;
     public static IModelCustom quadro;
@@ -1060,6 +1062,7 @@ public class ResourceManager {
         liberator = new HFRWavefrontObject("models/obj/weapons/liberator.obj").asVBO();
         panzerschreck = new HFRWavefrontObject("models/obj/weapons/panzerschreck.obj").asVBO();
         mike_hawk = new HFRWavefrontObject("models/obj/weapons/mike_hawk.obj").asVBO();
+        coilgun = new HFRWavefrontObject("models/obj/weapons/coilgun.obj").asVBO();
         stinger = new HFRWavefrontObject("models/obj/weapons/stinger.obj").asVBO();
         boltgun = new HFRWavefrontObject("models/obj/weapons/boltgun.obj").asVBO();
         quadro = new HFRWavefrontObject("models/obj/weapons/quadro.obj").asVBO();

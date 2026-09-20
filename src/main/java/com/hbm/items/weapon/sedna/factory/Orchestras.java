@@ -85,6 +85,12 @@ public class Orchestras {
      * im ganzen Bausatz: ein Muendungsblitz beim Schuss, ein Ton beim Nachladen. Keine Huelse
      * -- ein Lichtbogen wirft nichts aus.
      */
+    /**
+     * Spulenkanone und NI4NI teilen sich dieses Orchester. NUR DIE NI4NI BEKOMMT EIN
+     * MUENDUNGSFEUER -- die Spulenkanone schiesst mit Magnetfeldern, da brennt nichts. Diese
+     * Wache steht so im Original; bis Runde 202 fehlte sie hier, weil nur die NI4NI portiert
+     * war und die Frage sich nicht stellte.
+     */
     public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_COILGUN = (stack, ctx) -> {
         LivingEntity entity = ctx.entity;
         Level level = entity.level;
@@ -92,7 +98,7 @@ public class Orchestras {
         GunAnimation type = GunBaseNTItem.getLastAnim(stack, ctx.configIndex);
         int timer = GunBaseNTItem.getAnimTimer(stack, ctx.configIndex);
 
-        if(type == GunAnimation.CYCLE) {
+        if(type == GunAnimation.CYCLE && stack.getItem() == NtmItems.GUN_N_I_4_N_I.get()) {
             if(timer == 0) PacketDistributor.sendToPlayersNear(serverLevel, null, entity.getX(), entity.getY(), entity.getZ(), 100, new MuzzleFlashPacket(entity.getId()));
         }
         if(type == GunAnimation.RELOAD) {
