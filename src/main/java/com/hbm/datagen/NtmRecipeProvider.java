@@ -3051,26 +3051,31 @@ public class NtmRecipeProvider extends RecipeProvider {
         addNuggetDeCrafting(recipeOutput, NtmItems.NUGGET_AU198.get(), NtmItems.INGOT_AU198.get());
         addNuggetDeCrafting(recipeOutput, NtmItems.NUGGET_RA226.get(), NtmItems.INGOT_RA226.get());
 
+        addSwordRecipe(recipeOutput, NtmItems.STEEL_SWORD.get(), NtmItems.INGOT_STEEL.get(), "steel_sword");
         addPickaxeRecipe(recipeOutput, NtmItems.STEEL_PICKAXE.get(), NtmItems.INGOT_STEEL.get(), "steel_pickaxe");
         addAxeRecipe(recipeOutput, NtmItems.STEEL_AXE.get(), NtmItems.INGOT_STEEL.get(), "steel_axe");
         addShovelRecipe(recipeOutput, NtmItems.STEEL_SHOVEL.get(), NtmItems.INGOT_STEEL.get(), "steel_shovel");
         addHoeRecipe(recipeOutput, NtmItems.STEEL_HOE.get(), NtmItems.INGOT_STEEL.get(), "steel_hoe");
 
+        addSwordRecipe(recipeOutput, NtmItems.TITANIUM_SWORD.get(), NtmItems.INGOT_TITANIUM.get(), "titanium_sword");
         addPickaxeRecipe(recipeOutput, NtmItems.TITANIUM_PICKAXE.get(), NtmItems.INGOT_TITANIUM.get(), "titanium_pickaxe");
         addAxeRecipe(recipeOutput, NtmItems.TITANIUM_AXE.get(), NtmItems.INGOT_TITANIUM.get(), "titanium_axe");
         addShovelRecipe(recipeOutput, NtmItems.TITANIUM_SHOVEL.get(), NtmItems.INGOT_TITANIUM.get(), "titanium_shovel");
         addHoeRecipe(recipeOutput, NtmItems.TITANIUM_HOE.get(), NtmItems.INGOT_TITANIUM.get(), "titanium_hoe");
 
+        addSwordRecipe(recipeOutput, NtmItems.DESH_SWORD.get(), NtmItems.INGOT_DESH.get(), "desh_sword");
         addPickaxeRecipe(recipeOutput, NtmItems.DESH_PICKAXE.get(), NtmItems.INGOT_DESH.get(), "desh_pickaxe");
         addAxeRecipe(recipeOutput, NtmItems.DESH_AXE.get(), NtmItems.INGOT_DESH.get(), "desh_axe");
         addShovelRecipe(recipeOutput, NtmItems.DESH_SHOVEL.get(), NtmItems.INGOT_DESH.get(), "desh_shovel");
         addHoeRecipe(recipeOutput, NtmItems.DESH_HOE.get(), NtmItems.INGOT_DESH.get(), "desh_hoe");
 
+        addSwordRecipe(recipeOutput, NtmItems.COBALT_SWORD.get(), NtmItems.INGOT_COBALT.get(), "cobalt_sword");
         addPickaxeRecipe(recipeOutput, NtmItems.COBALT_PICKAXE.get(), NtmItems.INGOT_COBALT.get(), "cobalt_pickaxe");
         addAxeRecipe(recipeOutput, NtmItems.COBALT_AXE.get(), NtmItems.INGOT_COBALT.get(), "cobalt_axe");
         addShovelRecipe(recipeOutput, NtmItems.COBALT_SHOVEL.get(), NtmItems.INGOT_COBALT.get(), "cobalt_shovel");
         addHoeRecipe(recipeOutput, NtmItems.COBALT_HOE.get(), NtmItems.INGOT_COBALT.get(), "cobalt_hoe");
 
+        addSwordRecipe(recipeOutput, NtmItems.CMB_SWORD.get(), NtmItems.INGOT_COMBINE_STEEL.get(), "cmb_sword");
         addPickaxeRecipe(recipeOutput, NtmItems.CMB_PICKAXE.get(), NtmItems.INGOT_COMBINE_STEEL.get(), "cmb_pickaxe");
         addAxeRecipe(recipeOutput, NtmItems.CMB_AXE.get(), NtmItems.INGOT_COMBINE_STEEL.get(), "cmb_axe");
         addShovelRecipe(recipeOutput, NtmItems.CMB_SHOVEL.get(), NtmItems.INGOT_COMBINE_STEEL.get(), "cmb_shovel");
@@ -3079,11 +3084,13 @@ public class NtmRecipeProvider extends RecipeProvider {
         addPickaxeRecipe(recipeOutput, NtmItems.BISMUTH_PICKAXE.get(), NtmItems.INGOT_BISMUTH.get(), "bismuth_pickaxe");
         addAxeRecipe(recipeOutput, NtmItems.BISMUTH_AXE.get(), NtmItems.INGOT_BISMUTH.get(), "bismuth_axe");
 
+        addSwordRecipe(recipeOutput, NtmItems.STARMETAL_SWORD.get(), NtmItems.INGOT_STARMETAL.get(), "starmetal_sword");
         addPickaxeRecipe(recipeOutput, NtmItems.STARMETAL_PICKAXE.get(), NtmItems.INGOT_STARMETAL.get(), "starmetal_pickaxe");
         addAxeRecipe(recipeOutput, NtmItems.STARMETAL_AXE.get(), NtmItems.INGOT_STARMETAL.get(), "starmetal_axe");
         addShovelRecipe(recipeOutput, NtmItems.STARMETAL_SHOVEL.get(), NtmItems.INGOT_STARMETAL.get(), "starmetal_shovel");
         addHoeRecipe(recipeOutput, NtmItems.STARMETAL_HOE.get(), NtmItems.INGOT_STARMETAL.get(), "starmetal_hoe");
 
+        addSwordRecipe(recipeOutput, NtmItems.SCHRABIDIUM_SWORD.get(), NtmItems.INGOT_SCHRABIDIUM.get(), "schrabidium_sword");
         addPickaxeRecipe(recipeOutput, NtmItems.SCHRABIDIUM_PICKAXE.get(), NtmItems.INGOT_SCHRABIDIUM.get(), "schrabidium_pickaxe");
         addAxeRecipe(recipeOutput, NtmItems.SCHRABIDIUM_AXE.get(), NtmItems.INGOT_SCHRABIDIUM.get(), "schrabidium_axe");
         addShovelRecipe(recipeOutput, NtmItems.SCHRABIDIUM_SHOVEL.get(), NtmItems.INGOT_SCHRABIDIUM.get(), "schrabidium_shovel");
@@ -3237,6 +3244,27 @@ public class NtmRecipeProvider extends RecipeProvider {
         SimpleCookingRecipeBuilder.smelting(Ingredient.of(input), RecipeCategory.MISC, result, experience, 200)
                 .unlockedBy("has_" + inputName, has(input))
                 .save(recipeOutput, recipeId);
+    }
+
+    /**
+     * Das Schwert, Runde 243: zwei Barren ueber einem Stock, das Muster jedes Vanillaschwerts.
+     *
+     * DAS ORIGINAL HAT ZWEI ZWEIGE, und der Port nimmt denselben wie bei den vier anderen
+     * Werkzeugen. ToolRecipes stellt sie unter GeneralConfig.enableLBSMSimpleToolRecipes:
+     * ist die Einstellung an, gibt es schlichte Werkzeugrezepte aus Barren und Stoecken;
+     * ist sie aus, baut man Sternmetall aus einem Kobaltwerkzeug und Schrabidium aus einem
+     * Deshwerkzeug. Der Port kennt die Einstellung nicht und hat sich in frueheren Runden
+     * fuer den schlichten Zweig entschieden -- die Schwerter folgen dem.
+     */
+    private void addSwordRecipe(RecipeOutput recipeOutput, Item result, Item ingredient, String baseName) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, result, 1)
+                .pattern("X")
+                .pattern("X")
+                .pattern("#")
+                .define('X', ingredient)
+                .define('#', Items.STICK)
+                .unlockedBy("has_" + BuiltInRegistries.ITEM.getKey(ingredient).getPath(), has(ingredient))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", baseName));
     }
 
     private void addPickaxeRecipe(RecipeOutput recipeOutput, Item result, Item ingredient, String baseName) {
@@ -5256,7 +5284,15 @@ public class NtmRecipeProvider extends RecipeProvider {
      * GPG / PRP / GPG mit Schiesspulver, Goldplatten und einer Schallplatte in der Mitte.
      *
      * DAS R IST EINE SCHALLPLATTE. Das Original schreibt dort den Erzwoerterbuch-Eintrag
-     * "record", der in 1.7.10 jede Musikscheibe umfasst; auf 1.21 ist das ItemTags.MUSIC_DISCS.
+     * "record", der in 1.7.10 jede Musikscheibe umfasst; auf 1.21 ist das der Datentag
+     * minecraft:music_discs.
+     *
+     * ES GIBT DAFUER KEIN FELD IN ItemTags, und das hat Runde 242 einen CI-Durchgang
+     * gekostet: ItemTags.MUSIC_DISCS uebersetzt nicht. Vanilla fuehrt den Tag nur als
+     * Datendatei, nicht im Quelltext -- deshalb hier derselbe Weg wie beim RBMK-Moderator
+     * weiter oben, ueber ItemTags.create. Sollte der Tag nicht existieren, bleibt das
+     * nicht still: der Serverlauf der CI zaehlt ERROR-Zeilen, und ein Rezept mit
+     * unbekanntem Tag erzeugt eine.
      */
     private void defuserGoldRecipe(RecipeOutput recipeOutput) {
 
@@ -5264,7 +5300,7 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .pattern("GPG").pattern("PRP").pattern("GPG")
                 .define('G', Items.GUNPOWDER)
                 .define('P', NtmItems.PLATE_GOLD.get())
-                .define('R', ItemTags.MUSIC_DISCS)
+                .define('R', ItemTags.create(ResourceLocation.fromNamespaceAndPath("minecraft", "music_discs")))
                 .unlockedBy("has_plate_gold", has(NtmItems.PLATE_GOLD.get()))
                 .save(recipeOutput, NuclearTechMod.withDefaultNamespace("defuser_gold"));
     }
