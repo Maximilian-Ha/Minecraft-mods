@@ -1199,6 +1199,9 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.CHOCOLATE, "Ithis-Brand Radium Chocolate");
         this.add(NtmItems.BALL_DYNAMITE, "Dynamite");
         this.add(NtmItems.BALL_TNT, "TNT");
+        this.add(NtmItems.SAFETY_FUSE, "Safety Fuse");
+        this.add(NtmItems.STICK_TNT, "Stick of TNT");
+        this.add(NtmItems.STICK_SEMTEX, "Stick of Semtex");
         this.add(NtmItems.BALL_TATB, "TATB");
         this.add(NtmItems.PELLET_CLUSTER, "Explosive Pellets");
         this.add(NtmItems.MAGNETRON, "Magnetron");

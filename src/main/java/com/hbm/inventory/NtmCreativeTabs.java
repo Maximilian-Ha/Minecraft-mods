@@ -385,6 +385,9 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.BALL_DYNAMITE.get());
                         output.accept(NtmItems.BALL_TNT.get());
                         output.accept(NtmItems.BALL_TATB.get());
+                        /* Runde 239: die Zuendschnur steht im Original im Bauteilreiter,
+                         * die beiden Stangen im Waffenreiter. */
+                        output.accept(NtmItems.SAFETY_FUSE.get());
                         output.accept(NtmItems.PELLET_CLUSTER.get());
                         output.accept(NtmItems.PELLET_BUCKSHOT.get());
                         output.accept(NtmItems.MAGNETRON.get());
@@ -1917,6 +1920,8 @@ public class NtmCreativeTabs {
                         addGrenadeCombinations(output, NtmItems.GRENADE_UNIVERSAL.get());
                         /* Die Dynamitstange, Runde 234 -- im Original ebenfalls im Waffenreiter. */
                         output.accept(NtmItems.STICK_DYNAMITE.get());
+                        output.accept(NtmItems.STICK_TNT.get());
+                        output.accept(NtmItems.STICK_SEMTEX.get());
                         addMetaItems(output, NtmItems.AMMO_CONTAINER.get());
 
                     }).build());

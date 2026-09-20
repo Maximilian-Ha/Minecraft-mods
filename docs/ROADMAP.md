@@ -11180,3 +11180,36 @@ in der Höhe. Die Krabbenrenderer des Ports sind aber keine `MobRenderer`, sonde
 `EntityRenderer` -- die Vorwärtsdrehung findet also nie statt, und die Umkehrung drehte das
 Modell erst auf den Kopf. Beide Zeilen sind jetzt weg; übrig bleibt die Drehung nach der
 Blickrichtung des Rumpfes, und beim Taintkrebs seine eigene Vierteldrehung.
+
+### Runde 239: die Sicherheitszündschnur entblockt den Sprengstoffzweig
+
+Ein einziger fehlender Gegenstand hat einen ganzen Zweig festgehalten. `safety_fuse` war im
+Port nicht da -- und damit war **kein einziges** Rezept des Sprengstoffzweigs da: nicht die
+fünf Granatenzünder, nicht der Annäherungszünder, nicht die Dynamitstange, nicht der
+Dynamit-, TNT- oder Semtexblock. Die Zutaten lagen alle schon herum, nur die Schnur nicht.
+
+Neu: `safety_fuse`, `stick_tnt`, `stick_semtex`.
+
+Dreizehn Rezepte nachgereicht (Original: `WeaponRecipes` Z. 264-296 und `CraftingManager`
+Z. 749):
+
+* Zündschnur, achtmal aus Faden und Schwarzpulver.
+* Granatenzünder S3, S7, S15, Aufschlag und Luftsprengpunkt, je vier Stück.
+* Annäherungszünder (ein Aufsatz, kein Zünder), einer je Bau.
+* Dynamit-, TNT- und Semtexstange, je vier Stück.
+* Dynamit-, TNT- und Semtexblock: acht Stangen um eine Zündschnur.
+
+**Zwei Zünder, nicht einer:** die Dynamitstange wird mit der Zündschnur gebaut, die TNT- und
+die Semtexstange mit der Sprengschnur (`det_cord`). Das steht so im Original und ist keine
+Nachlässigkeit -- die Blöcke daraus nehmen dann wieder alle drei die Zündschnur.
+
+Dazu die fehlenden Sprengstoff-Gefahren (`HazardRegistry` des Originals, Z. 166-174):
+Dynamitkugel 2, Dynamitstange 1, TNT-Stange 1,5, Semtexstange 2,5, Cordit 2.
+
+Offen aus dieser Runde:
+
+* **Ballistit fehlt.** Im Original nimmt der Aufschlagzünder rauchloses Pulver aus dem
+  Erzverzeichnis (`AnySmokeless` = Ballistit oder Cordit); im Port bleibt davon das Cordit.
+* **Der Entschärfer-Rüstungsaufsatz fehlt.** Im Original lässt er beim Entschärfen eines
+  Creepers eine Zündschnur fallen (`ItemModDefuser`); der Port hat den Entschärfer nur als
+  Werkzeug.

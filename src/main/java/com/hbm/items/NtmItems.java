@@ -568,6 +568,16 @@ public class NtmItems {
     public static final DeferredItem<Item> BALL_DYNAMITE = ITEMS.register("ball_dynamite", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> BALL_TNT = ITEMS.register("ball_tnt", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> BALL_TATB = ITEMS.register("ball_tatb", () -> new Item(new Item.Properties()));
+    /**
+     * DIE SICHERHEITSZUENDSCHNUR, Runde 239. Der kleinste Gegenstand mit der groessten
+     * Wirkung: ohne sie gibt es im Original weder Granatenzuender noch Dynamit-, TNT- oder
+     * Semtexblock. Im Port fehlte sie -- und damit fehlte jedes dieser Rezepte.
+     */
+    public static final DeferredItem<Item> SAFETY_FUSE = ITEMS.register("safety_fuse", () -> new Item(new Item.Properties()));
+    /** Die TNT-Stange. Wie die Dynamitstange, nur mit Sprengschnur statt Zuendschnur gebaut. */
+    public static final DeferredItem<Item> STICK_TNT = ITEMS.register("stick_tnt", () -> new Item(new Item.Properties()));
+    /** Die Semtexstange. Sie ist die staerkste der drei. */
+    public static final DeferredItem<Item> STICK_SEMTEX = ITEMS.register("stick_semtex", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> PELLET_CLUSTER = ITEMS.register("pellet_cluster", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> MAGNETRON = ITEMS.register("magnetron", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> PHOTO_PANEL = ITEMS.register("photo_panel", () -> new Item(new Item.Properties()));

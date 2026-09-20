@@ -167,6 +167,17 @@ public class HazardRegistry {
         HazardSystem.register(Items.PUMPKIN_PIE, makeData(EXPLOSIVE, 1F));
         HazardSystem.register(Blocks.TNT, makeData(EXPLOSIVE, 4F));
 
+        /*
+         * Die Sprengstoffe, Runde 239. Das Original zaehlt sie im Original an derselben
+         * Stelle auf (HazardRegistry, Z. 166-174). Ballistit fehlt im Port -- deshalb steht
+         * hier nur das Cordit.
+         */
+        HazardSystem.register(item(BALL_DYNAMITE), makeData(EXPLOSIVE, 2F));
+        HazardSystem.register(item(STICK_DYNAMITE), makeData(EXPLOSIVE, 1F));
+        HazardSystem.register(item(STICK_TNT), makeData(EXPLOSIVE, 1.5F));
+        HazardSystem.register(item(STICK_SEMTEX), makeData(EXPLOSIVE, 2.5F));
+        HazardSystem.register(item(CORDITE), makeData(EXPLOSIVE, 2F));
+
         HazardSystem.register(item(CELL_TRITIUM), makeData(RADIATION, 0.001F));
         HazardSystem.register(item(CELL_SAS3), makeData().addEntry(RADIATION, sas3).addEntry(BLINDING, 60F));
         HazardSystem.register(item(CELL_BALEFIRE), makeData(RADIATION, 50F));

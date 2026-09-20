@@ -15,6 +15,8 @@ import com.hbm.items.PartGenericItem;
 import com.hbm.items.ItemEnums.SecretType;
 import com.hbm.items.WireDenseItem;
 import com.hbm.items.ItemEnums.LegendaryType;
+import com.hbm.items.weapon.grenade.GrenadeExtraItem.GrenadeExtra;
+import com.hbm.items.weapon.grenade.GrenadeFuzeItem.GrenadeFuze;
 import com.hbm.items.NtmItems;
 import com.hbm.items.weapon.sedna.factory.GunFactory;
 import com.hbm.items.machine.BatteryPackItem;
@@ -240,6 +242,7 @@ public class NtmRecipeProvider extends RecipeProvider {
         this.specialWeaponMods(recipeOutput);
         this.gunRecipes(recipeOutput);
         this.casingAndStoneAmmo(recipeOutput);
+        this.explosiveStickRecipes(recipeOutput);
 
         /* Die 240-mm-Granaten. Vier Ausfuehrungen; die W9 wird nicht gebaut, sie ist Fundstueck. */
         shell(recipeOutput, GunFactory.Ammo240Shell.STOCK, Blocks.TNT, NtmItems.SHELL_STEEL.get());
@@ -5232,6 +5235,124 @@ public class NtmRecipeProvider extends RecipeProvider {
      * Aufsatz liesse sich bauen und anbringen und taete nichts. Alle vierzehn sind jetzt
      * angemeldet und haben hier ihre Bauplaene.
      */
+    /**
+     * DER SPRENGSTOFFZWEIG, Runde 239. Alle diese Rezepte stehen im Original in
+     * WeaponRecipes (Z. 264-296) und in CraftingManager (Z. 749); im Port hat bis jetzt
+     * kein einziges davon gefehlt -- sie waren gar nicht da. Der Grund war ein einziger
+     * fehlender Gegenstand: die Sicherheitszuendschnur.
+     *
+     * ZWEI ZUENDER, NICHT EINER: die Dynamitstange wird mit der Zuendschnur gebaut, die
+     * TNT- und die Semtexstange mit der Sprengschnur (det_cord). Das steht so im Original
+     * und ist keine Nachlaessigkeit -- die Bloecke daraus nehmen dann wieder alle drei die
+     * Zuendschnur als Mittelstueck.
+     *
+     * DER AUFSCHLAGZUENDER braucht im Original rauchloses Pulver aus dem Erzverzeichnis
+     * (AnySmokeless = Ballistit oder Cordit). Ballistit gibt es im Port nicht, also bleibt
+     * das Cordit.
+     */
+    private void explosiveStickRecipes(RecipeOutput recipeOutput) {
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.SAFETY_FUSE.get(), 8)
+                .pattern("SSS").pattern("SGS").pattern("SSS")
+                .define('S', Items.STRING)
+                .define('G', Items.GUNPOWDER)
+                .unlockedBy("has_gunpowder", has(Items.GUNPOWDER))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("safety_fuse"));
+
+        /* Die fuenf Granatenzuender. Alle vier Stueck je Bau. */
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MetaHelper.newStack(NtmItems.GRENADE_FUZE.get(), 4, GrenadeFuze.S3))
+                .pattern("S").pattern("F")
+                .define('S', bolt(BoltItem.Type.STEEL))
+                .define('F', NtmItems.SAFETY_FUSE.get())
+                .unlockedBy("has_safety_fuse", has(NtmItems.SAFETY_FUSE.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("grenade_fuze_s3"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MetaHelper.newStack(NtmItems.GRENADE_FUZE.get(), 4, GrenadeFuze.S7))
+                .pattern("S").pattern("F").pattern("F")
+                .define('S', bolt(BoltItem.Type.STEEL))
+                .define('F', NtmItems.SAFETY_FUSE.get())
+                .unlockedBy("has_safety_fuse", has(NtmItems.SAFETY_FUSE.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("grenade_fuze_s7"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MetaHelper.newStack(NtmItems.GRENADE_FUZE.get(), 4, GrenadeFuze.S15))
+                .pattern(" S ").pattern(" F ").pattern("FFF")
+                .define('S', bolt(BoltItem.Type.STEEL))
+                .define('F', NtmItems.SAFETY_FUSE.get())
+                .unlockedBy("has_safety_fuse", has(NtmItems.SAFETY_FUSE.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("grenade_fuze_s15"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MetaHelper.newStack(NtmItems.GRENADE_FUZE.get(), 4, GrenadeFuze.IMPACT))
+                .pattern("C").pattern("S").pattern("F")
+                .define('C', NtmItems.CORDITE.get())
+                .define('S', bolt(BoltItem.Type.STEEL))
+                .define('F', NtmItems.SAFETY_FUSE.get())
+                .unlockedBy("has_safety_fuse", has(NtmItems.SAFETY_FUSE.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("grenade_fuze_impact"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MetaHelper.newStack(NtmItems.GRENADE_FUZE.get(), 4, GrenadeFuze.AIRBURST))
+                .pattern("C").pattern("S").pattern("F")
+                .define('C', NtmItems.CIRCUIT_VACUUM_TUBE.get())
+                .define('S', bolt(BoltItem.Type.STEEL))
+                .define('F', NtmItems.SAFETY_FUSE.get())
+                .unlockedBy("has_safety_fuse", has(NtmItems.SAFETY_FUSE.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("grenade_fuze_airburst"));
+
+        /* Der Annaeherungszuender ist ein Aufsatz, kein Zuender -- und nur einer je Bau. */
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MetaHelper.newStack(NtmItems.GRENADE_EXTRA.get(), 1, GrenadeExtra.PROXY_FUZE))
+                .pattern("C").pattern("F")
+                .define('C', NtmItems.CIRCUIT_MICROCHIP.get())
+                .define('F', NtmItems.SAFETY_FUSE.get())
+                .unlockedBy("has_safety_fuse", has(NtmItems.SAFETY_FUSE.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("grenade_extra_proxy_fuze"));
+
+        /* Die drei Stangen. Vier Stueck je Bau, aus zwei Ladungen und vier Blatt Papier. */
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.STICK_DYNAMITE.get(), 4)
+                .pattern(" S ").pattern("PDP").pattern("PDP")
+                .define('S', NtmItems.SAFETY_FUSE.get())
+                .define('P', Items.PAPER)
+                .define('D', NtmItems.BALL_DYNAMITE.get())
+                .unlockedBy("has_ball_dynamite", has(NtmItems.BALL_DYNAMITE.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("stick_dynamite"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.STICK_TNT.get(), 4)
+                .pattern(" S ").pattern("PDP").pattern("PDP")
+                .define('S', NtmBlocks.DET_CORD.get())
+                .define('P', Items.PAPER)
+                .define('D', NtmItems.BALL_TNT.get())
+                .unlockedBy("has_ball_tnt", has(NtmItems.BALL_TNT.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("stick_tnt"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.STICK_SEMTEX.get(), 4)
+                .pattern(" S ").pattern("PDP").pattern("PDP")
+                .define('S', NtmBlocks.DET_CORD.get())
+                .define('P', Items.PAPER)
+                .define('D', NtmItems.INGOT_SEMTEX.get())
+                .unlockedBy("has_ingot_semtex", has(NtmItems.INGOT_SEMTEX.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("stick_semtex"));
+
+        /* Und die drei Bloecke: acht Stangen um eine Zuendschnur herum. */
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.DYNAMITE.get(), 1)
+                .pattern("DDD").pattern("DSD").pattern("DDD")
+                .define('D', NtmItems.STICK_DYNAMITE.get())
+                .define('S', NtmItems.SAFETY_FUSE.get())
+                .unlockedBy("has_stick_dynamite", has(NtmItems.STICK_DYNAMITE.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("dynamite"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.TNT.get(), 1)
+                .pattern("DDD").pattern("DSD").pattern("DDD")
+                .define('D', NtmItems.STICK_TNT.get())
+                .define('S', NtmItems.SAFETY_FUSE.get())
+                .unlockedBy("has_stick_tnt", has(NtmItems.STICK_TNT.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("tnt"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.SEMTEX.get(), 1)
+                .pattern("DDD").pattern("DSD").pattern("DDD")
+                .define('D', NtmItems.STICK_SEMTEX.get())
+                .define('S', NtmItems.SAFETY_FUSE.get())
+                .unlockedBy("has_stick_semtex", has(NtmItems.STICK_SEMTEX.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("semtex"));
+    }
+
     private void gunRecipes(RecipeOutput recipeOutput) {
 
         /* Pfefferbuechse: der Einstieg, ohne ein einziges Waffenbauteil. */
