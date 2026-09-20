@@ -2426,6 +2426,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.METEOR_POLISHED, "Polished Meteor Block");
         this.add(NtmBlocks.METEOR_BRICK, "Meteor Bricks");
         this.add(NtmBlocks.METEOR_BRICK_CHISELED, "Chiseled Meteor Bricks");
+        this.add(NtmBlocks.METEOR_BRICK_MOSSY, "Mossy Meteor Bricks");
+        this.add(NtmBlocks.METEOR_BRICK_CRACKED, "Cracked Meteor Bricks");
         this.add(NtmBlocks.METEOR_PILLAR, "Meteor Pillar");
         this.add(NtmBlocks.METEOR_BATTERY, "Starmetal Static Electricity Generator");
 

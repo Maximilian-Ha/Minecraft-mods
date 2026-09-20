@@ -674,6 +674,15 @@ public class NtmBlocks {
     public static final DeferredBlock<Block> METEOR_POLISHED = registerBlastInfoBlock("meteor_polished", () -> new Block(BlockBehaviour.Properties.of().strength(15.0F, 360.0F).mapColor(MapColor.STONE)));
     public static final DeferredBlock<Block> METEOR_BRICK = registerBlastInfoBlock("meteor_brick", () -> new Block(BlockBehaviour.Properties.of().strength(15.0F, 360.0F).mapColor(MapColor.STONE)));
     public static final DeferredBlock<Block> METEOR_BRICK_CHISELED = registerBlastInfoBlock("meteor_brick_chiseled", () -> new Block(BlockBehaviour.Properties.of().strength(15.0F, 360.0F).mapColor(MapColor.STONE)));
+    /*
+     * Runde 250: die beiden VERWITTERTEN ZIEGEL. Runde 91 hat sie uebersehen, weil sie im
+     * Kreativreiter neben dem glatten Ziegel kaum auffallen -- gebraucht werden sie aber an
+     * jeder Wand des Meteoritenverlieses: dessen Blockwaehler ersetzt jeden gesetzten
+     * meteor_brick zu drei Zehnteln durch den bemoosten und zu drei Zehnteln durch den
+     * rissigen. Ohne sie waere das ganze Verlies gleichfoermig glatt.
+     */
+    public static final DeferredBlock<Block> METEOR_BRICK_MOSSY = registerBlastInfoBlock("meteor_brick_mossy", () -> new Block(BlockBehaviour.Properties.of().strength(15.0F, 360.0F).mapColor(MapColor.STONE)));
+    public static final DeferredBlock<Block> METEOR_BRICK_CRACKED = registerBlastInfoBlock("meteor_brick_cracked", () -> new Block(BlockBehaviour.Properties.of().strength(15.0F, 360.0F).mapColor(MapColor.STONE)));
     public static final DeferredBlock<RotatedPillarBlock> METEOR_PILLAR = registerBlastInfoBlock("meteor_pillar", () -> new RotatedPillarBlock(BlockBehaviour.Properties.of().strength(15.0F, 360.0F).mapColor(MapColor.STONE)));
     /* Der Statikgenerator steht immer aufrecht; er ist keine drehbare Saeule, nur oben anders. */
     public static final DeferredBlock<Block> METEOR_BATTERY = registerBlastInfoBlock("meteor_battery", () -> new Block(BlockBehaviour.Properties.of().strength(15.0F, 360.0F).mapColor(MapColor.STONE)));

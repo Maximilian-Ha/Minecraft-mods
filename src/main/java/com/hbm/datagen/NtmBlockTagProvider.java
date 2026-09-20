@@ -321,6 +321,8 @@ public class NtmBlockTagProvider extends BlockTagsProvider {
                         NtmBlocks.METEOR_POLISHED.get(),
                         NtmBlocks.METEOR_BRICK.get(),
                         NtmBlocks.METEOR_BRICK_CHISELED.get(),
+                        NtmBlocks.METEOR_BRICK_MOSSY.get(),
+                        NtmBlocks.METEOR_BRICK_CRACKED.get(),
                         NtmBlocks.METEOR_PILLAR.get(),
                         NtmBlocks.METEOR_BATTERY.get(),
                         NtmBlocks.TILE_LAB.get(),

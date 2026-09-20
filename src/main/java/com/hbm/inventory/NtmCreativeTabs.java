@@ -998,6 +998,8 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.METEOR_POLISHED);
                         output.accept(NtmBlocks.METEOR_BRICK);
                         output.accept(NtmBlocks.METEOR_BRICK_CHISELED);
+                        output.accept(NtmBlocks.METEOR_BRICK_MOSSY);
+                        output.accept(NtmBlocks.METEOR_BRICK_CRACKED);
                         output.accept(NtmBlocks.METEOR_PILLAR);
                         output.accept(NtmBlocks.METEOR_BATTERY);
 

@@ -351,6 +351,8 @@ public class ShredderRecipes extends SerializableRecipe {
         registerIfAbsent(new ItemStack(NtmBlocks.METEOR_POLISHED.get()), new ItemStack(NtmItems.POWDER_METEORITE.get(), 1));
         registerIfAbsent(new ItemStack(NtmBlocks.METEOR_BRICK.get()), new ItemStack(NtmItems.POWDER_METEORITE.get(), 1));
         registerIfAbsent(new ItemStack(NtmBlocks.METEOR_BRICK_CHISELED.get()), new ItemStack(NtmItems.POWDER_METEORITE.get(), 1));
+        registerIfAbsent(new ItemStack(NtmBlocks.METEOR_BRICK_MOSSY.get()), new ItemStack(NtmItems.POWDER_METEORITE.get(), 1));
+        registerIfAbsent(new ItemStack(NtmBlocks.METEOR_BRICK_CRACKED.get()), new ItemStack(NtmItems.POWDER_METEORITE.get(), 1));
         registerIfAbsent(new ItemStack(NtmBlocks.METEOR_PILLAR.get()), new ItemStack(NtmItems.POWDER_METEORITE.get(), 1));
 
         // Die Stahlbauteile: die Menge folgt dem Bauaufwand, nicht der Groesse.

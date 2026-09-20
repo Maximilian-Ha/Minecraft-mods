@@ -286,6 +286,8 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.simpleCubeAllBlock(NtmBlocks.METEOR_POLISHED);
         this.simpleCubeAllBlock(NtmBlocks.METEOR_BRICK);
         this.simpleCubeAllBlock(NtmBlocks.METEOR_BRICK_CHISELED);
+        this.simpleCubeAllBlock(NtmBlocks.METEOR_BRICK_MOSSY);
+        this.simpleCubeAllBlock(NtmBlocks.METEOR_BRICK_CRACKED);
         this.logBlock(NtmBlocks.METEOR_PILLAR.get());
         this.blockItem(NtmBlocks.METEOR_PILLAR);
         /* Der Statikgenerator: oben die Sternenmetallspule, ringsum und unten die Wand des Bruters. */
