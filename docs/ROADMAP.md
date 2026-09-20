@@ -10602,3 +10602,49 @@ Dazu kamen unterwegs acht Gegenstände und ein Block, die als Zutat gebraucht wu
 neue Grundklassen bzw. Schnittstellen, eine Schadensart und ein Tonereignis.
 
 Alle 39 Tore grün.
+
+## Runde 227 — Das Messwerkzeug hört auf zu lügen, und der nächste Bereich vermessen
+
+Mit der geschlossenen Rüstungsliste meldete `tools/port-gap.py` im Klassenvergleich weiter
+**73 fehlende Rüstungsklassen** — während der Registriernamen-Vergleich zwei Zeilen tiefer
+**null fehlende Namen** zeigte.
+
+Beide Zahlen waren richtig gerechnet. Die erste war trotzdem unbrauchbar: der Port fasst
+Klassen zusammen (eine `ArmorAJRItem` für AJR *und* AJRO, eine `ArmorFSBItem` für
+dreiunddreißig schlichte Garnituren), und der Klassenvergleich sagt selbst im Kopf, dass er
+nur eine obere Schranke ist. Eine Zahl, die Arbeit behauptet, die es nicht gibt, ist
+schlimmer als keine Zahl — dieselbe Regel, nach der in Runde 210 schon einmal das Werkzeug
+selbst berichtigt wurde.
+
+Die Rüstungszeile ist deshalb aus dem Klassenvergleich heraus. Gemessen wird sie ab jetzt
+ausschließlich über Registriernamen. Die Einzelliste `--list armor` bleibt, sie ist zum
+Nachschlagen weiter nützlich.
+
+### Der nächste Bereich, vermessen statt geschätzt
+
+`tools/structure-gap.py` zeigt die Bauwerke in besserem Zustand als erwartet: von **185**
+Blocknamen, die die 79 Bauwerke des Originals benutzen, sind 154 angelegt, 11 über Familien
+abgedeckt, 14 gar nicht nötig — **echt fehlend sind sechs**.
+
+Diese sechs sind nachgesehen, nicht geschätzt:
+
+| Name | Woran es hängt |
+|---|---|
+| `dungeon_spawner` | braucht `EntityUndeadSoldier` — **Entität fehlt** |
+| `meteor_spawner` | braucht `EntityCyberCrab` — **Entität fehlt** |
+| `wand_jigsaw` | Bauwerkzeug, 382 Zeilen |
+| `wand_logic` | Bauwerkzeug, 351 Zeilen |
+| `wand_loot` | Bauwerkzeug, 443 Zeilen |
+| `wand_tandem` | Bauwerkzeug, 431 Zeilen |
+
+Die beiden Spawner sind also **keine** Blockarbeit, sondern Entitätenarbeit: beide sind
+Blöcke, deren einziger Zweck das Herbeirufen eines Gegners ist, den es im Port nicht gibt.
+Sie zuerst anzulegen hieße, zwei Ursachen ohne Wirkung zu bauen.
+
+Die vier Wände sind mit je 350 bis 440 Zeilen jeweils eine eigene Runde wert und gehören
+nicht als Beifang in diese.
+
+Damit steht der nächste Bereich fest: **die Entitäten** (133 Klassen als obere Schranke) sind
+die Wurzel, an der Bauwerke und Spawner hängen.
+
+Alle 39 Tore grün.

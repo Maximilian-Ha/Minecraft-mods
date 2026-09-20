@@ -139,10 +139,18 @@ def main():
     print("KLASSENVERGLEICH (obere Schranke -- der Port fasst Klassen zusammen)")
     print("  %-18s %8s %8s %8s" % ("Bereich", "Original", "Port", "fehlend"))
     for name, ordner in (('blockentities', 'blockentity'), ('entities', 'entity'),
-                         ('armor', 'items/armor'), ('world', 'world')):
+                         ('world', 'world')):
         gesamt, fehlend = bereiche[name]
         offen = sum(len(v) for v in fehlend.values())
         print("  %-18s %8d %8d %8d" % (name, gesamt, len(port_dateien(ordner)), offen))
+
+    # DIE RUESTUNG STEHT HIER NICHT MEHR. Der Klassenvergleich meldete fuer sie zuletzt 73
+    # fehlende Klassen, obwohl der Registriernamen-Vergleich unten null fehlende Namen zeigt
+    # -- der Port fasst eben Klassen zusammen (eine ArmorAJRItem-Klasse fuer AJR und AJRO,
+    # eine ArmorFSBItem-Klasse fuer dreiunddreissig schlichte Garnituren). Eine Zahl, die
+    # Arbeit behauptet, die es nicht gibt, ist schlimmer als keine Zahl. Gemessen wird die
+    # Ruestung ab Runde 226 ausschliesslich ueber ihre Registriernamen.
+    # Die Einzelliste --list armor bleibt, sie ist zum Nachsehen weiter nuetzlich.
 
     # --- Namensvergleiche: obere Schranke ----------------------------------------------
     ub = namen_original('src/main/java/com/hbm/blocks/ModBlocks.java', r'setBlockName\("([^"]+)"\)')
