@@ -11968,3 +11968,38 @@ vorhanden** — die sind eine Zeile pro Stück. Die 73 Namen mit Metadaten sind 
 Arbeit: Treppen und Stufen, die ganze Rohrfamilie, die sechzehn Betonfarben, Türen, Lampen.
 
 Das ist der nächste Brocken, und er ist jetzt jederzeit nachzählbar statt zu schätzen.
+
+## Runde 254 — Die Flattening-Tabelle für Vanilla ist vollständig
+
+Von den 603 offenen `(Name, meta)`-Paaren des Umsetzers waren 168 Vanilla-Blöcke auf 56
+Namen. Sie sind jetzt alle übersetzt — **null offene Vanilla-Paare über alle 79 Dateien**.
+
+Die Tabelle ist nicht abgeschrieben, sondern aus den Regeln gebaut, die vor dem Flattening
+galten: die Farbliste in ihrer damaligen Reihenfolge, die sechs Holzarten, die zwei unteren
+Bit einer Treppe als Richtung und das dritte als Deckenanbau, die unteren drei Bit einer
+Halbstufe als Werkstoff und das vierte als obere Hälfte. Zwei Zeilen Code decken damit jeweils
+ein Dutzend Paare ab.
+
+### Vier Dinge, die in den Daten gar nicht stehen
+
+1. **Die Eckenform jeder Treppe** und **die Verbindungen jedes Zauns** rechnete 1.7.10 beim
+   Zeichnen aus den Nachbarn aus. Beides holt der Umsetzer seit Runde 251 nach.
+2. **Die obere Hälfte einer Tür** trägt in 1.7.10 nur das Scharnier, die untere nur die
+   Richtung. 1.21 will beides in beiden, sonst steht die Tür verdreht.
+3. **Die obere Hälfte einer doppelhohen Pflanze** trägt keine Sorte — welche Pflanze es ist,
+   steht nur unten.
+4. **Die Drehung eines Schädels** und **der Inhalt eines Blumentopfs** standen in der
+   Blockentität; seit 1.13 sind sie Teil des Blockzustands beziehungsweise ein eigener Block.
+
+Alle vier laufen als Nachlauf über das fertige Gitter, bevor die Palette gebaut wird.
+
+### Stand
+
+| | |
+|---|---:|
+| offene Paare über alle 79 Dateien | **435** |
+| davon Vanilla | **0** |
+| davon `hbm:` | 435 auf 161 Blocknamen |
+
+Die 38 Dateien des Meteoritenverlieses kommen nach der Änderung Byte für Byte gleich heraus —
+nachgeprüft mit `diff -r`.

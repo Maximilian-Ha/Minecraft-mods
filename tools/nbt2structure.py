@@ -289,6 +289,204 @@ for _m in (2, 3, 4, 5):
         'minecraft:trapped_chest', facing=SEITE[_m], type='single', waterlogged=False)
 
 
+
+# ---------------------------------------------------------------- Vanilla vor dem Flattening
+
+# 1.7.10 legt Farbe, Holzart und Gesteinsart als Metadaten-Zahl ab; seit 1.13 ist jede davon
+# ein eigener Block. Die Reihenfolgen unten sind die von damals und stehen fest.
+FARBEN = ['white', 'orange', 'magenta', 'light_blue', 'yellow', 'lime', 'pink', 'gray',
+          'light_gray', 'cyan', 'purple', 'blue', 'brown', 'green', 'red', 'black']
+HOLZ = ['oak', 'spruce', 'birch', 'jungle', 'acacia', 'dark_oak']
+
+# Treppen: die unteren zwei Bit sind die Richtung, Bit 2 haengt sie an die Decke.
+TREPPENRICHTUNG = {0: 'east', 1: 'west', 2: 'south', 3: 'north'}
+
+
+def _treppen(alt, neu):
+    for meta in range(8):
+        TABELLE[('minecraft:' + alt, meta)] = zustand(
+            'minecraft:' + neu,
+            facing=TREPPENRICHTUNG[meta & 3],
+            half='top' if meta & 4 else 'bottom',
+            shape='straight', waterlogged=False)
+
+
+def _stufen(alt, neu_je_meta):
+    """Halbstufen: meta & 7 waehlt den Werkstoff, Bit 3 hebt sie nach oben."""
+    for meta, neu in neu_je_meta.items():
+        TABELLE[('minecraft:' + alt, meta)] = zustand('minecraft:' + neu, type='bottom', waterlogged=False)
+        TABELLE[('minecraft:' + alt, meta | 8)] = zustand('minecraft:' + neu, type='top', waterlogged=False)
+
+
+def _schlicht(*paare):
+    for alt, neu in paare:
+        TABELLE[('minecraft:' + alt, 0)] = zustand('minecraft:' + neu)
+
+
+_schlicht(
+    ('bookshelf', 'bookshelf'), ('brick_block', 'bricks'), ('clay', 'clay'),
+    ('coal_block', 'coal_block'), ('cobblestone', 'cobblestone'),
+    ('crafting_table', 'crafting_table'), ('dirt', 'dirt'), ('grass', 'grass_block'),
+    ('gravel', 'gravel'), ('sandstone', 'sandstone'), ('sponge', 'sponge'),
+    ('stone', 'stone'), ('waterlily', 'lily_pad'), ('web', 'cobweb'),
+)
+
+TABELLE[('minecraft:fence', 0)] = zustand('minecraft:oak_fence',
+        north=False, east=False, south=False, west=False, waterlogged=False)
+TABELLE[('minecraft:cobblestone_wall', 0)] = zustand('minecraft:cobblestone_wall',
+        north='none', east='none', south='none', west='none', up=True, waterlogged=False)
+TABELLE[('minecraft:iron_bars', 0)] = zustand('minecraft:iron_bars',
+        north=False, east=False, south=False, west=False, waterlogged=False)
+TABELLE[('minecraft:glass_pane', 0)] = zustand('minecraft:glass_pane',
+        north=False, east=False, south=False, west=False, waterlogged=False)
+TABELLE[('minecraft:redstone_lamp', 0)] = zustand('minecraft:redstone_lamp', lit=False)
+TABELLE[('minecraft:wooden_pressure_plate', 0)] = zustand('minecraft:oak_pressure_plate', powered=False)
+TABELLE[('minecraft:flower_pot', 0)] = zustand('minecraft:flower_pot')
+TABELLE[('minecraft:sand', 0)] = zustand('minecraft:sand')
+TABELLE[('minecraft:sand', 1)] = zustand('minecraft:red_sand')
+TABELLE[('minecraft:stonebrick', 0)] = zustand('minecraft:stone_bricks')
+TABELLE[('minecraft:stonebrick', 1)] = zustand('minecraft:mossy_stone_bricks')
+TABELLE[('minecraft:stonebrick', 2)] = zustand('minecraft:cracked_stone_bricks')
+TABELLE[('minecraft:stonebrick', 3)] = zustand('minecraft:chiseled_stone_bricks')
+# In 1.20.3 umbenannt: aus grass wurde short_grass, weil grass schon der Erdblock war.
+TABELLE[('minecraft:tallgrass', 0)] = zustand('minecraft:dead_bush')
+TABELLE[('minecraft:tallgrass', 1)] = zustand('minecraft:short_grass')
+TABELLE[('minecraft:tallgrass', 2)] = zustand('minecraft:fern')
+
+for _i, _f in enumerate(FARBEN):
+    TABELLE[('minecraft:wool', _i)] = zustand('minecraft:%s_wool' % _f)
+    TABELLE[('minecraft:stained_glass', _i)] = zustand('minecraft:%s_stained_glass' % _f)
+    TABELLE[('minecraft:stained_hardened_clay', _i)] = zustand('minecraft:%s_terracotta' % _f)
+    TABELLE[('minecraft:stained_glass_pane', _i)] = zustand('minecraft:%s_stained_glass_pane' % _f,
+            north=False, east=False, south=False, west=False, waterlogged=False)
+
+for _i, _h in enumerate(HOLZ):
+    TABELLE[('minecraft:planks', _i)] = zustand('minecraft:%s_planks' % _h)
+
+# Stamm: die unteren zwei Bit waehlen die Holzart, die oberen die Achse. 12 heisst rundum
+# Rinde -- in 1.21 der wood-Block.
+for _i, _h in enumerate(HOLZ[:4]):
+    for _a, _achse in ((0, 'y'), (4, 'x'), (8, 'z')):
+        TABELLE[('minecraft:log', _i + _a)] = zustand('minecraft:%s_log' % _h, axis=_achse)
+    TABELLE[('minecraft:log', _i + 12)] = zustand('minecraft:%s_wood' % _h, axis='y')
+
+# Laub: Bit 2 heisst "nicht verfallen", Bit 3 "auf Verfall pruefen".
+for _i, _h in enumerate(HOLZ[:4]):
+    for _z in (0, 4, 8, 12):
+        TABELLE[('minecraft:leaves', _i + _z)] = zustand('minecraft:%s_leaves' % _h,
+                persistent=bool(_z & 4), distance=7, waterlogged=False)
+
+_treppen('brick_stairs', 'brick_stairs')
+_treppen('oak_stairs', 'oak_stairs')
+_treppen('spruce_stairs', 'spruce_stairs')
+_treppen('dark_oak_stairs', 'dark_oak_stairs')
+_treppen('sandstone_stairs', 'sandstone_stairs')
+_treppen('stone_brick_stairs', 'stone_brick_stairs')
+# stone_stairs hiess schon in 1.7.10 so, gemeint war immer die Bruchsteintreppe.
+_treppen('stone_stairs', 'cobblestone_stairs')
+
+_stufen('stone_slab', {0: 'smooth_stone_slab', 1: 'sandstone_slab', 2: 'petrified_oak_slab',
+                       3: 'cobblestone_slab', 4: 'brick_slab', 5: 'stone_brick_slab',
+                       6: 'nether_brick_slab', 7: 'quartz_slab'})
+_stufen('wooden_slab', {_i: '%s_slab' % _h for _i, _h in enumerate(HOLZ)})
+
+# Doppelstufen sind in 1.21 dieselbe Stufe mit type=double.
+for _m, _n in ((0, 'smooth_stone_slab'), (1, 'sandstone_slab'), (2, 'petrified_oak_slab'),
+               (3, 'cobblestone_slab'), (4, 'brick_slab'), (5, 'stone_brick_slab'),
+               (6, 'nether_brick_slab'), (7, 'quartz_slab')):
+    TABELLE[('minecraft:double_stone_slab', _m)] = zustand('minecraft:' + _n, type='double', waterlogged=False)
+for _i, _h in enumerate(HOLZ):
+    TABELLE[('minecraft:double_wooden_slab', _i)] = zustand('minecraft:%s_slab' % _h, type='double', waterlogged=False)
+
+# Fluessigkeiten: die Zahl ist die Fuellhoehe, ab 8 faellt sie.
+for _m in range(16):
+    TABELLE[('minecraft:water', _m)] = zustand('minecraft:water', level=_m)
+    TABELLE[('minecraft:lava', _m)] = zustand('minecraft:lava', level=_m)
+
+# Fackeln: 1 bis 4 haengen an der Wand, 5 steht auf dem Boden.
+_FACKELSEITE = {1: 'east', 2: 'west', 3: 'south', 4: 'north'}
+for _m, _r in _FACKELSEITE.items():
+    TABELLE[('minecraft:torch', _m)] = zustand('minecraft:wall_torch', facing=_r)
+TABELLE[('minecraft:torch', 5)] = zustand('minecraft:torch')
+TABELLE[('minecraft:torch', 0)] = zustand('minecraft:torch')
+
+# Knopf und Hebel tragen ihre Seite in denselben Zahlen; Bit 3 heisst gedrueckt.
+_KNOPF = {0: ('ceiling', 'north'), 1: ('wall', 'east'), 2: ('wall', 'west'),
+          3: ('wall', 'south'), 4: ('wall', 'north'), 5: ('floor', 'north')}
+for _m, (_seite, _r) in _KNOPF.items():
+    for _p in (0, 8):
+        TABELLE[('minecraft:stone_button', _m + _p)] = zustand('minecraft:stone_button',
+                face=_seite, facing=_r, powered=bool(_p))
+
+_HEBEL = {0: ('ceiling', 'west'), 1: ('wall', 'east'), 2: ('wall', 'west'), 3: ('wall', 'south'),
+          4: ('wall', 'north'), 5: ('floor', 'north'), 6: ('floor', 'west'), 7: ('ceiling', 'north')}
+for _m, (_seite, _r) in _HEBEL.items():
+    for _p in (0, 8):
+        TABELLE[('minecraft:lever', _m + _p)] = zustand('minecraft:lever',
+                face=_seite, facing=_r, powered=bool(_p))
+
+# Wandschild: die Zahl ist die Seite, in die es schaut.
+for _m in (2, 3, 4, 5):
+    TABELLE[('minecraft:wall_sign', _m)] = zustand('minecraft:oak_wall_sign', facing=SEITE[_m], waterlogged=False)
+
+# Der Schaedel liegt in allen Dateien auf dem Boden (meta 1) und ist vom Typ 0, also ein
+# Skelettschaedel; seine Drehung steht in der Blockentitaet und wandert in den Zustand.
+for _m in range(16):
+    TABELLE[('minecraft:skull', _m)] = zustand('minecraft:skeleton_skull', rotation=0)
+
+# Ranken: 1 Sued, 2 West, 4 Nord, 8 Ost.
+for _m in range(16):
+    TABELLE[('minecraft:vine', _m)] = zustand('minecraft:vine',
+            south=bool(_m & 1), west=bool(_m & 2), north=bool(_m & 4), east=bool(_m & 8), up=False)
+
+# Doppelhohe Pflanzen: Bit 3 ist die obere Haelfte, und die obere traegt KEINE Sorte --
+# welche Pflanze es ist, steht nur unten. forme_pflanzen() holt sie von dort.
+_DOPPELPFLANZE = {0: 'sunflower', 1: 'lilac', 2: 'tall_grass', 3: 'large_fern',
+                  4: 'rose_bush', 5: 'peony'}
+for _m, _p in _DOPPELPFLANZE.items():
+    TABELLE[('minecraft:double_plant', _m)] = zustand('minecraft:' + _p, half='lower')
+for _m in range(8, 16):
+    TABELLE[('minecraft:double_plant', _m)] = zustand('minecraft:tall_grass', half='upper')
+
+# Verstaerker und Vergleicher: untere zwei Bit die Richtung, obere die Verzoegerung
+# beziehungsweise die Betriebsart.
+_DIODE = {0: 'south', 1: 'west', 2: 'north', 3: 'east'}
+for _m in range(16):
+    TABELLE[('minecraft:unpowered_repeater', _m)] = zustand('minecraft:repeater',
+            facing=_DIODE[_m & 3], delay=(_m >> 2) + 1, locked=False, powered=False)
+    TABELLE[('minecraft:powered_repeater', _m)] = zustand('minecraft:repeater',
+            facing=_DIODE[_m & 3], delay=(_m >> 2) + 1, locked=False, powered=True)
+    TABELLE[('minecraft:unpowered_comparator', _m)] = zustand('minecraft:comparator',
+            facing=_DIODE[_m & 3], mode='subtract' if _m & 4 else 'compare', powered=False)
+    TABELLE[('minecraft:powered_comparator', _m)] = zustand('minecraft:comparator',
+            facing=_DIODE[_m & 3], mode='subtract' if _m & 4 else 'compare', powered=True)
+
+# Falltuer: die Reihenfolge ist die des Setzens in 1.7.10 (Seite 2 bis 5 auf 0 bis 3).
+_FALLTUER = {0: 'north', 1: 'south', 2: 'west', 3: 'east'}
+for _m in range(16):
+    TABELLE[('minecraft:trapdoor', _m)] = zustand('minecraft:oak_trapdoor',
+            facing=_FALLTUER[_m & 3], half='top' if _m & 8 else 'bottom',
+            open=bool(_m & 4), powered=False, waterlogged=False)
+
+# Tuer und Bett: die untere Haelfte traegt die Richtung, die obere nur das Scharnier
+# beziehungsweise nichts. forme_tueren() und forme_betten() holen sich das Fehlende.
+_TUERRICHTUNG = {0: 'east', 1: 'south', 2: 'west', 3: 'north'}
+for _m in range(8):
+    TABELLE[('minecraft:wooden_door', _m)] = zustand('minecraft:oak_door',
+            facing=_TUERRICHTUNG[_m & 3], half='lower', hinge='left',
+            open=bool(_m & 4), powered=False)
+for _m in range(8, 16):
+    TABELLE[('minecraft:wooden_door', _m)] = zustand('minecraft:oak_door',
+            facing='north', half='upper', hinge='right' if _m & 1 else 'left',
+            open=False, powered=False)
+
+_BETTRICHTUNG = {0: 'south', 1: 'west', 2: 'north', 3: 'east'}
+for _m in range(16):
+    TABELLE[('minecraft:bed', _m)] = zustand('minecraft:red_bed',
+            facing=_BETTRICHTUNG[_m & 3], part='head' if _m & 8 else 'foot',
+            occupied=bool(_m & 4))
+
+
 # Gegenstaende, die in Truheninhalten vorkommen. Wert None heisst: im Port nicht vorhanden,
 # der Stapel faellt weg -- das ist eine Entscheidung, keine Luecke.
 GEGENSTAENDE = {
@@ -409,6 +607,21 @@ def uebersetze_inhalt(te, gegenstandspalette):
     return {'id': 'minecraft:trapped_chest', 'Items': Liste(10, posten)}
 
 
+# Was in einem Blumentopf steht, war in 1.7.10 die Zahl des Gegenstands IN DER BLOCKENTITAET;
+# seit 1.13 ist jeder gefuellte Topf ein eigener Block. Null heisst leer.
+BLUMENTOPF = {
+    0: 'minecraft:flower_pot',
+    6: 'minecraft:potted_oak_sapling',
+    31: 'minecraft:potted_fern',
+    32: 'minecraft:potted_dead_bush',
+    37: 'minecraft:potted_dandelion',
+    38: 'minecraft:potted_poppy',
+    39: 'minecraft:potted_brown_mushroom',
+    40: 'minecraft:potted_red_mushroom',
+    81: 'minecraft:potted_cactus',
+}
+
+
 # ---------------------------------------------------------------- Formen nachrechnen
 
 def _ist_treppe(zust):
@@ -460,6 +673,48 @@ KEINE_ZAUNVERBINDUNG = {'minecraft:air', MODID + ':fence_metal', MODID + ':toxic
                         MODID + ':wand_loot'}
 
 
+def forme_tueren(gitter):
+    """Holt der oberen Tuerhaelfte, was nur die untere weiss -- Richtung und Zustand.
+
+    1.7.10 legt die Richtung allein in die untere Haelfte und das Scharnier allein in die
+    obere. 1.21 will beides in beiden, sonst zeichnet die Tuer sich verdreht.
+    """
+    for pos, zust in list(gitter.items()):
+        if zust is None or not zust[0].endswith('_door'):
+            continue
+        if zust[1].get('half') != 'upper':
+            continue
+
+        unten = gitter.get((pos[0], pos[1] - 1, pos[2]))
+        if unten is None or unten[0] != zust[0] or unten[1].get('half') != 'lower':
+            continue
+
+        zust[1]['facing'] = unten[1]['facing']
+        zust[1]['open'] = unten[1]['open']
+        unten[1]['hinge'] = zust[1]['hinge']
+
+
+# Die sechs doppelhohen Pflanzen. Die obere Haelfte traegt in 1.7.10 keine Sorte.
+DOPPELPFLANZEN = {'sunflower', 'lilac', 'tall_grass', 'large_fern', 'rose_bush', 'peony'}
+
+
+def forme_pflanzen(gitter):
+    """Gibt der oberen Haelfte einer doppelhohen Pflanze die Sorte der unteren."""
+    for pos, zust in list(gitter.items()):
+        if zust is None or zust[1].get('half') != 'upper':
+            continue
+        if zust[0].removeprefix('minecraft:') not in DOPPELPFLANZEN:
+            continue
+
+        unten = gitter.get((pos[0], pos[1] - 1, pos[2]))
+        if unten is None or unten[1].get('half') != 'lower':
+            continue
+        if unten[0].removeprefix('minecraft:') not in DOPPELPFLANZEN:
+            continue
+
+        gitter[pos] = (unten[0], {'half': 'upper'})
+
+
 def forme_zaeune(gitter):
     """Setzt die vier Verbindungen jedes Zaunfelds. 1.7.10 hat auch sie beim Zeichnen bestimmt."""
     for pos, zust in list(gitter.items()):
@@ -503,6 +758,20 @@ def umsetzen(quelle, praefix):
             if te is None:
                 raise ValueError('%s: wand_loot ohne Blockentitaet bei %s' % (quelle, list(pos)))
             zust, daten = beutestab(meta, te)
+        elif name == 'minecraft:skull':
+            # Der Schaedel: die Drehung steht in der Blockentitaet, in 1.21 im Zustand.
+            # SkullType 0 ist der Skelettschaedel -- alle Vorkommen der 79 Dateien sind das.
+            if te is not None and te.get('SkullType', 0) != 0:
+                raise KeyError('%s: Schaedelsorte %s ist nicht uebersetzt' % (quelle, te.get('SkullType')))
+            zust = ('minecraft:skeleton_skull', {'rotation': str(te.get('Rot', 0) if te else 0)})
+            daten = None
+        elif name == 'minecraft:flower_pot':
+            # Der Blumentopf: was darin steht, stand in 1.7.10 in der Blockentitaet.
+            inhalt = te.get('Item', 0) if te else 0
+            if inhalt not in BLUMENTOPF:
+                raise KeyError('%s: Blumentopfinhalt %s ist nicht uebersetzt' % (quelle, inhalt))
+            zust = (BLUMENTOPF[inhalt], {})
+            daten = None
         else:
             gefunden = TABELLE.get((name, meta))
             if gefunden is None:
@@ -516,6 +785,8 @@ def umsetzen(quelle, praefix):
 
     forme_treppen(gitter)
     forme_zaeune(gitter)
+    forme_tueren(gitter)
+    forme_pflanzen(gitter)
 
     # Palette einsammeln und Bloecke schreiben.
     paletteneu = []
