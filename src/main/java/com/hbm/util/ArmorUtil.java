@@ -88,6 +88,11 @@ public class ArmorUtil {
         for(Item teil : new Item[] { NtmItems.ENVSUIT_HELMET.get(), NtmItems.ENVSUIT_PLATE.get(), NtmItems.ENVSUIT_LEGS.get(), NtmItems.ENVSUIT_BOOTS.get() }) {
             ArmorRegistry.registerHazard(teil, FULL_PACKAGE);
         }
+
+        /* Der DNT-Nanoanzug ebenso. */
+        for(Item teil : new Item[] { NtmItems.DNS_HELMET.get(), NtmItems.DNS_PLATE.get(), NtmItems.DNS_LEGS.get(), NtmItems.DNS_BOOTS.get() }) {
+            ArmorRegistry.registerHazard(teil, FULL_PACKAGE);
+        }
     }
 
     /**

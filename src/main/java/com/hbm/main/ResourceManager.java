@@ -459,6 +459,12 @@ public class ResourceManager {
     public static final ResourceLocation BJ_LEG = NuclearTechMod.withDefaultNamespace("textures/armor/bj_leg.png");
     public static final ResourceLocation BJ_JETPACK = NuclearTechMod.withDefaultNamespace("textures/armor/bj_jetpack.png");
 
+    /* Der DNT-Nanoanzug. Texturen dnt_*, Gegenstaende dns_* -- so steht es im Original. */
+    public static final ResourceLocation DNT_HELMET = NuclearTechMod.withDefaultNamespace("textures/armor/dnt_helmet.png");
+    public static final ResourceLocation DNT_CHEST = NuclearTechMod.withDefaultNamespace("textures/armor/dnt_chest.png");
+    public static final ResourceLocation DNT_ARM = NuclearTechMod.withDefaultNamespace("textures/armor/dnt_arm.png");
+    public static final ResourceLocation DNT_LEG = NuclearTechMod.withDefaultNamespace("textures/armor/dnt_leg.png");
+
     /** Die Aschebrille -- im Original heisst die Datei ebenso. */
     public static final ResourceLocation ARMOR_GOGGLES = NuclearTechMod.withDefaultNamespace("textures/armor/goggles.png");
     public static final ResourceLocation HEV_LEG = NuclearTechMod.withDefaultNamespace("textures/armor/hev_leg.png");
@@ -837,6 +843,7 @@ public class ResourceManager {
     public static IModelCustom armor_trenchmaster;
     public static IModelCustom armor_envsuit;
     public static IModelCustom armor_bj;
+    public static IModelCustom armor_dnt;
 
     public static IObjRenderer sphere;
     public static IModelCustom sphere_new;
@@ -1159,6 +1166,7 @@ public class ResourceManager {
         armor_trenchmaster = new HFRWavefrontObject("models/obj/armor/trenchmaster.obj").asVBO();
         armor_envsuit = new HFRWavefrontObject("models/obj/armor/envsuit.obj").asVBO();
         armor_bj = new HFRWavefrontObject("models/obj/armor/bj.obj").asVBO();
+        armor_dnt = new HFRWavefrontObject("models/obj/armor/dnt.obj").asVBO();
 
         sphere = new HFRWavefrontObject("models/obj/sphere.obj").getRenderer();
         sphere_new = new HFRWavefrontObject("models/obj/sphere_new.obj").asVBO();

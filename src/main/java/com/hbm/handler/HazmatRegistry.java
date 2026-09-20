@@ -156,6 +156,14 @@ public class HazmatRegistry {
         HazmatRegistry.registerHazmat(NtmItems.BJ_LEGS.get(), blackjack * legs);
         HazmatRegistry.registerHazmat(NtmItems.BJ_BOOTS.get(), blackjack * boots);
 
+        /* Der DNT-Nanoanzug: 5,0 auf den ganzen Satz, im Original als Kommentar "99.999%"
+         * -- der beste Strahlenschutz des ganzen Mods. */
+        double dns = 5D;            // 99,999%
+        HazmatRegistry.registerHazmat(NtmItems.DNS_HELMET.get(), dns * helmet);
+        HazmatRegistry.registerHazmat(NtmItems.DNS_PLATE.get(), dns * chest);
+        HazmatRegistry.registerHazmat(NtmItems.DNS_LEGS.get(), dns * legs);
+        HazmatRegistry.registerHazmat(NtmItems.DNS_BOOTS.get(), dns * boots);
+
         /* Euphemium: Faktor 10, im Original mit dem Vermerk "<100%" -- der Satz haelt viel
          * ab, aber nicht alles. */
         double euph = 10D;

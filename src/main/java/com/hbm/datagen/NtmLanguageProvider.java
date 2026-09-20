@@ -4119,6 +4119,12 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.BJ_PLATE_JETPACK, "Lunar Cybernetic Plating (Winged)");
         this.add(NtmItems.BJ_LEGS, "Lunar Cybernetic Leg Replacements");
         this.add(NtmItems.BJ_BOOTS, "Lunar Studded Boots");
+
+        this.add(NtmItems.DNS_HELMET, "DNT Nano Suit Helmet");
+        this.add(NtmItems.DNS_PLATE, "DNT Nano Suit Chestplate");
+        this.add(NtmItems.DNS_LEGS, "DNT Nano Suit Leggings");
+        this.add(NtmItems.DNS_BOOTS, "DNT Nano Suit Boots");
+        this.add(NtmItems.COIN_WORM, "Balls-O-Tron Coin");
         this.add("armor.electricJetpack", "Ion Jetpack");
         this.add("armor.glider", "Sneak to glide");
         this.add("armor.moreAmmo", "More Ammo");

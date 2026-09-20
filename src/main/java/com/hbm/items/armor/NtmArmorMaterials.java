@@ -156,7 +156,14 @@ public class NtmArmorMaterials {
      */
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> BJ = register("bj", LAYER_INVISIBLE, 0, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.PLATE_ARMOR_LUNAR.get()));
 
+    /*
+     * DNT-Nano: {3, 8, 6, 3}, ohne Verzauberbarkeit, Haltbarkeitsfaktor 150, Reparatur mit
+     * der Dineutronium-Panzerplatte. Wellenfrontmodell, Schicht unsichtbar.
+     */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> DNS = register("dns", LAYER_INVISIBLE, 0, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.PLATE_ARMOR_DNT.get()));
+
     public static final int DURABILITY_T51 = 150;
+    public static final int DURABILITY_DNS = 150;
     public static final int DURABILITY_BJ = 150;
     public static final int DURABILITY_ENVSUIT = 150;
     public static final int DURABILITY_FAU = 150;

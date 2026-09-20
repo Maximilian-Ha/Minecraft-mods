@@ -10401,3 +10401,54 @@ Nach dieser Runde sind **13** Rüstungsnamen offen — und die DNS-Garnitur ist 
 blockiert: ihre vier Baupläne brauchen genau diese BJ-Stücke.
 
 Alle 39 Tore grün.
+
+## Runde 223 — Der DNT-Nanoanzug, der stärkste Satz des Mods
+
+Die Garnitur, die Runde 222 freigelegt hat: ihre vier Baupläne bauen jeweils um ein fertiges
+Blackjack-Stück herum.
+
+### Praktisch unverwundbar
+
+| | |
+|---|---|
+| Jeder Angriff außer einer Sprengung | wird **ganz abgebrochen**, mit Klirren |
+| Sprengungen | richten ein **Tausendstel** ihres Schadens an |
+| Alles andere, was durchkommt | null |
+| Energie | 1 000 000 000 HE |
+| Satzbonus | Stärke X, Eile VIII, Sprungkraft III |
+| Strahlung | 99,999 % — der beste Wert des Mods |
+
+Das ließ sich nur bauen, weil Runde 220 die beiden Kampfhaken nachgerüstet hat. Ohne
+`handleAttack` und `handleHurt` wäre dieser Anzug eine Rüstung mit Zahlen und ohne Eigenschaft
+gewesen.
+
+### Drei Flugzustände
+
+| Zustand | Bedingung | Wirkung |
+|---|---|---|
+| Triebwerk | Rückentriebwerk an, Sprungtaste | steigt um 0,2 je Tick bis 0,6 |
+| Schwebeflug | Rückentriebwerk an, in der Luft, nicht in der Hocke | Sturz aufgefangen, Waagerechte ×1,05, Blickrichtung zieht |
+| Sinken | in der Hocke, in der Luft | −0,1 je Tick |
+
+Auch das war nur möglich, weil Runde 222 gemessen hat, dass `isJetpackActive` im Port schon
+vorhanden ist. Zwei Runden Vorarbeit, die sich hier auszahlen.
+
+### Eine Falle im Namen
+
+**Die Texturen heißen `dnt_*`, die Gegenstände `dns_*`.** Das ist kein Vertipper: der Werkstoff
+ist Dineutronium (DNT), die Garnitur heißt „DNT Nano Suit" (DNS). Wer nach `dns` sucht, findet
+die Texturen nicht — genau die Art Namensverschiebung, die in Runde 215 schon einmal zu einer
+Fehlmessung geführt hat.
+
+### Ein Gegenstand kam mit
+
+Die **Balls-O-Tron-Münze** (`coin_worm`) fehlte dem Port; das DNS-Beinzeug braucht sie. Im
+Original lässt der BOT-Prime-Kopf sie fallen — diesen Gegner gibt es hier noch nicht, sie ist
+also vorerst nur über den Kreativreiter zu haben. Das steht am Gegenstand, damit niemand
+später rätselt, warum sie nirgends anfällt.
+
+Nach dieser Runde sind **9** Rüstungsnamen offen: `dieselsuit_*`, `steamsuit_*` und
+`nossy_hat`. Die ersten beiden brauchen `ArmorFSBFueled`, eine Grundklasse für
+flüssigkeitsbetriebene Anzüge, die der Port noch nicht hat.
+
+Alle 39 Tore grün.

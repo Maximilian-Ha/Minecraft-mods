@@ -4141,6 +4141,17 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .save(recipeOutput);
 
         /*
+         * DER DNT-NANOANZUG, ArmorRecipes.java Z. 86 bis 89. Alle vier Muster sind dasselbe:
+         * das fertige Blackjack-Stueck in der Mitte, Dineutronium-Panzerplatten ringsum,
+         * Kettenstahl unten und oben je ein Sonderstueck. Die Brustplatte verlangt die
+         * GEFLUEGELTE Blackjack-Platte, nicht die schlichte.
+         */
+        dnsPiece(recipeOutput, NtmItems.DNS_HELMET.get(), NtmItems.BJ_HELMET.get(), Ingredient.of(NtmItems.CIRCUIT_QUANTUM_PROCESSING_UNIT.get()));
+        dnsPiece(recipeOutput, NtmItems.DNS_PLATE.get(), NtmItems.BJ_PLATE_JETPACK.get(), Ingredient.of(NtmItems.SINGULARITY_SPARK.get()));
+        dnsPiece(recipeOutput, NtmItems.DNS_LEGS.get(), NtmItems.BJ_LEGS.get(), Ingredient.of(NtmItems.COIN_WORM.get()));
+        dnsPiece(recipeOutput, NtmItems.DNS_BOOTS.get(), NtmItems.BJ_BOOTS.get(), Ingredient.of(NtmItems.DEMON_CORE_CLOSED.get()));
+
+        /*
          * DIE AUFSTIEGSKETTE. Das Original bietet zwei Wege an und stellt ueber
          * enableLBSMSimpleArmorRecipes um: entweder jede Garnitur schlicht aus ihrem Barren,
          * oder jede aus der vorigen. Der Port nimmt die Kette -- sie ist der Standardfall,
@@ -4683,6 +4694,18 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .requires(Tags.Items.DYES_RED)
                 .requires(Tags.Items.DYES_BLACK)
                 .unlockedBy("has_plate_armor_ajr", has(NtmItems.PLATE_ARMOR_AJR.get()))
+                .save(recipeOutput);
+    }
+
+    /** Ein DNS-Stueck: das Blackjack-Stueck in der Mitte, oben ein Sonderstueck. */
+    private void dnsPiece(RecipeOutput recipeOutput, Item ergebnis, Item blackjack, Ingredient krone) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ergebnis, 1)
+                .pattern("PCP").pattern("PBP").pattern("PSP")
+                .define('P', NtmItems.PLATE_ARMOR_DNT.get())
+                .define('C', krone)
+                .define('B', blackjack)
+                .define('S', NtmItems.INGOT_CHAINSTEEL.get())
+                .unlockedBy("has_plate_armor_dnt", has(NtmItems.PLATE_ARMOR_DNT.get()))
                 .save(recipeOutput);
     }
 

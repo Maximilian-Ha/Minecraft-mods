@@ -27,6 +27,7 @@ import com.hbm.lib.ModEffect;
 import com.hbm.items.armor.ArmorBJItem;
 import com.hbm.items.armor.ArmorBJJetpackItem;
 import com.hbm.items.armor.ArmorBismuthItem;
+import com.hbm.items.armor.ArmorDNTItem;
 import com.hbm.items.armor.ArmorDigammaItem;
 import com.hbm.items.armor.ArmorEnvsuitItem;
 import com.hbm.items.armor.ArmorEuphemiumItem;
@@ -1798,6 +1799,22 @@ public class NtmItems {
     public static final DeferredItem<Item> BJ_LEGS = ITEMS.register("bj_legs", () -> bj(ArmorItem.Type.LEGGINGS));
     public static final DeferredItem<Item> BJ_BOOTS = ITEMS.register("bj_boots", () -> bj(ArmorItem.Type.BOOTS));
 
+    /*
+     * DER DNT-NANOANZUG, der staerkste Satz des Mods. Eine Milliarde Ladung; wer ihn
+     * vollstaendig traegt, ist praktisch unverwundbar und kann fliegen. Siehe ArmorDNTItem.
+     */
+    public static final DeferredItem<Item> DNS_HELMET = ITEMS.register("dns_helmet", () -> dns(ArmorItem.Type.HELMET));
+    public static final DeferredItem<Item> DNS_PLATE = ITEMS.register("dns_plate", () -> dns(ArmorItem.Type.CHESTPLATE));
+    public static final DeferredItem<Item> DNS_LEGS = ITEMS.register("dns_legs", () -> dns(ArmorItem.Type.LEGGINGS));
+    public static final DeferredItem<Item> DNS_BOOTS = ITEMS.register("dns_boots", () -> dns(ArmorItem.Type.BOOTS));
+
+    /**
+     * Die Balls-O-Tron-Muenze. Im Original ein schlichtes Beutestueck, das der BOT-Prime-Kopf
+     * fallen laesst -- diesen Gegner gibt es im Port noch nicht, sie ist darum vorerst nur
+     * ueber den Kreativreiter zu haben. Gebraucht wird sie fuer das DNS-Beinzeug.
+     */
+    public static final DeferredItem<Item> COIN_WORM = ITEMS.register("coin_worm", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON)));
+
     public static final DeferredItem<Item> HEV_HELMET = ITEMS.register("hev_helmet", () -> hev(ArmorItem.Type.HELMET));
     public static final DeferredItem<Item> HEV_PLATE = ITEMS.register("hev_plate", () -> hev(ArmorItem.Type.CHESTPLATE));
     public static final DeferredItem<Item> HEV_LEGS = ITEMS.register("hev_legs", () -> hev(ArmorItem.Type.LEGGINGS));
@@ -1913,6 +1930,15 @@ public class NtmItems {
                 .addEffect(new MobEffectInstance(MobEffects.JUMP, 20, 0))
                 .addEffect(new MobEffectInstance(MobEffects.SATURATION, 20, 0))
                 .addEffect(new MobEffectInstance(ModEffect.RADX, 20, 0))
+                .setHasGeigerSound(true);
+    }
+
+    /** Der DNT-Nanoanzug. Staerke X, Eile VIII und Sprungkraft III fuer den Satz. */
+    private static ArmorFSBItem dns(ArmorItem.Type type) {
+        return new ArmorDNTItem(NtmArmorMaterials.DNS, type, new Item.Properties().stacksTo(1).durability(type.getDurability(NtmArmorMaterials.DURABILITY_DNS)), 1_000_000_000L, 1_000_000L, 100_000L, 115L)
+                .addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20, 9))
+                .addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 20, 7))
+                .addEffect(new MobEffectInstance(MobEffects.JUMP, 20, 2))
                 .setHasGeigerSound(true);
     }
 

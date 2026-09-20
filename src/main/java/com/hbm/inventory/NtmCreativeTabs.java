@@ -507,6 +507,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.CRYSTAL_SCHRARANIUM);
                         output.accept(NtmItems.CRYSTAL_SCHRABIDIUM);
                         output.accept(NtmItems.CRYSTAL_RARE);
+                        output.accept(NtmItems.COIN_WORM);
                         output.accept(NtmItems.CRYSTAL_PHOSPHORUS);
                         output.accept(NtmItems.CRYSTAL_LITHIUM);
                         output.accept(NtmItems.CRYSTAL_CINNABAR);
@@ -2061,6 +2062,10 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.BJ_PLATE_JETPACK);
                         output.accept(NtmItems.BJ_LEGS);
                         output.accept(NtmItems.BJ_BOOTS);
+                        output.accept(NtmItems.DNS_HELMET);
+                        output.accept(NtmItems.DNS_PLATE);
+                        output.accept(NtmItems.DNS_LEGS);
+                        output.accept(NtmItems.DNS_BOOTS);
                         output.accept(NtmItems.MASK_RAG);
                         output.accept(NtmItems.MASK_PISS);
                         output.accept(NtmItems.GAS_MASK_FILTER);
