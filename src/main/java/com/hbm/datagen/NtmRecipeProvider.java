@@ -5191,23 +5191,36 @@ public class NtmRecipeProvider extends RecipeProvider {
     /**
      * Die Waffenbauplaene.
      *
-     * Wortgetreu aus WeaponRecipes des Originals, in der Reihenfolge des Originals. Von den
-     * 46 Bauplaenen dort bleiben hier 38 uebrig; der Rest faellt aus zwei gemessenen Gruenden
-     * weg:
+     * Wortgetreu aus WeaponRecipes des Originals, in der Reihenfolge des Originals.
      *
-     * ES GIBT DIE WAFFE NICHT: Stinger, Quadro, LAG, Raketenwerfer, Fat Man, Tau und die
-     * beiden Panzerruestungswaffen. Sie sind im Port nicht angelegt; ein Bauplan auf ein
-     * nicht vorhandenes Erzeugnis waere kein Rezept. Teslakanone, Ladungswerfer und
-     * Feuerloescher standen hier ebenfalls -- die Kanone bis Runde 188, der Werfer bis
-     * Runde 192, der Loescher bis Runde 193.
+     * NACHGEMESSEN IN RUNDE 229 -- und die Liste darunter war ueberholt. Sie nannte acht
+     * Waffen als "im Port nicht angelegt": Stinger, Quadro, LAG, Raketenwerfer, Fat Man, Tau
+     * und die beiden Panzerruestungswaffen. ALLE ACHT gibt es laengst -- die
+     * Panzerruestungswaffen seit Runde 196, Quadro und Raketenwerfer seit 197, Stinger seit
+     * 199, LAG seit 201, Tau seit 203, Fat Man seit 204. Sechs von ihnen hatten ihren Bauplan
+     * schon hier stehen; die beiden Panzerruestungswaffen bekommen ihn in dieser Runde.
+     * Damit ist die Gruppe "es gibt die Waffe nicht" leer bis auf gun_b92 und dessen Zelle
+     * gun_b92_ammo.
      *
-     * DER FEUERLOESCHER STEHT NICHT IN DIESER LISTE, sondern oben bei seiner Munition: sein
-     * Bauplan braucht kein einziges Waffenbauteil und damit auch nicht den gun()-Helfer.
+     * GEMESSEN IN RUNDE 229: WeaponRecipes baut 51 Mal eine Waffe, 50 verschiedene (der
+     * Ladungswerfer steht zweimal da, einmal mit Leder und einmal mit Gummi). Dieser Erzeuger
+     * deckt 46 davon ab; fehlend sind genau vier, und jede hat ihren Grund unten stehen.
+     *
+     * Teslakanone, Ladungswerfer und Feuerloescher standen hier ebenfalls einmal unter den
+     * fehlenden -- die Kanone bis Runde 188, der Werfer bis Runde 192, der Loescher bis
+     * Runde 193.
+     *
+     * DER FEUERLOESCHER BRAUCHT KEIN EINZIGES WAFFENBAUTEIL und darum auch nicht den
+     * gun()-Helfer, der die Waffenbank voraussetzt. Er steht deshalb mitten in dieser Methode
+     * als schlichtes ShapedRecipeBuilder-Rezept. (Bis Runde 229 stand hier, er stehe gar
+     * nicht in dieser Methode, sondern oben bei seiner Munition -- das war nicht wahr.)
      *
      * ES GIBT DIE ZUTAT NICHT:
      * - gun_double_barrel_sacred_dragon braucht item_secret in der Ausfuehrung
      *   SELENIUM_STEEL. Die ganze Familie der Geheimstuecke fehlt im Port; die Waffe selbst
-     *   gibt es seit Runde 84.
+     *   gibt es seit Runde 84. NACHGEMESSEN IN RUNDE 229: item_secret gibt es weiterhin
+     *   nicht, und es blockiert ausserdem den dungeon_spawner, der ein Geheimstueck in den
+     *   Skeletthalter legt.
      * - gun_chemthrower braucht einen Schraubenschluessel, und den gibt es im Port nicht:
      *   ToolType.WRENCH steht in der Aufzaehlung, ein Gegenstand dazu fehlt. NACHGEMESSEN IN
      *   RUNDE 191: das Gummirohr, das hier bis dahin als zweiter Grund stand, gibt es sehr
@@ -5628,6 +5641,28 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .define('G', anyHardPlasticGrip())
                 .define('M', mechanism(Mats.MAT_SATURN))
                 .unlockedBy("has_scope", has(NtmItems.WEAPON_MOD_SPECIAL.get()))
+                .save(recipeOutput);
+
+        /*
+         * Die beiden Waffen der Panzerruestung, Runde 229. Sie stehen im Original ganz am
+         * Ende des Waffenblocks, abgesetzt durch eine Leerzeile, und hier ebenso.
+         *
+         * KEINE WAFFENBAUTEILE: weder Lauf noch Verschluss noch Griff. Das passt zu dem, was
+         * sie sind -- Aufsaetze auf einen Anzug, keine Handfeuerwaffen. Darum auch kein
+         * gun()-Helfer mit Waffensymbolen, sondern Motor, Schaltkreis und Dickdraht.
+         */
+        gun(NtmItems.GUN_PA_MELEE, " C ", "MWM")
+                .define('C', NtmItems.CIRCUIT_INTEGRATED_BOARD.get())
+                .define('M', NtmItems.MOTOR.get())
+                .define('W', wireDense(WireDenseItem.Type.GOLD))
+                .unlockedBy("has_motor", has(NtmItems.MOTOR.get()))
+                .save(recipeOutput);
+
+        gun(NtmItems.GUN_PA_RANGED, "C", "W", "P")
+                .define('C', NtmItems.CIRCUIT_INTEGRATED_BOARD.get())
+                .define('W', wireDense(WireDenseItem.Type.GOLD))
+                .define('P', NtmItems.INGOT_POLYMER.get())
+                .unlockedBy("has_polymer", has(NtmItems.INGOT_POLYMER.get()))
                 .save(recipeOutput);
     }
 

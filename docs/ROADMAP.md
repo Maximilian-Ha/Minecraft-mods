@@ -10700,3 +10700,48 @@ zeigten im Spiel ihren rohen Schlüssel, im Todesbildschirm wie am Namensschild.
 haben jetzt einen. (Das Original hat für den Untoten Soldaten selbst keinen.)
 
 Entitäten damit 133 → **132** offene Klassen. Alle 39 Tore grün.
+
+## Runde 229 — Die Waffenbaupläne nachgemessen
+
+Beim Nachsehen, was der `dungeon_spawner` noch braucht, fiel im Kopfkommentar von
+`gunRecipes` ein Satz auf, der nicht mehr stimmte. Nachgemessen — und er stimmte gleich
+zweifach nicht.
+
+**Erstens.** Der Kommentar nannte acht Waffen als „im Port nicht angelegt": Stinger, Quadro,
+LAG, Raketenwerfer, Fat Man, Tau und die beiden Panzerrüstungswaffen. **Alle acht gibt es
+längst** — die Panzerrüstungswaffen seit Runde 196, Quadro und Raketenwerfer seit 197,
+Stinger seit 199, LAG seit 201, Tau seit 203, Fat Man seit 204. Sechs hatten ihren Bauplan
+auch schon; die beiden Panzerrüstungswaffen nicht. Die bekommen ihn jetzt.
+
+**Zweitens.** Der Kommentar behauptete, der Feuerlöscher stehe „nicht in dieser Liste,
+sondern oben bei seiner Munition". Er steht mitten in `gunRecipes`, an seinem Platz in der
+Reihenfolge des Originals, nur ohne den `gun()`-Helfer — weil er kein einziges Waffenbauteil
+braucht. Der Grund stimmte, der Ort war falsch.
+
+### Gemessen statt geschätzt
+
+| | |
+|---|---|
+| `WeaponRecipes` baut eine Waffe | **51 Mal**, **50 verschiedene** (der Ladungswerfer steht zweimal da, Leder und Gummi) |
+| Dieser Erzeuger deckt ab | **46** |
+| Echt fehlend | **4** |
+
+Und diese vier haben je einen Grund, der nachgesehen ist:
+
+| Bauplan | Grund |
+|---|---|
+| `gun_b92`, `gun_b92_ammo` | die Waffe gibt es im Port nicht — der letzte Rest der Gruppe „es gibt die Waffe nicht" |
+| `gun_chemthrower` | braucht einen Schraubenschlüssel; `ToolType.WRENCH` steht in der Aufzählung, ein Gegenstand dazu fehlt |
+| `gun_double_barrel_sacred_dragon` | braucht `item_secret` in der Ausführung `SELENIUM_STEEL` |
+
+`item_secret` ist damit zum zweiten Mal aufgefallen: es blockiert auch den
+`dungeon_spawner`, der ein Geheimstück in den Skeletthalter legt. Zwei Wirkungen, eine
+Ursache — die Familie der Geheimstücke ist die nächste Runde wert.
+
+### Die beiden neuen Baupläne
+
+Sie brauchen kein einziges Waffenbauteil, was zu dem passt, was sie sind: Aufsätze auf einen
+Anzug, keine Handfeuerwaffen. Motor, Schaltkreis und Dickdraht, mehr nicht — wortgetreu aus
+dem Original, wo sie ebenfalls abgesetzt am Ende des Waffenblocks stehen.
+
+Alle 39 Tore grün.
