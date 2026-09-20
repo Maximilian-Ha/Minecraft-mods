@@ -94,6 +94,8 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent.BreakEvent;
+import net.minecraft.world.entity.monster.Creeper;
+import com.hbm.entity.mob.CreeperDefuser;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
 @EventBusSubscriber(modid = NuclearTechMod.MODID)
@@ -252,6 +254,14 @@ public class CommonEvents {
             HazardSystem.updateLivingInventory(livingEntity);
             EntityEffectHandler.tick(livingEntity);
             ArmorModHandler.updateMods(livingEntity);
+        }
+
+        /* Ein entschaerfter Creeper wird hier niedergehalten -- VOR Creeper.tick(), sonst
+         * ist der Zaehler schon gestiegen. Im Original steht an dieser Stelle derselbe
+         * Griff, nur um nach dem Laden der Welt das entfernte SwellGoal wieder zu
+         * entfernen; im Port ist er der Mechanismus selbst. CreeperDefuser erklaert, warum. */
+        if (entity instanceof Creeper creeper) {
+            CreeperDefuser.haltNieder(creeper);
         }
     }
 

@@ -1180,6 +1180,7 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicItem(NtmItems.CARD_QOS.get());
         this.basicItem(NtmItems.MORNING_GLORY.get());
         this.basicItem(NtmItems.WILD_P.get());
+        this.basicItem(NtmItems.DEFUSER_GOLD.get());
         this.basicItem(NtmItems.BALLISTIC_GAUNTLET.get());
         this.basicItem(NtmItems.ARMOR_POLISH.get());
         this.basicItem(NtmItems.BANDAID.get());

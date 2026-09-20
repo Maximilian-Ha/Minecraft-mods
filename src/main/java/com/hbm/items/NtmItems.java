@@ -57,6 +57,7 @@ import com.hbm.items.armor.ModCardItem;
 import com.hbm.items.armor.ModMorningGloryItem;
 import com.hbm.items.armor.ModReviveItem;
 import com.hbm.items.armor.ItemModBandaid;
+import com.hbm.items.armor.ItemModDefuser;
 import com.hbm.items.armor.ItemModHealth;
 import com.hbm.items.armor.ItemModInk;
 import com.hbm.items.armor.ItemModMilk;
@@ -1118,6 +1119,7 @@ public class NtmItems {
      * hatte dadurch nur dreizehn seiner fuenfundzwanzig Eintraege.
      */
     /** Er tut nichts -- und das ist so im Original. Siehe ItemModTwoKick. */
+    public static final DeferredItem<Item> DEFUSER_GOLD = ITEMS.register("defuser_gold", () -> new ItemModDefuser(new Item.Properties()));
     public static final DeferredItem<Item> BALLISTIC_GAUNTLET = ITEMS.register("ballistic_gauntlet", () -> new ItemModTwoKick(new Item.Properties()));
     public static final DeferredItem<Item> ARMOR_POLISH = ITEMS.register("armor_polish", () -> new ItemModPolish(new Item.Properties()));
     public static final DeferredItem<Item> BANDAID = ITEMS.register("bandaid", () -> new ItemModBandaid(new Item.Properties()));
@@ -1476,7 +1478,7 @@ public class NtmItems {
     public static final DeferredItem<Item> DETONATOR_DEADMAN = ITEMS.register("detonator_deadman", () -> new DangerousDropItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> DETONATOR_DE = ITEMS.register("detonator_de", () -> new DangerousDropItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> BOMB_CALLER = ITEMS.register("bomb_caller", () -> new BombCallerItem(new Item.Properties().stacksTo(1)));
-    public static final DeferredItem<Item> DEFUSER = ITEMS.register("defuser", () -> new ToolingItem(ToolType.DEFUSER, new Item.Properties().durability(100)));
+    public static final DeferredItem<Item> DEFUSER = ITEMS.register("defuser", () -> new DefuserItem(ToolType.DEFUSER, new Item.Properties().durability(100)));
     public static final DeferredItem<Item> REACHER = ITEMS.register("reacher", () -> new Item(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> MELTDOWN_TOOL = ITEMS.register("meltdown_tool", () -> new DyatlovItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> MIRROR_TOOL = ITEMS.register("mirror_tool", () -> new MirrorToolItem(new Item.Properties().stacksTo(1)));

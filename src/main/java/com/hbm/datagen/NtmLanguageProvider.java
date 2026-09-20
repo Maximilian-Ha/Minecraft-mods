@@ -1803,6 +1803,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.CARD_AOS, "Ace of Spades");
         this.add(NtmItems.CARD_QOS, "Queen of Spades");
         this.add(NtmItems.MORNING_GLORY, "Morning Glory");
+        this.add(NtmItems.DEFUSER_GOLD, "Golden Wire Cutter");
         this.add(NtmItems.BALLISTIC_GAUNTLET, "Ballistic Gauntlet");
         this.add(NtmItems.ARMOR_POLISH, "Armor Polish");
         this.add(NtmItems.BANDAID, "Band-Aid");
@@ -1822,6 +1823,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("armorMod.ink", "10%% chance to nullify damage");
         this.add("armorMod.ink.flowers", "Flowers!");
         this.add("armorMod.health", "+%s health");
+        this.add("armorMod.defuser", "Defuses nearby creepers");
+        this.add("armorMod.defuser.short", "Defuses creepers");
         this.add("armorMod.twokick", "Punches fire 12 gauge shells");
         this.add("armorMod.twokick.quote", "\"I've had worse\"");
         this.add("armorMod.twokick.short", "Shotgun punches");

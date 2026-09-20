@@ -63,10 +63,19 @@ for dirpath, _, files in os.walk(ROOT):
             # Eine Datei kann mehrere Traeger enthalten -- NtmItems hat zwei Schraubenzieher
             # und zwei Handbohrer in derselben Datei. Gezaehlt werden Fundstellen, nicht
             # Dateien; sonst zaehlt ein Tor ungenau und sagt es nicht.
-            # Drei Wege, die Sorte zu tragen: ein ToolingItem unmittelbar, eine Unterklasse,
-            # die die Sorte an super() weiterreicht (so die Bolzenpistole), oder ein
-            # ausdrueckliches register().
-            n = len(re.findall(r'new ToolingItem\(\s*ToolType\.' + s + r'\b', src)) \
+            # Drei Wege, die Sorte zu tragen: eine Erzeugung, die die Sorte unmittelbar
+            # mitgibt, eine Unterklasse, die die Sorte an super() weiterreicht (so die
+            # Bolzenpistole), oder ein ausdrueckliches register().
+            #
+            # DIE ERZEUGUNG FRAGT NICHT NACH DEM KLASSENNAMEN, und zwar seit Runde 242.
+            # Vorher stand hier 'new ToolingItem\(' -- damit war das Tor blind fuer jede
+            # Unterklasse, die die Sorte durchreicht statt sie festzuschreiben. Genau das
+            # tut DefuserItem, und das Tor meldete daraufhin den Entschaerfer als Sorte
+            # ohne Traeger, obwohl eine Zeile darueber einer angemeldet wurde. Gemessen:
+            # im ganzen Baum gibt es fuenf Stellen der Form 'new X(ToolType.Y', und alle
+            # fuenf sind Gegenstandsanmeldungen -- das breitere Muster faengt nichts
+            # Falsches ein.
+            n = len(re.findall(r'new \w+\(\s*ToolType\.' + s + r'\b', src)) \
                 + len(re.findall(r'super\(\s*ToolType\.' + s + r'\b', src)) \
                 + len(re.findall(r'ToolType\.' + s + r'\.register\(', src))
             if n:

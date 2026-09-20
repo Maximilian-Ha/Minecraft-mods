@@ -11310,3 +11310,77 @@ wiederhergestellt zu haben.
 Damit stehen **dreiundzwanzig von fünfundzwanzig** Einträgen mit den Gewichten des
 Originals. Was noch fehlt, ist `starmetal_sword` und `flask_infusion` -- zwei andere
 Familien, keine Aufsätze. Der Kopf der Klasse nennt beide weiterhin beim Namen.
+
+### Runde 242: der Entschärfer — ein Werkzeug, das seinen Namen bisher nur trug
+
+Runde 195 hat `defuser` angemeldet, als schlichtes `ToolingItem` mit `ToolType.DEFUSER`.
+Als Schraubenschlüssel für Maschinen funktionierte er; **Creeper konnte er nicht
+entschärfen**, denn der dafür nötige Griff hing an `ItemModDefuser.castrateCreeper`, und
+die Klasse gab es im Port nicht. Ein Seitenschneider, der nur so heißt.
+
+`ItemModDefuser.castrateCreeper` hat im Original **vier** Aufrufer, und drei davon fehlten
+dem Port vollständig:
+
+| Aufrufer | im Original | im Port vor Runde 242 |
+|---|---|---|
+| `ItemDefuser` (Werkzeug) | Rechtsklick auf einen Creeper | Werkzeug da, Griff fehlt |
+| `ItemModDefuser` (Aufsatz) | jede Sekunde, Umkreis 5 | `defuser_gold` fehlt ganz |
+| `BlockPedestal` | alle 60 Takte, Umkreis 25 | ausdrücklich als Lücke vermerkt |
+| `ModEventHandler` | Wiederherstellung nach dem Laden | — |
+
+Alle vier stehen jetzt. Der Sockelkommentar, der die Lücke seit Runde 233 benannt hatte
+(*"Eine Abfrage auf einen Gegenstand, den es nicht gibt, wäre eine Zeile, die nie
+zutrifft"*), ist eingelöst statt gelöscht.
+
+#### Warum das Entschärfen im Port anders gebaut ist
+
+Das Original nimmt dem Creeper sein `EntityAICreeperSwell` aus der Aufgabenliste. Auf 1.21
+steht dem zweierlei im Weg: `Mob.goalSelector` ist geschützt, und **Aufgaben überleben das
+Speichern der Welt nicht** -- das Original weiß das und setzt deshalb die Marke
+`hfr_defused`, um den Entzug bei jedem Takt jedes markierten Creepers zu wiederholen.
+
+Der Port behält die Marke und macht sie zum Mechanismus selbst: `CommonEvents` hält
+markierte Creeper in jedem Takt nieder, mit `setSwellDir(-1)` in `EntityTickEvent.Pre` --
+also **vor** `Creeper.tick()`, wo der Zähler steigt. Dasselbe Ergebnis, ohne Griff in die
+Aufgabenliste, und die Marke steht in den beständigen Daten der Entität.
+
+**Ein Zugriffstransformer war trotzdem nötig: `Creeper.DATA_IS_IGNITED`.** Wer einen Creeper
+mit Feuerzeug und Stein anzündet, setzt ein Merkmal, das `Creeper.tick()` selbst wieder auf
++1 übersetzt -- dagegen hilft kein Niederhalten davor. Öffentlich gibt es nur `ignite()`,
+kein Gegenstück. Das ist derselbe Befund wie in Runde 240, eine Ebene weiter: die
+interessanten Teile des Creepers sind privat.
+
+#### Zwei Stellen, an denen das Original nachlässig ist -- und der Port es nicht nachbaut
+
+* **Der Schwächetrank.** Das Original schreibt `new PotionEffect(Potion.weakness.id, 0, 200)`.
+  Die Signatur ist `(id, Dauer, Stufe)` -- nachgemessen an den 335 `new PotionEffect(`-Aufrufen
+  im selben Quelltext, wo an zweiter Stelle durchweg `30 * 20` und dergleichen steht. Dort
+  stehen also **null Takte Dauer und Stufe 201**: der Effekt verfällt im selben Takt. Der
+  Port dreht es um, zehn Sekunden Schwäche.
+* **Die Abnutzung.** `itemInteractionForEntity` nutzt keine Haltbarkeit. Ein Seitenschneider
+  entschärft beliebig viele Creeper, ohne stumpf zu werden -- vermutlich ein Versehen, aber
+  eines nachzubessern hieße, eine Wirkung zu erfinden. Der Port übernimmt es und schreibt
+  dazu, dass er es tut.
+
+#### Nicht übernommen
+
+Der zweite Zweig von `ItemDefuser` sprengt einen sterbenden `EntityGlyphidNuclear` an Ort
+und Stelle. **Die Glyphiden gibt es im Port nicht** -- kein einziger der rund zwei Dutzend
+`EntityGlyphid*`. Der Zweig kommt mit ihnen, nicht vorher.
+
+#### Das Werkzeug-Tor war blind für Unterklassen
+
+`tool-check.sh` prüft seit Runde 195, dass jede `ToolType`-Sorte beide Seiten hat: einen
+Gegenstand, der sie trägt, und mindestens einen Block, der sie abfragt. Es suchte Träger
+über drei Muster, deren erstes wörtlich `new ToolingItem(ToolType.X` lautete.
+
+`DefuserItem` erbt von `ToolingItem` und **reicht die Sorte durch**, statt sie
+festzuschreiben -- also greift weder das erste Muster noch das `super(ToolType.X` der
+Bolzenpistole. Das Tor meldete daraufhin, `DEFUSER` habe keinen Träger, während eine Zeile
+über der Meldung einer angemeldet war. Ein falscher Fund, aber aus der richtigen Richtung:
+das Tor hätte diesen Fall auch dann nicht gesehen, wenn er ein echter Fehler gewesen wäre.
+
+Das Muster ist jetzt `new \w+\(\s*ToolType\.X` -- der Klassenname spielt keine Rolle mehr.
+Gemessen: im ganzen Baum gibt es fünf Stellen dieser Form, und alle fünf sind
+Gegenstandsanmeldungen; das breitere Muster fängt nichts Falsches ein. Gegenprobe: nimmt
+man dem Entschärfer seine Sorte wieder, meldet das Tor ihn sofort.

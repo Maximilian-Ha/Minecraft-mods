@@ -1944,6 +1944,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.PROTECTION_CHARM);
 
                         /* Die zehn Aufsaetze des Roten Zimmers, Runde 241. */
+                        output.accept(NtmItems.DEFUSER_GOLD);
                         output.accept(NtmItems.BALLISTIC_GAUNTLET);
                         output.accept(NtmItems.ARMOR_POLISH);
                         output.accept(NtmItems.BANDAID);

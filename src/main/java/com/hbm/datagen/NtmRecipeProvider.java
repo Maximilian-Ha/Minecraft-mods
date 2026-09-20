@@ -243,6 +243,7 @@ public class NtmRecipeProvider extends RecipeProvider {
         this.gunRecipes(recipeOutput);
         this.casingAndStoneAmmo(recipeOutput);
         this.explosiveStickRecipes(recipeOutput);
+        this.defuserGoldRecipe(recipeOutput);
 
         /* Die 240-mm-Granaten. Vier Ausfuehrungen; die W9 wird nicht gebaut, sie ist Fundstueck. */
         shell(recipeOutput, GunFactory.Ammo240Shell.STOCK, Blocks.TNT, NtmItems.SHELL_STEEL.get());
@@ -5250,6 +5251,24 @@ public class NtmRecipeProvider extends RecipeProvider {
      * (AnySmokeless = Ballistit oder Cordit). Ballistit gibt es im Port nicht, also bleibt
      * das Cordit.
      */
+    /**
+     * Der goldene Seitenschneider, Runde 242. Aus ConsumableRecipes des Originals:
+     * GPG / PRP / GPG mit Schiesspulver, Goldplatten und einer Schallplatte in der Mitte.
+     *
+     * DAS R IST EINE SCHALLPLATTE. Das Original schreibt dort den Erzwoerterbuch-Eintrag
+     * "record", der in 1.7.10 jede Musikscheibe umfasst; auf 1.21 ist das ItemTags.MUSIC_DISCS.
+     */
+    private void defuserGoldRecipe(RecipeOutput recipeOutput) {
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.DEFUSER_GOLD.get(), 1)
+                .pattern("GPG").pattern("PRP").pattern("GPG")
+                .define('G', Items.GUNPOWDER)
+                .define('P', NtmItems.PLATE_GOLD.get())
+                .define('R', ItemTags.MUSIC_DISCS)
+                .unlockedBy("has_plate_gold", has(NtmItems.PLATE_GOLD.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("defuser_gold"));
+    }
+
     private void explosiveStickRecipes(RecipeOutput recipeOutput) {
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.SAFETY_FUSE.get(), 8)

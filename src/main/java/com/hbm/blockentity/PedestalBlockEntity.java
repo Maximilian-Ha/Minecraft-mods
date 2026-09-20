@@ -1,6 +1,9 @@
 package com.hbm.blockentity;
 
 import com.hbm.blocks.generic.PedestalBlock;
+import com.hbm.entity.mob.CreeperDefuser;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.phys.AABB;
 import com.hbm.items.NtmItems;
 
 import net.minecraft.core.BlockPos;
@@ -21,13 +24,16 @@ import net.minecraft.world.level.block.state.BlockState;
  * Schutz- oder Meteoritentalisman darauf, meldet er sich alle zwanzig Takte beim
  * Eintragsregister des Blocks, und das Meteoritensystem fragt dort nach.
  *
- * NICHT UEBERNOMMEN: der goldene Entschaerfer, der im Original alle sechzig Takte die
- * Creeper im Umkreis entschaerft. Der Port kennt defuser_gold nicht -- es gibt den
- * Entschaerfer nur als Werkzeug (ToolType.DEFUSER), nicht als Ruestungsaufsatz, und
- * ItemModDefuser.castrateCreeper hat kein Gegenstueck. Eine Abfrage auf einen Gegenstand,
- * den es nicht gibt, waere eine Zeile, die nie zutrifft.
+ * DER GOLDENE SEITENSCHNEIDER kam in Runde 242 nach. Bis dahin stand hier, dass der Port
+ * defuser_gold nicht kennt und eine Abfrage darauf eine Zeile waere, die nie zutrifft.
+ * Jetzt gibt es ihn, und der Sockel entschaerft mit ihm wie im Original alle sechzig Takte
+ * jeden Creeper im Umkreis von fuenfundzwanzig Bloecken -- ohne Zuendschnur, ohne Ton: nur
+ * ein Sockel, in dessen Naehe kein Creeper mehr hochgeht.
  */
 public class PedestalBlockEntity extends BlockEntity {
+
+    /** Der Umkreis des goldenen Seitenschneiders: expand(25, 25, 25) im Original. */
+    public static final double REICHWEITE = 25D;
 
     public ItemStack item = ItemStack.EMPTY;
 
@@ -44,6 +50,19 @@ public class PedestalBlockEntity extends BlockEntity {
         }
         if(sockel.item.is(NtmItems.METEOR_CHARM.get())) {
             PedestalBlock.pushEntry(level, PedestalBlock.EntryType.METEORITE_CHARM, pos);
+        }
+
+        /* Alle sechzig Takte, nicht alle zwanzig: das Original hat hier eine zweite,
+         * engere Bedingung. Die Umkreissuche geht ueber fuenfzig Bloecke Kantenlaenge. */
+        if(level.getGameTime() % 60 == 0 && sockel.item.is(NtmItems.DEFUSER_GOLD.get())) {
+
+            AABB umkreis = new AABB(pos).inflate(REICHWEITE);
+
+            for(Creeper creeper : level.getEntitiesOfClass(Creeper.class, umkreis)) {
+                /* Ohne Ausgabe: ein Sockel, der jede Minute Zuendschnuere auswirft, waere
+                 * eine Zuendschnurfabrik. Das Original uebergibt hier ebenfalls false. */
+                CreeperDefuser.entschaerfe(creeper, null, false);
+            }
         }
     }
 
