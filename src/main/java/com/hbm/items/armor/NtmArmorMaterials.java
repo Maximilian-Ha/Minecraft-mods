@@ -99,6 +99,12 @@ public class NtmArmorMaterials {
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> SCHRABIDIUM = register("schrabidium", "schrabidium", 50, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.INGOT_SCHRABIDIUM.get()));
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> PAA = register("paa", "paa", 25, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.PLATE_PAA.get()));
 
+    /* Die T-51: Haltbarkeitsfaktor 150, {3, 8, 6, 3}, keine Verzauberbarkeit, Reparatur mit
+     * der Titan-Panzerplatte. Sie wird als Wellenfrontmodell gezeichnet, die Schicht bleibt
+     * darum unsichtbar. */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> T51 = register("t51", LAYER_INVISIBLE, 0, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.PLATE_ARMOR_TITANIUM.get()));
+
+    public static final int DURABILITY_T51 = 150;
     public static final int DURABILITY_ASBESTOS = 20;
     public static final int DURABILITY_CMB = 60;
     public static final int DURABILITY_SCHRABIDIUM = 100;

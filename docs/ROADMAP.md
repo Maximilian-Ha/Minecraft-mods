@@ -9876,6 +9876,69 @@ weil sie der Standardfall ist und Runde 212 den Kobaltsatz schon so gebaut hat:
 
 **Stahl → Kobalt → Sternmetall → Schrabidium**
 
-Damit sind von den 103 Namen aus Runde 210 noch **55** offen.
+Damit sind von den 103 Namen aus Runde 210 noch ~~55~~ **54** offen.
+*(Berichtigung aus Runde 214: nachgemessen auf `0353b37d` sind es 54. Die 55 war
+gezählt, nicht gemessen.)*
+
+Alle 39 Tore grün.
+
+## Runde 214 — Die T-51, die erste Panzerrüstung der Liste
+
+Die T-51 ist die erste Garnitur der Restliste, die *nicht* bloß eine Zahlenreihe ist: eine
+Panzerrüstung mit OBJ-Modell, eigener Energieversorgung und vier Texturen. Damit beginnt der
+teure Teil — die 50 Namen, die danach noch offen sind, brauchen alle dasselbe.
+
+### Was die Rüstung kann
+
+| | |
+|---|---|
+| Modell | `armor/t51.obj`, acht Teile (Helm, Brust, zwei Arme, zwei Beine, zwei Stiefel) |
+| Texturen | vier: Helm, Brust, Arm, Bein |
+| Energie | 1 000 000 HE, 10 000 Ladung, 1000 Verbrauch, 5 Abfluss |
+| Wirkung | Stärke I, solange sie Strom hat |
+| Schutz | `ArmorUtil.FULL_NO_LIGHT` auf allen vier Teilen — alles außer Blendschutz |
+| Strahlung | 90 % Abschirmung, mit Geigerton |
+
+`FULL_NO_LIGHT` ist neu: das vollständige Schutzpaket ohne `LIGHT`. Die T-51 ist die erste
+Rüstung des Ports, die alles abhält außer dem Blitz.
+
+### Das Gegenstandsbild ist Absicht
+
+Alle vier Teile tragen dasselbe Bild, `armor.png`. Das ist keine Auslassung — das Original
+gibt jeder Panzerrüstung dieses eine Bild über `setTextureName(":armor")`, und weder dort
+noch in der CE-Abspaltung gibt es ein eigenes Bild pro Garnitur.
+
+### Nicht übernommen
+
+`enableVATS`, `setHasHardLanding`, `setStep`/`setJump`/`setFall` und
+`hides(EnumPlayerPart.HAT)` — dieselben fünf, die schon beim HEV-Anzug (Runde 101)
+draußen geblieben sind, aus demselben Grund: die zugehörigen Haken gibt es im Port noch nicht.
+Sie stehen als Ursache ohne Wirkung im Original und würden hier als Wirkung ohne Ursache
+landen.
+
+### Die Baupläne
+
+Jedes Stück wird um das entsprechende Titanstück herumgebaut (`ArmorRecipes.java` Z. 61–64):
+
+| Stück | Muster | Zusätzlich |
+|---|---|---|
+| Helm | `PPC` / `PBP` / `IXI` | Leiterplatte, Kautschuk, **M65-Maske** |
+| Brust | `MPM` / `TBT` / `PPP` | zwei Motoren, **zwei leere Gasflaschen** |
+| Hose | `MPM` / `PBP` / `P P` | zwei Motoren |
+| Stiefel | `P P` / `PBP` | — |
+
+Die leere Gasflasche in der Brustplatte ist erst seit Runde 208 im Port. Hätte ich die T-51
+vorher angefasst, wäre genau dieser Bauplan blockiert gewesen — jetzt ist er es nicht.
+
+### Eine vierte Fehlmessung, diesmal in die andere Richtung
+
+Runde 213 schrieb, es seien noch 55 Namen offen. Nachgemessen auf demselben Commit sind es
+54. Die drei Fehlmessungen davor (207, 209, 212) haben die Lücke jeweils **zu klein**
+erklärt; diese hier hat sie zu groß erklärt. Beides kommt aus derselben Quelle: eine Zahl
+fortschreiben statt sie neu messen.
+
+Nach dieser Runde sind **50** offen, alle davon OBJ-Panzerrüstungen: `ajr_*`, `ajro_*`,
+`bismuth_*`, `bj_*` (+ `bj_plate_jetpack`), `dieselsuit_*`, `dns_*`, `envsuit_*`,
+`euphemium_*`, `fau_*`, `nossy_hat`, `steamsuit_*`, `taurun_*`, `trenchmaster_*`.
 
 Alle 39 Tore grün.

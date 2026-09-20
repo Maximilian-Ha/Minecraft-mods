@@ -97,6 +97,14 @@ public class HazmatRegistry {
         HazmatRegistry.registerHazmat(NtmItems.PAA_LEGS.get(), paa * legs);
         HazmatRegistry.registerHazmat(NtmItems.PAA_BOOTS.get(), paa * boots);
 
+        /* Die T-51 nimmt dem Traeger neunzig Prozent der Strahlung ab -- setRadResist(1.0)
+         * im Original. */
+        double t51 = 1.0D;          // 90%
+        HazmatRegistry.registerHazmat(NtmItems.T51_HELMET.get(), t51 * helmet);
+        HazmatRegistry.registerHazmat(NtmItems.T51_PLATE.get(), t51 * chest);
+        HazmatRegistry.registerHazmat(NtmItems.T51_LEGS.get(), t51 * legs);
+        HazmatRegistry.registerHazmat(NtmItems.T51_BOOTS.get(), t51 * boots);
+
         double liquidator = 2.4D;   // 99,6%
         HazmatRegistry.registerHazmat(NtmItems.LIQUIDATOR_HELMET.get(), liquidator * helmet);
         HazmatRegistry.registerHazmat(NtmItems.LIQUIDATOR_PLATE.get(), liquidator * chest);

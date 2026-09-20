@@ -911,6 +911,12 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicItem(NtmItems.PAA_PLATE.get());
         this.basicItem(NtmItems.PAA_LEGS.get());
         this.basicItem(NtmItems.PAA_BOOTS.get());
+        /* Die T-51 teilt sich das allgemeine Ruestungsbild -- im Original heisst es
+         * "armor" und steht bei allen Panzerruestungen im setTextureName. */
+        this.basicCustomLayerItem(NtmItems.T51_HELMET.get(), "armor");
+        this.basicCustomLayerItem(NtmItems.T51_PLATE.get(), "armor");
+        this.basicCustomLayerItem(NtmItems.T51_LEGS.get(), "armor");
+        this.basicCustomLayerItem(NtmItems.T51_BOOTS.get(), "armor");
         this.basicItem(NtmItems.ASBESTOS_CLOTH.get());
         this.basicItem(NtmItems.MASK_RAG.get());
         this.basicItem(NtmItems.MASK_PISS.get());

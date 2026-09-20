@@ -3847,6 +3847,46 @@ public class NtmRecipeProvider extends RecipeProvider {
         armorPiece(recipeOutput, NtmItems.ZIRCONIUM_LEGS.get(), Ingredient.of(NtmItems.INGOT_ZIRCONIUM.get()), "EEE", "E E", "E E");
 
         /*
+         * DIE T-51-PANZERRUESTUNG, ArmorRecipes.java Z. 61 bis 64. Jedes Stueck wird um das
+         * entsprechende Titanstueck herumgebaut -- der Helm zusaetzlich um eine M65-Maske,
+         * wie im Original. EnumCircuitType.BASIC ist die integrierte Leiterplatte und
+         * ANY_RUBBER.ingot() der Kautschukbarren, wie in allen Runden davor.
+         */
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.T51_HELMET.get(), 1)
+                .pattern("PPC").pattern("PBP").pattern("IXI")
+                .define('P', NtmItems.PLATE_ARMOR_TITANIUM.get())
+                .define('C', NtmItems.CIRCUIT_INTEGRATED_BOARD.get())
+                .define('I', NtmItems.INGOT_RUBBER.get())
+                .define('X', NtmItems.GAS_MASK_M65.get())
+                .define('B', NtmItems.TITANIUM_HELMET.get())
+                .unlockedBy("has_plate_armor_titanium", has(NtmItems.PLATE_ARMOR_TITANIUM.get()))
+                .save(recipeOutput);
+        /* Brustplatte und Beinzeug tragen je zwei Motoren -- das sind die Servos, die
+         * die Panzerung ueberhaupt beweglich machen. Die beiden Gasflaschen in der
+         * Brustplatte sind der Druckluftvorrat. Die Stiefel kommen ohne beides aus. */
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.T51_PLATE.get(), 1)
+                .pattern("MPM").pattern("TBT").pattern("PPP")
+                .define('M', NtmItems.MOTOR.get())
+                .define('P', NtmItems.PLATE_ARMOR_TITANIUM.get())
+                .define('T', NtmItems.GAS_EMPTY.get())
+                .define('B', NtmItems.TITANIUM_PLATE.get())
+                .unlockedBy("has_plate_armor_titanium", has(NtmItems.PLATE_ARMOR_TITANIUM.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.T51_LEGS.get(), 1)
+                .pattern("MPM").pattern("PBP").pattern("P P")
+                .define('M', NtmItems.MOTOR.get())
+                .define('P', NtmItems.PLATE_ARMOR_TITANIUM.get())
+                .define('B', NtmItems.TITANIUM_LEGS.get())
+                .unlockedBy("has_plate_armor_titanium", has(NtmItems.PLATE_ARMOR_TITANIUM.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.T51_BOOTS.get(), 1)
+                .pattern("P P").pattern("PBP")
+                .define('P', NtmItems.PLATE_ARMOR_TITANIUM.get())
+                .define('B', NtmItems.TITANIUM_BOOTS.get())
+                .unlockedBy("has_plate_armor_titanium", has(NtmItems.PLATE_ARMOR_TITANIUM.get()))
+                .save(recipeOutput);
+
+        /*
          * DIE AUFSTIEGSKETTE. Das Original bietet zwei Wege an und stellt ueber
          * enableLBSMSimpleArmorRecipes um: entweder jede Garnitur schlicht aus ihrem Barren,
          * oder jede aus der vorigen. Der Port nimmt die Kette -- sie ist der Standardfall,

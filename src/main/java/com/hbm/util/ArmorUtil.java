@@ -55,12 +55,26 @@ public class ArmorUtil {
         for(Item teil : new Item[] { NtmItems.HEV_HELMET.get(), NtmItems.HEV_PLATE.get(), NtmItems.HEV_LEGS.get(), NtmItems.HEV_BOOTS.get() }) {
             ArmorRegistry.registerHazard(teil, FULL_PACKAGE);
         }
+
+        /* Die T-51 haelt alles ab ausser Blendung -- sie hat ein Sichtfenster. */
+        for(Item teil : new Item[] { NtmItems.T51_HELMET.get(), NtmItems.T51_PLATE.get(), NtmItems.T51_LEGS.get(), NtmItems.T51_BOOTS.get() }) {
+            ArmorRegistry.registerHazard(teil, FULL_NO_LIGHT);
+        }
     }
 
     /**
      * Alles, wogegen ein geschlossener Anzug schuetzt. Uebernommen aus ArmorUtil des
      * Originals, wo dieselbe Liste unter demselben Namen steht.
      */
+    /**
+     * Dasselbe ohne LIGHT. Panzerruestungen mit Sichtfenster halten alles ab, was ein
+     * geschlossener Anzug abhaelt -- nur vor Blendung schuetzen sie nicht. Im Original heisst
+     * diese Liste ebenso.
+     */
+    public static final HazardClass[] FULL_NO_LIGHT = {
+            HazardClass.PARTICLE_COARSE, HazardClass.PARTICLE_FINE, HazardClass.GAS_LUNG, HazardClass.BACTERIA,
+            HazardClass.GAS_BLISTERING, HazardClass.GAS_MONOXIDE, HazardClass.SAND };
+
     public static final HazardClass[] FULL_PACKAGE = {
             HazardClass.PARTICLE_COARSE, HazardClass.PARTICLE_FINE, HazardClass.GAS_LUNG, HazardClass.BACTERIA,
             HazardClass.GAS_BLISTERING, HazardClass.GAS_MONOXIDE, HazardClass.LIGHT, HazardClass.SAND };

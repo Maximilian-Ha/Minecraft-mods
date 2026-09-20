@@ -408,6 +408,12 @@ public class ResourceManager {
     public static final ResourceLocation N_I_4_N_I_GREYSCALE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/n_i_4_n_i_greyscale.png");
 
     public static final ResourceLocation HEV_HELMET = NuclearTechMod.withDefaultNamespace("textures/armor/hev_helmet.png");
+    /* Die T-51-Panzerruestung: vier Texturen auf acht Modellteilen. */
+    public static final ResourceLocation T51_HELMET = NuclearTechMod.withDefaultNamespace("textures/armor/t51_helmet.png");
+    public static final ResourceLocation T51_CHEST = NuclearTechMod.withDefaultNamespace("textures/armor/t51_chest.png");
+    public static final ResourceLocation T51_ARM = NuclearTechMod.withDefaultNamespace("textures/armor/t51_arm.png");
+    public static final ResourceLocation T51_LEG = NuclearTechMod.withDefaultNamespace("textures/armor/t51_leg.png");
+
     /** Die Aschebrille -- im Original heisst die Datei ebenso. */
     public static final ResourceLocation ARMOR_GOGGLES = NuclearTechMod.withDefaultNamespace("textures/armor/goggles.png");
     public static final ResourceLocation HEV_LEG = NuclearTechMod.withDefaultNamespace("textures/armor/hev_leg.png");
@@ -778,6 +784,7 @@ public class ResourceManager {
     public static IModelCustom armor_hat;
     public static IModelCustom armor_no9;
     public static IModelCustom armor_goggles;
+    public static IModelCustom armor_t51;
 
     public static IObjRenderer sphere;
     public static IModelCustom sphere_new;
@@ -1092,6 +1099,7 @@ public class ResourceManager {
         armor_hat = new HFRWavefrontObject("models/obj/armor/hat.obj").asVBO();
         armor_no9 = new HFRWavefrontObject("models/obj/armor/no9.obj").asVBO();
         armor_goggles = new HFRWavefrontObject("models/obj/armor/goggles.obj").asVBO();
+        armor_t51 = new HFRWavefrontObject("models/obj/armor/t51.obj").asVBO();
 
         sphere = new HFRWavefrontObject("models/obj/sphere.obj").getRenderer();
         sphere_new = new HFRWavefrontObject("models/obj/sphere_new.obj").asVBO();

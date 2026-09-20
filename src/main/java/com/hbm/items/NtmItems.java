@@ -22,6 +22,7 @@ import com.hbm.items.special.SimpleConsumableItem;
 import com.hbm.items.special.SyringeItem;
 import com.hbm.items.armor.ArmorNCRPAItem;
 import com.hbm.items.armor.ArmorRPAItem;
+import com.hbm.items.armor.ArmorT51Item;
 import com.hbm.items.armor.ArmorHEVItem;
 import com.hbm.items.armor.ArmorNo9;
 import com.hbm.items.armor.FilterItem;
@@ -1664,6 +1665,15 @@ public class NtmItems {
      * Reihenfolge voraus -- der Helm muss schon angemeldet sein. Der Port baut alle vier
      * aus derselben Vorschrift, damit bleibt die Anmeldung reihenfolgefrei.
      */
+    /*
+     * DIE T-51-PANZERRUESTUNG. Eine Million Ladung, Staerke I fuer den Satz, Geigerton, und
+     * sie schirmt gegen alles ab ausser Blendung (FULL_NO_LIGHT in ArmorUtil).
+     */
+    public static final DeferredItem<Item> T51_HELMET = ITEMS.register("t51_helmet", () -> t51(ArmorItem.Type.HELMET));
+    public static final DeferredItem<Item> T51_PLATE = ITEMS.register("t51_plate", () -> t51(ArmorItem.Type.CHESTPLATE));
+    public static final DeferredItem<Item> T51_LEGS = ITEMS.register("t51_legs", () -> t51(ArmorItem.Type.LEGGINGS));
+    public static final DeferredItem<Item> T51_BOOTS = ITEMS.register("t51_boots", () -> t51(ArmorItem.Type.BOOTS));
+
     public static final DeferredItem<Item> HEV_HELMET = ITEMS.register("hev_helmet", () -> hev(ArmorItem.Type.HELMET));
     public static final DeferredItem<Item> HEV_PLATE = ITEMS.register("hev_plate", () -> hev(ArmorItem.Type.CHESTPLATE));
     public static final DeferredItem<Item> HEV_LEGS = ITEMS.register("hev_legs", () -> hev(ArmorItem.Type.LEGGINGS));
@@ -1693,6 +1703,12 @@ public class NtmItems {
     private static ArmorFSBItem ncrpa(ArmorItem.Type type) {
         return new ArmorNCRPAItem(NtmArmorMaterials.AJR, type, new Item.Properties().durability(type.getDurability(NtmArmorMaterials.DURABILITY_AJR)), 2_500_000, 10_000, 2_000, 25)
                 .addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20, 3))
+                .setHasGeigerSound(true);
+    }
+
+    private static ArmorFSBItem t51(ArmorItem.Type type) {
+        return new ArmorT51Item(NtmArmorMaterials.T51, type, new Item.Properties().stacksTo(1).durability(type.getDurability(NtmArmorMaterials.DURABILITY_T51)), 1_000_000, 10_000, 1_000, 5)
+                .addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20, 0))
                 .setHasGeigerSound(true);
     }
 

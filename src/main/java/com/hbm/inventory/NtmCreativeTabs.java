@@ -2022,6 +2022,10 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.PAA_PLATE);
                         output.accept(NtmItems.PAA_LEGS);
                         output.accept(NtmItems.PAA_BOOTS);
+                        output.accept(NtmItems.T51_HELMET);
+                        output.accept(NtmItems.T51_PLATE);
+                        output.accept(NtmItems.T51_LEGS);
+                        output.accept(NtmItems.T51_BOOTS);
                         output.accept(NtmItems.MASK_RAG);
                         output.accept(NtmItems.MASK_PISS);
                         output.accept(NtmItems.GAS_MASK_FILTER);
