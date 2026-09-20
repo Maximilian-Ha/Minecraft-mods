@@ -4052,6 +4052,41 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .save(recipeOutput);
 
         /*
+         * DER M1TTY-UMGEBUNGSANZUG, ArmorRecipes.java Z. 98 bis 101. Titanplatten und
+         * Kautschuk; der Helm bekommt einen Mikrochip und eine Glasscheibe als Sichtfenster,
+         * Brustplatte und Beinzeug je eine titanene Gussplatte. KEY_ANYPANE ist im Original
+         * der Wortverzeichniseintrag "paneGlass", hier die Glasscheiben-Kennung.
+         */
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.ENVSUIT_HELMET.get(), 1)
+                .pattern("TCT").pattern("TGT").pattern("RRR")
+                .define('T', NtmItems.PLATE_TITANIUM.get())
+                .define('C', NtmItems.CIRCUIT_MICROCHIP.get())
+                .define('G', Tags.Items.GLASS_PANES)
+                .define('R', NtmItems.INGOT_RUBBER.get())
+                .unlockedBy("has_plate_titanium", has(NtmItems.PLATE_TITANIUM.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.ENVSUIT_PLATE.get(), 1)
+                .pattern("T T").pattern("TCT").pattern("RRR")
+                .define('T', NtmItems.PLATE_TITANIUM.get())
+                .define('C', castPlate(CastPlateItem.Type.TITANIUM))
+                .define('R', NtmItems.INGOT_RUBBER.get())
+                .unlockedBy("has_plate_titanium", has(NtmItems.PLATE_TITANIUM.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.ENVSUIT_LEGS.get(), 1)
+                .pattern("TCT").pattern("R R").pattern("T T")
+                .define('T', NtmItems.PLATE_TITANIUM.get())
+                .define('C', castPlate(CastPlateItem.Type.TITANIUM))
+                .define('R', NtmItems.INGOT_RUBBER.get())
+                .unlockedBy("has_plate_titanium", has(NtmItems.PLATE_TITANIUM.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.ENVSUIT_BOOTS.get(), 1)
+                .pattern("R R").pattern("T T")
+                .define('T', NtmItems.PLATE_TITANIUM.get())
+                .define('R', NtmItems.INGOT_RUBBER.get())
+                .unlockedBy("has_plate_titanium", has(NtmItems.PLATE_TITANIUM.get()))
+                .save(recipeOutput);
+
+        /*
          * DIE AUFSTIEGSKETTE. Das Original bietet zwei Wege an und stellt ueber
          * enableLBSMSimpleArmorRecipes um: entweder jede Garnitur schlicht aus ihrem Barren,
          * oder jede aus der vorigen. Der Port nimmt die Kette -- sie ist der Standardfall,

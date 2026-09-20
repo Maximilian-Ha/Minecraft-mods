@@ -4108,6 +4108,11 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.TRENCHMASTER_PLATE, "Trenchmaster's Chestplate");
         this.add(NtmItems.TRENCHMASTER_LEGS, "Trenchmaster's Leggings");
         this.add(NtmItems.TRENCHMASTER_BOOTS, "Trenchmaster's Boots");
+
+        this.add(NtmItems.ENVSUIT_HELMET, "M1TTY Environment Suit Helmet");
+        this.add(NtmItems.ENVSUIT_PLATE, "M1TTY Environment Suit Chestplate");
+        this.add(NtmItems.ENVSUIT_LEGS, "M1TTY Environment Suit Leggings");
+        this.add(NtmItems.ENVSUIT_BOOTS, "M1TTY Environment Suit Boots");
         this.add("armor.moreAmmo", "More Ammo");
         this.add(NtmItems.ASBESTOS_CLOTH, "Asbestos Cloth");
         this.add(NtmItems.MASK_RAG, "Crude Protective Mask");

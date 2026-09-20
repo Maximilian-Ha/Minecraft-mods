@@ -83,6 +83,11 @@ public class ArmorUtil {
         for(Item teil : new Item[] { NtmItems.TRENCHMASTER_HELMET.get(), NtmItems.TRENCHMASTER_PLATE.get(), NtmItems.TRENCHMASTER_LEGS.get(), NtmItems.TRENCHMASTER_BOOTS.get() }) {
             ArmorRegistry.registerHazard(teil, FULL_PACKAGE);
         }
+
+        /* Der Umgebungsanzug ebenso -- er ist ja gerade dafuer gebaut. */
+        for(Item teil : new Item[] { NtmItems.ENVSUIT_HELMET.get(), NtmItems.ENVSUIT_PLATE.get(), NtmItems.ENVSUIT_LEGS.get(), NtmItems.ENVSUIT_BOOTS.get() }) {
+            ArmorRegistry.registerHazard(teil, FULL_PACKAGE);
+        }
     }
 
     /**

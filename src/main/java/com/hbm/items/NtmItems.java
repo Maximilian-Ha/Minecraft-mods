@@ -25,6 +25,7 @@ import com.hbm.items.armor.ArmorRPAItem;
 import com.hbm.items.armor.ArmorAJRItem;
 import com.hbm.items.armor.ArmorBismuthItem;
 import com.hbm.items.armor.ArmorDigammaItem;
+import com.hbm.items.armor.ArmorEnvsuitItem;
 import com.hbm.items.armor.ArmorEuphemiumItem;
 import com.hbm.items.armor.ArmorT51Item;
 import com.hbm.items.armor.ArmorTrenchmasterItem;
@@ -1765,6 +1766,16 @@ public class NtmItems {
     public static final DeferredItem<Item> TRENCHMASTER_LEGS = ITEMS.register("trenchmaster_legs", () -> trenchmaster(ArmorItem.Type.LEGGINGS));
     public static final DeferredItem<Item> TRENCHMASTER_BOOTS = ITEMS.register("trenchmaster_boots", () -> trenchmaster(ArmorItem.Type.BOOTS));
 
+    /*
+     * DER M1TTY-UMGEBUNGSANZUG. Ein Taucheranzug mit Landgang: im Sprint schneller, unter
+     * Wasser voller Atem, Nachtsicht und ein Antrieb in Blickrichtung. Siehe
+     * ArmorEnvsuitItem.
+     */
+    public static final DeferredItem<Item> ENVSUIT_HELMET = ITEMS.register("envsuit_helmet", () -> envsuit(ArmorItem.Type.HELMET));
+    public static final DeferredItem<Item> ENVSUIT_PLATE = ITEMS.register("envsuit_plate", () -> envsuit(ArmorItem.Type.CHESTPLATE));
+    public static final DeferredItem<Item> ENVSUIT_LEGS = ITEMS.register("envsuit_legs", () -> envsuit(ArmorItem.Type.LEGGINGS));
+    public static final DeferredItem<Item> ENVSUIT_BOOTS = ITEMS.register("envsuit_boots", () -> envsuit(ArmorItem.Type.BOOTS));
+
     public static final DeferredItem<Item> HEV_HELMET = ITEMS.register("hev_helmet", () -> hev(ArmorItem.Type.HELMET));
     public static final DeferredItem<Item> HEV_PLATE = ITEMS.register("hev_plate", () -> hev(ArmorItem.Type.CHESTPLATE));
     public static final DeferredItem<Item> HEV_LEGS = ITEMS.register("hev_legs", () -> hev(ArmorItem.Type.LEGGINGS));
@@ -1860,6 +1871,13 @@ public class NtmItems {
                 .addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 20, 1))
                 .addEffect(new MobEffectInstance(MobEffects.JUMP, 20, 1))
                 .addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 20, 0));
+    }
+
+    /** Der Umgebungsanzug. Mit 100 000 HE der sparsamste bestrombare Satz des Ports. */
+    private static ArmorFSBItem envsuit(ArmorItem.Type type) {
+        return new ArmorEnvsuitItem(NtmArmorMaterials.ENVSUIT, type, new Item.Properties().stacksTo(1).durability(type.getDurability(NtmArmorMaterials.DURABILITY_ENVSUIT)), 100_000, 1_000, 250, 0)
+                .addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 20, 1))
+                .addEffect(new MobEffectInstance(MobEffects.JUMP, 20, 0));
     }
 
     private static ArmorFSBItem hev(ArmorItem.Type type) {

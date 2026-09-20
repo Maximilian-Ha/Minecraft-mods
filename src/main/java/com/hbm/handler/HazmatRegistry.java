@@ -139,6 +139,13 @@ public class HazmatRegistry {
         HazmatRegistry.registerHazmat(NtmItems.TRENCHMASTER_LEGS.get(), trench * legs);
         HazmatRegistry.registerHazmat(NtmItems.TRENCHMASTER_BOOTS.get(), trench * boots);
 
+        /* Der Umgebungsanzug: 1,0 auf den ganzen Satz, im Original als Kommentar "90%". */
+        double env = 1.0D;          // 90%
+        HazmatRegistry.registerHazmat(NtmItems.ENVSUIT_HELMET.get(), env * helmet);
+        HazmatRegistry.registerHazmat(NtmItems.ENVSUIT_PLATE.get(), env * chest);
+        HazmatRegistry.registerHazmat(NtmItems.ENVSUIT_LEGS.get(), env * legs);
+        HazmatRegistry.registerHazmat(NtmItems.ENVSUIT_BOOTS.get(), env * boots);
+
         /* Euphemium: Faktor 10, im Original mit dem Vermerk "<100%" -- der Satz haelt viel
          * ab, aber nicht alles. */
         double euph = 10D;

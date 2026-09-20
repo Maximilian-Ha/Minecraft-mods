@@ -143,7 +143,15 @@ public class NtmArmorMaterials {
      */
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> TRENCHMASTER = register("trenchmaster", LAYER_INVISIBLE, 0, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.PLATE_IRON.get()));
 
+    /*
+     * Umgebungsanzug: {3, 8, 6, 3}, Verzauberbarkeit 10, Haltbarkeitsfaktor 150, Reparatur
+     * mit der HEV-Panzerplatte (so steht es im Original -- er teilt sie sich mit dem
+     * HEV-Anzug). Wellenfrontmodell, Schicht unsichtbar.
+     */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> ENVSUIT = register("envsuit", LAYER_INVISIBLE, 10, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.PLATE_ARMOR_HEV.get()));
+
     public static final int DURABILITY_T51 = 150;
+    public static final int DURABILITY_ENVSUIT = 150;
     public static final int DURABILITY_FAU = 150;
     public static final int DURABILITY_BISMUTH = 100;
     public static final int DURABILITY_ASBESTOS = 20;

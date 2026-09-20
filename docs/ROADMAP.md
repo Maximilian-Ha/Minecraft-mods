@@ -10295,3 +10295,50 @@ Taurun.
 Nach dieser Runde sind **22** Rüstungsnamen offen.
 
 Alle 39 Tore grün.
+
+## Runde 221 — Der M1TTY-Umgebungsanzug
+
+Ein Taucheranzug mit Landgang, und der erste der Reihe, dessen Wirkung davon abhängt, **wo
+der Träger gerade steht**.
+
+| | |
+|---|---|
+| Energie | 100 000 HE — der sparsamste bestrombare Satz des Ports |
+| Satzbonus | Tempo II, Sprungkraft I |
+| Im Sprint | ein Zehntel mehr Tempo, das beim Anhalten wieder verschwindet |
+| Unter Wasser | voller Atem, Nachtsicht, Antrieb in Blickrichtung |
+| Über Wasser | die Nachtsicht wird wieder abgenommen |
+| Strahlung | 90 %, `FULL_PACKAGE` |
+
+Der Sprintaufschlag wird **jeden Tick erst abgenommen und dann gegebenenfalls neu aufgelegt**
+— so hält das Original ihn an den Sprint gebunden, ohne ihn zu stapeln. Der Port macht es
+genauso, nur mit einem festen Namen statt einer festen UUID.
+
+### Eine sichtbare Abweichung, und warum
+
+Zum Helm gehören **Lampen**, die voll ausgeleuchtet und gelblich gezeichnet werden. Das
+Original zeichnet sie **ganz ohne Textur**: es schaltet `GL_TEXTURE_2D` ab und setzt eine
+reine Farbe. In 1.21 tastet die Zeichenart immer eine Textur ab — der Port färbt deshalb die
+Helmtextur ein, statt sie abzuschalten.
+
+Die Lampen leuchten also gelblich wie dort, zeigen aber die Maserung des Helms. Das ist die
+erste Abweichung dieser Reihe, die man **sieht**, und sie steht deshalb im Modell, nicht nur
+hier.
+
+### Ein Schwanz, den niemand zeichnet
+
+`envsuit.obj` enthält ein Teil namens `Tail`, und `ResourceManager` meldet eine Textur
+`envsuit_tail` dafür an. Gebunden wird sie nirgends — auch im Original nicht. Beides bleibt
+draußen: kein Zeichnen, keine Textur. Eine Wirkung ohne Ursache wäre hier ein Modellteil ohne
+Grund.
+
+### Nicht übernommen
+
+`hides(EnumPlayerPart.HAT)` wie überall. Dazu die Ausnahme für den **Nachtsicht-Aufsatz**: das
+Original nimmt die Nachtsicht *nicht* ab, wenn im Helm ein `ItemModNightVision` steckt. Dieses
+Modul gibt es im Port noch nicht — solange es fehlt, verhält sich der Anzug wie das Original
+ohne Aufsatz, was nachgemessen dasselbe ist.
+
+Nach dieser Runde sind **18** Rüstungsnamen offen.
+
+Alle 39 Tore grün.
