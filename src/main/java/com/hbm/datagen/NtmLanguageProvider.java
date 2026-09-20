@@ -4213,6 +4213,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("entity.hbmsntm.undead_soldier", "Undead Soldier");
         this.add("entity.hbmsntm.cyber_crab", "Cybercrab");
         this.add("entity.hbmsntm.tesla_crab", "Teslacrab");
+        this.add("entity.hbmsntm.taint_crab", "Taintcrab");
         this.add("entity.hbmsntm.tau_shot", "Tau Bolt");
         this.add("entity.hbmsntm.duck", "Duck");
         this.add("entity.hbmsntm.creeper_nuclear", "Nuclear Creeper");

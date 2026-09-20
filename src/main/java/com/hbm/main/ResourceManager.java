@@ -103,6 +103,8 @@ public class ResourceManager {
     public static final ResourceLocation TESLA_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/tesla.png");
     /** Die Teslakrabbe, Runde 236. Ihr Koerper ist ein OBJ-Modell, kein Kastensatz. */
     public static final ResourceLocation TESLACRAB_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/teslacrab.png");
+    /** Die Taint-Krabbe, Runde 237. Auch sie traegt ein OBJ-Modell. */
+    public static final ResourceLocation TAINTCRAB_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/taintcrab.png");
     /* Der Sockel nimmt im Original die Partikeltextur des Skeletts -- keine eigene Haut. */
     public static final ResourceLocation SKELETON_HOLDER_TEX = NuclearTechMod.withDefaultNamespace("textures/particle/skeleton.png");
     public static final ResourceLocation DEMON_LAMP_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/demon_lamp.png");
@@ -707,6 +709,7 @@ public class ResourceManager {
     public static IModelCustom heater_heatex;
     public static IModelCustom tesla;
     public static IModelCustom teslacrab;
+    public static IModelCustom taintcrab;
     public static IModelCustom skeleton_holder;
     public static IModelCustom demon_lamp;
 
@@ -1040,6 +1043,7 @@ public class ResourceManager {
         heater_heatex = new HFRWavefrontObject("models/obj/machines/heatex.obj").asVBO();
         tesla = new HFRWavefrontObject("models/obj/machines/tesla.obj").asVBO();
         teslacrab = new HFRWavefrontObject("models/obj/mobs/teslacrab.obj").asVBO();
+        taintcrab = new HFRWavefrontObject("models/obj/mobs/taintcrab.obj").asVBO();
         skeleton_holder = new HFRWavefrontObject("models/obj/blocks/skeleton_holder.obj").noSmooth().asVBO();
         demon_lamp = new HFRWavefrontObject("models/obj/blocks/demon_lamp.obj").asVBO();
 

@@ -11119,3 +11119,30 @@ Offene Punkte dieser Runde:
   Zu sehen ist seine Staubspur.
 * **Die Taint-Krabbe fehlt noch.** Sie hängt nicht am Nest, sondern am Taint, und braucht
   das 7,62-mm-Geschoss samt Partikelpaket.
+
+### Runde 237: die Taint-Krabbe schließt die Krabbenfamilie
+
+Sie hängt nicht am Nest, sondern am Taint: wer als Teslakrabbe in den Taint läuft, kommt
+als Taint-Krabbe wieder heraus. Genau diesen Zweig hat `TaintBlock.entityInside` bis jetzt
+nicht gehabt.
+
+* **`TaintCrab`** -- fünfundzwanzig Lebenspunkte, anderthalb Blöcke Kantenlänge, Blitze im
+  Umkreis von zehn statt drei Blöcken, alle fünf Ticks ein brennendes
+  7,62-mm-Vollmantelgeschoss aus bis zu fünfzig Blöcken. Sie flieht nicht, sie zerplatzt
+  dreißigmal so stark wie die Grundkrabbe (Sprengkraft 3), und sie verseucht alles binnen
+  fünf Blöcken -- im Original mit Strahlung der Stärke sechzehn, nicht mit Taint; die
+  CE-Abspaltung hat das später geändert, der Port folgt dem Original.
+* Sie lässt null bis zwei Kupferspulen fallen und mit etwa 2,5 Prozent eine magnetisierte
+  Wolframspule.
+* **`TaintCrabRenderer`** -- `taintcrab.obj` mit den Teilen Body, Legs1 und Legs2.
+* **`TaintBlock`**: die Verwandlung der Teslakrabbe.
+
+Dabei berichtigt: die Blitze der Teslakrabbe wurden in Runde 236 mitgedreht, wenn sich die
+Krabbe drehte. Das Original zeichnet sie vor `super.doRender`, also in Weltrichtung; beide
+Krabbenrenderer tun das jetzt auch.
+
+Offen aus dieser Runde:
+
+* **Der verseuchte Creeper fehlt.** Im Taintblock steht direkt neben der Krabbe ein zweiter
+  Zweig, der einen gewöhnlichen Creeper in einen `EntityCreeperTainted` verwandelt. Diese
+  Klasse gibt es im Port noch nicht.

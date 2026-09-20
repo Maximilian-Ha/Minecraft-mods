@@ -36,6 +36,7 @@ import com.hbm.entity.missile.SatellitePod;
 import com.hbm.entity.missile.Soyuz;
 import com.hbm.entity.mob.CreeperNuclear;
 import com.hbm.entity.mob.CyberCrab;
+import com.hbm.entity.mob.TaintCrab;
 import com.hbm.entity.mob.TeslaCrab;
 import com.hbm.entity.mob.Duck;
 import com.hbm.entity.mob.UndeadSoldier;
@@ -156,6 +157,17 @@ public class NtmEntityTypes {
                     () -> EntityType.Builder.<TeslaCrab>of(TeslaCrab::new, MobCategory.MONSTER)
                             .sized(0.75F, 1.25F)
                             .build("tesla_crab"));
+
+    /**
+     * Die Taint-Krabbe. Anderthalb Bloecke in jede Richtung -- die groesste der drei.
+     * Gerufen wird sie nicht vom Nest, sondern vom Taint: wer als Teslakrabbe hineinlaeuft,
+     * kommt als diese wieder heraus.
+     */
+    public static final DeferredHolder<EntityType<?>, EntityType<TaintCrab>> TAINT_CRAB =
+            ENTITY_TYPES.register("taint_crab",
+                    () -> EntityType.Builder.<TaintCrab>of(TaintCrab::new, MobCategory.MONSTER)
+                            .sized(1.25F, 1.25F)
+                            .build("taint_crab"));
 
     /** Der Tau-Bolzen der Krabbe. Einen halben Block gross, wie jedes Geschoss des Originals. */
     public static final DeferredHolder<EntityType<?>, EntityType<TauShot>> TAU_SHOT =

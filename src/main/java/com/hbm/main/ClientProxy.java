@@ -18,6 +18,7 @@ import com.hbm.render.entity.item.RenderTNTPrimedBase;
 import com.hbm.render.entity.mob.CreeperNuclearRenderer;
 import com.hbm.render.entity.mob.DuckRenderer;
 import com.hbm.render.entity.mob.CyberCrabRenderer;
+import com.hbm.render.entity.mob.TaintCrabRenderer;
 import com.hbm.render.entity.mob.TeslaCrabRenderer;
 import com.hbm.render.entity.mob.UndeadSoldierRenderer;
 import com.hbm.render.entity.projectile.*;
@@ -456,6 +457,7 @@ public class ClientProxy extends ServerProxy {
         EntityRenderers.register(NtmEntityTypes.UNDEAD_SOLDIER.get(), UndeadSoldierRenderer::new);
         EntityRenderers.register(NtmEntityTypes.CYBER_CRAB.get(), CyberCrabRenderer::new);
         EntityRenderers.register(NtmEntityTypes.TESLA_CRAB.get(), TeslaCrabRenderer::new);
+        EntityRenderers.register(NtmEntityTypes.TAINT_CRAB.get(), TaintCrabRenderer::new);
         /* Der Tau-Bolzen hat kein Modell: das Original zeichnet ihn ueber die alte
          * Geschossklasse, deren OBJ-Datei der Port nicht hat. Zu sehen ist seine Staubspur,
          * und die zeichnet die Entitaet selbst. */

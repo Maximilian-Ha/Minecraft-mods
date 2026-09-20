@@ -1,6 +1,6 @@
 package com.hbm.render.entity.mob;
 
-import com.hbm.entity.mob.TeslaCrab;
+import com.hbm.entity.mob.TaintCrab;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.util.BeamPronter;
 import com.hbm.render.util.BeamPronter.BeamType;
@@ -21,38 +21,34 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 /**
- * Portiert aus 1.7.10: com.hbm.render.entity.mob.RenderTeslaCrab samt ModelTeslaCrab.
+ * Portiert aus 1.7.10: com.hbm.render.entity.mob.RenderTaintCrab samt ModelTaintCrab.
  *
- * Der Koerper ist keine Kastensammlung, sondern ein OBJ-Modell mit drei Teilen: Body,
- * Front, Back. Vorder- und Hinterbeine schwenken gegenlaeufig mit dem Schritt, der Koerper
- * steht still. Danach zeichnet der Renderer zu jedem Ziel, das die Krabbe gerade schlaegt,
- * einen Blitz -- dieselben Werte wie bei der Teslaspule.
- *
- * WEIL DAS MODELL AUF DEM KOPF STEHT, dreht das Original es um hundertachtzig Grad um Z
- * und schiebt es um anderthalb Bloecke nach unten. Beides bleibt.
+ * Wie die Teslakrabbe, mit drei Unterschieden: das Modell heisst taintcrab.obj und seine
+ * Beinteile Legs1 und Legs2, es steht eine Vierteldrehung quer, und die Blitze gehen von
+ * anderthalb statt von einem Block Hoehe aus.
  */
 @OnlyIn(Dist.CLIENT)
-public class TeslaCrabRenderer extends EntityRenderer<TeslaCrab> {
+public class TaintCrabRenderer extends EntityRenderer<TaintCrab> {
 
-    public TeslaCrabRenderer(EntityRendererProvider.Context context) {
+    /** Hoehe, aus der die Blitze kommen -- im Original posY + 1.25. */
+    private static final float BLITZHOEHE = 1.25F;
+
+    public TaintCrabRenderer(EntityRendererProvider.Context context) {
         super(context);
         this.shadowRadius = 1.0F;
         this.shadowStrength = 0.0F;
     }
 
     @Override
-    public void render(TeslaCrab krabbe, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
+    public void render(TaintCrab krabbe, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
 
         RenderContext.setup(poseStack, packedLight, OverlayTexture.NO_OVERLAY);
 
-        /* Erst die Blitze, und zwar in Weltrichtung: das Original zeichnet sie vor
-         * super.doRender, also bevor der Darsteller die Krabbe in ihre Blickrichtung dreht.
-         * Die halbe Drehung und die umgekehrten Vorzeichen von X und Z sind dieselben wie
-         * beim Blitz der Teslaspule. */
+        /* Erst die Blitze in Weltrichtung, wie im Original vor super.doRender. */
         if(!krabbe.targets.isEmpty()) {
 
             RenderContext.pushPose();
-            RenderContext.translate(0F, 1F, 0F);
+            RenderContext.translate(0F, BLITZHOEHE, 0F);
             RenderContext.mulPose(Axis.YP.rotationDegrees(180F));
 
             int takt = (int) (krabbe.level().getGameTime() % 1000) + 1;
@@ -60,7 +56,7 @@ public class TeslaCrabRenderer extends EntityRenderer<TeslaCrab> {
             for(double[] ziel : krabbe.targets) {
 
                 double dx = ziel[0] - krabbe.getX();
-                double dy = ziel[1] - (krabbe.getY() + 1);
+                double dy = ziel[1] - (krabbe.getY() + BLITZHOEHE);
                 double dz = ziel[2] - krabbe.getZ();
                 double laenge = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
@@ -71,35 +67,36 @@ public class TeslaCrabRenderer extends EntityRenderer<TeslaCrab> {
             RenderContext.popPose();
         }
 
-        /* Der Koerper richtet sich nach dem Rumpf, nicht nach dem Kopf. */
         float rumpf = Mth.rotLerp(partialTick, krabbe.yBodyRotO, krabbe.yBodyRot);
         RenderContext.mulPose(Axis.YP.rotationDegrees(180F - rumpf));
 
-        RenderSystem.setShaderTexture(0, ResourceManager.TESLACRAB_TEX);
+        RenderSystem.setShaderTexture(0, ResourceManager.TAINTCRAB_TEX);
 
+        /* Die Vierteldrehung, die nur dieses Modell braucht, und die Wende auf die Fuesse. */
+        RenderContext.mulPose(Axis.YN.rotationDegrees(90F));
         RenderContext.mulPose(Axis.ZP.rotationDegrees(180F));
         RenderContext.translate(0F, -1.5F, 0F);
 
         float schwung = -(Mth.cos(krabbe.walkAnimation.position(partialTick) * 0.6662F * 2.0F) * 0.4F)
                 * krabbe.walkAnimation.speed(partialTick) * 57.3F;
 
-        ResourceManager.teslacrab.renderPart("Body");
+        ResourceManager.taintcrab.renderPart("Body");
 
         RenderContext.pushPose();
         RenderContext.mulPose(Axis.YP.rotationDegrees(schwung));
-        ResourceManager.teslacrab.renderPart("Front");
+        ResourceManager.taintcrab.renderPart("Legs1");
         RenderContext.popPose();
 
         RenderContext.pushPose();
         RenderContext.mulPose(Axis.YN.rotationDegrees(schwung));
-        ResourceManager.teslacrab.renderPart("Back");
+        ResourceManager.taintcrab.renderPart("Legs2");
         RenderContext.popPose();
 
         RenderContext.end();
     }
 
     @Override
-    public ResourceLocation getTextureLocation(TeslaCrab krabbe) {
-        return ResourceManager.TESLACRAB_TEX;
+    public ResourceLocation getTextureLocation(TaintCrab krabbe) {
+        return ResourceManager.TAINTCRAB_TEX;
     }
 }

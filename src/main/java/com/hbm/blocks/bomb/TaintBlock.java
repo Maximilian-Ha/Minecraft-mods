@@ -1,6 +1,9 @@
 package com.hbm.blocks.bomb;
 
 import com.hbm.blocks.ITooltipProvider;
+import com.hbm.entity.NtmEntityTypes;
+import com.hbm.entity.mob.TaintCrab;
+import com.hbm.entity.mob.TeslaCrab;
 import com.hbm.lib.ModEffect;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.ChatFormatting;
@@ -98,6 +101,24 @@ public class TaintBlock extends Block {
 
             if (level.random.nextInt(50) == 0) {
                 livingEntity.addEffect(effect);
+            }
+        }
+
+        /*
+         * Runde 237: die Teslakrabbe verwandelt sich im Taint. Das Original tut dasselbe --
+         * Entitaet toeten, Taint-Krabbe an dieselbe Stelle setzen.
+         *
+         * NOCH NICHT PORTIERT: der zweite Fall daneben, der einen gewoehnlichen Creeper zum
+         * verseuchten Creeper macht. EntityCreeperTainted gibt es im Port noch nicht.
+         */
+        if (entity instanceof TeslaCrab && !level.isClientSide) {
+
+            TaintCrab krabbe = NtmEntityTypes.TAINT_CRAB.get().create(level);
+
+            if (krabbe != null) {
+                krabbe.moveTo(entity.getX(), entity.getY(), entity.getZ(), entity.getYRot(), entity.getXRot());
+                entity.discard();
+                level.addFreshEntity(krabbe);
             }
         }
     }
