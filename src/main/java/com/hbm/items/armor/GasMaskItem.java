@@ -2,17 +2,24 @@ package com.hbm.items.armor;
 
 import api.hbm.item.IGasMask;
 import com.hbm.items.IHelmetOverlayItem;
+import com.hbm.render.model.armor.ModelGasMaskHead;
+import com.hbm.render.model.armor.ModelM65Head;
 import com.hbm.main.NuclearTechMod;
 import com.hbm.render.util.RenderScreenOverlay;
 import com.hbm.util.ArmorRegistry.HazardClass;
 import com.hbm.util.ArmorUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.Model;
+import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
@@ -22,9 +29,11 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Portiert aus 1.7.10: ArmorGasMask, ArmorHazmat und ArmorHazmatMask in einer Klasse.
@@ -71,10 +80,61 @@ public class GasMaskItem extends ArmorItem implements IGasMask, IHelmetOverlayIt
      */
     private final ResourceLocation[] overlay;
 
+    /**
+     * Welches Kopfmodell die Maske am Koerper traegt. KEINES heisst: sie bleibt am Koerper
+     * unsichtbar, so wie alle Masken des Ports es bis Runde 206 waren.
+     */
+    public enum Kopf { KEINES, GASMASKE, M65 }
+
+    private final Kopf kopf;
+
     public GasMaskItem(Holder<ArmorMaterial> material, Properties properties, List<HazardClass> blacklist, ResourceLocation... overlay) {
+        this(material, properties, Kopf.KEINES, blacklist, overlay);
+    }
+
+    public GasMaskItem(Holder<ArmorMaterial> material, Properties properties, Kopf kopf, List<HazardClass> blacklist, ResourceLocation... overlay) {
         super(material, Type.HELMET, properties.stacksTo(1));
         this.blacklist = List.copyOf(blacklist);
         this.overlay = overlay;
+        this.kopf = kopf;
+    }
+
+    /**
+     * Das Kopfmodell der dritten Person. Gezeichnet wird es von der Ruestungsschicht, und
+     * zwar mit der Schichttextur des Werkstoffs -- deshalb hat jede Maske mit Modell einen
+     * eigenen Werkstoff, dessen Schicht auf ihre Modelltextur zeigt.
+     */
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+
+        if(this.kopf == Kopf.KEINES) return;
+
+        consumer.accept(new IClientItemExtensions() {
+
+            private ModelGasMaskHead gasmaske;
+            private ModelM65Head m65;
+
+            @Override
+            @OnlyIn(Dist.CLIENT)
+            public Model getGenericArmorModel(LivingEntity living, ItemStack stack, EquipmentSlot slot, HumanoidModel<?> original) {
+
+                if(slot != EquipmentSlot.HEAD) return original;
+
+                EntityModelSet modelle = Minecraft.getInstance().getEntityModels();
+
+                if(kopf == Kopf.GASMASKE) {
+                    if(gasmaske == null) gasmaske = new ModelGasMaskHead(modelle.bakeLayer(ModelGasMaskHead.LAYER));
+                    gasmaske.copyHeadFrom(original);
+                    return gasmaske;
+                }
+
+                if(m65 == null) m65 = new ModelM65Head(modelle.bakeLayer(ModelM65Head.LAYER));
+                m65.copyHeadFrom(original);
+                m65.living = living;
+                return m65;
+            }
+        });
     }
 
     @Override

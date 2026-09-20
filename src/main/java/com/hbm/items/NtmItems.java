@@ -1502,9 +1502,9 @@ public class NtmItems {
 
     /* Die Masken. Alle bis auf die Monoxidmaske lassen aetzende Gase durch, weil die
      * auch die Haut angreifen; die Monoxidmaske ist nur ein Kohlefilter. */
-    public static final DeferredItem<Item> GAS_MASK = ITEMS.register("gas_mask", () -> new GasMaskItem(NtmArmorMaterials.MASK, maskProperties(), GasMaskItem.standardBlacklist(), GasMaskItem.OVERLAY_GASMASK));
-    public static final DeferredItem<Item> GAS_MASK_M65 = ITEMS.register("gas_mask_m65", () -> new GasMaskItem(NtmArmorMaterials.MASK, maskProperties(), GasMaskItem.standardBlacklist(), GasMaskItem.OVERLAY_GOGGLES));
-    public static final DeferredItem<Item> GAS_MASK_MONO = ITEMS.register("gas_mask_mono", () -> new GasMaskItem(NtmArmorMaterials.MASK, maskProperties(), GasMaskItem.monoxideBlacklist()));
+    public static final DeferredItem<Item> GAS_MASK = ITEMS.register("gas_mask", () -> new GasMaskItem(NtmArmorMaterials.MASK_GAS, maskProperties(), GasMaskItem.Kopf.GASMASKE, GasMaskItem.standardBlacklist(), GasMaskItem.OVERLAY_GASMASK));
+    public static final DeferredItem<Item> GAS_MASK_M65 = ITEMS.register("gas_mask_m65", () -> new GasMaskItem(NtmArmorMaterials.MASK_M65, maskProperties(), GasMaskItem.Kopf.M65, GasMaskItem.standardBlacklist(), GasMaskItem.OVERLAY_GOGGLES));
+    public static final DeferredItem<Item> GAS_MASK_MONO = ITEMS.register("gas_mask_mono", () -> new GasMaskItem(NtmArmorMaterials.MASK_MONO, maskProperties(), GasMaskItem.Kopf.M65, GasMaskItem.monoxideBlacklist()));
     public static final DeferredItem<Item> GAS_MASK_OLDE = ITEMS.register("gas_mask_olde", () -> new GasMaskItem(NtmArmorMaterials.MASK, maskProperties(), GasMaskItem.standardBlacklist()));
 
     /* Lappen vor dem Gesicht: kein Gewinde, kein Filter, nur der Schutz, den der

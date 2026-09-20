@@ -49,6 +49,17 @@ public class NtmArmorMaterials {
     /* Die Gasmasken nehmen im Original schlicht ArmorMaterial.IRON. */
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> MASK = register("mask", LAYER_INVISIBLE, 9, 2, 6, 5, 2, () -> Ingredient.of(Items.IRON_INGOT));
 
+    /*
+     * DREI MASKEN MIT EIGENEM KOPFMODELL. Werte wie MASK -- sie unterscheiden sich allein in
+     * der Schichttextur, und die ist hier nicht unsichtbar, sondern die Textur des Modells:
+     * ein Kastenmodell aus getGenericArmorModel wird von der Ruestungsschicht mit genau dieser
+     * Datei gezeichnet. Darum braucht jede Maske einen eigenen Werkstoff, obwohl alle drei
+     * gleich schuetzen.
+     */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> MASK_GAS = register("mask_gas", "gas_mask", 9, 2, 6, 5, 2, () -> Ingredient.of(Items.IRON_INGOT));
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> MASK_M65 = register("mask_m65", "gas_mask_m65", 9, 2, 6, 5, 2, () -> Ingredient.of(Items.IRON_INGOT));
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> MASK_MONO = register("mask_mono", "gas_mask_mono", 9, 2, 6, 5, 2, () -> Ingredient.of(Items.IRON_INGOT));
+
     /* Der HEV-Anzug. Er wird nicht als Ruestungsschicht gezeichnet, sondern als eigenes
      * Wellenfrontmodell (ModelArmorHEV) -- die Schicht bleibt darum unsichtbar.
      * Werte aus ModItemsArmor: HBM_HEV, Haltbarkeitsfaktor 150, {3, 8, 6, 3}, ohne

@@ -2739,6 +2739,9 @@ bleiben am Körper unsichtbar. Statt der lilaschwarzen Ersatztextur einer fehlen
 eine durchsichtige Rüstungsschicht bei. Schutzbrille und Aschebrille warten auf dieselben
 Modelle und folgen mit ihnen.
 
+> **Nachgereicht in Runde 206.** Beide Kopfmodelle sind portiert, die drei Masken mit Modell
+> (`gas_mask`, `gas_mask_m65`, `gas_mask_mono`) sind am Körper sichtbar. Siehe dort.
+
 ---
 
 ## Stufe 6 — Runde 137: der Rüstungstisch und die Module
@@ -9476,5 +9479,65 @@ die übrigen sechs Zutaten lagen alle im Baum. Der Bauplan steht jetzt drin.
 
 Das ist in dieser Runde das zweite Mal, dass eine Begründung beim Nachmessen zerfällt — beim
 Fatman stand gar keine da, und die eine, die ich selbst geschrieben habe, hielt keine Stunde.
+
+Alle 39 Tore grün.
+
+## Runde 206 — Die Masken bekommen ihre Köpfe
+
+Der offene Punkt aus Runde 136: „Die Kopfmodelle (`ModelGasMask`, `ModelM65`) sind nicht
+portiert; die Masken bleiben am Körper unsichtbar." Er ist zu.
+
+### Warum jede Maske jetzt einen eigenen Werkstoff hat
+
+Das war die eine Stelle, an der 1.21 wirklich anders funktioniert. In 1.7.10 liefert
+`getArmorModel` das Modell und `getArmorTexture` die Textur — zwei Methoden am selben
+Gegenstand, unabhängig voneinander. In 1.21 liefert `getGenericArmorModel` nur noch das
+Modell; **die Textur kommt aus der Rüstungsschicht des Werkstoffs**, die
+`HumanoidArmorLayer` bindet, bevor sie das Modell zeichnet.
+
+Ein Modell, das seine Textur selbst binden will, kommt damit nicht durch. Die HEV- und
+RPA-Rüstungen umgehen das, weil sie OBJ-Modelle sind und über `RenderContext` unmittelbar
+zeichnen; ein Kastenmodell aus `ModelPart` schreibt dagegen in den `VertexConsumer`, den die
+Schicht ihm hinhält — und der hängt an der Textur der Schicht.
+
+Also bekommt jede Maske mit Modell ihren eigenen Werkstoff (`mask_gas`, `mask_m65`,
+`mask_mono`), gleich in allen Schutzwerten und verschieden allein in der Schichttextur. Die
+Modelltexturen des Originals liegen dafür als `gas_mask_layer_1.png` (64×32),
+`gas_mask_m65_layer_1.png` und `gas_mask_mono_layer_1.png` (je 32×32) — die Maße stimmen mit
+den `LayerDefinition`s überein, das war die Gegenprobe.
+
+### Die Übersetzung aus Techne
+
+Nach demselben Verfahren wie beim Satellitenempfänger in Runde 105:
+`new ModelRenderer(this, u, v)` wird `texOffs(u, v)`, `addBox` bleibt `addBox`,
+`setRotationPoint` plus `setRotation` werden `PartPose.offsetAndRotation`, Drehreihenfolge
+Z→Y→X.
+
+**Dieselbe Falle wie damals, und diesmal auf jedem einzelnen Kasten:** beide Modelle setzen
+`mirror = true` — aber *nach* `addBox`. In 1.7.10 liest `addBox` das Feld, die Zeile kommt zu
+spät und tut nichts. Ein mechanisches `.mirror()` hätte beide Masken gespiegelt. Es steht
+nirgends eines.
+
+`convertToChild` ist nicht mitgekommen, und das ist kein Weglassen: der Elternkasten `mask`
+sitzt in beiden Modellen auf (0\|0\|0) ohne Drehung, die Umrechnung zieht also überall null ab.
+Die Zahlen des Originals stehen unverändert da.
+
+### Die Filterdose verrät, wer ungefiltert atmet
+
+Die M65 hat zwei Gruppen, und das ist keine Ordnungsfrage: `mask` ist die Haube, `filter` sind
+Anschluss und Dose — und **die Dose wird nur gezeichnet, wenn auch eine drinsteckt**. Ohne
+Filter bleibt am Gesicht nur der nackte Stutzen. Das Original fragt dafür
+`ArmorUtil.getGasMaskFilterRecursively`, und zwar rekursiv, weil der Filter auch im
+Helmaufsatz stecken kann; der Port hat diese Methode seit Runde 136.
+
+Zwei Kästen der M65 haben **Tiefe null** — die Sichtscheiben. Das ist Absicht des Originals,
+kein Rundungsfehler, und steht wortgetreu so da.
+
+### Was offen bleibt
+
+Schutzbrille und Aschebrille warten weiter — aber nicht mehr auf diese Modelle, sondern auf
+ihr eigenes (`ModelGoggles`). `gas_mask_olde` hat im Original gar kein Modell, sondern eine
+gewöhnliche Rüstungsschicht; er bleibt deshalb auf dem unsichtbaren Werkstoff, bis seine
+Schichttextur nachgereicht ist.
 
 Alle 39 Tore grün.

@@ -59,6 +59,8 @@ import com.hbm.registry.NtmBiomes;
 import com.hbm.render.entity.effect.SkeletonModel;
 import com.hbm.render.entity.projectile.ModelRubble;
 import com.hbm.render.entity.projectile.ModelShrapnel;
+import com.hbm.render.model.armor.ModelGasMaskHead;
+import com.hbm.render.model.armor.ModelM65Head;
 import com.hbm.render.item.weapon.sedna.ItemRenderWeaponBase;
 import com.hbm.render.loader.HFRModelReloader;
 import com.hbm.render.model.loader.NtmGeometryLoader;
@@ -939,6 +941,11 @@ public class NuclearTechModClient {
         event.registerLayerDefinition(SkeletonModel.SKELETON_PART_LAYER, SkeletonModel::createLayer);
 
         event.registerLayerDefinition(com.hbm.render.model.ModelSatelliteReceiver.LAYER, com.hbm.render.model.ModelSatelliteReceiver::createBodyLayer);
+
+        /* Die beiden Kopfmodelle der Masken. Sie haengen nicht an einem Darsteller, sondern
+         * an getGenericArmorModel -- gebacken werden sie trotzdem hier. */
+        event.registerLayerDefinition(ModelGasMaskHead.LAYER, ModelGasMaskHead::createBodyLayer);
+        event.registerLayerDefinition(ModelM65Head.LAYER, ModelM65Head::createBodyLayer);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
