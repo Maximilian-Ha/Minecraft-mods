@@ -4429,13 +4429,13 @@ public class NtmRecipeProvider extends RecipeProvider {
      * Die Waffenbauplaene.
      *
      * Wortgetreu aus WeaponRecipes des Originals, in der Reihenfolge des Originals. Von den
-     * 46 Bauplaenen dort bleiben hier 36 uebrig; der Rest faellt aus zwei gemessenen Gruenden
+     * 46 Bauplaenen dort bleiben hier 37 uebrig; der Rest faellt aus zwei gemessenen Gruenden
      * weg:
      *
-     * ES GIBT DIE WAFFE NICHT: Stinger, Quadro, LAG, Raketenwerfer, Fat Man, Tau,
-     * Ladungswerfer und die beiden Panzerruestungswaffen. Sie sind im Port nicht angelegt;
-     * ein Bauplan auf ein nicht vorhandenes Erzeugnis waere kein Rezept. Die Teslakanone
-     * stand bis Runde 188 auch hier; sie gibt es seit Runde 189.
+     * ES GIBT DIE WAFFE NICHT: Stinger, Quadro, LAG, Raketenwerfer, Fat Man, Tau und die
+     * beiden Panzerruestungswaffen. Sie sind im Port nicht angelegt; ein Bauplan auf ein
+     * nicht vorhandenes Erzeugnis waere kein Rezept. Teslakanone und Ladungswerfer standen
+     * hier ebenfalls -- die eine bis Runde 188, der andere bis Runde 192.
      *
      * ES GIBT DIE ZUTAT NICHT:
      * - gun_double_barrel_sacred_dragon braucht item_secret in der Ausfuehrung
@@ -4699,6 +4699,20 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .define('M', mechanism(Mats.MAT_SATURN))
                 .define('A', NtmItems.GUN_AUTOSHOTGUN.get())
                 .unlockedBy("has_autoshotgun", has(NtmItems.GUN_AUTOSHOTGUN.get()))
+                .save(recipeOutput);
+
+        /*
+         * Der Ladungswerfer. Das Original hat dafuer ZWEI Bauplaene, die sich nur im letzten
+         * Stueck unterscheiden -- Leder oder Gummi. Hier steht eine Zutat, die beides annimmt;
+         * ein zweites Rezept auf dasselbe Erzeugnis waere in 1.21 nur ein zweiter Eintrag mit
+         * gleichem Ergebnis.
+         */
+        gun(NtmItems.GUN_CHARGE_THROWER, "MMM", "BBL", "GG ")
+                .define('M', mechanism(Mats.MAT_GUNMETAL))
+                .define('B', heavyBarrel(Mats.MAT_STEEL))
+                .define('G', grip(Mats.MAT_STEEL))
+                .define('L', Ingredient.of(Items.LEATHER, NtmItems.INGOT_RUBBER.get()))
+                .unlockedBy("has_mechanism", has(NtmItems.PART_MECHANISM.get()))
                 .save(recipeOutput);
 
         gun(NtmItems.GUN_MINIGUN, "BMG", "BRE", "BGM")

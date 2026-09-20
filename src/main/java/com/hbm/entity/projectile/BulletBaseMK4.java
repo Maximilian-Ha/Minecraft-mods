@@ -3,6 +3,8 @@ package com.hbm.entity.projectile;
 import com.hbm.entity.NtmEntityTypes;
 import com.hbm.items.weapon.sedna.BulletConfig;
 import com.hbm.main.NuclearTechMod;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -13,6 +15,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -30,6 +33,25 @@ public class BulletBaseMK4 extends ProjectileLerping {
     public float damage;
     public int ricochets = 0;
     @Nullable public Entity lockonTarget = null;
+
+    /*
+     * DER STECKZUSTAND. Ein Geschoss, das in einer Wand steckt, statt an ihr zu zerschellen --
+     * der Enterhaken des Ladungswerfers braucht genau das, denn er ist der Ankerpunkt, an dem
+     * sich der Schuetze heranzieht.
+     *
+     * IM ORIGINAL ERBT DAS GESCHOSS DAS. Dort steht EntityBulletBaseMK4 unter
+     * EntityThrowableInterp und damit unter EntityThrowableNT, wo getStuck zuhause ist. Der
+     * Port hat die Vererbung anders geschnitten: ThrowableNT und ProjectileNT sind zwei
+     * getrennte Zweige unter Projectile. Deshalb steht derselbe Zustand hier ein zweites Mal.
+     *
+     * ER STEHT UND FAELLT MIT DEM BLOCK. Verschwindet der, an dem der Haken haengt, faellt das
+     * Geschoss wieder -- sonst haenge man an einer Wand, die es nicht mehr gibt.
+     */
+    @Nullable protected BlockPos steckBlock;
+    @Nullable protected BlockState steckZustand;
+    protected boolean imBoden;
+
+    public boolean istImBoden() { return this.imBoden; }
 
     private static final EntityDataAccessor<Integer> BULLET_CONFIG = SynchedEntityData.defineId(BulletBaseMK4.class, EntityDataSerializers.INT);
 
@@ -152,9 +174,40 @@ public class BulletBaseMK4 extends ProjectileLerping {
         this.prevVelocity = this.velocity;
         this.velocity = (float) Math.sqrt(dX * dX + dY * dY + dZ * dZ);
 
+        if(this.imBoden) this.steckTick();
+
         if(!level.isClientSide && this.tickCount > config.expires) this.discard();
 
         if(this.config.onUpdate != null) this.config.onUpdate.accept(this);
+    }
+
+    /**
+     * Setzt das Geschoss in einem Block fest. Das Original merkt sich dafuer Ort und Blockart;
+     * hier stehen BlockPos und BlockState.
+     */
+    public void getStuck(BlockPos pos, Direction seite) {
+        this.steckBlock = pos;
+        this.steckZustand = this.level.getBlockState(pos);
+        this.imBoden = true;
+        this.setDeltaMovement(Vec3.ZERO);
+        this.prevVelocity = 0F;
+        this.velocity = 0F;
+        this.hasImpulse = true;
+    }
+
+    /** Haelt das Geschoss still -- oder laesst es los, wenn der Block verschwunden ist. */
+    private void steckTick() {
+
+        if(this.steckBlock != null && this.level.getBlockState(this.steckBlock) == this.steckZustand) {
+            this.setDeltaMovement(Vec3.ZERO);
+            this.prevVelocity = 0F;
+            this.velocity = 0F;
+            return;
+        }
+
+        this.imBoden = false;
+        this.steckBlock = null;
+        this.steckZustand = null;
     }
 
     @Override protected void rotation() { }
@@ -183,7 +236,13 @@ public class BulletBaseMK4 extends ProjectileLerping {
     }
 
     @Override protected double getHeadingForceMult() { return 1.0; }
-    @Override protected double getDefaultGravity() { return this.config.gravity; }
+    /**
+     * Solange das Geschoss steckt, zieht nichts mehr an ihm. Das ist der ganze Kniff: die
+     * Bewegung steht auf null, und ohne Schwerkraft bleibt sie das auch. Ein frueher Ausstieg
+     * aus tick() waere der naheliegendere Weg gewesen und der falsche -- dann zaehlte
+     * tickCount nicht weiter, und das Geschoss liefe nie ab.
+     */
+    @Override protected double getDefaultGravity() { return this.imBoden ? 0D : this.config.gravity; }
     @Override protected double getMotionMult() { return this.config.velocity + this.accel; }
     @Override protected float getAirDrag() { return 1F; }
     @Override protected float getWaterDrag() { return 1F; }

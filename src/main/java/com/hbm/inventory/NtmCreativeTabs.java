@@ -1804,6 +1804,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.GUN_DRILL);
                         output.accept(NtmItems.GUN_TESLA_CANNON);
                         output.accept(NtmItems.GUN_FOLLY);
+                        output.accept(NtmItems.GUN_CHARGE_THROWER);
                         output.accept(NtmItems.GUN_LASER_PISTOL);
                         output.accept(NtmItems.GUN_LASER_PISTOL_PEW_PEW);
                         output.accept(NtmItems.GUN_LASER_PISTOL_MORNING_GLORY);

@@ -8707,3 +8707,64 @@ belegt einen anderen Platz, alle drei lassen sich zugleich anbringen.
 
 **Damit gibt es im Port keinen Aufsatz mehr ohne Klasse.** Bis zu dieser Runde standen
 vierzehn in `ModSpecial`, die sich eingetragen hatten, ohne angemeldet zu sein.
+
+## Runde 192 — Der Ladungswerfer, und ein Geschoss, das stehenbleibt
+
+`XFactoryTool` zerfällt sauber in zwei Hälften, und die Messung entscheidet, welche portierbar
+ist.
+
+**Der Ladungswerfer ist es.** Alles, was er braucht, lag da — bis auf **eine** Sache: ein
+Geschoss, das in der Wand stecken bleibt, statt an ihr zu zerschellen. Der Enterhaken ist der
+Ankerpunkt, an dem sich der Schütze heranzieht; fällt er zu Boden, hat die Waffe keinen Zug.
+
+Im Original erbt das Geschoss diesen Zustand: dort steht `EntityBulletBaseMK4` unter
+`EntityThrowableInterp` und damit unter `EntityThrowableNT`, wo `getStuck` zuhause ist. **Der
+Port hat die Vererbung anders geschnitten** — `ThrowableNT` und `ProjectileNT` sind zwei
+getrennte Zweige unter `Projectile`. Also steht derselbe Zustand jetzt ein zweites Mal in
+`BulletBaseMK4`.
+
+Der naheliegende Weg dorthin wäre ein früher Ausstieg aus `tick()` gewesen, und er wäre
+falsch: dann zählte `tickCount` nicht weiter und das Geschoss liefe nie ab. Stattdessen steht
+die Bewegung auf null **und die Schwerkraft setzt aus, solange es steckt** — damit sie das
+auch bleibt. Verschwindet der Block, an dem der Haken hängt, fällt das Geschoss wieder; sonst
+hinge man an einer Wand, die es nicht mehr gibt.
+
+### Drei Waffen in einer
+
+Was im Rohr steckt, entscheidet alles — und man wechselt es nur über das Nachladen:
+
+* **Enterhaken** — bleibt stecken, 6000 Ticks Lebensdauer, durchschlägt (damit er nicht an
+  einem Schwein hängenbleibt), macht keinen Schaden.
+* **Mörserladung** — Radius 5, räumt grob auf.
+* **Große Ladung** — Radius 15, nichts fällt als Bruchstück, dafür bleibt Schlacke.
+
+Das Seil selbst hat drei Zustände, und der Unterschied macht die Waffe aus: linke Taste zieht
+heran (und löst den Haken, wenn man ihm näher als zwei Blöcke kommt), rechte Taste gibt das
+Seil frei, **keine von beiden hält es straff** — würde der nächste Schritt den Abstand
+vergrößern, wird er auf die alte Seillänge zurückgeholt. Daraus wird ein Pendel.
+
+Der Leerschlag schweigt, solange ein Haken hängt: wer sich am Seil heranzieht, feuert nicht
+ins Leere.
+
+### Der Feuerlöscher bleibt, und das ist gemessen
+
+Er verschießt Wasser, Schaum und Sand und braucht dafür `ammo_fireext` sowie die Löschblöcke
+`foam_layer`, `sand_boron_layer`, `sand_mix` und `volcanic_lava_block`. Von denen gibt es im
+Port nur `block_foam`. Eine Waffe, die Schaum verschießt, der nirgends liegenbleibt, wäre
+keine Waffe — das ist eine Blockrunde, keine Waffenrunde.
+
+### Zwei kleine Nachträge
+
+Das **Zielfernrohr** passt im Original auch an den Ladungswerfer; die Liste im
+`XWeaponModManager` ist entsprechend ergänzt. Ohne das wäre der Fernrohr-Zweig im Zeichner ein
+Ast, den nichts erreicht.
+
+Der **Bauplan** steht im Original zweimal da, einmal mit Leder und einmal mit Gummi als
+letztem Stück. Hier steht eine Zutat, die beides annimmt — zwei Rezepte auf dasselbe Erzeugnis
+wären in 1.21 nur ein zweiter Eintrag mit gleichem Ergebnis.
+
+**NICHT übernommen:** das Original setzt beim Schwingen zusätzlich die Jetpack-Flugzeit zurück
+(`ArmorUtil.resetFlightTime`). Diese Zeitrechnung gibt es im Port nicht — die einzige Stelle,
+die sie je gerufen hätte, steht in `EntityEffectHandler` auskommentiert.
+
+**37 von 46 Bauplänen.** Alle 35 Tore grün.

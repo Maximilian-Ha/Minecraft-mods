@@ -155,7 +155,8 @@ public class XWeaponModManager {
                 .addMod(new Item[] {
                         NtmItems.GUN_G3.get(),
                         NtmItems.GUN_CARBINE.get(),
-                        NtmItems.GUN_MAS36.get() }, new WeaponModScope(ID_SCOPE));
+                        NtmItems.GUN_MAS36.get(),
+                        NtmItems.GUN_CHARGE_THROWER.get() }, new WeaponModScope(ID_SCOPE));
 
         /* Die Saege: kuerzerer Lauf, mehr Streuung, mehr Schaden -- an der G3 der Schaft. */
         new WeaponModDefinition(ModSpecial.SAW)

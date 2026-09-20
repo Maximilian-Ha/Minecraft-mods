@@ -43,6 +43,7 @@ public class NtmSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_TESLA_FIRE = reg("weapon.fire.tesla");
     /** Der lauteste Knall im Spiel -- das Original nennt die Kennung genauso. */
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_FOLLY_FIRE = reg("weapon.fire.loudest_noise_on_earth");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GUN_CHARGE_FIRE = reg("weapon.fire.grenade");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SCREW = reg("weapon.reload.screw");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_ROCKET_INSERT = reg("weapon.reload.insert_rocket");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_TESLA_BLAST = reg("entity.ufo_blast");

@@ -357,6 +357,9 @@ public class ResourceManager {
     /* ABWEICHUNG IM DATEINAMEN: im Original heisst diese Datei moonlight.png. Der Port
      * benennt sie nach der Waffe, wie alle uebrigen Waffentexturen. */
     public static final ResourceLocation FOLLY_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/folly.png");
+    public static final ResourceLocation CHARGE_THROWER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/charge_thrower.png");
+    public static final ResourceLocation CHARGE_THROWER_HOOK_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/charge_thrower_hook.png");
+    public static final ResourceLocation CHARGE_THROWER_MORTAR_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/charge_thrower_mortar.png");
     public static final ResourceLocation CHEMTHROWER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/chemthrower.png");
     public static final ResourceLocation LASER_PISTOL_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/laser_pistol.png");
     public static final ResourceLocation LASER_PISTOL_PEW_PEW_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/laser_pistol_pew_pew.png");
@@ -703,6 +706,7 @@ public class ResourceManager {
     public static IModelCustom drill;
     public static IModelCustom tesla_cannon;
     public static IModelCustom folly;
+    public static IModelCustom charge_thrower;
     public static IModelCustom chemthrower;
     public static IModelCustom laser_pistol;
     public static IModelCustom lasrifle;
@@ -1004,6 +1008,7 @@ public class ResourceManager {
         drill = new HFRWavefrontObject("models/obj/weapons/drill.obj").asVBO();
         tesla_cannon = new HFRWavefrontObject("models/obj/weapons/tesla_cannon.obj").asVBO();
         folly = new HFRWavefrontObject("models/obj/weapons/folly.obj").asVBO();
+        charge_thrower = new HFRWavefrontObject("models/obj/weapons/charge_thrower.obj").asVBO();
         chemthrower = new HFRWavefrontObject("models/obj/weapons/chemthrower.obj").asVBO();
         laser_pistol = new HFRWavefrontObject("models/obj/weapons/laser_pistol.obj").asVBO();
         lasrifle = new HFRWavefrontObject("models/obj/weapons/lasrifle.obj").asVBO();

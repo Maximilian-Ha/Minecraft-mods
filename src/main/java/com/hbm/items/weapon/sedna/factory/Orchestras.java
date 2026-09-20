@@ -3,6 +3,7 @@ package com.hbm.items.weapon.sedna.factory;
 import com.hbm.items.NtmItems;
 import com.hbm.items.weapon.sedna.GunBaseNTItem;
 import com.hbm.items.weapon.sedna.GunBaseNTItem.LambdaContext;
+import com.hbm.items.weapon.sedna.impl.GunChargeThrowerItem;
 import com.hbm.items.weapon.sedna.Receiver;
 import com.hbm.items.weapon.sedna.mags.IMagazine;
 import com.hbm.items.weapon.sedna.mods.XWeaponModManager;
@@ -1611,6 +1612,34 @@ public class Orchestras {
      * Die drei Laserpistolen. Der Laser hat keinen Auswurf und keine Huelse -- was hier
      * passiert, ist die Muendungswolke beim Schuss und die vier Griffe des Magazinwechsels.
      */
+    /**
+     * Der Ladungswerfer. Zwei Toene beim Nachladen -- Ladung hinein, Verschluss zu -- und ein
+     * dritter, der nur dann kommt, wenn er etwas zu sagen hat: der Leerschlag.
+     *
+     * DER LEERSCHLAG SCHWEIGT, SOLANGE EIN HAKEN HAENGT. Wer am Seil haengt und die Taste
+     * gedrueckt haelt, zieht sich heran -- das ist kein Fehlschuss, und es soll nicht klicken.
+     */
+    public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_CHARGE_THROWER = (stack, ctx) -> {
+
+        LivingEntity entity = ctx.entity;
+        Level level = entity.level;
+        if(level.isClientSide) return;
+
+        GunAnimation type = GunBaseNTItem.getLastAnim(stack, ctx.configIndex);
+        int timer = GunBaseNTItem.getAnimTimer(stack, ctx.configIndex);
+
+        if(type == GunAnimation.CYCLE_DRY && timer == 0) {
+            if(level.getEntity(GunChargeThrowerItem.getLastHook(stack)) == null) {
+                SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_DRY_FIRE.get(), entity.getSoundSource(), 1F, 0.75F);
+            }
+        }
+
+        if(type == GunAnimation.RELOAD) {
+            if(timer == 30) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_ROCKET_INSERT.get(), entity.getSoundSource());
+            if(timer == 40) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_BOLT_CLOSE.get(), entity.getSoundSource());
+        }
+    };
+
     /**
      * Die Folly laedt acht Sekunden lang nach, und in dieser Zeit fallen genau drei Toene:
      * der Verschluss auf, die Granate hinein, der Verschluss zu.
