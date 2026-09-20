@@ -22,6 +22,7 @@ import com.hbm.items.special.SimpleConsumableItem;
 import com.hbm.items.special.SyringeItem;
 import com.hbm.items.armor.ArmorNCRPAItem;
 import com.hbm.items.armor.ArmorRPAItem;
+import com.hbm.items.armor.ArmorEuphemiumItem;
 import com.hbm.items.armor.ArmorT51Item;
 import com.hbm.items.armor.ArmorHEVItem;
 import com.hbm.items.armor.ArmorNo9;
@@ -1674,6 +1675,26 @@ public class NtmItems {
     public static final DeferredItem<Item> T51_LEGS = ITEMS.register("t51_legs", () -> t51(ArmorItem.Type.LEGGINGS));
     public static final DeferredItem<Item> T51_BOOTS = ITEMS.register("t51_boots", () -> t51(ArmorItem.Type.BOOTS));
 
+    /*
+     * DER EUPHEMIUM-SATZ. Vier Teile ohne Strom und ohne Haltbarkeit, aber mit dem
+     * staerksten Satzbonus des ganzen Mods: Regeneration, Widerstandskraft, Feuerschutz und
+     * Saettigung, jeweils in Stufe 128 (Verstaerker 127).
+     *
+     * KEIN KREATIVREITER, wie im Original (ArmorEuphemium ruft setCreativeTab(null) auf).
+     * Erreichbar bleibt der Satz trotzdem: die vier Bauplaene an der Werkbank stehen in
+     * NtmRecipeProvider. Die Ausnahme steht mit dieser Begruendung in tools/tab-check.sh.
+     */
+    public static final DeferredItem<Item> EUPHEMIUM_HELMET = ITEMS.register("euphemium_helmet", () -> euphemium(ArmorItem.Type.HELMET));
+    public static final DeferredItem<Item> EUPHEMIUM_PLATE = ITEMS.register("euphemium_plate", () -> euphemium(ArmorItem.Type.CHESTPLATE));
+    public static final DeferredItem<Item> EUPHEMIUM_LEGS = ITEMS.register("euphemium_legs", () -> euphemium(ArmorItem.Type.LEGGINGS));
+    public static final DeferredItem<Item> EUPHEMIUM_BOOTS = ITEMS.register("euphemium_boots", () -> euphemium(ArmorItem.Type.BOOTS));
+
+    /**
+     * Die Uhr. Im Original ein ItemCustomLore ohne eigenes Verhalten; sie ist reines
+     * Bauteil und steckt in der Brustplatte des Euphemium-Satzes.
+     */
+    public static final DeferredItem<Item> WATCH = ITEMS.register("watch", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
+
     public static final DeferredItem<Item> HEV_HELMET = ITEMS.register("hev_helmet", () -> hev(ArmorItem.Type.HELMET));
     public static final DeferredItem<Item> HEV_PLATE = ITEMS.register("hev_plate", () -> hev(ArmorItem.Type.CHESTPLATE));
     public static final DeferredItem<Item> HEV_LEGS = ITEMS.register("hev_legs", () -> hev(ArmorItem.Type.LEGGINGS));
@@ -1710,6 +1731,21 @@ public class NtmItems {
         return new ArmorT51Item(NtmArmorMaterials.T51, type, new Item.Properties().stacksTo(1).durability(type.getDurability(NtmArmorMaterials.DURABILITY_T51)), 1_000_000, 10_000, 1_000, 5)
                 .addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20, 0))
                 .setHasGeigerSound(true);
+    }
+
+    /**
+     * Der Euphemium-Satz. OHNE durability(...) -- und das ist der Punkt: so kann kein Teil je
+     * kaputtgehen, was im Original ein leergelassenes setDamage erledigt.
+     *
+     * Die Dauer von fuenf Ticks steht so im Original und genuegt, weil ArmorFSBItem die
+     * Wirkungen in jedem Tick neu auflegt.
+     */
+    private static ArmorFSBItem euphemium(ArmorItem.Type type) {
+        return new ArmorEuphemiumItem(NtmArmorMaterials.EUPHEMIUM, type, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC))
+                .addEffect(new MobEffectInstance(MobEffects.REGENERATION, 5, 127))
+                .addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 5, 127))
+                .addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 5, 127))
+                .addEffect(new MobEffectInstance(MobEffects.SATURATION, 5, 127));
     }
 
     private static ArmorFSBItem hev(ArmorItem.Type type) {

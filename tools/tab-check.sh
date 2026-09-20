@@ -102,6 +102,11 @@ VERBORGENE_ITEMS = {
     'DIAMOND_GAVEL':       'Stecker des Zyklotrons; im Original nur ueber MagicRecipes herzustellen (Original: kein setCreativeTab)',
     'WOOD_GAVEL':          'Vorstufe des Bleihammers, an der Werkbank zu bauen (Original: kein setCreativeTab)',
     'LEAD_GAVEL':          'Vorstufe des Diamanthammers, an der Werkbank zu bauen (Original: kein setCreativeTab)',
+    'EUPHEMIUM_HELMET':    'der Euphemium-Satz steht in keinem Reiter, ist aber an der Werkbank zu bauen (Original: setCreativeTab(null) im Konstruktor von ArmorEuphemium)',
+    'EUPHEMIUM_PLATE':     'wie EUPHEMIUM_HELMET (Original: setCreativeTab(null))',
+    'EUPHEMIUM_LEGS':      'wie EUPHEMIUM_HELMET (Original: setCreativeTab(null))',
+    'EUPHEMIUM_BOOTS':     'wie EUPHEMIUM_HELMET (Original: setCreativeTab(null))',
+    'WATCH':               'Bauteil der Euphemium-Brustplatte, selbst an der Werkbank zu bauen (Original: kein setCreativeTab)',
 }
 
 fehlend_b = sorted(f for f in bloecke if f not in im_reiter_b and f not in VERBORGENE_BLOECKE)

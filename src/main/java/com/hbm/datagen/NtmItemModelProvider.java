@@ -917,6 +917,13 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicCustomLayerItem(NtmItems.T51_PLATE.get(), "armor");
         this.basicCustomLayerItem(NtmItems.T51_LEGS.get(), "armor");
         this.basicCustomLayerItem(NtmItems.T51_BOOTS.get(), "armor");
+
+        /* Der Euphemium-Satz hat vier eigene Bilder, anders als die Panzerruestungen. */
+        this.basicItem(NtmItems.EUPHEMIUM_HELMET.get());
+        this.basicItem(NtmItems.EUPHEMIUM_PLATE.get());
+        this.basicItem(NtmItems.EUPHEMIUM_LEGS.get());
+        this.basicItem(NtmItems.EUPHEMIUM_BOOTS.get());
+        this.basicItem(NtmItems.WATCH.get());
         this.basicItem(NtmItems.ASBESTOS_CLOTH.get());
         this.basicItem(NtmItems.MASK_RAG.get());
         this.basicItem(NtmItems.MASK_PISS.get());

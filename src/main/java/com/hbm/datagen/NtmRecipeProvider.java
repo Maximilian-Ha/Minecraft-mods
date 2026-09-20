@@ -3887,6 +3887,33 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .save(recipeOutput);
 
         /*
+         * DER EUPHEMIUM-SATZ, ArmorRecipes.java Z. 110 bis 113. Schlicht aus
+         * Euphemiumplatten -- nur die Brustplatte braucht zusaetzlich die Taschenuhr.
+         */
+        armorPiece(recipeOutput, NtmItems.EUPHEMIUM_HELMET.get(), Ingredient.of(NtmItems.PLATE_EUPHEMIUM.get()), "EEE", "E E");
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.EUPHEMIUM_PLATE.get(), 1)
+                .pattern("EWE").pattern("EEE").pattern("EEE")
+                .define('E', NtmItems.PLATE_EUPHEMIUM.get())
+                .define('W', NtmItems.WATCH.get())
+                .unlockedBy("has_plate_euphemium", has(NtmItems.PLATE_EUPHEMIUM.get()))
+                .save(recipeOutput);
+        armorPiece(recipeOutput, NtmItems.EUPHEMIUM_LEGS.get(), Ingredient.of(NtmItems.PLATE_EUPHEMIUM.get()), "EEE", "E E", "E E");
+        armorPiece(recipeOutput, NtmItems.EUPHEMIUM_BOOTS.get(), Ingredient.of(NtmItems.PLATE_EUPHEMIUM.get()), "E E", "E E");
+
+        /*
+         * Die Taschenuhr, CraftingManager.java Z. 547. KEY_BLUE ist im Original der
+         * Wortverzeichniseintrag "dyeBlue", also schlicht blauer Farbstoff.
+         */
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.WATCH.get(), 1)
+                .pattern("LYL").pattern("EWE").pattern("LYL")
+                .define('L', Tags.Items.DYES_BLUE)
+                .define('Y', NtmItems.BILLET_YHARONITE.get())
+                .define('E', NtmItems.INGOT_EUPHEMIUM.get())
+                .define('W', Items.CLOCK)
+                .unlockedBy("has_ingot_euphemium", has(NtmItems.INGOT_EUPHEMIUM.get()))
+                .save(recipeOutput);
+
+        /*
          * DIE AUFSTIEGSKETTE. Das Original bietet zwei Wege an und stellt ueber
          * enableLBSMSimpleArmorRecipes um: entweder jede Garnitur schlicht aus ihrem Barren,
          * oder jede aus der vorigen. Der Port nimmt die Kette -- sie ist der Standardfall,

@@ -9937,8 +9937,77 @@ Runde 213 schrieb, es seien noch 55 Namen offen. Nachgemessen auf demselben Comm
 erklärt; diese hier hat sie zu groß erklärt. Beides kommt aus derselben Quelle: eine Zahl
 fortschreiben statt sie neu messen.
 
-Nach dieser Runde sind **50** offen, alle davon OBJ-Panzerrüstungen: `ajr_*`, `ajro_*`,
-`bismuth_*`, `bj_*` (+ `bj_plate_jetpack`), `dieselsuit_*`, `dns_*`, `envsuit_*`,
-`euphemium_*`, `fau_*`, `nossy_hat`, `steamsuit_*`, `taurun_*`, `trenchmaster_*`.
+Nach dieser Runde sind **50** offen: `ajr_*`, `ajro_*`, `bismuth_*`, `bj_*`
+(+ `bj_plate_jetpack`), `dieselsuit_*`, `dns_*`, `envsuit_*`, `euphemium_*`, `fau_*`,
+`nossy_hat`, `steamsuit_*`, `taurun_*`, `trenchmaster_*`.
+
+*(Berichtigung aus Runde 215: hier stand „alle davon OBJ-Panzerrüstungen". Vier davon,
+`euphemium_*`, sind es nicht — sie sind schlichtes `ItemArmor` mit zwei Schichttexturen.
+Siehe Runde 215.)*
+
+Alle 39 Tore grün.
+
+## Runde 215 — Der Euphemium-Satz, und eine Behauptung aus der Runde davor
+
+Runde 214 hat die Restliste zu schnell abgeschrieben: „alle davon OBJ-Panzerrüstungen".
+Nachgemessen ist das für 46 der 50 richtig und für vier falsch. Der Euphemium-Satz ist im
+Original ein schlichtes `ItemArmor` mit zwei Schichttexturen — genau die Form, die Runde 212
+dreiunddreißig Mal gebaut hat.
+
+### Woher der Fehler kam
+
+Ich habe nach Modellklassen gesucht, deren Name den **Satznamen** enthält:
+
+    grep -iE "Model.*(Ajr|Bismuth|Bj|Diesel|Dns|Envsuit|Euphemium|Fau|Steam|Taurun|Trench)"
+
+Acht Treffer, siebzehn Namen ohne Treffer, und daraus der Schluss „die haben keine Modelle".
+Das war zweifach falsch. Die Modelle von `steamsuit_*`, `fau_*` und `dns_*` heißen nach dem
+**Material**, nicht nach der Garnitur: `ModelArmorDesh`, `ModelArmorDigamma`, `ModelArmorDNT`.
+Und `nossy_hat` hat auch eins, versteckt in `ArmorModel.getArmorModel`.
+
+Das ist derselbe Fehler wie in Runde 209 — nach der falschen Schreibweise gesucht und das
+Fehlen des Treffers für das Fehlen der Sache genommen. Die Lehre aus Runde 210 lautet: über
+**Registriernamen** vergleichen, nicht über Klassennamen. Die Klasse, die `dns_helmet`
+zeichnet, heißt nirgends `dns`.
+
+Diesmal hat der Irrtum ausnahmsweise Arbeit freigelegt statt versteckt: vier Namen, die ich
+für teuer gehalten habe, waren billig.
+
+### Was der Satz kann
+
+| | |
+|---|---|
+| Schutz | `{3, 8, 6, 3}`, Verzauberbarkeit 100 |
+| Satzbonus | Regeneration, Widerstandskraft, Feuerschutz, Sättigung — alle in Stufe 128 |
+| Fallschutz | die Fallgeschwindigkeit wird bei −0,25 gekappt, die Fallhöhe zurückgesetzt |
+| Haltbarkeit | keine |
+| Strahlung | Faktor 10, im Original mit dem Vermerk „<100 %" |
+
+**Er geht nicht kaputt.** Das Original erreicht das mit einem leergelassenen `setDamage`: die
+Haltbarkeitsleiste steht da und bewegt sich nie. Der Port gibt dem Gegenstand stattdessen gar
+keine Haltbarkeit — dasselbe Ergebnis am Spieler, ohne die Leiste, die ohnehin nie sinkt.
+
+**Er sitzt auf `ArmorFSBItem`, obwohl das Original ein schlichtes `ItemArmor` ist.** Die
+Satzprüfung ist dieselbe Sache: das Original zählt die vier Gegenstände einzeln auf,
+`ArmorFSBItem` vergleicht das Material der vier getragenen Teile — und `EUPHEMIUM` trägt
+genau diese vier und sonst nichts. Zwei Satzprüfungen nebeneinander wären eine zu viel.
+
+### Kein Kreativreiter — und trotzdem erreichbar
+
+`ArmorEuphemium` ruft im Konstruktor `setCreativeTab(null)`. Die vier Teile stehen deshalb in
+keinem Reiter, mit einem Satz Begründung in `tools/tab-check.sh`. Blockiert ist damit nichts:
+die vier Baupläne an der Werkbank stehen im Port.
+
+### Ein Gegenstand kam mit
+
+Die **kaputte Taschenuhr** (`watch`) fehlte dem Port — sie steckt in der Brustplatte. Ihr
+eigenes Rezept ist `LYL` / `EWE` / `LYL` aus blauem Farbstoff, Yharonit-Rohling,
+Euphemiumbarren und einer gewöhnlichen Uhr. Wie im Original steht auch sie in keinem Reiter.
+
+Damit sind noch **46** Rüstungsnamen offen — und die sind jetzt tatsächlich alle
+OBJ-Panzerrüstungen. Diesmal nicht geschätzt: jeder der 46 Namen wurde auf seine
+Konstruktorklasse abgebildet (dreizehn Klassen), und jede dieser dreizehn liefert ein
+`getArmorModel` aus einer Klasse mit `ModelRendererObj`. `ArmorHat` erbt seines von
+`ArmorModel` — genau die Art Fall, die der Klassennamen-Vergleich oben verschluckt hat.
 
 Alle 39 Tore grün.

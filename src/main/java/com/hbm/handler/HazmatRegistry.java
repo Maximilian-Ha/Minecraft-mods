@@ -105,6 +105,14 @@ public class HazmatRegistry {
         HazmatRegistry.registerHazmat(NtmItems.T51_LEGS.get(), t51 * legs);
         HazmatRegistry.registerHazmat(NtmItems.T51_BOOTS.get(), t51 * boots);
 
+        /* Euphemium: Faktor 10, im Original mit dem Vermerk "<100%" -- der Satz haelt viel
+         * ab, aber nicht alles. */
+        double euph = 10D;
+        HazmatRegistry.registerHazmat(NtmItems.EUPHEMIUM_HELMET.get(), euph * helmet);
+        HazmatRegistry.registerHazmat(NtmItems.EUPHEMIUM_PLATE.get(), euph * chest);
+        HazmatRegistry.registerHazmat(NtmItems.EUPHEMIUM_LEGS.get(), euph * legs);
+        HazmatRegistry.registerHazmat(NtmItems.EUPHEMIUM_BOOTS.get(), euph * boots);
+
         double liquidator = 2.4D;   // 99,6%
         HazmatRegistry.registerHazmat(NtmItems.LIQUIDATOR_HELMET.get(), liquidator * helmet);
         HazmatRegistry.registerHazmat(NtmItems.LIQUIDATOR_PLATE.get(), liquidator * chest);

@@ -104,6 +104,13 @@ public class NtmArmorMaterials {
      * darum unsichtbar. */
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> T51 = register("t51", LAYER_INVISIBLE, 0, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.PLATE_ARMOR_TITANIUM.get()));
 
+    /*
+     * Euphemium: {3, 8, 6, 3} und Verzauberbarkeit 100, wie im Original
+     * (EnumHelper.addArmorMaterial("HBM_EUPHEMIUM", ...)). Zwei eigene Schichten, keine
+     * Reparatur -- der Satz geht ohnehin nie kaputt, siehe ArmorEuphemiumItem.
+     */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> EUPHEMIUM = register("euphemium", "euphemium", 100, 3, 8, 6, 3, () -> Ingredient.EMPTY);
+
     public static final int DURABILITY_T51 = 150;
     public static final int DURABILITY_ASBESTOS = 20;
     public static final int DURABILITY_CMB = 60;
