@@ -17,6 +17,7 @@ import com.hbm.lib.ModAttachments;
 import com.hbm.lib.ModEffect;
 import com.hbm.particle.NtmParticleTypes;
 import com.hbm.registry.NtmRecipeSerializers;
+import com.hbm.registry.NtmCriteria;
 import com.hbm.registry.NtmMobEffects;
 import com.hbm.registry.NtmSoundEvents;
 import com.hbm.world.feature.NtmFeatures;
@@ -66,6 +67,7 @@ public class NuclearTechMod {
         NtmEntityTypes.register(eventBus);
         NtmSoundEvents.register(eventBus);
         NtmMobEffects.register(eventBus);
+        NtmCriteria.register(eventBus);
         NtmCreativeTabs.register(eventBus);
         ModAttachments.register(eventBus);
         ModEffect.register(eventBus);

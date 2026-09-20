@@ -858,6 +858,17 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("advancements.hbmsntm.fusion.description", "A dance of deuterons, tritons, and energy.");
         this.add("advancements.hbmsntm.red_balloons.title", "99 Red Balloons");
         this.add("advancements.hbmsntm.red_balloons.description", "\"This is what we've waited for. This is it, boys, this is war.\"");
+        /* Die ersten fuenf getriggerten Erfolge, Runde 248. */
+        this.add("advancements.hbmsntm.red_room.title", "The Other Side");
+        this.add("advancements.hbmsntm.red_room.description", "?");
+        this.add("advancements.hbmsntm.rad_poison.title", "Yay, Radiation!");
+        this.add("advancements.hbmsntm.rad_poison.description", "Suffer the effects of radiation poisoning.");
+        this.add("advancements.hbmsntm.rad_death.title", "Ouch, Radiation!");
+        this.add("advancements.hbmsntm.rad_death.description", "Marie Curie invented the theory of radioactivity, the treatment of radioactivity, and dying of radioactivity.");
+        this.add("advancements.hbmsntm.no9.title", "Old Number Nine");
+        this.add("advancements.hbmsntm.no9.description", "\"I hope the lead I'm mining will be used in your paint\"");
+        this.add("advancements.hbmsntm.go_fish.title", "Go Fish");
+        this.add("advancements.hbmsntm.go_fish.description", "Nautical Crucifixion");
         this.add("weapon.ability.bobble", "Luck of the Collector");
         this.add("weapon.ability.chainsaw", "Painsaw");
         this.add(NtmItems.STEEL_SWORD, "Steel Sword");

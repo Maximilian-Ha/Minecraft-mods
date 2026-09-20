@@ -6,6 +6,8 @@ import com.hbm.world.RedRoomGenerator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
+import com.hbm.registry.NtmCriteria;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -56,6 +58,9 @@ public class RedBrickKeyholeBlock extends RedBrickBlock {
         /* Offen bleibt die Wand, durch die man kommt -- von der Zimmermitte aus gesehen
          * liegt sie in der Richtung, aus welcher der Spieler geklickt hat. */
         RedRoomGenerator.generateBrickRoom(level, mitte, seite);
+
+        /* Derselbe Erfolg wie am steinernen Schluesselloch -- BlockRedBrickKeyhole Z. 91. */
+        if(player instanceof ServerPlayer spieler) NtmCriteria.marke(spieler, "red_room");
 
         return ItemInteractionResult.CONSUME;
     }

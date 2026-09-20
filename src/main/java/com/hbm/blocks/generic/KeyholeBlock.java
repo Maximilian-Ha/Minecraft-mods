@@ -6,6 +6,8 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
+import com.hbm.registry.NtmCriteria;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -58,6 +60,9 @@ public class KeyholeBlock extends Block {
 
         BlockPos mitte = KeyholeRitual.vollziehe(level, pos, player, stack, seite);
         RedRoomGenerator.generateStoneRoom(level, mitte);
+
+        /* Der Erfolg des Originals, Runde 248 -- BlockKeyhole Z. 69. */
+        if(player instanceof ServerPlayer spieler) NtmCriteria.marke(spieler, "red_room");
 
         return ItemInteractionResult.CONSUME;
     }

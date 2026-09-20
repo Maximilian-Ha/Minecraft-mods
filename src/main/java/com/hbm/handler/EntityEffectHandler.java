@@ -6,6 +6,7 @@ import com.hbm.extprop.HbmLivingAttachments.ContaminationEffect;
 import com.hbm.extprop.HbmPlayerAttachments;
 import com.hbm.handler.radiation.ChunkRadiationManager;
 import com.hbm.items.weapon.sedna.factory.ConfettiUtil;
+import com.hbm.registry.NtmCriteria;
 import net.minecraft.server.level.ServerPlayer;
 import com.hbm.lib.ModAttachments;
 import com.hbm.main.NuclearTechModClient;
@@ -189,6 +190,12 @@ public class EntityEffectHandler {
         if (eRad >= 1000) {
             entity.hurt(entity.damageSources().source(NtmDamageTypes.RADIATION), Float.MAX_VALUE);
             HbmLivingAttachments.setRadiation(entity, 0);
+
+            /* Der Erfolg des Originals, Runde 248 -- EntityEffectHandler Z. 241. Dort
+             * steht er hinter der Abfrage auf getHealth() <= 0; hier ist der Schaden
+             * Float.MAX_VALUE, was auf dasselbe hinauslaeuft, aber die Abfrage bleibt:
+             * wer die Strahlung ueberlebt, hat den Erfolg nicht verdient. */
+            if(entity instanceof ServerPlayer spieler && entity.getHealth() <= 0) NtmCriteria.marke(spieler, "rad_death");
         } else if (eRad >= 800) {
             if (level.random.nextInt(300) == 0) entity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 5 * 30, 0));
             if (level.random.nextInt(300) == 0) entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10 * 20, 2));
@@ -207,6 +214,10 @@ public class EntityEffectHandler {
         } else if (eRad >= 200) {
             if (level.random.nextInt(300) == 0) entity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 5 * 20, 0));
             if (level.random.nextInt(500) == 0) entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 5 * 20, 0));
+
+            /* EntityEffectHandler Z. 265: ab zweihundert RAD faellt der Erfolg, jeden
+             * Takt neu -- er wird ohnehin nur einmal verliehen. */
+            if(entity instanceof ServerPlayer spieler) NtmCriteria.marke(spieler, "rad_poison");
         }
     }
 

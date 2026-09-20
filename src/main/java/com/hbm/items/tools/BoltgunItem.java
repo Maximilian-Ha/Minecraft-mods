@@ -25,6 +25,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import com.hbm.registry.NtmCriteria;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -153,6 +154,13 @@ public class BoltgunItem extends ToolingItem implements IAnimatedItem {
                     10F, true, false, 0D, 0F, 0F);
         } else {
             entity.hurt(level.damageSources().source(NtmDamageTypes.BOLTGUN, player), 10F);
+        }
+
+        /* Der Erfolg des Originals, Runde 248 -- ItemBoltgun Z. 66. Er faellt beim
+         * GETROFFENEN, nicht beim Schuetzen: wer von einem Bolzen erschlagen wird, hat
+         * ihn sich verdient. Der Name geht auf "Go Fish" zurueck. */
+        if(!entity.isAlive() && entity instanceof ServerPlayer erschlagener) {
+            NtmCriteria.marke(erschlagener, "go_fish");
         }
 
         knallen(level, player, entity.position().add(0D, entity.getBbHeight() / 2D, 0D));

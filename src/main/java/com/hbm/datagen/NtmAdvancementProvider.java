@@ -8,6 +8,10 @@ import com.hbm.blocks.NtmBlocks;
 import com.hbm.items.NtmItems;
 import com.hbm.main.NuclearTechMod;
 
+import java.util.Optional;
+import com.hbm.registry.NtmCriteria;
+import net.minecraft.advancements.Criterion;
+import net.minecraft.world.item.Items;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementType;
@@ -46,6 +50,11 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
  * Symbol pile_rod_plutonium im Port die Metadatensorte PU239 von PILE_ROD ist; ein
  * Erfolg auf eine Metadatensorte braucht ein DataComponentPredicate und kommt mit der
  * naechsten Gruppe.
+ *
+ * SAVE NIMMT EINE ResourceLocation, KEINEN STRING. Das hat Runde 247 einen
+ * CI-Durchgang gekostet: NeoForges Erweiterung von Advancement.Builder.save nimmt
+ * (Consumer, ResourceLocation, ExistingFileHelper); Vanillas eigene nimmt einen
+ * String. Kein Tor kann das sehen -- die Tore laufen ohne Minecraft auf der Platte.
  */
 public class NtmAdvancementProvider extends AdvancementProvider {
 
@@ -67,7 +76,7 @@ public class NtmAdvancementProvider extends AdvancementProvider {
                             NuclearTechMod.withDefaultNamespace("textures/block/ore_oil.png"),
                             AdvancementType.TASK, false, false, false)
                     .addCriterion("tick", InventoryChangeTrigger.TriggerInstance.hasItems(NtmBlocks.MACHINE_PRESS.get()))
-                    .save(speichern, NuclearTechMod.withDefaultNamespace("root").toString(), helper);
+                    .save(speichern, NuclearTechMod.withDefaultNamespace("root"), helper);
 
             /* Die Kette des Originals, Vorgaenger fuer Vorgaenger. Die Namen sind die von
              * MainRegistry; die Sprachschluessel tragen sie weiter. */
@@ -97,6 +106,22 @@ public class NtmAdvancementProvider extends AdvancementProvider {
             erfolg(speichern, helper, bismuth, "fusion", NtmBlocks.FUSION_TORUS.get(), true);
 
             erfolg(speichern, helper, polymer, "red_balloons", NtmItems.MISSILE_NUCLEAR.get(), true);
+
+            /*
+             * DIE ERSTEN GETRIGGERTEN, Runde 248. Fuenf von zweiunddreissig -- genau die,
+             * deren Ausloeser im Port schon steht. Sie haengen alle an der Wurzel, weil das
+             * Original sie ohne Vorgaenger anmeldet; nur der Strahlentod folgt der
+             * Strahlenkrankheit.
+             */
+            erfolg(speichern, helper, wurzel, "red_room", NtmItems.KEY_RED.get(), true, "red_room");
+            AdvancementHolder radPoison = erfolg(speichern, helper, wurzel, "rad_poison", NtmItems.GEIGER_COUNTER.get(), false, "rad_poison");
+            erfolg(speichern, helper, radPoison, "rad_death", Items.SKELETON_SKULL, true, "rad_death");
+            erfolg(speichern, helper, wurzel, "no9", NtmItems.NO9.get(), false, "no9");
+
+            /* Das Original nimmt hier sein achievement_icon mit der Metadatensorte GOFISH --
+             * ein Symbolgegenstand, den es nur fuer Erfolge gibt und den der Port nicht hat.
+             * Statt ihn nachzubauen zeigt der Erfolg die Waffe, die ihn verleiht. */
+            erfolg(speichern, helper, wurzel, "go_fish", NtmItems.BOLTGUN.get(), true, "go_fish");
         }
 
         /**
@@ -108,6 +133,26 @@ public class NtmAdvancementProvider extends AdvancementProvider {
         private static AdvancementHolder erfolg(Consumer<AdvancementHolder> speichern, ExistingFileHelper helper,
                 AdvancementHolder vorgaenger, String name, ItemLike symbol, boolean besonders) {
 
+            return bauen(speichern, helper, vorgaenger, name, symbol, besonders,
+                    "has_item", InventoryChangeTrigger.TriggerInstance.hasItems(symbol));
+        }
+
+        /**
+         * Ein Erfolg, der an einer Marke haengt statt am Inventar -- das Gegenstueck zu
+         * triggerAchievement. Die Kennung muss mit der im Aufruf uebereinstimmen.
+         */
+        private static AdvancementHolder erfolg(Consumer<AdvancementHolder> speichern, ExistingFileHelper helper,
+                AdvancementHolder vorgaenger, String name, ItemLike symbol, boolean besonders, String kennung) {
+
+            return bauen(speichern, helper, vorgaenger, name, symbol, besonders, "marke",
+                    NtmCriteria.MARKE.get().createCriterion(
+                            new NtmCriteria.MarkeTrigger.Bedingung(Optional.empty(), kennung)));
+        }
+
+        private static AdvancementHolder bauen(Consumer<AdvancementHolder> speichern, ExistingFileHelper helper,
+                AdvancementHolder vorgaenger, String name, ItemLike symbol, boolean besonders,
+                String kriteriumsname, Criterion<?> kriterium) {
+
             return Advancement.Builder.advancement()
                     .parent(vorgaenger)
                     .display(symbol,
@@ -116,8 +161,8 @@ public class NtmAdvancementProvider extends AdvancementProvider {
                             null,
                             besonders ? AdvancementType.CHALLENGE : AdvancementType.TASK,
                             true, true, false)
-                    .addCriterion("has_item", InventoryChangeTrigger.TriggerInstance.hasItems(symbol))
-                    .save(speichern, NuclearTechMod.withDefaultNamespace(name).toString(), helper);
+                    .addCriterion(kriteriumsname, kriterium)
+                    .save(speichern, NuclearTechMod.withDefaultNamespace(name), helper);
         }
     }
 }

@@ -11,6 +11,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import com.hbm.registry.NtmCriteria;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -53,6 +55,13 @@ public class CigaretteItem extends Item {
                 HbmLivingAttachments.incrementBlackLung(living, 2000);
                 HbmLivingAttachments.incrementAsbestos(living, 2000);
                 HbmLivingAttachments.incrementRadiation(living, 100F);
+
+                /* Der Erfolg des Originals, Runde 248 -- ItemCigarette Z. 55: rauchen,
+                 * und dabei den Helm Nr. 9 tragen. */
+                if(living instanceof ServerPlayer spieler
+                        && spieler.getItemBySlot(EquipmentSlot.HEAD).is(NtmItems.NO9.get())) {
+                    NtmCriteria.marke(spieler, "no9");
+                }
             }
             if(this == NtmItems.CRACKPIPE.get()) {
                 HbmLivingAttachments.incrementBlackLung(living, 500);

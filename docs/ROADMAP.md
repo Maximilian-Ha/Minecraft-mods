@@ -11609,3 +11609,56 @@ die Metadatensorte `PU239` von `PILE_ROD`, und ein Erfolg auf eine Metadatensort
 ein `DataComponentPredicate`).
 
 Titel und Beschreibungen sind wörtlich die des Originals, bis hin zum ó in „Fólkvangr".
+
+### Runde 248: die ersten fünf getriggerten Erfolge — und ein Trigger, den 1.7.10 nicht braucht
+
+Runde 247 hat die Erfolge gebracht, die über den Besitz eines Gegenstands fallen. Bleiben
+die **32 getriggerten**: im Original steht dort schlicht
+`player.triggerAchievement(MainRegistry.achX)`, an 32 Stellen im Quelltext.
+
+**Auf 1.21 gibt es dazu kein Gegenstück.** Ein Erfolg wird nicht verliehen, sondern sein
+Kriterium wird erfüllt, und Kriterien müssen angemeldet sein. `NtmCriteria.MARKE` ist
+dieser Ersatz: **ein** Trigger für alle, mit einer Kennung als Unterscheidung. Die
+Alternative wäre ein eigener Trigger je Erfolg gewesen -- 32 Klassen, die sich nur im
+Namen unterscheiden.
+
+Fünf der 32 haben im Port bereits eine Stelle, die feuern kann -- gemessen, nicht geraten:
+
+| Erfolg | Stelle im Original | Stelle im Port |
+|---|---|---|
+| `red_room` | `BlockKeyhole:69`, `BlockRedBrickKeyhole:91` | `KeyholeBlock`, `RedBrickKeyholeBlock` |
+| `rad_poison` | `EntityEffectHandler:265` | derselbe Handler, ab 200 RAD |
+| `rad_death` | `EntityEffectHandler:241` | derselbe Handler, ab 1000 RAD |
+| `go_fish` | `ItemBoltgun:66` | `BoltgunItem` |
+| `no9` | `ItemCigarette:55` | `CigaretteItem` |
+
+**Der Bolzen-Erfolg fällt beim Getroffenen, nicht beim Schützen** -- das steht so im
+Original und ist leicht zu übersehen: wer von einem Bolzen erschlagen wird, hat ihn sich
+verdient.
+
+`go_fish` zeigt im Original ein `achievement_icon` mit der Metadatensorte `GOFISH` -- einen
+Symbolgegenstand, den es nur für Erfolge gibt und den der Port nicht hat. Statt ihn
+nachzubauen zeigt der Erfolg die Waffe, die ihn verleiht.
+
+Die übrigen 27 warten auf ihre Auslöser: vier Bossmünzen hängen an Bossen, die es im Port
+nicht gibt, fünf Digamma-Stufen am Digamma-System, zwei Horizons-Erfolge an den
+Gerald-Satelliten. Sie kommen mit ihnen, nicht vorher.
+
+#### CI-Fix zu Runde 247: `save` nimmt eine ResourceLocation
+
+Zwei Fehler, beide dieselbe Zeile in zwei Ausfertigungen:
+
+```
+NtmAdvancementProvider.java:70: error: incompatible types: String cannot be converted to ResourceLocation
+                .save(speichern, NuclearTechMod.withDefaultNamespace("root").toString(), helper);
+```
+
+**Vanilla und NeoForge haben beide ein `save`, und sie nehmen Verschiedenes.** Vanillas
+`Advancement.Builder.save(Consumer, String)` nimmt einen String; NeoForges Erweiterung
+`save(Consumer, ResourceLocation, ExistingFileHelper)` nimmt eine ResourceLocation. Wer
+den `ExistingFileHelper` mitgibt, meint die zweite -- und darf dann nicht noch
+`.toString()` schreiben.
+
+Derselbe Befund wie beim Datentag in Runde 242: **kein Tor kann das sehen.** Die Tore
+laufen ohne Minecraft auf der Platte, sie kennen keine Vanilla-Signaturen. Was es gibt,
+ist die CI -- und die hat es in einem Durchgang gefunden.
