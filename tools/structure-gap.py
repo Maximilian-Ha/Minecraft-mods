@@ -46,7 +46,13 @@ KEIN_BLOCK = {
     "machine_fluidtank",
     # Das Original selbst kennt sie nicht mehr: sie stehen dort in ignoreMappings,
     # der Liste der Altnamen, die beim Laden alter Welten stillschweigend wegfallen.
+    # ladder_tungsten setzt tools/nbt2structure.py auf die Stahlleiter um -- im Original
+    # wird sie zu Luft, weil BlockDefinition einen unbekannten Namen so aufloest.
     "barrel_iron", "ladder_tungsten", "ore_coal_oil",
+    # Der Jigsaw-Stab ist in 1.21 der Jigsaw-Block von Vanilla. Er markiert die
+    # Anschlussstelle zweier Bauwerksstuecke; beides tut dasselbe, und der Umsetzer
+    # schreibt minecraft:jigsaw an seine Stelle.
+    "wand_jigsaw",
 }
 
 # Metadaten-Bloecke des Originals, aus denen im Port mehrere Bloecke geworden sind.

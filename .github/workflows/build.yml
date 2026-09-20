@@ -229,6 +229,13 @@ jobs:
           chmod +x ./tools/dupreg-check.sh
           ./tools/dupreg-check.sh
 
+      # Die Vorlagen der Bauwerke nennen ihre Anschlusspools als Zeichenkette in der
+      # .nbt-Datei; die Pools entstehen in Java. Zwischen beiden prueft sonst nichts.
+      - name: Check structure template pools
+        run: |
+          chmod +x ./tools/structure-check.sh
+          ./tools/structure-check.sh
+
       - name: Check API usage
         run: |
           chmod +x ./tools/api-check.sh

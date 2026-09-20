@@ -86,6 +86,7 @@ VERBORGENE_BLOECKE = {
     'DOOR_RED':                     'Tuer des Roten Zimmers, wird vom Schluesselloch gesetzt (Original: kein setCreativeTab)',
     'CRATE_RED':                    'die rote Kiste steht nur in Weltbauwerken (Original: setCreativeTab(null))',
     'DECO_LOOT':                    'Beutesockel der Weltbauwerke; er gibt sich selbst nicht her und ist nur Traeger fuer die Stapel darauf (Original: setCreativeTab(null))',
+    'WAND_LOOT':                    'Beutestab: Marke in den Bauwerksdateien, die sich beim ersten Servertick durch Truhe oder Beutesockel ersetzt (Original: setBlockName ohne setCreativeTab)',
 }
 
 VERBORGENE_ITEMS = {

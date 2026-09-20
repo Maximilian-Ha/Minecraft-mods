@@ -305,6 +305,7 @@ public class NtmBlockLootTableProvider extends BlockLootSubProvider {
         this.dropSelf(NtmBlocks.METEOR_BRICK_CHISELED.get());
         this.dropSelf(NtmBlocks.METEOR_BRICK_MOSSY.get());
         this.dropSelf(NtmBlocks.METEOR_BRICK_CRACKED.get());
+        this.dropSelf(NtmBlocks.WAND_LOOT.get());
         this.dropSelf(NtmBlocks.METEOR_PILLAR.get());
         this.dropSelf(NtmBlocks.METEOR_BATTERY.get());
         this.dropSelf(NtmBlocks.TILE_LAB.get());

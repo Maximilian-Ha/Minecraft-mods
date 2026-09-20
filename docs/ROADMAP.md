@@ -1309,7 +1309,7 @@ alle sechs Blockarten fertig mit, das Original baut sie sich noch selbst zusamme
 - [ ] **Abweichung:** die Kette hängt im Original in alle sechs Richtungen, in 1.21 auf drei
       Achsen. Die Umsetzungstabelle bildet das ab.
 - [ ] **Abweichung:** die Kette hat im Original kein Rezept — sie kommt nur in Verliesen vor.
-      Hier bekommt sie eines, weil der Port ihre Verliese noch nicht baut.
+      Hier bekommt sie eines, weil der Port erst eines der 79 Bauwerke setzt (Runde 251).
 
 Gemessener Stand: von 115 Namen sind **58** abgedeckt, **57** fehlen noch
 (`tools/structure-gap.py`).
@@ -1327,6 +1327,9 @@ Abdeckung im ganzen Projekt**.
 
 Im Port gibt es **kein einziges Gebäude**. Vorhanden sind sechs Features (Ölflecken, Ölblasen,
 Bodenschätze, Landminen, abgestürzte Bombe) und die Meteoritenstruktur — das war es.
+
+> **Überholt seit Runde 251.** Das Meteoritenverlies steht; der Umsetzer für das
+> Dateiformat ist gebaut und gilt für alle 79. Siehe *Runde 250/251* am Ende.
 
 - [ ] **28 Strukturklassen** (`world/gen`) — Bunker, Silos, Raketenbasen
 - [ ] **13 Verliese** (`world/dungeon`) — Labore, Forschungsstationen
@@ -11755,3 +11758,112 @@ Original als Vorlage -- und der größte verbliebene Brocken des ganzen Ports.
 
 Erster Schritt beim Bau: prüfen, welche der 79 `.nbt`-Dateien 1.21 unverändert laden kann.
 Das Format hat sich geändert -- Palette statt Blockkennziffern.
+
+> **Nachgeholt in den Runden 250 und 251.** Antwort auf die Frage des letzten Absatzes:
+> **keine einzige**. Der Umsetzer steht jetzt, das Meteoritenverlies wird gebaut, und von
+> den vier Bauzauberstäben sind zwei erledigt. Siehe *Runde 250/251* am Ende.
+
+## Runde 250/251 — Das Meteoritenverlies steht in der Welt
+
+Die Standortbestimmung nach Runde 249 nannte drei offene Punkte und ein gemeinsames
+Fundament. Das Fundament ist gebaut.
+
+### Runde 250: zwei Blöcke, die Runde 91 übersehen hat
+
+`meteor_brick_mossy` und `meteor_brick_cracked`. Im Kreativreiter fallen sie kaum auf — sie
+sehen aus wie der glatte Meteoritenziegel mit Moos beziehungsweise Rissen. An jeder Wand des
+Verlieses stehen sie trotzdem: dessen Blockwähler ersetzt jeden gesetzten `meteor_brick` zu
+vier Zehnteln durch sich selbst, zu drei durch den bemoosten und zu drei durch den rissigen.
+Ohne die beiden wäre das ganze Verlies gleichförmig glatt.
+
+Danach meldete `tools/structure-gap.py` nur noch **vier** echte Lücken — und alle vier waren
+Bauzauberstäbe.
+
+### Runde 251: der Umsetzer, die Vorlagen, die Struktur
+
+**Der Umsetzer** (`tools/nbt2structure.py`, dazu `tools/extract-structures.sh`). Die
+`.nbt`-Dateien des Originals sehen aus wie Strukturblock-Dateien von 1.21 — gleiche
+Schlüssel, gleiches gzip-NBT — sind es aber nicht: ihre Palette nennt Blöcke im Namensschema
+von vor der Flattening-Umstellung, mit der Metadaten-Zahl als Eigenschaft, und das Feld
+`DataVersion` fehlt ganz. Jeder Block wird einzeln übersetzt.
+
+**Der Umsetzer rät nicht.** Ein `(Name, meta)`-Paar, das nicht in seiner Tabelle steht,
+bricht den Lauf ab. Das ist der Unterschied zum Original, das einen unbekannten Blocknamen
+stillschweigend zu Luft macht (`BlockDefinition`: *„if(block == null) block = Blocks.air"*) —
+genau das passiert dort heute mit `hbm:tile.ladder_tungsten`, die es nicht mehr gibt: **das
+Leiterzimmer des Meteoritenverlieses hat im Original keine Leiter mehr.** Der Port setzt die
+Stahlleiter, die dasselbe ist und die es noch gibt.
+
+Was der Umsetzer außerdem nachrechnet, weil 1.7.10 es beim Zeichnen tat und nicht in den
+Daten hatte: die **Eckenform jeder Treppe** und die **vier Verbindungen jedes Zaunfelds**.
+
+**38 Bauwerksdateien** liegen jetzt unter `data/hbmsntm/structure/meteor/` — 9729 Blöcke.
+
+**Die Zauberstäbe.** Von den vieren sind nach dieser Runde noch zwei offen:
+
+| Stab | im Port |
+|---|---|
+| `wand_jigsaw` | **braucht keinen Block** — in 1.21 ist das `minecraft:jigsaw`. Richtung, Pool, Ziel, Ersatzblock und die beiden Prioritäten gehen eins zu eins über |
+| `wand_loot` | **portiert** — Block, Blockentität, Selbstersatz beim ersten Servertick |
+| `wand_logic` | offen; gehört zu den Logikblöcken der Verliese |
+| `wand_tandem` | offen; verzögertes Nachsetzen von Bauwerksteilen |
+
+**Die Blockwähler** des Originals (`Component.MeteorBricks` und drei Geschwister) sind
+Prozessorlisten geworden. Deren Regeln werden der Reihe nach geprüft und die erste
+zutreffende gewinnt — die Zahlen sind deshalb **bedingte** Wahrscheinlichkeiten: drei Zehntel
+für den bemoosten, dann drei Siebtel des Rests für den rissigen, was wieder drei Zehntel
+ergibt.
+
+**Die Spitze**, die aus dem Boden ragt, trägt im Original `conformToTerrain` mit
+`heightOffset = -3`: jede einzelne Spalte wird auf die Geländehöhe gesetzt und dann drei
+Blöcke abgesenkt. Der Schwerkraftprozessor von 1.21 tut genau das.
+
+### Drei Stellen, an denen 1.21 nicht dasselbe kann
+
+1. **Größe.** Das Original zählt *Stücke* und hört bei 128 auf. 1.21 zählt *Tiefe* und lässt
+   höchstens 20 zu. Im Port stehen 7 — wie bei Vanillas Dörfern, die damit auf rund hundert
+   Stücke kommen.
+2. **Reichweite.** Original 128 Blöcke vom Mittelpunkt, der benutzte Erbauer von 1.21 setzt
+   80 fest.
+3. **Biome.** Das Original fragt `biome.rootHeight >= 0` ab. Die Zahl gibt es nicht mehr; an
+   ihrer Stelle steht eine Liste aller Oberflächenbiome außer Ozeanen, Flüssen und Sümpfen,
+   dazu die drei Höhlenbiome. Genau diese drei Gruppen liegen in 1.7.10 unter null.
+
+### Wie selten das Verlies steht — nachgerechnet, nicht geschätzt
+
+Das Original legt **ein** Raster von zwölf Chunks über die Welt und verlost in jeder Zelle
+*ein* Bauwerk unter allen, die im dortigen Biom stehen dürfen. Für die Ebene summieren sich
+die Gewichte auf **422**; das Verlies zieht mit Gewicht 1 mit. Es steht also in einer von 422
+Zellen.
+
+1.21 verlost nicht — jedes Bauwerk bekommt sein eigenes Raster, und die Dichte steckt allein
+im Rasterabstand. Gleiche Dichte heißt: Abstand mal Abstand gleich 144 mal 422, also **246
+Chunks**, Zwischenraum 82. Das ist rund ein Verlies auf 3900 mal 3900 Blöcke — so selten wie
+im Original.
+
+### Was an der Beute fehlt, und warum
+
+Kein Eintrag verschwindet stillschweigend; alles steht an seiner Stelle im Quelltext:
+
+- **Der Tresor** (`hbm:tile.safe`) ist im Port eine Vanilla-Truhe mit demselben Vorrat. Die
+  Beute ist erreichbar, das Schloss fehlt.
+- **Der Vorrat des Tresors** besteht im Original aus dem Buch und acht Stempelbüchern. Die
+  Stempelbücher gibt es im Port nicht — es bleibt der eine Eintrag.
+- **Die Schatztruhe** verliert vier von zwanzig Einträgen: `pill_herbal`, `heart_piece`,
+  `egg_glyphid`, `blueprint_folder`.
+- **`LOOT_METEOR`** — das Beuterezept des MKU-Stücks — braucht das MKU-Rätsel des Originals:
+  ein je Welt neu gewürfeltes Rezept samt Buch, das darauf hinweist. Weder das Rätsel noch
+  seine Zutaten noch das Lorebuch gibt es im Port. Der Sockel bleibt dort leer; er wird
+  **nicht** mit etwas anderem gefüllt.
+- **Die Statue** im Stück `meteor-3-statue` ist im Original `statue_elb_f`, registriert unter
+  dem Namen `#undef` — ein versteckter, unzerstörbarer, selbstleuchtender Block mit eigenem
+  Modell. Der Port hat die Statuenfamilie nicht; an ihrer Stelle steht der Sockelstein.
+
+### Gemessener Stand danach
+
+`tools/structure-gap.py`: von 185 Blocknamen der 79 Bauwerke sind **157** angelegt, **11**
+über Familien abgedeckt, **15** brauchen keinen Block. **Echt fehlend: 2** — `wand_logic`
+und `wand_tandem`.
+
+**Bauwerke in der Welt: 1 von 79.** Der Umsetzer gilt ab jetzt für alle; was den übrigen
+achtundsiebzig fehlt, ist je eine eigene Platzierung.

@@ -309,6 +309,10 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.stairsBlock(NtmBlocks.LIGHTSTONE_BRICKS_STAIRS.get(), blockTexture(NtmBlocks.LIGHTSTONE_BRICKS));
         this.blockItem(NtmBlocks.LIGHTSTONE_BRICKS_STAIRS);
 
+        /* Runde 251: der Beutestab. Seite und Deckel sind verschieden, wie im Original. */
+        this.simpleBlockWithItem(NtmBlocks.WAND_LOOT, this.models().cubeColumn(
+                name(NtmBlocks.WAND_LOOT), blockTexture(NtmBlocks.WAND_LOOT), modLoc("block/wand_loot_top")));
+
         /* Runde 94: die Foerderbaender. */
         this.conveyorBlock(NtmBlocks.CONVEYOR, "conveyor");
         this.conveyorBlock(NtmBlocks.CONVEYOR_EXPRESS, "conveyor_express");

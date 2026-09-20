@@ -47,6 +47,8 @@ import com.hbm.blockentity.turret.TurretSentryBlockEntity;
 import com.hbm.items.weapon.sedna.mods.XWeaponModManager;
 import com.hbm.inventory.screens.*;
 import com.hbm.itempool.ItemPoolsC130;
+import com.hbm.itempool.ItemPoolsMeteor;
+import com.hbm.itempool.ItemPoolsPile;
 import com.hbm.itempool.ItemPoolsRedRoom;
 import com.hbm.itempool.ItemPoolsSatellite;
 import com.hbm.items.IEquipReceiver;
@@ -153,6 +155,8 @@ public class CommonEvents {
             ItemPoolsSatellite.init();
             ItemPoolsC130.init();
             ItemPoolsRedRoom.init();
+            ItemPoolsPile.init();
+            ItemPoolsMeteor.init();
             LaunchPadBaseBlockEntity.registerLaunchables();
 
             /* Die Brennstofftafel des Radiothermalgenerators steht fest im Quelltext, wie im

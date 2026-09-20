@@ -22,6 +22,7 @@ import com.hbm.blocks.machine.WatzStructBlock;
 import com.hbm.blocks.generic.ToolConversionBlock;
 import com.hbm.blocks.generic.SteelRoofBlock;
 import com.hbm.blocks.generic.LootDecoBlock;
+import com.hbm.blocks.generic.WandLootBlock;
 import com.hbm.blocks.generic.SupplyCrateBlock;
 import com.hbm.blocks.generic.DecoPoleSatelliteReceiverBlock;
 import com.hbm.blocks.generic.MushBlock;
@@ -1045,6 +1046,15 @@ public class NtmBlocks {
     /* Der Beutesockel. Hart wie nichts und ohne Widerstand, wie im Original
      * (ModBlocks.java:1446) -- er soll nicht im Weg stehen. */
     public static final DeferredBlock<Block> DECO_LOOT = register("deco_loot", () -> new LootDecoBlock(BlockBehaviour.Properties.of().strength(0.0F, 0.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().noLootTable()));
+    /*
+     * Runde 251: der BEUTESTAB. Er steht in den Bauwerksdateien an jeder Stelle, an der spaeter
+     * Beute liegen soll, und ersetzt sich beim ersten Servertick durch das, was in ihm steht --
+     * eine Truhe mit gezogenem Inhalt oder einen Beutesockel mit einem Beuterezept.
+     *
+     * KEIN KREATIVREITER, wie im Original (ModBlocks.java:2365 setzt keinen). Er ist Werkzeug
+     * des Bauwerksbaus, nicht Ausstattung.
+     */
+    public static final DeferredBlock<Block> WAND_LOOT = register("wand_loot", () -> new WandLootBlock(BlockBehaviour.Properties.of().strength(1.0F, 1.0F).sound(SoundType.METAL).mapColor(MapColor.METAL)));
     /* Die Nachschubkiste am Fallschirm. Holzwerte wie im Original (ModBlocks.java:2092),
      * und sie teilt sich das Modell der Dosenkiste -- dort ebenfalls, ueber denselben
      * Zeichnertyp und dieselbe Textur. */

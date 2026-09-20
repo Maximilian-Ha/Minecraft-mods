@@ -26,3 +26,4 @@ run-data
 repo
 # Argument-Dateien, die javac beim Syntax-Gate anlegt
 javac.*.args
+__pycache__/

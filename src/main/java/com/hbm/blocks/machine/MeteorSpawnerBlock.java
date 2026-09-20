@@ -25,10 +25,9 @@ import javax.annotation.Nullable;
  * ER LAESST NICHTS FALLEN: das Original gibt in getItemDropped null zurueck. Hier ist das
  * noLootTable an den Eigenschaften.
  *
- * WER IHN AUFSTELLT: im Original der CrabSpawners-Waehler des Meteoritenverlieses -- jede
- * so bezeichnete Stelle wird zu vier Fuenfteln Meteoritenziegel und zu einem Fuenftel
- * Nest. Dieses Verlies baut der Port noch nicht; bis dahin steht der Block wie der
- * dungeon_spawner aus Runde 234 nur zum Setzen bereit.
+ * WER IHN AUFSTELLT: der CrabSpawners-Waehler des Meteoritenverlieses -- jede so bezeichnete
+ * Stelle wird zu vier Fuenfteln Meteoritenziegel und zu einem Fuenftel Nest. Seit Runde 251
+ * baut der Port dieses Verlies; der Waehler steht in NtmProcessorLists.METEOR_CRATES.
  */
 public class MeteorSpawnerBlock extends BaseEntityBlock {
 

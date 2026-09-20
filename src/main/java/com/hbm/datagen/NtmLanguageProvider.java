@@ -1212,6 +1212,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.CRATE_CAN, "Canned Food Crate");
         this.add(NtmBlocks.CRATE_SUPPLY, "Supply Crate");
         this.add(NtmBlocks.DECO_LOOT, "Loot Pedestal");
+        this.add(NtmBlocks.WAND_LOOT, "Loot Wand");
         /* Die Pfuetze hat im Original gar keinen Namen -- sie ist in keinem Reiter und
          * traegt keinen Gegenstand. Einen braucht sie trotzdem, sonst steht der rohe
          * Schluessel in der Anzeige beim Hinsehen. */
