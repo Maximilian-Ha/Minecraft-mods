@@ -37,8 +37,11 @@ import net.neoforged.api.distmarker.OnlyIn;
  * Original in renderAll. Sie bleiben hier, denn ohne sie laeuft die Krabbe seitwaerts --
  * was fuer eine Krabbe zwar passend waere, aber nicht das ist, was das Original zeigt.
  *
- * ALLE ZWANZIG KAESTEN SIND GESPIEGELT: das Original setzt am Ende seines Konstruktors
- * mirror = true fuer jeden von ihnen. Ohne das laege die Textur seitenverkehrt auf.
+ * KEIN KASTEN IST GESPIEGELT, obwohl das Original am Ende seines Konstruktors
+ * mirror = true fuer alle zwanzig setzt: in 1.7.10 liest addBox den Schalter in dem
+ * Augenblick, in dem der Kasten entsteht, und schreibt ihn in die ModelBox. Wer ihn
+ * danach setzt, setzt ihn fuer keinen Kasten mehr -- es folgt ja kein addBox. Die Zeile
+ * ist im Original wirkungslos; sie in 1.21 nachzubauen waere eine Aenderung.
  */
 @OnlyIn(Dist.CLIENT)
 public class ModelCrab extends EntityModel<CyberCrab> {
@@ -65,14 +68,14 @@ public class ModelCrab extends EntityModel<CyberCrab> {
         PartDefinition teile = mesh.getRoot();
 
         /* Der Panzer: acht Platten uebereinander, jede mit eigener Bildstelle. */
-        teile.addOrReplaceChild("shell_1", CubeListBuilder.create().texOffs(1, 1).mirror().addBox(0F, 0F, 0F, 4, 1, 4), PartPose.offset(-2F, -3F, -2F));
-        teile.addOrReplaceChild("shell_2", CubeListBuilder.create().texOffs(17, 1).mirror().addBox(0F, 0F, 0F, 4, 1, 6), PartPose.offset(-2F, -4F, -3F));
-        teile.addOrReplaceChild("shell_3", CubeListBuilder.create().texOffs(33, 1).mirror().addBox(0F, 0F, 0F, 3, 1, 3), PartPose.offset(-1.5F, -5F, -1.5F));
-        teile.addOrReplaceChild("shell_4", CubeListBuilder.create().texOffs(49, 1).mirror().addBox(0F, 0F, 0F, 4, 1, 2), PartPose.offset(-2F, -4.5F, -1F));
-        teile.addOrReplaceChild("shell_5", CubeListBuilder.create().texOffs(1, 9).mirror().addBox(0F, 0F, 0F, 6, 1, 4), PartPose.offset(-3F, -4F, -2F));
-        teile.addOrReplaceChild("shell_6", CubeListBuilder.create().texOffs(1, 25).mirror().addBox(0F, 0F, 0F, 2, 1, 4), PartPose.offset(-1F, -4.5F, -2F));
-        teile.addOrReplaceChild("shell_7", CubeListBuilder.create().texOffs(17, 25).mirror().addBox(0F, 0F, 0F, 5, 1, 3), PartPose.offset(-2.5F, -3.5F, -1.5F));
-        teile.addOrReplaceChild("shell_8", CubeListBuilder.create().texOffs(33, 25).mirror().addBox(0F, 0F, 0F, 3, 1, 5), PartPose.offset(-1.5F, -3.5F, -2.5F));
+        teile.addOrReplaceChild("shell_1", CubeListBuilder.create().texOffs(1, 1).addBox(0F, 0F, 0F, 4, 1, 4), PartPose.offset(-2F, -3F, -2F));
+        teile.addOrReplaceChild("shell_2", CubeListBuilder.create().texOffs(17, 1).addBox(0F, 0F, 0F, 4, 1, 6), PartPose.offset(-2F, -4F, -3F));
+        teile.addOrReplaceChild("shell_3", CubeListBuilder.create().texOffs(33, 1).addBox(0F, 0F, 0F, 3, 1, 3), PartPose.offset(-1.5F, -5F, -1.5F));
+        teile.addOrReplaceChild("shell_4", CubeListBuilder.create().texOffs(49, 1).addBox(0F, 0F, 0F, 4, 1, 2), PartPose.offset(-2F, -4.5F, -1F));
+        teile.addOrReplaceChild("shell_5", CubeListBuilder.create().texOffs(1, 9).addBox(0F, 0F, 0F, 6, 1, 4), PartPose.offset(-3F, -4F, -2F));
+        teile.addOrReplaceChild("shell_6", CubeListBuilder.create().texOffs(1, 25).addBox(0F, 0F, 0F, 2, 1, 4), PartPose.offset(-1F, -4.5F, -2F));
+        teile.addOrReplaceChild("shell_7", CubeListBuilder.create().texOffs(17, 25).addBox(0F, 0F, 0F, 5, 1, 3), PartPose.offset(-2.5F, -3.5F, -1.5F));
+        teile.addOrReplaceChild("shell_8", CubeListBuilder.create().texOffs(33, 25).addBox(0F, 0F, 0F, 3, 1, 5), PartPose.offset(-1.5F, -3.5F, -2.5F));
 
         /* Die vier Beine und ihre Fuesse. Bildstellen und Winkel wie im Original. */
         int[][] beinBild = { {25, 9}, {41, 9}, {1, 17}, {17, 17} };
@@ -80,10 +83,10 @@ public class ModelCrab extends EntityModel<CyberCrab> {
 
         for(int i = 0; i < 4; i++) {
             teile.addOrReplaceChild(BEINE[i],
-                    CubeListBuilder.create().texOffs(beinBild[i][0], beinBild[i][1]).mirror().addBox(-0.5F, 0F, 2F, 1, 1, 3),
+                    CubeListBuilder.create().texOffs(beinBild[i][0], beinBild[i][1]).addBox(-0.5F, 0F, 2F, 1, 1, 3),
                     PartPose.offsetAndRotation(0F, -3F, 0F, -0.17453293F, WINKEL[i], 0F));
             teile.addOrReplaceChild(FUESSE[i],
-                    CubeListBuilder.create().texOffs(fussBild[i][0], fussBild[i][1]).mirror().addBox(-0.5F, 1F, 4F, 1, 3, 1),
+                    CubeListBuilder.create().texOffs(fussBild[i][0], fussBild[i][1]).addBox(-0.5F, 1F, 4F, 1, 3, 1),
                     PartPose.offsetAndRotation(0F, -3F, 0F, 0.17453293F, WINKEL[i], 0F));
         }
 
@@ -92,7 +95,7 @@ public class ModelCrab extends EntityModel<CyberCrab> {
         int[][] zangenBild = { {17, 1}, {33, 9}, {49, 9}, {9, 17} };
         for(int i = 0; i < 4; i++) {
             teile.addOrReplaceChild("fang_" + i,
-                    CubeListBuilder.create().texOffs(zangenBild[i][0], zangenBild[i][1]).mirror().addBox(-0.5F, 0F, 1.5F, 1, 1, 1),
+                    CubeListBuilder.create().texOffs(zangenBild[i][0], zangenBild[i][1]).addBox(-0.5F, 0F, 1.5F, 1, 1, 1),
                     PartPose.offsetAndRotation(0F, -3F, 0F, -0.43633231F, zangenWinkel[i], 0F));
         }
 

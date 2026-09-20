@@ -28,8 +28,13 @@ import net.neoforged.api.distmarker.OnlyIn;
  * steht still. Danach zeichnet der Renderer zu jedem Ziel, das die Krabbe gerade schlaegt,
  * einen Blitz -- dieselben Werte wie bei der Teslaspule.
  *
- * WEIL DAS MODELL AUF DEM KOPF STEHT, dreht das Original es um hundertachtzig Grad um Z
- * und schiebt es um anderthalb Bloecke nach unten. Beides bleibt.
+ * NICHT UEBERNOMMEN: die halbe Drehung um Z und der Versatz um anderthalb Bloecke, die im
+ * Modell des Originals stehen. Sie sind dort die UMKEHRUNG dessen, was RendererLivingEntity
+ * vorher tut (glScalef(-1, -1, 1) und ein Versatz von 1,5078 nach unten) -- die ganze Kette
+ * ergibt nachgerechnet die Einheitsabbildung plus 0,0078 in der Hoehe. Dieser Darsteller ist
+ * aber kein MobRenderer, sondern ein schlichter EntityRenderer, wie jeder OBJ-Darsteller des
+ * Ports: die Vorwaertsdrehung findet nie statt, und die Umkehrung allein stellte die Krabbe
+ * auf den Kopf.
  */
 @OnlyIn(Dist.CLIENT)
 public class TeslaCrabRenderer extends EntityRenderer<TeslaCrab> {
@@ -76,9 +81,6 @@ public class TeslaCrabRenderer extends EntityRenderer<TeslaCrab> {
         RenderContext.mulPose(Axis.YP.rotationDegrees(180F - rumpf));
 
         RenderSystem.setShaderTexture(0, ResourceManager.TESLACRAB_TEX);
-
-        RenderContext.mulPose(Axis.ZP.rotationDegrees(180F));
-        RenderContext.translate(0F, -1.5F, 0F);
 
         float schwung = -(Mth.cos(krabbe.walkAnimation.position(partialTick) * 0.6662F * 2.0F) * 0.4F)
                 * krabbe.walkAnimation.speed(partialTick) * 57.3F;

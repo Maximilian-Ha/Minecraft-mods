@@ -14,6 +14,7 @@ import com.hbm.config.FalloutConfigJSON;
 import com.hbm.entity.NtmEntityTypes;
 import com.hbm.items.armor.ModReviveItem;
 import com.hbm.entity.mob.CreeperNuclear;
+import com.hbm.entity.mob.CreeperTainted;
 import com.hbm.entity.mob.CyberCrab;
 import com.hbm.entity.mob.TaintCrab;
 import com.hbm.entity.mob.TeslaCrab;
@@ -201,6 +202,7 @@ public class CommonEvents {
         event.put(NtmEntityTypes.CYBER_CRAB.get(), CyberCrab.createAttributes().build());
         event.put(NtmEntityTypes.TESLA_CRAB.get(), TeslaCrab.createAttributes().build());
         event.put(NtmEntityTypes.TAINT_CRAB.get(), TaintCrab.createAttributes().build());
+        event.put(NtmEntityTypes.CREEPER_TAINTED.get(), CreeperTainted.createAttributes().build());
     }
 
     @SubscribeEvent

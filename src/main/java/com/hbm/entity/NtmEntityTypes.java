@@ -35,6 +35,7 @@ import com.hbm.entity.missile.MissileCustom;
 import com.hbm.entity.missile.SatellitePod;
 import com.hbm.entity.missile.Soyuz;
 import com.hbm.entity.mob.CreeperNuclear;
+import com.hbm.entity.mob.CreeperTainted;
 import com.hbm.entity.mob.CyberCrab;
 import com.hbm.entity.mob.TaintCrab;
 import com.hbm.entity.mob.TeslaCrab;
@@ -140,6 +141,16 @@ public class NtmEntityTypes {
                     () -> EntityType.Builder.of(UndeadSoldier::new, MobCategory.MONSTER)
                             .sized(0.6F, 1.8F)
                             .build("undead_soldier"));
+
+    /**
+     * Der verseuchte Creeper, Runde 238. Masse wie jeder Creeper -- das Original setzt
+     * fuer ihn kein eigenes setSize.
+     */
+    public static final DeferredHolder<EntityType<?>, EntityType<CreeperTainted>> CREEPER_TAINTED =
+            ENTITY_TYPES.register("creeper_tainted",
+                    () -> EntityType.Builder.<CreeperTainted>of(CreeperTainted::new, MobCategory.MONSTER)
+                            .sized(0.6F, 1.7F)
+                            .build("creeper_tainted"));
 
     /**
      * Die Kybernetische Krabbe, Runde 236. Masse wie im Original: drei Viertel breit,

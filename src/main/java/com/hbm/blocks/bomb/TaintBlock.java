@@ -2,6 +2,7 @@ package com.hbm.blocks.bomb;
 
 import com.hbm.blocks.ITooltipProvider;
 import com.hbm.entity.NtmEntityTypes;
+import com.hbm.entity.mob.CreeperTainted;
 import com.hbm.entity.mob.TaintCrab;
 import com.hbm.entity.mob.TeslaCrab;
 import com.hbm.lib.ModEffect;
@@ -15,6 +16,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -105,20 +107,35 @@ public class TaintBlock extends Block {
         }
 
         /*
-         * Runde 237: die Teslakrabbe verwandelt sich im Taint. Das Original tut dasselbe --
-         * Entitaet toeten, Taint-Krabbe an dieselbe Stelle setzen.
+         * Was im Taint steht, wird zu etwas anderem. Runde 237 hat die Teslakrabbe
+         * gebracht, Runde 238 den Creeper -- im Original stehen beide Faelle hier
+         * nebeneinander.
          *
-         * NOCH NICHT PORTIERT: der zweite Fall daneben, der einen gewoehnlichen Creeper zum
-         * verseuchten Creeper macht. EntityCreeperTainted gibt es im Port noch nicht.
+         * NUR DER GEWOEHNLICHE CREEPER: das Original prueft mit getClass().equals(
+         * EntityCreeper.class) statt mit instanceof, damit der nukleare und der schon
+         * verseuchte Creeper nicht auch noch verwandelt werden. Hier steht darum
+         * dieselbe Pruefung auf die genaue Klasse.
          */
-        if (entity instanceof TeslaCrab && !level.isClientSide) {
+        if (!level.isClientSide) {
 
-            TaintCrab krabbe = NtmEntityTypes.TAINT_CRAB.get().create(level);
+            if (entity instanceof TeslaCrab) {
+                TaintCrab krabbe = NtmEntityTypes.TAINT_CRAB.get().create(level);
 
-            if (krabbe != null) {
-                krabbe.moveTo(entity.getX(), entity.getY(), entity.getZ(), entity.getYRot(), entity.getXRot());
-                entity.discard();
-                level.addFreshEntity(krabbe);
+                if (krabbe != null) {
+                    krabbe.moveTo(entity.getX(), entity.getY(), entity.getZ(), entity.getYRot(), entity.getXRot());
+                    entity.discard();
+                    level.addFreshEntity(krabbe);
+                }
+            }
+
+            if (entity.getClass().equals(Creeper.class)) {
+                CreeperTainted creeper = NtmEntityTypes.CREEPER_TAINTED.get().create(level);
+
+                if (creeper != null) {
+                    creeper.moveTo(entity.getX(), entity.getY(), entity.getZ(), entity.getYRot(), entity.getXRot());
+                    entity.discard();
+                    level.addFreshEntity(creeper);
+                }
             }
         }
     }

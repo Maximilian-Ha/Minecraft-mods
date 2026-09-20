@@ -11146,3 +11146,37 @@ Offen aus dieser Runde:
 * **Der verseuchte Creeper fehlt.** Im Taintblock steht direkt neben der Krabbe ein zweiter
   Zweig, der einen gewöhnlichen Creeper in einen `EntityCreeperTainted` verwandelt. Diese
   Klasse gibt es im Port noch nicht.
+
+### Runde 238: der verseuchte Creeper
+
+Der zweite Zweig aus `TaintBlock.entityInside`, den Runde 237 offen gelassen hat: wer als
+gewöhnlicher Creeper in den Taint läuft, kommt als verseuchter Creeper wieder heraus.
+
+* **`CreeperTainted`** -- fünfzehn Lebenspunkte, Tempo 0,35, heilt sich alle zehn Ticks um
+  einen Punkt, lässt TNT fallen. Sein Knall hat Sprengkraft fünf ohne Feuer und ohne
+  Blockschaden; danach sät er Taint: als gewöhnlicher Creeper fünfundachtzig Würfe in einen
+  Würfel von sieben Blöcken Kante, als geladener zweihundertfünfundfünfzig in einen von
+  fünfzehn. Wie tief der Taint sitzt, hängt an `TAINT_TRAILS` -- und zwar umgekehrt: ist sie
+  aus, bekommt der Taint niedrige Stufen und breitet sich weiter aus.
+* **`CreeperTaintedRenderer`** -- dasselbe Creeper-Modell, andere Haut. Das Original hat
+  dafür einen gemeinsamen Darsteller (`RenderCreeperUniversal`); in 1.21 braucht ohnehin
+  jede Entitätsart ihre eigene Anmeldung.
+* **`TaintBlock`**: beide Verwandlungen stehen jetzt nebeneinander, wie im Original. Die
+  Creeper-Prüfung geht wie dort über `getClass().equals(...)` statt über `instanceof` --
+  sonst würde auch der nukleare und der schon verseuchte Creeper noch einmal verwandelt.
+
+Nicht übernommen: `hasPosNeightbour`. Die Methode steht im Original am Ende der Klasse und
+wird von niemandem gerufen.
+
+Damit ist der Taintblock vollständig: beide Zweige, die das Original dort hat, sind da.
+
+**Berichtigt, nachgerechnet:** die beiden OBJ-Krabben standen auf dem Kopf. Der Grund ist
+eine Falle, die jede OBJ-Entität des Ports betrifft. In 1.7.10 dreht `RendererLivingEntity`
+die Szene vor dem Modell um (`glScalef(-1, -1, 1)`) und schiebt sie um 1,5078 nach unten --
+1.21 macht in `LivingEntityRenderer` genau dasselbe. Die beiden Zeilen im Modell des
+Originals (`glRotatef(180, 0, 0, 1)` und `glTranslatef(0, -1.5, 0)`) sind nichts anderes als
+die Umkehrung davon: nachgerechnet ergibt die ganze Kette die Einheitsabbildung plus 0,0078
+in der Höhe. Die Krabbenrenderer des Ports sind aber keine `MobRenderer`, sondern schlichte
+`EntityRenderer` -- die Vorwärtsdrehung findet also nie statt, und die Umkehrung drehte das
+Modell erst auf den Kopf. Beide Zeilen sind jetzt weg; übrig bleibt die Drehung nach der
+Blickrichtung des Rumpfes, und beim Taintkrebs seine eigene Vierteldrehung.

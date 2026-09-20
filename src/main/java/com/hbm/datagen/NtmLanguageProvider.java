@@ -4217,6 +4217,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("entity.hbmsntm.tau_shot", "Tau Bolt");
         this.add("entity.hbmsntm.duck", "Duck");
         this.add("entity.hbmsntm.creeper_nuclear", "Nuclear Creeper");
+        this.add("entity.hbmsntm.creeper_tainted", "Tainted Creeper");
     }
 
     // HELPERS //
