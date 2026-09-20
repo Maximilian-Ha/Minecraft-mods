@@ -408,6 +408,8 @@ public class ResourceManager {
     public static final ResourceLocation N_I_4_N_I_GREYSCALE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/n_i_4_n_i_greyscale.png");
 
     public static final ResourceLocation HEV_HELMET = NuclearTechMod.withDefaultNamespace("textures/armor/hev_helmet.png");
+    /** Die Aschebrille -- im Original heisst die Datei ebenso. */
+    public static final ResourceLocation ARMOR_GOGGLES = NuclearTechMod.withDefaultNamespace("textures/armor/goggles.png");
     public static final ResourceLocation HEV_LEG = NuclearTechMod.withDefaultNamespace("textures/armor/hev_leg.png");
     public static final ResourceLocation HEV_CHEST = NuclearTechMod.withDefaultNamespace("textures/armor/hev_chest.png");
     public static final ResourceLocation HEV_ARM = NuclearTechMod.withDefaultNamespace("textures/armor/hev_arm.png");
@@ -775,6 +777,7 @@ public class ResourceManager {
     public static IModelCustom armor_ncrpa;
     public static IModelCustom armor_hat;
     public static IModelCustom armor_no9;
+    public static IModelCustom armor_goggles;
 
     public static IObjRenderer sphere;
     public static IModelCustom sphere_new;
@@ -1088,6 +1091,7 @@ public class ResourceManager {
         armor_ncrpa = new HFRWavefrontObject("models/obj/armor/ncrpa.obj").asVBO();
         armor_hat = new HFRWavefrontObject("models/obj/armor/hat.obj").asVBO();
         armor_no9 = new HFRWavefrontObject("models/obj/armor/no9.obj").asVBO();
+        armor_goggles = new HFRWavefrontObject("models/obj/armor/goggles.obj").asVBO();
 
         sphere = new HFRWavefrontObject("models/obj/sphere.obj").getRenderer();
         sphere_new = new HFRWavefrontObject("models/obj/sphere_new.obj").asVBO();

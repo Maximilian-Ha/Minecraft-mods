@@ -25,6 +25,7 @@ import com.hbm.items.armor.ArmorRPAItem;
 import com.hbm.items.armor.ArmorHEVItem;
 import com.hbm.items.armor.ArmorNo9;
 import com.hbm.items.armor.FilterItem;
+import com.hbm.items.armor.ArmorAshGlassesItem;
 import com.hbm.items.armor.ArmorLiquidatorItem;
 import com.hbm.items.armor.ArmorLiquidatorMaskItem;
 import com.hbm.items.armor.GasMaskItem;
@@ -1540,6 +1541,13 @@ public class NtmItems {
      * und Sand ab und truebt die Sicht mit zunehmendem Verschleiss.
      */
     public static final DeferredItem<Item> GOGGLES = ITEMS.register("goggles", () -> new GasMaskItem(NtmArmorMaterials.GOGGLES, maskProperties(), GasMaskItem.Kopf.BRILLE, List.of(), GasMaskItem.OVERLAY_GOGGLES));
+
+    /*
+     * DIE ASCHEBRILLE. Nicht die Schutzbrille darueber -- ein eigener Gegenstand mit eigenem
+     * Modell, der nichts kann ausser gut aussehen. Ihr Werkstoff ist die unsichtbare Schicht,
+     * weil ihr Wellenfrontmodell seine Textur selbst bindet.
+     */
+    public static final DeferredItem<Item> ASHGLASSES = ITEMS.register("ashglasses", () -> new ArmorAshGlassesItem(NtmArmorMaterials.MASK, maskProperties()));
 
     /* Lappen vor dem Gesicht: kein Gewinde, kein Filter, nur der Schutz, den der
      * Lappen selbst mitbringt. */

@@ -862,6 +862,7 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicItem(NtmItems.GAS_MASK_MONO.get());
         this.basicItem(NtmItems.GAS_MASK_OLDE.get());
         this.basicItem(NtmItems.GOGGLES.get());
+        this.basicItem(NtmItems.ASHGLASSES.get());
         this.basicItem(NtmItems.MASK_RAG.get());
         this.basicItem(NtmItems.MASK_PISS.get());
         this.basicItem(NtmItems.GAS_MASK_FILTER.get());

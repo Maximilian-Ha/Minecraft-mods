@@ -9681,13 +9681,14 @@ funktioniert, er sieht nur anders aus als er soll. Beide haben ihr Bild jetzt.
 ### Die Aschebrille
 
 Die stand in der Liste aus Runde 136 („Schutzbrille und Aschebrille warten auf dieselben
-Modelle"). Nachgemessen: die Zeichenkette `ash_glasses` kommt **im ganzen Original nicht ein
-einziges Mal vor** — weder als Feld in `ModItems` noch als Registrierung. Der Name kam aus
-`port-gap.py`, das Klassennamen vergleicht.
+Modelle").
 
-Im Original liegen eine Klasse `ArmorAshGlasses` und eine Textur `ashglasses.png` — beide
-gehören zu keinem Gegenstand. Das ist dort tote Ladung, nicht hier eine Lücke; es gibt nichts
-nachzureichen.
+> **BERICHTIGUNG AUS RUNDE 211.** Hier stand, die Aschebrille gebe es im Original gar nicht.
+> Das war falsch, und zwar aus demselben Grund wie der Irrtum in Runde 207: **ich habe nach
+> der falschen Schreibweise gesucht.** Der Gegenstand heißt `ashglasses`, ohne Unterstrich;
+> ich hatte `ash_glasses` gegriffen, nichts gefunden und daraus geschlossen, es gebe ihn
+> nicht. Es gibt ihn — mit Feld, Registrierung, Konstruktor, Modell und Textur. Er ist in
+> Runde 211 nachgereicht.
 
 Alle 39 Tore grün.
 
@@ -9732,5 +9733,46 @@ Port über Hilfsmethoden anmeldet.
 | meine Handmessung aus Runde 207 | 1 |
 
 Die dritte Zeile ist der Grund für diese Runde.
+
+Alle 39 Tore grün.
+
+
+## Runde 211 — Die Aschebrille, und schon wieder die falsche Schreibweise
+
+Zwei Runden hintereinander habe ich eine Lücke wegmessen wollen und mich dabei vermessen.
+Runde 210 war die Berichtigung der einen, diese ist die Berichtigung der anderen.
+
+### Was falsch war
+
+In Runde 209 steht: „die Zeichenkette `ash_glasses` kommt im ganzen Original nicht ein
+einziges Mal vor". Das stimmt sogar — **nur heißt der Gegenstand nicht so.** Er heißt
+`ashglasses`, ohne Unterstrich. Ich hatte die Schreibweise aus der Klassenliste von
+`port-gap.py` abgeleitet (`ArmorAshGlasses`) und beim Suchen einen Unterstrich eingefügt, den
+es nie gab. Der Gegenstand ist im Original vollständig vorhanden: Feld, Registrierung,
+Konstruktor, Modell, Item- und Rüstungstextur.
+
+Bemerkenswert daran ist, dass die richtige Schreibweise **die ganze Zeit sichtbar war** — sie
+steht in der 103er-Liste, die Runde 210 ausgerechnet hat, an vierzehnter Stelle: `ashglasses`.
+Ich hatte sie gelesen, ohne sie mit der Behauptung aus Runde 209 zusammenzubringen.
+
+### Die Brille
+
+Sie kann nichts. Das Original hängt ihr weder Gefahrenklassen noch Strahlenschutz noch ein
+Schirmbild an — ein gewöhnlicher Helmgegenstand aus Eisen mit eigenem Kopfmodell.
+
+Anders als die Masken aus Runde 206 und 209 braucht sie **keinen eigenen Werkstoff**: ihr
+Modell ist ein Wellenfrontmodell und bindet seine Textur selbst über `RenderContext`, statt sie
+von der Rüstungsschicht zu beziehen — derselbe Weg, den HEV- und RPA-Rüstung gehen. Der ganze
+Umstand aus Runde 206 entfällt damit.
+
+**Sieben tote Zuweisungen sind nicht mitgekommen.** `ModelGlasses` legt im Original neben dem
+Kopf auch Rumpf, Arme, Beine und Füße aus dem BJ-Rüstungsmodell an — und zeichnet davon in
+`render()` nie eines, weil die Brille nur den Kopfschlitz belegt. Deshalb braucht der Port die
+BJ-Modelldatei für sie auch nicht, sondern allein `goggles.obj`.
+
+Und eine Verwechslungsgefahr, die im Original angelegt ist: die **Aschebrille** (`ashglasses`)
+benutzt die Dateien, die dort `goggles.obj` und `goggles.png` heißen — während die
+**Schutzbrille** (`goggles`) aus Runde 209 ein Kastenmodell ist. Zwei Gegenstände, deren Namen
+und Dateien über Kreuz liegen. Im Port steht das an beiden Klassen als Warnung.
 
 Alle 39 Tore grün.
