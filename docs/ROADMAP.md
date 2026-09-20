@@ -10497,3 +10497,41 @@ Mal steht es jetzt in der Klasse.
 Nach dieser Runde sind **5** Rüstungsnamen offen: `dieselsuit_*` und `nossy_hat`.
 
 Alle 39 Tore grün.
+
+## Runde 225 — Der Dieselanzug
+
+Der zweite Tankanzug, und der erste, der **zwei Sorten** annimmt: neben Diesel auch
+gekrackten Diesel. Das Original überschreibt dafür `acceptsFluid`; die Zapfsäule füllt beide,
+der Tankname im Tooltip nennt nur den ersten — dort wie hier.
+
+| | |
+|---|---|
+| Tank | 64 000, dieselbe Staffelung wie der Dampfanzug |
+| Satzbonus | Tempo III, Sprungkraft III |
+| Rückstoßfestigkeit | +25 % an **jedem** Teil |
+| Gefahren / Strahlung | **keine** |
+
+**Er schirmt gegen nichts ab**, und das ist kein vergessener Eintrag: als einziger der beiden
+Tankanzüge trägt er im Original weder `setHazardClass` noch `setRadResist`. Er steht deshalb
+weder in `ArmorUtil` noch in `HazmatRegistry` — dieselbe Abwesenheit mit Grund wie bei der
+Wismut-Garnitur aus Runde 218.
+
+### Dritter Name für dieselbe Sache
+
+Die Klasse heißt `Diesel`, die Registriernamen `dieselsuit_*`, und Modell, Texturen **und
+Werkstoff** heißen `bnuuy`. Wer nach „diesel" sucht, findet weder Modell noch Texturen.
+
+Das ist die dritte Namensverschiebung in drei Runden — nach `dnt`/`dns` (223) und
+`Desh`/`steamsuit` (224). In diesem Mod ist der Name, unter dem eine Sache registriert wird,
+regelmäßig nicht der Name, unter dem ihre Dateien liegen. Wer über Klassennamen sucht, misst
+falsch; genau das ist in Runde 215 passiert.
+
+### Die Baupläne
+
+Rote Wolle und Stahlbarren. Die Brustplatte verlangt einen **ganzen Dieselgenerator** als
+Kern, das Beinzeug zwei Motoren. Die Stiefel — vier Felder, zwei Zutaten — sind das
+schlichteste Rüstungsrezept des Mods.
+
+Nach dieser Runde ist **ein** Rüstungsname offen: `nossy_hat`.
+
+Alle 39 Tore grün.

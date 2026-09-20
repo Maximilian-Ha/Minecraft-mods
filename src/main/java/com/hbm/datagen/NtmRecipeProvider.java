@@ -4188,6 +4188,40 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .save(recipeOutput);
 
         /*
+         * DER DIESELANZUG, ArmorRecipes.java Z. 94 bis 97. Rote Wolle und Stahlbarren; die
+         * Brustplatte verlangt einen ganzen Dieselgenerator als Kern, das Beinzeug zwei
+         * Motoren. Die Stiefel sind das schlichteste Ruestungsrezept des Mods.
+         */
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.DIESELSUIT_HELMET.get(), 1)
+                .pattern("W W").pattern("W W").pattern("SCS")
+                .define('W', Blocks.RED_WOOL)
+                .define('S', NtmItems.INGOT_STEEL.get())
+                .define('C', NtmItems.CIRCUIT_ANALOG_BOARD.get())
+                .unlockedBy("has_ingot_steel", has(NtmItems.INGOT_STEEL.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.DIESELSUIT_PLATE.get(), 1)
+                .pattern("W W").pattern("CDC").pattern("SWS")
+                .define('W', Blocks.RED_WOOL)
+                .define('S', NtmItems.INGOT_STEEL.get())
+                .define('C', NtmItems.CIRCUIT_ANALOG_BOARD.get())
+                .define('D', NtmBlocks.MACHINE_DIESEL.get())
+                .unlockedBy("has_machine_diesel", has(NtmBlocks.MACHINE_DIESEL.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.DIESELSUIT_LEGS.get(), 1)
+                .pattern("M M").pattern("S S").pattern("W W")
+                .define('W', Blocks.RED_WOOL)
+                .define('S', NtmItems.INGOT_STEEL.get())
+                .define('M', NtmItems.MOTOR.get())
+                .unlockedBy("has_motor", has(NtmItems.MOTOR.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.DIESELSUIT_BOOTS.get(), 1)
+                .pattern("W W").pattern("S S")
+                .define('W', Blocks.RED_WOOL)
+                .define('S', NtmItems.INGOT_STEEL.get())
+                .unlockedBy("has_ingot_steel", has(NtmItems.INGOT_STEEL.get()))
+                .save(recipeOutput);
+
+        /*
          * DIE AUFSTIEGSKETTE. Das Original bietet zwei Wege an und stellt ueber
          * enableLBSMSimpleArmorRecipes um: entweder jede Garnitur schlicht aus ihrem Barren,
          * oder jede aus der vorigen. Der Port nimmt die Kette -- sie ist der Standardfall,

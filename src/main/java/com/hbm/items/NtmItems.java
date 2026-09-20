@@ -29,6 +29,7 @@ import com.hbm.items.armor.ArmorBJJetpackItem;
 import com.hbm.items.armor.ArmorBismuthItem;
 import com.hbm.items.armor.ArmorDNTItem;
 import com.hbm.items.armor.ArmorDeshItem;
+import com.hbm.items.armor.ArmorDieselItem;
 import com.hbm.items.armor.ArmorDigammaItem;
 import com.hbm.items.armor.ArmorEnvsuitItem;
 import com.hbm.items.armor.ArmorEuphemiumItem;
@@ -1826,6 +1827,16 @@ public class NtmItems {
     public static final DeferredItem<Item> STEAMSUIT_LEGS = ITEMS.register("steamsuit_legs", () -> steamsuit(ArmorItem.Type.LEGGINGS));
     public static final DeferredItem<Item> STEAMSUIT_BOOTS = ITEMS.register("steamsuit_boots", () -> steamsuit(ArmorItem.Type.BOOTS));
 
+    /*
+     * DER DIESELANZUG. Wie der Dampfanzug ein Satz mit Tank, aber er nimmt zwei Sorten:
+     * Diesel und gekrackten Diesel. Tempo III und Sprungkraft III fuer den Satz, dazu ein
+     * Viertel mehr Rueckstossfestigkeit an jedem Teil.
+     */
+    public static final DeferredItem<Item> DIESELSUIT_HELMET = ITEMS.register("dieselsuit_helmet", () -> dieselsuit(ArmorItem.Type.HELMET));
+    public static final DeferredItem<Item> DIESELSUIT_PLATE = ITEMS.register("dieselsuit_plate", () -> dieselsuit(ArmorItem.Type.CHESTPLATE));
+    public static final DeferredItem<Item> DIESELSUIT_LEGS = ITEMS.register("dieselsuit_legs", () -> dieselsuit(ArmorItem.Type.LEGGINGS));
+    public static final DeferredItem<Item> DIESELSUIT_BOOTS = ITEMS.register("dieselsuit_boots", () -> dieselsuit(ArmorItem.Type.BOOTS));
+
     public static final DeferredItem<Item> HEV_HELMET = ITEMS.register("hev_helmet", () -> hev(ArmorItem.Type.HELMET));
     public static final DeferredItem<Item> HEV_PLATE = ITEMS.register("hev_plate", () -> hev(ArmorItem.Type.CHESTPLATE));
     public static final DeferredItem<Item> HEV_LEGS = ITEMS.register("hev_legs", () -> hev(ArmorItem.Type.LEGGINGS));
@@ -1974,6 +1985,27 @@ public class NtmItems {
 
         return new ArmorDeshItem(NtmArmorMaterials.DESH, type, eigenschaften, () -> Fluids.STEAM, 64_000, 500, 50, 1)
                 .addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 20, 4));
+    }
+
+    /**
+     * Der Dieselanzug. Dieselben Tankwerte wie der Dampfanzug; die Rueckstossfestigkeit
+     * steht im Original in getItemAttributeModifiers, anteilig gerechnet (Operation 1).
+     */
+    private static ArmorFSBItem dieselsuit(ArmorItem.Type type) {
+        EquipmentSlotGroup gruppe = EquipmentSlotGroup.bySlot(type.getSlot());
+
+        Item.Properties eigenschaften = new Item.Properties()
+                .stacksTo(1)
+                .durability(type.getDurability(NtmArmorMaterials.DURABILITY_DIESELSUIT))
+                .attributes(ItemAttributeModifiers.builder()
+                        .add(Attributes.KNOCKBACK_RESISTANCE,
+                                new AttributeModifier(NuclearTechMod.withDefaultNamespace("dieselsuit_knockback_" + type.getName()),
+                                        0.25D, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), gruppe)
+                        .build());
+
+        return new ArmorDieselItem(NtmArmorMaterials.DIESELSUIT, type, eigenschaften, () -> Fluids.DIESEL, 64_000, 500, 50, 1)
+                .addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 20, 2))
+                .addEffect(new MobEffectInstance(MobEffects.JUMP, 20, 2));
     }
 
     private static ArmorFSBItem hev(ArmorItem.Type type) {

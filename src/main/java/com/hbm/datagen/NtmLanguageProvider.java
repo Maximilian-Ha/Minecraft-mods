@@ -4130,6 +4130,11 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.STEAMSUIT_PLATE, "Steam Suit Chestplate");
         this.add(NtmItems.STEAMSUIT_LEGS, "Steam Suit Leggings");
         this.add(NtmItems.STEAMSUIT_BOOTS, "Steam Suit Boots");
+
+        this.add(NtmItems.DIESELSUIT_HELMET, "Diesel-Powered Head-Mounted Environmental Sensor");
+        this.add(NtmItems.DIESELSUIT_PLATE, "Diesel-Powered Cybernetics");
+        this.add(NtmItems.DIESELSUIT_LEGS, "Diesel-Powered Leg Servos");
+        this.add(NtmItems.DIESELSUIT_BOOTS, "Diesel-Powered High Heels");
         this.add("armor.electricJetpack", "Ion Jetpack");
         this.add("armor.glider", "Sneak to glide");
         this.add("armor.moreAmmo", "More Ammo");

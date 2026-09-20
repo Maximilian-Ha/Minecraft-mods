@@ -168,7 +168,15 @@ public class NtmArmorMaterials {
      */
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> DESH = register("desh", LAYER_INVISIBLE, 0, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.INGOT_DESH.get()));
 
+    /*
+     * Der Dieselanzug. Im Original heisst der Werkstoff "HBM_BNUUY" -- wie das Modell und
+     * die Texturen. {3, 8, 6, 3}, ohne Verzauberbarkeit, Haltbarkeitsfaktor 150, Reparatur
+     * mit der Kupferplatte. Wellenfrontmodell, Schicht unsichtbar.
+     */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> DIESELSUIT = register("dieselsuit", LAYER_INVISIBLE, 0, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.PLATE_COPPER.get()));
+
     public static final int DURABILITY_T51 = 150;
+    public static final int DURABILITY_DIESELSUIT = 150;
     public static final int DURABILITY_DESH = 150;
     public static final int DURABILITY_DNS = 150;
     public static final int DURABILITY_BJ = 150;

@@ -977,6 +977,11 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicItem(NtmItems.STEAMSUIT_PLATE.get());
         this.basicItem(NtmItems.STEAMSUIT_LEGS.get());
         this.basicItem(NtmItems.STEAMSUIT_BOOTS.get());
+
+        this.basicItem(NtmItems.DIESELSUIT_HELMET.get());
+        this.basicItem(NtmItems.DIESELSUIT_PLATE.get());
+        this.basicItem(NtmItems.DIESELSUIT_LEGS.get());
+        this.basicItem(NtmItems.DIESELSUIT_BOOTS.get());
         this.basicItem(NtmItems.ASBESTOS_CLOTH.get());
         this.basicItem(NtmItems.MASK_RAG.get());
         this.basicItem(NtmItems.MASK_PISS.get());
