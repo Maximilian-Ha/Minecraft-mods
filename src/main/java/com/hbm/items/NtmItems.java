@@ -56,6 +56,14 @@ import com.hbm.items.armor.ItemModKnockback;
 import com.hbm.items.armor.ModCardItem;
 import com.hbm.items.armor.ModMorningGloryItem;
 import com.hbm.items.armor.ModReviveItem;
+import com.hbm.items.armor.ItemModBandaid;
+import com.hbm.items.armor.ItemModHealth;
+import com.hbm.items.armor.ItemModInk;
+import com.hbm.items.armor.ItemModMilk;
+import com.hbm.items.armor.ItemModPolish;
+import com.hbm.items.armor.ItemModQuartz;
+import com.hbm.items.armor.ItemModSerum;
+import com.hbm.items.armor.ItemModTwoKick;
 import com.hbm.items.armor.ModCharmItem;
 import com.hbm.items.armor.NtmArmorMaterials;
 import com.hbm.items.food.ConserveItem;
@@ -1103,6 +1111,25 @@ public class NtmItems {
     public static final DeferredItem<Item> MORNING_GLORY = ITEMS.register("morning_glory", () -> new ModMorningGloryItem(new Item.Properties()));
     /* Drei Leben, wie im Original (ItemModRevive(3)). */
     public static final DeferredItem<Item> WILD_P = ITEMS.register("wild_p", () -> new ModReviveItem(new Item.Properties(), 3));
+
+    /*
+     * DIE ZEHN AUFSAETZE DES ROTEN ZIMMERS, Runde 241. Sie standen seit Runde 233 als
+     * fehlende Beutestuecke im Kopf von ItemPoolsRedRoom; der Beutetopf des roten Sockels
+     * hatte dadurch nur dreizehn seiner fuenfundzwanzig Eintraege.
+     */
+    /** Er tut nichts -- und das ist so im Original. Siehe ItemModTwoKick. */
+    public static final DeferredItem<Item> BALLISTIC_GAUNTLET = ITEMS.register("ballistic_gauntlet", () -> new ItemModTwoKick(new Item.Properties()));
+    public static final DeferredItem<Item> ARMOR_POLISH = ITEMS.register("armor_polish", () -> new ItemModPolish(new Item.Properties()));
+    public static final DeferredItem<Item> BANDAID = ITEMS.register("bandaid", () -> new ItemModBandaid(new Item.Properties()));
+    public static final DeferredItem<Item> SERUM = ITEMS.register("serum", () -> new ItemModSerum(new Item.Properties()));
+    public static final DeferredItem<Item> QUARTZ_PLUTONIUM = ITEMS.register("quartz_plutonium", () -> new ItemModQuartz(new Item.Properties()));
+    public static final DeferredItem<Item> SPIDER_MILK = ITEMS.register("spider_milk", () -> new ItemModMilk(new Item.Properties()));
+    public static final DeferredItem<Item> INK = ITEMS.register("ink", () -> new ItemModInk(new Item.Properties()));
+    /* Zwanzig und vierzig Lebenspunkte, wie im Original (ItemModHealth(20F) und (40F)). */
+    public static final DeferredItem<Item> HEART_CONTAINER = ITEMS.register("heart_container", () -> new ItemModHealth(new Item.Properties(), 20D));
+    public static final DeferredItem<Item> BLACK_DIAMOND = ITEMS.register("black_diamond", () -> new ItemModHealth(new Item.Properties(), 40D));
+    /* Ein Leben, wie im Original (ItemModRevive(1)) -- der Wild-P hat drei. */
+    public static final DeferredItem<Item> SCRUMPY = ITEMS.register("scrumpy", () -> new ModReviveItem(new Item.Properties(), 1));
 
     public static final DeferredItem<Item> METEOR_CHARM = ITEMS.register("meteor_charm", () -> new ModCharmItem(new Item.Properties(), true));
     public static final DeferredItem<Item> PROTECTION_CHARM = ITEMS.register("protection_charm", () -> new ModCharmItem(new Item.Properties(), false));

@@ -11272,3 +11272,41 @@ erzeugt, prüfte niemand. Das Tor sucht für jeden gebundenen Block seine Klasse
 Gemessen: 260 Arten, 283 gebundene Blöcke, null Funde. Zwei Gegenproben: meldet man den
 Schlackenabstich als schlichten `Block` an, meldet das Tor genau ihn; stellt man den Unfall
 selbst nach und nimmt `SlagBlock` sein `newBlockEntity`, meldet es die Schlackenpfütze.
+
+### Runde 241: die zehn Rüstungsaufsätze des Roten Zimmers
+
+Der Sockel des roten Zimmers hat im Original **fünfundzwanzig** Einträge. Seit Runde 233
+standen dreizehn davon, und der Kopf von `ItemPoolsRedRoom` zählte die zwölf fehlenden
+namentlich auf, statt sie zu verschweigen. Gemessen: **zehn der zwölf sind
+Rüstungsaufsätze**, und das Baukastensystem dafür gibt es seit Runde 137 --
+`ItemArmorMod`, `ArmorModHandler` und acht der neununddreißig Aufsatzklassen des Originals.
+Es fehlten also nicht zwölf verschiedene Dinge, sondern im Wesentlichen ein Zweig.
+
+| Gegenstand | Klasse | Steckplatz, Teile | Wirkung |
+|---|---|---|---|
+| `armor_polish` | `ItemModPolish` | EXTRA, alle vier | jeder zwanzigste Treffer prallt ab |
+| `bandaid` | `ItemModBandaid` | EXTRA, alle vier | drei von hundert Treffern heilen ganz, statt zu verletzen |
+| `serum` | `ItemModSerum` | EXTRA, alle vier | tauscht Gift gegen hundert Ticks Stärke der Stufe fünf |
+| `quartz_plutonium` | `ItemModQuartz` | EXTRA, alle vier | jeder Treffer nimmt zehn RAD ab, der Schaden bleibt |
+| `spider_milk` | `ItemModMilk` | EXTRA, alle vier | nimmt Tick für Tick jeden schädlichen Trankeffekt |
+| `ink` | `ItemModInk` | EXTRA, alle vier | jeder zehnte Treffer prallt ab und wirft Blumen |
+| `heart_container` | `ItemModHealth` (20) | EXTRA, Brustplatte | +10 Herzen |
+| `black_diamond` | `ItemModHealth` (40) | EXTRA, Brustplatte | +20 Herzen |
+| `scrumpy` | `ModReviveItem` (1) | EXTRA, Hose | die Klasse gab es schon |
+| `ballistic_gauntlet` | `ItemModTwoKick` | SERVOS, Brustplatte | **absichtlich wirkungslos** |
+
+Die Spalte *Teile* steht für die vier Merker am Ende des `ItemArmorMod`-Konstruktors: an
+welche Rüstungsteile sich der Aufsatz überhaupt stecken lässt. Sie sind aus dem Original
+übernommen, nicht vereinheitlicht -- deshalb hängen die beiden Herzaufsätze an der
+Brustplatte, der Scrumpy an der Hose.
+
+**`ballistic_gauntlet` ist kein vergessener Rest, sondern einer im Original.** Der Name
+kommt im gesamten 1.7.10-Quelltext an genau zwei Stellen vor: in seiner eigenen
+Anmeldung und in seiner eigenen Klasse. Nirgends fragt eine Schrotflinte ihn ab. Der
+Rückstoßschlag, den der Name verspricht, wurde dort nie eingebaut. Die Portklasse trägt
+das im Kopf, damit niemand später eine Wirkung dazuerfindet und meint, sie
+wiederhergestellt zu haben.
+
+Damit stehen **dreiundzwanzig von fünfundzwanzig** Einträgen mit den Gewichten des
+Originals. Was noch fehlt, ist `starmetal_sword` und `flask_infusion` -- zwei andere
+Familien, keine Aufsätze. Der Kopf der Klasse nennt beide weiterhin beim Namen.

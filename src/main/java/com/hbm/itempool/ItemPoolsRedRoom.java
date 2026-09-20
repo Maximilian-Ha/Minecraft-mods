@@ -17,16 +17,17 @@ import net.minecraft.world.level.Level;
  * Was in den Zimmern hinter den Schluessellochbloecken liegt. Drei Vorraete: der Sockel des
  * steinernen Zimmers, die Tafel des Ziegelzimmers und dessen vier Beisockel.
  *
- * DER ERSTE VORRAT IST UNVOLLSTAENDIG, und das steht hier statt im Verborgenen. Von den
- * fuenfundzwanzig Eintraegen des Originals stehen dreizehn; ZWOELF Gegenstaende gibt es im
- * Port nicht -- gemessen ueber den Registriernamen, nicht ueber den Feldnamen:
+ * DER ERSTE VORRAT IST FAST VOLLSTAENDIG, und was fehlt, steht hier statt im Verborgenen.
+ * Von den fuenfundzwanzig Eintraegen des Originals stehen seit Runde 241 dreiundzwanzig;
+ * ZWEI Gegenstaende gibt es im Port nicht -- gemessen ueber den Registriernamen, nicht
+ * ueber den Feldnamen:
  *
- *   ballistic_gauntlet, armor_polish, bandaid, serum, quartz_plutonium, spider_milk, ink,
- *   heart_container, black_diamond, scrumpy, starmetal_sword, flask_infusion
+ *   starmetal_sword, flask_infusion
  *
- * Die Gewichte der uebrigen bleiben, wie sie sind. Sie umzurechnen, damit die Summe wieder
- * stimmt, waere eine Erfindung: das Original kennt diese Verteilung nicht, und sobald die
- * zwoelf nachkommen, muesste man zweimal umrechnen. Was fehlt, fehlt sichtbar.
+ * Die zehn Ruestungsaufsaetze, die bis Runde 240 gefehlt haben, sind nachgekommen und mit
+ * ihren Gewichten aus dem Original eingetragen. Die Gewichte der uebrigen bleiben, wie sie
+ * sind: sie umzurechnen, damit die Summe wieder stimmt, waere eine Erfindung, und sobald
+ * die zwei nachkommen, muesste man zweimal umrechnen. Was fehlt, fehlt sichtbar.
  *
  * DER ZWEITE VORRAT stand in Runde 233 noch leer da: er besteht im Original aus einem
  * einzigen Eintrag, der Tontafel, und die kam erst in Runde 234. Jetzt ist er vollstaendig.
@@ -46,7 +47,17 @@ public class ItemPoolsRedRoom {
         initialized = true;
 
         ItemPool.getOrCreate(POOL_RED_PEDESTAL)
+                .add(NtmItems.BALLISTIC_GAUNTLET.get(), 1, 1, 10)
+                .add(NtmItems.ARMOR_POLISH.get(), 1, 1, 10)
+                .add(NtmItems.BANDAID.get(), 1, 1, 10)
+                .add(NtmItems.SERUM.get(), 1, 1, 10)
+                .add(NtmItems.QUARTZ_PLUTONIUM.get(), 1, 1, 10)
                 .add(NtmItems.MORNING_GLORY.get(), 1, 1, 10)
+                .add(NtmItems.SPIDER_MILK.get(), 1, 1, 10)
+                .add(NtmItems.INK.get(), 1, 1, 10)
+                .add(NtmItems.HEART_CONTAINER.get(), 1, 1, 10)
+                .add(NtmItems.BLACK_DIAMOND.get(), 1, 1, 10)
+                .add(NtmItems.SCRUMPY.get(), 1, 1, 10)
 
                 .add(NtmItems.WILD_P.get(), 1, 1, 5)
                 .add(NtmItems.CARD_AOS.get(), 1, 1, 5)

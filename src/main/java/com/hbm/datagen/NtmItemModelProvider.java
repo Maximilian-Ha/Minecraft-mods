@@ -1180,6 +1180,16 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicItem(NtmItems.CARD_QOS.get());
         this.basicItem(NtmItems.MORNING_GLORY.get());
         this.basicItem(NtmItems.WILD_P.get());
+        this.basicItem(NtmItems.BALLISTIC_GAUNTLET.get());
+        this.basicItem(NtmItems.ARMOR_POLISH.get());
+        this.basicItem(NtmItems.BANDAID.get());
+        this.basicItem(NtmItems.SERUM.get());
+        this.basicItem(NtmItems.QUARTZ_PLUTONIUM.get());
+        this.basicItem(NtmItems.SPIDER_MILK.get());
+        this.basicItem(NtmItems.INK.get());
+        this.basicItem(NtmItems.HEART_CONTAINER.get());
+        this.basicItem(NtmItems.BLACK_DIAMOND.get());
+        this.basicItem(NtmItems.SCRUMPY.get());
         this.basicItem(NtmItems.RING_PULL.get());
         this.basicItem(NtmItems.CAN_KEY.get());
 

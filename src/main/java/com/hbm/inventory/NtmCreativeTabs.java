@@ -1943,6 +1943,18 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.METEOR_CHARM);
                         output.accept(NtmItems.PROTECTION_CHARM);
 
+                        /* Die zehn Aufsaetze des Roten Zimmers, Runde 241. */
+                        output.accept(NtmItems.BALLISTIC_GAUNTLET);
+                        output.accept(NtmItems.ARMOR_POLISH);
+                        output.accept(NtmItems.BANDAID);
+                        output.accept(NtmItems.SERUM);
+                        output.accept(NtmItems.QUARTZ_PLUTONIUM);
+                        output.accept(NtmItems.SPIDER_MILK);
+                        output.accept(NtmItems.INK);
+                        output.accept(NtmItems.HEART_CONTAINER);
+                        output.accept(NtmItems.BLACK_DIAMOND);
+                        output.accept(NtmItems.SCRUMPY);
+
                         /* Schutzkleidung: Anzuege, Masken und Filter. */
                         output.accept(NtmItems.NO9);
                         output.accept(NtmItems.HAZMAT_HELMET);

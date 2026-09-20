@@ -1803,6 +1803,28 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.CARD_AOS, "Ace of Spades");
         this.add(NtmItems.CARD_QOS, "Queen of Spades");
         this.add(NtmItems.MORNING_GLORY, "Morning Glory");
+        this.add(NtmItems.BALLISTIC_GAUNTLET, "Ballistic Gauntlet");
+        this.add(NtmItems.ARMOR_POLISH, "Armor Polish");
+        this.add(NtmItems.BANDAID, "Band-Aid");
+        this.add(NtmItems.SERUM, "Serum");
+        this.add(NtmItems.QUARTZ_PLUTONIUM, "Plutonium Quartz");
+        this.add(NtmItems.SPIDER_MILK, "Spider Milk");
+        this.add(NtmItems.INK, "Ink");
+        this.add(NtmItems.HEART_CONTAINER, "Heart Container");
+        this.add(NtmItems.BLACK_DIAMOND, "Black Diamond");
+        this.add(NtmItems.SCRUMPY, "Scrumpy");
+        /* Die Hinweiszeilen der zehn Aufsaetze, Runde 241. */
+        this.add("armorMod.polish", "5% chance to nullify damage");
+        this.add("armorMod.bandaid", "3% chance for full heal when damaged");
+        this.add("armorMod.serum", "Cures poison and gives strength");
+        this.add("armorMod.quartz", "Taking damage removes 10 RAD");
+        this.add("armorMod.milk", "Removes bad potion effects");
+        this.add("armorMod.ink", "10%% chance to nullify damage");
+        this.add("armorMod.ink.flowers", "Flowers!");
+        this.add("armorMod.health", "+%s health");
+        this.add("armorMod.twokick", "Punches fire 12 gauge shells");
+        this.add("armorMod.twokick.quote", "\"I've had worse\"");
+        this.add("armorMod.twokick.short", "Shotgun punches");
         this.add(NtmItems.WILD_P, "Wild Pegasus Dry Whiskey");
 
         /* Die fuenf Geheimstuecke, wortgetreu aus en_US.lang des Originals. */
