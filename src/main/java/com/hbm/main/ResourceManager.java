@@ -347,6 +347,7 @@ public class ResourceManager {
     public static final ResourceLocation CARBINE_BAYONET_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/carbine_bayonet.png");
     public static final ResourceLocation MAS36_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/mas36.png");
     public static final ResourceLocation MINIGUN_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/minigun.png");
+    public static final ResourceLocation MINIGUN_LACUNAE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/minigun_lacunae.png");
     public static final ResourceLocation MINIGUN_DUAL_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/minigun_dual.png");
     public static final ResourceLocation BOLTER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/bolter.png");
     public static final ResourceLocation ABERRATOR_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/aberrator.png");
@@ -394,6 +395,7 @@ public class ResourceManager {
     public static final ResourceLocation DUCHESSGAMBIT_TEX = NuclearTechMod.withDefaultNamespace("textures/models/duchessgambit.png");
     public static final ResourceLocation TORPEDO_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/torpedo.png");
     public static final ResourceLocation SHREDDER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/shredder.png");
+    public static final ResourceLocation SHREDDER_HERETIC_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/sexy_heretic.png");
     public static final ResourceLocation LILMAC_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/lilmac.png");
     public static final ResourceLocation PROTEGE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/protege.png");
     public static final ResourceLocation LILMAC_SCOPE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/lilmac_scope.png");

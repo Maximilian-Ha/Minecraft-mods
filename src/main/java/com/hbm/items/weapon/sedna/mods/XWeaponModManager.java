@@ -188,7 +188,8 @@ public class XWeaponModManager {
                 .addMod(NtmItems.GUN_LIBERATOR.get(), new WeaponModLiberatorSpeedloader(200));
         new WeaponModDefinition(ModSpecial.CHOKE)
                 .addMod(new Item[] { NtmItems.GUN_PEPPERBOX.get(), NtmItems.GUN_MARESLEG.get(), NtmItems.GUN_DOUBLE_BARREL.get(),
-                        NtmItems.GUN_LIBERATOR.get(), NtmItems.GUN_SPAS12.get(), NtmItems.GUN_AUTOSHOTGUN_SEXY.get() }, new WeaponModChoke(210));
+                        NtmItems.GUN_LIBERATOR.get(), NtmItems.GUN_SPAS12.get(), NtmItems.GUN_AUTOSHOTGUN_SEXY.get(),
+                        NtmItems.GUN_AUTOSHOTGUN_HERETIC.get() }, new WeaponModChoke(210));
         new WeaponModDefinition(ModSpecial.STACK_MAG)
                 .addMod(new Item[] { NtmItems.GUN_GREASEGUN.get(), NtmItems.GUN_UZI.get(), NtmItems.GUN_UZI_AKIMBO.get(),
                         NtmItems.GUN_ABERRATOR.get(), NtmItems.GUN_ABERRATOR_EOTT.get() }, new WeaponModStackMag(214));

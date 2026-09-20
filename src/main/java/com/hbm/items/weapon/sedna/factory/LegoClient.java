@@ -150,6 +150,13 @@ public class LegoClient {
     public static BiConsumer<BulletBeamBase, Float> RENDER_LASER_EMERALD = (strahl, partialTick) ->
             zeichneStrahl(strahl, partialTick, 0xFF158015, 0xFF80FF80);
 
+    /**
+     * Das Lacunae. Der Kern ist die Farbe des Originals (0x601580); der Saum folgt derselben
+     * Regel wie bei Rot und Smaragd -- der staerkste Kanal geht auf voll, die uebrigen auf halb.
+     */
+    public static BiConsumer<BulletBeamBase, Float> RENDER_LASER_PURPLE = (strahl, partialTick) ->
+            zeichneStrahl(strahl, partialTick, 0xFF601580, 0xFF8080FF);
+
     /** Der Schredder: derselbe Riss, nur gruen wie sein Plasma. */
     public static BiConsumer<BulletBeamBase, Float> RENDER_SHREDDER = (strahl, partialTick) ->
             zeichneStrahl(strahl, partialTick, 0xFF1E7A1E, 0xFFBFFFBF);

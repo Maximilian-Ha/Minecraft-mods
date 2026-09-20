@@ -74,6 +74,7 @@ public class GunFactoryClient {
         registerGunItemRenderer(event, new ItemRenderCarbine(), NtmItems.GUN_CARBINE.get());
         registerGunItemRenderer(event, new ItemRenderMAS36(), NtmItems.GUN_MAS36.get());
         registerGunItemRenderer(event, new ItemRenderMinigun(ResourceManager.MINIGUN_TEX), NtmItems.GUN_MINIGUN.get());
+        registerGunItemRenderer(event, new ItemRenderMinigun(ResourceManager.MINIGUN_LACUNAE_TEX), NtmItems.GUN_MINIGUN_LACUNAE.get());
         registerGunItemRenderer(event, new ItemRenderMinigunDual(), NtmItems.GUN_MINIGUN_DUAL.get());
         registerGunItemRenderer(event, new ItemRenderDoubleBarrel(ResourceManager.DOUBLE_BARREL_TEX), NtmItems.GUN_DOUBLE_BARREL.get());
         registerGunItemRenderer(event, new ItemRenderDoubleBarrel(ResourceManager.DOUBLE_BARREL_SACRED_DRAGON_TEX), NtmItems.GUN_DOUBLE_BARREL_SACRED_DRAGON.get());
@@ -90,6 +91,7 @@ public class GunFactoryClient {
         registerGunItemRenderer(event, new ItemRenderShredder(ResourceManager.SHREDDER_TEX), NtmItems.GUN_AUTOSHOTGUN.get());
         registerGunItemRenderer(event, new ItemRenderShredder(ResourceManager.SHREDDER_TEX), NtmItems.GUN_AUTOSHOTGUN_SHREDDER.get());
         registerGunItemRenderer(event, new ItemRenderShredder(ResourceManager.SHREDDER_TEX), NtmItems.GUN_AUTOSHOTGUN_SEXY.get());
+        registerGunItemRenderer(event, new ItemRenderShredder(ResourceManager.SHREDDER_HERETIC_TEX), NtmItems.GUN_AUTOSHOTGUN_HERETIC.get());
 
         //PROJECTILES
         ammo_debug.setRenderer(LegoClient.RENDER_STANDARD_BULLET);
@@ -131,6 +133,9 @@ public class GunFactoryClient {
         XFactoryEnergy.energy_tesla_overcharge.setRendererBeam(LegoClient.RENDER_LIGHTNING);
         XFactoryEnergy.energy_tesla_ir.setRendererBeam(LegoClient.RENDER_LIGHTNING);
         XFactoryEnergy.energy_tesla_ir_sub.setRendererBeam(LegoClient.RENDER_LIGHTNING_SUB);
+        XFactory762mm.energy_lacunae.setRendererBeam(LegoClient.RENDER_LASER_PURPLE);
+        XFactory762mm.energy_lacunae_overcharge.setRendererBeam(LegoClient.RENDER_LASER_PURPLE);
+        XFactory762mm.energy_lacunae_ir.setRendererBeam(LegoClient.RENDER_LASER_PURPLE);
         XFactoryEnergy.energy_las.setRendererBeam(LegoClient.RENDER_LASER_RED);
         XFactoryEnergy.energy_las_overcharge.setRendererBeam(LegoClient.RENDER_LASER_RED);
         XFactoryEnergy.energy_las_ir.setRendererBeam(LegoClient.RENDER_LASER_RED);
@@ -166,6 +171,8 @@ public class GunFactoryClient {
         ((GunBaseNTItem) NtmItems.GUN_QUADRO.get())					.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_MISSILE_LAUNCHER.get())		.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_STINGER.get())				.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
+        ((GunBaseNTItem) NtmItems.GUN_MINIGUN_LACUNAE.get())		.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
+        ((GunBaseNTItem) NtmItems.GUN_AUTOSHOTGUN_HERETIC.get())	.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_GREASEGUN.get())				.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
     }
 

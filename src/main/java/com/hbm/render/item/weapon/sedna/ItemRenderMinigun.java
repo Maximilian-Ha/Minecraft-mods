@@ -1,5 +1,6 @@
 package com.hbm.render.item.weapon.sedna;
 
+import com.hbm.items.NtmItems;
 import com.hbm.items.weapon.sedna.GunBaseNTItem;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.anim.HbmAnimations;
@@ -18,9 +19,9 @@ import net.minecraft.world.item.ItemStack;
  *
  * Die Minigun. Beweglich ist nur der Laufkranz (ROTATE); Gehaeuse und Griff stehen fest.
  *
- * ABWEICHUNG: das Original kennt hier auch das Lacunae-Lasergatling und zeichnet ihm statt des
- * Muendungsfeuers zwei ineinanderliegende Laserblitze (renderLaserFlash). Weder die Waffe noch
- * renderLaserFlash stehen im Port; beides kommt mit der Kondensatormunition.
+ * DAS LACUNAE teilt sich diesen Renderer und bekommt statt des Muendungsfeuers ZWEI
+ * INEINANDERLIEGENDE LASERBLITZE -- ein breiter magentafarbener und ein halb so grosser,
+ * dunklerer davor. Das ist der ganze Unterschied im Bild.
  *
  * ABWEICHUNG: setupModTable ist NICHT UEBERNOMMEN -- der Waffentisch des Ports zeigt statt der
  * Waffe ihr Gegenstandsbild.
@@ -91,10 +92,18 @@ public class ItemRenderMinigun extends ItemRenderWeaponBase {
         RenderContext.pushPose();
         RenderContext.translate(0F, 0F, 12F);
         RenderContext.mulPose(Axis.YP.rotationDegrees(90F));
-        RenderContext.translate(0F, 0.5F, 0F);
-        RenderContext.mulPose(Axis.XP.rotationDegrees(gun.shotRand * 90F));
-        RenderContext.scale(1.5F, 1.5F, 1.5F);
-        renderMuzzleFlash(buffer, gun.lastShot[0], 50, 7.5F);
+
+        if(stack.getItem() == NtmItems.GUN_MINIGUN_LACUNAE.get()) {
+            renderLaserFlash(buffer, gun.lastShot[0], 50, 1F, 0xff00ff);
+            RenderContext.translate(0F, 0F, -0.25F);
+            renderLaserFlash(buffer, gun.lastShot[0], 50, 0.5F, 0xff0080);
+        } else {
+            RenderContext.translate(0F, 0.5F, 0F);
+            RenderContext.mulPose(Axis.XP.rotationDegrees(gun.shotRand * 90F));
+            RenderContext.scale(1.5F, 1.5F, 1.5F);
+            renderMuzzleFlash(buffer, gun.lastShot[0], 50, 7.5F);
+        }
+
         RenderContext.popPose();
     }
 

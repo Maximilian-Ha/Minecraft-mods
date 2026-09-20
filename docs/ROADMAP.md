@@ -9203,3 +9203,50 @@ allen Waffen des Ports nicht übernommen.
 Werfer — Panzerschreck, Quadro, Raketenwerfer, Stinger — plus die Schulterrakete der NCR-Rüstung.
 
 Alle 38 Tore grün.
+
+---
+
+## Runde 200 — Zwei Waffen, zwei überholte Begründungen
+
+Nach dem Stinger blieb die Frage, was von den Waffenfabriken noch fehlt. **Gemessen**: von 31
+`XFactory`-Dateien sind alle da, und in ihnen fehlen sechs Waffen — Ketzer, Lacunae, LAG,
+Spulenkanone, Tau-Kanone und Fatman. Zwei davon hatten eine Begründung, und **beide waren
+falsch**.
+
+### Die Ketzer-Selbstladeflinte
+
+`XFactory10ga` sagte, sie borge sich alles von der Schredder-Flinte der 12 Gauge, „die im Port
+noch fehlt". **Die Schredder-Flinte steht in `XFactory12ga`**, samt `LAMBDA_SEXY_ANIMS`,
+`LAMBDA_RECOIL_SEXY` und `ORCHESTRA_SHREDDER_SEXY`. Auch der Klang war da: das Original ruft
+`fireShotgunAuto`, und `NtmSoundEvents.GUN_SHREDDER_FIRE` zeigt seit jeher auf dieselbe Datei.
+
+Es fehlte **nichts** — nur die Registrierung.
+
+### Das Lacunae
+
+`XFactory762mm` sagte, es verschieße „Kondensatoren aus `XFactoryEnergy`, die der Port noch
+nicht hat". Zweimal falsch: `Ammo.CAPACITOR` steht seit der Laserfamilie im Port, und die drei
+Strahlsätze des Lacunae stehen im Original **gar nicht in `XFactoryEnergy`**, sondern in
+`XFactory762mm` selbst — es ist eine 7,62er Minigun, der nur der Lauf ausgetauscht wurde.
+
+Wirklich gefehlt haben zwei Kleinigkeiten: `LegoClient.RENDER_LASER_PURPLE` und der Klang
+`weapon.fire.lasergatling`.
+
+### Ein dritter überholter Satz
+
+`ItemRenderMinigun` behauptete, „weder die Waffe noch `renderLaserFlash`" stünden im Port.
+**`renderLaserFlash` steht seit jeher in `ItemRenderWeaponBase`** — eine Zeile über dem
+Kommentar, das ihn für fehlend erklärte. Das Lacunae teilt sich den Renderer und bekommt statt
+des Mündungsfeuers zwei ineinanderliegende Laserblitze, wie im Original.
+
+### Abweichungen
+
+Das Lacunae ist im Original ein **Sockelfundstück**; den Sockel gibt es im Port nicht
+(nachgemessen). Es ist damit vorerst nur im Kreativreiter zu haben — wie die drei anderen
+Legenden des Ports (Dani, Morning Glory, Daybreaker) auch. Die Ketzer-Flinte steht wie im
+Original auf `WeaponQuality.DEBUG` und hat weder Haltbarkeit noch Bauplan.
+
+Das Rückstoßlambda des Lacunae ist im Original leer und hängt hier gar nicht erst ein — dieselbe
+Abweichung wie bei den Raketen.
+
+Alle 38 Tore grün.

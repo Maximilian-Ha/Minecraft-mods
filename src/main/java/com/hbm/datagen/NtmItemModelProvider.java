@@ -1308,6 +1308,7 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.entityItem(NtmItems.GUN_AUTOSHOTGUN.get(), true);
         this.entityItem(NtmItems.GUN_AUTOSHOTGUN_SHREDDER.get(), true);
         this.entityItem(NtmItems.GUN_AUTOSHOTGUN_SEXY.get(), true);
+        this.entityItem(NtmItems.GUN_AUTOSHOTGUN_HERETIC.get(), true);
         this.entityItem(NtmItems.GUN_HANGMAN.get(), true);
         this.entityItem(NtmItems.GUN_N_I_4_N_I.get(), true);
         this.entityItem(NtmItems.GUN_HENRY.get(), true);
@@ -1355,6 +1356,7 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.entityItem(NtmItems.GUN_CARBINE.get(), true);
         this.entityItem(NtmItems.GUN_MAS36.get(), true);
         this.entityItem(NtmItems.GUN_MINIGUN.get(), true);
+        this.entityItem(NtmItems.GUN_MINIGUN_LACUNAE.get(), true);
         this.entityItem(NtmItems.GUN_MINIGUN_DUAL.get(), true);
         this.entityItem(NtmItems.GUN_DOUBLE_BARREL.get(), true);
         this.entityItem(NtmItems.GUN_DOUBLE_BARREL_SACRED_DRAGON.get(), true);

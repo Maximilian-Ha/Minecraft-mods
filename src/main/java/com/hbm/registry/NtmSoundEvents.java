@@ -95,6 +95,8 @@ public class NtmSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SHREDDER_CYCLE = reg("weapon.fire.shreddercycle");
     /** Der Schuss der Autoschrotflinte -- im Original "hbm:weapon.fire.shotgunAuto". */
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SHREDDER_FIRE = reg("weapon.fire.shotgunauto");
+    /** Das Lacunae-Lasergatling -- im Original HBMSoundHandler.fireLaserGatling. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> GUN_LASER_GATLING = reg("weapon.fire.lasergatling");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SWITCHMODE_1 = reg("weapon.switchmode1");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SWITCHMODE_2 = reg("weapon.switchmode2");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SILENCER_SHOOT = reg("weapon.fire.silencer_shoot");

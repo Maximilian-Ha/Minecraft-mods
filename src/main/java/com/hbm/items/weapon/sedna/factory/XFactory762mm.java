@@ -1,5 +1,6 @@
 package com.hbm.items.weapon.sedna.factory;
 
+import com.hbm.util.DamageResistanceHandler.DamageClass;
 import com.hbm.entity.projectile.BulletBaseMK4;
 import com.hbm.items.ItemEnums.CasingType;
 import com.hbm.items.NtmItems;
@@ -47,8 +48,13 @@ import java.util.function.BiFunction;
  * Tick, fuenfzigtausend Schuss Haltbarkeit. Die Doppel-Minigun ist zweimal dieselbe Waffe, jede
  * Haelfte auf ihrer Maustaste.
  *
- * NICHT UEBERNOMMEN: das Lacunae-Lasergatling. Es verschiesst Kondensatoren aus XFactoryEnergy,
- * die der Port noch nicht hat.
+ * DAS LACUNAE ist dieselbe Minigun mit einem anderen Lauf: doppelter Schaden, kein Rueckstoss,
+ * und ein Kondensator reicht fuer vierzig Strahlen.
+ *
+ * BERICHTIGUNG: hier stand bis Runde 200, es sei nicht uebernommen, weil es "Kondensatoren aus
+ * XFactoryEnergy" brauche, die der Port nicht habe. Beides nachgemessen und falsch --
+ * Ammo.CAPACITOR steht im Port seit der Laserfamilie, und seine drei Strahlsaetze stehen im
+ * Original gar nicht in XFactoryEnergy, sondern hier.
  */
 public class XFactory762mm {
 
@@ -58,6 +64,16 @@ public class XFactory762mm {
     public static BulletConfig r762_ap;
     public static BulletConfig r762_du;
     public static BulletConfig r762_he;
+
+    /**
+     * DIE DREI STRAHLSAETZE DES LACUNAE. Sie stehen im Original hier und nicht in
+     * XFactoryEnergy -- das Lasergatling ist eine 7,62er Minigun, der nur der Lauf
+     * ausgetauscht wurde. Vierzig Schuss je Kondensator, daher setReloadCount(40) und der
+     * vierzigfache Huelsenzaehler.
+     */
+    public static BulletConfig energy_lacunae;
+    public static BulletConfig energy_lacunae_overcharge;
+    public static BulletConfig energy_lacunae_ir;
 
     /**
      * Die Sprengpatrone reisst anderthalb Bloecke weit. Trifft sie in den ersten drei Ticks den
@@ -120,6 +136,25 @@ public class XFactory762mm {
         ).setDefaultAmmo(Ammo.R762_FMJ, 30));
 
         /*
+         * DAS LACUNAE. Dieselbe Minigun, nur dass sie Laserstrahlen statt Bleikugeln wirft:
+         * doppelter Schaden, kein Rueckstoss, und ein Kondensator reicht fuer vierzig Schuss.
+         * Es ist ein Fundstueck -- im Original gibt es dafuer ein Sockelrezept, kein
+         * Werkbankmuster. DEN SOCKEL GIBT ES IM PORT NICHT, nachgemessen; das Lacunae ist
+         * damit vorerst nur im Kreativreiter zu haben, wie die drei anderen Legenden des
+         * Ports (Dani, Morning Glory, Daybreaker) auch.
+         */
+        NtmItems.GUN_MINIGUN_LACUNAE = registry.register("gun_minigun_lacunae", () -> new GunBaseNTItem(WeaponQuality.LEGENDARY, new GunConfig()
+                .dura(50_000).draw(20).inspect(20).crosshair(Crosshair.L_CIRCLE)
+                .rec(new Receiver(0)
+                        .dmg(12F).delay(1).auto(true).dry(15).reload(15).spread(0.01F).sound(NtmSoundEvents.GUN_LASER_GATLING, 1.0F, 1.0F)
+                        .mag(new MagazineFullReload(0, 200).addConfigs(energy_lacunae, energy_lacunae_overcharge, energy_lacunae_ir))
+                        .offset(1, -0.0625 * 2.5, -0.25D)
+                        .setupStandardFire())
+                .setupStandardConfiguration()
+                .anim(LAMBDA_MINIGUN_ANIMS).orchestra(Orchestras.ORCHESTRA_MINIGUN)
+        ).setDefaultAmmo(Ammo.CAPACITOR, 15));
+
+        /*
          * Die Doppel-Minigun. Zwei vollstaendige Konfigurationen, die linke auf der linken
          * Maustaste, die rechte auf der rechten -- die zweite braucht deshalb einen eigenen
          * Entscheider, weil der Standardentscheider das Dauerfeuer an der linken Taste festmacht.
@@ -168,8 +203,24 @@ public class XFactory762mm {
                 .setCasing(casing762.clone().setColor(SpentCasing.COLOR_CASE_44).register("r762du"));
         r762_he = new BulletConfig().setItem(Ammo.R762_HE).setCasing(CasingType.SMALL_STEEL, 6).setWear(3F).setDamage(1.75F).setOnImpact(LAMBDA_TINY_EXPLODE)
                 .setCasing(casing762.clone().setColor(SpentCasing.COLOR_CASE_44).register("r762he"));
+
+        energy_lacunae = new BulletConfig().setItem(Ammo.CAPACITOR).setCasing(() -> new ItemStack(NtmItems.INGOT_POLYMER.get(), 2), 4 * 40)
+                .setupDamageClass(DamageClass.LASER).setBeam().setReloadCount(40).setSpread(0.0F).setLife(5).setRenderRotations(false)
+                .setOnBeamImpact(BulletConfig.LAMBDA_STANDARD_BEAM_HIT);
+        energy_lacunae_overcharge = new BulletConfig().setItem(Ammo.CAPACITOR_OVERCHARGE).setCasing(() -> new ItemStack(NtmItems.INGOT_POLYMER.get(), 2), 4 * 40)
+                .setupDamageClass(DamageClass.LASER).setBeam().setReloadCount(40).setSpread(0.0F).setLife(5).setRenderRotations(false).setDoesPenetrate(true)
+                .setOnBeamImpact(BulletConfig.LAMBDA_STANDARD_BEAM_HIT);
+        energy_lacunae_ir = new BulletConfig().setItem(Ammo.CAPACITOR_IR).setCasing(() -> new ItemStack(NtmItems.INGOT_POLYMER.get(), 2), 4 * 40)
+                .setupDamageClass(DamageClass.FIRE).setBeam().setReloadCount(40).setSpread(0.0F).setLife(5).setRenderRotations(false)
+                .setOnBeamImpact(XFactoryEnergy.LAMBDA_IR_HIT);
     }
 
+    /**
+     * Das Lacunae hat KEINEN Rueckstoss. Im Original steht dafuer ein leeres Lambda, damit
+     * der Standardrueckstoss nicht greift; der Port haengt gar keines ein -- das Feld ist
+     * standardmaessig leer, und die Auswertung fragt vorher nach. Dieselbe Abweichung wie bei
+     * den Raketen in XFactoryRocket.
+     */
     /** Wie der Standardentscheider, nur dass das Dauerfeuer an der rechten Maustaste haengt. */
     public static BiConsumer<ItemStack, LambdaContext> LAMBDA_SECOND_MINIGUN = (stack, ctx) -> {
         int index = ctx.configIndex;

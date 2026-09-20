@@ -245,6 +245,9 @@ public class NtmSoundDefinitionsProvider extends SoundDefinitionsProvider {
         this.add(NtmSoundEvents.GUN_SHREDDER_FIRE, SoundDefinition.definition()
                 .with(sound(NuclearTechMod.withDefaultNamespace("weapon/fire/shotgunauto")))
         );
+        this.add(NtmSoundEvents.GUN_LASER_GATLING, SoundDefinition.definition()
+                .with(sound(NuclearTechMod.withDefaultNamespace("weapon/fire/lasergatling")))
+        );
         /* Drei Aufnahmen, wie im Original -- welche kommt, entscheidet das Spiel. */
         this.add(NtmSoundEvents.GRENADE_BOUNCE, SoundDefinition.definition()
                 .with(sound(NuclearTechMod.withDefaultNamespace("weapon/grenade_bounce1")))

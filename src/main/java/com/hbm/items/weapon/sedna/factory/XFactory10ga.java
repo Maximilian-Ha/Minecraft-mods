@@ -47,8 +47,13 @@ import java.util.function.BiFunction;
  * ihre Sonderausfuehrung -- halb so viel Schaden mehr, sechsfache Haltbarkeit, dafuer ein
  * Drittel mehr Streuung.
  *
- * NICHT UEBERNOMMEN: die Ketzer-Selbstladeflinte desselben Kalibers. Sie borgt sich Animationen,
- * Ruecklauf und Orchester von der Schredder-Flinte der 12 Gauge, die im Port noch fehlt.
+ * DIE KETZER-SELBSTLADEFLINTE borgt sich Bewegungen, Rueckstoss und Orchester von der
+ * Schredder-Flinte der 12 Gauge -- sie ist dieselbe Waffe in diesem Kaliber, mit
+ * zweihundertfuenfzig Schuss im Magazin und ohne Haltbarkeit.
+ *
+ * BERICHTIGUNG: hier stand bis Runde 200, sie sei nicht uebernommen, weil die Schredder-Flinte
+ * der 12 Gauge im Port fehle. Nachgemessen falsch -- sie steht in XFactory12ga, samt
+ * LAMBDA_SEXY_ANIMS, LAMBDA_RECOIL_SEXY und ORCHESTRA_SHREDDER_SEXY.
  */
 public class XFactory10ga {
 
@@ -91,6 +96,23 @@ public class XFactory10ga {
                 .setupStandardConfiguration().ps(LAMBDA_DOUBLE_SECONDARY)
                 .anim(LAMBDA_DOUBLE_BARREL_ANIMS).orchestra(Orchestras.ORCHESTRA_DOUBLE_BARREL)
         ).setDefaultAmmo(Ammo.G10_DU, 6));
+
+        /*
+         * DIE KETZER-SELBSTLADEFLINTE. Sie ist eine Schredder-Flinte im Kaliber 10 Gauge und
+         * borgt sich alles von ihr: Bewegungen, Rueckstoss und Orchester. Zweihundertfuenfzig
+         * Schuss im Magazin, hundert Schaden je Schuss, und sie nutzt sich nicht ab
+         * (LAMBDA_NOWEAR_FIRE) -- sie hat im Original gar keine Haltbarkeit.
+         */
+        NtmItems.GUN_AUTOSHOTGUN_HERETIC = registry.register("gun_autoshotgun_heretic", () -> new GunBaseNTItem(WeaponQuality.DEBUG, new GunConfig()
+                .draw(20).inspect(65).reloadSequential(true).inspectCancel(false).crosshair(Crosshair.L_CIRCLE).hideCrosshair(false).smoke(Lego.LAMBDA_STANDARD_SMOKE)
+                .rec(new Receiver(0)
+                        .dmg(100F).delay(3).auto(true).dryfireAfterAuto(true).reload(110).jam(19).sound(NtmSoundEvents.GUN_SHREDDER_FIRE, 1.0F, 1.0F)
+                        .mag(new MagazineFullReload(0, 250).addConfigs(g10, g10_shrapnel, g10_du, g10_slug, g10_explosive))
+                        .offset(0.75, -0.125, -0.25)
+                        .canFire(Lego.LAMBDA_STANDARD_CAN_FIRE).fire(Lego.LAMBDA_NOWEAR_FIRE).recoil(XFactory12ga.LAMBDA_RECOIL_SEXY))
+                .setupStandardConfiguration()
+                .anim(XFactory12ga.LAMBDA_SEXY_ANIMS).orchestra(Orchestras.ORCHESTRA_SHREDDER_SEXY)
+        ).setDefaultAmmo(Ammo.G10, 50));
     }
 
     public static void initAmmo() {
