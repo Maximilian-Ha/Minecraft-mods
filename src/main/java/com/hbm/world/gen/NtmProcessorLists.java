@@ -45,6 +45,8 @@ public class NtmProcessorLists {
     public static final ResourceKey<StructureProcessorList> METEOR_OOZE = registerKey("meteor_ooze");
     /** Die Spitze folgt dem Gelaende, Spalte fuer Spalte. */
     public static final ResourceKey<StructureProcessorList> METEOR_SPIKE = registerKey("meteor_spike");
+    /** Die zehn Ruinen folgen dem Gelaende, Spalte fuer Spalte -- conformToTerrain im Original. */
+    public static final ResourceKey<StructureProcessorList> RUINS = registerKey("ruins");
 
     public static void bootstrap(BootstrapContext<StructureProcessorList> context) {
 
@@ -75,6 +77,16 @@ public class NtmProcessorLists {
          */
         context.register(METEOR_SPIKE, new StructureProcessorList(List.of(
                 new GravityProcessor(Heightmap.Types.WORLD_SURFACE_WG, -3))));
+
+        /*
+         * DIE RUINEN. Alle zehn tragen im Original conformToTerrain = true und heightOffset
+         * = -1 (NTMWorldGenerator.java:199 ff.) -- dieselbe Paarung wie die Meteorspitze, nur
+         * mit einem Block statt dreien. Der Versatz gehoert dabei ZUM Gelaendefolgen und wird
+         * nicht noch einmal auf das ganze Bauwerk gerechnet; die Struktur selbst startet
+         * deshalb mit Versatz null.
+         */
+        context.register(RUINS, new StructureProcessorList(List.of(
+                new GravityProcessor(Heightmap.Types.WORLD_SURFACE_WG, -1))));
     }
 
     /**

@@ -55,6 +55,18 @@ public class NtmStructures {
     public static final ResourceKey<Structure> DESERT_SHACK_3 = registerKey("desert_shack_3");
     public static final ResourceKey<Structure> DEAD_DISH_SMALL = registerKey("dead_dish_small");
 
+    /* Die zehn Ruinen, Runde 261. */
+    public static final ResourceKey<Structure> RUIN_A = registerKey("ruin_a");
+    public static final ResourceKey<Structure> RUIN_B = registerKey("ruin_b");
+    public static final ResourceKey<Structure> RUIN_C = registerKey("ruin_c");
+    public static final ResourceKey<Structure> RUIN_D = registerKey("ruin_d");
+    public static final ResourceKey<Structure> RUIN_E = registerKey("ruin_e");
+    public static final ResourceKey<Structure> RUIN_F = registerKey("ruin_f");
+    public static final ResourceKey<Structure> RUIN_G = registerKey("ruin_g");
+    public static final ResourceKey<Structure> RUIN_H = registerKey("ruin_h");
+    public static final ResourceKey<Structure> RUIN_I = registerKey("ruin_i");
+    public static final ResourceKey<Structure> RUIN_J = registerKey("ruin_j");
+
     public static void bootstrap(BootstrapContext<Structure> context) {
 
         HolderGetter<Biome> biome = context.lookup(Registries.BIOME);
@@ -87,6 +99,22 @@ public class NtmStructures {
         einzeln(context, biome, pools, DESERT_SHACK_2, NtmTemplatePools.DESERT_SHACK_2, -7);
         einzeln(context, biome, pools, DESERT_SHACK_3, NtmTemplatePools.DESERT_SHACK_3, -5);
         einzeln(context, biome, pools, DEAD_DISH_SMALL, NtmTemplatePools.DEAD_DISH_SMALL, -5);
+
+        /*
+         * DIE ZEHN RUINEN. Versatz null, obwohl das Original heightOffset = -1 nennt: der
+         * Versatz gehoert dort zum conformToTerrain und steckt hier im Schwerkraftprozessor
+         * des Pools. Zweimal gerechnet stuende jede Ruine einen Block zu tief.
+         */
+        ruine(context, biome, pools, RUIN_A, NtmTemplatePools.RUIN_A);
+        ruine(context, biome, pools, RUIN_B, NtmTemplatePools.RUIN_B);
+        ruine(context, biome, pools, RUIN_C, NtmTemplatePools.RUIN_C);
+        ruine(context, biome, pools, RUIN_D, NtmTemplatePools.RUIN_D);
+        ruine(context, biome, pools, RUIN_E, NtmTemplatePools.RUIN_E);
+        ruine(context, biome, pools, RUIN_F, NtmTemplatePools.RUIN_F);
+        ruine(context, biome, pools, RUIN_G, NtmTemplatePools.RUIN_G);
+        ruine(context, biome, pools, RUIN_H, NtmTemplatePools.RUIN_H);
+        ruine(context, biome, pools, RUIN_I, NtmTemplatePools.RUIN_I);
+        ruine(context, biome, pools, RUIN_J, NtmTemplatePools.RUIN_J);
     }
 
     /** Ein Einzelbauwerk der Wueste: ein Stueck, an der Gelaendeoberkante, um Versatz tiefer. */
@@ -105,6 +133,62 @@ public class NtmStructures {
                 ConstantHeight.of(VerticalAnchor.absolute(versatz)),
                 false,
                 Heightmap.Types.WORLD_SURFACE_WG));
+    }
+
+    /** Eine Ruine: ein Stueck, Gelaendefolgen im Prozessor, darum ohne eigenen Versatz. */
+    private static void ruine(BootstrapContext<Structure> context, HolderGetter<Biome> biome,
+            HolderGetter<StructureTemplatePool> pools, ResourceKey<Structure> schluessel,
+            ResourceKey<StructureTemplatePool> pool) {
+
+        context.register(schluessel, new JigsawStructure(
+                new Structure.StructureSettings(
+                        regenbiome(biome),
+                        Map.of(),
+                        GenerationStep.Decoration.SURFACE_STRUCTURES,
+                        TerrainAdjustment.NONE),
+                pools.getOrThrow(pool),
+                1,
+                ConstantHeight.of(VerticalAnchor.absolute(0)),
+                false,
+                Heightmap.Types.WORLD_SURFACE_WG));
+    }
+
+    /**
+     * Wo die Ruinen stehen duerfen: !isWaterBiome(biome) && biome.canSpawnLightningBolt().
+     *
+     * canSpawnLightningBolt() ist eine Zeile aus Vanilla 1.7.10 -- "enableSnow ? false :
+     * enableRain". Es regnet dort also, und es schneit nicht. Damit fallen die Wuesten und die
+     * Mesa-Familie weg (kein Regen) und alles Verschneite; isWaterBiome nimmt Ozeane und
+     * Fluesse heraus.
+     *
+     * Die Liste unten ist die Anwendung dieser Regel auf die Biome von 1.21: Laub, Gras und
+     * Dschungel, dazu die Suempfe und die feuchten Bergbiome. Sie ist NICHT an Vanillas
+     * Tabelle nachgemessen -- die liegt so wenig in diesem Baum wie Forges Typentabelle.
+     */
+    private static HolderSet<Biome> regenbiome(HolderGetter<Biome> biome) {
+        return HolderSet.direct(
+                biome.getOrThrow(Biomes.PLAINS),
+                biome.getOrThrow(Biomes.SUNFLOWER_PLAINS),
+                biome.getOrThrow(Biomes.FOREST),
+                biome.getOrThrow(Biomes.FLOWER_FOREST),
+                biome.getOrThrow(Biomes.BIRCH_FOREST),
+                biome.getOrThrow(Biomes.OLD_GROWTH_BIRCH_FOREST),
+                biome.getOrThrow(Biomes.DARK_FOREST),
+                biome.getOrThrow(Biomes.TAIGA),
+                biome.getOrThrow(Biomes.OLD_GROWTH_PINE_TAIGA),
+                biome.getOrThrow(Biomes.OLD_GROWTH_SPRUCE_TAIGA),
+                biome.getOrThrow(Biomes.JUNGLE),
+                biome.getOrThrow(Biomes.SPARSE_JUNGLE),
+                biome.getOrThrow(Biomes.BAMBOO_JUNGLE),
+                biome.getOrThrow(Biomes.SWAMP),
+                biome.getOrThrow(Biomes.MANGROVE_SWAMP),
+                biome.getOrThrow(Biomes.WINDSWEPT_HILLS),
+                biome.getOrThrow(Biomes.WINDSWEPT_GRAVELLY_HILLS),
+                biome.getOrThrow(Biomes.WINDSWEPT_FOREST),
+                biome.getOrThrow(Biomes.MEADOW),
+                biome.getOrThrow(Biomes.CHERRY_GROVE),
+                biome.getOrThrow(Biomes.STONY_PEAKS),
+                biome.getOrThrow(Biomes.MUSHROOM_FIELDS));
     }
 
     /**

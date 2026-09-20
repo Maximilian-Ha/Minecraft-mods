@@ -12331,3 +12331,57 @@ steht jetzt mit in der Erkennung.
 
 **Stand: 7 von 34 Bauwerken in der Welt** (das Verlies und diese sechs), 73 von 79 Rohdateien
 umsetzbar.
+
+## Runde 261 — Die zehn Ruinen, und ein Streuwert, der zehnmal derselbe gewesen wäre
+
+Die zweite Gruppe: `NTMRuinsA` bis `NTMRuinsJ`. Sie hängen alle an derselben Bedingung —
+`!isWaterBiome(biome) && biome.canSpawnLightningBolt()` — und tragen alle `conformToTerrain`.
+
+### Gelände folgen heißt Schwerkraftprozessor
+
+Alle zehn haben im Original `conformToTerrain = true` **und** `heightOffset = -1`. Das ist
+dieselbe Paarung wie bei der Meteorspitze, nur mit einem Block statt dreien: jede einzelne
+Säule wird auf die Geländehöhe gesetzt und dann abgesenkt. In 1.21 ist das ein
+`GravityProcessor(WORLD_SURFACE_WG, -1)` im Pool.
+
+**Der Versatz gehört dabei zum Geländefolgen und wird nicht noch einmal auf das ganze Bauwerk
+gerechnet.** Die Struktur startet deshalb mit Versatz null — zweimal gerechnet stünde jede
+Ruine einen Block zu tief.
+
+### Ein Fund an der eigenen Arbeit
+
+Runde 260 bildete den Streuwert als `996996996 + Abstand`. Das ging gut, solange nur die sechs
+der Wüste dastanden: ihre Abstände sind alle verschieden. Bei den Ruinen fällt dieselbe Formel
+in genau die Falle, vor der der Kommentar daneben warnt — **neun der zehn haben den Abstand
+71**, bekämen also denselben Streuwert und stünden in jeder Rasterzelle auf demselben Feld,
+also ineinander.
+
+Der Streuwert wird jetzt durchgezählt. Gemessen: alle sechzehn Werte verschieden.
+
+### Zwei Zahlen, die sich widersprechen — und was damit geschieht
+
+Das Gesamtgewicht der Ebene ist bei den Ruinen der Nenner. Runde 251 hat dafür **422**
+ausgezählt; eine zweite Auszählung in dieser Runde kam auf **491**. Der Unterschied liegt an
+zwei Angaben, die sich in diesem Verzeichnisbaum nicht nachschlagen lassen:
+
+- ob Forge der Ebene den Typ `SPARSE` gibt — davon hängen Labor, Funkhaus und Sendeturm ab,
+  zusammen 75;
+- wie das Leergewicht (`plainsNullWeight`, 4) mitzählt.
+
+Hier steht die ältere Zahl, damit Ruinen und Verlies auf derselben Skala liegen. Das ist eine
+Entscheidung, keine Messung, und sie steht so im Quelltext: wer die beiden Angaben einmal
+misst, rechnet **beide** Orte um, nicht nur einen.
+
+Die Biomliste ist aus `canSpawnLightningBolt()` hergeleitet — Vanilla 1.7.10: „es regnet, und
+es schneit nicht". Damit fallen Wüste und Mesa (kein Regen), alles Verschneite und, über
+`isWaterBiome`, Ozeane und Flüsse weg. Auch diese Liste ist eine Anwendung der Regel, keine
+Messung an Vanillas Tabelle; sie steht mit derselben Warnung im Quelltext wie die SANDY-Liste
+aus Runde 260.
+
+### Noch ein Loch im Bauwerkstor
+
+Die Ruinenpools gehen durch eine zweite Fassung der Hilfe — die mit Prozessoren —, und das
+Muster aus Runde 260 verlangte eine schließende Klammer direkt hinter dem Pfad. Alle zehn
+Dateien wurden wieder als „ohne Benutzer" gemeldet. Das Muster endet jetzt am Pfad.
+
+**Stand: 17 von 34 Bauwerken in der Welt.**

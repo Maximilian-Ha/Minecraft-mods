@@ -55,6 +55,18 @@ public class NtmTemplatePools {
     public static final ResourceKey<StructureTemplatePool> DESERT_SHACK_3 = registerKey("desert/desert_shack_3");
     public static final ResourceKey<StructureTemplatePool> DEAD_DISH_SMALL = registerKey("desert/dead_dish_small");
 
+    /* Die zehn Ruinen. Jede ein Stueck, jede mit dem Schwerkraftprozessor. */
+    public static final ResourceKey<StructureTemplatePool> RUIN_A = registerKey("ruins/ruin_a");
+    public static final ResourceKey<StructureTemplatePool> RUIN_B = registerKey("ruins/ruin_b");
+    public static final ResourceKey<StructureTemplatePool> RUIN_C = registerKey("ruins/ruin_c");
+    public static final ResourceKey<StructureTemplatePool> RUIN_D = registerKey("ruins/ruin_d");
+    public static final ResourceKey<StructureTemplatePool> RUIN_E = registerKey("ruins/ruin_e");
+    public static final ResourceKey<StructureTemplatePool> RUIN_F = registerKey("ruins/ruin_f");
+    public static final ResourceKey<StructureTemplatePool> RUIN_G = registerKey("ruins/ruin_g");
+    public static final ResourceKey<StructureTemplatePool> RUIN_H = registerKey("ruins/ruin_h");
+    public static final ResourceKey<StructureTemplatePool> RUIN_I = registerKey("ruins/ruin_i");
+    public static final ResourceKey<StructureTemplatePool> RUIN_J = registerKey("ruins/ruin_j");
+
     public static void bootstrap(BootstrapContext<StructureTemplatePool> context) {
 
         HolderGetter<StructureTemplatePool> pools = context.lookup(Registries.TEMPLATE_POOL);
@@ -132,6 +144,18 @@ public class NtmTemplatePools {
         einzeln(context, leer, DESERT_SHACK_2, "desert/desert_shack_2");
         einzeln(context, leer, DESERT_SHACK_3, "desert/desert_shack_3");
         einzeln(context, leer, DEAD_DISH_SMALL, "desert/dead_dish_small");
+
+        Holder<StructureProcessorList> gelaende = prozessoren.getOrThrow(NtmProcessorLists.RUINS);
+        einzeln(context, leer, RUIN_A, "ruins/ruin_a", gelaende);
+        einzeln(context, leer, RUIN_B, "ruins/ruin_b", gelaende);
+        einzeln(context, leer, RUIN_C, "ruins/ruin_c", gelaende);
+        einzeln(context, leer, RUIN_D, "ruins/ruin_d", gelaende);
+        einzeln(context, leer, RUIN_E, "ruins/ruin_e", gelaende);
+        einzeln(context, leer, RUIN_F, "ruins/ruin_f", gelaende);
+        einzeln(context, leer, RUIN_G, "ruins/ruin_g", gelaende);
+        einzeln(context, leer, RUIN_H, "ruins/ruin_h", gelaende);
+        einzeln(context, leer, RUIN_I, "ruins/ruin_i", gelaende);
+        einzeln(context, leer, RUIN_J, "ruins/ruin_j", gelaende);
     }
 
     /**
@@ -146,6 +170,15 @@ public class NtmTemplatePools {
 
         Eintraege eintrag = new Eintraege();
         eintrag.add(pfad, 1);
+        context.register(schluessel, new StructureTemplatePool(leer, eintrag.liste(), StructureTemplatePool.Projection.RIGID));
+    }
+
+    /** Dasselbe, aber mit Prozessoren -- die Ruinen folgen dem Gelaende. */
+    private static void einzeln(BootstrapContext<StructureTemplatePool> context, Holder<StructureTemplatePool> leer,
+            ResourceKey<StructureTemplatePool> schluessel, String pfad, Holder<StructureProcessorList> prozessoren) {
+
+        Eintraege eintrag = new Eintraege();
+        eintrag.add(pfad, prozessoren, 1);
         context.register(schluessel, new StructureTemplatePool(leer, eintrag.liste(), StructureTemplatePool.Projection.RIGID));
     }
 

@@ -55,7 +55,7 @@ eingesetzt = set(re.findall(r'\.add\("([^"]+)"', quelle))
 # Und die Einzelbauwerke, deren Pfad durch die Hilfe einzeln(...) laeuft statt durch add(...).
 # Ohne diese Zeile meldet das Tor jedes von ihnen als "Datei ohne Benutzer" -- die erste
 # Fassung tat genau das, und die Datei lag trotzdem richtig im Pool.
-eingesetzt |= set(re.findall(r'einzeln\(context, \w+, \w+, "([^"]+)"\)', quelle))
+eingesetzt |= set(re.findall(r'einzeln\(context, \w+, \w+, "([^"]+)"', quelle))
 schleife = re.search(r'for\(String name : new String\[\] \{(.*?)\}\)', quelle, re.S)
 if schleife:
     namen = re.findall(r'"([^"]+)"', schleife.group(1))
