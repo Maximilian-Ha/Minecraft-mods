@@ -12596,3 +12596,49 @@ trotzdem `crane.nbt`, weil der Name des Bauwerks zählt und nicht der der Vorlag
 **Damit stehen alle 34 NBT-Bauwerke des Originals in der Welt.** Offen bleiben aus dieser
 Gruppe nur noch die beiden, die im Original gar keine Vorlagendatei haben — Features und Bunker
 sind dort handgeschriebene Bauwerkskomponenten (`MapGenNTMFeatures`, `BunkerStart`).
+
+## Runde 267 — Die Ausrüstungslisten, und eine Liste, die es nie gab
+
+Drei der sechs offenen Logikstab-Aktionen brauchten nur eines: `MobUtil`, die gewichteten
+Listen, aus denen ein Zombie seinen Helm und ein Skelett seine Waffe zieht.
+
+**Vier Listen, nicht acht.** Das Original führt acht Pools; vier gehören zu den Ruß-Mobs und
+dem Gob-Block, die der Port nicht hat. Übernommen sind nur die, die die Aktionen benutzen:
+gewöhnlich, fortgeschritten, Fernkampf (ohne Hand — die füllt die Waffenliste) und drei
+Waffenlisten.
+
+### Eine Liste, die im Original nie gefüllt wird
+
+`SKELETON_GUN_TIER_1` ruft `assignItemsToEntity(mob, MobUtil.slotPoolMasks, ...)`. Nachgemessen
+über den ganzen Quelltext hat `slotPoolMasks` **genau zwei Vorkommen**: die Erklärung und
+diesen Aufruf. Keine einzige `put()`-Zeile füllt sie. Der Aufruf läuft also über eine leere
+Abbildung und tut nichts — im Port steht er darum gar nicht erst.
+
+Das ist nach `DEAD_GUY_BASE_TOWER` (Runde 265) der zweite Fund dieser Art im selben
+Teilsystem: etwas, das dasteht und nie wirkt.
+
+### Neun Einträge entfallen, und warum kein Ersatz
+
+Von 78 Gegenständen der übernommenen Listen gibt es 69 im Port. Die neun fehlenden sind die
+drei Schilder (`chernobylsign`, `sopsign`, `stopsign`), die beiden Jacken (`jackt`, `jackt2`),
+`mask_of_infamy`, `reer_graar` und die beiden Schraubenschlüssel (`wrench`,
+`wrench_flipped`).
+
+Ihre Gewichte fallen **ersatzlos** weg. Damit bleiben die Verhältnisse der übrigen Einträge
+zueinander die des Originals, nur die Summe ist kleiner. Ein Ersatzgegenstand wäre geraten; ein
+Weglassen ist nachlesbar.
+
+**Ein Name geht auseinander:** was im Original `ModItems.hat` heißt, ist dort als `nossy_hat`
+angemeldet (`ModItemsArmor.java:33` — das Feld heißt anders als der Name). Gefunden hat das
+nicht das Auge, sondern `registry-check`, das `NtmItems.HAT` als unbekanntes Feld meldete.
+
+### Drei Fallen mehr
+
+`ZOMBIE_TIER_1`, `ZOMBIE_TIER_2` und `SKELETON_GUN_TIER_1` sind damit live — sechs der neun
+auflösbaren Aktionen. Alle drei setzen **drei Mobs auf denselben Punkt** und löschen danach den
+Stab; dass die drei übereinander stehen, löst Vanilla selbst auf, sobald sie ticken. So steht
+es im Original.
+
+Offen bleiben `SKELETON_GUN_TIER_2/3` (sie brauchen das KI-Ziel `EntityAIFireGun` — ohne es
+stünde ein Skelett mit einer Waffe da, die es nie abfeuert, und das wäre schlimmer als keines)
+und `BOMB_CRANE` (die C4-Ladung mit Zeitzünder).

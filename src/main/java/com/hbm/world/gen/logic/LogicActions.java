@@ -5,11 +5,15 @@ import com.hbm.blockentity.WandLogicBlockEntity;
 import com.hbm.blockentity.machine.LockableBaseBlockEntity;
 import com.hbm.blocks.NtmBlocks;
 import com.hbm.items.NtmItems;
+import com.hbm.util.MobUtil;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -27,20 +31,21 @@ import java.util.function.Consumer;
  * Portiert aus 1.7.10: com.hbm.world.gen.util.LogicBlockActions.
  *
  * NACHGEZAEHLT ueber die drei Bauwerke mit Logikstaeben (Kran, Fabrik, Turmsockel) nennen sie
- * ZEHN Aktionen, von denen das Original neun aufloesen kann. Diese Runde bringt die drei, die
- * ohne neue Hilfsklassen auskommen:
+ * ZEHN Aktionen, von denen das Original neun aufloesen kann. Sechs davon stehen hier:
  *
  *   COLLAPSE_ROOF_RAD_5   die Decke faellt herunter
  *   POWER_LOCK            der Tresor nebenan schliesst sich zu
  *   DEAD_GUY_CRANE        aus dem Stab wird ein Skeletthalter mit einer Waffe
+ *   ZOMBIE_TIER_1/2       drei Zombies, ausgeruestet aus den Listen von MobUtil
+ *   SKELETON_GUN_TIER_1   drei Skelette mit Waffe und Fernkampfruestung
  *
- * DIE UEBRIGEN SECHS warten auf Teile, die der Port noch nicht hat, und sind hier deshalb
+ * DIE UEBRIGEN DREI warten auf Teile, die der Port noch nicht hat, und sind hier deshalb
  * NICHT eingetragen -- ein Stab mit ihrem Namen verschwindet, genau wie im Original einer mit
  * einem unbekannten Namen:
  *
- *   ZOMBIE_TIER_1/2, SKELETON_GUN_TIER_1/2/3   brauchen MobUtil und seine Ausruestungspools
- *   SKELETON_GUN_TIER_2/3 zusaetzlich          das KI-Ziel EntityAIFireGun
- *   BOMB_CRANE                                 die C4-Ladung mit Zeitzuender
+ *   SKELETON_GUN_TIER_2/3   das KI-Ziel EntityAIFireGun (ohne es stuende ein Skelett mit
+ *                           einer Waffe da, die es nie abfeuert -- schlimmer als keines)
+ *   BOMB_CRANE              die C4-Ladung mit Zeitzuender
  *
  * DIE ZEHNTE, DEAD_GUY_BASE_TOWER, kommt nie: im Original ist die einzige Zeile, die sie
  * anmelden wuerde, auskommentiert UND anders geschrieben (LogicBlockActions.java:537). Der
@@ -51,7 +56,10 @@ public class LogicActions {
     private static final Map<String, Consumer<WandLogicBlockEntity>> AKTIONEN = Map.of(
             "COLLAPSE_ROOF_RAD_5", LogicActions::deckeFaellt,
             "POWER_LOCK", LogicActions::stromschloss,
-            "DEAD_GUY_CRANE", LogicActions::toterAmKran);
+            "DEAD_GUY_CRANE", LogicActions::toterAmKran,
+            "ZOMBIE_TIER_1", be -> mobs(be, EntityType.ZOMBIE, MobUtil.GEWOEHNLICH, null),
+            "ZOMBIE_TIER_2", be -> mobs(be, EntityType.ZOMBIE, MobUtil.FORTGESCHRITTEN, null),
+            "SKELETON_GUN_TIER_1", be -> mobs(be, EntityType.SKELETON, MobUtil.WAFFEN_1, MobUtil.FERNKAMPF));
 
     /** Null, wenn der Name unbekannt ist -- dann loescht sich der Stab, wie im Original. */
     public static Consumer<WandLogicBlockEntity> finde(String name) {
@@ -153,6 +161,41 @@ public class LogicActions {
 
         skelett.item = new ItemStack(hatWaffe ? NtmItems.CLAY_TABLET.get() : NtmItems.GUN_HANGMAN.get());
         skelett.setChanged();
+    }
+
+    /**
+     * Die Mob-Aktionen: drei Stueck derselben Art, ausgeruestet aus den Listen von MobUtil,
+     * und der Stab verschwindet dabei.
+     *
+     * DREIMAL AN DERSELBEN STELLE, und das ist kein Versehen des Originals: die Schleife
+     * laeuft dreimal, setzt jedes Mal einen Mob auf denselben Punkt und ueberschreibt danach
+     * den Stab mit Luft. Dass die drei uebereinander stehen, loest Vanilla selbst auf -- sie
+     * schieben sich auseinander, sobald sie ticken.
+     *
+     * NUR IN PHASE 1: die Bedingung muss also einmal zugetroffen haben. Bei den Fallen des
+     * Kranes und der Fabrik heisst das: ein Spieler war nah genug.
+     */
+    private static void mobs(WandLogicBlockEntity be, EntityType<? extends Mob> art,
+            Map<Integer, List<MobUtil.Eintrag>> handListe, Map<Integer, List<MobUtil.Eintrag>> ruestungsListe) {
+
+        if(be.phase != 1) return;
+
+        Level level = be.getLevel();
+        BlockPos pos = be.getBlockPos();
+        if(!(level instanceof ServerLevel serverLevel)) return;
+
+        for(int i = 0; i < 3; i++) {
+
+            Mob mob = art.create(serverLevel);
+            if(mob == null) return;
+
+            mob.moveTo(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, 0F, 0F);
+            MobUtil.ausruesten(mob, handListe, serverLevel.random);
+            if(ruestungsListe != null) MobUtil.ausruesten(mob, ruestungsListe, serverLevel.random);
+            serverLevel.addFreshEntity(mob);
+        }
+
+        level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
     }
 
     /** Der erste Tresor in den sechs Nachbarfeldern, oder null. */
