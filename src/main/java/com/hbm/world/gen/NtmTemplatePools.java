@@ -75,6 +75,10 @@ public class NtmTemplatePools {
     public static final ResourceKey<StructureTemplatePool> CRASHED_PLANE_2 = registerKey("land/crashed_plane_2");
     public static final ResourceKey<StructureTemplatePool> WATER_PUMP = registerKey("land/water_pump");
 
+    /* Die beiden mit isFlatBiome, Runde 263. */
+    public static final ResourceKey<StructureTemplatePool> RADIO_HOUSE = registerKey("flat/radio_house");
+    public static final ResourceKey<StructureTemplatePool> BROADCASTING_TOWER = registerKey("flat/broadcasting_tower");
+
     public static void bootstrap(BootstrapContext<StructureTemplatePool> context) {
 
         HolderGetter<StructureTemplatePool> pools = context.lookup(Registries.TEMPLATE_POOL);
@@ -171,6 +175,9 @@ public class NtmTemplatePools {
         einzeln(context, leer, CRASHED_PLANE_1, "land/crashed_plane_1");
         einzeln(context, leer, CRASHED_PLANE_2, "land/crashed_plane_2");
         einzeln(context, leer, WATER_PUMP, "land/water_pump");
+
+        einzeln(context, leer, RADIO_HOUSE, "flat/radio_house");
+        einzeln(context, leer, BROADCASTING_TOWER, "flat/broadcasting_tower");
     }
 
     /**

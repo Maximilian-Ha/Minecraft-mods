@@ -64,6 +64,9 @@ public class NtmStructureSets {
     public static final ResourceKey<StructureSet> CRASHED_PLANE_2 = registerKey("crashed_plane_2");
     public static final ResourceKey<StructureSet> WATER_PUMP = registerKey("water_pump");
 
+    public static final ResourceKey<StructureSet> RADIO_HOUSE = registerKey("radio_house");
+    public static final ResourceKey<StructureSet> BROADCASTING_TOWER = registerKey("broadcasting_tower");
+
     public static void bootstrap(BootstrapContext<StructureSet> context) {
 
         HolderGetter<Structure> strukturen = context.lookup(Registries.STRUCTURE);
@@ -96,13 +99,17 @@ public class NtmStructureSets {
          * DIE ZEHN RUINEN. Gewichte 10 fuer die erste, 12 fuer die uebrigen neun.
          *
          * DAS GESAMTGEWICHT IST HIER 422 -- die Zahl, die Runde 251 fuer die Ebene ausgezaehlt
-         * hat und mit der das Meteoritenverlies steht. EINE ZWEITE AUSZAEHLUNG IN DIESER RUNDE
-         * KAM AUF 491, und der Unterschied liegt an zwei Angaben, die sich in diesem
-         * Verzeichnisbaum nicht nachschlagen lassen: ob Forge der Ebene den Typ SPARSE gibt
-         * (davon haengen Labor, Funkhaus und Sendeturm ab, zusammen 75) und wie das
-         * Leergewicht mitzaehlt. Hier steht die aeltere Zahl, damit die Ruinen und das Verlies
-         * auf derselben Skala liegen; wer die beiden Angaben einmal misst, rechnet BEIDE Orte
-         * um, nicht nur einen.
+         * hat und mit der das Meteoritenverlies steht. EINE ZWEITE AUSZAEHLUNG IN RUNDE 261
+         * KAM AUF 491. Die beiden lassen sich nicht sauber gegeneinander aufrechnen: 422 plus
+         * die drei Bauwerke mit isFlatBiome (75) plus das Leergewicht (4) waeren 501, nicht
+         * 491. Die aeltere Zahl zaehlt also noch anderes anders, und welche von beiden stimmt,
+         * entscheidet eine Tabelle, die nicht in diesem Verzeichnisbaum liegt: Forges
+         * registerVanillaBiomes, aus der hervorgeht, welche Typen die Ebene traegt.
+         *
+         * Hier steht die aeltere Zahl, damit alle Bauwerke dieses Ports auf DERSELBEN Skala
+         * liegen -- eine gemeinsame Skala, die um ein Sechstel danebenliegt, ist harmloser als
+         * zwei richtige Skalen nebeneinander. Wer die Tabelle einmal misst, rechnet ALLE
+         * Eintraege hier um, nicht einzelne.
          */
         streuung(context, strukturen, RUIN_A, NtmStructures.RUIN_A, 78, 26, 996996996 + 7);
         streuung(context, strukturen, RUIN_B, NtmStructures.RUIN_B, 71, 24, 996996996 + 8);
@@ -129,6 +136,9 @@ public class NtmStructureSets {
         streuung(context, strukturen, CRASHED_PLANE_1, NtmStructures.CRASHED_PLANE_1, 49, 16, 996996996 + 20);
         streuung(context, strukturen, CRASHED_PLANE_2, NtmStructures.CRASHED_PLANE_2, 49, 16, 996996996 + 21);
         streuung(context, strukturen, WATER_PUMP, NtmStructures.WATER_PUMP, 64, 21, 996996996 + 22);
+
+        streuung(context, strukturen, RADIO_HOUSE, NtmStructures.RADIO_HOUSE, 45, 15, 996996996 + 23);
+        streuung(context, strukturen, BROADCASTING_TOWER, NtmStructures.BROADCASTING_TOWER, 49, 16, 996996996 + 24);
     }
 
     /**

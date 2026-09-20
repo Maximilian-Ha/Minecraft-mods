@@ -75,6 +75,10 @@ public class NtmStructures {
     public static final ResourceKey<Structure> CRASHED_PLANE_2 = registerKey("crashed_plane_2");
     public static final ResourceKey<Structure> WATER_PUMP = registerKey("water_pump");
 
+    /* Die beiden mit isFlatBiome, Runde 263. */
+    public static final ResourceKey<Structure> RADIO_HOUSE = registerKey("radio_house");
+    public static final ResourceKey<Structure> BROADCASTING_TOWER = registerKey("broadcasting_tower");
+
     public static void bootstrap(BootstrapContext<Structure> context) {
 
         HolderGetter<Biome> biome = context.lookup(Registries.BIOME);
@@ -136,6 +140,16 @@ public class NtmStructures {
         einzeln(context, flach(biome), pools, CRASHED_PLANE_1, NtmTemplatePools.CRASHED_PLANE_1, -5);
         einzeln(context, flach(biome), pools, CRASHED_PLANE_2, NtmTemplatePools.CRASHED_PLANE_2, -8);
         einzeln(context, ebeneUndSumpf(biome), pools, WATER_PUMP, NtmTemplatePools.WATER_PUMP, -10);
+
+        /*
+         * ZWEI MIT isFlatBiome. Die Bedingung des Originals lautet dort
+         * heightVariation <= 0.2F && !isWaterBiome && Type.SPARSE -- flach UND schuetter
+         * bewachsen. Das dritte Bauwerk dieser Gruppe, das Labor, fehlt hier: es traegt
+         * zusaetzlich eine Hoehenschranke (53 bis 65), und dafuer gibt es in 1.21 keinen
+         * fertigen Bauwerkstyp.
+         */
+        einzeln(context, schuetter(biome), pools, RADIO_HOUSE, NtmTemplatePools.RADIO_HOUSE, -6);
+        einzeln(context, schuetter(biome), pools, BROADCASTING_TOWER, NtmTemplatePools.BROADCASTING_TOWER, -9);
     }
 
     /** Ein Einzelbauwerk: ein Stueck, an der Gelaendeoberkante, um Versatz tiefer. */
@@ -272,6 +286,33 @@ public class NtmStructures {
                 biome.getOrThrow(Biomes.BEACH),
                 biome.getOrThrow(Biomes.SNOWY_BEACH),
                 biome.getOrThrow(Biomes.MUSHROOM_FIELDS));
+    }
+
+    /**
+     * isFlatBiome: heightVariation <= 0.2F && !isWaterBiome && Type.SPARSE.
+     *
+     * SPARSE heisst bei Forge "schuetter bewachsen" -- offenes Land ohne geschlossenen Wald.
+     * Zusammen mit der Rauheitsschranke bleibt das offene, flache Land uebrig: Ebene, Savanne,
+     * Wiese und die lichten Formen. Wald, Dschungel und Taiga sind draussen, Gebirge ohnehin.
+     *
+     * Ob Forge der Ebene SPARSE wirklich gibt, laesst sich hier so wenig nachschlagen wie
+     * SANDY (siehe unten) -- es ist dieselbe Tabelle. Diese Liste ist die Anwendung der
+     * Beschreibung, nicht eine Messung. Sie haengt ausserdem mit der offenen Frage in
+     * NtmStructureSets zusammen: steht die Ebene auf SPARSE, ziehen dort auch Labor (20),
+     * Funkhaus (30) und Sendeturm (25) mit, und das Gesamtgewicht der Ebene steigt um diese
+     * 75. Die Ebene steht hier drin, das Gesamtgewicht dort aber bei 422 -- das ist der
+     * Widerspruch, den die Notiz dort benennt und den erst eine Messung an Forges Tabelle
+     * aufloest.
+     */
+    private static HolderSet<Biome> schuetter(HolderGetter<Biome> biome) {
+        return HolderSet.direct(
+                biome.getOrThrow(Biomes.PLAINS),
+                biome.getOrThrow(Biomes.SUNFLOWER_PLAINS),
+                biome.getOrThrow(Biomes.SNOWY_PLAINS),
+                biome.getOrThrow(Biomes.SAVANNA),
+                biome.getOrThrow(Biomes.SAVANNA_PLATEAU),
+                biome.getOrThrow(Biomes.MEADOW),
+                biome.getOrThrow(Biomes.SPARSE_JUNGLE));
     }
 
     /** Type.PLAINS || Type.SWAMP -- die Bedingung der Wasserpumpe, und die einzige hier mit Typen. */

@@ -12427,3 +12427,32 @@ verschieden.
 Bauwerkstyp), die Schüssel (auch Höhenschranke), die drei mit `isFlatBiome` (Labor, Funkhaus,
 Sendeturm), die vier, die `wand_logic` brauchen, und die beiden Nicht-NBT-Bauwerke (Features,
 Bunker), die im Original gar keine Vorlagendatei haben.
+
+## Runde 263 — Funkhaus und Sendeturm, und eine Zahl, die dreimal anders hieß
+
+Die vierte Gruppe wäre `isFlatBiome` — `heightVariation ≤ 0.2 && !isWaterBiome && Type.SPARSE`
+—, und sie hat drei Mitglieder. Zwei davon stehen jetzt: Funkhaus und Sendeturm. Das Labor
+fehlt weiter, denn es trägt zusätzlich eine **Höhenschranke** (53 bis 65), und dafür hat 1.21
+keinen fertigen Bauwerkstyp.
+
+`SPARSE` heißt bei Forge „schütter bewachsen" — offenes Land ohne geschlossenen Wald. Zusammen
+mit der Rauheitsschranke bleibt übrig: Ebene, Savanne, Wiese und die lichten Formen. Wald,
+Dschungel und Taiga sind draußen, Gebirge ohnehin.
+
+### Die Zahl, die dreimal anders hieß
+
+Beim Schreiben des Kommentars zu `SPARSE` fiel auf, dass die Bemerkung eine **dritte**
+Gesamtzahl für die Ebene einführte (497) neben den schon vorhandenen 422 und 491. Nachgerechnet
+geht keine der Verbindungen auf: 422 + 75 (Labor, Funkhaus, Sendeturm) + 4 (Leergewicht) wären
+501, nicht 491.
+
+Damit ist die Erklärung aus Runde 261 — „der Unterschied liegt an zwei Angaben" — **zu
+einfach**: die ältere Auszählung zählt noch anderes anders. Beide Notizen stehen jetzt so da:
+die Zahlen sind 422 und 491, sie lassen sich nicht sauber gegeneinander aufrechnen, und welche
+stimmt, entscheidet eine Tabelle, die nicht in diesem Verzeichnisbaum liegt.
+
+Es bleibt bei 422 für alle Einträge — **eine gemeinsame Skala, die um ein Sechstel daneben
+liegt, ist harmloser als zwei richtige Skalen nebeneinander.** Wer Forges Tabelle einmal misst,
+rechnet alle Einträge um, nicht einzelne.
+
+**Stand: 25 von 34 Bauwerken in der Welt.**
