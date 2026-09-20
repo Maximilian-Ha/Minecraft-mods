@@ -106,7 +106,7 @@ public class ModelArmorRPA extends ModelArmorBase {
         if(this.body.xRot != 0F) RenderContext.mulPose(Axis.XP.rotation(this.body.xRot));
 
         RenderContext.translate(0F, 4.875F * px, 0F);
-        RenderContext.mulPose(Axis.ZP.rotationDegrees(-(System.currentTimeMillis() / 2D % 360D)));
+        RenderContext.mulPose(Axis.ZP.rotationDegrees((float) -(System.currentTimeMillis() / 2D % 360D)));
         RenderContext.translate(0F, -4.875F * px, 0F);
 
         /* Der Luefter ist schon an seinem Platz -- sein eigener Drehpunkt bleibt bei null. */

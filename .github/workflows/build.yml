@@ -202,6 +202,11 @@ jobs:
           chmod +x ./tools/tool-check.sh
           ./tools/tool-check.sh
 
+      - name: Check narrowing conversions
+        run: |
+          chmod +x ./tools/narrow-check.sh
+          ./tools/narrow-check.sh
+
       - name: Check API usage
         run: |
           chmod +x ./tools/api-check.sh
