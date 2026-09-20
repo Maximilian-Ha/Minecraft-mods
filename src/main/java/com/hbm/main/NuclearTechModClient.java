@@ -968,6 +968,7 @@ public class NuclearTechModClient {
         /* Die Kybernetische Krabbe, Runde 236. Ihre Teslaschwester hat kein solches Modell --
          * die ist ein OBJ und kommt ueber den ResourceManager. */
         event.registerLayerDefinition(com.hbm.render.model.ModelCrab.LAYER, com.hbm.render.model.ModelCrab::createBodyLayer);
+        event.registerLayerDefinition(com.hbm.render.model.ModelBullet.LAYER, com.hbm.render.model.ModelBullet::createBodyLayer);
 
         /* Die beiden Kopfmodelle der Masken. Sie haengen nicht an einem Darsteller, sondern
          * an getGenericArmorModel -- gebacken werden sie trotzdem hier. */

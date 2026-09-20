@@ -11517,3 +11517,30 @@ zwei leere Plätze dazuzuerfinden.
 geschlossen -- 233 legte ihn mit dreizehn an und zählte die zwölf fehlenden im Klassenkopf
 namentlich auf, 241 reichte die zehn Rüstungsaufsätze nach, 243 das Sternmetallschwert,
 244 die Infusionsflasche. Der Kopf zählt jetzt nichts mehr auf, weil nichts mehr fehlt.
+
+### Runde 245: der Tau-Bolzen wird sichtbar — und die Begründung war falsch
+
+Seit Runde 236 schießt die Kybernetische Krabbe einen Bolzen, den `EmptyEntityRenderer`
+zeichnet: also gar nicht. Die Aufgabenliste hielt dazu fest, das Original zeichne ihn über
+`ResourceManager.projectiles`, Teil `"BulletRifle"`, und diese OBJ-Datei liege nicht im
+Port. **Beides stimmt, und trotzdem ist der Schluss falsch.**
+
+`RenderBullet` zeichnet so -- aber das ist das alte Geschosssystem, das im Original selbst
+mit `@Deprecated // the entire old bullet system should finally fucking die i hate it`
+markiert ist. `EntityBullet`, das die Krabbe wirklich wirft, meldet `ClientProxy:615` bei
+**`RenderRocket`** an, und das zeichnet `ModelBullet`: **einen einzigen Kasten**, zwei mal
+eins mal eins, auf einer Bildfläche von acht mal vier. Kein OBJ nötig.
+
+Auch die Textur war nicht die erwartete. `RenderRocket` wählt `tau.png` nur bei
+`getIsCritical()`; gesetzt wird das ausschließlich im `isTau`-Konstruktor
+(`EntityBullet:191`), und die Krabbe nimmt einen anderen (`:82`). Ihr Bolzen trägt
+`bullet.png`.
+
+Zwischenzeitlich lagen `projectiles.obj` (132 KB) und `bullet_rifle.png` schon im Baum und
+waren im `ResourceManager` angemeldet -- beides zurückgenommen, sobald die Messung zeigte,
+dass sie niemand braucht. Eine Datei, die nichts zeichnet, ist derselbe Fehler wie eine
+Klasse, die niemand anmeldet.
+
+`ModelBullet` bringt dieselbe Falle mit wie die Krabbe in Runde 236: ein `mirror = true`
+**hinter** dem `addBox`. 1.7.10 liest das Feld zum Zeitpunkt des Aufrufs, also ist es
+wirkungslos, und der Kasten wird nicht gespiegelt.

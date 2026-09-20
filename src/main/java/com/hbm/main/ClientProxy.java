@@ -7,6 +7,7 @@ import com.hbm.entity.NtmEntityTypes;
 import com.hbm.items.NtmItems;
 import com.hbm.items.weapon.sedna.GunBaseNTItem;
 import com.hbm.items.weapon.sedna.factory.LegoClient;
+import com.hbm.render.entity.projectile.TauShotRenderer;
 import com.hbm.render.blockentity.*;
 import com.hbm.render.entity.EmptyEntityRenderer;
 import com.hbm.render.entity.effect.*;
@@ -469,7 +470,7 @@ public class ClientProxy extends ServerProxy {
         /* Der Tau-Bolzen hat kein Modell: das Original zeichnet ihn ueber die alte
          * Geschossklasse, deren OBJ-Datei der Port nicht hat. Zu sehen ist seine Staubspur,
          * und die zeichnet die Entitaet selbst. */
-        EntityRenderers.register(NtmEntityTypes.TAU_SHOT.get(), EmptyEntityRenderer::new);
+        EntityRenderers.register(NtmEntityTypes.TAU_SHOT.get(), TauShotRenderer::new);
     }
 
     private static final HashMap<Integer, Long> vanished = new HashMap<>();
