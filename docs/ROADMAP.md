@@ -11079,3 +11079,43 @@ Der Aufschlag zündet sie **nicht** — sie springt ab und rollt, bis die Zeit u
 der Unterschied zum Aufschlagzünder der Universalgranate und steht so im Original.
 
 Alle 39 Tore grün.
+
+### Runde 236: die Kybernetische Krabbe und ihr Nest
+
+Der `meteor_spawner` ist der zweite der sechs echt fehlenden Bauwerksblöcke aus Runde 227.
+Im Original heißt seine Klasse `BlockCybercrab` -- wieder ein Fall, in dem der
+Registriername und der Klassenname auseinanderlaufen.
+
+Portiert:
+
+* **`CyberCrab`** -- vier Lebenspunkte, Tempo 0,75, meidet Wasser (Wasser, Nässe und Feuer
+  kosten je Tick zehn Schaden), schießt alle 60 bis 80 Ticks aus fünfzehn Blöcken einen
+  Tau-Bolzen, ist gegen Tau- und Strahlenschaden immun und zerplatzt beim Tod
+  (Sprengkraft 0,1, kein Blockschaden).
+* **`TeslaCrab`** -- zehn Lebenspunkte, Tempo 0,5, schlägt zusätzlich beständig Blitze im
+  Umkreis von drei Blöcken; ihr Körper ist das OBJ-Modell `teslacrab.obj`. Fällt mit
+  etwa 2,5 Prozent eine Kupferspule.
+* **`TauShot`** -- die eine Einstellung der alten `EntityBullet`, die die Krabbe benutzt:
+  kritisch und Tau, Schaden drei. "Kritisch" heißt im Original nicht mehr Schaden, sondern
+  dass das Geschoss weder in Blöcken steckenbleibt noch beim Treffer stirbt -- hier also
+  spektral und durchschlagend, 250 Ticks lang.
+* **`ModelCrab`** -- die zwanzig Kästen des Originals, Kasten für Kasten.
+* **`MeteorSpawnerBlock` / `MeteorSpawnerBlockEntity`** -- das Nest: alle 200 Ticks eine
+  neue Krabbe, wenn der Platz darüber frei ist, ein Spieler binnen 25 Blöcken steht und
+  weniger als fünf Krabben in der Nachbarschaft sind; jede fünfte als Teslakrabbe.
+* Laute: `entity.cybercrab` (die fünfzehn `radio_random`-Aufnahmen) und `weapon.saw_shoot`.
+  Die Datei heißt im Original `sawShoot.ogg`; 1.21 lässt in einem Ressourcenpfad kein
+  großes S zu -- derselbe Fall wie `immolator_shoot` in Runde 222.
+* `TeslaBlockEntity.zap` hat einen zeichnenden Modus bekommen: die Teslakrabbe rechnet ihre
+  Blitze wie im Original auf beiden Seiten aus, und auf dem Client darf davon nichts wirken.
+
+Offene Punkte dieser Runde:
+
+* **Das Meteoritenverlies baut der Port noch nicht.** Im Original setzt der
+  `CrabSpawners`-Wähler das Nest dort mit einem Fünftel Wahrscheinlichkeit; bis dahin steht
+  der Block -- wie der `dungeon_spawner` aus Runde 234 -- nur zum Setzen bereit.
+* **Der Tau-Bolzen hat kein Modell.** Das Original zeichnet ihn über
+  `ResourceManager.projectiles`, Teil `BulletRifle`; diese OBJ-Datei liegt nicht im Port.
+  Zu sehen ist seine Staubspur.
+* **Die Taint-Krabbe fehlt noch.** Sie hängt nicht am Nest, sondern am Taint, und braucht
+  das 7,62-mm-Geschoss samt Partikelpaket.

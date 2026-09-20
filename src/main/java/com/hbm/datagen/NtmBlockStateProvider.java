@@ -1279,6 +1279,12 @@ public class NtmBlockStateProvider extends BlockStateProvider {
                 .texture("all", mcLoc("block/stone")));
         this.blockItem(NtmBlocks.DUNGEON_SPAWNER);
 
+        /* Das Krabbennest: oben eigene Platte, unten der blanke Meteoritenbau, ringsum die
+         * Seitentextur -- genau die drei Bilder, die BlockCybercrab.registerBlockIcons nennt. */
+        this.simpleBlock(NtmBlocks.METEOR_SPAWNER.get(), this.models().cubeBottomTop("meteor_spawner",
+                modLoc("block/meteor_spawner_side"), modLoc("block/meteor_polished"), modLoc("block/meteor_spawner_top")));
+        this.blockItem(NtmBlocks.METEOR_SPAWNER);
+
         this.redBrick(NtmBlocks.BRICK_RED, modLoc("block/brick_red"));
         this.redBrick(NtmBlocks.STONE_KEYHOLE_META, modLoc("block/stone_keyhole_meta"));
 

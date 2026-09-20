@@ -64,6 +64,28 @@ public class NtmSoundDefinitionsProvider extends SoundDefinitionsProvider {
                 .with(sound(NuclearTechMod.withDefaultNamespace("block/broadcast3")).stream())
         );
 
+        this.add(NtmSoundEvents.ENTITY_CYBERCRAB, SoundDefinition.definition()
+                .with(
+                        sound(NuclearTechMod.withDefaultNamespace("entity/radio_random1")),
+                        sound(NuclearTechMod.withDefaultNamespace("entity/radio_random2")),
+                        sound(NuclearTechMod.withDefaultNamespace("entity/radio_random3")),
+                        sound(NuclearTechMod.withDefaultNamespace("entity/radio_random4")),
+                        sound(NuclearTechMod.withDefaultNamespace("entity/radio_random5")),
+                        sound(NuclearTechMod.withDefaultNamespace("entity/radio_random6")),
+                        sound(NuclearTechMod.withDefaultNamespace("entity/radio_random7")),
+                        sound(NuclearTechMod.withDefaultNamespace("entity/radio_random8")),
+                        sound(NuclearTechMod.withDefaultNamespace("entity/radio_random9")),
+                        sound(NuclearTechMod.withDefaultNamespace("entity/radio_random10")),
+                        sound(NuclearTechMod.withDefaultNamespace("entity/radio_random11")),
+                        sound(NuclearTechMod.withDefaultNamespace("entity/radio_random12")),
+                        sound(NuclearTechMod.withDefaultNamespace("entity/radio_random13")),
+                        sound(NuclearTechMod.withDefaultNamespace("entity/radio_random14")),
+                        sound(NuclearTechMod.withDefaultNamespace("entity/radio_random15"))
+                )
+        );
+        this.add(NtmSoundEvents.WEAPON_SAW_SHOOT, SoundDefinition.definition()
+                .with(sound(NuclearTechMod.withDefaultNamespace("weapon/saw_shoot")))
+        );
         this.add(NtmSoundEvents.WEAPON_TESLA, SoundDefinition.definition()
                 .with(
                         sound(NuclearTechMod.withDefaultNamespace("weapon/tesla1")),

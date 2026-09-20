@@ -14,6 +14,8 @@ import com.hbm.config.FalloutConfigJSON;
 import com.hbm.entity.NtmEntityTypes;
 import com.hbm.items.armor.ModReviveItem;
 import com.hbm.entity.mob.CreeperNuclear;
+import com.hbm.entity.mob.CyberCrab;
+import com.hbm.entity.mob.TeslaCrab;
 import com.hbm.entity.mob.UndeadSoldier;
 import com.hbm.entity.mob.Duck;
 import com.hbm.handler.ArmorModHandler;
@@ -195,6 +197,8 @@ public class CommonEvents {
         event.put(NtmEntityTypes.DUCK.get(), Duck.createAttributes().build());
         event.put(NtmEntityTypes.CREEPER_NUCLEAR.get(), CreeperNuclear.createAttributes().build());
         event.put(NtmEntityTypes.UNDEAD_SOLDIER.get(), UndeadSoldier.createAttributes().build());
+        event.put(NtmEntityTypes.CYBER_CRAB.get(), CyberCrab.createAttributes().build());
+        event.put(NtmEntityTypes.TESLA_CRAB.get(), TeslaCrab.createAttributes().build());
     }
 
     @SubscribeEvent

@@ -2576,6 +2576,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.TESLA, DESC, "Zaps every living thing in range.$Wear a full set of metal armor$to stay out of the circuit.");
         /* Das Rote Zimmer, Runde 233 -- alle vier Namen wortgetreu aus en_US.lang. */
         this.add(NtmBlocks.DUNGEON_SPAWNER, "Dungeon Spawner");
+        this.add(NtmBlocks.METEOR_SPAWNER, "Cybercrab Nest");
         this.add(NtmBlocks.BRICK_RED, "Red Room Brick");
         this.add(NtmBlocks.STONE_KEYHOLE, "Strange Stone");
         this.add(NtmBlocks.STONE_KEYHOLE_META, "Strange Red Room Brick");
@@ -4210,6 +4211,9 @@ public class NtmLanguageProvider extends LanguageProvider {
          * ebenfalls keinen Eintrag; hier bekommen alle drei einen, weil ein roher Schluessel
          * im Todesbildschirm und am Namensschild zu sehen ist. */
         this.add("entity.hbmsntm.undead_soldier", "Undead Soldier");
+        this.add("entity.hbmsntm.cyber_crab", "Cybercrab");
+        this.add("entity.hbmsntm.tesla_crab", "Teslacrab");
+        this.add("entity.hbmsntm.tau_shot", "Tau Bolt");
         this.add("entity.hbmsntm.duck", "Duck");
         this.add("entity.hbmsntm.creeper_nuclear", "Nuclear Creeper");
     }

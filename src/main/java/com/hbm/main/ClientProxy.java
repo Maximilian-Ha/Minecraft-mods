@@ -17,6 +17,8 @@ import com.hbm.render.entity.item.RenderMovingPackage;
 import com.hbm.render.entity.item.RenderTNTPrimedBase;
 import com.hbm.render.entity.mob.CreeperNuclearRenderer;
 import com.hbm.render.entity.mob.DuckRenderer;
+import com.hbm.render.entity.mob.CyberCrabRenderer;
+import com.hbm.render.entity.mob.TeslaCrabRenderer;
 import com.hbm.render.entity.mob.UndeadSoldierRenderer;
 import com.hbm.render.entity.projectile.*;
 import com.hbm.render.entity.rocket.*;
@@ -452,6 +454,12 @@ public class ClientProxy extends ServerProxy {
         EntityRenderers.register(NtmEntityTypes.CREEPER_NUCLEAR.get(), CreeperNuclearRenderer::new);
         EntityRenderers.register(NtmEntityTypes.DUCK.get(), DuckRenderer::new);
         EntityRenderers.register(NtmEntityTypes.UNDEAD_SOLDIER.get(), UndeadSoldierRenderer::new);
+        EntityRenderers.register(NtmEntityTypes.CYBER_CRAB.get(), CyberCrabRenderer::new);
+        EntityRenderers.register(NtmEntityTypes.TESLA_CRAB.get(), TeslaCrabRenderer::new);
+        /* Der Tau-Bolzen hat kein Modell: das Original zeichnet ihn ueber die alte
+         * Geschossklasse, deren OBJ-Datei der Port nicht hat. Zu sehen ist seine Staubspur,
+         * und die zeichnet die Entitaet selbst. */
+        EntityRenderers.register(NtmEntityTypes.TAU_SHOT.get(), EmptyEntityRenderer::new);
     }
 
     private static final HashMap<Integer, Long> vanished = new HashMap<>();

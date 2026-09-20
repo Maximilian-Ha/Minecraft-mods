@@ -35,6 +35,8 @@ import com.hbm.entity.missile.MissileCustom;
 import com.hbm.entity.missile.SatellitePod;
 import com.hbm.entity.missile.Soyuz;
 import com.hbm.entity.mob.CreeperNuclear;
+import com.hbm.entity.mob.CyberCrab;
+import com.hbm.entity.mob.TeslaCrab;
 import com.hbm.entity.mob.Duck;
 import com.hbm.entity.mob.UndeadSoldier;
 import com.hbm.entity.projectile.*;
@@ -137,6 +139,32 @@ public class NtmEntityTypes {
                     () -> EntityType.Builder.of(UndeadSoldier::new, MobCategory.MONSTER)
                             .sized(0.6F, 1.8F)
                             .build("undead_soldier"));
+
+    /**
+     * Die Kybernetische Krabbe, Runde 236. Masse wie im Original: drei Viertel breit,
+     * gut ein Drittel hoch -- sie passt unter jeden Ueberhang.
+     */
+    public static final DeferredHolder<EntityType<?>, EntityType<CyberCrab>> CYBER_CRAB =
+            ENTITY_TYPES.register("cyber_crab",
+                    () -> EntityType.Builder.<CyberCrab>of(CyberCrab::new, MobCategory.MONSTER)
+                            .sized(0.75F, 0.35F)
+                            .build("cyber_crab"));
+
+    /** Die Teslakrabbe. Ebenso breit, aber deutlich hoeher -- die Spule steht auf ihr. */
+    public static final DeferredHolder<EntityType<?>, EntityType<TeslaCrab>> TESLA_CRAB =
+            ENTITY_TYPES.register("tesla_crab",
+                    () -> EntityType.Builder.<TeslaCrab>of(TeslaCrab::new, MobCategory.MONSTER)
+                            .sized(0.75F, 1.25F)
+                            .build("tesla_crab"));
+
+    /** Der Tau-Bolzen der Krabbe. Einen halben Block gross, wie jedes Geschoss des Originals. */
+    public static final DeferredHolder<EntityType<?>, EntityType<TauShot>> TAU_SHOT =
+            ENTITY_TYPES.register("tau_shot",
+                    () -> EntityType.Builder.<TauShot>of(TauShot::new, MobCategory.MISC)
+                            .noSummon()
+                            .setTrackingRange(250)
+                            .sized(0.5F, 0.5F)
+                            .build("tau_shot"));
 
     public static final DeferredHolder<EntityType<?>, EntityType<TNTPrimedBase>> TNT_PRIMED_BASE = ENTITY_TYPES.register(
             "tnt_primed_base",

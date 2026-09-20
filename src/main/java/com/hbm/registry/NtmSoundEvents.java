@@ -44,6 +44,18 @@ public class NtmSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_LIBERATOR_FIRE = reg("weapon.fire.shotgun_alt");
     /** Der Schlag der Teslaspule, vier Aufnahmen im Wechsel. */
     public static final DeferredHolder<SoundEvent, SoundEvent> WEAPON_TESLA = reg("weapon.tesla");
+    /**
+     * Die Stimme der Kybernetischen Krabbe: fuenfzehn Funkschnipsel, aus denen sie bei
+     * jedem Treffer und beim Sterben einen auswaehlt. Im Original heisst das Ereignis
+     * "hbm:entity.cybercrab" und zaehlt dieselben fuenfzehn Dateien auf.
+     */
+    public static final DeferredHolder<SoundEvent, SoundEvent> ENTITY_CYBERCRAB = reg("entity.cybercrab");
+    /**
+     * Der Schuss der Krabbe. Im Original heisst die Datei sawShoot -- 1.21 laesst in einem
+     * Ressourcenpfad nur [a-z0-9/._-] zu, das grosse S also nicht. Datei und Verweis
+     * heissen hier darum saw_shoot, wie schon bei immolator_shoot in Runde 222.
+     */
+    public static final DeferredHolder<SoundEvent, SoundEvent> WEAPON_SAW_SHOOT = reg("weapon.saw_shoot");
     /* Die drei Schleifen des verseuchten Senders. Welche ein Sender spielt, haengt an
      * seinem Ort -- darum drei einzelne Ereignisse statt eines mit drei Aufnahmen. */
     public static final DeferredHolder<SoundEvent, SoundEvent> BLOCK_BROADCAST_1 = reg("block.broadcast1");

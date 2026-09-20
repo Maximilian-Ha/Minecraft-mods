@@ -104,6 +104,17 @@ public class TeslaBlockEntity extends LoadedBaseBlockEntity implements ITickable
      * @param quelle wird uebersprungen -- so trifft eine tragbare Quelle nicht den Traeger.
      */
     public static List<double[]> zap(Level level, double x, double y, double z, double radius, Entity quelle) {
+        return zap(level, x, y, z, radius, quelle, true);
+    }
+
+    /**
+     * @param schaden false zeichnet nur: es werden dieselben Endpunkte ermittelt, aber
+     *                niemand wird verletzt und kein Creeper gezuendet. Die Teslakrabbe
+     *                braucht das -- sie rechnet ihre Blitze wie im Original auf beiden
+     *                Seiten aus, statt sie zu uebertragen, und auf dem Client darf davon
+     *                nichts wirken.
+     */
+    public static List<double[]> zap(Level level, double x, double y, double z, double radius, Entity quelle, boolean schaden) {
 
         List<double[]> enden = new ArrayList<>();
 
@@ -119,21 +130,21 @@ public class TeslaBlockEntity extends LoadedBaseBlockEntity implements ITickable
 
             if(Library.isObstructed(level, x, y, z, e.getX(), e.getY() + e.getBbHeight() / 2, e.getZ())) continue;
 
-            // Der Strom zuendet den Creeper, statt ihn zu verletzen.
-            if(e instanceof Creeper creeper) {
-                creeper.ignite();
-                enden.add(new double[] { e.getX(), e.getY() + e.getBbHeight() / 2, e.getZ() });
-                continue;
-            }
+            if(schaden) {
 
-            if(!(e instanceof Player spieler && ArmorUtil.checkForFaraday(spieler))) {
+                // Der Strom zuendet den Creeper, statt ihn zu verletzen.
+                if(e instanceof Creeper creeper) {
+                    creeper.ignite();
 
-                DamageSource quell = level.damageSources().source(NtmDamageTypes.ELECTRICITY);
-                float schaden = Mth.clamp(e.getMaxHealth() * 0.5F, 3F, 20F) / ziele.size();
+                } else if(!(e instanceof Player spieler && ArmorUtil.checkForFaraday(spieler))) {
 
-                if(e.hurt(quell, schaden)) {
-                    level.playSound(null, e.getX(), e.getY(), e.getZ(),
-                            NtmSoundEvents.WEAPON_TESLA.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+                    DamageSource quell = level.damageSources().source(NtmDamageTypes.ELECTRICITY);
+                    float schadenswert = Mth.clamp(e.getMaxHealth() * 0.5F, 3F, 20F) / ziele.size();
+
+                    if(e.hurt(quell, schadenswert)) {
+                        level.playSound(null, e.getX(), e.getY(), e.getZ(),
+                                NtmSoundEvents.WEAPON_TESLA.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+                    }
                 }
             }
 

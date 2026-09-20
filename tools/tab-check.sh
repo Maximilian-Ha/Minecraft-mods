@@ -79,6 +79,7 @@ VERBORGENE_BLOECKE = {
     'SKELETON_HOLDER':              'Sockel aus den Weltbauwerken, wird nur von der Generierung gesetzt (Original: setCreativeTab(null))',
     'PEDESTAL':                     'Sockel des Rituals, wird nur von der Generierung gesetzt -- im Original von BlockKeyhole, BlockRedBrickKeyhole und LogicBlockConditions (Original: setCreativeTab(null), kein Werkbankrezept)',
     'DUNGEON_SPAWNER':              'Aufrufer der Untoten Soldaten, wird nur von der Generierung gesetzt (Original: kein setCreativeTab)',
+    'METEOR_SPAWNER':               'Nest der Kybernetischen Krabben, wird nur von der Generierung gesetzt -- im Original vom CrabSpawners-Waehler des Meteoritenverlieses (Original: kein setCreativeTab, getItemDropped liefert null)',
     'BRICK_RED':                    'Ziegel des Roten Zimmers; das Zimmer baut sich selbst, der Ziegel gibt sich nicht her (Original: kein setCreativeTab, getItemDropped liefert null)',
     'STONE_KEYHOLE':                'das steinerne Schluesselloch steht in den Bauwerken und gibt sich als Stein aus (Original: setCreativeTab(null))',
     'STONE_KEYHOLE_META':           'wie STONE_KEYHOLE, nur in der Wand des Roten Zimmers (Original: setCreativeTab(null))',
