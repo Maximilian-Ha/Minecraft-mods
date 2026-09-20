@@ -23,6 +23,7 @@ import com.hbm.util.Compat;
 import com.hbm.util.EnumUtil;
 import com.hbm.util.fauxpointtwelve.DirPos;
 import com.hbm.util.function.Function;
+import com.hbm.registry.NtmCriteria;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup.Provider;
@@ -439,6 +440,9 @@ public class WatzBlockEntity extends MachineBaseBlockEntity implements IControlR
         this.setBrokenColumn(0, cooler, -2, -1);
         this.setBrokenColumn(0, cooler, 1, -2);
         this.setBrokenColumn(0, cooler, -1, -2);
+
+        /* Der Erfolg des Originals, Runde 249 -- TileEntityWatz Z. 532. */
+        NtmCriteria.markeImUmkreis(this.level, this.worldPosition, 50D, "watz_boom");
 
         for(int j = -1; j < 2; j++) {
             this.setBrokenColumn(1, end, 3, j);

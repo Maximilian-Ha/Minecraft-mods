@@ -1,5 +1,6 @@
 package com.hbm.entity.logic;
 
+import com.hbm.registry.NtmCriteria;
 import com.hbm.config.NtmConfig;
 import com.hbm.entity.NtmEntityTypes;
 import com.hbm.explosion.ExplosionFleija;
@@ -10,6 +11,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
@@ -50,6 +52,13 @@ public class NukeExplosionMK3 extends ExplosionChunkLoading {
         if (!this.did) {
             if (extType == 0) expl = new ExplosionFleija((int) this.position.x, (int) this.position.y, (int) this.position.z, this.level, this.destructionRange, this.coefficient, this.coefficient2);
             if (extType == 1) sol = new ExplosionSolinium((int) this.position.x, (int) this.position.y, (int) this.position.z, this.level, this.destructionRange, this.coefficient, this.coefficient2);
+
+            /* Der Erfolg des Originals, Runde 249 -- EntityNukeExplosionMK3 Z. 130 und
+             * MK5 an derselben Stelle. Er faellt bei JEDEM Spieler in der Welt, nicht
+             * nur bei denen in der Naehe: wer die Mod spielt, hat den Knall gehoert. */
+            if(this.level() instanceof ServerLevel welt) {
+                for(ServerPlayer spieler : welt.players()) NtmCriteria.marke(spieler, "manhattan");
+            }
 
             this.did = true;
         }

@@ -1,5 +1,8 @@
 package com.hbm.entity.logic;
 
+import com.hbm.registry.NtmCriteria;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import com.hbm.config.NtmConfig;
 import com.hbm.entity.NtmEntityTypes;
 import com.hbm.entity.effect.FalloutRain;
@@ -67,6 +70,15 @@ public class NukeExplosionMK5 extends ExplosionChunkLoading {
         ExplosionNukeGeneric.dealDamage(this.level, this.position.x, this.position.y, this.position.z, this.length * 2);
 
         if(explosion == null) {
+
+            /* Der Erfolg des Originals, Runde 249 -- EntityNukeExplosionMK5 feuert ihn
+             * bei jedem Spieler in der Welt. Dort haengt er an einem Merker namens did;
+             * der Port hat keinen, aber "explosion == null" ist genau derselbe
+             * Zeitpunkt -- der erste Takt, in dem es losgeht. */
+            if(this.level() instanceof ServerLevel welt) {
+                for(ServerPlayer spieler : welt.players()) NtmCriteria.marke(spieler, "manhattan");
+            }
+
             explosionStart = System.currentTimeMillis();
             // todo make config val
             //explosion = new ExplosionNukeRayBatched(this.level, this.blockPosition.getX(), this.blockPosition.getY(), this.blockPosition.getZ(), strength, speed, length);

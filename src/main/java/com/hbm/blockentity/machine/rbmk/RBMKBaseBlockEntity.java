@@ -26,6 +26,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.util.Mth;
+import com.hbm.registry.NtmCriteria;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -451,7 +452,12 @@ public abstract class RBMKBaseBlockEntity extends LoadedBaseBlockEntity implemen
         PacketDistributor.sendToPlayersNear(serverLevel, null, x, y, z, 250, new AuxParticle(data, x, y, z));
 
         this.level.playSound(null, x, y, z, NtmSoundEvents.RBMK_EXPLOSION.get(), SoundSource.BLOCKS, 50.0F, 1.0F);
+
+        /* Der Erfolg des Originals, Runde 249 -- TileEntityRBMKBase Z. 556. */
+        NtmCriteria.markeImUmkreis(this.level, this.worldPosition, 50D, "rbmk_boom");
     }
+
+
 
     /**
      * Der Schutt unmittelbar um eine ausgelaufene Brennstoffsaeule wird selbst zur Strahlenquelle

@@ -122,6 +122,20 @@ public class NtmAdvancementProvider extends AdvancementProvider {
              * ein Symbolgegenstand, den es nur fuer Erfolge gibt und den der Port nicht hat.
              * Statt ihn nachzubauen zeigt der Erfolg die Waffe, die ihn verleiht. */
             erfolg(speichern, helper, wurzel, "go_fish", NtmItems.BOLTGUN.get(), true, "go_fish");
+
+            /*
+             * VIER WEITERE, Runde 249 -- die Katastrophen. Drei von ihnen haengen im
+             * Original an einem Symbolgegenstand, den der Port nicht hat; sie bekommen
+             * einen, der dasselbe meint:
+             *
+             *   bucket_mud   -> das Watz-Pellet (der Eimer Schlamm fehlt im Port)
+             *   coin_creeper -> Vanillas Creeperkopf (die Bossmuenzen fehlen alle)
+             *   nuke_boy     -> nuke_little_boy, derselbe Block unter dem vollen Namen
+             */
+            erfolg(speichern, helper, rbmk, "rbmk_boom", NtmItems.DEBRIS_FUEL.get(), true, "rbmk_boom");
+            erfolg(speichern, helper, wurzel, "watz_boom", NtmItems.WATZ_PELLET.get(), true, "watz_boom");
+            erfolg(speichern, helper, wurzel, "boss_creeper", Items.CREEPER_HEAD, false, "boss_creeper");
+            erfolg(speichern, helper, polymer, "manhattan", NtmBlocks.NUKE_LITTLE_BOY.get(), true, "manhattan");
         }
 
         /**

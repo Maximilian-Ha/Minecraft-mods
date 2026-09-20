@@ -10,6 +10,7 @@ import com.hbm.items.special.PolaroidItem;
 import com.hbm.registry.NtmSoundEvents;
 import com.hbm.network.toclient.AuxParticle;
 import com.hbm.registry.NtmDamageTypes;
+import com.hbm.registry.NtmCriteria;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
@@ -91,6 +92,11 @@ public class CreeperNuclear extends Creeper {
      * Zaehler stattdessen selbst abliest, steht in CreeperFuse.
      */
     private void zuenden() {
+
+        /* Der Erfolg des Originals, Runde 249 -- EntityCreeperNuclear Z. 81. Dort haengt
+         * er an onDeath; hier steht er in zuenden, weil der Creeper genau so stirbt. */
+        NtmCriteria.markeImUmkreis(this, 50D, "boss_creeper");
+
         this.dead = true;
         this.nuclearExplode();
         this.triggerOnDeathMobEffects(RemovalReason.KILLED);

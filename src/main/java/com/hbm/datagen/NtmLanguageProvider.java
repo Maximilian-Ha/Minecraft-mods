@@ -869,6 +869,15 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("advancements.hbmsntm.no9.description", "\"I hope the lead I'm mining will be used in your paint\"");
         this.add("advancements.hbmsntm.go_fish.title", "Go Fish");
         this.add("advancements.hbmsntm.go_fish.description", "Nautical Crucifixion");
+        /* Die vier Katastrophen-Erfolge, Runde 249. */
+        this.add("advancements.hbmsntm.rbmk_boom.title", "It is 15,000.");
+        this.add("advancements.hbmsntm.rbmk_boom.description", "What is the cost of lies?");
+        this.add("advancements.hbmsntm.watz_boom.title", "Disgusting");
+        this.add("advancements.hbmsntm.watz_boom.description", "Drain your septic tank next time.");
+        this.add("advancements.hbmsntm.boss_creeper.title", "Bomb On Four Legs");
+        this.add("advancements.hbmsntm.boss_creeper.description", "'There is nuclear creepers? Those are a thing?!'");
+        this.add("advancements.hbmsntm.manhattan.title", "The Manhattan Project");
+        this.add("advancements.hbmsntm.manhattan.description", "8:15; August 6th, 1945");
         this.add("weapon.ability.bobble", "Luck of the Collector");
         this.add("weapon.ability.chainsaw", "Painsaw");
         this.add(NtmItems.STEEL_SWORD, "Steel Sword");

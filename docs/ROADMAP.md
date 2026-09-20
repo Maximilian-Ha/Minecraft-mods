@@ -11662,3 +11662,35 @@ den `ExistingFileHelper` mitgibt, meint die zweite -- und darf dann nicht noch
 Derselbe Befund wie beim Datentag in Runde 242: **kein Tor kann das sehen.** Die Tore
 laufen ohne Minecraft auf der Platte, sie kennen keine Vanilla-Signaturen. Was es gibt,
 ist die CI -- und die hat es in einem Durchgang gefunden.
+
+### Runde 249: vier Katastrophen-Erfolge — und die Frage, wo sie hängen
+
+Runde 248 hat die fünf getriggerten Erfolge gebracht, deren Auslöser im Port schon standen.
+Diese Runde geht dieselbe Frage systematisch an: **welche Datei feuert im Original welchen
+Erfolg, und gibt es die Datei im Port?** Gemessen über die 28 Dateien, die
+`triggerAchievement` aufrufen:
+
+| Auslöser im Original | im Port | Erfolg |
+|---|---|---|
+| `TileEntityRBMKBase` | `RBMKBaseBlockEntity` | `rbmk_boom` |
+| `TileEntityWatz` | `WatzBlockEntity` | `watz_boom` |
+| `EntityCreeperNuclear` | `CreeperNuclear` | `boss_creeper` |
+| `EntityNukeExplosionMK3`/`MK5` | beide da | `manhattan` |
+| `EntitySpear`, `GenericFluidBlock`, `ItemModKnife`, `TileEntityReactorZirnox`, `TileEntityPADetector` | **fehlen** | — |
+
+Vier Erfolge kommen damit nach. Drei Anmerkungen, die beim Bauen sichtbar wurden:
+
+* **`manhattan` fällt bei jedem Spieler in der Welt**, nicht bei denen in der Nähe -- wer
+  die Mod spielt, hat den Knall gehört. Die anderen drei ziehen eine Kugel von fünfzig
+  Blöcken; dafür gibt es jetzt `NtmCriteria.markeImUmkreis`, in zwei Fassungen (um einen
+  Block, um eine Entität).
+* **MK5 hat keinen `did`-Merker** wie MK3. Der Port setzt den Erfolg stattdessen an
+  `explosion == null` -- genau derselbe Zeitpunkt, der erste Takt, in dem es losgeht.
+* **Drei von vier Symbolgegenständen fehlen dem Port.** `bucket_mud` wird zum Watz-Pellet,
+  `coin_creeper` zu Vanillas Creeperkopf (die vier Bossmünzen fehlen alle), und `nuke_boy`
+  heißt im Port `nuke_little_boy` -- derselbe Block unter dem vollen Namen, wieder die
+  Namensfalle.
+
+Der Erfolgsbaum steht damit bei **29 von 61**. Was noch fehlt, wartet auf Teilsysteme:
+die vier Bosse, das Digamma-System, die Gerald-Satelliten, der Sojus-Start, der
+ZIRNOX-Reaktor, der Speer und das Messer.
