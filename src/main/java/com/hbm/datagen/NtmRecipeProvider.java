@@ -3784,6 +3784,66 @@ public class NtmRecipeProvider extends RecipeProvider {
         hazmatBoots(recipeOutput, NtmItems.HAZMAT_BOOTS_GREY.get(), NtmItems.HAZMAT_CLOTH_GREY.get());
 
         /*
+         * DIE ACHT SCHLICHTEN GARNITUREN. Sieben davon haben im Original einen Bauplan,
+         * ALLOY und STARMETAL nicht -- der Legierungssatz ist dort als veraltet
+         * gekennzeichnet, der Sternmetallsatz kommt aus Beute. Beide bleiben darum auch hier
+         * ohne Bauplan; das ist der Stand des Originals, keine Luecke des Ports.
+         */
+        armorSet(recipeOutput, Ingredient.of(NtmItems.INGOT_STEEL.get()),
+                NtmItems.STEEL_HELMET.get(), NtmItems.STEEL_PLATE.get(), NtmItems.STEEL_LEGS.get(), NtmItems.STEEL_BOOTS.get());
+        armorSet(recipeOutput, Ingredient.of(NtmItems.INGOT_TITANIUM.get()),
+                NtmItems.TITANIUM_HELMET.get(), NtmItems.TITANIUM_PLATE.get(), NtmItems.TITANIUM_LEGS.get(), NtmItems.TITANIUM_BOOTS.get());
+        armorSet(recipeOutput, Ingredient.of(NtmItems.INGOT_DINEUTRONIUM.get()),
+                NtmItems.DNT_HELMET.get(), NtmItems.DNT_PLATE.get(), NtmItems.DNT_LEGS.get(), NtmItems.DNT_BOOTS.get());
+
+        /* Die Robe bis auf die Stiefel aus Lappen; die Stiefel brauchen zusaetzlich Gummi. */
+        armorPiece(recipeOutput, NtmItems.ROBES_HELMET.get(), Ingredient.of(NtmItems.RAG.get()), "EEE", "E E");
+        armorPiece(recipeOutput, NtmItems.ROBES_PLATE.get(), Ingredient.of(NtmItems.RAG.get()), "E E", "EEE", "EEE");
+        armorPiece(recipeOutput, NtmItems.ROBES_LEGS.get(), Ingredient.of(NtmItems.RAG.get()), "EEE", "E E", "E E");
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.ROBES_BOOTS.get(), 1)
+                .pattern("R R").pattern("P P")
+                .define('R', NtmItems.RAG.get())
+                .define('P', NtmItems.INGOT_RUBBER.get())
+                .unlockedBy("has_rag", has(NtmItems.RAG.get()))
+                .save(recipeOutput);
+
+        /* Kobalt wird um die Stahlruestung herumgelegt, Stueck fuer Stueck. */
+        cobaltPiece(recipeOutput, NtmItems.COBALT_HELMET.get(), NtmItems.STEEL_HELMET.get(), "ECE");
+        cobaltPiece(recipeOutput, NtmItems.COBALT_PLATE.get(), NtmItems.STEEL_PLATE.get(), " E ", "ECE", " E ");
+        cobaltPiece(recipeOutput, NtmItems.COBALT_LEGS.get(), NtmItems.STEEL_LEGS.get(), "ECE", "E E");
+        cobaltPiece(recipeOutput, NtmItems.COBALT_BOOTS.get(), NtmItems.STEEL_BOOTS.get(), "ECE");
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.SECURITY_HELMET.get(), 1)
+                .pattern("SSS").pattern("IGI")
+                .define('S', NtmItems.PLATE_STEEL.get())
+                .define('I', NtmItems.INGOT_RUBBER.get())
+                .define('G', Tags.Items.GLASS_PANES)
+                .unlockedBy("has_plate_kevlar", has(NtmItems.PLATE_KEVLAR.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.SECURITY_PLATE.get(), 1)
+                .pattern("KWK").pattern("IKI").pattern("WKW")
+                .define('K', NtmItems.PLATE_KEVLAR.get())
+                .define('I', anyPlasticIngot())
+                .define('W', ItemTags.WOOL)
+                .unlockedBy("has_plate_kevlar", has(NtmItems.PLATE_KEVLAR.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.SECURITY_LEGS.get(), 1)
+                .pattern("IWI").pattern("K K").pattern("W W")
+                .define('K', NtmItems.PLATE_KEVLAR.get())
+                .define('I', anyPlasticIngot())
+                .define('W', ItemTags.WOOL)
+                .unlockedBy("has_plate_kevlar", has(NtmItems.PLATE_KEVLAR.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.SECURITY_BOOTS.get(), 1)
+                .pattern("P P").pattern("I I")
+                .define('P', NtmItems.PLATE_STEEL.get())
+                .define('I', NtmItems.INGOT_RUBBER.get())
+                .unlockedBy("has_plate_kevlar", has(NtmItems.PLATE_KEVLAR.get()))
+                .save(recipeOutput);
+
+        armorPiece(recipeOutput, NtmItems.ZIRCONIUM_LEGS.get(), Ingredient.of(NtmItems.INGOT_ZIRCONIUM.get()), "EEE", "E E", "E E");
+
+        /*
          * DIE SCHUTZBRILLE. Vier Stahlplatten und zwei Glasscheiben, wortgetreu aus
          * ArmorRecipes des Originals; KEY_ANYPANE ist dort jede Glasscheibe.
          */
@@ -4265,6 +4325,32 @@ public class NtmRecipeProvider extends RecipeProvider {
      * das es nicht gibt, bekommt beim Erzeugen der Daten einen Abbruch statt eines
      * stillschweigend unbaubaren Rezepts.
      */
+    /** Die vier Vanillamuster einer Ruestungsgarnitur aus einer einzigen Zutat. */
+    private void armorSet(RecipeOutput recipeOutput, Ingredient zutat, Item helmet, Item chest, Item legs, Item boots) {
+        armorPiece(recipeOutput, helmet, zutat, "EEE", "E E");
+        armorPiece(recipeOutput, chest, zutat, "E E", "EEE", "EEE");
+        armorPiece(recipeOutput, legs, zutat, "EEE", "E E", "E E");
+        armorPiece(recipeOutput, boots, zutat, "E E", "E E");
+    }
+
+    private void armorPiece(RecipeOutput recipeOutput, Item ergebnis, Ingredient zutat, String... muster) {
+        ShapedRecipeBuilder bauer = ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ergebnis, 1);
+        for(String zeile : muster) bauer.pattern(zeile);
+        bauer.define('E', zutat)
+                .unlockedBy("has_material", has(NtmItems.INGOT_STEEL.get()))
+                .save(recipeOutput);
+    }
+
+    /** Kobalt: ein Billet-Kranz um das entsprechende Stahlstueck. */
+    private void cobaltPiece(RecipeOutput recipeOutput, Item ergebnis, Item stahl, String... muster) {
+        ShapedRecipeBuilder bauer = ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ergebnis, 1);
+        for(String zeile : muster) bauer.pattern(zeile);
+        bauer.define('E', NtmItems.BILLET_COBALT.get())
+                .define('C', stahl)
+                .unlockedBy("has_billet_cobalt", has(NtmItems.BILLET_COBALT.get()))
+                .save(recipeOutput);
+    }
+
     private static Ingredient gunPart(NTMMaterial mat, MaterialShapes shape, DeferredItem<Item> item) {
 
         if(MatShapeItems.gunPart(mat, shape, item).isEmpty())

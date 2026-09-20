@@ -9776,3 +9776,49 @@ benutzt die Dateien, die dort `goggles.obj` und `goggles.png` heißen — währe
 und Dateien über Kreuz liegen. Im Port steht das an beiden Klassen als Warnung.
 
 Alle 39 Tore grün.
+
+## Runde 212 — Dreiunddreißig Rüstungsteile, die nichts können
+
+Die erste Familie aus der 103er-Liste von Runde 210, und die einfachste: acht Garnituren plus
+eine einzelne Hose, allesamt `ArmorFSB` **ohne einen einzigen Zusatz** — kein Satzbonus, keine
+Trankwirkung, kein Schirmbild, kein eigenes Modell. Sie sind genau das, wonach sie aussehen.
+
+| Garnitur | Haltbarkeit | Verzauberbarkeit | Bauplan |
+|---|---|---|---|
+| Stahl | 30 | 5 | ja |
+| Titan | 25 | 9 | ja |
+| Legierung | 40 | 12 | **nein** |
+| Kobalt | 70 | 60 | ja |
+| Sternmetall | 150 | 100 | **nein** |
+| Sicherheit | 100 | 15 | ja |
+| Dineutronium | 3 | 0 | ja |
+| Robe | 15 | 12 | ja |
+| Zirkonium (nur Hose) | 1000 | 1000 | ja |
+
+### Drei Stellen, an denen Abschreiben falsch gewesen wäre
+
+**Die Robe hat keinen eigenen Werkstoff.** Das Original reicht `ArmorMaterial.CHAIN` durch —
+die Kettenrüstung des Grundspiels, also {2, 5, 4, 1} statt der {3, 8, 6, 3}, die alle anderen
+hier haben. Ich hatte zuerst {3, 8, 6, 3} hingeschrieben, weil alle Nachbarzeilen das sagen;
+das wäre eine stillschweigend stärkere Robe geworden. Nur die Rüstungsschicht ist bei ihr
+eigen.
+
+**Die Legierung lässt sich nicht ausbessern.** `aMatAlloy` hat im Original kein
+`customCraftingMaterial` — passend dazu, dass der Werkstoff dort `@Deprecated` ist und
+`MAT_ALLOY` in `Mats` auskommentiert. Die Zutat bleibt darum auch hier leer, statt
+ersatzweise Eisen einzusetzen.
+
+**`HBM_DNT_LOLOLOL`** heißt wirklich so, und die Werte passen dazu: {1, 1, 1, 1},
+Haltbarkeitsfaktor 3, Verzauberbarkeit 0. Die Garnitur ist ein Scherz und soll einer bleiben —
+nichts daran ist ein Tippfehler, den man glattziehen müsste.
+
+### Zwei ohne Bauplan, und das ist keine Lücke
+
+Legierung und Sternmetall haben im Original **keinen** Bauplan: die eine ist veraltet, die
+andere kommt aus Beute. Beide bleiben deshalb auch hier ohne — das ist der Stand des Originals.
+Die übrigen sieben haben ihren, wortgetreu übernommen; Kobalt legt sich dabei Stück für Stück
+um die Stahlrüstung, was die Reihenfolge im Fortschritt festlegt.
+
+Damit sind von den 103 Namen aus Runde 210 noch **70** offen.
+
+Alle 39 Tore grün.

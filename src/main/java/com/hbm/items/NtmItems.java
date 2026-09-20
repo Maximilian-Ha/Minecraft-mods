@@ -1537,6 +1537,54 @@ public class NtmItems {
     public static final DeferredItem<Item> GAS_MASK_OLDE = ITEMS.register("gas_mask_olde", () -> new GasMaskItem(NtmArmorMaterials.MASK, maskProperties(), GasMaskItem.standardBlacklist()));
 
     /*
+     * DIE ACHT SCHLICHTEN GARNITUREN aus ModItemsArmor. Im Original allesamt ArmorFSB ohne
+     * einen einzigen Zusatz: kein Satzbonus, keine Trankwirkung, kein Schirmbild. Sie sind
+     * genau das, wonach sie aussehen -- Ruestung.
+     */
+    public static final DeferredItem<Item> STEEL_HELMET = ITEMS.register("steel_helmet", () -> new ArmorFSBItem(NtmArmorMaterials.STEEL, ArmorItem.Type.HELMET, plainArmorProperties(ArmorItem.Type.HELMET, NtmArmorMaterials.DURABILITY_STEEL)));
+    public static final DeferredItem<Item> STEEL_PLATE = ITEMS.register("steel_plate", () -> new ArmorFSBItem(NtmArmorMaterials.STEEL, ArmorItem.Type.CHESTPLATE, plainArmorProperties(ArmorItem.Type.CHESTPLATE, NtmArmorMaterials.DURABILITY_STEEL)));
+    public static final DeferredItem<Item> STEEL_LEGS = ITEMS.register("steel_legs", () -> new ArmorFSBItem(NtmArmorMaterials.STEEL, ArmorItem.Type.LEGGINGS, plainArmorProperties(ArmorItem.Type.LEGGINGS, NtmArmorMaterials.DURABILITY_STEEL)));
+    public static final DeferredItem<Item> STEEL_BOOTS = ITEMS.register("steel_boots", () -> new ArmorFSBItem(NtmArmorMaterials.STEEL, ArmorItem.Type.BOOTS, plainArmorProperties(ArmorItem.Type.BOOTS, NtmArmorMaterials.DURABILITY_STEEL)));
+
+    public static final DeferredItem<Item> TITANIUM_HELMET = ITEMS.register("titanium_helmet", () -> new ArmorFSBItem(NtmArmorMaterials.TITANIUM, ArmorItem.Type.HELMET, plainArmorProperties(ArmorItem.Type.HELMET, NtmArmorMaterials.DURABILITY_TITANIUM)));
+    public static final DeferredItem<Item> TITANIUM_PLATE = ITEMS.register("titanium_plate", () -> new ArmorFSBItem(NtmArmorMaterials.TITANIUM, ArmorItem.Type.CHESTPLATE, plainArmorProperties(ArmorItem.Type.CHESTPLATE, NtmArmorMaterials.DURABILITY_TITANIUM)));
+    public static final DeferredItem<Item> TITANIUM_LEGS = ITEMS.register("titanium_legs", () -> new ArmorFSBItem(NtmArmorMaterials.TITANIUM, ArmorItem.Type.LEGGINGS, plainArmorProperties(ArmorItem.Type.LEGGINGS, NtmArmorMaterials.DURABILITY_TITANIUM)));
+    public static final DeferredItem<Item> TITANIUM_BOOTS = ITEMS.register("titanium_boots", () -> new ArmorFSBItem(NtmArmorMaterials.TITANIUM, ArmorItem.Type.BOOTS, plainArmorProperties(ArmorItem.Type.BOOTS, NtmArmorMaterials.DURABILITY_TITANIUM)));
+
+    public static final DeferredItem<Item> ALLOY_HELMET = ITEMS.register("alloy_helmet", () -> new ArmorFSBItem(NtmArmorMaterials.ALLOY, ArmorItem.Type.HELMET, plainArmorProperties(ArmorItem.Type.HELMET, NtmArmorMaterials.DURABILITY_ALLOY)));
+    public static final DeferredItem<Item> ALLOY_PLATE = ITEMS.register("alloy_plate", () -> new ArmorFSBItem(NtmArmorMaterials.ALLOY, ArmorItem.Type.CHESTPLATE, plainArmorProperties(ArmorItem.Type.CHESTPLATE, NtmArmorMaterials.DURABILITY_ALLOY)));
+    public static final DeferredItem<Item> ALLOY_LEGS = ITEMS.register("alloy_legs", () -> new ArmorFSBItem(NtmArmorMaterials.ALLOY, ArmorItem.Type.LEGGINGS, plainArmorProperties(ArmorItem.Type.LEGGINGS, NtmArmorMaterials.DURABILITY_ALLOY)));
+    public static final DeferredItem<Item> ALLOY_BOOTS = ITEMS.register("alloy_boots", () -> new ArmorFSBItem(NtmArmorMaterials.ALLOY, ArmorItem.Type.BOOTS, plainArmorProperties(ArmorItem.Type.BOOTS, NtmArmorMaterials.DURABILITY_ALLOY)));
+
+    public static final DeferredItem<Item> COBALT_HELMET = ITEMS.register("cobalt_helmet", () -> new ArmorFSBItem(NtmArmorMaterials.COBALT, ArmorItem.Type.HELMET, plainArmorProperties(ArmorItem.Type.HELMET, NtmArmorMaterials.DURABILITY_COBALT)));
+    public static final DeferredItem<Item> COBALT_PLATE = ITEMS.register("cobalt_plate", () -> new ArmorFSBItem(NtmArmorMaterials.COBALT, ArmorItem.Type.CHESTPLATE, plainArmorProperties(ArmorItem.Type.CHESTPLATE, NtmArmorMaterials.DURABILITY_COBALT)));
+    public static final DeferredItem<Item> COBALT_LEGS = ITEMS.register("cobalt_legs", () -> new ArmorFSBItem(NtmArmorMaterials.COBALT, ArmorItem.Type.LEGGINGS, plainArmorProperties(ArmorItem.Type.LEGGINGS, NtmArmorMaterials.DURABILITY_COBALT)));
+    public static final DeferredItem<Item> COBALT_BOOTS = ITEMS.register("cobalt_boots", () -> new ArmorFSBItem(NtmArmorMaterials.COBALT, ArmorItem.Type.BOOTS, plainArmorProperties(ArmorItem.Type.BOOTS, NtmArmorMaterials.DURABILITY_COBALT)));
+
+    public static final DeferredItem<Item> STARMETAL_HELMET = ITEMS.register("starmetal_helmet", () -> new ArmorFSBItem(NtmArmorMaterials.STARMETAL, ArmorItem.Type.HELMET, plainArmorProperties(ArmorItem.Type.HELMET, NtmArmorMaterials.DURABILITY_STARMETAL)));
+    public static final DeferredItem<Item> STARMETAL_PLATE = ITEMS.register("starmetal_plate", () -> new ArmorFSBItem(NtmArmorMaterials.STARMETAL, ArmorItem.Type.CHESTPLATE, plainArmorProperties(ArmorItem.Type.CHESTPLATE, NtmArmorMaterials.DURABILITY_STARMETAL)));
+    public static final DeferredItem<Item> STARMETAL_LEGS = ITEMS.register("starmetal_legs", () -> new ArmorFSBItem(NtmArmorMaterials.STARMETAL, ArmorItem.Type.LEGGINGS, plainArmorProperties(ArmorItem.Type.LEGGINGS, NtmArmorMaterials.DURABILITY_STARMETAL)));
+    public static final DeferredItem<Item> STARMETAL_BOOTS = ITEMS.register("starmetal_boots", () -> new ArmorFSBItem(NtmArmorMaterials.STARMETAL, ArmorItem.Type.BOOTS, plainArmorProperties(ArmorItem.Type.BOOTS, NtmArmorMaterials.DURABILITY_STARMETAL)));
+
+    public static final DeferredItem<Item> SECURITY_HELMET = ITEMS.register("security_helmet", () -> new ArmorFSBItem(NtmArmorMaterials.SECURITY, ArmorItem.Type.HELMET, plainArmorProperties(ArmorItem.Type.HELMET, NtmArmorMaterials.DURABILITY_SECURITY)));
+    public static final DeferredItem<Item> SECURITY_PLATE = ITEMS.register("security_plate", () -> new ArmorFSBItem(NtmArmorMaterials.SECURITY, ArmorItem.Type.CHESTPLATE, plainArmorProperties(ArmorItem.Type.CHESTPLATE, NtmArmorMaterials.DURABILITY_SECURITY)));
+    public static final DeferredItem<Item> SECURITY_LEGS = ITEMS.register("security_legs", () -> new ArmorFSBItem(NtmArmorMaterials.SECURITY, ArmorItem.Type.LEGGINGS, plainArmorProperties(ArmorItem.Type.LEGGINGS, NtmArmorMaterials.DURABILITY_SECURITY)));
+    public static final DeferredItem<Item> SECURITY_BOOTS = ITEMS.register("security_boots", () -> new ArmorFSBItem(NtmArmorMaterials.SECURITY, ArmorItem.Type.BOOTS, plainArmorProperties(ArmorItem.Type.BOOTS, NtmArmorMaterials.DURABILITY_SECURITY)));
+
+    public static final DeferredItem<Item> DNT_HELMET = ITEMS.register("dnt_helmet", () -> new ArmorFSBItem(NtmArmorMaterials.DNT, ArmorItem.Type.HELMET, plainArmorProperties(ArmorItem.Type.HELMET, NtmArmorMaterials.DURABILITY_DNT)));
+    public static final DeferredItem<Item> DNT_PLATE = ITEMS.register("dnt_plate", () -> new ArmorFSBItem(NtmArmorMaterials.DNT, ArmorItem.Type.CHESTPLATE, plainArmorProperties(ArmorItem.Type.CHESTPLATE, NtmArmorMaterials.DURABILITY_DNT)));
+    public static final DeferredItem<Item> DNT_LEGS = ITEMS.register("dnt_legs", () -> new ArmorFSBItem(NtmArmorMaterials.DNT, ArmorItem.Type.LEGGINGS, plainArmorProperties(ArmorItem.Type.LEGGINGS, NtmArmorMaterials.DURABILITY_DNT)));
+    public static final DeferredItem<Item> DNT_BOOTS = ITEMS.register("dnt_boots", () -> new ArmorFSBItem(NtmArmorMaterials.DNT, ArmorItem.Type.BOOTS, plainArmorProperties(ArmorItem.Type.BOOTS, NtmArmorMaterials.DURABILITY_DNT)));
+
+    public static final DeferredItem<Item> ROBES_HELMET = ITEMS.register("robes_helmet", () -> new ArmorFSBItem(NtmArmorMaterials.ROBES, ArmorItem.Type.HELMET, plainArmorProperties(ArmorItem.Type.HELMET, NtmArmorMaterials.DURABILITY_ROBES)));
+    public static final DeferredItem<Item> ROBES_PLATE = ITEMS.register("robes_plate", () -> new ArmorFSBItem(NtmArmorMaterials.ROBES, ArmorItem.Type.CHESTPLATE, plainArmorProperties(ArmorItem.Type.CHESTPLATE, NtmArmorMaterials.DURABILITY_ROBES)));
+    public static final DeferredItem<Item> ROBES_LEGS = ITEMS.register("robes_legs", () -> new ArmorFSBItem(NtmArmorMaterials.ROBES, ArmorItem.Type.LEGGINGS, plainArmorProperties(ArmorItem.Type.LEGGINGS, NtmArmorMaterials.DURABILITY_ROBES)));
+    public static final DeferredItem<Item> ROBES_BOOTS = ITEMS.register("robes_boots", () -> new ArmorFSBItem(NtmArmorMaterials.ROBES, ArmorItem.Type.BOOTS, plainArmorProperties(ArmorItem.Type.BOOTS, NtmArmorMaterials.DURABILITY_ROBES)));
+
+    /* Zirkonium gibt es nur als Hose -- im Original ebenso, samt der einen Textur dafuer. */
+    public static final DeferredItem<Item> ZIRCONIUM_LEGS = ITEMS.register("zirconium_legs", () -> new ArmorFSBItem(NtmArmorMaterials.ZIRCONIUM, ArmorItem.Type.LEGGINGS, plainArmorProperties(ArmorItem.Type.LEGGINGS, NtmArmorMaterials.DURABILITY_ZIRCONIUM)));
+
+    /*
      * DIE SCHUTZBRILLE. Kein Filtergewinde, sondern nur Glas vor den Augen: sie haelt Licht
      * und Sand ab und truebt die Sicht mit zunehmendem Verschleiss.
      */
@@ -1685,6 +1733,11 @@ public class NtmItems {
                                 new AttributeModifier(NuclearTechMod.withDefaultNamespace("liquidator_speed_" + type.getName()),
                                         -0.1D, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), gruppe)
                         .build());
+    }
+
+    /** Eine Ruestung ohne Besonderheiten: nur Stapelgrenze und Haltbarkeit. */
+    private static Item.Properties plainArmorProperties(ArmorItem.Type type, int factor) {
+        return new Item.Properties().stacksTo(1).durability(type.getDurability(factor));
     }
 
     private static Item.Properties maskProperties() {

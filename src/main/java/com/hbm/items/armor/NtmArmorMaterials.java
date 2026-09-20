@@ -62,6 +62,44 @@ public class NtmArmorMaterials {
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> GOGGLES = register("goggles", "goggles", 9, 2, 6, 5, 2, () -> Ingredient.of(Items.IRON_INGOT));
 
     /*
+     * DIE ACHT SCHLICHTEN GARNITUREN. Im Original allesamt ArmorFSB ohne einen einzigen
+     * Zusatz -- kein Satzbonus, keine Trankwirkung, kein Schirmbild. Sie unterscheiden sich
+     * nur in Haltbarkeitsfaktor, Verzauberbarkeit und Textur; die Schutzwerte {3, 8, 6, 3}
+     * sind bei allen gleich. Werte aus MainRegistry des Originals.
+     *
+     * HBM_ALLOY ist dort als @Deprecated gekennzeichnet -- der Gegenstand bleibt trotzdem
+     * angemeldet, und darum steht er auch hier.
+     */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> STEEL = register("steel", "steel", 5, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.INGOT_STEEL.get()));
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> TITANIUM = register("titanium", "titanium", 9, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.INGOT_TITANIUM.get()));
+    /* HBM_ALLOY hat im Original KEIN customCraftingMaterial -- die Garnitur laesst sich dort
+     * nicht am Amboss ausbessern, passend dazu, dass der Werkstoff als @Deprecated
+     * gekennzeichnet ist und MAT_ALLOY in Mats auskommentiert. Das bleibt so. */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> ALLOY = register("alloy", "alloy", 12, 3, 8, 6, 3, () -> Ingredient.EMPTY);
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> COBALT = register("cobalt", "cobalt", 60, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.INGOT_COBALT.get()));
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> STARMETAL = register("starmetal", "starmetal", 100, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.INGOT_STARMETAL.get()));
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> SECURITY = register("security", "security", 15, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.PLATE_KEVLAR.get()));
+    /* DIE ROBE IST KEIN EIGENER WERKSTOFF: das Original reicht ArmorMaterial.CHAIN durch,
+     * also die Kettenruestung des Grundspiels -- {2, 5, 4, 1}, Verzauberbarkeit 12,
+     * Haltbarkeitsfaktor 15, Reparatur mit Eisen. Nur die Schicht ist eine eigene. */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> ROBES = register("robes", "robes", 12, 2, 5, 4, 1, () -> Ingredient.of(Items.IRON_INGOT));
+    /* HBM_DNT_LOLOLOL: der Name ist der des Originals, die Werte auch -- {1,1,1,1}, kaum
+     * Haltbarkeit, keine Verzauberbarkeit. Die Garnitur ist ein Scherz und soll einer sein. */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> DNT = register("dnt", "dnt", 0, 1, 1, 1, 1, () -> Ingredient.of(NtmItems.INGOT_DINEUTRONIUM.get()));
+    /* Zirkonium gibt es nur als Hose. Haltbarkeitsfaktor 1000, Verzauberbarkeit 1000. */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> ZIRCONIUM = register("zirconium", "zirconium", 1000, 2, 5, 3, 1, () -> Ingredient.of(NtmItems.INGOT_ZIRCONIUM.get()));
+
+    public static final int DURABILITY_STEEL = 30;
+    public static final int DURABILITY_TITANIUM = 25;
+    public static final int DURABILITY_ALLOY = 40;
+    public static final int DURABILITY_COBALT = 70;
+    public static final int DURABILITY_STARMETAL = 150;
+    public static final int DURABILITY_SECURITY = 100;
+    public static final int DURABILITY_ROBES = 15;
+    public static final int DURABILITY_DNT = 3;
+    public static final int DURABILITY_ZIRCONIUM = 1000;
+
+    /*
      * DER BLEIANZUG DER LIQUIDATOREN. Im Original ein Werkstoff: HBM_LIQUIDATOR,
      * Haltbarkeitsfaktor 750, {3, 8, 6, 3}, Verzauberbarkeit 10, Reparatur mit der Bleiplatte.
      *
