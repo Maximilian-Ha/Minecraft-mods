@@ -13,6 +13,7 @@ import com.hbm.commands.SatellitesCommand;
 import com.hbm.config.FalloutConfigJSON;
 import com.hbm.entity.NtmEntityTypes;
 import com.hbm.entity.mob.CreeperNuclear;
+import com.hbm.entity.mob.UndeadSoldier;
 import com.hbm.entity.mob.Duck;
 import com.hbm.handler.ArmorModHandler;
 import com.hbm.items.armor.ItemModIndestructible;
@@ -144,6 +145,7 @@ public class CommonEvents {
     public static void onEntityAttributeCreation(EntityAttributeCreationEvent event) {
         event.put(NtmEntityTypes.DUCK.get(), Duck.createAttributes().build());
         event.put(NtmEntityTypes.CREEPER_NUCLEAR.get(), CreeperNuclear.createAttributes().build());
+        event.put(NtmEntityTypes.UNDEAD_SOLDIER.get(), UndeadSoldier.createAttributes().build());
     }
 
     @SubscribeEvent

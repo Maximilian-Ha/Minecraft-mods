@@ -10648,3 +10648,55 @@ Damit steht der nächste Bereich fest: **die Entitäten** (133 Klassen als obere
 die Wurzel, an der Bauwerke und Spawner hängen.
 
 Alle 39 Tore grün.
+
+## Runde 228 — Der Untote Soldat
+
+Die erste Entität nach der geschlossenen Rüstungsliste, und die, an der zwei Dinge hängen:
+der `dungeon_spawner` (Runde 227 hat ihn als „braucht `EntityUndeadSoldier`" ausgewiesen)
+und die **Taurun-Rüstung** aus Runde 217, die bis heute nur in der Kreativkiste lag. Im
+Original trägt sie dieser Soldat — mehr Quelle hat sie nicht, kein Werkbankrezept, nichts.
+
+Der Soldat ist zur Hälfte Zombie, zur Hälfte Skelett. Was er ist, würfelt er beim Erscheinen
+aus; es entscheidet über Modell, Textur, Stimme und Schrittgeräusch. Dazu eine von fünf
+Handfeuerwaffen — schwerer und leichter Revolver, Karabiner, Mare's Leg, Grease Gun —, alle
+fünf gibt es im Port seit den Waffenrunden.
+
+### Was 1.21 anders will
+
+| Original (1.7.10) | Port (1.21) | Warum |
+|---|---|---|
+| `EntityMob.attackEntity` | `MeleeAttackGoal` | 1.7.10 hat Zulaufen und Zuschlagen fest in `EntityMob`; 1.21 hat es nicht. Ohne diese Aufgabe stünde der Soldat nur da und sähe seinem Ziel zu. |
+| `getCreatureAttribute() == UNDEAD` | Tag `minecraft:undead` | In 1.21 sagt keine Kreatur mehr selbst, dass sie untot ist. `sensitive_to_smite` und `inverted_healing_and_harm` zeigen beide auf `undead` — **ein** Eintrag genügt für alle drei Wirkungen. Dafür ist `NtmEntityTypeTagsProvider` neu. |
+| `ModelZombie` + `ModelSkeletonNT` | eine Klasse, zwei Modelllagen | `ModelSkeletonNT` ist ein `ModelZombie` mit dünnen Gliedern — genau `ModelLayers.SKELETON`. In 1.21 ist die Geometrie von der Haltung getrennt, also bleibt eine Klasse für die Haltung und zwei Lagen von Minecraft für die Form. |
+| `preRenderCallback` tauscht das Modell | `render()` tauscht es | `LivingEntityRenderer` liest `this.model` in 1.21 schon **vor** `scale()`, der Stelle, die `preRenderCallback` entspricht. Wer dort tauschte, setzte den Schlagtakt noch am alten Modell. |
+| `getCanSpawnHere()` | *nicht übernommen* | Das Original prüft dort Schwierigkeitsgrad, freie Stelle, keine Flüssigkeit — genau das, was `Monster.checkSpawnRules` und `Mob.checkSpawnObstruction` von sich aus tun. Eine Wiederholung wäre toter Code. |
+| Spawn-Ei aus `EntityMappings.addMob` | *nicht übernommen* | Der Port hat für **keine** seiner Kreaturen eines, auch nicht für den nuklearen Creeper. Gerufen wird per `/summon`. |
+
+Eine Stelle ist absichtlich **besser** als das Original: die ausgewürfelte Gestalt wird
+gespeichert. In 1.7.10 wird der `DataWatcher` nicht in die NBT geschrieben, ein nachgeladener
+Soldat ist also wieder Zombie, auch wenn er als Skelett aufgestellt wurde. Das ist eine Lücke
+der alten Datenhaltung, kein Verhalten, das jemand gewollt hat.
+
+Fallen lässt er nichts — auch nicht, was er trägt. So steht es im Original (`dropFewItems` und
+`dropEquipment` beide leer), und der Port macht es über `dropCustomDeathLoot`.
+
+### Das Asset-Tor hat sich selbst gemeldet
+
+Die Zombie- und die Skeletttextur sind **Minecraft-Texturen**, geholt über
+`ResourceLocation.withDefaultNamespace(...)`. `tools/asset-check.sh` unterschied die beiden
+Empfänger nicht und suchte sie unter `assets/hbmsntm/` — zwei Fehlalarme, die keine
+Mod-Assets sind.
+
+Das Muster ist jetzt auf den Empfänger eingeengt, und zwar **nur gegen `ResourceLocation`**,
+nicht etwa eingeschränkt auf `NuclearTechMod` — sonst sähe das Tor einen künftigen Aufruf
+über einen anderen Helfer gar nicht mehr an. Gemessen: 751 Aufrufe über `NuclearTechMod`,
+zwei über `ResourceLocation`; geprüfte Referenzen 1662 → 1660, fehlende 2 → 0. Gegenprobe mit
+einem absichtlich verdrehten Entenpfad: genau ein Fund. Das Tor sieht also weiter hin.
+
+### Nebenbei berichtigt
+
+Bis zu dieser Runde hatte **keine** Kreatur des Ports einen Namen — Ente und nuklearer Creeper
+zeigten im Spiel ihren rohen Schlüssel, im Todesbildschirm wie am Namensschild. Alle drei
+haben jetzt einen. (Das Original hat für den Untoten Soldaten selbst keinen.)
+
+Entitäten damit 133 → **132** offene Klassen. Alle 39 Tore grün.

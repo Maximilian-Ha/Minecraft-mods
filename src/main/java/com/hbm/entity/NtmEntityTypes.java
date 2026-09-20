@@ -35,6 +35,7 @@ import com.hbm.entity.missile.SatellitePod;
 import com.hbm.entity.missile.Soyuz;
 import com.hbm.entity.mob.CreeperNuclear;
 import com.hbm.entity.mob.Duck;
+import com.hbm.entity.mob.UndeadSoldier;
 import com.hbm.entity.projectile.*;
 import com.hbm.main.NuclearTechMod;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -125,6 +126,16 @@ public class NtmEntityTypes {
                     () -> EntityType.Builder.of(CreeperNuclear::new, MobCategory.MONSTER)
                             .sized(0.6F, 1.7F)
                             .build("creeper_nuclear"));
+
+    /**
+     * Der Untote Soldat, Runde 228. Masse wie ein Spieler -- das Original setzt fuer ihn kein
+     * eigenes setSize, EntityMob behaelt also die 0,6 mal 1,8 aus Entity.
+     */
+    public static final DeferredHolder<EntityType<?>, EntityType<UndeadSoldier>> UNDEAD_SOLDIER =
+            ENTITY_TYPES.register("undead_soldier",
+                    () -> EntityType.Builder.of(UndeadSoldier::new, MobCategory.MONSTER)
+                            .sized(0.6F, 1.8F)
+                            .build("undead_soldier"));
 
     public static final DeferredHolder<EntityType<?>, EntityType<TNTPrimedBase>> TNT_PRIMED_BASE = ENTITY_TYPES.register(
             "tnt_primed_base",

@@ -4174,6 +4174,14 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.PLAN_C, "Plan C");
         this.add(NtmItems.CASSETTE, "Cassette");
         this.add(NtmItems.FLUID_ICON, "Fluid");
+
+        /* DIE KREATUREN. Bis Runde 228 hatte keine einen Namen -- Ente und nuklearer Creeper
+         * zeigten im Spiel ihren rohen Schluessel. Das Original hat fuer den Untoten Soldaten
+         * ebenfalls keinen Eintrag; hier bekommen alle drei einen, weil ein roher Schluessel
+         * im Todesbildschirm und am Namensschild zu sehen ist. */
+        this.add("entity.hbmsntm.undead_soldier", "Undead Soldier");
+        this.add("entity.hbmsntm.duck", "Duck");
+        this.add("entity.hbmsntm.creeper_nuclear", "Nuclear Creeper");
     }
 
     // HELPERS //

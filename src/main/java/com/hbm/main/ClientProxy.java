@@ -17,6 +17,7 @@ import com.hbm.render.entity.item.RenderMovingPackage;
 import com.hbm.render.entity.item.RenderTNTPrimedBase;
 import com.hbm.render.entity.mob.CreeperNuclearRenderer;
 import com.hbm.render.entity.mob.DuckRenderer;
+import com.hbm.render.entity.mob.UndeadSoldierRenderer;
 import com.hbm.render.entity.projectile.*;
 import com.hbm.render.entity.rocket.*;
 import com.hbm.render.item.*;
@@ -448,6 +449,7 @@ public class ClientProxy extends ServerProxy {
         //mobs
         EntityRenderers.register(NtmEntityTypes.CREEPER_NUCLEAR.get(), CreeperNuclearRenderer::new);
         EntityRenderers.register(NtmEntityTypes.DUCK.get(), DuckRenderer::new);
+        EntityRenderers.register(NtmEntityTypes.UNDEAD_SOLDIER.get(), UndeadSoldierRenderer::new);
     }
 
     private static final HashMap<Integer, Long> vanished = new HashMap<>();

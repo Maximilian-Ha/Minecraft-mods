@@ -10,6 +10,14 @@
 #   new HFRWavefrontObject("models/obj/...")              -> assets/hbmsntm/...
 #   modLoc("block/xyz")  in den Datengeneratoren          -> assets/hbmsntm/textures/block/xyz.png
 #
+#   NICHT GEPRUEFT wird ResourceLocation.withDefaultNamespace("..."): dessen Namensraum ist
+#   minecraft, nicht hbmsntm, und die Datei liegt im Spiel selbst. Bis Runde 228 unterschied
+#   das Muster die beiden Empfaenger nicht und meldete die Zombie- und die Skeletttextur des
+#   Untoten Soldaten als fehlende Mod-Assets. GEMESSEN: 751 Aufrufe ueber NuclearTechMod,
+#   zwei ueber ResourceLocation. Ausgenommen wird nur der Empfaenger ResourceLocation, nicht
+#   etwa auf NuclearTechMod eingeengt -- sonst saehe das Tor einen kuenftigen Aufruf ueber
+#   einen anderen Helfer gar nicht mehr an.
+#
 # Exit-Code 0 = alle Referenzen aufloesbar, 1 = mindestens eine fehlt.
 
 set -uo pipefail
@@ -33,7 +41,7 @@ echo "Pruefe Asset-Referenzen ..."
 # withDefaultNamespace("...") mit Dateiendung -> direkter Pfad unter assets/hbmsntm/
 while IFS= read -r line; do
   file="${line%%:*}"
-  ref=$(echo "$line" | grep -oP 'withDefaultNamespace\("\K[^"]+\.(png|ogg|json)' | head -1)
+  ref=$(echo "$line" | grep -oP '(?<!ResourceLocation\.)withDefaultNamespace\("\K[^"]+\.(png|ogg|json)' | head -1)
   [ -z "$ref" ] && continue
   check "$ASSETS/$ref" "$file"
 # resources.put(...) legt eine zur Laufzeit erzeugte Ressource an -- keine Datei auf der Platte.

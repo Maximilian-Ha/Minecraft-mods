@@ -1,5 +1,6 @@
 package com.hbm.particle.helper;
 
+import com.hbm.entity.mob.UndeadSoldier;
 import com.hbm.main.NuclearTechMod;
 import com.hbm.particle.SkeletonParticle;
 import com.hbm.util.Vec3NT;
@@ -206,6 +207,8 @@ public class SkeletonCreator implements IParticleCreator {
         skullanizer.put(LocalPlayer.class.getSimpleName(), BONES_BIPED);
 
         skullanizer.put(Zombie.class.getSimpleName(), BONES_ZOMBIE);
+        /* Der Untote Soldat zerfaellt wie ein Zombie -- so steht es im Original. */
+        skullanizer.put(UndeadSoldier.class.getSimpleName(), BONES_ZOMBIE);
         skullanizer.put(Skeleton.class.getSimpleName(), BONES_CHANGING);
 
         skullanizer.put(Villager.class.getSimpleName(), BONES_VILLAGER);
