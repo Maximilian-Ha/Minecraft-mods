@@ -73,6 +73,11 @@ public class ArmorUtil {
         for(Item teil : new Item[] { NtmItems.TAURUN_HELMET.get(), NtmItems.TAURUN_PLATE.get(), NtmItems.TAURUN_LEGS.get(), NtmItems.TAURUN_BOOTS.get() }) {
             ArmorRegistry.registerHazard(teil, FULL_PACKAGE);
         }
+
+        /* Der Fau-Anzug ebenso. */
+        for(Item teil : new Item[] { NtmItems.FAU_HELMET.get(), NtmItems.FAU_PLATE.get(), NtmItems.FAU_LEGS.get(), NtmItems.FAU_BOOTS.get() }) {
+            ArmorRegistry.registerHazard(teil, FULL_PACKAGE);
+        }
     }
 
     /**

@@ -24,6 +24,7 @@ import com.hbm.items.armor.ArmorNCRPAItem;
 import com.hbm.items.armor.ArmorRPAItem;
 import com.hbm.items.armor.ArmorAJRItem;
 import com.hbm.items.armor.ArmorBismuthItem;
+import com.hbm.items.armor.ArmorDigammaItem;
 import com.hbm.items.armor.ArmorEuphemiumItem;
 import com.hbm.items.armor.ArmorT51Item;
 import com.hbm.items.armor.ArmorTaurunItem;
@@ -1744,6 +1745,15 @@ public class NtmItems {
      */
     public static final DeferredItem<Item> LASER_CRYSTAL_BISMUTH = ITEMS.register("laser_crystal_bismuth", () -> new Item(new Item.Properties().stacksTo(1)));
 
+    /*
+     * DER FAU-ANZUG. Zehn Millionen Ladung, Sprungkraft II fuer den Satz, Geigerton und
+     * 99,99 Prozent Strahlenschutz -- der zweitbeste Wert des Mods.
+     */
+    public static final DeferredItem<Item> FAU_HELMET = ITEMS.register("fau_helmet", () -> fau(ArmorItem.Type.HELMET));
+    public static final DeferredItem<Item> FAU_PLATE = ITEMS.register("fau_plate", () -> fau(ArmorItem.Type.CHESTPLATE));
+    public static final DeferredItem<Item> FAU_LEGS = ITEMS.register("fau_legs", () -> fau(ArmorItem.Type.LEGGINGS));
+    public static final DeferredItem<Item> FAU_BOOTS = ITEMS.register("fau_boots", () -> fau(ArmorItem.Type.BOOTS));
+
     public static final DeferredItem<Item> HEV_HELMET = ITEMS.register("hev_helmet", () -> hev(ArmorItem.Type.HELMET));
     public static final DeferredItem<Item> HEV_PLATE = ITEMS.register("hev_plate", () -> hev(ArmorItem.Type.CHESTPLATE));
     public static final DeferredItem<Item> HEV_LEGS = ITEMS.register("hev_legs", () -> hev(ArmorItem.Type.LEGGINGS));
@@ -1823,6 +1833,13 @@ public class NtmItems {
                 .addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 20, 6))
                 .addEffect(new MobEffectInstance(MobEffects.REGENERATION, 20, 1))
                 .addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 15 * 20, 0));
+    }
+
+    /** Der Fau-Anzug. Kein Dauerverbrauch -- er zahlt nur, wenn er etwas abbekommt. */
+    private static ArmorFSBItem fau(ArmorItem.Type type) {
+        return new ArmorDigammaItem(NtmArmorMaterials.FAU, type, new Item.Properties().stacksTo(1).durability(type.getDurability(NtmArmorMaterials.DURABILITY_FAU)), 10_000_000, 10_000, 2_500, 0)
+                .addEffect(new MobEffectInstance(MobEffects.JUMP, 20, 1))
+                .setHasGeigerSound(true);
     }
 
     private static ArmorFSBItem hev(ArmorItem.Type type) {

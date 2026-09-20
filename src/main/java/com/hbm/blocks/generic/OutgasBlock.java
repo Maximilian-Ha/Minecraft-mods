@@ -45,6 +45,10 @@ public class OutgasBlock extends Block {
             return NtmBlocks.GAS_RADON.get().defaultBlockState();
         }
 
+        if(this == NtmBlocks.ANCIENT_SCRAP.get()) {
+            return NtmBlocks.GAS_RADON_TOMB.get().defaultBlockState();
+        }
+
         return Blocks.AIR.defaultBlockState();
     }
 
@@ -76,6 +80,32 @@ public class OutgasBlock extends Block {
     @Override
     protected void spawnAfterBreak(BlockState state, ServerLevel level, BlockPos pos, ItemStack stack, boolean dropExperience) {
         if(onBreak) level.setBlock(pos, this.getGas(), 3);
+
+        /*
+         * DER URALTSCHROTT MACHT MEHR ALS EINE WOLKE. Das Original fuellt beim Zerschlagen
+         * einen Wuerfel von fuenf mal fuenf mal fuenf um die Bruchstelle mit Gruftradon --
+         * aber nur die Felder, deren Versatzsumme zwischen eins und vier liegt. Das schneidet
+         * die Ecken ab und laesst die Bruchstelle selbst aus; die hat der Waechter oben schon.
+         *
+         * Die Abfrage steht im Original genauso mitten in der gemeinsamen Klasse wie getGas
+         * darueber, und aus demselben Grund: nur dieser eine Block macht es.
+         */
+        if(this != NtmBlocks.ANCIENT_SCRAP.get()) return;
+
+        BlockState gas = this.getGas();
+
+        for(int ix = -2; ix <= 2; ix++) {
+            for(int iy = -2; iy <= 2; iy++) {
+                for(int iz = -2; iz <= 2; iz++) {
+
+                    int summe = Math.abs(ix + iy + iz);
+                    if(summe == 0 || summe >= 5) continue;
+
+                    BlockPos ziel = pos.offset(ix, iy, iz);
+                    if(level.getBlockState(ziel).isAir()) level.setBlock(ziel, gas, 3);
+                }
+            }
+        }
     }
 
     @Override

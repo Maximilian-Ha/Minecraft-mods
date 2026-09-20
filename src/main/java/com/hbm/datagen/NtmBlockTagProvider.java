@@ -237,6 +237,7 @@ public class NtmBlockTagProvider extends BlockTagsProvider {
                         NtmBlocks.BRICK_ASBESTOS.get(),
                         NtmBlocks.BLOCK_CORIUM.get(),
                         NtmBlocks.BLOCK_CORIUM_COBBLE.get(),
+                        NtmBlocks.ANCIENT_SCRAP.get(),
                         NtmBlocks.BRICK_FIRE.get(),
                         NtmBlocks.REINFORCED_LAMINATE.get(),
                         NtmBlocks.CONCRETE.get(),

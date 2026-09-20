@@ -10179,3 +10179,51 @@ vorn kennt der Port nicht.
 Nach dieser Runde sind **30** Rüstungsnamen offen.
 
 Alle 39 Tore grün.
+
+## Runde 219 — Der Fau-Anzug, und ein Block aus der Gruft
+
+Wieder eine Garnitur, die an einem fehlenden Stück hing — und wieder war das Stück kleiner
+als befürchtet. Die Fau-Brustplatte braucht einen Block **Uraltschrott**, und den hatte der
+Port nicht. Die Klasse dahinter, `OutgasBlock`, gibt es aber längst, und das Gruftradon, das
+der Schrott ausatmet, auch. Es fehlte nur der Block selbst.
+
+### Der Uraltschrott
+
+Dieselben drei Schalter wie das Koriumgestein (zufälliger Tick, Gas beim Abbau, Gas an
+Nachbarn), Härte 100, Sprengfestigkeit 6000, Strahlung 150 — und Gruftradon statt gewöhnlichem
+Radon.
+
+**Wer ihn zerschlägt, steht in einer Wolke.** Das Original füllt einen Würfel von 5 × 5 × 5 um
+die Bruchstelle, aber nur die Felder, deren Versatzsumme zwischen 1 und 4 liegt: das schneidet
+die Ecken ab und lässt die Bruchstelle selbst aus, die der Wächter davor schon gefüllt hat.
+Die Abfrage steht im Original mitten in der gemeinsamen Klasse, genau wie `getGas()` — im Port
+ebenso, aus demselben Grund: nur dieser eine Block macht es.
+
+### Der Anzug
+
+| | |
+|---|---|
+| Energie | 10 000 000 HE, 10 000 Ladung, 2500 Verbrauch, **0 Abfluss** |
+| Wirkung | Sprungkraft II für den Satz |
+| Gefahren | `FULL_PACKAGE`, mit Geigerton |
+| Strahlung | 99,99 % — der zweitbeste Wert des Mods, nur der DNT-Anzug ist besser |
+
+### Neun Teile statt acht, und eines davon ist durchscheinend
+
+Über der Brustplatte sitzt eine **Kassette** mit eigener Textur. Sie hat keinen eigenen
+Drehpunkt, sondern übernimmt den des Rumpfes. Sie ist der einzige Rüstungsteil des ganzen
+Ports, der mit Alphamischung gezeichnet wird.
+
+**Hier weicht der Port bewusst ab.** Das Original schaltet die Mischung vor der Kassette ein
+und nie wieder aus — alles, was danach gezeichnet wird, erbt sie. Der Port schaltet sie
+hinterher ab. Einen durchgereichten Zeichenzustand nachzubauen wäre kein treuer Port, sondern
+ein abgeschriebener Fehler.
+
+### Nicht übernommen
+
+`enableThermalSight`, `setHasHardLanding`, `setStep`/`setJump`/`setFall`, `hides(...)` und
+`setFullSetForHide` — dieselbe Liste wie bei HEV, T-51 und AJR, nur um die Wärmesicht länger.
+
+Nach dieser Runde sind **26** Rüstungsnamen offen.
+
+Alle 39 Tore grün.

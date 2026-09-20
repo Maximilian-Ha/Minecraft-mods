@@ -125,6 +125,13 @@ public class HazmatRegistry {
         HazmatRegistry.registerHazmat(NtmItems.TAURUN_LEGS.get(), taurun * legs);
         HazmatRegistry.registerHazmat(NtmItems.TAURUN_BOOTS.get(), taurun * boots);
 
+        /* Der Fau-Anzug: 4,0 auf den ganzen Satz, im Original als Kommentar "99.99%". */
+        double fau = 4D;            // 99,99%
+        HazmatRegistry.registerHazmat(NtmItems.FAU_HELMET.get(), fau * helmet);
+        HazmatRegistry.registerHazmat(NtmItems.FAU_PLATE.get(), fau * chest);
+        HazmatRegistry.registerHazmat(NtmItems.FAU_LEGS.get(), fau * legs);
+        HazmatRegistry.registerHazmat(NtmItems.FAU_BOOTS.get(), fau * boots);
+
         /* Euphemium: Faktor 10, im Original mit dem Vermerk "<100%" -- der Satz haelt viel
          * ab, aber nicht alles. */
         double euph = 10D;

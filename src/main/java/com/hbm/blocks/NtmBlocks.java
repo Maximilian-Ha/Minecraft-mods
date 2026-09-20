@@ -442,6 +442,9 @@ public class NtmBlocks {
     public static final DeferredBlock<Block> BLOCK_CORIUM =           register(              "block_corium",           () -> new HazardBlock(BlockBehaviour.Properties.of().strength(100.0F, 6000.0F).mapColor(MapColor.COLOR_BLACK).requiresCorrectToolForDrops()));
     /** Erstarrtes ausgelaufenes Corium: poroes, gast Radon aus. */
     public static final DeferredBlock<Block> BLOCK_CORIUM_COBBLE =    register(              "block_corium_cobble",    () -> new OutgasBlock(true, true, true, BlockBehaviour.Properties.of().strength(100.0F, 6000.0F).mapColor(MapColor.COLOR_BLACK).requiresCorrectToolForDrops()));
+    /* Der Uraltschrott aus dem Gruftbauwerk. Dieselben drei Schalter wie das Koriumgestein,
+     * aber er atmet Gruftradon aus -- und wer ihn zerschlaegt, steht mitten in einer Wolke. */
+    public static final DeferredBlock<Block> ANCIENT_SCRAP =          register(              "ancient_scrap",          () -> new OutgasBlock(true, true, true, BlockBehaviour.Properties.of().strength(100.0F, 6000.0F).mapColor(MapColor.COLOR_GRAY).requiresCorrectToolForDrops()));
     public static final DeferredBlock<Block> BRICK_FIRE =             registerBlastInfoBlock("brick_fire",             () -> new Block(BlockBehaviour.Properties.of().strength(5.0F, 35.0F).mapColor(MapColor.FIRE)));
     public static final DeferredBlock<Block> CONCRETE =               registerBlastInfoBlock("concrete",             () -> new Block(BlockBehaviour.Properties.of().strength(5.0F, 84.0F).mapColor(MapColor.SNOW)));
     public static final DeferredBlock<Block> CONCRETE_SMOOTH =        registerBlastInfoBlock("concrete_smooth",             () -> new Block(BlockBehaviour.Properties.of().strength(5.0F, 84.0F).mapColor(MapColor.SNOW)));

@@ -23,6 +23,7 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 
 import static com.hbm.blocks.NtmBlocks.BLOCK_CORIUM;
+import static com.hbm.blocks.NtmBlocks.ANCIENT_SCRAP;
 import static com.hbm.blocks.NtmBlocks.BLOCK_CORIUM_COBBLE;
 import static com.hbm.blocks.NtmBlocks.BLOCK_WASTE;
 import static com.hbm.blocks.NtmBlocks.BLOCK_WASTE_PAINTED;
@@ -401,6 +402,8 @@ public class HazardRegistry {
         /* Corium, fluessig wie erstarrt: der heisseste Feststoff im ganzen Mod. */
         HazardSystem.register(block(BLOCK_CORIUM), makeData(RADIATION, 150F));
         HazardSystem.register(block(BLOCK_CORIUM_COBBLE), makeData(RADIATION, 150F));
+        /* Der Uraltschrott strahlt genauso stark wie Corium -- 150, im Original Z. 218. */
+        HazardSystem.register(block(ANCIENT_SCRAP), makeData(RADIATION, 150F));
         HazardSystem.register(block(BLOCK_WASTE_PAINTED), makeData(RADIATION, wst * block));
         HazardSystem.register(block(BLOCK_WASTE_VITRIFIED), makeData(RADIATION, wstv * block));
 

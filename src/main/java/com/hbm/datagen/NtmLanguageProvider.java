@@ -1151,6 +1151,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.RBMK_DISPLAY_BLANK, "RBMK Blank Panel");
         this.add(NtmBlocks.BLOCK_CORIUM, "Corium Block");
         this.add(NtmBlocks.BLOCK_CORIUM_COBBLE, "Corium Debris");
+        this.add(NtmBlocks.ANCIENT_SCRAP, "Ancient Scrap Metal");
         this.add(NtmBlocks.MACHINE_PUREX, "PUREX Reprocessing Plant");
         this.add(NtmBlocks.MACHINE_RADIOLYSIS, "Radioisotope Thermoelectric Generator and Radiolysis Chamber");
         this.add(NtmBlocks.MACHINE_CHEMICAL_PLANT, "Chemical Plant");
@@ -4097,6 +4098,11 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.BISMUTH_LEGS, "Bismuth Kneeguards");
         this.add(NtmItems.BISMUTH_BOOTS, "Bismuth Sandals");
         this.add(NtmItems.LASER_CRYSTAL_BISMUTH, "BiSmUTh Laser Crystal");
+
+        this.add(NtmItems.FAU_HELMET, "Fau Helmet");
+        this.add(NtmItems.FAU_PLATE, "Fau Chestplate");
+        this.add(NtmItems.FAU_LEGS, "Fau Leggins");
+        this.add(NtmItems.FAU_BOOTS, "Fau Boots");
         this.add(NtmItems.ASBESTOS_CLOTH, "Asbestos Cloth");
         this.add(NtmItems.MASK_RAG, "Crude Protective Mask");
         this.add(NtmItems.MASK_PISS, "Trench Mask");

@@ -788,6 +788,7 @@ public class NtmBlockStateProvider extends BlockStateProvider {
 
         this.simpleCubeAllBlock(NtmBlocks.BLOCK_CORIUM);
         this.simpleCubeAllBlock(NtmBlocks.BLOCK_CORIUM_COBBLE);
+        this.simpleCubeAllBlock(NtmBlocks.ANCIENT_SCRAP);
         this.particleOnlyBlock(NtmBlocks.MACHINE_PUREX, modLoc("block/block_steel"));
         this.particleOnlyBlock(NtmBlocks.MACHINE_RADIOLYSIS, modLoc("block/block_steel"));
         this.particleOnlyBlock(NtmBlocks.MACHINE_CHEMICAL_PLANT, modLoc("block/block_steel"));

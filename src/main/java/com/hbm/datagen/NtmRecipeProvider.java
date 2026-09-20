@@ -4012,6 +4012,46 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .save(recipeOutput);
 
         /*
+         * DER FAU-ANZUG, ArmorRecipes.java Z. 82 bis 85. Jedes Stueck wird um das
+         * entsprechende Sternmetallstueck herumgebaut. Die Brustplatte verlangt den
+         * geschlossenen Daemonenkern und einen Uraltschrottblock, das Beinzeug und die
+         * Stiefel je einen Poloniumrohling.
+         */
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.FAU_HELMET.get(), 1)
+                .pattern("PWP").pattern("PBP").pattern("FSF")
+                .define('P', NtmItems.PLATE_ARMOR_FAU.get())
+                .define('W', Blocks.RED_WOOL)
+                .define('B', NtmItems.STARMETAL_HELMET.get())
+                .define('F', NtmItems.GAS_MASK_FILTER.get())
+                .define('S', NtmItems.PIPE_STEEL.get())
+                .unlockedBy("has_plate_armor_fau", has(NtmItems.PLATE_ARMOR_FAU.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.FAU_PLATE.get(), 1)
+                .pattern("MCM").pattern("PBP").pattern("PSP")
+                .define('M', NtmItems.MOTOR_DESH.get())
+                .define('C', NtmItems.DEMON_CORE_CLOSED.get())
+                .define('P', NtmItems.PLATE_ARMOR_FAU.get())
+                .define('B', NtmItems.STARMETAL_PLATE.get())
+                .define('S', NtmBlocks.ANCIENT_SCRAP.get())
+                .unlockedBy("has_plate_armor_fau", has(NtmItems.PLATE_ARMOR_FAU.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.FAU_LEGS.get(), 1)
+                .pattern("MPM").pattern("PBP").pattern("PDP")
+                .define('M', NtmItems.MOTOR_DESH.get())
+                .define('P', NtmItems.PLATE_ARMOR_FAU.get())
+                .define('B', NtmItems.STARMETAL_LEGS.get())
+                .define('D', NtmItems.BILLET_POLONIUM.get())
+                .unlockedBy("has_plate_armor_fau", has(NtmItems.PLATE_ARMOR_FAU.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.FAU_BOOTS.get(), 1)
+                .pattern("PDP").pattern("PBP")
+                .define('P', NtmItems.PLATE_ARMOR_FAU.get())
+                .define('D', NtmItems.BILLET_POLONIUM.get())
+                .define('B', NtmItems.STARMETAL_BOOTS.get())
+                .unlockedBy("has_plate_armor_fau", has(NtmItems.PLATE_ARMOR_FAU.get()))
+                .save(recipeOutput);
+
+        /*
          * DIE AUFSTIEGSKETTE. Das Original bietet zwei Wege an und stellt ueber
          * enableLBSMSimpleArmorRecipes um: entweder jede Garnitur schlicht aus ihrem Barren,
          * oder jede aus der vorigen. Der Port nimmt die Kette -- sie ist der Standardfall,

@@ -128,7 +128,14 @@ public class NtmArmorMaterials {
      */
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> BISMUTH = register("bismuth", LAYER_INVISIBLE, 100, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.PLATE_BISMUTH.get()));
 
+    /*
+     * Fau: {3, 8, 6, 3}, ohne Verzauberbarkeit, Haltbarkeitsfaktor 150, Reparatur mit der
+     * Fau-Panzerplatte. Wellenfrontmodell, Schicht unsichtbar.
+     */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> FAU = register("fau", LAYER_INVISIBLE, 0, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.PLATE_ARMOR_FAU.get()));
+
     public static final int DURABILITY_T51 = 150;
+    public static final int DURABILITY_FAU = 150;
     public static final int DURABILITY_BISMUTH = 100;
     public static final int DURABILITY_ASBESTOS = 20;
     public static final int DURABILITY_CMB = 60;

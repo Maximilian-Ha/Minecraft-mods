@@ -881,6 +881,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.BRICK_ASBESTOS);
                         output.accept(NtmBlocks.BLOCK_CORIUM);
                         output.accept(NtmBlocks.BLOCK_CORIUM_COBBLE);
+                        output.accept(NtmBlocks.ANCIENT_SCRAP);
                         output.accept(NtmBlocks.BRICK_FIRE);
                         output.accept(NtmBlocks.REINFORCED_LAMINATE);
                         output.accept(NtmBlocks.STEEL_SCAFFOLD);
@@ -2043,6 +2044,10 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.BISMUTH_PLATE);
                         output.accept(NtmItems.BISMUTH_LEGS);
                         output.accept(NtmItems.BISMUTH_BOOTS);
+                        output.accept(NtmItems.FAU_HELMET);
+                        output.accept(NtmItems.FAU_PLATE);
+                        output.accept(NtmItems.FAU_LEGS);
+                        output.accept(NtmItems.FAU_BOOTS);
                         output.accept(NtmItems.MASK_RAG);
                         output.accept(NtmItems.MASK_PISS);
                         output.accept(NtmItems.GAS_MASK_FILTER);
