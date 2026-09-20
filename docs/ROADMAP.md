@@ -11213,3 +11213,45 @@ Offen aus dieser Runde:
 * **Der Entschärfer-Rüstungsaufsatz fehlt.** Im Original lässt er beim Entschärfen eines
   Creepers eine Zündschnur fallen (`ItemModDefuser`); der Port hat den Entschärfer nur als
   Werkzeug.
+
+### Runde 240: die drei übrigen Creeper, ihr Erscheinen -- und eine Lunte, die ins Leere führte
+
+Damit ist die Creeper-Familie vollständig: nuklear, verseucht, golden, flüchtig, Phosgen.
+
+* **`CreeperGold`** -- kein Schaden, kein Feuer: er verwandelt, was er trifft, in Golderz.
+  Sieben Blöcke weit, als geladener vierzehn. Erscheint nur unter Y=40. Fällt Goldkristalle:
+  vom Spieler erschlagen fünf plus bis zu fünf weitere, sonst drei.
+* **`CreeperVolatile`** -- derselbe Knall, nur hinterlässt er gesprungene Schlacke. Fällt
+  Schwefel und TNT-Stangen. Er erbt vom Goldcreeper und überschreibt nur, was sich
+  unterscheidet.
+* **`CreeperPhosgene`** -- kurze Lunte (zwanzig Ticks statt dreißig), schluckt vier Schaden
+  von jedem nicht absoluten Treffer, kleiner Knall ohne Blockschaden und danach eine
+  Phosgenwolke: zehn Blöcke breit, fünf hoch, hundertfünfzig Ticks lang.
+* **Natürliches Erscheinen** -- das erste im Port überhaupt. Das Original meldet die drei in
+  `EntityMappings` an (Phosgen 5, flüchtig 10, golden 1, je ein Stück, alle Biome); hier
+  sind es ein `AddSpawnsBiomeModifier` auf `BiomeTags.IS_OVERWORLD` und eine
+  Platzierungsregel je Art. Die Prüfung auf `dimension == 0` aus `getCanSpawnHere` entfällt
+  dadurch -- sie wäre toter Code.
+* **Der gesprungene Schlackeblock.** `block_slag` hat den Zustand `broken` bekommen, wie die
+  Metadaten 0 und 1 des Originals. Die Textur `block_slag_broken.png` lag seit Runden im
+  Baum, ohne dass ein Block sie zeigte; Runde 194 hatte das im Mörserwerfer ausdrücklich
+  vermerkt und zurückgestellt. Jetzt zeigen sie beide: der Mörserwerfer und der flüchtige
+  Creeper. Die neue Klasse heißt `SolidSlagBlock` und nicht `SlagBlock` -- **wieder eine
+  Namensfalle**: `SlagBlock` ist im Port längst vergeben, nämlich an die Schlackenpfütze
+  unter dem Abstich (`slag`, mit Blockentität). Im Original heißen die beiden verschieden
+  genug, im Port nicht.
+
+**Berichtigt: der Knall kam fast nie.** Alle Creeper dieser Mod ersetzen den Knall des
+Originals durch einen eigenen. Im Original geht das über `func_146077_cc`, die Methode am
+Ende des Zählers; in 1.21 heißt sie `explodeCreeper` und ist **privat**. Der Port hatte sich
+seit dem nuklearen Creeper an `ignite()` gehängt -- aber dort kommt im Spiel fast niemand
+vorbei: `SwellGoal` ruft `setSwellDir(1)`, sobald ein Spieler nah genug ist, und
+`Creeper.tick()` lässt den Zähler dann bis `maxSwell` laufen und ruft das private
+`explodeCreeper`. Durch `ignite()` kommt nur, wer mit Feuerzeug und Stein anzündet. Ein
+nuklearer Creeper, der einfach auf einen Spieler zuläuft, machte also den **gewöhnlichen**
+Knall.
+
+`CreeperFuse` liest den Zähler stattdessen über das öffentliche `getSwelling` zurück und
+löst zwei Ticks vor dem gewöhnlichen Knall aus. Das kostet ein Zehntel einer Sekunde Lunte;
+dafür geht jeder Creeper dieser Mod auf jedem Weg so hoch, wie er soll. Der Phosgencreeper
+bekommt darüber auch seine kurze Lunte -- `maxSwell` ist in 1.21 ebenfalls privat.

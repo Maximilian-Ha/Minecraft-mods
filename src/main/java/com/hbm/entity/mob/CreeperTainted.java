@@ -58,15 +58,6 @@ public class CreeperTainted extends Creeper implements IRadiationImmune {
     }
 
     @Override
-    public void tick() {
-        super.tick();
-
-        if(this.isAlive() && this.getHealth() < this.getMaxHealth() && this.tickCount % 10 == 0) {
-            this.heal(1.0F);
-        }
-    }
-
-    @Override
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, source, recentlyHit);
 
@@ -74,18 +65,28 @@ public class CreeperTainted extends Creeper implements IRadiationImmune {
     }
 
     /**
-     * Das Original ueberschreibt func_146077_cc -- die Methode, die der Creeper aufruft,
-     * wenn sein Zaehler abgelaufen ist. In 1.21 heisst sie explodeCreeper und ist privat;
-     * der Port haengt sich darum an ignite(), genau wie der nukleare Creeper es tut.
+     * Das Original ueberschreibt func_146077_cc -- die Methode am Ende des Zaehlers. In
+     * 1.21 ist sie privat; warum der Port stattdessen den Zaehler selbst abliest, steht in
+     * CreeperFuse.
+     *
+     * BERICHTIGT IN RUNDE 240: hier stand ignite(). Dort kommt aber nur vorbei, wer mit
+     * Feuerzeug und Stein anzuendet -- ein Creeper, der auf einen Spieler zulaeuft, machte
+     * den gewoehnlichen Knall und saete keinen Taint.
      */
     @Override
-    public void ignite() {
-        super.ignite();
+    public void tick() {
+        super.tick();
 
-        this.dead = true;
-        this.verseuchen();
-        this.triggerOnDeathMobEffects(RemovalReason.KILLED);
-        this.discard();
+        if(this.isAlive() && this.getHealth() < this.getMaxHealth() && this.tickCount % 10 == 0) {
+            this.heal(1.0F);
+        }
+
+        if(CreeperFuse.abgebrannt(this, CreeperFuse.SPANNE)) {
+            this.dead = true;
+            this.verseuchen();
+            this.triggerOnDeathMobEffects(RemovalReason.KILLED);
+            this.discard();
+        }
     }
 
     private void verseuchen() {

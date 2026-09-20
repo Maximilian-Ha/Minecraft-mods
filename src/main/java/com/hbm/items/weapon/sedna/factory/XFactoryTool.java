@@ -10,6 +10,7 @@ import com.hbm.explosion.vanillant.standard.EntityProcessorCrossSmooth;
 import com.hbm.explosion.vanillant.standard.ExplosionEffectWeapon;
 import com.hbm.explosion.vanillant.standard.PlayerProcessorStandard;
 import com.hbm.blocks.NtmBlocks;
+import com.hbm.blocks.generic.SolidSlagBlock;
 import com.hbm.items.NtmItems;
 import com.hbm.items.weapon.sedna.BulletConfig;
 import com.hbm.items.weapon.sedna.Crosshair;
@@ -294,10 +295,8 @@ public class XFactoryTool {
     /**
      * Die grosse: Radius 15, kein Bruchstueck bleibt liegen, dafuer Schlacke.
      *
-     * ABWEICHUNG: das Original setzt die Schlacke mit Metadaten 1 -- das ist die gesprungene
-     * Fassung derselben Textur. Der Port hat block_slag als einen Block ohne Zustaende; die
-     * Textur block_slag_broken.png liegt zwar im Baum, aber kein Block zeigt sie. Bis es den
-     * gesprungenen Block gibt, bleibt hier die glatte Schlacke stehen.
+     * Das Original setzt die Schlacke mit Metadaten 1 -- die gesprungene Fassung derselben
+     * Textur. Seit Runde 240 hat block_slag dafuer den Zustand broken, und hier steht er.
      */
     public static BiConsumer<BulletBaseMK4, HitResult> LAMBDA_MORTAR_CHARGE = (geschoss, treffer) -> {
 
@@ -307,7 +306,8 @@ public class XFactoryTool {
         new ExplosionVNT(geschoss.level, ort.x, ort.y, ort.z, 15F, geschoss.getOwner())
                 .setBlockAllocator(new BlockAllocatorStandard())
                 .setBlockProcessor(new BlockProcessorStandard().setNoDrop()
-                        .withBlockEffect(new BlockMutatorDebris(NtmBlocks.BLOCK_SLAG.get())))
+                        .withBlockEffect(new BlockMutatorDebris(
+                                NtmBlocks.BLOCK_SLAG.get().defaultBlockState().setValue(SolidSlagBlock.BROKEN, true))))
                 .setEntityProcessor(new EntityProcessorCrossSmooth(1, geschoss.damage)
                         .setupPiercing(geschoss.config.armorThresholdNegation, geschoss.config.armorPiercingPercent))
                 .setPlayerProcessor(new PlayerProcessorStandard())

@@ -79,12 +79,18 @@ public class CreeperNuclear extends Creeper {
                 this.heal(1.0F);
             }
         }
+
+        if (CreeperFuse.abgebrannt(this, CreeperFuse.SPANNE)) this.zuenden();
     }
 
-    @Override
-    public void ignite() {
-        super.ignite();
-
+    /**
+     * BERICHTIGT IN RUNDE 240: hier stand ignite(). Dort kommt aber nur vorbei, wer mit
+     * Feuerzeug und Stein anzuendet; ein Creeper, der auf einen Spieler zulaeuft, macht in
+     * 1.21 den gewoehnlichen Knall am Ende des Zaehlers (Creeper.tick ruft das private
+     * explodeCreeper). Der Kernschlag kam also fast nie zustande. Warum der Port den
+     * Zaehler stattdessen selbst abliest, steht in CreeperFuse.
+     */
+    private void zuenden() {
         this.dead = true;
         this.nuclearExplode();
         this.triggerOnDeathMobEffects(RemovalReason.KILLED);

@@ -35,7 +35,10 @@ import com.hbm.entity.missile.MissileCustom;
 import com.hbm.entity.missile.SatellitePod;
 import com.hbm.entity.missile.Soyuz;
 import com.hbm.entity.mob.CreeperNuclear;
+import com.hbm.entity.mob.CreeperGold;
+import com.hbm.entity.mob.CreeperPhosgene;
 import com.hbm.entity.mob.CreeperTainted;
+import com.hbm.entity.mob.CreeperVolatile;
 import com.hbm.entity.mob.CyberCrab;
 import com.hbm.entity.mob.TaintCrab;
 import com.hbm.entity.mob.TeslaCrab;
@@ -141,6 +144,29 @@ public class NtmEntityTypes {
                     () -> EntityType.Builder.of(UndeadSoldier::new, MobCategory.MONSTER)
                             .sized(0.6F, 1.8F)
                             .build("undead_soldier"));
+
+    /**
+     * Die drei uebrigen Creeper, Runde 240. Masse wie jeder Creeper -- das Original setzt
+     * fuer keinen von ihnen ein eigenes setSize. Anders als der nukleare und der verseuchte
+     * erscheinen diese drei von selbst in der Welt; wo, steht im Biom-Aenderer.
+     */
+    public static final DeferredHolder<EntityType<?>, EntityType<CreeperGold>> CREEPER_GOLD =
+            ENTITY_TYPES.register("creeper_gold",
+                    () -> EntityType.Builder.<CreeperGold>of(CreeperGold::new, MobCategory.MONSTER)
+                            .sized(0.6F, 1.7F)
+                            .build("creeper_gold"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<CreeperVolatile>> CREEPER_VOLATILE =
+            ENTITY_TYPES.register("creeper_volatile",
+                    () -> EntityType.Builder.<CreeperVolatile>of(CreeperVolatile::new, MobCategory.MONSTER)
+                            .sized(0.6F, 1.7F)
+                            .build("creeper_volatile"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<CreeperPhosgene>> CREEPER_PHOSGENE =
+            ENTITY_TYPES.register("creeper_phosgene",
+                    () -> EntityType.Builder.<CreeperPhosgene>of(CreeperPhosgene::new, MobCategory.MONSTER)
+                            .sized(0.6F, 1.7F)
+                            .build("creeper_phosgene"));
 
     /**
      * Der verseuchte Creeper, Runde 238. Masse wie jeder Creeper -- das Original setzt

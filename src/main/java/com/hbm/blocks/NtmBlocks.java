@@ -305,7 +305,7 @@ public class NtmBlocks {
     public static final DeferredBlock<Block> BLOCK_FIBERGLASS = register("block_fiberglass", () -> new Block(BlockBehaviour.Properties.of().strength(1.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL)));
     public static final DeferredBlock<Block> REINFORCED_LAMINATE = registerNew("reinforced_laminate", () -> new Block(BlockBehaviour.Properties.of().strength(0.3F, 3.0F).sound(SoundType.GLASS).noOcclusion().mapColor(MapColor.NONE)));
     public static final DeferredBlock<Block> BLOCK_INSULATOR = register("block_insulator", () -> new Block(BlockBehaviour.Properties.of().strength(1.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL)));
-    public static final DeferredBlock<Block> BLOCK_SLAG = register("block_slag", () -> new Block(BlockBehaviour.Properties.of().strength(1.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL)));
+    public static final DeferredBlock<Block> BLOCK_SLAG = register("block_slag", () -> new SolidSlagBlock(BlockBehaviour.Properties.of().strength(1.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL)));
 
     // Deco Blocks
     public static final DeferredBlock<Block> BOBBLEHEAD = registerNew("bobblehead", () -> new BobbleBlock(BlockBehaviour.Properties.of().noOcclusion().instabreak().mapColor(DyeColor.WHITE)));

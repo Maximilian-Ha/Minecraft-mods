@@ -14,6 +14,8 @@ import com.hbm.config.FalloutConfigJSON;
 import com.hbm.entity.NtmEntityTypes;
 import com.hbm.items.armor.ModReviveItem;
 import com.hbm.entity.mob.CreeperNuclear;
+import com.hbm.entity.mob.CreeperGold;
+import com.hbm.entity.mob.CreeperPhosgene;
 import com.hbm.entity.mob.CreeperTainted;
 import com.hbm.entity.mob.CyberCrab;
 import com.hbm.entity.mob.TaintCrab;
@@ -61,6 +63,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -78,6 +84,9 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
+
+import java.util.List;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
@@ -203,6 +212,30 @@ public class CommonEvents {
         event.put(NtmEntityTypes.TESLA_CRAB.get(), TeslaCrab.createAttributes().build());
         event.put(NtmEntityTypes.TAINT_CRAB.get(), TaintCrab.createAttributes().build());
         event.put(NtmEntityTypes.CREEPER_TAINTED.get(), CreeperTainted.createAttributes().build());
+        event.put(NtmEntityTypes.CREEPER_GOLD.get(), CreeperGold.createAttributes().build());
+        event.put(NtmEntityTypes.CREEPER_VOLATILE.get(), CreeperGold.createAttributes().build());
+        event.put(NtmEntityTypes.CREEPER_PHOSGENE.get(), CreeperPhosgene.createAttributes().build());
+    }
+
+    /**
+     * WO die drei Creeper erscheinen duerfen, Runde 240. Das Gewicht und das Biom stehen im
+     * Biom-Aenderer; hier steht, worauf sie erscheinen: auf festem Boden, im Dunkeln, nach
+     * denselben Regeln wie jedes andere Monster (Monster.checkMonsterSpawnRules).
+     *
+     * OHNE DIESEN EINTRAG WUERDEN SIE UEBERALL ERSCHEINEN -- auch in der Luft und im
+     * Hellen: ohne Platzierungsregel prueft 1.21 gar nichts.
+     */
+    @SubscribeEvent
+    public static void onRegisterSpawnPlacements(RegisterSpawnPlacementsEvent event) {
+
+        for(EntityType<? extends Monster> art : List.of(
+                NtmEntityTypes.CREEPER_GOLD.get(),
+                NtmEntityTypes.CREEPER_VOLATILE.get(),
+                NtmEntityTypes.CREEPER_PHOSGENE.get())) {
+
+            event.register(art, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                    Monster::checkMonsterSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        }
     }
 
     @SubscribeEvent

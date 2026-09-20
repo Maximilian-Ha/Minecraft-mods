@@ -6,6 +6,7 @@ import com.hbm.blocks.ICustomBlockModelRegister;
 import com.hbm.blocks.generic.RedBrickBlock;
 import com.hbm.blocks.states.BrickFace;
 import com.hbm.blocks.NtmBlocks;
+import com.hbm.blocks.generic.SolidSlagBlock;
 import com.hbm.blocks.machine.FurnaceBrickBlock;
 import com.hbm.blocks.network.FluidValveBlock;
 import com.hbm.blocks.machine.MachineDetectorBlock;
@@ -1589,7 +1590,15 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.simpleCubeAllBlock(NtmBlocks.BLOCK_WASTE_PAINTED);
         this.simpleCubeAllBlock(NtmBlocks.BLOCK_WASTE_VITRIFIED);
         this.simpleCubeAllBlock(NtmBlocks.BLOCK_YELLOWCAKE);
-        this.simpleCubeAllBlock(NtmBlocks.BLOCK_SLAG);
+        /* Die Schlacke, Runde 240: glatt und gesprungen, wie die Metadaten 0 und 1 des
+         * Originals. Der Gegenstand zeigt die glatte -- die gesprungene setzt nur der
+         * Einschlag. */
+        ModelFile slagGlatt = this.models().cubeAll(name(NtmBlocks.BLOCK_SLAG), modLoc("block/block_slag"));
+        ModelFile slagRissig = this.models().cubeAll(name(NtmBlocks.BLOCK_SLAG) + "_broken", modLoc("block/block_slag_broken"));
+        this.getVariantBuilder(NtmBlocks.BLOCK_SLAG.get()).forAllStates(state -> ConfiguredModel.builder()
+                .modelFile(state.getValue(SolidSlagBlock.BROKEN) ? slagRissig : slagGlatt)
+                .build());
+        this.blockItem(NtmBlocks.BLOCK_SLAG);
         this.simpleBlockWithItem(NtmBlocks.BLOCK_FIBERGLASS.get(), this.models().cubeBottomTop("block_fiberglass", modLoc("block/block_fiberglass_side"), modLoc("block/block_fiberglass_side"), modLoc("block/block_fiberglass_top")));
         this.simpleBlockWithItem(NtmBlocks.BLOCK_INSULATOR.get(), this.models().cubeBottomTop("block_insulator", modLoc("block/block_insulator_side"), modLoc("block/block_insulator_side"), modLoc("block/block_insulator_top")));
     }

@@ -1,5 +1,6 @@
 package com.hbm.world.gen;
 
+import com.hbm.entity.NtmEntityTypes;
 import com.hbm.main.NuclearTechMod;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
@@ -11,8 +12,12 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.neoforged.neoforge.common.world.BiomeModifier;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier;
+import net.neoforged.neoforge.common.world.BiomeModifiers.AddSpawnsBiomeModifier;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
+
+import java.util.List;
 
 public class NtmBiomeModifiers {
 
@@ -25,6 +30,19 @@ public class NtmBiomeModifiers {
 
     public static final ResourceKey<BiomeModifier> ADD_CRASHED_BOMB = registerKey("add_crashed_bomb");
 
+    /**
+     * Die drei Creeper, die von selbst erscheinen, Runde 240. Das Original meldet sie in
+     * EntityMappings an: Phosgen mit Gewicht 5, der fluechtige mit 10, der goldene mit 1 --
+     * und alle drei mit einer Gruppengroesse von genau einem Stueck, in allen Biomen.
+     *
+     * "ALLE BIOME" HEISST HIER DIE OBERWELT. Im Original ist das
+     * BiomeGenBase.getBiomeGenArray(), also jedes angemeldete Biom; der Creeper prueft dann
+     * in getCanSpawnHere noch einmal auf dimension == 0. Der Port dreht das um und haengt
+     * das Erscheinen gleich an BiomeTags.IS_OVERWORLD -- dieselbe Wirkung, eine Pruefung
+     * weniger.
+     */
+    public static final ResourceKey<BiomeModifier> ADD_CREEPERS = registerKey("add_creepers");
+
     public static void bootstrap(BootstrapContext<BiomeModifier> context) {
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
         HolderGetter<Biome> biomes = context.lookup(Registries.BIOME);
@@ -35,6 +53,13 @@ public class NtmBiomeModifiers {
         context.register(ADD_LANDMINE, new AddFeaturesBiomeModifier(biomes.getOrThrow(BiomeTags.IS_OVERWORLD), HolderSet.direct(placedFeatures.getOrThrow(NtmPlacedFeatures.LANDMINE_PLACED)), GenerationStep.Decoration.UNDERGROUND_DECORATION));
 
         context.register(ADD_CRASHED_BOMB, new AddFeaturesBiomeModifier(biomes.getOrThrow(BiomeTags.IS_OVERWORLD), HolderSet.direct(placedFeatures.getOrThrow(NtmPlacedFeatures.CRASHED_BOMB_PLACED)), GenerationStep.Decoration.UNDERGROUND_DECORATION));
+
+        context.register(ADD_CREEPERS, new AddSpawnsBiomeModifier(
+                biomes.getOrThrow(BiomeTags.IS_OVERWORLD),
+                List.of(
+                        new MobSpawnSettings.SpawnerData(NtmEntityTypes.CREEPER_PHOSGENE.get(), 5, 1, 1),
+                        new MobSpawnSettings.SpawnerData(NtmEntityTypes.CREEPER_VOLATILE.get(), 10, 1, 1),
+                        new MobSpawnSettings.SpawnerData(NtmEntityTypes.CREEPER_GOLD.get(), 1, 1, 1))));
     }
 
     private static ResourceKey<BiomeModifier> registerKey(String name) {
