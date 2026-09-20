@@ -44,6 +44,9 @@ KEIN_BLOCK = {
     "machine_weapon_table", "tnt_ntm",
     # Der Port schreibt den Tank mit Unterstrich: machine_fluid_tank.
     "machine_fluidtank",
+    # Der Feldname im Original ist machine_rtg, der angemeldete machine_rtg_grey; der Port
+    # nimmt den Feldnamen. Wieder ein Fall, in dem beide auseinandergehen.
+    "machine_rtg_grey",
     # Das Original selbst kennt sie nicht mehr: sie stehen dort in ignoreMappings,
     # der Liste der Altnamen, die beim Laden alter Welten stillschweigend wegfallen.
     # ladder_tungsten setzt tools/nbt2structure.py auf die Stahlleiter um -- im Original
@@ -139,9 +142,24 @@ def structure_names():
             # Hinter dem gzip-Strom steht in manchen Dateien noch etwas; decompressobj
             # hoert am Stromende auf, gzip.decompress wuerde daran scheitern.
             raw = zlib.decompressobj(16 + zlib.MAX_WBITS).decompress(raw)
-        for block in read_nbt(io.BytesIO(raw)).get("palette", []):
+        root = read_nbt(io.BytesIO(raw))
+
+        for block in root.get("palette", []):
             name = block.get("Name", "")
             if name.startswith("hbm:tile."):
+                names.add(name[len("hbm:tile."):])
+
+        # DIE PALETTE IST NICHT ALLES. Ein Beutestab nennt den Block, zu dem er wird, in
+        # SEINER BLOCKENTITAET -- in der Palette steht nur der Stab. Wer nur die Palette
+        # liest, uebersieht sie: der Aktenschrank (filing_cabinet) steht in vier Bauwerken
+        # und hat bis Runde 255 in keiner Zaehlung gefehlt, weil niemand dort nachgesehen
+        # hat. Ein Tor, das an einer Stelle nicht hinsieht, ist schlimmer als keines.
+        for block in root.get("blocks", []):
+            entity = block.get("nbt")
+            if not entity:
+                continue
+            name = entity.get("block", "")
+            if isinstance(name, str) and name.startswith("hbm:tile."):
                 names.add(name[len("hbm:tile."):])
 
     return names, len(listing)

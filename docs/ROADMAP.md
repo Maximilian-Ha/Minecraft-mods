@@ -12003,3 +12003,49 @@ Alle vier laufen als Nachlauf über das fertige Gitter, bevor die Palette gebaut
 
 Die 38 Dateien des Meteoritenverlieses kommen nach der Änderung Byte für Byte gleich heraus —
 nachgeprüft mit `diff -r`.
+
+## Runde 255 — Die Umsetzungstabelle ist bis auf einen Block fertig
+
+Nach Runde 254 waren noch 435 `(Name, meta)`-Paare auf 161 `hbm:`-Blocknamen offen. Jetzt
+sind es **7 Paare auf 2 Namen** — und beide sind Bauzauberstäbe.
+
+Der Weg dahin, in vier Schritten:
+
+1. **69 Namen eins zu eins.** Blöcke, die im Port genauso heißen und in den Bauwerken nur mit
+   Metadatum null vorkommen. Ihr Standardzustand ist die richtige Übersetzung.
+2. **Die Familien.** Dreizehn Treppen, drei Stufenblöcke samt ihren Doppelstufen, die
+   vierundzwanzig Rohre, die sechzehn Betonfarben, die acht Töne des erweiterten Betons, die
+   Türen. Die Reihenfolgen sind nicht geraten: sie stehen in `ModBlocks.java`, wo die
+   Werkstoffe dem Erbauer eines `BlockMultiSlab` in genau dieser Folge übergeben werden.
+3. **Die Einzelstücke.** Scheinwerfer (Bit 0 heißt zerschossen, die oberen drei sind die
+   Seite), Gitter (das Metadatum ist die Höhe in Achteln), Panzerbeton (der Verfall), toter
+   Bewuchs, Leuchtstein, Amboss, Falltür, Schmalspurgleis, Wackelkopf.
+4. **Die Mehrblockmaschinen.** In 1.7.10 sagt ein Metadatum dreierlei zugleich, und der
+   Kopfkommentar von `BlockDummyable` erklärt es: 0–5 ein Platzhalter, 6–11 ein Platzhalter
+   mit Merker, 12–15 der Kern — und die Richtung ist die Zahl minus 0, 6 beziehungsweise 10.
+   Der Port hat dafür zwei Eigenschaften statt einer Zahl, `facing` und `type`.
+
+### Ein Tor, das an einer Stelle nicht hingesehen hat
+
+`tools/structure-gap.py` las nur die **Palette** jeder Bauwerksdatei. Ein Beutestab nennt den
+Block, zu dem er wird, aber in **seiner Blockentität** — in der Palette steht nur der Stab.
+Damit war der Aktenschrank (`filing_cabinet`) in vier Bauwerken unsichtbar und hat in keiner
+Zählung gefehlt.
+
+Das Tor liest jetzt beides. Ergebnis: **drei echte Lücken** statt einer.
+
+| fehlt | wo |
+|---|---|
+| `filing_cabinet` | `oil_rig`, `radio_house`, `laboratory`, `factory`, `crane_mod` |
+| `safe` | `meteor-3-book` (seit Runde 251 durch eine Truhe vertreten) |
+| `wand_logic` | `crane`, `crane_mod`, `factory`, `tower_base` |
+
+Dabei fiel noch eine Namensverschiebung auf: der graue RTG heißt im Original im Feld
+`machine_rtg`, angemeldet aber als `machine_rtg_grey`. Der Port nimmt den Feldnamen.
+
+### Zwei Zahlen, die niemand mehr auflösen kann
+
+Zwei Beutestäbe nennen ihren Ersatzblock als **Zahl** — 557 und 683. 1.7.10 löst einen
+Blocknamen, der eine Zahl ist, über die Blockkennziffer auf, und die galt nur in der Welt des
+Urhebers. Sie sind nicht auflösbar und bleiben ein Fehler des Umsetzers, kein stiller Ersatz.
+Die dritte solche Zahl, 54, ist die Vanilla-Truhe und damit eindeutig.

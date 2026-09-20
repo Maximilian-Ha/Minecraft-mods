@@ -290,6 +290,47 @@ for _m in (2, 3, 4, 5):
 
 
 
+
+# ---------------------------------------------------------------- hbm, eins zu eins
+
+# Bloecke, die es im Port unter genau demselben Namen gibt und die in den Bauwerken nur mit
+# Metadatum null vorkommen. Ihr Standardzustand ist die richtige Uebersetzung -- was sonst
+# noch an Eigenschaften an ihnen haengt, stand in 1.7.10 nicht in der Datei.
+EINS_ZU_EINS = [
+    'barrel_corroded', 'barrel_plastic', 'block_aluminium', 'block_copper',
+    'block_electrical_scrap', 'block_red_copper', 'block_scrap', 'block_slag', 'brick_asbestos',
+    'brick_compound', 'brick_concrete', 'brick_concrete_broken', 'brick_concrete_cracked',
+    'brick_concrete_mossy', 'brick_light', 'concrete', 'concrete_asbestos', 'concrete_rebar',
+    'concrete_smooth', 'concrete_super_broken', 'crate_ammo', 'crate_can', 'crate_lead',
+    'crate_metal', 'crate_supply', 'crate_weapon', 'deco_aluminium', 'deco_beryllium',
+    'deco_loot', 'deco_red_copper', 'deco_rusty_steel', 'deco_steel', 'deco_titanium',
+    'deco_tungsten', 'det_charge', 'dirt_dead', 'dungeon_spawner', 'gas_asbestos',
+    'gravel_obsidian', 'hev_battery', 'leaves_layer', 'machine_funnel', 'mine_ap', 'mine_he',
+    'mine_naval', 'mush', 'oil_spill', 'ore_oil_sand', 'pole_top', 'red_cable',
+    'red_wire_coated', 'reinforced_brick', 'reinforced_glass', 'reinforced_glass_pane',
+    'reinforced_light', 'reinforced_sand', 'reinforced_stone', 'sellafield_slaked', 'spikes',
+    'spotlight_beam', 'spotlight_fluoro', 'tile_lab', 'tile_lab_broken', 'tile_lab_cracked',
+    'turret_sentry_damaged', 'vitrified_barrel', 'waste_leaves', 'yellow_barrel',
+]
+
+for _n in EINS_ZU_EINS:
+    TABELLE[('hbm:tile.' + _n, 0)] = zustand(MODID + ':' + _n)
+
+# DREI FAESSER STEHEN IM PORT ANDERSHERUM: dort heisst zuerst das Fass, dann die Sorte.
+for _alt, _neu in (('lox_barrel', 'barrel_lox'), ('pink_barrel', 'barrel_pink'),
+                   ('red_barrel', 'barrel_red')):
+    TABELLE[('hbm:tile.' + _alt, 0)] = zustand(MODID + ':' + _neu)
+
+# ZWEI NAMEN KENNT DAS ORIGINAL SELBST NICHT MEHR; beide stehen dort in ignoreMappings.
+# ore_coal_oil traegt das Original in seine eigene Ersatztabelle ein (NBTStructure:89) und
+# macht Kohleerz daraus; hier steht dasselbe. barrel_iron hat keinen Nachfolger -- im
+# Original wird daraus Luft, und dabei bleibt es.
+TABELLE[('hbm:tile.ore_coal_oil', 0)] = zustand('minecraft:coal_ore')
+TABELLE[('hbm:tile.barrel_iron', 0)] = zustand('minecraft:air')
+
+# Der Waffentisch heisst im Port ohne das machine_ davor.
+TABELLE[('hbm:tile.machine_weapon_table', 0)] = zustand(MODID + ':weapon_table')
+
 # ---------------------------------------------------------------- Vanilla vor dem Flattening
 
 # 1.7.10 legt Farbe, Holzart und Gesteinsart als Metadaten-Zahl ab; seit 1.13 ist jede davon
@@ -487,6 +528,289 @@ for _m in range(16):
             occupied=bool(_m & 4))
 
 
+
+# ---------------------------------------------------------------- hbm, Familien
+
+def _hbm_treppen(name, ziel=None):
+    """Treppen zaehlen im Port wie in Vanilla; nur der Name wechselt gelegentlich."""
+    for meta in range(8):
+        TABELLE[('hbm:tile.' + name, meta)] = zustand(
+            MODID + ':' + (ziel or name),
+            facing=TREPPENRICHTUNG[meta & 3],
+            half='top' if meta & 4 else 'bottom',
+            shape='straight', waterlogged=False)
+
+
+for _t in ('brick_compound_stairs', 'brick_concrete_broken_stairs', 'brick_concrete_cracked_stairs',
+           'brick_concrete_mossy_stairs', 'brick_concrete_stairs', 'brick_light_stairs',
+           'concrete_asbestos_stairs', 'concrete_smooth_stairs', 'concrete_stairs',
+           'lightstone_bricks_stairs', 'reinforced_brick_stairs', 'reinforced_stone_stairs',
+           'brick_obsidian_stairs'):
+    _hbm_treppen(_t)
+
+# DIE STUFENBLOECKE. Im Original ist jeder von ihnen EIN Block, dessen untere drei Bit den
+# Werkstoff waehlen und dessen viertes ihn nach oben hebt (BlockMultiSlab). Im Port ist jeder
+# Werkstoff eine eigene Stufe. Die Reihenfolgen stehen in ModBlocks.java: die Werkstoffe
+# werden dem Erbauer in genau dieser Folge uebergeben.
+MULTISTUFEN = {
+    # ModBlocks.java:1530
+    'brick_slab': ['reinforced_stone', 'reinforced_brick', 'brick_obsidian', 'brick_light',
+                   'brick_compound', 'brick_asbestos', 'brick_fire'],
+    # ModBlocks.java:1528
+    'concrete_brick_slab': ['brick_concrete', 'brick_concrete_mossy', 'brick_concrete_cracked',
+                            'brick_concrete_broken', 'brick_ducrete'],
+    # ModBlocks.java:1526
+    'concrete_slab': ['concrete_smooth', 'concrete', 'concrete_asbestos', 'ducrete_smooth',
+                      'ducrete', 'asphalt'],
+}
+
+# Werkstoffe, die der Port nicht als Stufe hat. Sie kommen in keinem der 79 Bauwerke vor --
+# nachgeprueft mit --fehlliste --, stehen hier aber, damit die Tabelle nicht stillschweigend
+# etwas Falsches liefert, falls sie doch einmal auftauchen.
+STUFEN_OHNE_PORT = {'brick_obsidian', 'brick_asbestos', 'brick_fire', 'brick_ducrete',
+                    'ducrete_smooth', 'ducrete', 'asphalt'}
+
+for _name, _werkstoffe in MULTISTUFEN.items():
+    for _i, _w in enumerate(_werkstoffe):
+        if _w in STUFEN_OHNE_PORT:
+            continue
+        TABELLE[('hbm:tile.' + _name, _i)] = zustand(MODID + ':%s_slab' % _w, type='bottom', waterlogged=False)
+        TABELLE[('hbm:tile.' + _name, _i + 8)] = zustand(MODID + ':%s_slab' % _w, type='top', waterlogged=False)
+    # Die Doppelstufe ist ein eigener Block, dessen Metadatum nur den Werkstoff nennt.
+    _doppel = _name.replace('_slab', '_double_slab')
+    for _i, _w in enumerate(_werkstoffe):
+        if _w in STUFEN_OHNE_PORT:
+            continue
+        TABELLE[('hbm:tile.' + _doppel, _i)] = zustand(MODID + ':%s_slab' % _w, type='double', waterlogged=False)
+
+# DIE ROHRE. Im Port sind sie Saeulen; das Metadatum ist die Achse, wie bei jedem
+# Saeulenblock von 1.7.10 (0 y, 4 x, 8 z).
+ROHRE = [
+    'deco_pipe', 'deco_pipe_rusted', 'deco_pipe_green', 'deco_pipe_green_rusted',
+    'deco_pipe_red', 'deco_pipe_marked',
+    'deco_pipe_rim', 'deco_pipe_rim_rusted', 'deco_pipe_rim_green', 'deco_pipe_rim_green_rusted',
+    'deco_pipe_rim_red', 'deco_pipe_rim_marked',
+    'deco_pipe_quad', 'deco_pipe_quad_rusted', 'deco_pipe_quad_green', 'deco_pipe_quad_green_rusted',
+    'deco_pipe_quad_red', 'deco_pipe_quad_marked',
+    'deco_pipe_framed', 'deco_pipe_framed_rusted', 'deco_pipe_framed_green',
+    'deco_pipe_framed_green_rusted', 'deco_pipe_framed_red', 'deco_pipe_framed_marked',
+]
+
+for _r in ROHRE:
+    for _m, _a in ((0, 'y'), (4, 'x'), (8, 'z')):
+        TABELLE[('hbm:tile.' + _r, _m)] = zustand(MODID + ':' + _r, axis=_a)
+
+# Zwei weitere Saeulen desselben Zuschnitts.
+for _saeule in ('concrete_pillar', 'meteor_pillar'):
+    for _m, _a in ((0, 'y'), (4, 'x'), (8, 'z')):
+        TABELLE[('hbm:tile.' + _saeule, _m)] = zustand(MODID + ':' + _saeule, axis=_a)
+
+# DER BUNTE BETON. Die Farbe steht als ~meta & 15 in ItemDye.field_150921_b -- dieselbe
+# verkehrte Zaehlung wie bei der Wolle, nur dass hbm sie noch einmal umdreht.
+BETONFARBEN = ['black', 'red', 'green', 'brown', 'blue', 'purple', 'cyan', 'light_gray',
+               'gray', 'pink', 'lime', 'yellow', 'light_blue', 'magenta', 'orange', 'white']
+for _m in range(16):
+    TABELLE[('hbm:tile.concrete_colored', _m)] = zustand(MODID + ':concrete_' + BETONFARBEN[(~_m) & 15])
+
+# Der erweiterte Beton zaehlt geradeaus, in der Reihenfolge von EnumConcreteType.
+BETON_EXT = ['machine', 'machine_stripe', 'indigo', 'purple', 'pink', 'hazard', 'sand', 'bronze']
+for _i, _n in enumerate(BETON_EXT):
+    TABELLE[('hbm:tile.concrete_colored_ext', _i)] = zustand(MODID + ':concrete_ext_' + _n)
+
+# DIE TUEREN zaehlen wie die Vanilla-Tuer; forme_tueren() holt der oberen Haelfte nach, was
+# nur die untere weiss.
+for _tuer in ('door_metal', 'door_office', 'door_bunker', 'door_red', 'door_bunker_bulkhead'):
+    for _m in range(8):
+        TABELLE[('hbm:tile.' + _tuer, _m)] = zustand(MODID + ':' + _tuer,
+                facing=_TUERRICHTUNG[_m & 3], half='lower', hinge='left',
+                open=bool(_m & 4), powered=False)
+    for _m in range(8, 16):
+        TABELLE[('hbm:tile.' + _tuer, _m)] = zustand(MODID + ':' + _tuer,
+                facing='north', half='upper', hinge='right' if _m & 1 else 'left',
+                open=False, powered=False)
+
+
+
+# ---------------------------------------------------------------- hbm, Einzelstuecke
+
+def _seitenblock(name, ziel=None, eigenschaft='facing'):
+    """Bloecke, deren Metadatum die Seitenzahl ist (2 Nord bis 5 Ost)."""
+    for meta in (2, 3, 4, 5):
+        TABELLE[('hbm:tile.' + name, meta)] = zustand(MODID + ':' + (ziel or name), **{eigenschaft: SEITE[meta]})
+
+
+for _b in ('charger', 'geiger', 'machine_boiler_off', 'radiorec', 'skeleton_holder',
+           'steel_poles', 'tape_recorder', 'wood_barrier', 'ladder_steel', 'floodlight',
+           'machine_diesel', 'machine_battery', 'pole_satellite_receiver'):
+    _seitenblock(_b)
+
+# DIE KETTE ist im Port eine Achse, im Original eine Seite: unten und oben sind dieselbe
+# Achse, Nord und Sued auch.
+for _m, _a in ((0, 'y'), (1, 'y'), (2, 'z'), (3, 'z'), (4, 'x'), (5, 'x')):
+    TABELLE[('hbm:tile.dungeon_chain', _m)] = zustand(MODID + ':dungeon_chain', axis=_a, waterlogged=False)
+
+# DAS GITTER: das Metadatum ist die Hoehe, in Achteln. Neun heisst einen Achtel unter dem
+# Boden (BlockGrate.getY).
+for _m in range(10):
+    TABELLE[('hbm:tile.steel_grate', _m)] = zustand(MODID + ':steel_grate', layer=_m)
+    TABELLE[('hbm:tile.steel_grate_wide', _m)] = zustand(MODID + ':steel_grate_wide', layer=_m)
+
+# DER PANZERBETON zaehlt seinen Verfall von null bis fuenfzehn.
+for _m in range(16):
+    TABELLE[('hbm:tile.concrete_super', _m)] = zustand(MODID + ':concrete_super', decay=_m)
+
+# DER MASCHENDRAHTZAUN: null ist das Feld, alles andere der Pfosten (BlockMetalFence.getIcon).
+for _m in range(1, 16):
+    TABELLE[('hbm:tile.fence_metal', _m)] = zustand(MODID + ':fence_metal_post',
+            north=False, east=False, south=False, west=False, waterlogged=False)
+
+# Die dunkle Lampe ist im Port dieselbe mit lit=false.
+TABELLE[('hbm:tile.reinforced_lamp_off', 0)] = zustand(MODID + ':reinforced_lamp', lit=False)
+
+# DREI BLOECKE HABEN IM PORT KEINE DREHUNG. Im Original liegt in ihrem Metadatum eine
+# Ausrichtung; der Port hat sie als schlichte Bloecke angelegt (Runde 74). Alle Spielarten
+# werden derselbe Block -- das ist ein Verlust an Vielfalt, aber kein falscher Block.
+for _b in ('steel_beam', 'steel_roof', 'steel_scaffold'):
+    for _m in range(16):
+        TABELLE[('hbm:tile.' + _b, _m)] = zustand(MODID + ':' + _b)
+
+# Die Vorratskiste kennt im Port keine Drehung.
+for _m in range(16):
+    TABELLE[('hbm:tile.crate_iron', _m)] = zustand(MODID + ':crate_iron')
+
+# DIE TOTEN PFLANZEN: das Metadatum ist die Nummer in EnumDeadPlantType.
+TOTE_PFLANZEN = ['generic', 'grass', 'flower', 'bigflower', 'fern']
+for _i, _p in enumerate(TOTE_PFLANZEN):
+    TABELLE[('hbm:tile.plant_dead', _i)] = zustand(MODID + ':plant_dead_' + _p)
+
+# DER LEUCHTSTEIN: das Metadatum ist die Nummer in LightstoneType.
+LEUCHTSTEIN = ['lightstone', 'lightstone_tile', 'lightstone_bricks',
+               'lightstone_bricks_chiseled', 'lightstone_chiseled']
+for _i, _l in enumerate(LEUCHTSTEIN):
+    TABELLE[('hbm:tile.lightstone', _i)] = zustand(MODID + ':' + _l)
+
+# DER AMBOSS: im Port ein Block mit Spielart. Der Bleiamboss ist Nummer eins.
+for _m in range(16):
+    TABELLE[('hbm:tile.anvil_lead', _m)] = zustand(MODID + ':anvil', subtype=1, facing='north')
+
+# DIE STAHLFALLTUER zaehlt wie die Vanilla-Falltuer.
+for _m in range(16):
+    TABELLE[('hbm:tile.trapdoor_steel', _m)] = zustand(MODID + ':trapdoor_steel',
+            facing=_FALLTUER[_m & 3], half='top' if _m & 8 else 'bottom',
+            open=bool(_m & 4), powered=False, waterlogged=False)
+
+# DAS SCHMALSPURGLEIS: dieselben Formen wie das Vanilla-Gleis.
+GLEISFORM = {0: 'north_south', 1: 'east_west', 2: 'ascending_east', 3: 'ascending_west',
+             4: 'ascending_north', 5: 'ascending_south', 6: 'south_east', 7: 'south_west',
+             8: 'north_west', 9: 'north_east'}
+for _m, _f in GLEISFORM.items():
+    TABELLE[('hbm:tile.rail_narrow', _m)] = zustand(MODID + ':rail_narrow', shape=_f, waterlogged=False)
+
+
+
+# DIE SCHEINWERFER: Bit 0 heisst zerschossen, die oberen drei sind die Seitenzahl
+# (Spotlight.getDirection: metadata >> 1; isBroken: metadata & 1).
+for _b in ('spotlight_halogen', 'spotlight_incandescent', 'spotlight_fluoro'):
+    for _seite in range(6):
+        for _kaputt in (0, 1):
+            TABELLE[('hbm:tile.' + _b, (_seite << 1) | _kaputt)] = zustand(
+                    MODID + ':' + _b, facing=SEITE[_seite], lit=True, broken=bool(_kaputt))
+    # Die dunkle Fassung ist im Port dieselbe mit lit=false.
+    for _seite in range(6):
+        for _kaputt in (0, 1):
+            TABELLE[('hbm:tile.' + _b + '_off', (_seite << 1) | _kaputt)] = zustand(
+                    MODID + ':' + _b, facing=SEITE[_seite], lit=False, broken=bool(_kaputt))
+
+# Der dunkle Ofen ebenso.
+for _m in (2, 3, 4, 5):
+    TABELLE[('hbm:tile.machine_electric_furnace_off', _m)] = zustand(
+            MODID + ':machine_electric_furnace', facing=SEITE[_m], lit=False)
+
+# DIE DEKO-MODELLE: das Metadatum ist (Drehung << 2) | Spielart, und die Drehung zaehlt
+# 0 Nord, 1 Sued, 2 West, 3 Ost (BlockDecoModel.onBlockPlacedBy, dort auch der Kommentar).
+_DEKODREHUNG = {0: 'north', 1: 'south', 2: 'west', 3: 'east'}
+
+
+def _dekomodell(name, spielarten):
+    for meta in range(16):
+        spielart = meta & 3
+        if spielart >= len(spielarten):
+            continue
+        TABELLE[('hbm:tile.' + name, meta)] = zustand(
+                MODID + ':' + spielarten[spielart], facing=_DEKODREHUNG[meta >> 2])
+
+
+_dekomodell('deco_computer', ['deco_computer'])
+
+# CRT und Toaster zaehlen andersherum: bei ihnen ist die Spielart oben und die Drehung unten
+# (BlockDecoCRT.damageDropped: (meta % 16) / 4).
+def _dekovariante(name, spielarten):
+    for meta in range(16):
+        spielart = (meta % 16) // 4
+        if spielart >= len(spielarten):
+            continue
+        TABELLE[('hbm:tile.' + name, meta)] = zustand(
+                MODID + ':' + spielarten[spielart], facing=_DEKODREHUNG[meta % 4])
+
+
+_dekovariante('deco_crt', ['deco_crt_clean', 'deco_crt_broken', 'deco_crt_blinking', 'deco_crt_bsod'])
+_dekovariante('deco_toaster', ['deco_toaster_iron', 'deco_toaster_steel', 'deco_toaster_wood'])
+
+# DER HOLZBAU: das Metadatum ist die Nummer in EnumWoodStructure.
+for _i, _w in enumerate(['roof', 'scaffold', 'ceiling']):
+    TABELLE[('hbm:tile.wood_structure', _i)] = zustand(MODID + ':wood_structure_' + _w)
+
+# DER WACKELKOPF steht auf sechzehn Drehungen; WELCHER Kopf es ist, stand in 1.7.10 in der
+# Blockentitaet und steht im Port in der Eigenschaft meta. Die Bauwerke setzen keinen
+# bestimmten -- ohne Blockentitaet bleibt es der erste.
+for _m in range(16):
+    TABELLE[('hbm:tile.bobblehead', _m)] = zustand(MODID + ':bobblehead', direction=_m, meta=0)
+
+
+
+# DIE MEHRBLOCKMASCHINEN. In 1.7.10 besteht so eine Maschine aus einem Kern und einer Wolke
+# von Platzhaltern; das Metadatum sagt, was der Block ist und wohin die Maschine schaut
+# (BlockDummyable, Kopfkommentar):
+#
+#   0 bis  5   Platzhalter, Richtung = Metadatum
+#   6 bis 11   Platzhalter mit Merker ("extra"), Richtung = Metadatum minus 6
+#  12 bis 15   der Kern, Richtung = Metadatum minus 10 (also nur die vier waagerechten)
+#
+# Der Port hat dafuer zwei Eigenschaften statt einer Zahl: facing und type.
+MEHRBLOCK = {
+    'machine_fluidtank': 'machine_fluid_tank',
+    'machine_rotary_furnace': 'machine_rotary_furnace',
+    'radio_telex': 'radio_telex',
+    'turret_howard_damaged': 'turret_howard_damaged',
+    'turret_sentry_damaged': 'turret_sentry_damaged',
+}
+
+for _alt, _neu in MEHRBLOCK.items():
+    for _m in range(6):
+        TABELLE[('hbm:tile.' + _alt, _m)] = zustand(MODID + ':' + _neu, facing=SEITE[_m], type='dummy')
+    for _m in range(6, 12):
+        TABELLE[('hbm:tile.' + _alt, _m)] = zustand(MODID + ':' + _neu, facing=SEITE[_m - 6], type='extra')
+    for _m in range(12, 16):
+        TABELLE[('hbm:tile.' + _alt, _m)] = zustand(MODID + ':' + _neu, facing=SEITE[_m - 10], type='core')
+
+# Die Mikrowelle hat im Port keine Drehung -- im Original steht in ihrem Metadatum eine.
+for _m in range(16):
+    TABELLE[('hbm:tile.machine_microwave', _m)] = zustand(MODID + ':machine_microwave')
+
+# Der Rotdraht-Anschluss traegt die Seite, in die er zeigt.
+for _m in range(6):
+    TABELLE[('hbm:tile.red_connector', _m)] = zustand(MODID + ':red_connector', facing=SEITE[_m])
+
+# DIE FLUESSIGKEITSLEITUNGEN. Das Messrohr hat im Port keine Eigenschaften -- was es misst,
+# steht in seiner Blockentitaet. Die Standardleitung traegt ihre sechs Anschluesse und die
+# Fluessigkeitsnummer; die Anschluesse rechnet 1.21 beim Setzen selbst aus, die Nummer
+# stammt aus dem Metadatum.
+for _m in range(16):
+    TABELLE[('hbm:tile.fluid_duct_gauge', _m)] = zustand(MODID + ':fluid_duct_gauge')
+    TABELLE[('hbm:tile.fluid_duct_neo', _m)] = zustand(MODID + ':fluid_duct_neo', meta=_m,
+            north=False, south=False, east=False, west=False, up=False, down=False)
+
+
 # Gegenstaende, die in Truheninhalten vorkommen. Wert None heisst: im Port nicht vorhanden,
 # der Stapel faellt weg -- das ist eine Entscheidung, keine Luecke.
 GEGENSTAENDE = {
@@ -558,7 +882,17 @@ def uebersetze_ersatzblock(name, meta):
 ERSATZ_BEUTE = {
     'hbm:tile.deco_loot': MODID + ':deco_loot',
     'minecraft:chest': 'minecraft:chest',
+    'hbm:tile.crate_steel': MODID + ':crate_steel',
+    'hbm:tile.crate_iron': MODID + ':crate_iron',
     'hbm:tile.safe': 'minecraft:chest',
+    # 1.7.10 loest einen Blocknamen, der eine Zahl ist, ueber die Blockkennziffer auf
+    # (Block.getBlockFromName). 54 ist die Truhe. Die beiden anderen Zahlen, die in den
+    # Dateien stehen -- 557 und 683 --, zeigen auf Bloecke, deren Kennziffer nur in der
+    # Welt des Urhebers galt; sie sind nicht aufloesbar und bleiben ein Fehler.
+    '54': 'minecraft:chest',
+    # Der Feldname im Original ist machine_rtg, der angemeldete Name machine_rtg_grey --
+    # wieder ein Fall, in dem beide auseinandergehen. Der Port nimmt den Feldnamen.
+    'hbm:tile.machine_rtg_grey': MODID + ':machine_rtg',
 }
 
 
@@ -667,7 +1001,8 @@ def _treppe_bei(gitter, pos, richtung):
 
 
 # Bloecke, an die ein Zaun andockt: alles, was in diesen Bauwerken eine volle Wand ist.
-KEINE_ZAUNVERBINDUNG = {'minecraft:air', MODID + ':fence_metal', MODID + ':toxic_block',
+KEINE_ZAUNVERBINDUNG = {'minecraft:air', MODID + ':fence_metal', MODID + ':fence_metal_post',
+                        MODID + ':toxic_block',
                         MODID + ':balefire', 'minecraft:redstone_torch',
                         'minecraft:redstone_wall_torch', 'minecraft:jigsaw',
                         MODID + ':wand_loot'}
@@ -718,13 +1053,13 @@ def forme_pflanzen(gitter):
 def forme_zaeune(gitter):
     """Setzt die vier Verbindungen jedes Zaunfelds. 1.7.10 hat auch sie beim Zeichnen bestimmt."""
     for pos, zust in list(gitter.items()):
-        if zust is None or zust[0] != MODID + ':fence_metal':
+        if zust is None or zust[0] not in (MODID + ':fence_metal', MODID + ':fence_metal_post'):
             continue
         for richtung in ('north', 'east', 'south', 'west'):
             dx, dy, dz = VERSATZ[richtung]
             nachbar = gitter.get((pos[0] + dx, pos[1] + dy, pos[2] + dz))
             verbunden = nachbar is not None and nachbar[0] not in KEINE_ZAUNVERBINDUNG
-            if nachbar is not None and nachbar[0] == MODID + ':fence_metal':
+            if nachbar is not None and nachbar[0] in (MODID + ':fence_metal', MODID + ':fence_metal_post'):
                 verbunden = True
             zust[1][richtung] = 'true' if verbunden else 'false'
 
