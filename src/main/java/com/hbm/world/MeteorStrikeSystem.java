@@ -1,5 +1,6 @@
 package com.hbm.world;
 
+import com.hbm.blocks.generic.PedestalBlock;
 import com.hbm.config.NtmConfig;
 import com.hbm.entity.NtmEntityTypes;
 import com.hbm.entity.projectile.Meteor;
@@ -46,8 +47,28 @@ public final class MeteorStrikeSystem {
             List<ServerPlayer> players = level.players();
             if (!players.isEmpty()) {
                 ServerPlayer player = players.get(level.random.nextInt(players.size()));
-                if (shouldSpawnMeteorFor(player)) {
-                    spawnMeteorAtPlayer(player, hasProtection(player));
+
+                /*
+                 * Runde 231: der zweite Weg zu den Talismanen. Bis dahin zaehlte nur, was im
+                 * HELM steckt; im Original (BossSpawnHandler Z. 244) zaehlt ausserdem, was
+                 * auf einem Sockel im Umkreis von hundert Bloecken liegt. Der Sockel traegt
+                 * sich dafuer alle zwanzig Takte selbst ein, und die Eintraege verfallen nach
+                 * drei Sekunden -- so merkt das System, wenn der Talisman fort ist.
+                 */
+                boolean abwehr = hasProtection(player);
+                boolean einschlag = shouldSpawnMeteorFor(player);
+
+                if(!abwehr || einschlag) {
+                    for(PedestalBlock.Entry eintrag : PedestalBlock.getEntries(level)) {
+                        if(Math.abs(eintrag.pos().getX() - player.getBlockX()) > 100) continue;
+                        if(Math.abs(eintrag.pos().getZ() - player.getBlockZ()) > 100) continue;
+                        if(eintrag.type() == PedestalBlock.EntryType.CHARM_OF_PROTECTION) abwehr = true;
+                        if(eintrag.type() == PedestalBlock.EntryType.METEORITE_CHARM) einschlag = false;
+                    }
+                }
+
+                if (einschlag) {
+                    spawnMeteorAtPlayer(player, abwehr);
                 }
             }
         }

@@ -27,6 +27,7 @@ import com.hbm.inventory.NtmMenuTypes;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.recipes.GasCentrifugeRecipes;
 import com.hbm.inventory.recipes.MagicRecipes;
+import com.hbm.inventory.recipes.PedestalRecipes;
 import com.hbm.inventory.recipes.loader.SerializableRecipe;
 import com.hbm.items.machine.MoldItem;
 import com.hbm.blocks.generic.ToolConversionBlock;
@@ -114,6 +115,11 @@ public class CommonEvents {
             /* Die Rezepte des Buchs stehen wie im Original fest im Quelltext; sie haben keine
              * Form, sondern nur eine Reihenfolge, und passen deshalb in kein Rezeptdatenblatt. */
             MagicRecipes.register();
+
+            /* Die Sockelrezepte, Runde 231. Auch sie stehen fest im Quelltext: sie haben
+             * neun Plaetze im Abstand drei und eine Bedingung an Mondphase oder Ruf -- das
+             * passt in kein Rezeptdatenblatt von 1.21. */
+            PedestalRecipes.register();
 
             HTTPHandler.loadStats();
             FalloutConfigJSON.initialize();

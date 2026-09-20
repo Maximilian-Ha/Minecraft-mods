@@ -2559,6 +2559,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.RADIO_TORCH_LOGIC, DESC, "Placable on flat surfaces or comparator-compatible blocks$Maps redstone signals to conditions evaluated in a set order$Numerical or string inputs are compared against a constant");
         this.add(NtmBlocks.TESLA, "Tesla Coil");
         this.add(NtmBlocks.TESLA, DESC, "Zaps every living thing in range.$Wear a full set of metal armor$to stay out of the circuit.");
+        this.add(NtmBlocks.PEDESTAL, "Pedestal");
         this.add(NtmBlocks.SKELETON_HOLDER, "Oh, that's a dead guy");
         this.add(NtmBlocks.MACHINE_MICROWAVE, "Microwave");
         this.add(NtmBlocks.MACHINE_MICROWAVE, DESC, "Heats up food using the regular$smelting recipes.$Do not run it at full power.");

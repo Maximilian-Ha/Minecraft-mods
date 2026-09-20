@@ -1267,6 +1267,45 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.particleOnlyBlock(NtmBlocks.RADIO_TELEX, modLoc("block/radio_telex"));
         this.particleOnlyBlock(NtmBlocks.TESLA, modLoc("block/tesla"));
         // Das Original nimmt fuer den Sockel schlicht die Seelensand-Textur des Spiels.
+        /*
+         * Der Sockel, Runde 231. Drei Kaesten, genau die des Originals (RenderPedestal):
+         * Fuss null bis vier, Saeule vier bis zwoelf und zwei Pixel eingerueckt, Deckplatte
+         * zwoelf bis sechzehn. Oben und unten das Deckbild, ringsum das Seitenbild -- so
+         * steht es dort in getIcon: Seite null und eins ist blockIcon, der Rest iconSide.
+         */
+        ModelFile pedestalModel = models()
+                .getBuilder("pedestal")
+                .parent(new ModelFile.UncheckedModelFile("block/block"))
+                .texture("top", modLoc("block/pedestal_top"))
+                .texture("side", modLoc("block/pedestal_side"))
+                .texture("particle", modLoc("block/pedestal_side"))
+                .element().from(0, 0, 0).to(16, 4, 16)
+                        .face(Direction.UP).texture("#top").end()
+                        .face(Direction.DOWN).texture("#top").cullface(Direction.DOWN).end()
+                        .face(Direction.NORTH).texture("#side").end()
+                        .face(Direction.SOUTH).texture("#side").end()
+                        .face(Direction.WEST).texture("#side").end()
+                        .face(Direction.EAST).texture("#side").end()
+                .end()
+                .element().from(2, 4, 2).to(14, 12, 14)
+                        .face(Direction.UP).texture("#top").end()
+                        .face(Direction.DOWN).texture("#top").end()
+                        .face(Direction.NORTH).texture("#side").end()
+                        .face(Direction.SOUTH).texture("#side").end()
+                        .face(Direction.WEST).texture("#side").end()
+                        .face(Direction.EAST).texture("#side").end()
+                .end()
+                .element().from(0, 12, 0).to(16, 16, 16)
+                        .face(Direction.UP).texture("#top").cullface(Direction.UP).end()
+                        .face(Direction.DOWN).texture("#top").end()
+                        .face(Direction.NORTH).texture("#side").end()
+                        .face(Direction.SOUTH).texture("#side").end()
+                        .face(Direction.WEST).texture("#side").end()
+                        .face(Direction.EAST).texture("#side").end()
+                .end();
+        this.getVariantBuilder(NtmBlocks.PEDESTAL.get()).partialState().setModels(new ConfiguredModel(pedestalModel));
+        this.blockItem(NtmBlocks.PEDESTAL);
+
         this.particleOnlyBlock(NtmBlocks.SKELETON_HOLDER, mcLoc("block/soul_sand"));
         this.particleOnlyBlock(NtmBlocks.LAMP_DEMON, modLoc("block/lamp_demon"));
         // Das Original hat fuer die Mikrowelle nur eine Textur und waehlt sie fuer alle

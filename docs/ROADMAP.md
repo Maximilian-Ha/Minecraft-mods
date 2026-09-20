@@ -10794,3 +10794,61 @@ dungeon_spawner  ->  UndeadSoldier   (Runde 228, da)
 Die Sockelrezepte sind also der nächste echte Knoten, nicht der Spawner.
 
 Alle 39 Tore grün.
+
+## Runde 231 — Das Sockelsystem
+
+Der Knoten, den Runde 230 vermessen hatte. Neun Sockel: einer in der Mitte, acht ringsum
+im Abstand **drei** — nicht nebeneinander, sondern so weit auseinander, dass das Ganze
+sieben mal sieben Blöcke einnimmt. Wer das Richtige auflegt und den mittleren mit Redstone
+beschickt, bekommt darauf ein Einzelstück.
+
+Die Abstandstabelle ist Schritt für Schritt nachgerechnet und nicht geglättet: die vier
+geraden Richtungen liegen drei Blöcke entfernt, die vier **Ecken je zwei in beide
+Richtungen**. Das ist nicht dasselbe wie drei in beide Richtungen, und es sieht im Spiel
+auch anders aus — die Ecken stehen näher. So steht es im Original, und so bleibt es.
+
+### Was heute baubar ist — gemessen, nicht geschätzt
+
+Alle 14 Erzeugnisse der Sockelrezepte gibt es im Port. Von den **17 Rezepten stehen 13**
+hier; vier fehlen, und jedes mit benannter Ursache:
+
+| Rezept | Fehlende Zutat |
+|---|---|
+| `gun_flamer_daybreaker` | `stick_dynamite` |
+| `gun_autoshotgun_sexy` | `bolt_spike`, `wild_p`, `card_qos`, `card_aos` |
+| `gun_laser_pistol_morning_glory` | `morning_glory` |
+| `ammo_secret` FOLLY_SM | `chunk_ore` in der Ausführung MOONSTONE |
+
+Ein Rezept auf eine Zutat, die es nicht gibt, wäre kein Rezept, sondern eine Zeile, die nie
+zutrifft.
+
+### Die Namensfalle, noch einmal
+
+Der Protege braucht `ModBlocks.chain` — und dieses Feld meldet sich im Original unter dem
+Namen **`dungeon_chain`** an. Wer nach `chain` sucht, findet im Port nichts und hielte das
+Rezept für blockiert. Dieselbe Falle wie bei `dnt_*`, `ArmorDesh`/`steamsuit` und
+`ArmorHat`/`nossy_hat`: der Feldname ist nicht der Registriername.
+
+### Eine Ursache bekommt ihre Wirkung
+
+Der Sockel führt ein Eintragsregister: liegt ein Schutz- oder Meteoritentalisman darauf,
+trägt er sich alle zwanzig Takte ein, und die Einträge verfallen nach drei Sekunden — so
+merkt das System, wenn der Talisman fort ist. `MeteorStrikeSystem` kannte bisher **nur** den
+Talisman im Helm; der zweite Weg (im Original `BossSpawnHandler` Z. 244) ist jetzt
+angeschlossen. Hätte ich das Register ohne diesen Anschluss portiert, stünde eine Ursache
+ohne Wirkung da.
+
+### Zwei Dinge bewusst nicht übernommen
+
+* **Die Statistik `statLegendary`**, die das Original jedem Spieler im Umkreis von fünfzig
+  Blöcken gutschreibt. Der Port hat kein eigenes Statistiksystem — es gibt nichts, was man
+  hier hochzählen könnte.
+* **Der goldene Entschärfer** auf dem Sockel, der Creeper im Umkreis entschärft. Der Port
+  kennt `defuser_gold` nicht: den Entschärfer gibt es nur als Werkzeug, nicht als
+  Rüstungsaufsatz, und `castrateCreeper` hat kein Gegenstück.
+
+Der Sockel selbst steht wie im Original in **keinem** Kreativreiter und hat kein
+Werkbankrezept — er wird von der Weltgenerierung gesetzt (Schlüsselloch, roter Backstein,
+`LogicBlockConditions`). Der Eintrag im Torwächter sagt das mit dieser Begründung.
+
+Alle 39 Tore grün.

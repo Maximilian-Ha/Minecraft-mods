@@ -77,6 +77,7 @@ VERBORGENE_BLOECKE = {
     'TAINT':                        'breitet sich selbst aus, kein Bauklotz (Original: null)',
     'ZIRNOX_DESTROYED':             'Ruine nach der Kernschmelze, entsteht nur dort (Original: null)',
     'SKELETON_HOLDER':              'Sockel aus den Weltbauwerken, wird nur von der Generierung gesetzt (Original: setCreativeTab(null))',
+    'PEDESTAL':                     'Sockel des Rituals, wird nur von der Generierung gesetzt -- im Original von BlockKeyhole, BlockRedBrickKeyhole und LogicBlockConditions (Original: setCreativeTab(null), kein Werkbankrezept)',
     'CRATE_RED':                    'die rote Kiste steht nur in Weltbauwerken (Original: setCreativeTab(null))',
     'DECO_LOOT':                    'Beutesockel der Weltbauwerke; er gibt sich selbst nicht her und ist nur Traeger fuer die Stapel darauf (Original: setCreativeTab(null))',
 }

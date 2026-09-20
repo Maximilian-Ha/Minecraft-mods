@@ -33,6 +33,7 @@ import com.hbm.blocks.machine.BroadcasterBlock;
 import com.hbm.blocks.machine.DemonLampBlock;
 import com.hbm.blocks.machine.FurnaceBrickBlock;
 import com.hbm.blocks.machine.MachineMicrowaveBlock;
+import com.hbm.blocks.generic.PedestalBlock;
 import com.hbm.blocks.generic.SkeletonHolderBlock;
 import com.hbm.blocks.machine.TeslaBlock;
 import com.hbm.blocks.network.RadioRecBlock;
@@ -394,6 +395,12 @@ public class NtmBlocks {
     public static final DeferredBlock<Block> TESLA = register("tesla", () -> new TeslaBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion()));
     /* Stufe 5: der Sockel aus den Weltbauwerken. Werte aus ModBlocks.java:1448; wie im
      * Original in keinem Kreativreiter -- er wird nur von der Weltgenerierung gesetzt. */
+    /**
+     * Der Sockel, Runde 231. Stein wie im Original (Material.rock); die Werte sind die des
+     * Skeletthalters nebenan, denn beide sind dasselbe: ein Gestell, das einen Gegenstand
+     * zeigt. noOcclusion, weil er schmaler ist als ein voller Block.
+     */
+    public static final DeferredBlock<Block> PEDESTAL = register("pedestal", () -> new PedestalBlock(BlockBehaviour.Properties.of().strength(2.0F, 10.0F).sound(SoundType.STONE).mapColor(MapColor.STONE).noOcclusion()));
     public static final DeferredBlock<Block> SKELETON_HOLDER = register("skeleton_holder", () -> new SkeletonHolderBlock(BlockBehaviour.Properties.of().strength(2.0F, 10.0F).sound(SoundType.SOUL_SAND).mapColor(MapColor.COLOR_BROWN).noOcclusion()));
     /* Sein Lichtfleck: unsichtbar, nicht anfassbar, nur hell -- aber mit eigener
      * Blockentitaet, weil er sich Quelle und Strahlnummer merken muss. */
