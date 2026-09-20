@@ -521,6 +521,15 @@ public class NtmItems {
     public static final DeferredItem<Item> PELLET_CHARGED = ITEMS.register("pellet_charged", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> GLYPHID_MEAT = ITEMS.register("glyphid_meat", () -> new Item(new Item.Properties().food(NtmFoods.GLYPHID_MEAT)));
     public static final DeferredItem<Item> SOLID_FUEL = ITEMS.register("solid_fuel", () -> new Item(new Item.Properties()));
+    /*
+     * DIE GASFLASCHE. Das Gegenstueck des Kanisters fuer alles Gasfoermige: der Kanister
+     * nimmt, was ein CD_Canister hat, die Flasche, was ein CD_Gastank hat. CD_Gastank stand
+     * seit jeher in Fluids -- ein Dutzend Fluide bringt ihn mit, und bis Runde 208 las ihn
+     * niemand.
+     */
+    public static final DeferredItem<Item> GAS_EMPTY = ITEMS.register("gas_empty", () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> GAS_FULL = ITEMS.register("gas_full", () -> new GasTankItem(new Item.Properties()));
+
     public static final DeferredItem<Item> CANISTER_EMPTY = ITEMS.register("canister_empty", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> CANISTER_NAPALM = ITEMS.register("canister_napalm", () -> new Item(new Item.Properties()));
     /* Der gefuellte Kanister. Wie das Fass ein Gegenstand je Fluessigkeit, nur kleiner: tausend

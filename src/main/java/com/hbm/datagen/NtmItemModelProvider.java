@@ -756,6 +756,9 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicCustomLayerItem(NtmItems.FLUID_BARREL_EMPTY.get(), "fluid_barrel_empty");
         this.layeredItem(NtmItems.FLUID_BARREL_FULL.get(), "fluid_barrel", "fluid_barrel_overlay");
         this.layeredItem(NtmItems.CANISTER_FULL.get(), "canister_empty", "canister_overlay");
+        this.basicItem(NtmItems.GAS_EMPTY.get());
+        /* Drei Schichten: Rumpf, gefaerbter Flaschenkoerper, gefaerbtes Etikett. */
+        this.layeredItem(NtmItems.GAS_FULL.get(), "gas_empty", "gas_bottle").texture("layer2", modLoc("item/gas_label"));
         this.basicItem(NtmItems.FLUID_BARREL_INFINITE.get());
 
         this.basicCustomLayerItem(NtmItems.FLUID_PACK_EMPTY.get(), "fluid_pack");

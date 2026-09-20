@@ -4,6 +4,7 @@ import com.hbm.blocks.machine.fusion.FusionComponentBlock;
 import com.hbm.blocks.NtmBlocks;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids.CD_Canister;
+import com.hbm.inventory.fluid.Fluids.CD_Gastank;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.IMetaItem;
 import com.hbm.items.NtmItems;
@@ -365,6 +366,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.PART_COPPER);
                         output.accept(NtmItems.PART_PLUTONIUM);
                         output.accept(NtmItems.CANISTER_EMPTY.get());
+                        output.accept(NtmItems.GAS_EMPTY.get());
                         output.accept(NtmItems.CANISTER_NAPALM.get());
                         addMetaItems(output, NtmItems.FUEL_ADDITIVE.get());
                         output.accept(NtmItems.BIOMASS.get());
@@ -627,6 +629,13 @@ public class NtmCreativeTabs {
                             FluidType type = types[i];
                             if(type.getContainer(CD_Canister.class) == null) continue;
                             output.accept(MetaHelper.metaStack(new ItemStack(NtmItems.CANISTER_FULL.get(), 1), type.getID()));
+                        }
+                        // Gasflaschen -- nur die Fluide mit einem CD_Gastank. Die leere steht
+                        // wie der leere Kanister im Reiter der Bauteile.
+                        for(int i = 1; i < types.length; ++i) {
+                            FluidType type = types[i];
+                            if(type.getContainer(CD_Gastank.class) == null) continue;
+                            output.accept(MetaHelper.metaStack(new ItemStack(NtmItems.GAS_FULL.get(), 1), type.getID()));
                         }
                         // fluid packs
                         output.accept(NtmItems.FLUID_PACK_EMPTY.get());

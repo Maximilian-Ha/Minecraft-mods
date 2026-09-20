@@ -20,6 +20,7 @@ import com.hbm.inventory.MetaHelper;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.Fluids.CD_Canister;
+import com.hbm.inventory.fluid.Fluids.CD_Gastank;
 import com.hbm.inventory.screens.LoadingScreenRendererNT;
 import com.hbm.items.*;
 import com.hbm.items.machine.CassetteItem;
@@ -840,6 +841,21 @@ public class NuclearTechModClient {
                     return canister == null ? 0xFFFFFFFF : 0xFF000000 | canister.color;
                 },
                 NtmItems.CANISTER_FULL.get()
+        );
+
+        /*
+         * Die Gasflasche hat ZWEI gefaerbte Schichten: der Flaschenkoerper (Schicht 1) und
+         * das Etikett (Schicht 2). Beide Farben stehen in CD_Gastank, und das Original malt
+         * sie in drei Durchgaengen -- hier sind es drei Texturschichten.
+         */
+        event.register(
+                (stack, tintIndex) -> {
+                    if(tintIndex == 0) return 0xFFFFFFFF;
+                    CD_Gastank tank = Fluids.fromID(MetaHelper.getMeta(stack)).getContainer(CD_Gastank.class);
+                    if(tank == null) return 0xFFFFFFFF;
+                    return 0xFF000000 | (tintIndex == 1 ? tank.bottleColor : tank.labelColor);
+                },
+                NtmItems.GAS_FULL.get()
         );
         event.register(
                 (stack, tintIndex) -> tintIndex == 0 ? 0xFF000000 | ((CastPlateItem) stack.getItem()).getColor(stack) : 0xFFFFFFFF,

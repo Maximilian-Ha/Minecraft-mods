@@ -2,6 +2,7 @@ package com.hbm.inventory;
 
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids.CD_Canister;
+import com.hbm.inventory.fluid.Fluids.CD_Gastank;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.NtmItems;
 import net.minecraft.world.item.ItemStack;
@@ -43,6 +44,20 @@ public class FluidContainerRegistry {
              * Z. 75), und sie ist dieselbe, die auch ueber die Farbe des Aufdrucks entscheidet. */
             if(type.getContainer(CD_Canister.class) != null)
                 FluidContainerRegistry.registerContainer(new FluidContainer(MetaHelper.newStack(NtmItems.CANISTER_FULL.get(), 1, id), new ItemStack(NtmItems.CANISTER_EMPTY.get()), type, 1000));
+
+            /*
+             * Dasselbe fuer die Gasflasche, nur mit CD_Gastank. Im Original stehen beide
+             * Zeilen unmittelbar nebeneinander (FluidContainerRegistry Z. 75 und 76).
+             *
+             * ACHTUNG, EIN UNTERSCHIED ZUM ORIGINAL: dort stehen beide Abfragen VOR den
+             * Waechtern hasNoContainer und needsLeadContainer, hier dahinter. Gemessen macht
+             * das heute keinen Unterschied -- keines der 21 Fluide mit CD_Gastank traegt
+             * FT_NoContainer oder FT_LeadContainer. Bekaeme eines von beiden je eines dieser
+             * Merkmale, verloere es hier still seine Flasche; dann gehoeren beide Abfragen
+             * nach oben.
+             */
+            if(type.getContainer(CD_Gastank.class) != null)
+                FluidContainerRegistry.registerContainer(new FluidContainer(MetaHelper.newStack(NtmItems.GAS_FULL.get(), 1, id), new ItemStack(NtmItems.GAS_EMPTY.get()), type, 1000));
         }
     }
 

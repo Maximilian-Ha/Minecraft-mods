@@ -9576,11 +9576,14 @@ M65-`LayerDefinition`, was die Zuordnung bestätigt.
 
 ### Die Weste ist nicht baubar, und das hat einen gemessenen Grund
 
-Drei der vier Muster sind übernommen. Das vierte, die Weste, verlangt zwei **`gas_empty`** —
-die leere Gasflasche des Originals. Die hat der Port nicht: `CD_Gastank` steht in `Fluids` und
-wird von einem Dutzend Fluiden benutzt, aber das Flaschenpaar `gas_empty`/`gas_full` ist nie
-mitgekommen. Das ist eine eigene Lücke, keine dieses Anzugs; bis sie zu ist, gibt es die Weste
-nur im Kreativreiter.
+Drei der vier Muster sind übernommen. Das vierte, die Weste, verlangt zwei leere Gasflaschen —
+und die waren zum Zeitpunkt dieser Runde noch nicht portiert: `CD_Gastank` stand in `Fluids`
+und wurde von einem Dutzend Fluiden benutzt, das Flaschenpaar selbst war nie mitgekommen. Das
+war eine eigene Lücke, keine dieses Anzugs; bis sie zu war, gab es die Weste nur im
+Kreativreiter.
+
+> **Zu in Runde 208.** Die Gasflasche ist nachgereicht, die Weste ist baubar, der Anzug
+> vollständig. Siehe dort.
 
 ### Zwei Registrierungen, die etwas tun — und eine, die nichts täte
 
@@ -9594,5 +9597,40 @@ und nur so ausgesehen, als täte sie etwas.
 Ebenfalls nicht mitgekommen sind `setStep`, `setJump` und `setFall`. Die drei Geräusche hängen
 an einem Teilsystem, das der Port nicht hat — `ArmorFSBItem` sagt das im Kopf ausdrücklich für
 alle FSB-Anzüge.
+
+Alle 39 Tore grün.
+
+
+## Runde 208 — Die Gasflasche, und ein Merkmal ohne Wirkung
+
+Die Lücke, die Runde 207 eine Stunde vorher als eigene benannt hatte: das Flaschenpaar aus
+leerer und voller Gasflasche. Es ist zu, und damit ist auch die Liquidatorweste baubar.
+
+### Ein Container, den niemand las
+
+`CD_Gastank` stand seit jeher in `Fluids` — **21 Fluide bringen ihn mit**, jedes mit zwei
+Farben (`bottleColor`, `labelColor`). Gelesen hat ihn nichts. Das ist genau die Fehlerform, die
+dieser Port sonst umgekehrt sucht: kein Effekt ohne Ursache, aber hier lag eine Ursache ohne
+jeden Effekt.
+
+Die Flasche ist das Gegenstück des Kanisters: der Kanister nimmt, was ein `CD_Canister` hat,
+die Flasche, was ein `CD_Gastank` hat. Beide Abfragen stehen im Original unmittelbar
+nebeneinander, und jetzt auch hier.
+
+### Ein Unterschied zum Original, der heute nichts ändert — und trotzdem dasteht
+
+Im Original stehen beide Abfragen **vor** den Wächtern `hasNoContainer` und
+`needsLeadContainer`; im Port stehen sie dahinter. Nachgemessen macht das heute keinen
+Unterschied: **keines der 21 Fluide mit `CD_Gastank` trägt `FT_NoContainer` oder
+`FT_LeadContainer`**. Bekäme eines von beiden je eines dieser Merkmale, verlöre es hier still
+seine Flasche — deshalb steht die Messung als Kommentar an der Stelle und nicht bloß in diesem
+Text.
+
+### Drei Schichten statt drei Durchgängen
+
+Das Original malt die volle Flasche in drei Darstellungsdurchgängen: Rumpf ungefärbt,
+Flaschenkörper in `bottleColor`, Etikett in `labelColor`. In 1.21 sind das drei
+Texturschichten mit je einem eigenen Farbton — dieselbe Aufteilung, nur anders benannt. Der
+Kanister im Port hat genau zwei; die Flasche ist die erste Stelle, die eine dritte braucht.
 
 Alle 39 Tore grün.
