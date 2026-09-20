@@ -959,6 +959,7 @@ public class NtmBlockEntityTypes {
     public static final Supplier<BlockEntityType<TeslaBlockEntity>> TESLA = BLOCK_ENTITY_TYPES.register("tesla", () -> BlockEntityType.Builder.of(TeslaBlockEntity::new, NtmBlocks.TESLA.get()).build(null));
     public static final Supplier<BlockEntityType<BroadcasterBlockEntity>> BROADCASTER = BLOCK_ENTITY_TYPES.register("broadcaster", () -> BlockEntityType.Builder.of(BroadcasterBlockEntity::new, NtmBlocks.BROADCASTER_PC.get()).build(null));
     public static final Supplier<BlockEntityType<DemonLampBlockEntity>> LAMP_DEMON = BLOCK_ENTITY_TYPES.register("lamp_demon", () -> BlockEntityType.Builder.of(DemonLampBlockEntity::new, NtmBlocks.LAMP_DEMON.get()).build(null));
+    public static final Supplier<BlockEntityType<DungeonSpawnerBlockEntity>> DUNGEON_SPAWNER = BLOCK_ENTITY_TYPES.register("dungeon_spawner", () -> BlockEntityType.Builder.of(DungeonSpawnerBlockEntity::new, NtmBlocks.DUNGEON_SPAWNER.get()).build(null));
     public static final Supplier<BlockEntityType<PedestalBlockEntity>> PEDESTAL = BLOCK_ENTITY_TYPES.register("pedestal", () -> BlockEntityType.Builder.of(PedestalBlockEntity::new, NtmBlocks.PEDESTAL.get()).build(null));
     public static final Supplier<BlockEntityType<SkeletonHolderBlockEntity>> SKELETON_HOLDER = BLOCK_ENTITY_TYPES.register("skeleton_holder", () -> BlockEntityType.Builder.of(SkeletonHolderBlockEntity::new, NtmBlocks.SKELETON_HOLDER.get()).build(null));
 

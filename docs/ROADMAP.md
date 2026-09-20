@@ -10991,3 +10991,59 @@ Schalter, genau die zwei Fehlalarme weg, beide `MissileTier`-Prüfungen erhalten
 mit einem zusätzlichen Wert in `MissileTier`: genau zwei Funde.
 
 Alle 39 Tore grün.
+
+## Runde 234 — Die Tontafel und der Aufrufer: die Kette ist zu
+
+Runde 230 hatte eine Kette aufgeschrieben:
+
+```
+dungeon_spawner  ->  UndeadSoldier   (228)
+                 ->  item_secret     (230)
+                 ->  clay_tablet     ->  PedestalRecipes   (231)
+```
+
+Sie ist geschlossen.
+
+### Die Tontafel
+
+Sie zeigt **ein** Sockelrezept — aber nur zum Teil: bei der hellen Tafel bleibt die Hälfte
+der neun Plätze verdeckt, bei der dunklen drei Viertel. Man sieht, was dabei herauskommt,
+und muss den Rest erraten oder eine zweite Tafel suchen. Sie ist damit der einzige Weg,
+ein Ritual überhaupt zu erfahren — die Rezepte stehen in keinem Rezeptbuch.
+
+**Der Wurf steht im Stapel, nicht im Bildschirm.** Beim ersten Rechtsklick wird er
+gewürfelt und bleibt; dieselbe Tafel zeigt immer dasselbe. Im Original ist das eine
+NBT-Zahl, hier eine Datenkomponente — und sie muss zum Client, denn gezeichnet wird dort.
+
+Die Reihenfolge der Züge ist die des Originals und darf nicht wandern: erst das Rezept aus
+der Menge, dann Zeile für Zeile die neun Plätze. Wer dazwischen würfelt, verschiebt alles
+Folgende, und die Tafel zeigte ein anderes Bild als im Original.
+
+### Der Aufrufer
+
+Vier Phasen: warten, bis ein Spieler auf zwanzig Blöcke herankommt — zehn Untote Soldaten
+im Kreis aufstellen — warten, bis keiner mehr lebt — noch einmal zehn — und zuletzt eine
+Belohnung in den Skeletthalter achtzehn Blöcke darüber legen. Danach macht er sich selbst
+zu Obsidian: das Ritual geschieht genau einmal.
+
+Die Belohnung ist mit einem Fünftel ein Aberrator-Teil, sonst die **dunkle Tontafel**.
+Beides gibt es sonst nirgends: das Teil baut den Aberrator, die Tafel zeigt, wie. Genau
+deshalb musste die Tafel vor dem Aufrufer kommen — ohne sie hätte er in vier von fünf
+Fällen nichts herzugeben gehabt.
+
+Der Zehnerkreis wird gerechnet wie im Original: ein Vektor der Länge zehn, zehnmal um
+sechsunddreißig Grad gedreht, und je Soldat sieben Anläufe auf einen freien Platz.
+
+### Was sich damit noch geschlossen hat
+
+`POOL_BLACK_SLAB` war in Runde 233 **leer** gemeldet worden — mit der Begründung, sein
+einziger Eintrag sei die Tontafel. Er ist jetzt vollständig. Von den sechs echt fehlenden
+Bauwerksblöcken aus Runde 227 ist damit einer weg:
+
+| Runde 227 | heute |
+|---|---|
+| `dungeon_spawner` | **da** (Runde 234) |
+| `meteor_spawner` | braucht `EntityCyberCrab` |
+| `wand_jigsaw`, `wand_logic`, `wand_loot`, `wand_tandem` | vier Bauwerkzeuge, je 350–440 Zeilen |
+
+Alle 39 Tore grün.

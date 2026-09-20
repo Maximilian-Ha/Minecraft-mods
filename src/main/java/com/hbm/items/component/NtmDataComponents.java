@@ -41,5 +41,12 @@ public class NtmDataComponents {
     /** Die Namen, auf die ein Geschuetzturm mit diesem Zielchip nicht schiesst. */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<java.util.List<String>>> TURRET_WHITELIST = DATA_COMPONENT_TYPES.register("turret_whitelist", () -> DataComponentType.<java.util.List<String>>builder().persistent(Codec.STRING.listOf()).networkSynchronized(ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list())).build());
 
+    /**
+     * Der Wurf der Tontafel, Runde 234. Das Original schreibt ihn als tabletSeed in die NBT
+     * des Stapels; in 1.21 ist so etwas eine Datenkomponente. Sie muss zum Client, denn
+     * gezeichnet wird die Tafel dort -- deshalb networkSynchronized.
+     */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Long>> TABLET_SEED = DATA_COMPONENT_TYPES.register("tablet_seed", () -> DataComponentType.<Long>builder().persistent(Codec.LONG).networkSynchronized(ByteBufCodecs.VAR_LONG).build());
+
     public static void register(IEventBus eventBus) { DATA_COMPONENT_TYPES.register(eventBus); }
 }

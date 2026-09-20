@@ -21,6 +21,8 @@ import com.hbm.items.armor.ArmorFSBItem;
 import com.hbm.items.armor.ArmorHatItem;
 import com.hbm.items.food.PillItem;
 import com.hbm.items.machine.GunPartItem;
+import com.hbm.items.component.NtmDataComponents;
+import com.hbm.items.special.ClayTabletItem;
 import com.hbm.items.special.SimpleConsumableItem;
 import com.hbm.items.special.SyringeItem;
 import com.hbm.items.armor.ArmorNCRPAItem;
@@ -1353,6 +1355,16 @@ public class NtmItems {
      * wird er als Zutat des Sockelrezepts der Sexy Shotgun.
      */
     public static final DeferredItem<Item> BOLT_SPIKE = ITEMS.register("bolt_spike", () -> new Item(new Item.Properties()));
+
+    /**
+     * DIE TONTAFEL, Runde 234. Sie zeigt ein Sockelrezept, teils verdeckt -- und sie ist der
+     * einzige Weg, eines ueberhaupt zu erfahren: die Rituale stehen in keinem Rezeptbuch.
+     *
+     * ZWEI AUSFUEHRUNGEN wie im Original: der Metadatenwert waehlt die Rezeptmenge, null die
+     * helle und eins die dunkle. Ein EnumMultiItem waere hier falsch -- das Original nennt
+     * die beiden nicht, sondern unterscheidet sie nur am Wert.
+     */
+    public static final DeferredItem<Item> CLAY_TABLET = ITEMS.register("clay_tablet", () -> new ClayTabletItem(new Item.Properties().component(NtmDataComponents.META.get(), 0)));
 
     public static final DeferredItem<Item> ITEM_SECRET = ITEMS.register("item_secret", () -> new EnumMultiItem(new Item.Properties(), SecretType.class, true, true));
     public static final DeferredItem<Item> RING_PULL = ITEMS.register("ring_pull", () -> new Item(new Item.Properties()));

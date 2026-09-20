@@ -1273,6 +1273,12 @@ public class NtmBlockStateProvider extends BlockStateProvider {
          * Das Rote Zimmer, Runde 233. Der Ziegel hat sieben Zustaende: sechs, bei denen
          * genau eine Seite das Ziegelbild traegt, und einen siebten ohne.
          */
+        /* Der Aufrufer traegt schlicht das Steinbild -- so steht es im Original. */
+        this.simpleBlock(NtmBlocks.DUNGEON_SPAWNER.get(), this.models()
+                .withExistingParent("dungeon_spawner", mcLoc("block/cube_all"))
+                .texture("all", mcLoc("block/stone")));
+        this.blockItem(NtmBlocks.DUNGEON_SPAWNER);
+
         this.redBrick(NtmBlocks.BRICK_RED, modLoc("block/brick_red"));
         this.redBrick(NtmBlocks.STONE_KEYHOLE_META, modLoc("block/stone_keyhole_meta"));
 

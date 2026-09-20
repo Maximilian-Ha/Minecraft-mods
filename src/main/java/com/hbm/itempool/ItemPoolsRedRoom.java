@@ -28,11 +28,8 @@ import net.minecraft.world.level.Level;
  * stimmt, waere eine Erfindung: das Original kennt diese Verteilung nicht, und sobald die
  * zwoelf nachkommen, muesste man zweimal umrechnen. Was fehlt, fehlt sichtbar.
  *
- * DER ZWEITE VORRAT IST LEER. POOL_BLACK_SLAB besteht im Original aus einem einzigen
- * Eintrag -- der Tontafel --, und die fehlt dem Port noch, weil ihre Oberflaeche ein
- * Sockelrezept anzeigt. Ein leerer Vorrat liefert einen leeren Stapel, und der Sockel in
- * der Mitte des Ziegelzimmers bleibt dann leer stehen; das ist ehrlicher als ein Ersatz,
- * den das Original dort nie hatte.
+ * DER ZWEITE VORRAT stand in Runde 233 noch leer da: er besteht im Original aus einem
+ * einzigen Eintrag, der Tontafel, und die kam erst in Runde 234. Jetzt ist er vollstaendig.
  */
 public class ItemPoolsRedRoom {
 
@@ -65,8 +62,10 @@ public class ItemPoolsRedRoom {
                 .add(() -> MetaHelper.newStack(NtmItems.WEAPON_MOD_SPECIAL.get(), 1, ModSpecial.NICKEL.ordinal()), 1)
                 .add(() -> MetaHelper.newStack(NtmItems.WEAPON_MOD_SPECIAL.get(), 1, ModSpecial.DOUBLOONS.ordinal()), 1);
 
-        /* POOL_BLACK_SLAB bleibt leer, siehe Kopf -- die Tontafel fehlt dem Port noch. */
-        ItemPool.getOrCreate(POOL_BLACK_SLAB);
+        /* Die Tafel in der Mitte des schwarzen Zimmers. Sie ist im Original der einzige
+         * Eintrag dieses Vorrats, und seit Runde 234 gibt es sie. */
+        ItemPool.getOrCreate(POOL_BLACK_SLAB)
+                .add(NtmItems.CLAY_TABLET.get(), 1, 1, 10);
 
         /* Die vier Beisockel: im Original dieselben Geheimstuecke, die auch der Sockel des
          * Rituals braucht. Sie sind der einzige Weg, an ein Aberrator-Teil zu kommen. */

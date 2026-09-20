@@ -34,6 +34,7 @@ import com.hbm.blocks.machine.DemonLampBlock;
 import com.hbm.blocks.machine.FurnaceBrickBlock;
 import com.hbm.blocks.machine.MachineMicrowaveBlock;
 import com.hbm.blocks.generic.RedBrickBlock;
+import com.hbm.blocks.generic.DungeonSpawnerBlock;
 import com.hbm.blocks.generic.KeyholeBlock;
 import com.hbm.blocks.generic.RedBrickKeyholeBlock;
 import com.hbm.blocks.generic.PedestalBlock;
@@ -417,6 +418,12 @@ public class NtmBlocks {
 
     /** Die Tuer des Roten Zimmers -- die vierte neben Metall, Buero und Bunker. */
     public static final DeferredBlock<DoorBlock> DOOR_RED = register("door_red", () -> new DoorBlock(NtmBlockSetTypes.METAL, BlockBehaviour.Properties.of().strength(10.0F, 100.0F).sound(SoundType.METAL).mapColor(MapColor.COLOR_RED).noOcclusion().pushReaction(PushReaction.DESTROY)));
+
+    /**
+     * Der Aufrufer, Runde 234. Er sieht aus wie Stein; was er tut, steht in seiner
+     * Blockentitaet. Kein Reiter, kein Rezept -- die Weltgenerierung setzt ihn.
+     */
+    public static final DeferredBlock<Block> DUNGEON_SPAWNER = register("dungeon_spawner", () -> new DungeonSpawnerBlock(BlockBehaviour.Properties.of().strength(2.0F, 10_000F).sound(SoundType.STONE).mapColor(MapColor.STONE).noLootTable()));
 
     public static final DeferredBlock<Block> PEDESTAL = register("pedestal", () -> new PedestalBlock(BlockBehaviour.Properties.of().strength(2.0F, 10.0F).sound(SoundType.STONE).mapColor(MapColor.STONE).noOcclusion()));
     public static final DeferredBlock<Block> SKELETON_HOLDER = register("skeleton_holder", () -> new SkeletonHolderBlock(BlockBehaviour.Properties.of().strength(2.0F, 10.0F).sound(SoundType.SOUL_SAND).mapColor(MapColor.COLOR_BROWN).noOcclusion()));

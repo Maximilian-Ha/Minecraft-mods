@@ -1793,6 +1793,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.CHUNK_ORE, this.getName(ChunkType.MALACHITE), "Malachite Chunk");
         this.add(NtmItems.CHUNK_ORE, this.getName(ChunkType.CRYOLITE), "Cryolite Chunk");
         this.add(NtmItems.CHUNK_ORE, this.getName(ChunkType.MOONSTONE), "Moonstone");
+        this.add(NtmItems.CLAY_TABLET, "Clay Tablet");
         this.add(NtmItems.BOLT_SPIKE, "Railroad Spike");
         this.add(NtmItems.BOLT_SPIKE, DESC, "Radiates a threatening aura, somehow");
         this.add(NtmItems.CARD_AOS, "Ace of Spades");
@@ -2573,6 +2574,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.TESLA, "Tesla Coil");
         this.add(NtmBlocks.TESLA, DESC, "Zaps every living thing in range.$Wear a full set of metal armor$to stay out of the circuit.");
         /* Das Rote Zimmer, Runde 233 -- alle vier Namen wortgetreu aus en_US.lang. */
+        this.add(NtmBlocks.DUNGEON_SPAWNER, "Dungeon Spawner");
         this.add(NtmBlocks.BRICK_RED, "Red Room Brick");
         this.add(NtmBlocks.STONE_KEYHOLE, "Strange Stone");
         this.add(NtmBlocks.STONE_KEYHOLE_META, "Strange Red Room Brick");
