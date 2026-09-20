@@ -79,6 +79,14 @@ public class NtmTemplatePools {
     public static final ResourceKey<StructureTemplatePool> RADIO_HOUSE = registerKey("flat/radio_house");
     public static final ResourceKey<StructureTemplatePool> BROADCASTING_TOWER = registerKey("flat/broadcasting_tower");
 
+    /* Kueste und Hoehenklemme, Runde 264. */
+    public static final ResourceKey<StructureTemplatePool> BEACHED_PATROL = registerKey("coast/beached_patrol");
+    public static final ResourceKey<StructureTemplatePool> AIRCRAFT_CARRIER = registerKey("coast/aircraft_carrier");
+    public static final ResourceKey<StructureTemplatePool> OIL_RIG = registerKey("coast/oil_rig");
+    public static final ResourceKey<StructureTemplatePool> LIGHTHOUSE = registerKey("coast/lighthouse");
+    public static final ResourceKey<StructureTemplatePool> DISH = registerKey("coast/dish");
+    public static final ResourceKey<StructureTemplatePool> LABORATORY = registerKey("coast/laboratory");
+
     public static void bootstrap(BootstrapContext<StructureTemplatePool> context) {
 
         HolderGetter<StructureTemplatePool> pools = context.lookup(Registries.TEMPLATE_POOL);
@@ -178,6 +186,13 @@ public class NtmTemplatePools {
 
         einzeln(context, leer, RADIO_HOUSE, "flat/radio_house");
         einzeln(context, leer, BROADCASTING_TOWER, "flat/broadcasting_tower");
+
+        einzeln(context, leer, BEACHED_PATROL, "coast/beached_patrol");
+        einzeln(context, leer, AIRCRAFT_CARRIER, "coast/aircraft_carrier");
+        einzeln(context, leer, OIL_RIG, "coast/oil_rig");
+        einzeln(context, leer, LIGHTHOUSE, "coast/lighthouse");
+        einzeln(context, leer, DISH, "coast/dish");
+        einzeln(context, leer, LABORATORY, "coast/laboratory");
     }
 
     /**

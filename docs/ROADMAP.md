@@ -12456,3 +12456,55 @@ liegt, ist harmloser als zwei richtige Skalen nebeneinander.** Wer Forges Tabell
 rechnet alle Einträge um, nicht einzelne.
 
 **Stand: 25 von 34 Bauwerken in der Welt.**
+
+## Runde 264 — Die Höhenschranke war nie eine Schranke
+
+Sechs Bauwerke trugen `minHeight`/`maxHeight`, und die letzten beiden Runden haben sie
+deswegen zurückgestellt: „1.21 kennt dafür keinen fertigen Bauwerkstyp." **Das war ein
+Lesefehler.**
+
+`NBTStructure.java:921`:
+
+```java
+int y = isFlatWorld ? averageHeight : MathHelper.clamp_int(averageHeight, minHeight, maxHeight);
+```
+
+`minHeight` und `maxHeight` **verwerfen den Ort nicht, sie klemmen die Höhe.** Das Bauwerk wird
+immer gesetzt, nur nie höher als `maxHeight` und nie tiefer als `minHeight`. Wer das als Filter
+liest, sucht in 1.21 nach einem Bauwerkstyp, den es nicht gibt; wer es als Klemme liest, muss
+nur noch entscheiden, ob die Klemme am gegebenen Ort greift.
+
+| | Fenster | Versatz | greift die Klemme? |
+|---|---|---|---|
+| Ölplattform | 11–12 | −20 | **immer** — Meeresboden minus 20 liegt weit darunter |
+| Leuchtturm | 28–29 | −40 | **immer** — dasselbe, nur tiefer |
+| Strandpatrouille | 58–67 | −5 | **meistens** — Strand liegt um 63, macht 58 |
+| Flugzeugträger | ≤ 42 | −6 | selten |
+| Schüssel, Labor | 53–65 | −10 | selten |
+
+Die ersten drei bekommen deshalb eine **feste Höhe ohne Höhenkarte** — genau die Form, die das
+Meteoritenverlies schon hat, wo `minHeight` und `maxHeight` beide 32 sind. Die letzten drei
+folgen dem Gelände wie alle anderen.
+
+**Das ist die einzige bewusste Abweichung dieser Gruppe:** an ungewöhnlich hohem oder tiefem
+Gelände steht Träger, Schüssel oder Labor dort, wo das Original sie festgehalten hätte. Das
+steht so im Quelltext.
+
+### Der Ozean hat einen eigenen Nenner
+
+Die drei Ozeanbauwerke rechnen nicht gegen die 422 der Ebene, sondern gegen **27**: im Wasser
+ziehen nur Träger (3), Ölplattform (5), Leuchtturm (4) und das Leergewicht des Ozeans (15).
+Alles andere verlangt `!isWaterBiome`. Deshalb stehen sie **enger** als die Landbauwerke,
+obwohl ihre Gewichte viel kleiner sind — sie teilen sich den Ozean fast allein.
+
+**Stand: 31 von 34 Bauwerken in der Welt.** Offen bleiben genau **drei**: Kran, Fabrik und
+Turmsockel — alle drei warten auf `wand_logic`.
+
+*Beim Nachzählen aufgefallen:* der Kran benutzt nicht `crane.nbt`, sondern `crane_mod.nbt`
+(`StructureManager.java:90` — der Feldname ist `crane`, die Datei heißt anders). `crane.nbt`
+ist im Original eine Leiche: keine Zeile verweist darauf. Das sind also drei Bauwerke aus vier
+Dateien, nicht vier Bauwerke.
+
+Dazu kommen die beiden, die im Original gar keine Vorlagendatei haben und deshalb nicht in
+diesen 34 stecken: Features und Bunker sind dort handgeschriebene Bauwerkskomponenten
+(`MapGenNTMFeatures`, `BunkerStart`) und gehören zu einer eigenen Aufgabe.

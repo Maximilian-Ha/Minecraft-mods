@@ -79,6 +79,14 @@ public class NtmStructures {
     public static final ResourceKey<Structure> RADIO_HOUSE = registerKey("radio_house");
     public static final ResourceKey<Structure> BROADCASTING_TOWER = registerKey("broadcasting_tower");
 
+    /* Kueste und Hoehenklemme, Runde 264. */
+    public static final ResourceKey<Structure> BEACHED_PATROL = registerKey("beached_patrol");
+    public static final ResourceKey<Structure> AIRCRAFT_CARRIER = registerKey("aircraft_carrier");
+    public static final ResourceKey<Structure> OIL_RIG = registerKey("oil_rig");
+    public static final ResourceKey<Structure> LIGHTHOUSE = registerKey("lighthouse");
+    public static final ResourceKey<Structure> DISH = registerKey("dish");
+    public static final ResourceKey<Structure> LABORATORY = registerKey("laboratory");
+
     public static void bootstrap(BootstrapContext<Structure> context) {
 
         HolderGetter<Biome> biome = context.lookup(Registries.BIOME);
@@ -150,6 +158,56 @@ public class NtmStructures {
          */
         einzeln(context, schuetter(biome), pools, RADIO_HOUSE, NtmTemplatePools.RADIO_HOUSE, -6);
         einzeln(context, schuetter(biome), pools, BROADCASTING_TOWER, NtmTemplatePools.BROADCASTING_TOWER, -9);
+
+        /*
+         * DIE SECHS MIT HOEHENANGABE -- und die war das Missverstaendnis dieser Gruppe.
+         *
+         * minHeight und maxHeight VERWERFEN DEN ORT NICHT, SIE KLEMMEN DIE HOEHE. In
+         * NBTStructure.java:921 steht clamp_int(averageHeight + heightOffset, minHeight,
+         * maxHeight) -- das Bauwerk wird immer gesetzt, nur eben nie hoeher als maxHeight und
+         * nie tiefer als minHeight. Wer das als Filter liest, sucht in 1.21 nach einem
+         * Bauwerkstyp, den es nicht gibt; wer es als Klemme liest, braucht nur zu entscheiden,
+         * ob die Klemme am gegebenen Ort greift oder nicht.
+         *
+         * SIE GREIFT IMMER bei Oelplattform (11 bis 12) und Leuchtturm (28 bis 29): beide
+         * stehen ueber dem Meeresboden und ziehen zwanzig bzw. vierzig Bloecke ab, landen also
+         * weit unter der Untergrenze. Fuer sie ist die Klemme eine feste Hoehe -- genau wie
+         * beim Meteoritenverlies, wo minHeight und maxHeight beide 32 sind. Sie bekommen
+         * deshalb KEINE Hoehenkarte, sondern die absolute Hoehe.
+         *
+         * SIE GREIFT MEISTENS bei der Strandpatrouille (58 bis 67 bei Versatz -5): ein Strand
+         * liegt um 63, macht 58 -- die Untergrenze. Auch sie bekommt die feste Hoehe.
+         *
+         * SIE GREIFT SELTEN bei Traeger (bis 42), Schuessel und Labor (53 bis 65): deren
+         * gewoehnliche Orte liegen im Fenster. Sie folgen darum dem Gelaende wie alle anderen,
+         * und die Klemme entfaellt. Das ist die einzige Stelle dieser Gruppe, an der der Port
+         * vom Original abweicht -- an ungewoehnlich hohem oder tiefem Gelaende steht das
+         * Bauwerk dort, wo das Original es festgehalten haette.
+         */
+        fest(context, strand(biome), pools, BEACHED_PATROL, NtmTemplatePools.BEACHED_PATROL, 58);
+        fest(context, ozean(biome), pools, OIL_RIG, NtmTemplatePools.OIL_RIG, 12);
+        fest(context, ozeanUndStrand(biome), pools, LIGHTHOUSE, NtmTemplatePools.LIGHTHOUSE, 28);
+
+        einzeln(context, ozean(biome), pools, AIRCRAFT_CARRIER, NtmTemplatePools.AIRCRAFT_CARRIER, -6);
+        einzeln(context, ebene(biome), pools, DISH, NtmTemplatePools.DISH, -10);
+        einzeln(context, schuetter(biome), pools, LABORATORY, NtmTemplatePools.LABORATORY, -10);
+    }
+
+    /** Ein Bauwerk auf fester Hoehe, ohne Hoehenkarte -- fuer die, bei denen die Klemme immer greift. */
+    private static void fest(BootstrapContext<Structure> context, HolderSet<Biome> biome,
+            HolderGetter<StructureTemplatePool> pools, ResourceKey<Structure> schluessel,
+            ResourceKey<StructureTemplatePool> pool, int hoehe) {
+
+        context.register(schluessel, new JigsawStructure(
+                new Structure.StructureSettings(
+                        biome,
+                        Map.of(),
+                        GenerationStep.Decoration.SURFACE_STRUCTURES,
+                        TerrainAdjustment.NONE),
+                pools.getOrThrow(pool),
+                1,
+                ConstantHeight.of(VerticalAnchor.absolute(hoehe)),
+                false));
     }
 
     /** Ein Einzelbauwerk: ein Stueck, an der Gelaendeoberkante, um Versatz tiefer. */
@@ -286,6 +344,54 @@ public class NtmStructures {
                 biome.getOrThrow(Biomes.BEACH),
                 biome.getOrThrow(Biomes.SNOWY_BEACH),
                 biome.getOrThrow(Biomes.MUSHROOM_FIELDS));
+    }
+
+    /** Type.OCEAN. In 1.21 die Ozeanfamilie, ohne Fluesse. */
+    private static HolderSet<Biome> ozean(HolderGetter<Biome> biome) {
+        return HolderSet.direct(
+                biome.getOrThrow(Biomes.OCEAN),
+                biome.getOrThrow(Biomes.DEEP_OCEAN),
+                biome.getOrThrow(Biomes.COLD_OCEAN),
+                biome.getOrThrow(Biomes.DEEP_COLD_OCEAN),
+                biome.getOrThrow(Biomes.LUKEWARM_OCEAN),
+                biome.getOrThrow(Biomes.DEEP_LUKEWARM_OCEAN),
+                biome.getOrThrow(Biomes.WARM_OCEAN),
+                biome.getOrThrow(Biomes.FROZEN_OCEAN),
+                biome.getOrThrow(Biomes.DEEP_FROZEN_OCEAN));
+    }
+
+    /** Type.BEACH. */
+    private static HolderSet<Biome> strand(HolderGetter<Biome> biome) {
+        return HolderSet.direct(
+                biome.getOrThrow(Biomes.BEACH),
+                biome.getOrThrow(Biomes.SNOWY_BEACH),
+                biome.getOrThrow(Biomes.STONY_SHORE));
+    }
+
+    /** Type.OCEAN || Type.BEACH -- die Bedingung des Leuchtturms. */
+    private static HolderSet<Biome> ozeanUndStrand(HolderGetter<Biome> biome) {
+        return HolderSet.direct(
+                biome.getOrThrow(Biomes.OCEAN),
+                biome.getOrThrow(Biomes.DEEP_OCEAN),
+                biome.getOrThrow(Biomes.COLD_OCEAN),
+                biome.getOrThrow(Biomes.DEEP_COLD_OCEAN),
+                biome.getOrThrow(Biomes.LUKEWARM_OCEAN),
+                biome.getOrThrow(Biomes.DEEP_LUKEWARM_OCEAN),
+                biome.getOrThrow(Biomes.WARM_OCEAN),
+                biome.getOrThrow(Biomes.FROZEN_OCEAN),
+                biome.getOrThrow(Biomes.DEEP_FROZEN_OCEAN),
+                biome.getOrThrow(Biomes.BEACH),
+                biome.getOrThrow(Biomes.SNOWY_BEACH),
+                biome.getOrThrow(Biomes.STONY_SHORE));
+    }
+
+    /** Type.PLAINS allein -- die Bedingung der Satellitenschuessel. */
+    private static HolderSet<Biome> ebene(HolderGetter<Biome> biome) {
+        return HolderSet.direct(
+                biome.getOrThrow(Biomes.PLAINS),
+                biome.getOrThrow(Biomes.SUNFLOWER_PLAINS),
+                biome.getOrThrow(Biomes.SNOWY_PLAINS),
+                biome.getOrThrow(Biomes.MEADOW));
     }
 
     /**

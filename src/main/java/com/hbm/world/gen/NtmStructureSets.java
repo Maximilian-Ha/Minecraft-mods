@@ -67,6 +67,13 @@ public class NtmStructureSets {
     public static final ResourceKey<StructureSet> RADIO_HOUSE = registerKey("radio_house");
     public static final ResourceKey<StructureSet> BROADCASTING_TOWER = registerKey("broadcasting_tower");
 
+    public static final ResourceKey<StructureSet> BEACHED_PATROL = registerKey("beached_patrol");
+    public static final ResourceKey<StructureSet> AIRCRAFT_CARRIER = registerKey("aircraft_carrier");
+    public static final ResourceKey<StructureSet> OIL_RIG = registerKey("oil_rig");
+    public static final ResourceKey<StructureSet> LIGHTHOUSE = registerKey("lighthouse");
+    public static final ResourceKey<StructureSet> DISH = registerKey("dish");
+    public static final ResourceKey<StructureSet> LABORATORY = registerKey("laboratory");
+
     public static void bootstrap(BootstrapContext<StructureSet> context) {
 
         HolderGetter<Structure> strukturen = context.lookup(Registries.STRUCTURE);
@@ -139,6 +146,22 @@ public class NtmStructureSets {
 
         streuung(context, strukturen, RADIO_HOUSE, NtmStructures.RADIO_HOUSE, 45, 15, 996996996 + 23);
         streuung(context, strukturen, BROADCASTING_TOWER, NtmStructures.BROADCASTING_TOWER, 49, 16, 996996996 + 24);
+
+        /*
+         * KUESTE UND HOEHENKLEMME. Die drei Ozeanbauwerke haben einen ANDEREN NENNER als alle
+         * bisherigen: im Wasser darf fast nichts stehen. Dort ziehen nur Traeger (3),
+         * Oelplattform (5), Leuchtturm (4) und das Leergewicht des Ozeans (15) -- zusammen 27.
+         * Alles andere verlangt !isWaterBiome. Deshalb stehen sie enger als die Landbauwerke,
+         * obwohl ihre Gewichte kleiner sind: sie teilen sich den Ozean fast allein.
+         *
+         * Strandpatrouille, Schuessel und Labor rechnen wieder gegen die 422 der Ebene.
+         */
+        streuung(context, strukturen, BEACHED_PATROL, NtmStructures.BEACHED_PATROL, 64, 21, 996996996 + 25);
+        streuung(context, strukturen, AIRCRAFT_CARRIER, NtmStructures.AIRCRAFT_CARRIER, 36, 12, 996996996 + 26);
+        streuung(context, strukturen, OIL_RIG, NtmStructures.OIL_RIG, 28, 9, 996996996 + 27);
+        streuung(context, strukturen, LIGHTHOUSE, NtmStructures.LIGHTHOUSE, 31, 10, 996996996 + 28);
+        streuung(context, strukturen, DISH, NtmStructures.DISH, 55, 18, 996996996 + 29);
+        streuung(context, strukturen, LABORATORY, NtmStructures.LABORATORY, 55, 18, 996996996 + 30);
     }
 
     /**
