@@ -4,6 +4,7 @@ import com.hbm.handler.HbmKeybinds.EnumKeybind;
 import com.hbm.interfaces.IHoldableWeapon;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.items.IEquipReceiver;
+import com.hbm.items.armor.ArmorTrenchmasterItem;
 import com.hbm.items.IHUDItem;
 import com.hbm.items.IKeybindReceiver;
 import com.hbm.inventory.MetaHelper;
@@ -344,7 +345,7 @@ public class GunBaseNTItem extends Item implements IKeybindReceiver, IHUDItem, I
             return;
         }
 
-        for(int i = 0; i < confNo; i++) for(int k = 0; k == 0 /*|| (k < 2 ArmorTrenchmaster.isTrenchMaster(player) && getState(stack, i) == GunState.RELOADING);*/; k++) {
+        for(int i = 0; i < confNo; i++) for(int k = 0; k == 0 || (k < 2 && ArmorTrenchmasterItem.isTrenchMaster(player) && getState(stack, i) == GunState.RELOADING); k++) {
             BiConsumer<ItemStack, LambdaContext> orchestra = configs[i].getOrchestra(stack);
             if(orchestra != null) orchestra.accept(stack, ctx[i]);
 

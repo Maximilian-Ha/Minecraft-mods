@@ -27,6 +27,7 @@ import com.hbm.items.armor.ArmorBismuthItem;
 import com.hbm.items.armor.ArmorDigammaItem;
 import com.hbm.items.armor.ArmorEuphemiumItem;
 import com.hbm.items.armor.ArmorT51Item;
+import com.hbm.items.armor.ArmorTrenchmasterItem;
 import com.hbm.items.armor.ArmorTaurunItem;
 import com.hbm.items.armor.ArmorHEVItem;
 import com.hbm.items.armor.ArmorNo9;
@@ -1754,6 +1755,16 @@ public class NtmItems {
     public static final DeferredItem<Item> FAU_LEGS = ITEMS.register("fau_legs", () -> fau(ArmorItem.Type.LEGGINGS));
     public static final DeferredItem<Item> FAU_BOOTS = ITEMS.register("fau_boots", () -> fau(ArmorItem.Type.BOOTS));
 
+    /*
+     * DER GRABENMEISTER. Beute wie die Taurun-Ruestung, ohne Haltbarkeit und ohne Bauplan --
+     * aber mit zwei Kampfeigenschaften, die sonst keine Ruestung hat: eigene Sprengungen tun
+     * nicht weh, und jeder dritte Treffer prallt ab. Siehe ArmorTrenchmasterItem.
+     */
+    public static final DeferredItem<Item> TRENCHMASTER_HELMET = ITEMS.register("trenchmaster_helmet", () -> trenchmaster(ArmorItem.Type.HELMET));
+    public static final DeferredItem<Item> TRENCHMASTER_PLATE = ITEMS.register("trenchmaster_plate", () -> trenchmaster(ArmorItem.Type.CHESTPLATE));
+    public static final DeferredItem<Item> TRENCHMASTER_LEGS = ITEMS.register("trenchmaster_legs", () -> trenchmaster(ArmorItem.Type.LEGGINGS));
+    public static final DeferredItem<Item> TRENCHMASTER_BOOTS = ITEMS.register("trenchmaster_boots", () -> trenchmaster(ArmorItem.Type.BOOTS));
+
     public static final DeferredItem<Item> HEV_HELMET = ITEMS.register("hev_helmet", () -> hev(ArmorItem.Type.HELMET));
     public static final DeferredItem<Item> HEV_PLATE = ITEMS.register("hev_plate", () -> hev(ArmorItem.Type.CHESTPLATE));
     public static final DeferredItem<Item> HEV_LEGS = ITEMS.register("hev_legs", () -> hev(ArmorItem.Type.LEGGINGS));
@@ -1840,6 +1851,15 @@ public class NtmItems {
         return new ArmorDigammaItem(NtmArmorMaterials.FAU, type, new Item.Properties().stacksTo(1).durability(type.getDurability(NtmArmorMaterials.DURABILITY_FAU)), 10_000_000, 10_000, 2_500, 0)
                 .addEffect(new MobEffectInstance(MobEffects.JUMP, 20, 1))
                 .setHasGeigerSound(true);
+    }
+
+    /** Der Grabenmeister. Ohne durability(...), weil das Original setMaxDamage(0) setzt. */
+    private static ArmorFSBItem trenchmaster(ArmorItem.Type type) {
+        return new ArmorTrenchmasterItem(NtmArmorMaterials.TRENCHMASTER, type, new Item.Properties().stacksTo(1))
+                .addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20, 2))
+                .addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 20, 1))
+                .addEffect(new MobEffectInstance(MobEffects.JUMP, 20, 1))
+                .addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 20, 0));
     }
 
     private static ArmorFSBItem hev(ArmorItem.Type type) {

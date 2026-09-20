@@ -1,5 +1,6 @@
 package com.hbm.items.weapon.sedna.mags;
 
+import com.hbm.items.armor.ArmorTrenchmasterItem;
 import com.hbm.items.weapon.sedna.BulletConfig;
 import com.hbm.particle.SpentCasing;
 import net.minecraft.world.Container;
@@ -59,8 +60,11 @@ public interface IMagazine<T> {
 
     static boolean shouldUseUpTrenchie(Container container) {
         if(container instanceof Inventory inv) {
-            boolean trenchie = false;//ArmorTrenchmaster.isTrenchMaster(invPlayer.player);
-            boolean aos = false;//ArmorTrenchmaster.hasAoS(invPlayer.player);
+            boolean trenchie = ArmorTrenchmasterItem.isTrenchMaster(inv.player);
+            /* Die AoS-Karte fehlt dem Port noch -- sie ist ein Ruestungsmodul (card_aos,
+             * ItemModCard), keine Ruestung, und gehoert in die Runde, die das Kartenmodul
+             * nachreicht. Bis dahin zieht nur die Grabenmeister-Haelfte. */
+            boolean aos = false;
             if(trenchie || aos) return inv.player.random.nextInt(3) < 2;
         }
         return true;

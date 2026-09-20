@@ -132,6 +132,13 @@ public class HazmatRegistry {
         HazmatRegistry.registerHazmat(NtmItems.FAU_LEGS.get(), fau * legs);
         HazmatRegistry.registerHazmat(NtmItems.FAU_BOOTS.get(), fau * boots);
 
+        /* Der Grabenmeister: 1,0 auf den ganzen Satz, im Original als Kommentar "90%". */
+        double trench = 1.0D;       // 90%
+        HazmatRegistry.registerHazmat(NtmItems.TRENCHMASTER_HELMET.get(), trench * helmet);
+        HazmatRegistry.registerHazmat(NtmItems.TRENCHMASTER_PLATE.get(), trench * chest);
+        HazmatRegistry.registerHazmat(NtmItems.TRENCHMASTER_LEGS.get(), trench * legs);
+        HazmatRegistry.registerHazmat(NtmItems.TRENCHMASTER_BOOTS.get(), trench * boots);
+
         /* Euphemium: Faktor 10, im Original mit dem Vermerk "<100%" -- der Satz haelt viel
          * ab, aber nicht alles. */
         double euph = 10D;

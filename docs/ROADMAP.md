@@ -10227,3 +10227,71 @@ ein abgeschriebener Fehler.
 Nach dieser Runde sind **26** Rüstungsnamen offen.
 
 Alle 39 Tore grün.
+
+## Runde 220 — Der Grabenmeister, drei tote Aufrufstellen und eine Lücke aus Runde 215
+
+Die Grabenmeister-Rüstung ist die erste dieser Reihe, die **Verhalten** mitbringt statt nur
+Werte — und dafür brauchte der Port zwei Haken, die es noch nicht gab.
+
+### Drei Aufrufstellen warteten schon
+
+Im Port standen drei auskommentierte Zeilen, die auf genau diese Klasse warteten:
+
+| Datei | Wirkung |
+|---|---|
+| `HbmAnimation` | Nachladeanimation läuft auf halbe Zeit |
+| `GunBaseNTItem` | der Nachladedurchlauf läuft zweimal |
+| `IMagazine` | ein Drittel der Munition wird gespart |
+
+Das waren Ursachen ohne Wirkung — Platzhalter, die jemand (ich, in früheren Runden) für diese
+Runde hinterlassen hat. Alle drei sind jetzt scharf.
+
+Die vierte Hälfte, `hasAoS`, bleibt aus: sie liest die **AoS-Karte**, ein Rüstungsmodul
+(`card_aos`, `ItemModCard`), das der Port noch nicht hat. Das steht als Kommentar an der
+Stelle, nicht als stiller `false`.
+
+### Zwei neue Haken an `ArmorFSBItem`
+
+`handleHurt` (in 1.21 `LivingDamageEvent.Pre`) und `handleAttack` (`LivingIncomingDamageEvent`).
+Beide werden **nur an der Brustplatte** aufgerufen — das ist keine Vereinfachung, sondern
+steht so im Original (`ModEventHandler` Z. 680 und 733), das ausschließlich
+`armorInventory[2]` fragt.
+
+### Eine Lücke aus Runde 215, nachgereicht
+
+Beim Nachmessen des Verteilers fiel auf: **der Euphemium-Satz bricht im Original Angriffe
+ganz ab**, mit demselben Klirren. Diese Abfrage steht nicht in `ArmorEuphemium`, sondern im
+Ereignisverteiler (`ModEventHandler` Z. 674) — deshalb habe ich sie in Runde 215 übersehen,
+als ich nur die Klasse gelesen habe. Sie kommt jetzt nach, an genau der Stelle, an der sie
+auch im Original steht.
+
+Die Lehre reiht sich in die fünf Fehlmessungen davor ein, ist aber eine neue Art: nicht falsch
+gesucht, sondern **am falschen Ort gesucht**. Was eine Rüstung tut, steht in diesem Mod nicht
+immer in ihrer Klasse.
+
+### Was der Grabenmeister kann
+
+| | |
+|---|---|
+| Satzbonus | Stärke III, Eile II, Sprungkraft II, Tempo I |
+| Eigene Sprengungen | richten **null** Schaden an (fremde treffen normal) |
+| Jeder dritte Treffer | prallt ganz ab, mit Klirren |
+| Strahlung | 90 %, `FULL_PACKAGE` |
+| Haltbarkeit | keine — Beute wie Taurun, kein einziges Werkbankrezept |
+
+### Eine Lampe, die leuchtet
+
+Zum Helm gehört ein neuntes Modellteil, das **voll ausgeleuchtet** gezeichnet wird. Der Port
+merkt sich den Lichtwert, setzt ihn auf `FULL_BRIGHT` und legt ihn danach zurück, damit der
+Rest der Figur nicht mitleuchtet.
+
+Der Helm selbst ist durchscheinend — und anders als beim Fau-Anzug aus Runde 219 schaltet das
+Original die Mischung hier hinterher **selbst** wieder ab. Hier war also nichts zu berichtigen,
+nur zu übernehmen.
+
+Die Beine stehen wieder einen Hauch auseinander, dieselben ±0,16 Modelleinheiten wie bei
+Taurun.
+
+Nach dieser Runde sind **22** Rüstungsnamen offen.
+
+Alle 39 Tore grün.

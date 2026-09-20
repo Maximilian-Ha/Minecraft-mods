@@ -78,6 +78,11 @@ public class ArmorUtil {
         for(Item teil : new Item[] { NtmItems.FAU_HELMET.get(), NtmItems.FAU_PLATE.get(), NtmItems.FAU_LEGS.get(), NtmItems.FAU_BOOTS.get() }) {
             ArmorRegistry.registerHazard(teil, FULL_PACKAGE);
         }
+
+        /* Der Grabenmeister ebenso. */
+        for(Item teil : new Item[] { NtmItems.TRENCHMASTER_HELMET.get(), NtmItems.TRENCHMASTER_PLATE.get(), NtmItems.TRENCHMASTER_LEGS.get(), NtmItems.TRENCHMASTER_BOOTS.get() }) {
+            ArmorRegistry.registerHazard(teil, FULL_PACKAGE);
+        }
     }
 
     /**

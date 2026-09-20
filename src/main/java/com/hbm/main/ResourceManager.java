@@ -440,6 +440,11 @@ public class ResourceManager {
     public static final ResourceLocation FAU_LEG = NuclearTechMod.withDefaultNamespace("textures/armor/fau_leg.png");
     public static final ResourceLocation FAU_CASSETTE = NuclearTechMod.withDefaultNamespace("textures/armor/fau_cassette.png");
 
+    public static final ResourceLocation TRENCHMASTER_HELMET = NuclearTechMod.withDefaultNamespace("textures/armor/trenchmaster_helmet.png");
+    public static final ResourceLocation TRENCHMASTER_CHEST = NuclearTechMod.withDefaultNamespace("textures/armor/trenchmaster_chest.png");
+    public static final ResourceLocation TRENCHMASTER_ARM = NuclearTechMod.withDefaultNamespace("textures/armor/trenchmaster_arm.png");
+    public static final ResourceLocation TRENCHMASTER_LEG = NuclearTechMod.withDefaultNamespace("textures/armor/trenchmaster_leg.png");
+
     /** Die Aschebrille -- im Original heisst die Datei ebenso. */
     public static final ResourceLocation ARMOR_GOGGLES = NuclearTechMod.withDefaultNamespace("textures/armor/goggles.png");
     public static final ResourceLocation HEV_LEG = NuclearTechMod.withDefaultNamespace("textures/armor/hev_leg.png");
@@ -815,6 +820,7 @@ public class ResourceManager {
     public static IModelCustom armor_taurun;
     public static IModelCustom armor_bismuth;
     public static IModelCustom armor_fau;
+    public static IModelCustom armor_trenchmaster;
 
     public static IObjRenderer sphere;
     public static IModelCustom sphere_new;
@@ -1134,6 +1140,7 @@ public class ResourceManager {
         armor_taurun = new HFRWavefrontObject("models/obj/armor/taurun.obj").asVBO();
         armor_bismuth = new HFRWavefrontObject("models/obj/armor/bismuth.obj").asVBO();
         armor_fau = new HFRWavefrontObject("models/obj/armor/fau.obj").asVBO();
+        armor_trenchmaster = new HFRWavefrontObject("models/obj/armor/trenchmaster.obj").asVBO();
 
         sphere = new HFRWavefrontObject("models/obj/sphere.obj").getRenderer();
         sphere_new = new HFRWavefrontObject("models/obj/sphere_new.obj").asVBO();

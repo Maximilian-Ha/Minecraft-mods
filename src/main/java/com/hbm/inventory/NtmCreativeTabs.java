@@ -2048,6 +2048,10 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.FAU_PLATE);
                         output.accept(NtmItems.FAU_LEGS);
                         output.accept(NtmItems.FAU_BOOTS);
+                        output.accept(NtmItems.TRENCHMASTER_HELMET);
+                        output.accept(NtmItems.TRENCHMASTER_PLATE);
+                        output.accept(NtmItems.TRENCHMASTER_LEGS);
+                        output.accept(NtmItems.TRENCHMASTER_BOOTS);
                         output.accept(NtmItems.MASK_RAG);
                         output.accept(NtmItems.MASK_PISS);
                         output.accept(NtmItems.GAS_MASK_FILTER);

@@ -1,5 +1,6 @@
 package com.hbm.network.toclient;
 
+import com.hbm.items.armor.ArmorTrenchmasterItem;
 import com.hbm.items.IAnimatedItem;
 import com.hbm.items.weapon.sedna.GunBaseNTItem;
 import com.hbm.items.weapon.sedna.GunBaseNTItem.LambdaContext;
@@ -93,7 +94,7 @@ public record HbmAnimation(short animType, int rec, int gun) implements CustomPa
 
         if(animation != null) {
             boolean isReloadAnimation = type == GunAnimation.RELOAD || type == GunAnimation.RELOAD_CYCLE;
-            //if(isReloadAnimation && ArmorTrenchmaster.isTrenchMaster(player)) animation.setTimeMult(0.5D);
+            if(isReloadAnimation && ArmorTrenchmasterItem.isTrenchMaster(player)) animation.setTimeMult(0.5D);
             HbmAnimations.hotbar[slot][gunIndex] = new Animation(stack.getItem().getDescriptionId(), System.currentTimeMillis(), animation, isReloadAnimation && config.getReloadAnimSequential(stack));
         }
     }

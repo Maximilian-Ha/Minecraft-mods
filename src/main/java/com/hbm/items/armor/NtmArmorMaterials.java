@@ -134,6 +134,15 @@ public class NtmArmorMaterials {
      */
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> FAU = register("fau", LAYER_INVISIBLE, 0, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.PLATE_ARMOR_FAU.get()));
 
+    /*
+     * Grabenmeister. Im Original heisst dieser Werkstoff "HBM_TRENCH" -- genau wie der der
+     * Taurun-Ruestung; im Port hat jeder seinen eigenen Namen (siehe Runde 217).
+     * {3, 8, 6, 3}, ohne Verzauberbarkeit, Reparatur mit der Eisenplatte. Der
+     * Haltbarkeitsfaktor des Originals bleibt wirkungslos: der Konstruktor setzt
+     * setMaxDamage(0).
+     */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> TRENCHMASTER = register("trenchmaster", LAYER_INVISIBLE, 0, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.PLATE_IRON.get()));
+
     public static final int DURABILITY_T51 = 150;
     public static final int DURABILITY_FAU = 150;
     public static final int DURABILITY_BISMUTH = 100;

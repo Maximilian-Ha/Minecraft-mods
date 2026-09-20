@@ -24,6 +24,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
@@ -110,6 +113,24 @@ public class ArmorFSBItem extends ArmorItem implements IHelmetOverlayItem {
     public boolean isArmorEnabled(ItemStack stack) {
         return true;
     }
+
+    /**
+     * Der Anzug darf den Schaden verrechnen, den sein Traeger gerade abbekommt. Im Original
+     * heisst der Haken ebenso und haengt am LivingHurtEvent; in 1.21 ist das
+     * LivingDamageEvent.Pre.
+     *
+     * AUFGERUFEN WIRD NUR DIE BRUSTPLATTE. Das ist keine Vereinfachung, sondern steht so im
+     * Original (ModEventHandler Z. 733): dort wird ausschliesslich armorInventory[2] gefragt.
+     * Die Brustplatte weiss ohnehin als einzige, ob der Satz vollstaendig ist.
+     */
+    public void handleHurt(LivingDamageEvent.Pre event) { }
+
+    /**
+     * Dasselbe eine Stufe frueher, solange der Angriff noch ganz abgesagt werden kann. Im
+     * Original der LivingAttackEvent, in 1.21 der LivingIncomingDamageEvent -- und ebenfalls
+     * nur an der Brustplatte (ModEventHandler Z. 680).
+     */
+    public void handleAttack(LivingIncomingDamageEvent event) { }
 
     /**
      * Traegt der Spieler einen vollstaendigen Satz, und hat jedes Teil auch das, was es zum

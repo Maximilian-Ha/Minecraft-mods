@@ -42,6 +42,8 @@ import com.hbm.itempool.ItemPoolsSatellite;
 import com.hbm.items.IEquipReceiver;
 import com.hbm.items.weapon.sedna.GunBaseNTItem;
 import com.hbm.saveddata.satellite.XSatelliteRegistry;
+import com.hbm.items.armor.ArmorFSBItem;
+import com.hbm.items.NtmItems;
 import com.hbm.util.ArmorUtil;
 import com.hbm.util.DamageResistanceHandler;
 import net.minecraft.core.BlockPos;
@@ -49,6 +51,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -64,6 +68,7 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent.BreakEvent;
@@ -181,6 +186,41 @@ public class CommonEvents {
     @SubscribeEvent
     public static void onLivingDamage(LivingDamageEvent.Pre event) {
         ArmorModHandler.handleDamage(event);
+
+        /* Danach darf der Anzug selbst ran -- und zwar nur die Brustplatte, wie im Original
+         * (ModEventHandler Z. 733). */
+        if(!(event.getEntity() instanceof Player player)) return;
+
+        if(player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof ArmorFSBItem brustplatte) {
+            brustplatte.handleHurt(event);
+        }
+    }
+
+    /**
+     * Eine Stufe frueher als oben: hier laesst sich der Angriff noch ganz absagen.
+     *
+     * DER EUPHEMIUM-SATZ STEHT HIER UND NICHT IN SEINER KLASSE. Im Original ist das ebenso
+     * (ModEventHandler Z. 674): die Abfrage haengt am Ereignis, nicht am Gegenstand, weil sie
+     * den ganzen Satz auf einmal prueft. Runde 215 hat den Satz portiert, aber diese Wirkung
+     * uebersehen -- sie kommt hier nach.
+     */
+    @SubscribeEvent
+    public static void onLivingIncomingDamage(LivingIncomingDamageEvent event) {
+
+        if(!(event.getEntity() instanceof Player player)) return;
+
+        if(ArmorUtil.checkArmor(player, NtmItems.EUPHEMIUM_HELMET.get(), NtmItems.EUPHEMIUM_PLATE.get(),
+                NtmItems.EUPHEMIUM_LEGS.get(), NtmItems.EUPHEMIUM_BOOTS.get())) {
+
+            player.level().playSound(null, player.blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS,
+                    0.5F, 1.0F + player.getRandom().nextFloat() * 0.5F);
+            event.setCanceled(true);
+            return;
+        }
+
+        if(player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof ArmorFSBItem brustplatte) {
+            brustplatte.handleAttack(event);
+        }
     }
 
     @SubscribeEvent
