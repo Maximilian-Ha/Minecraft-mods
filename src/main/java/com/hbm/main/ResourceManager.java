@@ -493,6 +493,11 @@ public class ResourceManager {
     public static final ResourceLocation NCRPA_ARM = NuclearTechMod.withDefaultNamespace("textures/armor/ncrpa_arm.png");
     public static final ResourceLocation NCRPA_LEG = NuclearTechMod.withDefaultNamespace("textures/armor/ncrpa_leg.png");
 
+    /**
+     * Die Textur des Huts. Sie lag samt Modell (armor_hat) und Wellenfrontdatei schon im
+     * Port, weil der Wackelkopf denselben Hut traegt -- nur der Ruestungsgegenstand dazu
+     * fehlte bis Runde 226. Seitdem hat auch diese Konstante einen zweiten Nutzer.
+     */
     public static final ResourceLocation HAT_TEX = NuclearTechMod.withDefaultNamespace("textures/armor/hat.png");
     public static final ResourceLocation NO9_TEX = NuclearTechMod.withDefaultNamespace("textures/armor/no9.png");
     public static final ResourceLocation NO9_INSIGNIA_TEX = NuclearTechMod.withDefaultNamespace("textures/armor/no9_insignia.png");

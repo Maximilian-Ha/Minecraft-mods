@@ -175,6 +175,14 @@ public class NtmArmorMaterials {
      */
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> DIESELSUIT = register("dieselsuit", LAYER_INVISIBLE, 0, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.PLATE_COPPER.get()));
 
+    /*
+     * Der Hut. Im Original benutzt er den Legierungswerkstoff mit; der Port gibt ihm einen
+     * eigenen, weil er sein Aussehen als Wellenfrontmodell holt und die Schicht darum
+     * unsichtbar bleiben muss -- teilte er sich den Werkstoff mit der Legierungsruestung,
+     * traege er deren Schichtbild.
+     */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> HAT = register("hat", LAYER_INVISIBLE, 12, 3, 8, 6, 3, () -> Ingredient.EMPTY);
+
     public static final int DURABILITY_T51 = 150;
     public static final int DURABILITY_DIESELSUIT = 150;
     public static final int DURABILITY_DESH = 150;

@@ -43,6 +43,8 @@ import com.hbm.items.IEquipReceiver;
 import com.hbm.items.weapon.sedna.GunBaseNTItem;
 import com.hbm.saveddata.satellite.XSatelliteRegistry;
 import com.hbm.items.armor.ArmorFSBItem;
+import com.hbm.items.armor.IDamageHandlerItem;
+import com.hbm.items.armor.IAttackHandlerItem;
 import com.hbm.items.NtmItems;
 import com.hbm.util.ArmorUtil;
 import com.hbm.util.DamageResistanceHandler;
@@ -194,6 +196,13 @@ public class CommonEvents {
         if(player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof ArmorFSBItem brustplatte) {
             brustplatte.handleHurt(event);
         }
+
+        /* Danach jedes einzelne Teil, das sich dafuer anmeldet -- an allen vier Plaetzen,
+         * nicht nur an der Brust (ModEventHandler Z. 736). */
+        for(EquipmentSlot platz : ArmorModHandler.ARMOR_SLOTS) {
+            ItemStack teil = player.getItemBySlot(platz);
+            if(teil.getItem() instanceof IDamageHandlerItem handler) handler.handleDamage(event, teil);
+        }
     }
 
     /**
@@ -220,6 +229,12 @@ public class CommonEvents {
 
         if(player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof ArmorFSBItem brustplatte) {
             brustplatte.handleAttack(event);
+        }
+
+        /* Und hier ebenso an allen vier Plaetzen (ModEventHandler Z. 682). */
+        for(EquipmentSlot platz : ArmorModHandler.ARMOR_SLOTS) {
+            ItemStack teil = player.getItemBySlot(platz);
+            if(teil.getItem() instanceof IAttackHandlerItem handler) handler.handleAttack(event, teil);
         }
     }
 

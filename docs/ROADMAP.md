@@ -10535,3 +10535,70 @@ schlichteste Rüstungsrezept des Mods.
 Nach dieser Runde ist **ein** Rüstungsname offen: `nossy_hat`.
 
 Alle 39 Tore grün.
+
+## Runde 226 — Der Hut schließt die Rüstungsliste
+
+Der letzte der 141 Rüstungsnamen. Kein Anzugteil, sondern ein Einzelstück:
+
+| | |
+|---|---|
+| Schadensminderung | −2 von **jedem** Treffer, der nicht unabwendbar ist |
+| Kleine Treffer | was höchstens 2 gemacht hätte, wird ganz abgesagt, mit Klirren |
+| Fallengelassen | verschwindet auf der Stelle |
+| Satzbonus | **keiner** — beides greift, sobald er auf dem Kopf sitzt |
+
+### Zwei Haken, die an allen vier Plätzen greifen
+
+Runde 220 hat `handleHurt` und `handleAttack` an `ArmorFSBItem` nachgerüstet — aber die
+werden **nur an der Brustplatte** gefragt, so wie im Original. Der Hut ist ein Helm, und er
+hängt an keinem Satz.
+
+Dafür gibt es im Original zwei eigene Schnittstellen, `IAttackHandler` und `IDamageHandler`,
+die über **alle vier** Rüstungsplätze abgefragt werden (`ModEventHandler` Z. 682 und 736).
+Der Port hat sie jetzt auch, unter den Namen `IAttackHandlerItem` und `IDamageHandlerItem`.
+Damit stehen beide Verteilungswege nebeneinander, genau wie dort — und der Unterschied
+zwischen ihnen ist gemessen, nicht geraten.
+
+### Modell und Textur lagen schon da
+
+`syntax-check` hat gemeldet, dass `armor_hat` bereits erklärt ist. Nachgesehen: der
+**Wackelkopf** (`RenderBobble`) trägt denselben Hut und hat Modell, Wellenfrontdatei und
+Textur längst mitgebracht. Auch die Konstante `HAT_TEX` gab es, nur ohne Nutzer.
+
+Es fehlte also nie das Aussehen, sondern nur der Rüstungsgegenstand dazu. Das Tor hat eine
+doppelte Erklärung verhindert und nebenbei eine tote Konstante wiederbelebt.
+
+### Zu haben ist er nur im Kreativreiter
+
+Im Original trägt ihn gelegentlich ein Gegner (`MobUtil`) und ein bestimmter Spieler bekommt
+ihn geschenkt; ein Werkbankrezept hat er auch dort nicht. Beide Quellen gibt es im Port nicht
+— das steht am Gegenstand, damit niemand nach einem Rezept sucht, das es nie gab.
+
+---
+
+## Damit ist die Rüstungsliste geschlossen
+
+**141 von 141 Rüstungsnamen sind portiert.** Der Stand aus Runde 210 — 103 fehlende Namen,
+nachgemessen nach einer Fehlmessung, die 17 behauptet hatte — ist abgearbeitet:
+
+| Runde | Was | Namen |
+|---|---|---|
+| 211–213 | Aschebrille, 33 schlichte Teile, 15 mit Zusatz | 49 |
+| 214 | T-51 | 4 |
+| 215 | Euphemium + Taschenuhr | 4 |
+| 216 | AJR und AJRO | 8 |
+| 217 | Taurun | 4 |
+| 218 | Wismut + Laserkristall | 4 |
+| 219 | Fau + Uraltschrott | 4 |
+| 220 | Grabenmeister | 4 |
+| 221 | Umgebungsanzug | 4 |
+| 222 | Blackjack samt Triebwerk | 5 |
+| 223 | DNT-Nano + Münze | 4 |
+| 224 | Dampfanzug + `ArmorFSBFueledItem` | 4 |
+| 225 | Dieselanzug | 4 |
+| 226 | Hut | 1 |
+
+Dazu kamen unterwegs acht Gegenstände und ein Block, die als Zutat gebraucht wurden, drei
+neue Grundklassen bzw. Schnittstellen, eine Schadensart und ein Tonereignis.
+
+Alle 39 Tore grün.

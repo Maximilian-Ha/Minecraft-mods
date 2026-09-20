@@ -2074,6 +2074,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.DIESELSUIT_PLATE);
                         output.accept(NtmItems.DIESELSUIT_LEGS);
                         output.accept(NtmItems.DIESELSUIT_BOOTS);
+                        output.accept(NtmItems.NOSSY_HAT);
                         output.accept(NtmItems.MASK_RAG);
                         output.accept(NtmItems.MASK_PISS);
                         output.accept(NtmItems.GAS_MASK_FILTER);

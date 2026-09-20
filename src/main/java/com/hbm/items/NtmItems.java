@@ -16,6 +16,7 @@ import com.hbm.items.ItemEnums.CapType;
 import com.hbm.items.ItemEnums.U238M2Type;
 import com.hbm.items.ItemEnums.CasingType;
 import com.hbm.items.armor.ArmorFSBItem;
+import com.hbm.items.armor.ArmorHatItem;
 import com.hbm.items.food.PillItem;
 import com.hbm.items.machine.GunPartItem;
 import com.hbm.items.special.SimpleConsumableItem;
@@ -1836,6 +1837,14 @@ public class NtmItems {
     public static final DeferredItem<Item> DIESELSUIT_PLATE = ITEMS.register("dieselsuit_plate", () -> dieselsuit(ArmorItem.Type.CHESTPLATE));
     public static final DeferredItem<Item> DIESELSUIT_LEGS = ITEMS.register("dieselsuit_legs", () -> dieselsuit(ArmorItem.Type.LEGGINGS));
     public static final DeferredItem<Item> DIESELSUIT_BOOTS = ITEMS.register("dieselsuit_boots", () -> dieselsuit(ArmorItem.Type.BOOTS));
+
+    /**
+     * DER HUT -- das letzte Ruestungsstueck, das dem Port gefehlt hat. Er nimmt zwei Punkte
+     * von jedem Treffer und laesst kleine Treffer ganz abprallen; wer ihn wegwirft, verliert
+     * ihn. Siehe ArmorHatItem.
+     */
+    public static final DeferredItem<Item> NOSSY_HAT = ITEMS.register("nossy_hat", () ->
+            new ArmorHatItem(NtmArmorMaterials.HAT, ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1)));
 
     public static final DeferredItem<Item> HEV_HELMET = ITEMS.register("hev_helmet", () -> hev(ArmorItem.Type.HELMET));
     public static final DeferredItem<Item> HEV_PLATE = ITEMS.register("hev_plate", () -> hev(ArmorItem.Type.CHESTPLATE));

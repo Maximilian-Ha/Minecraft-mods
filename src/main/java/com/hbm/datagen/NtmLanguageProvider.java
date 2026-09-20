@@ -4135,6 +4135,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.DIESELSUIT_PLATE, "Diesel-Powered Cybernetics");
         this.add(NtmItems.DIESELSUIT_LEGS, "Diesel-Powered Leg Servos");
         this.add(NtmItems.DIESELSUIT_BOOTS, "Diesel-Powered High Heels");
+
+        this.add(NtmItems.NOSSY_HAT, "Fabulous Hat");
         this.add("armor.electricJetpack", "Ion Jetpack");
         this.add("armor.glider", "Sneak to glide");
         this.add("armor.moreAmmo", "More Ammo");
