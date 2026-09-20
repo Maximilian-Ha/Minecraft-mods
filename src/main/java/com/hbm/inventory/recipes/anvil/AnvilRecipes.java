@@ -10,6 +10,8 @@ import com.hbm.items.BoltItem;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.CastPlateItem;
 import com.hbm.items.WireDenseItem;
+import com.hbm.items.food.DrinkItem;
+import com.hbm.items.food.FlaskItem;
 import com.hbm.items.NtmItems;
 import com.hbm.items.machine.GearItem;
 import com.hbm.util.InventoryUtil;
@@ -123,6 +125,24 @@ public class AnvilRecipes {
 
         addUpgrade(NTMAnvilBlock.Variant.IRON, NTMAnvilBlock.Variant.OSMIRIDIUM, NtmItems.INGOT_OSMIRIDIUM.get(), 10);
         addUpgrade(NTMAnvilBlock.Variant.LEAD, NTMAnvilBlock.Variant.OSMIRIDIUM, NtmItems.INGOT_OSMIRIDIUM.get(), 10);
+
+        /*
+         * Die Infusionsflasche, Runde 244. Aus dem Original (AnvilRecipes Z. 94): Alexandrit
+         * und eine Nuka-Cola, Stufe 4.
+         *
+         * DIE NUKA-COLA IST EIN METADATEN-GEGENSTAND. Im Original ist bottle_nuka ein
+         * eigener Gegenstand; im Port ist es die Sorte NUKA des Getraenks, also braucht
+         * ComparableStack die Metadatenzahl dazu.
+         */
+        ItemStack infusion = new ItemStack(NtmItems.FLASK_INFUSION.get());
+        MetaHelper.setMeta(infusion, FlaskItem.InfusionType.SHIELD.ordinal());
+
+        SMITHING_RECIPES.add(new AnvilSmithingRecipe(
+                4,
+                infusion,
+                new ComparableStack(NtmItems.GEM_ALEXANDRITE.get(), 1),
+                new ComparableStack(NtmItems.DRINK.get(), 1, DrinkItem.DrinkType.NUKA.ordinal())
+        ));
 
         SMITHING_RECIPES.add(new AnvilSmithingCyanideRecipe());
         SMITHING_RECIPES.add(new AnvilSmithingRenameRecipe());

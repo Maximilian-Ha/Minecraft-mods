@@ -23,6 +23,7 @@ import com.hbm.items.weapon.grenade.GrenadeFillingItem.GrenadeFilling;
 import com.hbm.items.weapon.grenade.GrenadeFuzeItem.GrenadeFuze;
 import com.hbm.items.weapon.grenade.GrenadeShellItem.GrenadeShell;
 import com.hbm.items.food.DrinkItem.DrinkType;
+import com.hbm.items.food.FlaskItem.InfusionType;
 import com.hbm.items.machine.BatteryPackItem.BatteryPackType;
 import com.hbm.items.machine.BatterySCItem.BatterySCType;
 import com.hbm.items.machine.BreedingRodItem.BreedingRodType;
@@ -1686,6 +1687,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.BALEFIRE_AND_STEEL, "Balefire and Steel");
 
         this.add("item.hbmsntm.obj_drink.requires_opener", "[Requires bottle opener]");
+        this.add(NtmItems.FLASK_INFUSION, this.getName(InfusionType.SHIELD), "Shield Infusion");
         this.add(NtmItems.DRINK, this.getName(DrinkType.CAN_EMPTY), "Empty Can");
         this.add(NtmItems.DRINK, this.getName(DrinkType.SMART), "'Smart' Energy Drink");
         this.add(NtmItems.DRINK, this.getName(DrinkType.SMART) + DESC, "Cheap and full of bubbles");
@@ -1812,6 +1814,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.CARD_AOS, "Ace of Spades");
         this.add(NtmItems.CARD_QOS, "Queen of Spades");
         this.add(NtmItems.MORNING_GLORY, "Morning Glory");
+        this.add(NtmItems.AUSTRALIUM_III, "Mark III Life Extender");
         this.add(NtmItems.DEFUSER_GOLD, "Golden Wire Cutter");
         this.add(NtmItems.BALLISTIC_GAUNTLET, "Ballistic Gauntlet");
         this.add(NtmItems.ARMOR_POLISH, "Armor Polish");

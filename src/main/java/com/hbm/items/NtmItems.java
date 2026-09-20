@@ -57,6 +57,8 @@ import com.hbm.items.armor.ModCardItem;
 import com.hbm.items.armor.ModMorningGloryItem;
 import com.hbm.items.armor.ModReviveItem;
 import com.hbm.items.armor.ItemModBandaid;
+import com.hbm.items.armor.ItemModShield;
+import com.hbm.items.food.FlaskItem;
 import com.hbm.items.armor.ItemModDefuser;
 import com.hbm.items.armor.ItemModHealth;
 import com.hbm.items.armor.ItemModInk;
@@ -1119,6 +1121,8 @@ public class NtmItems {
      * hatte dadurch nur dreizehn seiner fuenfundzwanzig Eintraege.
      */
     /** Er tut nichts -- und das ist so im Original. Siehe ItemModTwoKick. */
+    /* Das Australium-Amulett: der einzige Schildaufsatz des Originals, +25. */
+    public static final DeferredItem<Item> AUSTRALIUM_III = ITEMS.register("australium_iii", () -> new ItemModShield(new Item.Properties(), 25F));
     public static final DeferredItem<Item> DEFUSER_GOLD = ITEMS.register("defuser_gold", () -> new ItemModDefuser(new Item.Properties()));
     public static final DeferredItem<Item> BALLISTIC_GAUNTLET = ITEMS.register("ballistic_gauntlet", () -> new ItemModTwoKick(new Item.Properties()));
     public static final DeferredItem<Item> ARMOR_POLISH = ITEMS.register("armor_polish", () -> new ItemModPolish(new Item.Properties()));
@@ -1294,6 +1298,8 @@ public class NtmItems {
 
     // Energy Drinks
     public static final DeferredItem<Item> DRINK = ITEMS.register("drink", () -> new DrinkItem(new Item.Properties()));
+    /* Die Infusionsflasche, Runde 244 -- eine Sorte, SHIELD, wie im Original. */
+    public static final DeferredItem<Item> FLASK_INFUSION = ITEMS.register("flask_infusion", () -> new FlaskItem(new Item.Properties()));
     /* Die Brechstange: im Original ein Stahlschwert mit eigenem Bild (ModItems.java:4284).
      * Sie ist der einzige Weg, eine Beutekiste zu oeffnen. */
     public static final DeferredItem<Item> CROWBAR = ITEMS.register(

@@ -12,6 +12,10 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
+import com.hbm.handler.ArmorModHandler;
+import com.hbm.items.armor.ItemModShield;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -64,6 +68,28 @@ public class HbmPlayerAttachments {
 
     public static HbmPlayerAttachments getData(Player player) {
         return player.getData(ModAttachments.PLAYER_ATTACHMENT);
+    }
+
+    /**
+     * Die wirksame Obergrenze des Schilds, Runde 244: der angetrunkene Wert plus der
+     * Aufschlag eines Schildaufsatzes im Kevlar-Steckplatz der Brustplatte.
+     *
+     * DER AUFSATZ WIRD JEDES MAL NEU GEFRAGT, nicht gemerkt. Das Original macht es ebenso,
+     * und der Grund ist derselbe: wer die Brustplatte ablegt, verliert den Aufschlag im
+     * selben Takt. Ein gemerkter Wert muesste beim Anlegen und Ablegen nachgezogen werden
+     * -- eine Buchhaltung, die nur schiefgehen kann.
+     */
+    public float getEffectiveMaxShield(Player player) {
+
+        float max = this.maxShield;
+
+        ItemStack brustplatte = player.getItemBySlot(EquipmentSlot.CHEST);
+        if(brustplatte.isEmpty()) return max;
+
+        ItemStack aufsatz = ArmorModHandler.pryMod(player.level(), brustplatte, ArmorModHandler.KEVLAR);
+        if(aufsatz.getItem() instanceof ItemModShield schild) max += schild.schild;
+
+        return max;
     }
 
     public final boolean[] keysPressed = new boolean[EnumKeybind.values().length];

@@ -11461,3 +11461,59 @@ ohne Minecraft auf der Platte -- `maven.neoforged.net` ist hier nicht erreichbar
 führt. Was es stattdessen gibt: der Serverlauf der CI zählt `/ERROR]`-Zeilen, und ein
 Rezept mit unbekanntem Tag erzeugt eine. Der Weg über `create` ist also nicht stiller als
 der über ein Feld -- er scheitert nur später und lauter statt früher.
+
+### Runde 244: das Schildsystem — sechs Teile, von denen der Port zwei hatte
+
+`HbmPlayerAttachments` führt seit Langem `shield`, `maxShield` und `shieldCap`, samt
+Netzwerk- und NBT-Behandlung. **Gelesen oder geschrieben hat sie niemand.** Gegengeprüft
+über den ganzen Quellbaum: die übrigen Treffer auf „shield" sind Panzerschreck-Darsteller,
+ein G3-Waffenaufsatz und dergleichen -- kein einziger betrifft dieses Feld. Zwei Zahlen,
+die gespeichert und übertragen wurden und nichts bedeuteten.
+
+Sichtbar wurde das wieder von unten: `flask_infusion` ist der letzte fehlende Eintrag des
+Rote-Zimmer-Sockels. Allein gebaut wäre es ein Trank gewesen, der eine Zahl erhöht, die
+niemand liest.
+
+| Teil | im Original | im Port vor Runde 244 |
+|---|---|---|
+| die Felder | `HbmPlayerProps` | **da** |
+| `getEffectiveMaxShield` | `HbmPlayerProps:179` | fehlte |
+| Regeneration | `EntityEffectHandler:89` | fehlte |
+| Schadensabzug | `ModEventHandler:700` | fehlte |
+| Anzeige | `RenderScreenOverlay:246` | fehlte |
+| `ItemModShield` (`australium_iii`) | `+25` | fehlte |
+| `ItemFlask` (`flask_infusion`) | `+5`, gedeckelt auf 100 | fehlte |
+
+#### Die Regeneration beschleunigt sich, und das ist so gewollt geblieben
+
+Das Original addiert nicht `0.005` je Takt, sondern `0.005 * (Takte seit Beginn der Ruhe)`.
+Wer eine Minute nicht getroffen wird, lädt am Ende gut sechzigmal so schnell wie am Anfang.
+Das sieht nach einem Versehen aus -- gemeint war vermutlich eine gleichmäßige Rate --,
+aber es ist die Kurve, die das Spiel hat. Sie zu begradigen wäre eine andere Waffe gewesen.
+Die sechzig Takte Wartezeit vor dem ersten Nachladen stehen ebenfalls unverändert.
+
+#### Drei Stellen, an denen 1.21 einen anderen Weg verlangt
+
+* **Der Aufsatz wird jedes Mal neu gefragt.** `getEffectiveMaxShield` sieht bei jedem Aufruf
+  in den Kevlar-Steckplatz der Brustplatte; wer sie ablegt, verliert den Aufschlag im
+  selben Takt. Ein gemerkter Wert müsste beim An- und Ablegen nachgezogen werden -- eine
+  Buchhaltung, die nur schiefgehen kann. Das Original macht es genauso.
+* **Die Leiste verdrängt nichts mehr.** Das Original hängt sich an
+  `GuiIngameForge.left_height` und schiebt den Zähler um zehn hoch, damit Hunger und Luft
+  darunter rutschen. Diesen Zähler gibt es in 1.21 nicht; die Schildleiste zeichnet sich
+  jetzt über der Lebensanzeige und lässt die übrigen, wo sie sind. Den Zähler nachzubauen
+  hieße, in jede fremde Leiste einzugreifen.
+* **Der Anhang synchronisiert sich selbst.** Das Original schickt nach jeder Änderung ein
+  `ExtPropPacket` hinterher; der Port hat `.sync(STREAM_CODEC)` am `AttachmentType`, und
+  der Client bekommt den Wert ohne Zutun.
+
+#### Eine Sorte, nicht drei
+
+Die CE-Abspaltung liefert drei Flaschentexturen (`empty`, `shield`, `radpot`). `EnumInfusion`
+des 1.7.10-Standes kennt genau **eine** Sorte: `SHIELD`. Der Port meldet nur die an, statt
+zwei leere Plätze dazuzuerfinden.
+
+**Der Sockel des Roten Zimmers ist damit vollständig: 25 von 25.** Vier Runden haben ihn
+geschlossen -- 233 legte ihn mit dreizehn an und zählte die zwölf fehlenden im Klassenkopf
+namentlich auf, 241 reichte die zehn Rüstungsaufsätze nach, 243 das Sternmetallschwert,
+244 die Infusionsflasche. Der Kopf zählt jetzt nichts mehr auf, weil nichts mehr fehlt.

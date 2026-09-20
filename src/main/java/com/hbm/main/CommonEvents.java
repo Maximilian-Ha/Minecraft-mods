@@ -89,6 +89,8 @@ import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import java.util.List;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import com.hbm.extprop.HbmPlayerAttachments;
+import com.hbm.lib.ModAttachments;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
@@ -289,6 +291,13 @@ public class CommonEvents {
      */
     @SubscribeEvent
     public static void onLivingDamage(LivingDamageEvent.Pre event) {
+
+        /* DAS SCHILD ZUERST, Runde 244. Im Original steht es an derselben Stelle
+         * (ModEventHandler Z. 700) -- im selben LivingHurtEvent, aber VOR den
+         * Ruestungsaufsaetzen bei Z. 736. Was das Schild traegt, sehen die Aufsaetze
+         * gar nicht erst. */
+        schildAbzug(event);
+
         ArmorModHandler.handleDamage(event);
 
         /* Danach darf der Anzug selbst ran -- und zwar nur die Brustplatte, wie im Original
@@ -305,6 +314,31 @@ public class CommonEvents {
             ItemStack teil = player.getItemBySlot(platz);
             if(teil.getItem() instanceof IDamageHandlerItem handler) handler.handleDamage(event, teil);
         }
+    }
+
+    /**
+     * Der Schildabzug, Runde 244. Was das Schild traegt, nimmt der Spieler nicht -- und der
+     * Zeitpunkt des letzten Treffers wird festgehalten, weil die Regeneration in
+     * EntityEffectHandler sechzig Takte Ruhe verlangt.
+     *
+     * DIE MARKE WIRD AUCH GESETZT, WENN DAS SCHILD LEER IST. Das Original macht es ebenso:
+     * lastDamage steht ausserhalb der Abfrage auf shield > 0. Sonst koennte ein Spieler mit
+     * leerem Schild unter Dauerbeschuss weiter aufladen.
+     */
+    private static void schildAbzug(LivingDamageEvent.Pre event) {
+
+        if(!(event.getEntity() instanceof Player player)) return;
+
+        HbmPlayerAttachments props = HbmPlayerAttachments.getData(player);
+
+        if(props.shield > 0) {
+            float traegt = Math.min(props.shield, event.getNewDamage());
+            props.shield -= traegt;
+            event.setNewDamage(event.getNewDamage() - traegt);
+        }
+
+        props.lastDamage = player.tickCount;
+        player.setData(ModAttachments.PLAYER_ATTACHMENT.get(), props);
     }
 
     /**

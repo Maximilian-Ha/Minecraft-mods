@@ -114,6 +114,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ItemFrame;
+import com.hbm.render.util.ShieldOverlay;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -367,6 +368,11 @@ public class NuclearTechModClient {
      */
     @SubscribeEvent
     public static void onRenderCameraOverlays(RenderGuiLayerEvent.Post event) {
+
+        /* Die Schildleiste, Runde 244 -- sie haengt an der Lebensanzeige, nicht an den
+         * Kameravorsaetzen, und prueft das selbst. */
+        Player schildtraeger = NuclearTechMod.proxy.me();
+        if(schildtraeger != null) ShieldOverlay.handleOverlay(event, schildtraeger);
 
         if(!event.getName().equals(VanillaGuiLayers.CAMERA_OVERLAYS)) return;
 

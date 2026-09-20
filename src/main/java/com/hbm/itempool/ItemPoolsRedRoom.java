@@ -5,6 +5,7 @@ import com.hbm.blocks.NtmBlocks;
 import com.hbm.inventory.MetaHelper;
 import com.hbm.items.ItemEnums.SecretType;
 import com.hbm.items.NtmItems;
+import com.hbm.items.food.FlaskItem;
 import com.hbm.items.weapon.sedna.factory.GunFactory.ModSpecial;
 
 import net.minecraft.core.BlockPos;
@@ -17,17 +18,13 @@ import net.minecraft.world.level.Level;
  * Was in den Zimmern hinter den Schluessellochbloecken liegt. Drei Vorraete: der Sockel des
  * steinernen Zimmers, die Tafel des Ziegelzimmers und dessen vier Beisockel.
  *
- * DER ERSTE VORRAT IST FAST VOLLSTAENDIG, und was fehlt, steht hier statt im Verborgenen.
- * Von den fuenfundzwanzig Eintraegen des Originals stehen seit Runde 243 vierundzwanzig;
- * EIN Gegenstand fehlt noch -- gemessen ueber den Registriernamen, nicht ueber den
- * Feldnamen:
+ * DER ERSTE VORRAT IST SEIT RUNDE 244 VOLLSTAENDIG: alle fuenfundzwanzig Eintraege des
+ * Originals stehen, mit dessen Gewichten. Vier Runden haben ihn geschlossen -- 233 legte
+ * ihn mit dreizehn an und zaehlte die zwoelf fehlenden im Kopf namentlich auf, 241 reichte
+ * die zehn Ruestungsaufsaetze nach, 243 das Sternmetallschwert und 244 die Infusionsflasche.
  *
- *   flask_infusion
- *
- * Runde 241 hat die zehn Ruestungsaufsaetze nachgereicht, Runde 243 das Sternmetallschwert;
- * beide mit ihren Gewichten aus dem Original. Das Gewicht des letzten bleibt, wie es ist:
- * die uebrigen umzurechnen, damit die Summe stimmt, waere eine Erfindung. Was fehlt, fehlt
- * sichtbar.
+ * Der Kopf zaehlt jetzt nichts mehr auf, weil nichts mehr fehlt. Falls je wieder etwas
+ * herausfaellt, gehoert es hierher -- nicht ins Verborgene.
  *
  * DER ZWEITE VORRAT stand in Runde 233 noch leer da: er besteht im Original aus einem
  * einzigen Eintrag, der Tontafel, und die kam erst in Runde 234. Jetzt ist er vollstaendig.
@@ -61,6 +58,7 @@ public class ItemPoolsRedRoom {
 
                 .add(NtmItems.WILD_P.get(), 1, 1, 5)
                 .add(NtmItems.STARMETAL_SWORD.get(), 1, 1, 5)
+                .add(() -> MetaHelper.newStack(NtmItems.FLASK_INFUSION.get(), 1, FlaskItem.InfusionType.SHIELD.ordinal()), 5)
                 .add(NtmItems.CARD_AOS.get(), 1, 1, 5)
                 .add(NtmItems.CARD_QOS.get(), 1, 1, 5)
                 .add(NtmItems.GEM_ALEXANDRITE.get(), 1, 1, 5)

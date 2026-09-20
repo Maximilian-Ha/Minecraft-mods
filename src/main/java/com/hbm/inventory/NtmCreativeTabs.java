@@ -1944,6 +1944,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.PROTECTION_CHARM);
 
                         /* Die zehn Aufsaetze des Roten Zimmers, Runde 241. */
+                        output.accept(NtmItems.AUSTRALIUM_III);
                         output.accept(NtmItems.DEFUSER_GOLD);
                         output.accept(NtmItems.BALLISTIC_GAUNTLET);
                         output.accept(NtmItems.ARMOR_POLISH);
@@ -2134,6 +2135,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.BALEFIRE_AND_STEEL);
 
                         addMetaItems(output, NtmItems.DRINK.get());
+                        addMetaItems(output, NtmItems.FLASK_INFUSION.get());
                         output.accept(NtmItems.CROWBAR);
                         output.accept(NtmItems.BOTTLE_OPENER);
                         output.accept(NtmItems.COIN_MASKMAN);

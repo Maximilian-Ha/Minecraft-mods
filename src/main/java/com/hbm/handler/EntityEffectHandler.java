@@ -6,6 +6,7 @@ import com.hbm.extprop.HbmLivingAttachments.ContaminationEffect;
 import com.hbm.extprop.HbmPlayerAttachments;
 import com.hbm.handler.radiation.ChunkRadiationManager;
 import com.hbm.items.weapon.sedna.factory.ConfettiUtil;
+import net.minecraft.server.level.ServerPlayer;
 import com.hbm.lib.ModAttachments;
 import com.hbm.main.NuclearTechModClient;
 import com.hbm.particle.NtmParticleTypes;
@@ -75,7 +76,39 @@ public class EntityEffectHandler {
         handleOil(entity);
         handleTemperature(entity);
         if(entity instanceof Player player) handleFauxLadder(player);
+        if(entity instanceof ServerPlayer spieler) schildRegeneration(spieler);
     }
+
+    /**
+     * Die Schildregeneration, Runde 244. Sechzig Takte nach dem letzten Treffer beginnt das
+     * Schild sich zu fuellen.
+     *
+     * SIE BESCHLEUNIGT SICH, und das ist so im Original (EntityEffectHandler Z. 89-91):
+     * addiert wird nicht 0.005 je Takt, sondern 0.005 MAL der Zahl der Takte seit Beginn
+     * der Ruhe. Wer eine Minute nicht getroffen wird, laedt am Ende gut sechzigmal so
+     * schnell wie am Anfang. Das sieht nach einem Versehen aus -- gemeint war
+     * wahrscheinlich eine gleichmaessige Rate --, aber es ist die Kurve, die das Spiel
+     * hat, und sie zu begradigen waere eine andere Waffe.
+     *
+     * NUR AUF DEM SERVER: der Client bekommt den Wert ueber das Anhangspaket.
+     */
+    private static void schildRegeneration(ServerPlayer spieler) {
+
+        HbmPlayerAttachments props = HbmPlayerAttachments.getData(spieler);
+        float grenze = props.getEffectiveMaxShield(spieler);
+
+        if(props.shield < grenze && spieler.tickCount > props.lastDamage + RUHE) {
+            int ruhig = spieler.tickCount - (props.lastDamage + RUHE);
+            props.shield += Math.min(grenze - props.shield, 0.005F * ruhig);
+        }
+
+        if(props.shield > grenze) props.shield = grenze;
+
+        spieler.setData(ModAttachments.PLAYER_ATTACHMENT.get(), props);
+    }
+
+    /** Wie viele Takte Ruhe die Regeneration verlangt. Aus dem Original. */
+    public static final int RUHE = 60;
 
     private static void handleFauxLadder(Player player) {
 
