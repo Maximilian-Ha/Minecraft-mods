@@ -74,5 +74,6 @@ public class NtmDataGenerators {
         generator.addProvider(event.includeServer(), new NtmFluidTagsProvider(output, lookup, helper));
         generator.addProvider(event.includeServer(), new NtmEntityTypeTagsProvider(output, lookup, helper));
         generator.addProvider(event.includeServer(), new NtmRecipeProvider(output, lookup));
+        generator.addProvider(event.includeServer(), new NtmAdvancementProvider(output, lookup, helper));
     }
 }

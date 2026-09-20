@@ -11574,3 +11574,38 @@ Cordits.
 Die Messung von Runde 240 war richtig und hat trotzdem eine falsche Zahl stehen lassen,
 weil sie nur gefragt hat, ob sich etwas *bauen* lässt -- nicht, ob es sich so baut wie im
 Original.
+
+### Runde 247: die Erfolge — 61 im Original, einer im Port, und der hieß „test"
+
+Der Port hatte genau eine Erfolgsdatei: `data/hbmsntm/advancement/root.json`,
+handgeschrieben, mit `"title": {"translate": "test"}` und leerer Beschreibung. Ein
+Erfolgsbaum, der aus einer leeren Wurzel besteht, ist derselbe Fehler wie eine Klasse, die
+niemand anmeldet -- er steht da und tut nichts.
+
+Das Original hat **61 Erfolge**, angemeldet als eine `AchievementPage` namens
+„Nuclear Tech". Die Trennlinie zwischen ihnen lässt sich messen:
+
+| Auslöser | Anzahl | Weg auf 1.21 |
+|---|---|---|
+| `triggerAchievement(...)` im Quelltext | 32 | braucht je eine Stelle im Port, die feuert |
+| Forges Bau- und Aufnahmeerkennung | 29 | `InventoryChangeTrigger` |
+
+**Diese Runde bringt die zweite Gruppe** -- die Fortschrittskette, vom Brennerpresse bis
+zur Fusion. Wer den Symbolgegenstand im Inventar hat, bekommt den Erfolg, genau wie im
+Original.
+
+Die 32 getriggerten fehlen noch, und das ist kein Versehen: jeder braucht eine Stelle, die
+ihn feuert -- den Tod durch Strahlung, das Betreten des roten Zimmers, den Start einer
+Sojus. Sie kommen mit ihren Auslösern, nicht vorher.
+
+**Gitterplätze gibt es in 1.21 nicht mehr.** Das Original setzt jeden Erfolg auf eine
+Koordinate (`achBlastFurnace` auf 1,3, `achFusion` auf 13,-7); 1.21 legt den Baum selbst
+aus der Vorgängerkette. Die Kette ist übernommen, die Koordinaten entfallen ersatzlos.
+Aus `.setSpecial()` wird `AdvancementType.CHALLENGE` -- derselbe gezackte Rahmen.
+
+Zwei Erfolge der Kette fehlen mit benanntem Grund: `achSILEX` (den Block `machine_silex`
+gibt es im Port nicht) und `achChicagoPile` (sein Symbol `pile_rod_plutonium` ist im Port
+die Metadatensorte `PU239` von `PILE_ROD`, und ein Erfolg auf eine Metadatensorte braucht
+ein `DataComponentPredicate`).
+
+Titel und Beschreibungen sind wörtlich die des Originals, bis hin zum ó in „Fólkvangr".
