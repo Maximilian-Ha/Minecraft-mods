@@ -106,6 +106,7 @@ public class ClientProxy extends ServerProxy {
         }
 
         registerItemRenderer(event, new RenderLaserDetonator(), NtmItems.DETONATOR_LASER.get());
+        registerItemRenderer(event, new RenderBoltgunItem(), NtmItems.BOLTGUN.get());
 
         registerItemRenderer(event, new RenderCableItem(), NtmBlocks.RED_CABLE.asItem());
         registerItemRenderer(event, new RenderDetCordItem(), NtmBlocks.DET_CORD.asItem());

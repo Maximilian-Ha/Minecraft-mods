@@ -47,8 +47,9 @@ import java.util.Map;
  * MetaBlock nach. In 1.21 ist die Baustufe eine Blockzustands-Eigenschaft (STAGE); der
  * Umbaukatalog schlaegt daher ueber (Werkzeug, Block, Stufe) nach.
  *
- * Im Katalog steht bisher nur watz_end. Die beiden anderen Bauteile des Originals,
- * fusion_component und icf_component, kommen mit der Fusionsanlage und dem ICF dazu.
+ * Alle drei Bauteile des Originals stehen im Katalog: watz_end, fusion_component und
+ * icf_component. Bis Runde 198 stand hier, es sei nur watz_end -- das war seit der
+ * Fusionsanlage und dem ICF ueberholt.
  */
 public class ToolConversionBlock extends Block implements IToolable, ILookOverlay {
 
@@ -166,15 +167,12 @@ public class ToolConversionBlock extends Block implements IToolable, ILookOverla
         CONVERSIONS.put(new Key(tool, block, from), new Conversion(requirements, to));
     }
 
-    /**
-     * Traegt die Umbauschritte des Originals ein. Wird beim Rezept-Aufbau aufgerufen.
-     *
-     */
+    /** Traegt die Umbauschritte des Originals ein. Wird beim Rezept-Aufbau aufgerufen. */
     public static void registerRecipes() {
 
         CONVERSIONS.clear();
 
-        /* Die Aussenwand des Watz wird mit dem Schraubenschluessel verschraubt. */
+        /* Die Aussenwand des Watz wird mit der Bolzenpistole verschraubt. */
         register(ToolType.BOLT, NtmBlocks.WATZ_END.get(), 0, 1,
                 new TagStack(MaterialShapes.BOLT.getTag(Mats.MAT_DURA), 4));
 

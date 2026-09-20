@@ -952,6 +952,17 @@ public class NtmItems {
      */
     public static final DeferredItem<Item> HAND_DRILL = ITEMS.register("hand_drill", () -> new ToolingItem(ToolType.HAND_DRILL, new Item.Properties().durability(100)));
     public static final DeferredItem<Item> HAND_DRILL_DESH = ITEMS.register("hand_drill_desh", () -> new ToolingItem(ToolType.HAND_DRILL, new Item.Properties()));
+    /*
+     * Runde 198: DIE BOLZENPISTOLE, und damit die dritte Haelfte desselben Fundes wie in den
+     * Runden 99 und 195. VIER UMBAUSCHRITTE an Watz und ICF fragen im Port nach ToolType.BOLT
+     * -- und kein Gegenstand hat diese Sorte je getragen.
+     *
+     * Das Original nennt sie "Pneumatic Rivet Gun". Daher stand in der Ausnahmeliste des
+     * Werkzeugtors bis hierher, ihr fehle der Klang "RIVET_GUN" -- nachgemessen falsch: der
+     * Klang heisst tool.boltgun und steht seit jeher im Port. Ebenso falsch war, sie brauche
+     * bolt_spike: die Zeile, die ihn im Original verschiesst, ist dort auskommentiert.
+     */
+    public static final DeferredItem<Item> BOLTGUN = ITEMS.register("boltgun", () -> new BoltgunItem(new Item.Properties()));
     public static final DeferredItem<Item> BLOWTORCH = ITEMS.register("blowtorch", () -> new BlowtorchItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> ACETYLENE_TORCH = ITEMS.register("acetylene_torch", () -> new BlowtorchItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> BLADES_STEEL = ITEMS.register("blades_steel", () -> new Item(new Item.Properties().stacksTo(1).durability(256)));

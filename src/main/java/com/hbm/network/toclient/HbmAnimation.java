@@ -1,5 +1,6 @@
 package com.hbm.network.toclient;
 
+import com.hbm.items.IAnimatedItem;
 import com.hbm.items.weapon.sedna.GunBaseNTItem;
 import com.hbm.items.weapon.sedna.GunBaseNTItem.LambdaContext;
 import com.hbm.items.weapon.sedna.GunConfig;
@@ -57,7 +58,11 @@ public record HbmAnimation(short animType, int rec, int gun) implements CustomPa
             int slot = player.inventory.selected;
 
             for(ItemStack stack : InventoryUtil.getItemsFromBothHands(player)) {
-                if(stack.getItem() instanceof GunBaseNTItem) handleSedna(player, stack, slot, GunAnimation.values()[packet.animType], packet.rec, packet.gun);
+                if(stack.getItem() instanceof GunBaseNTItem) {
+                    handleSedna(player, stack, slot, GunAnimation.values()[packet.animType], packet.rec, packet.gun);
+                } else if(stack.getItem() instanceof IAnimatedItem) {
+                    handleAnimatedItem(stack, slot, packet.animType);
+                }
             }
         });
     }
@@ -91,6 +96,21 @@ public record HbmAnimation(short animType, int rec, int gun) implements CustomPa
             //if(isReloadAnimation && ArmorTrenchmaster.isTrenchMaster(player)) animation.setTimeMult(0.5D);
             HbmAnimations.hotbar[slot][gunIndex] = new Animation(stack.getItem().getDescriptionId(), System.currentTimeMillis(), animation, isReloadAnimation && config.getReloadAnimSequential(stack));
         }
+    }
+
+    /**
+     * DER ZWEITE WEG IN DASSELBE REGAL. Ein Gegenstand, der keine Waffe ist, hat keine
+     * GunConfig, aus der sich die Bewegung holen liesse -- er sagt sie selbst. Abgelegt wird
+     * sie danach genau wie bei einer Waffe: unter dem Uebersetzungsschluessel, in Schiene
+     * null des gewaehlten Regalplatzes. HbmAnimations fragt beim Zeichnen nichts weiter.
+     */
+    @OnlyIn(Dist.CLIENT)
+    public static void handleAnimatedItem(ItemStack stack, int slot, short animType) {
+
+        BusAnimation animation = ((IAnimatedItem) stack.getItem()).getAnimation(stack, animType);
+        if(animation == null) return;
+
+        HbmAnimations.hotbar[slot][0] = new Animation(stack.getItem().getDescriptionId(), System.currentTimeMillis(), animation);
     }
 
     @Override public Type<HbmAnimation> type() { return TYPE; }

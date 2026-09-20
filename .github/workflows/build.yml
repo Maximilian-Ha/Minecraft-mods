@@ -207,6 +207,11 @@ jobs:
           chmod +x ./tools/narrow-check.sh
           ./tools/narrow-check.sh
 
+      - name: Check constructor argument types
+        run: |
+          chmod +x ./tools/ctorarg-check.sh
+          ./tools/ctorarg-check.sh
+
       - name: Check API usage
         run: |
           chmod +x ./tools/api-check.sh

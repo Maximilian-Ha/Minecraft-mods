@@ -179,6 +179,20 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .save(recipeOutput);
 
         /*
+         * Die Bolzenpistole, Muster aus ToolRecipes des Originals, Zeile 147. Sie ist das
+         * fuenfte Einstellwerkzeug und das einzige der Sorte BOLT -- vier Umbauschritte an
+         * Watz und ICF warteten bis Runde 198 auf sie.
+         */
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, NtmItems.BOLTGUN.get(), 1)
+                .pattern("DPS").pattern(" RD").pattern(" D ")
+                .define('D', NtmItems.INGOT_DURA_STEEL.get())
+                .define('P', DataComponentIngredient.of(false, NtmDataComponents.META, PartGenericItem.Type.PISTON_PNEUMATIC.ordinal(), NtmItems.PART_GENERIC.get()))
+                .define('R', NtmItems.INGOT_RUBBER.get())
+                .define('S', NtmItems.SHELL_STEEL.get())
+                .unlockedBy("has_dura_steel", has(NtmItems.INGOT_DURA_STEEL.get()))
+                .save(recipeOutput);
+
+        /*
          * DIE LEGENDENTEILE. Fuenf formlose Bauplaene aus CraftingManager Z. 910 bis 914:
          * jede Stufe entsteht aus Kettenstahl und Alexandrit, und drei einer Stufe lassen
          * sich zu einer der naechsten zusammenlegen. Der Rueckweg steht ebenfalls im

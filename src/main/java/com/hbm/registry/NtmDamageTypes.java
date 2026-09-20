@@ -25,6 +25,9 @@ public interface NtmDamageTypes {
     ResourceKey<DamageType> BANG = key("bang");
     ResourceKey<DamageType> LEAD = key("lead");
     ResourceKey<DamageType> SHRAPNEL = key("shrapnel");
+    /** Die Bolzenpistole. Im Original setDamageBypassesArmor() an einem Spielerangriff --
+     *  ein Bolzen, der mit Druckluft geschossen wird, geht durch den Panzer hindurch. */
+    ResourceKey<DamageType> BOLTGUN = key("boltgun");
     ResourceKey<DamageType> RUBBLE = key("rubble");
     ResourceKey<DamageType> MONOXIDE = key("monoxide");
     /** Runde 14: Giftgaswolken. Im Original ModDamageSource.cloud, ruestungsdurchdringend. */
@@ -65,6 +68,7 @@ public interface NtmDamageTypes {
         context.register(BANG, new DamageType("bang", 0.1F));
         context.register(LEAD, new DamageType("lead", 0.1F));
         context.register(SHRAPNEL, new DamageType("shrapnel", 0.1F));
+        context.register(BOLTGUN, new DamageType("boltgun", 0.1F));
         context.register(RUBBLE, new DamageType("rubble", 0.1F));
         context.register(MONOXIDE, new DamageType("monoxide", 0.1F));
         context.register(CLOUD, new DamageType("cloud", 0.1F));

@@ -39,6 +39,7 @@ public class NtmDamageTypeTagsProvider extends DamageTypeTagsProvider {
                         NtmDamageTypes.BLACKLUNG,
                         NtmDamageTypes.TAINT,
                         NtmDamageTypes.BANG,
+                        NtmDamageTypes.BOLTGUN,
                         NtmDamageTypes.LEAD,
                         NtmDamageTypes.MONOXIDE,
                         NtmDamageTypes.CLOUD,

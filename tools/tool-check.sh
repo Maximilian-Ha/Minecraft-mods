@@ -25,7 +25,8 @@
 # Eine Sorte ganz ohne Traeger und ohne Abfrager ist kein Fehler -- sie ist nur eine
 # Aufzaehlungsstelle, die noch niemand benutzt. Eine Sorte mit nur einer Seite ist einer.
 #
-# TRAEGER ist ein "new ToolingItem(ToolType.X" oder ein ausdrueckliches "ToolType.X.register(".
+# TRAEGER ist ein "new ToolingItem(ToolType.X", ein "super(ToolType.X" in einer Unterklasse
+# davon, oder ein ausdrueckliches "ToolType.X.register(".
 # ABFRAGER ist ein "ToolType.X" in einer Datei, die onScrew erklaert oder aufruft.
 #
 # DIE AUSNAHMEN stehen unten mit Begruendung und sind gemessen, nicht gegriffen.
@@ -62,7 +63,11 @@ for dirpath, _, files in os.walk(ROOT):
             # Eine Datei kann mehrere Traeger enthalten -- NtmItems hat zwei Schraubenzieher
             # und zwei Handbohrer in derselben Datei. Gezaehlt werden Fundstellen, nicht
             # Dateien; sonst zaehlt ein Tor ungenau und sagt es nicht.
+            # Drei Wege, die Sorte zu tragen: ein ToolingItem unmittelbar, eine Unterklasse,
+            # die die Sorte an super() weiterreicht (so die Bolzenpistole), oder ein
+            # ausdrueckliches register().
             n = len(re.findall(r'new ToolingItem\(\s*ToolType\.' + s + r'\b', src)) \
+                + len(re.findall(r'super\(\s*ToolType\.' + s + r'\b', src)) \
                 + len(re.findall(r'ToolType\.' + s + r'\.register\(', src))
             if n:
                 traeger[s].extend([path] * n)
@@ -73,11 +78,11 @@ for dirpath, _, files in os.walk(ROOT):
 # AUSNAHMEN. Jede mit dem Grund, warum die fehlende Seite heute nicht zu haben ist.
 # --------------------------------------------------------------------------------------
 AUSNAHMEN = {
-    # Die Bolzenpistole des Originals (ItemBoltgun) braucht drei Dinge, die der Port nicht
-    # hat: den Gegenstand bolt_spike, den Klang RIVET_GUN und die Schnittstelle
-    # IAnimatedItem samt ToolAnimation-Bussen. Nachgemessen in Runde 195 -- alle drei fehlen.
-    # Die beiden Umwandlungen im ToolConversionBlock (watz_end, icf_component) warten darauf.
-    'BOLT': 'Traeger fehlt: die Bolzenpistole braucht bolt_spike, RIVET_GUN und IAnimatedItem',
+    # Keine. Bis Runde 198 stand hier BOLT -- angeblich fehlten bolt_spike, der Klang
+    # RIVET_GUN und die Schnittstelle IAnimatedItem. Zwei davon waren falsch: bolt_spike
+    # verschiesst das Original gar nicht (die Zeile ist dort auskommentiert), und der Klang
+    # heisst tool.boltgun und stand seit jeher im Port. Die Schnittstelle fehlte wirklich
+    # und ist nachgereicht.
 }
 
 probleme = []

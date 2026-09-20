@@ -385,6 +385,7 @@ public class ResourceManager {
     public static final ResourceLocation DOUBLE_BARREL_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/double_barrel.png");
     public static final ResourceLocation LIBERATOR_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/liberator.png");
     public static final ResourceLocation PANZERSCHRECK_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/panzerschreck.png");
+    public static final ResourceLocation BOLTGUN_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/boltgun.png");
     public static final ResourceLocation QUADRO_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/quadro.png");
     public static final ResourceLocation QUADRO_ROCKET_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/quadro_rocket.png");
     public static final ResourceLocation MISSILE_LAUNCHER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/weapon/missile_launcher.png");
@@ -742,6 +743,7 @@ public class ResourceManager {
     public static IModelCustom double_barrel;
     public static IModelCustom liberator;
     public static IModelCustom panzerschreck;
+    public static IModelCustom boltgun;
     public static IModelCustom quadro;
     public static IModelCustom missile_launcher;
     public static IModelCustom boxcar;
@@ -1049,6 +1051,7 @@ public class ResourceManager {
         double_barrel = new HFRWavefrontObject("models/obj/weapons/sacred_dragon.obj").asVBO();
         liberator = new HFRWavefrontObject("models/obj/weapons/liberator.obj").asVBO();
         panzerschreck = new HFRWavefrontObject("models/obj/weapons/panzerschreck.obj").asVBO();
+        boltgun = new HFRWavefrontObject("models/obj/weapons/boltgun.obj").asVBO();
         quadro = new HFRWavefrontObject("models/obj/weapons/quadro.obj").asVBO();
         missile_launcher = new HFRWavefrontObject("models/obj/weapons/missile_launcher.obj").asVBO();
         boxcar = new HFRWavefrontObject("models/obj/boxcar.obj").asVBO();

@@ -9065,3 +9065,86 @@ Visier (drehendes `">> <<"` beim Quadro, flackerndes `"AUTO"` beim Raketenwerfer
 Original als Block aus Lichtkarten-Rechnerei; der Port hat dafür `FullBright`.
 
 Alle 37 Tore grün.
+
+---
+
+## Runde 198 — Die Bolzenpistole, und ein Erzeuger, den es nicht gab
+
+### Der CI-Fehler
+
+Die Zielsuche aus Runde 197 schreibt den Blickvektor dreimal ab, bevor sie ihn verrechnet —
+`add`, `multiply` und die Drehungen ändern in `Vec3NT` **alle den Vektor selbst** und geben ihn
+zurück. Wer ihn mehrfach anders braucht, muss ihn kopieren.
+
+**Den Abschreibe-Erzeuger gab es im Port nicht.** `Vec3NT` kennt `()`, `(x,y,z)` und `(Vec3)` —
+und ein `Vec3NT` ist kein `Vec3`. Das Original hat `Vec3NT(Vec3NT)`; er ist nachgereicht.
+
+### Das 38. Tor
+
+Das war der **dritte Typfehler in fünf Runden**, den kein Tor sah: Runde 193 die Stelligkeit
+eines Konstruktors, Runde 196 die Breite einer Zahl, Runde 197 der Typ eines Arguments.
+`override-check.sh` zählt seit Runde 193 die Argumente — hier stimmte die Zahl und der Typ nicht.
+
+`tools/ctorarg-check.sh` prüft den Typ. Entscheidbar ist der Fall, weil die Erzeuger im Projekt
+stehen und der Typ des Arguments in derselben Datei — als Erklärung, als Parameter oder im Kopf
+einer `for`-Schleife.
+
+**Die ersten elf Funde des Entwurfs waren allesamt falsch**, und jeder zeigte auf eine eigene
+Lücke:
+
+* **Typvariablen sind keine Klassen.** `Pair<X, Y>` hat einen Erzeuger `(X, Y)`; `X` ist kein
+  Typ, gegen den sich etwas prüfen ließe.
+* **Eine Aufzählung erbt von `Enum`.** `ComparableStack(Item, int, Enum)` nimmt jeden
+  Aufzählungswert — ohne diese Regel meldete das Tor vier Rezepte.
+* **Die nächstliegende Erklärung gilt**, nicht irgendeine in der Datei. Und `var` sagt den Typ
+  nicht — es wird trotzdem vermerkt, damit es eine früher stehende Erklärung verdeckt.
+* **Klammern und Doppelpunkte dürfen nicht mitverbraucht werden.** Sonst findet in
+  `(Level level, BulletConfig art)` der zweite Parameter kein Komma mehr vor sich, weil der
+  erste es aufgebraucht hat — und `for(ItemStack mod : mods)` fällt ganz heraus.
+
+Wessen Ahnenreihe das Projekt verlässt — jeder Block, jeder Gegenstand —, fällt heraus: was
+über `Item` steht, weiß der Port nicht. Entscheidbar sind damit vor allem die eigenen
+Wertklassen, und genau dort lag der Fehler.
+
+Gemessen: 8949 Erzeuger-Aufrufe, null Funde; Erzeuger wieder weg, genau die drei Zeilen.
+
+### Die Bolzenpistole
+
+Sie stand seit Runde 195 als einzige Ausnahme im Werkzeug-Tor, mit drei genannten Gründen.
+**Zwei davon waren falsch:**
+
+* `bolt_spike` **braucht sie gar nicht** — die Zeile, die ihn im Original verschießt, ist dort
+  auskommentiert (`//FIXME`). Verschossen werden Stahl-, Wolfram- und Durastahlbolzen.
+* Der Klang **„RIVET_GUN" existiert nicht**, auch nicht im Original. Er heißt `tool.boltgun`,
+  und `NtmSoundEvents.BOLTGUN` samt `boltgun.ogg` steht seit jeher im Port. Der Name kam aus
+  der Übersetzung: das Original nennt die Waffe „Pneumatic Rivet Gun".
+
+**Richtig war der dritte Grund:** `IAnimatedItem` fehlte. Er ist nachgereicht, und das war ein
+Zweizeiler an der richtigen Stelle: `HbmAnimations` schlägt eine laufende Bewegung ohnehin über
+den Übersetzungsschlüssel nach und fragt nie, ob der Gegenstand eine Waffe ist — nur der **Weg
+dorthin** war einer, weil `HbmAnimation` ausschließlich nach `GunBaseNTItem` sah.
+
+Sie kann dreierlei: das Bauteil eine Baustufe weiterbringen, einen gewöhnlichen Block umbauen
+(genau ein Eintrag im Original: Stein wird für einen Durastahlbolzen zu Bruchstein), und einem
+Wesen einen Bolzen aus dem Rucksack entgegenschießen.
+
+**Das Werkzeug-Tor sah sie zunächst nicht.** Es kennt Träger als `new ToolingItem(ToolType.X`
+oder `ToolType.X.register(` — eine Unterklasse, die die Sorte an `super()` weiterreicht, war
+ihm neu. Erweitert und gegengemessen.
+
+### Abweichungen
+
+Das Original vergibt beim Töten eines Spielers den Erfolg `achGoFish`; ein Erfolgssystem gibt es
+im Port nicht, nachgemessen. `setDamageBypassesArmor()` ist im Port eine eigene Schadensart
+(`NtmDamageTypes.BOLTGUN` im Sack `BYPASSES_ARMOR`) — in 1.21 hängt das an der Schadensart, nicht
+am einzelnen Schlag. Der Renderer verwendet die Haltungszahlen des Ports statt der
+`ItemRenderFrames17`-Matrizen des Originals, die eine Nachbildung von 1.7.10 sind.
+
+Zwei falsche Sätze in `ToolConversionBlock` fielen dabei auf: der Katalog enthalte „bisher nur
+watz_end" (alle drei stehen längst drin), und die Watz-Außenwand werde „mit dem
+Schraubenschlüssel" verschraubt (es ist die Bolzenpistole).
+
+**Damit hat jede benutzte Werkzeugsorte beide Seiten, und das Werkzeug-Tor hat keine Ausnahme
+mehr.**
+
+Alle 38 Tore grün.

@@ -1470,6 +1470,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.SCREWDRIVER_DESH, "Desh Screwdriver");
         this.add(NtmItems.HAND_DRILL, "Hand Drill");
         this.add(NtmItems.HAND_DRILL_DESH, "Desh Hand Drill");
+        this.add(NtmItems.BOLTGUN, "Pneumatic Rivet Gun");
         this.add(NtmItems.BLOWTORCH, "Blowtorch");
         this.add(NtmItems.ACETYLENE_TORCH, "Acetylene Welding Torch");
         this.add(NtmItems.BLADES_STEEL, "Steel Shredder Blades");
@@ -3764,6 +3765,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.addDamage("bang", "%1$s was blasted into bite-sized pieces");
         this.addDamage("lead", "%1$s died from lead poisoning");
         this.addDamage("shrapnel", "%1$s was ragged by a shrapnel");
+        this.addDamage("boltgun", "%1$s was riveted");
+        this.addDamagePlayer("boltgun", "%1$s was riveted by %2$s");
         this.addDamage("rubble", "%1$s was squashed by debris");
         this.addDamage("monoxide", "%1$s forgot to change the batteries in their carbon monoxide detector");
         this.addDamage("cloud", "%1$s inhaled something nasty");
