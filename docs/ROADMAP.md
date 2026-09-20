@@ -12071,3 +12071,52 @@ Der Umsetzer setzt jetzt den Tresor statt der Truhe; genau eine der 38 Vorlagend
 sich dadurch (`meteor-3-book`).
 
 `tools/structure-gap.py`: **zwei echte Lücken** statt drei — `filing_cabinet` und `wand_logic`.
+
+## Runde 257 — Das Tor, das den falsch geschriebenen Zustand findet, und sein eigener blinder Fleck
+
+Der Umsetzer schreibt Blockzustände als Zeichenketten in die `.nbt`-Datei: `"facing"`,
+`"axis"`, `"layer"`. Ob der Block diese Eigenschaft überhaupt hat, prüft dort niemand — und
+Minecraft prüft es auch nicht. `NbtUtils.readBlockState` geht vom **Standardzustand** aus und
+setzt nur, was es kennt; eine unbekannte Eigenschaft wird stillschweigend überlesen. Aus einer
+Treppe mit `"facng"` wird eine Treppe nach Norden, aus einer Säule mit falscher Achse eine
+stehende. Kein Absturz, kein Protokolleintrag. Das Bauwerk steht nur schief, und niemand weiß
+warum.
+
+`tools/structure-state-check.sh` (43. Tor) hält deshalb jede Eigenschaft, die der Umsetzer
+erzeugt, gegen die Blockklasse des Ports: Blockname → Klasse aus `NtmBlocks.java`,
+Eigenschaften aus dem `createBlockStateDefinition` der Klasse samt ihrer Oberklassen. Vanilla-
+Blöcke bleiben außen vor — deren Klassen liegen nicht auf der Platte, die Tore laufen ohne
+Minecraft.
+
+**Nachgemessen:** 876 der 1367 Tabelleneinträge zeigen auf einen Block des Ports, zusammen 228
+verschiedene.
+
+**Zwei echte Funde:**
+
+- `turret_sentry_damaged` stand in der Mehrblock-Tabelle und bekam damit `facing` und `type`.
+  `TurretSentryBlock` erbt von `BaseEntityBlock` und hat **keine** Eigenschaft. Nachgemessen
+  über alle 79 Rohdateien: der Block kommt **genau einmal** vor, mit Meta 0, in `crane_mod.nbt`
+  — und war über `EINS_ZU_EINS` längst abgedeckt.
+- `door_bunker_bulkhead` stand in der Türliste. Diese Tür gibt es im Port nicht (kein Treffer
+  unter `src/`), und in keiner der 79 Rohdateien kommt sie vor.
+
+### Der blinde Fleck des Tors war das Tor selbst
+
+Der Gegenversuch — eine Eigenschaft absichtlich falsch schreiben, messen, zurückkopieren —
+ergab beim **zweiten** Lauf wieder einen Fund, obwohl die Datei wiederhergestellt war. Der
+Grund lag nicht im Umsetzer, sondern im Lader: das Tor holte den Umsetzer über
+`importlib.util.spec_from_file_location`, und Python hält ein `.pyc` für gültig, wenn Größe und
+Änderungszeit **auf die Sekunde genau** passen. `"axsi"` ist genauso lang wie `"axis"`, das
+Zurückkopieren fiel in dieselbe Sekunde — also maß das Tor eine Datei, die es auf der Platte
+nicht mehr gab.
+
+Ein Tor, das den Quelltext neben sich liegen lässt und stattdessen einen Zwischenspeicher
+misst, ist schlimmer als keins: es meldet grün für etwas, das nie gelaufen ist, oder rot für
+etwas, das nie geschrieben wurde. Beide Lader — dieses Tor und `tools/structure-check.sh` —
+lesen jetzt den Quelltext und übersetzen ihn selbst; `sys.dont_write_bytecode = True` sorgt
+dafür, dass gar kein `.pyc` mehr entsteht.
+
+**Nachgemessen nach dem Umbau:** Gegenversuch rot mit genauer Zeile
+(`dungeon_chain (ClimbableChainBlock): "axsi"`), Wiederherstellung **mit aufgeprägter
+Änderungszeit der verfälschten Fassung** wieder grün. Genau der Fall, der das Tor vorher
+getäuscht hat. Die 38 Meteorvorlagen setzt der Umsetzer weiterhin byte-identisch um.

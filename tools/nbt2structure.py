@@ -619,7 +619,7 @@ for _i, _n in enumerate(BETON_EXT):
 
 # DIE TUEREN zaehlen wie die Vanilla-Tuer; forme_tueren() holt der oberen Haelfte nach, was
 # nur die untere weiss.
-for _tuer in ('door_metal', 'door_office', 'door_bunker', 'door_red', 'door_bunker_bulkhead'):
+for _tuer in ('door_metal', 'door_office', 'door_bunker', 'door_red'):
     for _m in range(8):
         TABELLE[('hbm:tile.' + _tuer, _m)] = zustand(MODID + ':' + _tuer,
                 facing=_TUERRICHTUNG[_m & 3], half='lower', hinge='left',
@@ -782,7 +782,10 @@ MEHRBLOCK = {
     'machine_rotary_furnace': 'machine_rotary_furnace',
     'radio_telex': 'radio_telex',
     'turret_howard_damaged': 'turret_howard_damaged',
-    'turret_sentry_damaged': 'turret_sentry_damaged',
+    # NICHT DABEI: turret_sentry_damaged. Er sieht aus wie sein Geschwister, ist im Port aber
+    # keine DummyableBlock-Maschine, sondern ein schlichter Block ohne Eigenschaften -- und in
+    # den Bauwerken steht er ohnehin nur mit Metadatum null. Das Zustands-Tor hat den Fehler
+    # gemeldet, bevor ein Bauwerk damit gebaut wurde.
 }
 
 for _alt, _neu in MEHRBLOCK.items():

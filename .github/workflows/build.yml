@@ -236,6 +236,14 @@ jobs:
           chmod +x ./tools/structure-check.sh
           ./tools/structure-check.sh
 
+      # Eine Eigenschaft, die der Umsetzer falsch schreibt, faellt beim Bauen nirgends auf:
+      # Minecraft ueberliest sie und setzt den Standardwert ein. Das Bauwerk steht dann
+      # schief, ohne Absturz und ohne Protokolleintrag.
+      - name: Check structure block states
+        run: |
+          chmod +x ./tools/structure-state-check.sh
+          ./tools/structure-state-check.sh
+
       - name: Check API usage
         run: |
           chmod +x ./tools/api-check.sh

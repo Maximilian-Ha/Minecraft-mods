@@ -28,10 +28,18 @@ import re
 import sys
 
 sys.path.insert(0, 'tools')
-import importlib.util
-spec = importlib.util.spec_from_file_location('nbt2structure', 'tools/nbt2structure.py')
-nbt = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(nbt)
+import types
+
+# Den Umsetzer aus dem QUELLTEXT laden, nicht ueber den Bytecode-Zwischenspeicher.
+# Python haelt ein .pyc fuer gueltig, wenn Groesse und Aenderungszeit auf die Sekunde
+# genau passen. Beim Gegenversuch zu diesem Tor -- eine Eigenschaft falsch schreiben,
+# messen, zurueckkopieren -- stimmt beides, und das Tor misst danach eine Datei, die es
+# auf der Platte nicht mehr gibt. Genau so hat es sich in Runde 257 verlaufen.
+sys.dont_write_bytecode = True
+_quelle = open('tools/nbt2structure.py', encoding='utf-8').read()
+nbt = types.ModuleType('nbt2structure')
+nbt.__file__ = 'tools/nbt2structure.py'
+exec(compile(_quelle, 'tools/nbt2structure.py', 'exec'), nbt.__dict__)
 
 WURZEL = 'src/main/resources/data/hbmsntm/structure'
 POOLS = 'src/main/java/com/hbm/world/gen/NtmTemplatePools.java'
