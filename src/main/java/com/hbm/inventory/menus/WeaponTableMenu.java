@@ -11,6 +11,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 /**
  * Portiert aus 1.7.10: com.hbm.inventory.container.ContainerWeaponTable.
@@ -44,8 +45,13 @@ public class WeaponTableMenu extends AbstractContainerMenu {
         this(id, inventory);
     }
 
+    /** Die Welt, in der der Tisch steht -- der Glueck-Aufsatz braucht ihre Verzauberungsregistry. */
+    private final Level level;
+
     public WeaponTableMenu(int id, Inventory inventory) {
         super(NtmMenuTypes.WEAPON_TABLE.get(), id);
+
+        this.level = inventory.player.level();
 
         for(int i = 0; i < MOD_SLOTS; i++) this.addSlot(new ModSlot(this.mods, i, 44 + 18 * i, 108));
 
@@ -140,7 +146,7 @@ public class WeaponTableMenu extends AbstractContainerMenu {
 
     private void applyMods(ItemStack stack) {
         if(stack.isEmpty()) return;
-        XWeaponModManager.install(stack, this.index,
+        XWeaponModManager.install(this.level, stack, this.index,
                 this.mods.getItem(0), this.mods.getItem(1), this.mods.getItem(2), this.mods.getItem(3),
                 this.mods.getItem(4), this.mods.getItem(5), this.mods.getItem(6));
     }
@@ -160,7 +166,7 @@ public class WeaponTableMenu extends AbstractContainerMenu {
 
         if(!weapon.isEmpty()) {
             /* Was noch auf dem Tisch lag, ist beim Schliessen heruntergefallen -- also auch ab. */
-            XWeaponModManager.uninstall(weapon, this.index);
+            XWeaponModManager.uninstall(this.level, weapon, this.index);
             player.drop(weapon, false);
         }
     }

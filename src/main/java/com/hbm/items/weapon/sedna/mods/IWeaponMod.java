@@ -1,6 +1,7 @@
 package com.hbm.items.weapon.sedna.mods;
 
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 public interface IWeaponMod {
 
@@ -11,6 +12,12 @@ public interface IWeaponMod {
      * identifier and the yet unmodified parent (i.e. if the value is part of the receiver, that receiver) */
     <T> T eval(T base, ItemStack gun, String key, Object parent);
 
-    default void onInstall(ItemStack gun, ItemStack mod, int index) { }
-    default void onUninstall(ItemStack gun, ItemStack mod, int index) { }
+    /*
+     * ABWEICHUNG VOM ORIGINAL: beide Haken bekommen die Welt mitgereicht. Das Original kommt
+     * ohne aus, weil es Verzauberungen ueber feste Enchantment-Felder anspricht; in 1.21 sind
+     * Verzauberungen datengetrieben und nur ueber die Registry der laufenden Welt zu
+     * bekommen. Ohne diesen Parameter koennte WeaponModDrillFortune nichts tun.
+     */
+    default void onInstall(Level level, ItemStack gun, ItemStack mod, int index) { }
+    default void onUninstall(Level level, ItemStack gun, ItemStack mod, int index) { }
 }

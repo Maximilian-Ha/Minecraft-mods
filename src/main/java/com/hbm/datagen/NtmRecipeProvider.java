@@ -15,6 +15,7 @@ import com.hbm.items.PartGenericItem;
 import com.hbm.items.WireDenseItem;
 import com.hbm.items.NtmItems;
 import com.hbm.items.weapon.sedna.factory.GunFactory;
+import com.hbm.items.machine.BatteryPackItem;
 import com.hbm.items.machine.GearItem;
 import com.hbm.items.component.NtmDataComponents;
 import com.hbm.inventory.recipes.crafting.RBMKFuelDisassemblyRecipe;
@@ -4109,6 +4110,14 @@ public class NtmRecipeProvider extends RecipeProvider {
     private static Ingredient anyResistantAlloyHeavyBarrel() { return CompoundIngredient.of(heavyBarrel(Mats.MAT_TCALLOY), heavyBarrel(Mats.MAT_CDALLOY)); }
     private static Ingredient anyResistantAlloyCastPlate() { return CompoundIngredient.of(castPlate(CastPlateItem.Type.TCALLOY), castPlate(CastPlateItem.Type.CDALLOY)); }
     private static Ingredient anyBismoidBronzeCastPlate() { return CompoundIngredient.of(castPlate(CastPlateItem.Type.BISMUTH_BRONZE), castPlate(CastPlateItem.Type.ARSENIC_BRONZE)); }
+    private static Ingredient anyResistantAlloyIngot() { return Ingredient.of(NtmItems.INGOT_TCALLOY.get(), NtmItems.INGOT_CDALLOY.get()); }
+    /*
+     * ENGER ALS IM ORIGINAL, und zwar gemessen: dort ist AnyHardPlastic {Polycarbonat, PVC}.
+     * Einen Polycarbonat-BARREN gibt es im Port nicht -- MAT_HARDPLASTIC traegt nur STOCK und
+     * GRIP in seinem autogen. Bleibt PVC, das im Original ebenso zulaessig ist. Kein Ersatz,
+     * sondern die kleinere von zwei zulaessigen Moeglichkeiten.
+     */
+    private static Ingredient anyHardPlasticIngot() { return Ingredient.of(NtmItems.INGOT_PVC.get()); }
 
     /**
      * Die Bauteile, die man von Hand macht.
@@ -4290,6 +4299,99 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .define('P', NtmItems.PLATE_SATURNITE.get())
                 .unlockedBy("has_saturnite", has(NtmItems.INGOT_SATURNITE.get()))
                 .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_skin_saturnite"));
+
+        /*
+         * DIE ELF AUFSAETZE DES BOHRERS. Vier Bohrkoepfe nach demselben Muster -- je fester
+         * das Metall, desto mehr Schaden, Reichweite und Kantenlaenge --, vier Motoren nach
+         * ebenfalls demselben Muster, und drei, die nebenherlaufen.
+         */
+        modSpecial(GunFactory.ModSpecial.DRILL_HSS)
+                .pattern(" IP").pattern("IIM").pattern(" IP")
+                .define('I', NtmItems.INGOT_DURA_STEEL.get())
+                .define('P', anyPlasticIngot())
+                .define('M', mechanism(Mats.MAT_GUNMETAL))
+                .unlockedBy("has_dura_steel", has(NtmItems.INGOT_DURA_STEEL.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_drill_hss"));
+
+        modSpecial(GunFactory.ModSpecial.DRILL_WEAPONSTEEL)
+                .pattern(" IP").pattern("IIM").pattern(" IP")
+                .define('I', NtmItems.INGOT_WEAPON_STEEL.get())
+                .define('P', NtmItems.INGOT_RUBBER.get())
+                .define('M', mechanism(Mats.MAT_GUNMETAL))
+                .unlockedBy("has_weapon_steel", has(NtmItems.INGOT_WEAPON_STEEL.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_drill_weaponsteel"));
+
+        modSpecial(GunFactory.ModSpecial.DRILL_TCALLOY)
+                .pattern(" IP").pattern("IIM").pattern(" IP")
+                .define('I', anyResistantAlloyIngot())
+                .define('P', NtmItems.INGOT_RUBBER.get())
+                .define('M', mechanism(Mats.MAT_WEAPONSTEEL))
+                .unlockedBy("has_tcalloy", has(NtmItems.INGOT_TCALLOY.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_drill_tcalloy"));
+
+        modSpecial(GunFactory.ModSpecial.DRILL_SATURNITE)
+                .pattern(" IP").pattern("IIM").pattern(" IP")
+                .define('I', NtmItems.INGOT_SATURNITE.get())
+                .define('P', anyHardPlasticIngot())
+                .define('M', mechanism(Mats.MAT_WEAPONSTEEL))
+                .unlockedBy("has_saturnite", has(NtmItems.INGOT_SATURNITE.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_drill_saturnite"));
+
+        modSpecial(GunFactory.ModSpecial.ENGINE_DIESEL)
+                .pattern("DSD").pattern("PPP").pattern("DSD")
+                .define('D', NtmItems.PLATE_DURA_STEEL.get())
+                .define('P', NtmItems.PISTON_SELENIUM.get())
+                .define('S', NtmItems.PIPE_STEEL.get())
+                .unlockedBy("has_piston", has(NtmItems.PISTON_SELENIUM.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_engine_diesel"));
+
+        modSpecial(GunFactory.ModSpecial.ENGINE_AVIATION)
+                .pattern("DSD").pattern("PPP").pattern("DSD")
+                .define('D', castPlate(CastPlateItem.Type.DURA_STEEL))
+                .define('P', NtmItems.PISTON_SELENIUM.get())
+                .define('S', mechanism(Mats.MAT_GUNMETAL))
+                .unlockedBy("has_piston", has(NtmItems.PISTON_SELENIUM.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_engine_aviation"));
+
+        modSpecial(GunFactory.ModSpecial.ENGINE_ELECTRIC)
+                .pattern("DSD").pattern("PPP").pattern("DSD")
+                .define('D', anyPlasticIngot())
+                .define('P', wireDense(WireDenseItem.Type.GOLD))
+                .define('S', DataComponentIngredient.of(false, NtmDataComponents.META,
+                        BatteryPackItem.BatteryPackType.CAPACITOR_GOLD.ordinal(), NtmItems.BATTERY_PACK.get()))
+                .unlockedBy("has_capacitor", has(NtmItems.BATTERY_PACK.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_engine_electric"));
+
+        modSpecial(GunFactory.ModSpecial.ENGINE_TURBO)
+                .pattern("DSD").pattern("PPP").pattern("DSD")
+                .define('D', anyBismoidBronzeCastPlate())
+                .define('P', NtmItems.PISTON_SELENIUM.get())
+                .define('S', mechanism(Mats.MAT_WEAPONSTEEL))
+                .unlockedBy("has_piston", has(NtmItems.PISTON_SELENIUM.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_engine_turbo"));
+
+        modSpecial(GunFactory.ModSpecial.MAGNET)
+                .pattern("RGR").pattern("GBG").pattern("RGR")
+                .define('R', NtmItems.INGOT_RUBBER.get())
+                .define('G', wireDense(WireDenseItem.Type.GOLD))
+                .define('B', NtmBlocks.BLOCK_NIOBIUM.get())
+                .unlockedBy("has_niobium", has(NtmBlocks.BLOCK_NIOBIUM.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_magnet"));
+
+        modSpecial(GunFactory.ModSpecial.SIFTER)
+                .pattern("IGI").pattern("IGI")
+                .define('I', NtmItems.INGOT_DURA_STEEL.get())
+                .define('G', NtmBlocks.STEEL_GRATE.get())
+                .unlockedBy("has_grate", has(NtmBlocks.STEEL_GRATE.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_sifter"));
+
+        modSpecial(GunFactory.ModSpecial.CANISTERS)
+                .pattern(" R ").pattern("CCC").pattern("SSS")
+                .define('R', NtmItems.PIPE_RUBBER.get())
+                .define('C', NtmItems.CANISTER_EMPTY.get())
+                .define('S', NtmItems.PLATE_STEEL.get())
+                .unlockedBy("has_canister", has(NtmItems.CANISTER_EMPTY.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("weapon_mod_special_canisters"));
     }
 
     private ShapedRecipeBuilder modSpecial(GunFactory.ModSpecial mod) {
@@ -4313,19 +4415,19 @@ public class NtmRecipeProvider extends RecipeProvider {
      * - gun_double_barrel_sacred_dragon braucht item_secret in der Ausfuehrung
      *   SELENIUM_STEEL. Die ganze Familie der Geheimstuecke fehlt im Port; die Waffe selbst
      *   gibt es seit Runde 84.
-     * - gun_chemthrower braucht ein Gummirohr und einen Schraubenschluessel. RUBBER traegt
-     *   zwar PIPE in seinem autogen, aber ein pipes_rubber gibt es im Port nicht, und einen
-     *   wrench ebenso wenig. Zwei Ersatzzutaten waeren kein Port mehr, sondern ein eigener
-     *   Bauplan; die Waffe selbst steht seit Runde 188.
+     * - gun_chemthrower braucht einen Schraubenschluessel, und den gibt es im Port nicht:
+     *   ToolType.WRENCH steht in der Aufzaehlung, ein Gegenstand dazu fehlt. NACHGEMESSEN IN
+     *   RUNDE 191: das Gummirohr, das hier bis dahin als zweiter Grund stand, gibt es sehr
+     *   wohl -- pipe_rubber ist angemeldet, hat ein Ambossrezept und liegt im Reiter. Der
+     *   Satz war falsch; es fehlt nur noch das eine Werkzeug.
      *
-     * NICHT UEBERNOMMEN, WEIL DER AUFSATZ SELBST FEHLT: LAS_SHOTGUN, LAS_CAPACITOR,
-     * LAS_AUTO, DRILL_*, ENGINE_*, MAGNET, SIFTER und CANISTERS. Sie stehen zwar in der
-     * Aufzaehlung ModSpecial, sind aber nicht im XWeaponModManager angemeldet -- ein
-     * solcher Aufsatz liesse sich bauen und anbringen und taete nichts. Die Waffen dazu gibt
-     * es inzwischen alle (den Bohrer seit Runde 186, das Lasergewehr seit Runde 187); was
-     * fehlt, sind die Aufsatzklassen selbst -- WeaponModLasShotgun, WeaponModLasCapacitor,
-     * WeaponModLasAuto, WeaponModDrill, WeaponModEngine, WeaponModDrillFortune und
-     * WeaponModCanisters. Das ist eine eigene Stufe.
+     * NICHT UEBERNOMMEN, WEIL DER AUFSATZ SELBST FEHLT: LAS_SHOTGUN, LAS_CAPACITOR und
+     * LAS_AUTO. Sie stehen in der Aufzaehlung ModSpecial, sind aber nicht im
+     * XWeaponModManager angemeldet -- ein solcher Aufsatz liesse sich bauen und anbringen und
+     * taete nichts. Die Waffe dazu steht seit Runde 187; was fehlt, sind die drei
+     * Aufsatzklassen WeaponModLasShotgun, WeaponModLasCapacitor und WeaponModLasAuto.
+     * Die elf Aufsaetze des Bohrers standen bis Runde 191 in derselben Liste; seither sind
+     * sie angemeldet und haben hier ihre Bauplaene.
      */
     private void gunRecipes(RecipeOutput recipeOutput) {
 

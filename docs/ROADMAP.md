@@ -8596,3 +8596,66 @@ bekommen. Das ist keine neue Lücke, sondern dieselbe, die der rote Raum überal
   Gegenstandsbild.
 
 Alle 35 Tore grün.
+
+## Runde 191 — Die elf Aufsätze des Bohrers, und ein Rohr, das es längst gab
+
+Der Bohrer kam in Runde 186 mit vier Haken für Aufsätze — `D_REACH`, `F_DTNEG`, `F_PIERCE`,
+`I_AOE` — und liest sie alle vier beim Abbauen aus. **Nur hatte keiner von ihnen einen
+Schreiber.** Die elf Aufsätze, die im Original an den Bohrer gehören, standen zwar in der
+Aufzählung `ModSpecial`, hatten aber keine Klasse: vier Bohrköpfe, vier Motoren, Magnet, Sieb
+und Kanister. Ein Haken ohne Schreiber ist dasselbe wie ein Aufsatz ohne Wirkung, nur von der
+anderen Seite.
+
+**Die vier Bohrköpfe** (`WeaponModDrill`) fassen als einzige alles an: Schaden als Faktor,
+Reichweite als Faktor, Panzerbruch und Kantenlänge als feste Werte. Je fester das Metall,
+desto mehr von allem — vom Schnellarbeitsstahl (1,25× Schaden) bis zum Saturnit (3× Schaden,
+doppelte Reichweite, 3×3-Würfel).
+
+**Die vier Motoren** (`WeaponModEngine`) tauschen das Magazin aus und bestimmen damit
+zugleich, welchen Kraftstoff das Gerät frisst und wie schnell es arbeitet: Diesel, Kerosin,
+Strom, Reformat. Der Elektromotor ist der einzige, der gar kein Fluid mehr nimmt — an ihm
+hängt ein Akku.
+
+**Magnet und Sieb** (`WeaponModDrillFortune`) greifen in keinen Waffenwert ein, sondern
+schreiben eine Glücksverzauberung in den Gegenstand: zwei Stufen der Magnet, eine das Sieb.
+**Die Kanister** (`WeaponModCanisters`) verdreifachen den Tank.
+
+### Drei Dinge, die nebenher fällig wurden
+
+**Der Akku des Bohrers.** In `GunDrillItem` stand: *"NICHT ÜBERNOMMEN: die Batteriehälfte …
+diesen Aufsatz gibt es im Port nicht, und `MagazineElectricEngine` ebenso wenig — die Hälfte
+wäre Code ohne Wirkung."* Das stimmte, solange der Elektromotor fehlte. Jetzt gibt es ihn,
+also gibt es auch `MagazineElectricEngine` und die Batteriehälfte: der Bohrer ist ein
+`IBatteryItem`, wenn der Elektromotor steckt, und ein `IFillableItem`, wenn ein
+Verbrennungsmotor steckt. Beide Hälften fragen dasselbe Magazin ab und geben null zurück,
+wenn gerade die andere Sorte darin ist.
+
+**`I_HARVEST` war eine tote Konstante.** Das Original hebt mit dem Bohrkopf an, was der Bohrer
+überhaupt abbauen darf. In 1.21 gibt es keine Abbaustufe als Zahl mehr, und
+`GunDrillItem.isCorrectToolForDrops` gibt ohnehin stets wahr zurück — der Bohrer bricht alles.
+Die Kennung stand seit Runde 186 im Baum, ohne dass sie irgendwer gelesen hätte. Sie ist
+entfernt, mit Begründung an ihrer Stelle.
+
+**Ein Rohr, das es längst gab.** Beim Schreiben des Kanister-Bauplans fiel auf, dass die
+Begründung für den fehlenden Chemiewerfer-Bauplan zur Hälfte falsch war: dort stand, es fehle
+ein Gummirohr *und* ein Schraubenschlüssel. `pipe_rubber` ist aber angemeldet, hat ein
+Ambossrezept, liegt im Kreativreiter und wird von der Montagefabrik verarbeitet. Es fehlt nur
+noch der Schraubenschlüssel — `ToolType.WRENCH` steht in der Aufzählung, ein Gegenstand dazu
+nicht. Das ist die **dritte** Runde in Folge, in der sich eine Begründung als veraltet
+erweist.
+
+### Eine benannte API-Abweichung
+
+`onInstall` und `onUninstall` bekommen die **Welt** mitgereicht, anders als im Original. Der
+Grund ist zwingend: in 1.21 sind Verzauberungen datengetrieben und nur über die Registry der
+laufenden Welt zu bekommen. Ohne diesen Parameter könnte `WeaponModDrillFortune` gar nichts
+tun. Der Weg dorthin ist kurz — der Waffentisch kennt seinen Spieler und damit seine Welt.
+
+### Abweichung im Bauplan
+
+`ANY_HARDPLASTIC` ist im Original `{Polycarbonat, PVC}`. Einen Polycarbonat-**Barren** gibt es
+im Port nicht (`MAT_HARDPLASTIC` trägt nur `STOCK` und `GRIP` in seinem `autogen`), also bleibt
+für den Saturnit-Bohrkopf PVC — das im Original ebenso zulässig ist. Kein Ersatz, sondern die
+kleinere von zwei zulässigen Möglichkeiten.
+
+**24 Aufsätze mit Wirkung** (13 + die elf dieser Runde). Alle 35 Tore grün.

@@ -15,6 +15,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -208,6 +209,49 @@ public class XWeaponModManager {
         /* Das Saturnit-Gehaeuse der Uzi. */
         new WeaponModDefinition(ModSpecial.SKIN_SATURNITE)
                 .addMod(new Item[] { NtmItems.GUN_UZI.get(), NtmItems.GUN_UZI_AKIMBO.get() }, new WeaponModUziSaturnite(ID_UZI_SATURN));
+
+        /*
+         * DIE ELF AUFSAETZE DES BOHRERS. Sie stehen seit Runde 186 in der Aufzaehlung
+         * ModSpecial, hatten aber bis Runde 191 keine Klasse -- und die vier Haken, die der
+         * Bohrer dafuer mitbringt (D_REACH, F_DTNEG, F_PIERCE, I_AOE), hatten keinen Leser.
+         *
+         * Vier Bohrkoepfe, vier Motoren, und drei, die nebenherlaufen. Die Zahlen sind
+         * wortgetreu die des Originals.
+         */
+        new WeaponModDefinition(ModSpecial.DRILL_HSS)
+                .addMod(NtmItems.GUN_DRILL.get(), new WeaponModDrill(ID_DRILL_HSS)
+                        .damage(1.25F).dt(3F).pierce(0.15F));
+        new WeaponModDefinition(ModSpecial.DRILL_WEAPONSTEEL)
+                .addMod(NtmItems.GUN_DRILL.get(), new WeaponModDrill(ID_DRILL_WSTEEL)
+                        .damage(1.5F).dt(5F).pierce(0.2F).aoe(2));
+        new WeaponModDefinition(ModSpecial.DRILL_TCALLOY)
+                .addMod(NtmItems.GUN_DRILL.get(), new WeaponModDrill(ID_DRILL_TCALLOY)
+                        .damage(2F).dt(7.5F).pierce(0.2F).reach(2).aoe(3));
+        new WeaponModDefinition(ModSpecial.DRILL_SATURNITE)
+                .addMod(NtmItems.GUN_DRILL.get(), new WeaponModDrill(ID_DRILL_SATURN)
+                        .damage(3F).dt(10F).pierce(0.25F).reach(2).aoe(3));
+
+        /* Die Motoren. Jeder tauscht das Magazin und damit den Kraftstoff. */
+        new WeaponModDefinition(ModSpecial.ENGINE_DIESEL)
+                .addMod(NtmItems.GUN_DRILL.get(), new WeaponModEngine(ID_ENGINE_DIESEL)
+                        .mag(WeaponModEngine.ENGINE_DIESEL).delay(15));
+        new WeaponModDefinition(ModSpecial.ENGINE_AVIATION)
+                .addMod(NtmItems.GUN_DRILL.get(), new WeaponModEngine(ID_ENGINE_AVIATION)
+                        .mag(WeaponModEngine.ENGINE_AVIATION).delay(10));
+        new WeaponModDefinition(ModSpecial.ENGINE_ELECTRIC)
+                .addMod(NtmItems.GUN_DRILL.get(), new WeaponModEngine(ID_ENGINE_ELECTRIC)
+                        .mag(WeaponModEngine.ENGINE_ELECTRIC).delay(15));
+        new WeaponModDefinition(ModSpecial.ENGINE_TURBO)
+                .addMod(NtmItems.GUN_DRILL.get(), new WeaponModEngine(ID_ENGINE_TURBO)
+                        .mag(WeaponModEngine.ENGINE_TURBO).delay(5));
+
+        /* Magnet und Sieb schreiben Glueck in den Gegenstand, die Kanister verdreifachen den Tank. */
+        new WeaponModDefinition(ModSpecial.MAGNET)
+                .addMod(NtmItems.GUN_DRILL.get(), new WeaponModDrillFortune(ID_MAGNET, "MAGNET", 2));
+        new WeaponModDefinition(ModSpecial.SIFTER)
+                .addMod(NtmItems.GUN_DRILL.get(), new WeaponModDrillFortune(ID_SIFTER, "SIFTER", 1));
+        new WeaponModDefinition(ModSpecial.CANISTERS)
+                .addMod(NtmItems.GUN_DRILL.get(), new WeaponModCanisters(ID_CANISTERS));
     }
 
     public static final int ID_SILENCER = 201;
@@ -222,6 +266,17 @@ public class XWeaponModManager {
     public static final int ID_MAS_BAYONET = 213;
     public static final int ID_UZI_SATURN = 215;
     public static final int ID_CARBINE_BAYONET = 219;
+    public static final int ID_DRILL_HSS = 222;
+    public static final int ID_DRILL_WSTEEL = 223;
+    public static final int ID_DRILL_TCALLOY = 224;
+    public static final int ID_DRILL_SATURN = 225;
+    public static final int ID_ENGINE_DIESEL = 226;
+    public static final int ID_ENGINE_AVIATION = 227;
+    public static final int ID_ENGINE_ELECTRIC = 228;
+    public static final int ID_ENGINE_TURBO = 229;
+    public static final int ID_MAGNET = 230;
+    public static final int ID_SIFTER = 231;
+    public static final int ID_CANISTERS = 232;
 
     /** Die Aufsaetze einer Waffe, als Gegenstaende -- so zeigt der Waffentisch sie an. */
     public static ItemStack[] getUpgradeItems(ItemStack stack, int cfg) {
@@ -287,10 +342,10 @@ public class XWeaponModManager {
      * Aufsatz ein zweites Mal angebracht --, dann kommt alles in der Reihenfolge der Prioritaet
      * wieder dran.
      */
-    public static void install(ItemStack stack, int cfg, ItemStack... mods) {
+    public static void install(Level level, ItemStack stack, int cfg, ItemStack... mods) {
 
         saveMagState(stack, cfg);
-        uninstall(stack, cfg);
+        uninstall(level, stack, cfg);
 
         List<IWeaponMod> toInstall = new ArrayList<>();
         ComparableStack gun = new ComparableStack(stack).makeSingular();
@@ -315,7 +370,7 @@ public class XWeaponModManager {
         for(int i = 0; i < modIds.length; i++) {
             IWeaponMod mod = toInstall.get(i);
             modIds[i] = idToMod.inverse().get(mod);
-            onInstallStack(stack, modToStack.get(mod), cfg);
+            onInstallStack(level, stack, modToStack.get(mod), cfg);
         }
 
         CompoundTag tag = TagsUtil.getCustomData(stack);
@@ -326,25 +381,25 @@ public class XWeaponModManager {
     }
 
     /** Nimmt alle Aufsaetze ab. */
-    public static void uninstall(ItemStack stack, int cfg) {
+    public static void uninstall(Level level, ItemStack stack, int cfg) {
 
         if(stack == null || stack.isEmpty() || !TagsUtil.hasCustomData(stack)) return;
 
-        for(ItemStack mod : getUpgradeItems(stack, cfg)) onUninstallStack(stack, mod, cfg);
+        for(ItemStack mod : getUpgradeItems(stack, cfg)) onUninstallStack(level, stack, mod, cfg);
 
         CompoundTag tag = TagsUtil.getCustomData(stack);
         tag.remove(KEY_MOD_LIST + cfg);
         TagsUtil.putCustomData(stack, tag);
     }
 
-    public static void onInstallStack(ItemStack gun, ItemStack mod, int cfg) {
+    public static void onInstallStack(Level level, ItemStack gun, ItemStack mod, int cfg) {
         IWeaponMod newMod = modFromStack(gun, mod, cfg);
-        if(newMod != null) newMod.onInstall(gun, mod, cfg);
+        if(newMod != null) newMod.onInstall(level, gun, mod, cfg);
     }
 
-    public static void onUninstallStack(ItemStack gun, ItemStack mod, int cfg) {
+    public static void onUninstallStack(Level level, ItemStack gun, ItemStack mod, int cfg) {
         IWeaponMod newMod = modFromStack(gun, mod, cfg);
-        if(newMod != null) newMod.onUninstall(gun, mod, cfg);
+        if(newMod != null) newMod.onUninstall(level, gun, mod, cfg);
     }
 
     public static IWeaponMod modFromStack(ItemStack gun, ItemStack mod, int cfg) {

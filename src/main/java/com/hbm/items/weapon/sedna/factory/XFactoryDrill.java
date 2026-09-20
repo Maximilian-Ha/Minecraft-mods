@@ -67,7 +67,14 @@ public class XFactoryDrill {
     public static final String F_DTNEG = "F_DTNEG";
     public static final String F_PIERCE = "F_PIERCE";
     public static final String I_AOE = "I_AOE";
-    public static final String I_HARVEST = "I_HARVEST";
+
+    /*
+     * NICHT DABEI, und das ist gemessen: I_HARVEST. Das Original hebt mit dem Bohrkopf an, was
+     * der Bohrer ueberhaupt abbauen darf (getModdableHarvestLevel). In 1.21 gibt es keine
+     * Abbaustufe als Zahl mehr, und GunDrillItem.isCorrectToolForDrops gibt ohnehin stets wahr
+     * zurueck -- der Bohrer bricht alles. Bis Runde 191 stand die Kennung hier trotzdem, ohne
+     * dass sie irgendwer gelesen haette.
+     */
 
     public static void init(DeferredRegister.Items registry) {
 
