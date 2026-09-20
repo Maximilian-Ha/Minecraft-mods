@@ -467,6 +467,7 @@ public class NtmBlockLootTableProvider extends BlockLootSubProvider {
         this.dropSelf(NtmBlocks.RADIOREC.get());
         this.dropSelf(NtmBlocks.RADIO_TELEX.get());
         this.dropSelf(NtmBlocks.TESLA.get());
+        this.add(NtmBlocks.DOOR_RED.get(), this::createDoorTable);
         this.dropSelf(NtmBlocks.PEDESTAL.get());
         this.dropSelf(NtmBlocks.SKELETON_HOLDER.get());
         this.dropSelf(NtmBlocks.POLE_TOP.get());

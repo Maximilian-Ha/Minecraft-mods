@@ -176,6 +176,12 @@ for pfad in dateien:
 
 SCHALTER = re.compile(r'(=|return)\s*switch\s*\(([^)]*)\)\s*\{')
 
+# Die Marken von net.minecraft.core.Direction. Sie stehen hier, weil das Tor die
+# Aufzaehlungen von Minecraft nicht lesen kann -- der Maven-Server ist in dieser Umgebung
+# gesperrt, die echte API liegt nicht vor. Kommt eine weitere verwechselbare Aufzaehlung
+# dazu, gehoert sie hierher.
+VANILLA_DIRECTION = {'DOWN', 'UP', 'NORTH', 'SOUTH', 'WEST', 'EAST'}
+
 luecken = []
 schalter_geprueft = 0
 
@@ -206,6 +212,23 @@ for pfad in dateien:
         # Welche Aufzaehlung deckt alle Marken ab? Nur bei genau einer wird geprueft.
         passend = [n for n, (m, _) in erklaert.items() if labels <= m]
         if len(passend) != 1: continue
+
+        # UND SIE DARF NICHT MIT EINER AUFZAEHLUNG AUS MINECRAFT VERWECHSELBAR SEIN.
+        #
+        # Das Tor kennt nur die Aufzaehlungen des Projekts. Ein Schalter ueber Direction
+        # sieht fuer es darum aus wie einer ueber die einzige Projektaufzaehlung mit
+        # denselben Marken. GEMESSEN IN RUNDE 233: BrickFace heisst DOWN, UP, NORTH, SOUTH,
+        # WEST, EAST und NONE -- und prompt wurden zwei Schalter ueber Direction als
+        # Schalter ueber BrickFace gemeldet, denen "NONE fehle".
+        #
+        # Uebersprungen wird nur, wenn BEIDES zutrifft: die Marken passen auch auf eine
+        # bekannte Minecraft-Aufzaehlung, UND die Datei nennt den Projekttyp nirgends. Wer
+        # den Typ nennt, meint ihn vermutlich auch; wer ihn nirgends nennt, kann ihn nicht
+        # schalten. Die Bedingung allein auf die Dateinennung zu stellen, waere zu scharf --
+        # sie haette zwei echte Pruefungen in MissileBase mit abgeschaltet, wo der Schalter
+        # ueber missileItem.tier laeuft und MissileTier nirgends ausgeschrieben steht.
+        if labels <= VANILLA_DIRECTION and not re.search(r'\b' + re.escape(passend[0]) + r'\b', sauber):
+            continue
 
         name = passend[0]
         fehlt = erklaert[name][0] - labels

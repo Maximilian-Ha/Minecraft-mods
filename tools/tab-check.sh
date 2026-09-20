@@ -78,6 +78,10 @@ VERBORGENE_BLOECKE = {
     'ZIRNOX_DESTROYED':             'Ruine nach der Kernschmelze, entsteht nur dort (Original: null)',
     'SKELETON_HOLDER':              'Sockel aus den Weltbauwerken, wird nur von der Generierung gesetzt (Original: setCreativeTab(null))',
     'PEDESTAL':                     'Sockel des Rituals, wird nur von der Generierung gesetzt -- im Original von BlockKeyhole, BlockRedBrickKeyhole und LogicBlockConditions (Original: setCreativeTab(null), kein Werkbankrezept)',
+    'BRICK_RED':                    'Ziegel des Roten Zimmers; das Zimmer baut sich selbst, der Ziegel gibt sich nicht her (Original: kein setCreativeTab, getItemDropped liefert null)',
+    'STONE_KEYHOLE':                'das steinerne Schluesselloch steht in den Bauwerken und gibt sich als Stein aus (Original: setCreativeTab(null))',
+    'STONE_KEYHOLE_META':           'wie STONE_KEYHOLE, nur in der Wand des Roten Zimmers (Original: setCreativeTab(null))',
+    'DOOR_RED':                     'Tuer des Roten Zimmers, wird vom Schluesselloch gesetzt (Original: kein setCreativeTab)',
     'CRATE_RED':                    'die rote Kiste steht nur in Weltbauwerken (Original: setCreativeTab(null))',
     'DECO_LOOT':                    'Beutesockel der Weltbauwerke; er gibt sich selbst nicht her und ist nur Traeger fuer die Stapel darauf (Original: setCreativeTab(null))',
 }

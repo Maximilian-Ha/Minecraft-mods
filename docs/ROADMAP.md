@@ -10920,3 +10920,74 @@ drei Stücke Laufzeitcode.
 Das Schlüsselloch ist damit die nächste Runde — es ist nicht bloß ein Platzierer, sondern
 ein eigenes Ritual (Kammer ausheben, Lava setzen, mit einem Zwanzigstel Wahrscheinlichkeit
 eine Beutekiste statt des Sockels) und hängt an den Beutetöpfen des Roten Zimmers.
+
+## Runde 233 — Das Rote Zimmer
+
+Die Lücke aus dem Nachtrag zu Runde 231 ist zu. Der Sockel hat jetzt eine Quelle: das
+**steinerne Schlüsselloch**, das in den Bauwerken herumsteht und aussieht wie Stein — bis
+hin zum Mittelklick, der Stein liefert. Wer den roten Schlüssel daran hält, hebt dahinter
+ein Zimmer aus, neun mal neun Blöcke und fünf hoch, und bekommt eine Tür.
+
+### Vier Blöcke
+
+| Block | Was er ist |
+|---|---|
+| `brick_red` | der Ziegel des Zimmers — **sieben** Zustände |
+| `stone_keyhole` | das steinerne Schlüsselloch |
+| `stone_keyhole_meta` | dasselbe in der Zimmerwand, dahinter das schwarze Zimmer |
+| `door_red` | die Tür, die vierte neben Metall, Büro und Bunker |
+
+**Sieben Zustände, nicht sechs.** Das Metadatum des Originals ist die *Seite*, die das
+Ziegelbild trägt — und der Zimmererzeuger setzt für alle Kanten den Wert sechs, der gar
+keiner Seite entspricht. Eine bloße Richtungseigenschaft könnte das nicht ausdrücken, also
+steht dort eine eigene Aufzählung mit einem siebten Wert `NONE`, in genau der Reihenfolge
+des Originals.
+
+Und deshalb **sieben einzelne Modelle**: ein gedrehtes `cube_column` wäre kürzer, trägt sein
+Bild aber auf zwei gegenüberliegenden Seiten. Hier soll es auf genau einer stehen.
+
+### Ein Erzeuger statt zwei
+
+Im Original ist `generateRoom` in beiden Schlüssellochklassen abgeschrieben, mit
+Unterschieden. Hier steht er einmal, mit den Unterschieden als Parameter:
+
+* **Steinernes Zimmer** — Wände tragen das Ziegelbild nach innen, dazu Fackeln und mit je
+  einem Viertel Spinnweben, Säulen, Feuer, ein Kreis und Lava. Mit einem Zwanzigstel eine
+  Beutekiste mit einem ganzen Panzerrüstungssatz statt des Sockels.
+* **Schwarzes Zimmer** — schmucklos, dafür bis zu fünf Sockel, und **die Wand, durch die man
+  eintritt, bleibt offen**.
+
+### Was nicht eins zu eins ging, und warum
+
+* **`concrete_colored`** (Säulen und Kreis) gibt es im Port nicht; ein sechzehnfarbiger
+  Betonblock wäre eine eigene Runde. Dort steht jetzt Minecrafts rotes Beton: dieselbe
+  Farbe, dieselbe Rolle, anderes Bild. Kommt der Farbbeton nach, gehören die beiden Stellen
+  berichtigt — sie sagen das selbst.
+* **`achRedRoom`** fällt weg. Der Port hat kein Errungenschaftssystem, dasselbe Loch wie bei
+  `statLegendary` am Sockel.
+* **Der Beutetopf ist unvollständig, und zwar sichtbar.** Von den 25 Einträgen stehen 13;
+  zwölf Gegenstände gibt es nicht (`ballistic_gauntlet`, `armor_polish`, `bandaid`, `serum`,
+  `quartz_plutonium`, `spider_milk`, `ink`, `heart_container`, `black_diamond`, `scrumpy`,
+  `starmetal_sword`, `flask_infusion`). Die Gewichte der übrigen bleiben, wie sie sind: sie
+  umzurechnen wäre eine Erfindung, und beim Nachreichen müsste man zweimal rechnen.
+* **`POOL_BLACK_SLAB` ist leer.** Er besteht im Original aus einem einzigen Eintrag, der
+  Tontafel, und die fehlt noch. Ein leerer Vorrat liefert einen leeren Stapel — der Sockel
+  in der Mitte bleibt dann leer. Das ist ehrlicher als ein Ersatz, den das Original nie hatte.
+
+### Das Aufzählungs-Tor hat geraten, und das ist jetzt abgestellt
+
+`BrickFace` heißt `DOWN, UP, NORTH, SOUTH, WEST, EAST, NONE` — und prompt meldete
+`enum-check.sh` zwei Schalter über Minecrafts `Direction` als Schalter über `BrickFace`,
+denen „`NONE` fehle". Das Tor kennt nur die Aufzählungen des Projekts; eine fremde mit
+denselben Marken kann es nicht sehen.
+
+Der erste Versuch — „der Typ muss in der Datei vorkommen" — war zu scharf: er hätte **zwei
+echte Prüfungen** in `MissileBase` mit abgeschaltet, wo der Schalter über `missileItem.tier`
+läuft und `MissileTier` nirgends ausgeschrieben steht. Gemessen: 21 → 17 geprüfte Schalter.
+
+Die eingebaute Fassung überspringt nur, wenn **beides** zutrifft: die Marken passen auch auf
+`Direction`, **und** die Datei nennt den Projekttyp nirgends. Gemessen: 21 → **19** geprüfte
+Schalter, genau die zwei Fehlalarme weg, beide `MissileTier`-Prüfungen erhalten. Gegenprobe
+mit einem zusätzlichen Wert in `MissileTier`: genau zwei Funde.
+
+Alle 39 Tore grün.

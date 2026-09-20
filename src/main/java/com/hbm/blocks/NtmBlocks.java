@@ -33,6 +33,9 @@ import com.hbm.blocks.machine.BroadcasterBlock;
 import com.hbm.blocks.machine.DemonLampBlock;
 import com.hbm.blocks.machine.FurnaceBrickBlock;
 import com.hbm.blocks.machine.MachineMicrowaveBlock;
+import com.hbm.blocks.generic.RedBrickBlock;
+import com.hbm.blocks.generic.KeyholeBlock;
+import com.hbm.blocks.generic.RedBrickKeyholeBlock;
 import com.hbm.blocks.generic.PedestalBlock;
 import com.hbm.blocks.generic.SkeletonHolderBlock;
 import com.hbm.blocks.machine.TeslaBlock;
@@ -400,6 +403,21 @@ public class NtmBlocks {
      * Skeletthalters nebenan, denn beide sind dasselbe: ein Gestell, das einen Gegenstand
      * zeigt. noOcclusion, weil er schmaler ist als ein voller Block.
      */
+    /**
+     * DAS ROTE ZIMMER, Runde 233. Drei Bloecke, die zusammengehoeren: der Ziegel, aus dem
+     * das Zimmer besteht, und die beiden Schluessellochbloecke, die es ausheben.
+     *
+     * SPRENGWIDERSTAND ZEHNTAUSEND wie im Original -- das Zimmer soll durch die Tuer
+     * betreten werden, nicht aufgesprengt. Und noLootTable(): der Ziegel gibt sich nicht
+     * her (getItemDropped liefert im Original null).
+     */
+    public static final DeferredBlock<Block> BRICK_RED = register("brick_red", () -> new RedBrickBlock(BlockBehaviour.Properties.of().strength(2.0F, 10_000F).sound(SoundType.STONE).mapColor(MapColor.COLOR_RED).noLootTable()));
+    public static final DeferredBlock<Block> STONE_KEYHOLE = register("stone_keyhole", () -> new KeyholeBlock(BlockBehaviour.Properties.of().strength(1.5F, 10_000F).sound(SoundType.STONE).mapColor(MapColor.STONE).noLootTable()));
+    public static final DeferredBlock<Block> STONE_KEYHOLE_META = register("stone_keyhole_meta", () -> new RedBrickKeyholeBlock(BlockBehaviour.Properties.of().strength(2.0F, 10_000F).sound(SoundType.STONE).mapColor(MapColor.COLOR_RED).noLootTable()));
+
+    /** Die Tuer des Roten Zimmers -- die vierte neben Metall, Buero und Bunker. */
+    public static final DeferredBlock<DoorBlock> DOOR_RED = register("door_red", () -> new DoorBlock(NtmBlockSetTypes.METAL, BlockBehaviour.Properties.of().strength(10.0F, 100.0F).sound(SoundType.METAL).mapColor(MapColor.COLOR_RED).noOcclusion().pushReaction(PushReaction.DESTROY)));
+
     public static final DeferredBlock<Block> PEDESTAL = register("pedestal", () -> new PedestalBlock(BlockBehaviour.Properties.of().strength(2.0F, 10.0F).sound(SoundType.STONE).mapColor(MapColor.STONE).noOcclusion()));
     public static final DeferredBlock<Block> SKELETON_HOLDER = register("skeleton_holder", () -> new SkeletonHolderBlock(BlockBehaviour.Properties.of().strength(2.0F, 10.0F).sound(SoundType.SOUL_SAND).mapColor(MapColor.COLOR_BROWN).noOcclusion()));
     /* Sein Lichtfleck: unsichtbar, nicht anfassbar, nur hell -- aber mit eigener

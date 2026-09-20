@@ -585,6 +585,7 @@ public class NtmBlockTagProvider extends BlockTagsProvider {
                         NtmBlocks.DOOR_METAL.get(),
                         NtmBlocks.DOOR_OFFICE.get(),
                         NtmBlocks.DOOR_BUNKER.get(),
+                        NtmBlocks.DOOR_RED.get(),
                         NtmBlocks.TRAPDOOR_STEEL.get(),
                         NtmBlocks.LADDER_STEEL.get(),
                         NtmBlocks.FENCE_METAL.get(),

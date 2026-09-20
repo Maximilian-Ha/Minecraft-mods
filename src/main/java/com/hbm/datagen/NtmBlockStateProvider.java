@@ -3,6 +3,8 @@ package com.hbm.datagen;
 import com.google.gson.JsonObject;
 import com.hbm.blocks.DummyableBlock;
 import com.hbm.blocks.ICustomBlockModelRegister;
+import com.hbm.blocks.generic.RedBrickBlock;
+import com.hbm.blocks.states.BrickFace;
 import com.hbm.blocks.NtmBlocks;
 import com.hbm.blocks.machine.FurnaceBrickBlock;
 import com.hbm.blocks.network.FluidValveBlock;
@@ -1267,6 +1269,24 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.particleOnlyBlock(NtmBlocks.RADIO_TELEX, modLoc("block/radio_telex"));
         this.particleOnlyBlock(NtmBlocks.TESLA, modLoc("block/tesla"));
         // Das Original nimmt fuer den Sockel schlicht die Seelensand-Textur des Spiels.
+        /*
+         * Das Rote Zimmer, Runde 233. Der Ziegel hat sieben Zustaende: sechs, bei denen
+         * genau eine Seite das Ziegelbild traegt, und einen siebten ohne.
+         */
+        this.redBrick(NtmBlocks.BRICK_RED, modLoc("block/brick_red"));
+        this.redBrick(NtmBlocks.STONE_KEYHOLE_META, modLoc("block/stone_keyhole_meta"));
+
+        /* Das steinerne Schluesselloch: Stein oben und unten, der Schlitz ringsum. */
+        this.simpleBlock(NtmBlocks.STONE_KEYHOLE.get(), this.models()
+                .withExistingParent("stone_keyhole", mcLoc("block/cube_column"))
+                .texture("end", mcLoc("block/stone"))
+                .texture("side", modLoc("block/stone_keyhole"))
+                .texture("particle", mcLoc("block/stone")));
+        this.blockItem(NtmBlocks.STONE_KEYHOLE);
+
+        this.doorBlockWithRenderType(NtmBlocks.DOOR_RED.get(), modLoc("block/door_red_bottom"), modLoc("block/door_red_top"), "cutout");
+        this.itemModels().basicItem(NtmBlocks.DOOR_RED.asItem());
+
         /*
          * Der Sockel, Runde 231. Drei Kaesten, genau die des Originals (RenderPedestal):
          * Fuss null bis vier, Saeule vier bis zwoelf und zwei Pixel eingerueckt, Deckplatte
@@ -2798,6 +2818,62 @@ public class NtmBlockStateProvider extends BlockStateProvider {
     protected ResourceLocation key(DeferredBlock<? extends Block> block) { return BuiltInRegistries.BLOCK.getKey(block.get()); }
     protected ResourceLocation blockTexture(DeferredBlock<? extends Block> block) { ResourceLocation name = this.key(block); return ResourceLocation.fromNamespaceAndPath(name.getNamespace(), "block/" + name.getPath()); }
     protected ResourceLocation blockTexture(DeferredBlock<? extends Block> block, String toAppend) { ResourceLocation name = this.key(block); return ResourceLocation.fromNamespaceAndPath(name.getNamespace(), "block/" + name.getPath() + toAppend); }
+
+    /**
+     * Der rote Ziegel und sein Schluesselloch-Zwilling: sieben Zustaende, sieben Modelle.
+     *
+     * Das Original baut das Bild aus drei Texturen: brick_base auf allen Seiten, die das
+     * Metadatum NICHT nennt, brick_red_top auf der genannten, wenn sie oben oder unten ist,
+     * und sonst das uebergebene Seitenbild.
+     *
+     * SIEBEN EINZELNE MODELLE, und zwar mit Absicht. Ein gedrehtes cube_column-Modell waere
+     * kuerzer, traegt sein Bild aber auf ZWEI gegenueberliegenden Seiten -- hier soll es auf
+     * genau einer stehen. Drehung hilft also nicht; jede Seite braucht ihr eigenes Modell.
+     *
+     * DER SIEBTE ZUSTAND hat keine genannte Seite und ist zugleich das Gegenstandsmodell:
+     * so sieht der Ziegel aus, wenn ihn niemand ausgerichtet hat.
+     */
+    private void redBrick(DeferredBlock<? extends Block> block, ResourceLocation seite) {
+
+        String name = name(block);
+        ModelFile ohne = this.models()
+                .withExistingParent(name + "_none", mcLoc("block/cube_all"))
+                .texture("all", modLoc("block/brick_base"));
+
+        /* Oben und unten teilen sich das Deckbild, die vier Seiten das uebergebene. */
+        ModelFile oben = this.einseitig(name + "_up", modLoc("block/brick_red_top"), Direction.UP);
+        ModelFile unten = this.einseitig(name + "_down", modLoc("block/brick_red_top"), Direction.DOWN);
+        ModelFile nord = this.einseitig(name + "_north", seite, Direction.NORTH);
+        ModelFile sued = this.einseitig(name + "_south", seite, Direction.SOUTH);
+        ModelFile west = this.einseitig(name + "_west", seite, Direction.WEST);
+        ModelFile ost = this.einseitig(name + "_east", seite, Direction.EAST);
+
+        this.getVariantBuilder(block.get())
+                .partialState().with(RedBrickBlock.FACE, BrickFace.UP).setModels(new ConfiguredModel(oben))
+                .partialState().with(RedBrickBlock.FACE, BrickFace.DOWN).setModels(new ConfiguredModel(unten))
+                .partialState().with(RedBrickBlock.FACE, BrickFace.NORTH).setModels(new ConfiguredModel(nord))
+                .partialState().with(RedBrickBlock.FACE, BrickFace.SOUTH).setModels(new ConfiguredModel(sued))
+                .partialState().with(RedBrickBlock.FACE, BrickFace.WEST).setModels(new ConfiguredModel(west))
+                .partialState().with(RedBrickBlock.FACE, BrickFace.EAST).setModels(new ConfiguredModel(ost))
+                .partialState().with(RedBrickBlock.FACE, BrickFace.NONE).setModels(new ConfiguredModel(ohne));
+
+        this.simpleBlockItem(block.get(), ohne);
+    }
+
+    /** Ein Wuerfel aus brick_base, bei dem genau EINE Seite ein anderes Bild traegt. */
+    private ModelFile einseitig(String name, ResourceLocation bild, Direction seite) {
+        var builder = this.models()
+                .getBuilder(name)
+                .parent(new ModelFile.UncheckedModelFile("block/block"))
+                .texture("base", modLoc("block/brick_base"))
+                .texture("face", bild)
+                .texture("particle", modLoc("block/brick_base"))
+                .element().from(0, 0, 0).to(16, 16, 16);
+        for(Direction d : Direction.values()) {
+            builder = builder.face(d).texture(d == seite ? "#face" : "#base").cullface(d).end();
+        }
+        return builder.end();
+    }
 
     private void blockItem(DeferredBlock<? extends Block> block) { this.blockItem(block, ""); }
     private void blockItem(DeferredBlock<? extends Block> block, String suffix) { this.simpleBlockItem(block.get(), new ModelFile.UncheckedModelFile("hbmsntm:block/" + block.getId().getPath() + suffix)); }
