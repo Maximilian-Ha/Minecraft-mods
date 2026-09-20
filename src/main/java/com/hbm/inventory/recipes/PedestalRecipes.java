@@ -8,6 +8,7 @@ import com.hbm.inventory.RecipesCommon.TagStack;
 import com.hbm.inventory.material.MaterialShapes;
 import com.hbm.inventory.material.Mats;
 import com.hbm.inventory.material.NTMMaterial;
+import com.hbm.items.ItemEnums.ChunkType;
 import com.hbm.items.ItemEnums.SecretType;
 import com.hbm.items.NtmItems;
 import com.hbm.items.weapon.sedna.factory.GunFactory.Ammo;
@@ -120,12 +121,24 @@ public class PedestalRecipes {
                 meta(NtmItems.WEAPON_MOD_SPECIAL.get(), 1, ModSpecial.SILENCER), st(NtmItems.GUN_AMAT.get()), meta(NtmItems.WEAPON_MOD_SPECIAL.get(), 1, ModSpecial.FURNITURE_BLACK),
                 st(NtmItems.INGOT_STARMETAL.get()), shape(MaterialShapes.CASTPLATE, Mats.MAT_DURA), st(NtmItems.INGOT_STARMETAL.get())));
 
+        /* Die Sexy Shotgun. Das Rezept mit den meisten Beutestuecken: Spiessbolzen, Wild P
+         * und die beiden Spielkarten -- alle vier kamen erst mit Runde 232. */
+        register(new PedestalRecipe(new ItemStack(NtmItems.GUN_AUTOSHOTGUN_SEXY.get()),
+                st(NtmItems.BOLT_SPIKE.get(), 16), st(NtmItems.WILD_P.get()),                   st(NtmItems.BOLT_SPIKE.get(), 16),
+                st(NtmItems.CARD_QOS.get()),       st(NtmItems.GUN_AUTOSHOTGUN.get()),           st(NtmItems.CARD_AOS.get()),
+                st(NtmItems.BOLT_SPIKE.get(), 16), st(NtmItems.INGOT_STARMETAL.get(), 16),       st(NtmItems.BOLT_SPIKE.get(), 16)));
+
         /* Die Lacunae. Erstes Rezept mit einem Geheimstueck -- und mit dem Vollmond. */
         register(new PedestalRecipe(new ItemStack(NtmItems.GUN_MINIGUN_LACUNAE.get()),
                 null,                               st(NtmItems.POWDER_MAGIC.get(), 4),             null,
                 meta(NtmItems.ITEM_SECRET.get(), 4, SecretType.SELENIUM_STEEL), st(NtmItems.GUN_MINIGUN.get()), meta(NtmItems.ITEM_SECRET.get(), 4, SecretType.SELENIUM_STEEL),
                 null,                               st(NtmItems.POWDER_MAGIC.get(), 4),             null)
                 .extra(PedestalExtraCondition.FULL_MOON));
+
+        register(new PedestalRecipe(new ItemStack(NtmItems.GUN_LASER_PISTOL_MORNING_GLORY.get()),
+                null,                               st(NtmItems.MORNING_GLORY.get()),            null,
+                meta(NtmItems.ITEM_SECRET.get(), 2, SecretType.SELENIUM_STEEL), st(NtmItems.GUN_LASER_PISTOL.get()), meta(NtmItems.ITEM_SECRET.get(), 2, SecretType.SELENIUM_STEEL),
+                null,                               st(Items.EMERALD, 16),                       null));
 
         register(new PedestalRecipe(new ItemStack(NtmItems.GUN_FOLLY.get()),
                 meta(NtmItems.ITEM_SECRET.get(), 4, SecretType.FOLLY), meta(NtmItems.ITEM_SECRET.get(), 2, SecretType.CONTROLLER), meta(NtmItems.ITEM_SECRET.get(), 4, SecretType.FOLLY),
@@ -143,6 +156,12 @@ public class PedestalRecipes {
                 meta(NtmItems.ITEM_SECRET.get(), 1, SecretType.ABERRATOR), shape(MaterialShapes.MECHANISM, Mats.MAT_SATURN, 16), meta(NtmItems.ITEM_SECRET.get(), 1, SecretType.ABERRATOR),
                 meta(NtmItems.ITEM_SECRET.get(), 1, SecretType.ABERRATOR), meta(NtmItems.ITEM_SECRET.get(), 1, SecretType.ABERRATOR), meta(NtmItems.ITEM_SECRET.get(), 1, SecretType.ABERRATOR))
                 .extra(PedestalExtraCondition.GOOD_KARMA).set(1));
+
+        register(new PedestalRecipe(MetaHelper.newStack(NtmItems.AMMO_SECRET.get(), 1, AmmoSecret.FOLLY_SM.ordinal()),
+                st(NtmItems.INGOT_STARMETAL.get()), st(NtmItems.POWDER_MAGIC.get()),            st(NtmItems.INGOT_STARMETAL.get()),
+                st(NtmItems.POWDER_MAGIC.get()),    meta(NtmItems.CHUNK_ORE.get(), 1, ChunkType.MOONSTONE), st(NtmItems.POWDER_MAGIC.get()),
+                st(NtmItems.INGOT_STARMETAL.get()), st(NtmItems.POWDER_MAGIC.get()),            st(NtmItems.INGOT_STARMETAL.get()))
+                .extra(PedestalExtraCondition.FULL_MOON).set(1));
 
         register(new PedestalRecipe(MetaHelper.newStack(NtmItems.AMMO_SECRET.get(), 1, AmmoSecret.FOLLY_NUKE.ordinal()),
                 st(NtmItems.INGOT_STARMETAL.get()), st(NtmItems.POWDER_MAGIC.get()),                st(NtmItems.INGOT_STARMETAL.get()),
@@ -163,15 +182,13 @@ public class PedestalRecipes {
     }
 
     /**
-     * WAS HIER NICHT STEHT, und warum -- nachgemessen in Runde 231, nicht geschaetzt. Alle
-     * vier Erzeugnisse gibt es im Port; es fehlt jeweils eine ZUTAT:
+     * WAS HIER NICHT STEHT, und warum -- nachgemessen in Runde 231, fortgeschrieben in 232.
+     * Damals fehlten vier Rezepte; Runde 232 hat sechs Zutaten nachgereicht und damit drei
+     * davon eingesetzt (Sexy Shotgun, Morning Glory, Folly-SM). UEBRIG BLEIBT EINES:
      *
      *   gun_flamer_daybreaker            stick_dynamite fehlt
-     *   gun_autoshotgun_sexy             bolt_spike, wild_p, card_qos, card_aos fehlen
-     *   gun_laser_pistol_morning_glory   morning_glory fehlt
-     *   ammo_secret FOLLY_SM             chunk_ore in der Ausfuehrung MOONSTONE fehlt
      *
-     * Dreizehn der siebzehn Rezepte des Originals stehen oben. Ein Rezept auf eine Zutat,
+     * Sechzehn der siebzehn Rezepte des Originals stehen oben. Ein Rezept auf eine Zutat,
      * die es nicht gibt, waere kein Rezept, sondern eine Zeile, die nie zutrifft.
      */
     private PedestalRecipes() { }

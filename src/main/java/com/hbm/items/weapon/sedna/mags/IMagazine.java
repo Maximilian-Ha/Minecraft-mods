@@ -61,10 +61,8 @@ public interface IMagazine<T> {
     static boolean shouldUseUpTrenchie(Container container) {
         if(container instanceof Inventory inv) {
             boolean trenchie = ArmorTrenchmasterItem.isTrenchMaster(inv.player);
-            /* Die AoS-Karte fehlt dem Port noch -- sie ist ein Ruestungsmodul (card_aos,
-             * ItemModCard), keine Ruestung, und gehoert in die Runde, die das Kartenmodul
-             * nachreicht. Bis dahin zieht nur die Grabenmeister-Haelfte. */
-            boolean aos = false;
+            /* Seit Runde 232 gibt es die AoS-Karte; bis dahin stand hier ein festes falsch. */
+            boolean aos = ArmorTrenchmasterItem.hasAoS(inv.player);
             if(trenchie || aos) return inv.player.random.nextInt(3) < 2;
         }
         return true;

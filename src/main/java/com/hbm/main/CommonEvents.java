@@ -12,6 +12,7 @@ import com.hbm.commands.RbmkDialCommand;
 import com.hbm.commands.SatellitesCommand;
 import com.hbm.config.FalloutConfigJSON;
 import com.hbm.entity.NtmEntityTypes;
+import com.hbm.items.armor.ModReviveItem;
 import com.hbm.entity.mob.CreeperNuclear;
 import com.hbm.entity.mob.UndeadSoldier;
 import com.hbm.entity.mob.Duck;
@@ -57,6 +58,8 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -71,6 +74,7 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
@@ -145,6 +149,43 @@ public class CommonEvents {
     public static void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
         ItemStack itemInHand = event.getEntity().getItemInHand(InteractionHand.MAIN_HAND);
         if(itemInHand.getItem() instanceof GunBaseNTItem) event.setCanceled(true);
+    }
+
+    /**
+     * DAS WILD P, Runde 232. Wer mit dem Aufsatz an der Beinschiene stirbt, steht wieder auf:
+     * volle Gesundheit, drei Sekunden Resistenz, und der Aufsatz verliert ein Leben. Beim
+     * letzten wird er abgenommen, statt kaputtzugehen.
+     *
+     * DAS ORIGINAL SUCHT IHN IN ALLEN VIER TEILEN (ModEventHandler.onEntityDeathFirst),
+     * obwohl der Aufsatz nur auf die Beinschiene passt. Der Port tut dasselbe: haengt ihn
+     * jemand mit einem Befehl woandershin, soll er trotzdem wirken.
+     */
+    @SubscribeEvent
+    public static void onLivingDeath(LivingDeathEvent event) {
+
+        LivingEntity gestorbener = event.getEntity();
+        if(gestorbener.level().isClientSide) return;
+
+        for(EquipmentSlot platz : ArmorModHandler.ARMOR_SLOTS) {
+            ItemStack teil = gestorbener.getItemBySlot(platz);
+            if(teil.isEmpty() || !ArmorModHandler.hasMods(teil)) continue;
+
+            ItemStack aufsatz = ArmorModHandler.pryMods(gestorbener.level(), teil)[ArmorModHandler.EXTRA];
+            if(aufsatz.isEmpty() || !(aufsatz.getItem() instanceof ModReviveItem)) continue;
+
+            aufsatz.setDamageValue(aufsatz.getDamageValue() + 1);
+
+            if(aufsatz.getDamageValue() >= aufsatz.getMaxDamage()) {
+                ArmorModHandler.removeMod(teil, ArmorModHandler.EXTRA);
+            } else {
+                ArmorModHandler.applyMod(gestorbener.level(), teil, aufsatz);
+            }
+
+            gestorbener.setHealth(gestorbener.getMaxHealth());
+            gestorbener.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 60, 99));
+            event.setCanceled(true);
+            return;
+        }
     }
 
     @SubscribeEvent

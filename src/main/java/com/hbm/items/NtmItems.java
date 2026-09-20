@@ -15,6 +15,7 @@ import com.hbm.items.ItemEnums.LegendaryType;
 import com.hbm.items.ItemEnums.CapType;
 import com.hbm.items.ItemEnums.U238M2Type;
 import com.hbm.items.ItemEnums.CasingType;
+import com.hbm.items.ItemEnums.ChunkType;
 import com.hbm.items.ItemEnums.SecretType;
 import com.hbm.items.armor.ArmorFSBItem;
 import com.hbm.items.armor.ArmorHatItem;
@@ -49,6 +50,9 @@ import com.hbm.items.armor.ItemModCladding;
 import com.hbm.items.armor.ItemModIndestructible;
 import com.hbm.items.armor.ItemModInsert;
 import com.hbm.items.armor.ItemModKnockback;
+import com.hbm.items.armor.ModCardItem;
+import com.hbm.items.armor.ModMorningGloryItem;
+import com.hbm.items.armor.ModReviveItem;
 import com.hbm.items.armor.ModCharmItem;
 import com.hbm.items.armor.NtmArmorMaterials;
 import com.hbm.items.food.ConserveItem;
@@ -1073,6 +1077,20 @@ public class NtmItems {
     public static final DeferredItem<Item> OIL_DETECTOR = ITEMS.register("oil_detector", () -> new OilDetectorItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> DIGAMMA_DIAGNOSTIC = ITEMS.register("digamma_diagnostic", () -> new DigammaDiagnosticItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> METEOR_REMOTE = ITEMS.register("meteor_remote", () -> new MeteorRemoteItem(new Item.Properties()));
+    /**
+     * DREI AUFSAETZE AUS DER BEUTE, Runde 232. Alle drei sind Zutaten der Sockelrezepte und
+     * haben im Original weder Reiter noch Bauplan.
+     *
+     * DIE BEIDEN KARTEN schliessen ausserdem eine Luecke, die der Port selbst vermerkt hat:
+     * IMagazine.shouldUseUpTrenchie stand bis hierher auf einem festen falsch, mit der
+     * Begruendung, die AoS-Karte fehle. Sie fehlt nicht mehr.
+     */
+    public static final DeferredItem<Item> CARD_AOS = ITEMS.register("card_aos", () -> new ModCardItem(new Item.Properties(), false));
+    public static final DeferredItem<Item> CARD_QOS = ITEMS.register("card_qos", () -> new ModCardItem(new Item.Properties(), true));
+    public static final DeferredItem<Item> MORNING_GLORY = ITEMS.register("morning_glory", () -> new ModMorningGloryItem(new Item.Properties()));
+    /* Drei Leben, wie im Original (ItemModRevive(3)). */
+    public static final DeferredItem<Item> WILD_P = ITEMS.register("wild_p", () -> new ModReviveItem(new Item.Properties(), 3));
+
     public static final DeferredItem<Item> METEOR_CHARM = ITEMS.register("meteor_charm", () -> new ModCharmItem(new Item.Properties(), true));
     public static final DeferredItem<Item> PROTECTION_CHARM = ITEMS.register("protection_charm", () -> new ModCharmItem(new Item.Properties(), false));
 
@@ -1322,6 +1340,20 @@ public class NtmItems {
      * den Skeletthalter). Beide Luecken standen als Behauptung im Port, bis Runde 229 sie
      * auf eine gemeinsame Ursache zurueckfuehrte.
      */
+    /**
+     * DIE VIER BROCKEN, Runde 232. Im Original Beute und Schlaemmerertrag; hier zunaechst
+     * gebraucht, weil ohne den Mondstein das Sockelrezept der Folly-Sondermunition fehlt.
+     */
+    public static final DeferredItem<Item> CHUNK_ORE = ITEMS.register("chunk_ore", () -> new EnumMultiItem(new Item.Properties(), ChunkType.class, true, true));
+
+    /**
+     * DER SPIESSBOLZEN, Runde 232. Er ist genau das, wonach er aussieht -- ein Stueck Metall
+     * ohne eigene Faehigkeit. Runde 198 hat nachgemessen, dass die Bolzenpistole ihn NICHT
+     * braucht (die Zeile, die ihn verschoesse, ist im Original auskommentiert); gebraucht
+     * wird er als Zutat des Sockelrezepts der Sexy Shotgun.
+     */
+    public static final DeferredItem<Item> BOLT_SPIKE = ITEMS.register("bolt_spike", () -> new Item(new Item.Properties()));
+
     public static final DeferredItem<Item> ITEM_SECRET = ITEMS.register("item_secret", () -> new EnumMultiItem(new Item.Properties(), SecretType.class, true, true));
     public static final DeferredItem<Item> RING_PULL = ITEMS.register("ring_pull", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> CAN_KEY = ITEMS.register("can_key", () -> new Item(new Item.Properties()));

@@ -12,6 +12,7 @@ import com.hbm.inventory.RecipesCommon.TagStack;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.recipes.loader.SerializableRecipe;
+import com.hbm.items.ItemEnums.ChunkType;
 import com.hbm.items.NtmItems;
 import com.hbm.util.Tuple.Pair;
 import net.minecraft.tags.ItemTags;
@@ -206,7 +207,20 @@ public class CrystallizerRecipes extends SerializableRecipe {
 
         /* Original: drei Kompatibilitaetsbloecke (Certus Quartz, weisser Phosphorstaub, Zinnoberstaub)
          * haengen am Erzdictionary anderer Mods -- im Port ohne Gegenstueck, ausgelassen. */
-        /* Original: moon_turf -> chunk_ore MOONSTONE (Dauer 1200, setReq 16) -- chunk_ore fehlt im Port. */
+        /*
+         * Der Mondboden, Runde 232. Hier stand bis dahin bloss ein Hinweis, dass die Brocken
+         * dem Port noch fehlten; seit derselben Runde gibt es sie, und damit dieses Rezept.
+         * Sechzehn Bloecke Mondboden und eine Minute ergeben einen Mondstein -- die zweite
+         * Quelle neben der Beute, und ohne sie gaebe es die Folly-Sondermunition nur in
+         * Bauwerken.
+         *
+         * (Der Satz nennt die Brocken absichtlich nicht bei ihrem Registriernamen: das
+         * Behauptungs-Tor liest jede Verneinung neben einem Registriernamen als Aussage
+         * ueber den Ist-Zustand und kann ein Zitat der alten Lage nicht davon
+         * unterscheiden.)
+         */
+        registerRecipe(new ComparableStack(NtmBlocks.MOON_TURF.asItem()),
+                new CrystallizerRecipe(MetaHelper.newStack(NtmItems.CHUNK_ORE.get(), 1, ChunkType.MOONSTONE.ordinal()), 1200).setReq(16));
     }
 
     /** Registriert dasselbe Rezept fuer mehrere konkrete Bloecke, die im Original an einem Erzdictionary-Schluessel hingen. */

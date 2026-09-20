@@ -10852,3 +10852,49 @@ Werkbankrezept — er wird von der Weltgenerierung gesetzt (Schlüsselloch, rote
 `LogicBlockConditions`). Der Eintrag im Torwächter sagt das mit dieser Begründung.
 
 Alle 39 Tore grün.
+
+## Runde 232 — Sechs Zutaten, drei Rezepte, zwei eingelöste Versprechen
+
+Runde 231 hatte vier Sockelrezepte mit benannter Ursache offengelassen. Diese Runde reicht
+sechs Zutaten nach und setzt drei der vier ein:
+
+| Gegenstand | Was er ist | Welches Rezept er freigibt |
+|---|---|---|
+| `chunk_ore` (4 Werte) | vier Brocken, darunter der **Mondstein** | `ammo_secret` FOLLY_SM |
+| `bolt_spike` | Eisenbahnnagel, ein Stück Metall ohne Fähigkeit | `gun_autoshotgun_sexy` |
+| `card_aos` / `card_qos` | Pik-Ass und Pik-Dame, Helmaufsätze | `gun_autoshotgun_sexy` |
+| `wild_p` | „Explosive Reactive Plot Armor", drei Leben | `gun_autoshotgun_sexy` |
+| `morning_glory` | Sonderaufsatz, Resistenz und Verfallsschutz | `gun_laser_pistol_morning_glory` |
+
+**Sechzehn von siebzehn** Sockelrezepten stehen damit. Übrig bleibt eines:
+`gun_flamer_daybreaker`, dem `stick_dynamite` fehlt.
+
+### Zwei Versprechen, die der Port selbst notiert hatte
+
+Beide Stellen standen mit ausgeschriebener Begründung im Quelltext — und beide lösen sich
+mit dieser Runde auf:
+
+* **`IMagazine.shouldUseUpTrenchie`** stand auf einem festen `aos = false`, mit dem Satz,
+  die AoS-Karte fehle dem Port. Sie fehlt nicht mehr; `ArmorTrenchmasterItem.hasAoS` ist
+  nachgereicht und die Zeile liest sie jetzt.
+* **`ArmorTrenchmasterItem`** vermerkte im Kopf, `hasAoS` sei nicht übernommen, weil die
+  Karte fehle. Auch dieser Satz ist fort.
+
+Dazu kommt eine neue Wirkungsstelle: `CommonEvents.onLivingDeath` fängt das Sterben ab und
+lässt den Träger des Wild P wieder aufstehen. Das Original sucht den Aufsatz in **allen
+vier** Teilen, obwohl er nur auf die Beinschiene passt — der Port tut dasselbe.
+
+### Das Behauptungs-Tor hat sofort zugeschlagen
+
+Kaum waren die Brocken angemeldet, meldete `claim-check.sh` einen Satz in
+`CrystallizerRecipes`, der behauptete, es gebe sie nicht. Er war seit dieser Runde falsch,
+und mit ihm fehlte ein Rezept: **sechzehn Blöcke Mondboden ergeben einen Mondstein** — die
+zweite Quelle neben der Beute. Ohne sie gäbe es die Folly-Sondermunition nur in Bauwerken.
+
+Beim zweiten Durchgang meldete das Tor **erneut** — diesmal meinen eigenen neuen Kommentar,
+der die alte Behauptung wörtlich zitierte. Das Tor kann ein Zitat nicht von einer Aussage
+unterscheiden. Die Lösung war nicht, eine Ausnahme einzutragen, sondern den Satz anders zu
+schreiben: ein Tor, das man für den eigenen Text stummschaltet, schaut beim nächsten Mal
+auch für einen echten Fehler weg.
+
+Alle 39 Tore grün.

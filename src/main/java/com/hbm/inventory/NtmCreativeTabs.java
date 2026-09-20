@@ -178,6 +178,10 @@ public class NtmCreativeTabs {
                         addMetaItems(output, NtmItems.NUCLEAR_WASTE_LONG_DEPLETED.get());
                         addMetaItems(output, NtmItems.NUCLEAR_WASTE_LONG_DEPLETED_TINY.get());
                         output.accept(NtmItems.SCRAP_NUCLEAR.get());
+                        /* Die vier Brocken und der Spiessbolzen, Runde 232 -- im Original
+                         * beide im Teile-Reiter. */
+                        addMetaItems(output, NtmItems.CHUNK_ORE.get());
+                        output.accept(NtmItems.BOLT_SPIKE.get());
                         output.accept(NtmItems.REACTOR_CORE.get());
                         output.accept(NtmItems.FRAGMENT_NIOBIUM.get());
                         output.accept(NtmItems.FRAGMENT_NEODYMIUM.get());

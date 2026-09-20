@@ -1169,6 +1169,12 @@ public class NtmItemModelProvider extends ItemModelProvider {
 
         // CAP uses ICustomItemModelRegister
         // ITEM_SECRET nutzt ICustomItemModelRegister (EnumMultiItem), fuenf Modelle
+        // CHUNK_ORE nutzt ICustomItemModelRegister (EnumMultiItem), vier Modelle
+        this.basicItem(NtmItems.BOLT_SPIKE.get());
+        this.basicItem(NtmItems.CARD_AOS.get());
+        this.basicItem(NtmItems.CARD_QOS.get());
+        this.basicItem(NtmItems.MORNING_GLORY.get());
+        this.basicItem(NtmItems.WILD_P.get());
         this.basicItem(NtmItems.RING_PULL.get());
         this.basicItem(NtmItems.CAN_KEY.get());
 

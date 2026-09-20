@@ -30,6 +30,14 @@ public class ItemEnums {
     }
 
     /**
+     * Die vier Brocken. Der erste ist die allgemeine Seltenheit, die drei anderen sind
+     * Mineralien. Die Reihenfolge ist die des Originals und ist der Metadatenwert.
+     */
+    public enum ChunkType {
+        RARE, MALACHITE, CRYOLITE, MOONSTONE
+    }
+
+    /**
      * Die Geheimstuecke. Fuenf Sachen, die es nicht zu bauen gibt -- sie liegen in den
      * Bauwerken, im Sockel des Skeletthalters, in Beutetoepfen. Im Original tragen sie
      * setCreativeTab(null) und stehen auf der NEI-Ausschlussliste: man soll nicht sehen,
