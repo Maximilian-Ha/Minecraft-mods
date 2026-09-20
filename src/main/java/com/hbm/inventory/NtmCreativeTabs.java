@@ -1933,6 +1933,10 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.HAZMAT_PLATE_GREY);
                         output.accept(NtmItems.HAZMAT_LEGS_GREY);
                         output.accept(NtmItems.HAZMAT_BOOTS_GREY);
+                        output.accept(NtmItems.LIQUIDATOR_HELMET);
+                        output.accept(NtmItems.LIQUIDATOR_PLATE);
+                        output.accept(NtmItems.LIQUIDATOR_LEGS);
+                        output.accept(NtmItems.LIQUIDATOR_BOOTS);
                         output.accept(NtmItems.HAZMAT_PAA_HELMET);
                         output.accept(NtmItems.HAZMAT_PAA_PLATE);
                         output.accept(NtmItems.HAZMAT_PAA_LEGS);

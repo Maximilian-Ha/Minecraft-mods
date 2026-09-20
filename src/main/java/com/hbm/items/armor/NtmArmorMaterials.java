@@ -60,6 +60,18 @@ public class NtmArmorMaterials {
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> MASK_M65 = register("mask_m65", "gas_mask_m65", 9, 2, 6, 5, 2, () -> Ingredient.of(Items.IRON_INGOT));
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> MASK_MONO = register("mask_mono", "gas_mask_mono", 9, 2, 6, 5, 2, () -> Ingredient.of(Items.IRON_INGOT));
 
+    /*
+     * DER BLEIANZUG DER LIQUIDATOREN. Im Original ein Werkstoff: HBM_LIQUIDATOR,
+     * Haltbarkeitsfaktor 750, {3, 8, 6, 3}, Verzauberbarkeit 10, Reparatur mit der Bleiplatte.
+     *
+     * Im Port sind es zwei, und zwar nur wegen der Textur: die Haube traegt am Koerper das
+     * M65-Kopfmodell, und die Ruestungsschicht bindet dafuer liquidator_helmet.png, waehrend
+     * Weste, Hose und Stiefel die gewoehnlichen Schichten liquidator_1 und liquidator_2
+     * brauchen. Die Schutzwerte sind in beiden gleich; der Grund steht in Runde 206.
+     */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> LIQUIDATOR = register("liquidator", "liquidator", 10, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.PLATE_LEAD.get()));
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> LIQUIDATOR_HOOD = register("liquidator_hood", "liquidator_helmet", 10, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.PLATE_LEAD.get()));
+
     /* Der HEV-Anzug. Er wird nicht als Ruestungsschicht gezeichnet, sondern als eigenes
      * Wellenfrontmodell (ModelArmorHEV) -- die Schicht bleibt darum unsichtbar.
      * Werte aus ModItemsArmor: HBM_HEV, Haltbarkeitsfaktor 150, {3, 8, 6, 3}, ohne
@@ -79,6 +91,7 @@ public class NtmArmorMaterials {
     public static final int DURABILITY_MASK = 15;
     public static final int DURABILITY_HEV = 150;
     public static final int DURABILITY_AJR = 150;
+    public static final int DURABILITY_LIQUIDATOR = 750;
 
     private static DeferredHolder<ArmorMaterial, ArmorMaterial> register(String name, String layer, int enchantability, int helmet, int chest, int legs, int boots, Supplier<Ingredient> repair) {
         return ARMOR_MATERIALS.register(name, () -> {

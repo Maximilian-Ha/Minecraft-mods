@@ -9541,3 +9541,58 @@ gewöhnliche Rüstungsschicht; er bleibt deshalb auf dem unsichtbaren Werkstoff,
 Schichttextur nachgereicht ist.
 
 Alle 39 Tore grün.
+
+## Runde 207 — Der Bleianzug der Liquidatoren
+
+Die letzte fehlende Rüstungsgarnitur des Ports — und zwar gemessen, nicht geschätzt.
+
+### Warum „73 fehlende Rüstungen" nicht stimmt
+
+`tools/port-gap.py` meldet 73 fehlende Rüstungsklassen. Die Zahl ist eine **obere Schranke aus
+einem Klassennamen-Vergleich**, und sie zählt weit zu hoch: `ArmorFSB` heißt im Port
+`ArmorFSBItem`, `ArmorHEV` heißt `ArmorHEVItem`, `ArmorHazmat` und `ArmorGasMask` sind zu
+einer Klasse `GasMaskItem` zusammengefallen. Der Vergleich über die **Registriernamen** der
+Rüstungs-Konstruktoren — also über das, was im Spiel wirklich ankommt — lässt genau eine
+Garnitur übrig: `liquidator_helmet`, `liquidator_plate`, `liquidator_legs`,
+`liquidator_boots`.
+
+### Der Anzug
+
+Er wird nicht neu gebaut, sondern um den grauen Hochleistungs-Schutzanzug herumgelegt: Gummi
+außen, Bleiauskleidung innen. Das macht ihn so schwer, dass ihn nichts mehr umwirft
+(Rückstoßfestigkeit +100) und sein Träger merklich langsamer geht (Tempo −0,1). Sein
+Strahlenschutz ist mit 99,6 % der beste außerhalb des HEV-Anzugs.
+
+Die **Haube ist zugleich Gasmaske**, und als volle Haube kennt sie keine Ausnahme: was der
+Filter kann, hält sie ab. Das Original sagt das in einem Einzeiler — `return new ArrayList()`
+mit dem Kommentar „full hood has no restrictions".
+
+Am Körper trägt sie das **M65-Kopfmodell**, dasselbe wie die M65-Gasmaske. Dass das überhaupt
+geht, ist der Ertrag von Runde 206; vorher wäre der Helm an einem fehlenden Modell gescheitert.
+Aus demselben Grund wie dort hat der Helm einen eigenen Werkstoff (`liquidator_hood`), dessen
+Schicht auf `liquidator_helmet.png` zeigt, während Weste, Hose und Stiefel sich `liquidator`
+mit den gewöhnlichen Schichten teilen. Die Helmtextur ist 32×32 — dieselbe Größe wie die
+M65-`LayerDefinition`, was die Zuordnung bestätigt.
+
+### Die Weste ist nicht baubar, und das hat einen gemessenen Grund
+
+Drei der vier Muster sind übernommen. Das vierte, die Weste, verlangt zwei **`gas_empty`** —
+die leere Gasflasche des Originals. Die hat der Port nicht: `CD_Gastank` steht in `Fluids` und
+wird von einem Dutzend Fluiden benutzt, aber das Flaschenpaar `gas_empty`/`gas_full` ist nie
+mitgekommen. Das ist eine eigene Lücke, keine dieses Anzugs; bis sie zu ist, gibt es die Weste
+nur im Kreativreiter.
+
+### Zwei Registrierungen, die etwas tun — und eine, die nichts täte
+
+Übernommen sind die Gefahrenklassen der Haube (`LIGHT`, `SAND`) und der Strahlenschutz aller
+vier Teile. **Nicht übernommen** ist die dritte Zeile des Originals:
+`DamageResistanceHandler.registerSet(..., new ResistanceStats())` — ein leeres Statistikobjekt,
+also ein Eintrag ohne jede Wirkung. Im Port kommen die Satzwerte ohnehin aus der
+Konfigurationsdatei, nicht aus fest verdrahteten Aufrufen; die Zeile hätte dort nichts getan
+und nur so ausgesehen, als täte sie etwas.
+
+Ebenfalls nicht mitgekommen sind `setStep`, `setJump` und `setFall`. Die drei Geräusche hängen
+an einem Teilsystem, das der Port nicht hat — `ArmorFSBItem` sagt das im Kopf ausdrücklich für
+alle FSB-Anzüge.
+
+Alle 39 Tore grün.

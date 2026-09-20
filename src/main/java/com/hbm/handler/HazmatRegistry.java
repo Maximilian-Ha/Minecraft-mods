@@ -82,6 +82,14 @@ public class HazmatRegistry {
         HazmatRegistry.registerHazmat(NtmItems.HAZMAT_PAA_LEGS.get(), paa * legs);
         HazmatRegistry.registerHazmat(NtmItems.HAZMAT_PAA_BOOTS.get(), paa * boots);
 
+        /* Der Bleianzug der Liquidatoren. 2,4 heisst im Original 99,6 Prozent -- der beste
+         * Strahlenschutz ausserhalb des HEV-Anzugs. */
+        double liquidator = 2.4D;   // 99,6%
+        HazmatRegistry.registerHazmat(NtmItems.LIQUIDATOR_HELMET.get(), liquidator * helmet);
+        HazmatRegistry.registerHazmat(NtmItems.LIQUIDATOR_PLATE.get(), liquidator * chest);
+        HazmatRegistry.registerHazmat(NtmItems.LIQUIDATOR_LEGS.get(), liquidator * legs);
+        HazmatRegistry.registerHazmat(NtmItems.LIQUIDATOR_BOOTS.get(), liquidator * boots);
+
         /* Der HEV-Anzug: 2,3 auf den ganzen Satz, im Original als Kommentar "99,5%".
          * Die Aufteilung auf die vier Teile ist dieselbe wie ueberall hier. */
         double hev = 2.3D;

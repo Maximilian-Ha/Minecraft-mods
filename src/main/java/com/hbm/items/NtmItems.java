@@ -25,6 +25,8 @@ import com.hbm.items.armor.ArmorRPAItem;
 import com.hbm.items.armor.ArmorHEVItem;
 import com.hbm.items.armor.ArmorNo9;
 import com.hbm.items.armor.FilterItem;
+import com.hbm.items.armor.ArmorLiquidatorItem;
+import com.hbm.items.armor.ArmorLiquidatorMaskItem;
 import com.hbm.items.armor.GasMaskItem;
 import com.hbm.items.armor.ItemModCladding;
 import com.hbm.items.armor.ItemModIndestructible;
@@ -70,6 +72,10 @@ import com.hbm.items.machine.WatzPelletItem;
 import com.hbm.items.machine.PWRFuelItem.EnumPWRFuel;
 import com.hbm.items.machine.RBMKPelletItem;
 import com.hbm.items.machine.RBMKRodItem;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.ChatFormatting;
 import com.hbm.items.tools.RBMKLinkItem;
 import com.hbm.items.machine.RBMKRodItem.EnumBurnFunc;
@@ -1494,6 +1500,16 @@ public class NtmItems {
     public static final DeferredItem<Item> HAZMAT_LEGS_GREY = ITEMS.register("hazmat_legs_grey", () -> new ArmorItem(NtmArmorMaterials.HAZMAT_GREY, ArmorItem.Type.LEGGINGS, hazmatProperties(ArmorItem.Type.LEGGINGS)));
     public static final DeferredItem<Item> HAZMAT_BOOTS_GREY = ITEMS.register("hazmat_boots_grey", () -> new ArmorItem(NtmArmorMaterials.HAZMAT_GREY, ArmorItem.Type.BOOTS, hazmatProperties(ArmorItem.Type.BOOTS)));
 
+    /*
+     * DER BLEIANZUG DER LIQUIDATOREN. Vier Teile, so schwer, dass sie ihren Traeger nicht mehr
+     * umwerfen lassen und ihn merklich langsamer machen. Die Haube ist zugleich Gasmaske und
+     * traegt am Koerper das M65-Kopfmodell.
+     */
+    public static final DeferredItem<Item> LIQUIDATOR_HELMET = ITEMS.register("liquidator_helmet", () -> new ArmorLiquidatorMaskItem(NtmArmorMaterials.LIQUIDATOR_HOOD, liquidatorProperties(ArmorItem.Type.HELMET)));
+    public static final DeferredItem<Item> LIQUIDATOR_PLATE = ITEMS.register("liquidator_plate", () -> new ArmorLiquidatorItem(NtmArmorMaterials.LIQUIDATOR, ArmorItem.Type.CHESTPLATE, liquidatorProperties(ArmorItem.Type.CHESTPLATE)));
+    public static final DeferredItem<Item> LIQUIDATOR_LEGS = ITEMS.register("liquidator_legs", () -> new ArmorLiquidatorItem(NtmArmorMaterials.LIQUIDATOR, ArmorItem.Type.LEGGINGS, liquidatorProperties(ArmorItem.Type.LEGGINGS)));
+    public static final DeferredItem<Item> LIQUIDATOR_BOOTS = ITEMS.register("liquidator_boots", () -> new ArmorLiquidatorItem(NtmArmorMaterials.LIQUIDATOR, ArmorItem.Type.BOOTS, liquidatorProperties(ArmorItem.Type.BOOTS)));
+
     /* Der PAA-Anzug: dieselbe Haube, aber gepanzert und langlebiger. */
     public static final DeferredItem<Item> HAZMAT_PAA_HELMET = ITEMS.register("hazmat_paa_helmet", () -> new GasMaskItem(NtmArmorMaterials.HAZMAT_PAA, paaProperties(ArmorItem.Type.HELMET), List.of(), GasMaskItem.OVERLAY_HAZMAT));
     public static final DeferredItem<Item> HAZMAT_PAA_PLATE = ITEMS.register("hazmat_paa_plate", () -> new ArmorItem(NtmArmorMaterials.HAZMAT_PAA, ArmorItem.Type.CHESTPLATE, paaProperties(ArmorItem.Type.CHESTPLATE)));
@@ -1618,6 +1634,31 @@ public class NtmItems {
 
     private static Item.Properties paaProperties(ArmorItem.Type type) {
         return new Item.Properties().durability(type.getDurability(NtmArmorMaterials.DURABILITY_PAA));
+    }
+
+    /**
+     * Die Merkmale des Bleianzugs, an jedem der vier Teile: Rueckstossfestigkeit +100 und
+     * Tempo -0,1, wortgetreu aus ArmorLiquidator.getItemAttributeModifiers des Originals.
+     *
+     * Das Original baut die Multimap von Hand und schluesselt sie ueber
+     * ArmorModHandler.fixedUUIDs, damit sich die vier Teile nicht gegenseitig ueberschreiben.
+     * In 1.21 leistet das die Kennung des Aenderers, die hier den Platz mitfuehrt.
+     */
+    private static Item.Properties liquidatorProperties(ArmorItem.Type type) {
+
+        EquipmentSlotGroup gruppe = EquipmentSlotGroup.bySlot(type.getSlot());
+
+        return new Item.Properties()
+                .stacksTo(1)
+                .durability(type.getDurability(NtmArmorMaterials.DURABILITY_LIQUIDATOR))
+                .attributes(ItemAttributeModifiers.builder()
+                        .add(Attributes.KNOCKBACK_RESISTANCE,
+                                new AttributeModifier(NuclearTechMod.withDefaultNamespace("liquidator_knockback_" + type.getName()),
+                                        100D, AttributeModifier.Operation.ADD_VALUE), gruppe)
+                        .add(Attributes.MOVEMENT_SPEED,
+                                new AttributeModifier(NuclearTechMod.withDefaultNamespace("liquidator_speed_" + type.getName()),
+                                        -0.1D, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), gruppe)
+                        .build());
     }
 
     private static Item.Properties maskProperties() {

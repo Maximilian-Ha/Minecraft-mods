@@ -4003,6 +4003,10 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.HAZMAT_PLATE_GREY, "High-Performance Hazmat Chestplate");
         this.add(NtmItems.HAZMAT_LEGS_GREY, "High-Performance Hazmat Leggings");
         this.add(NtmItems.HAZMAT_BOOTS_GREY, "High-Performance Hazmat Boots");
+        this.add(NtmItems.LIQUIDATOR_HELMET, "Liquidator Hood");
+        this.add(NtmItems.LIQUIDATOR_PLATE, "Liquidator Vest");
+        this.add(NtmItems.LIQUIDATOR_LEGS, "Liquidator Leggings");
+        this.add(NtmItems.LIQUIDATOR_BOOTS, "Liquidator Boots");
         this.add(NtmItems.HAZMAT_PAA_HELMET, "PaA Battle Hazmat Suit Helmet");
         this.add(NtmItems.HAZMAT_PAA_PLATE, "PaA Battle Hazmat Suit Chestplate");
         this.add(NtmItems.HAZMAT_PAA_LEGS, "PaA Battle Hazmat Suit Leggings");

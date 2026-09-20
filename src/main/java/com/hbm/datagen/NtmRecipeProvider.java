@@ -3783,6 +3783,46 @@ public class NtmRecipeProvider extends RecipeProvider {
         hazmatLegs(recipeOutput, NtmItems.HAZMAT_LEGS_GREY.get(), NtmItems.HAZMAT_CLOTH_GREY.get());
         hazmatBoots(recipeOutput, NtmItems.HAZMAT_BOOTS_GREY.get(), NtmItems.HAZMAT_CLOTH_GREY.get());
 
+        /*
+         * DER BLEIANZUG DER LIQUIDATOREN. Er wird nicht neu gebaut, sondern um den grauen
+         * Hochleistungs-Schutzanzug herumgelegt: Gummi aussen, Bleiauskleidung innen. Muster
+         * und Zutaten wortgetreu aus ArmorRecipes des Originals.
+         *
+         * DIE WESTE FEHLT HIER, und zwar mit Grund: ihr Muster verlangt zwei gas_empty --
+         * die leere Gasflasche des Originals. Der Port hat sie nicht; CD_Gastank steht in
+         * Fluids, aber das Flaschenpaar gas_empty/gas_full ist nie mitgekommen. Das ist eine
+         * eigene Luecke, keine dieses Anzugs. Bis dahin ist die Weste nur im Kreativreiter
+         * zu haben -- die drei uebrigen Teile sind baubar.
+         */
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.LIQUIDATOR_HELMET.get(), 1)
+                .pattern("III")
+                .pattern("CBC")
+                .pattern("III")
+                .define('I', NtmItems.INGOT_RUBBER.get())
+                .define('C', NtmItems.CLADDING_LEAD.get())
+                .define('B', NtmItems.HAZMAT_HELMET_GREY.get())
+                .unlockedBy("has_cladding_lead", has(NtmItems.CLADDING_LEAD.get()))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.LIQUIDATOR_LEGS.get(), 1)
+                .pattern("III")
+                .pattern("CBC")
+                .pattern("I I")
+                .define('I', NtmItems.INGOT_RUBBER.get())
+                .define('C', NtmItems.CLADDING_LEAD.get())
+                .define('B', NtmItems.HAZMAT_LEGS_GREY.get())
+                .unlockedBy("has_cladding_lead", has(NtmItems.CLADDING_LEAD.get()))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.LIQUIDATOR_BOOTS.get(), 1)
+                .pattern("ICI")
+                .pattern("IBI")
+                .define('I', NtmItems.INGOT_RUBBER.get())
+                .define('C', NtmItems.CLADDING_LEAD.get())
+                .define('B', NtmItems.HAZMAT_BOOTS_GREY.get())
+                .unlockedBy("has_cladding_lead", has(NtmItems.CLADDING_LEAD.get()))
+                .save(recipeOutput);
+
         /* Der PAA-Anzug wird aus Platten statt aus Tuch gebaut; sein Helm hat wieder die
          * Form des gelben. */
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.HAZMAT_PAA_HELMET.get(), 1)

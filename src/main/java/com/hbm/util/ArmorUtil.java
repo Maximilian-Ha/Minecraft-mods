@@ -47,6 +47,7 @@ public class ArmorUtil {
         ArmorRegistry.registerHazard(NtmItems.HAZMAT_HELMET_RED.get(), HazardClass.SAND);
         ArmorRegistry.registerHazard(NtmItems.HAZMAT_HELMET_GREY.get(), HazardClass.SAND);
         ArmorRegistry.registerHazard(NtmItems.HAZMAT_PAA_HELMET.get(), HazardClass.LIGHT, HazardClass.SAND);
+        ArmorRegistry.registerHazard(NtmItems.LIQUIDATOR_HELMET.get(), HazardClass.LIGHT, HazardClass.SAND);
 
         /* Der HEV-Anzug haelt alles ab, was es gibt. Das Original schreibt dafuer
          * ArmorUtil.FULL_PACKAGE an jedes der vier Teile. */
