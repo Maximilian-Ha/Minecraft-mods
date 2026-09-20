@@ -22,6 +22,7 @@ import com.hbm.items.special.SimpleConsumableItem;
 import com.hbm.items.special.SyringeItem;
 import com.hbm.items.armor.ArmorNCRPAItem;
 import com.hbm.items.armor.ArmorRPAItem;
+import com.hbm.items.armor.ArmorAJRItem;
 import com.hbm.items.armor.ArmorEuphemiumItem;
 import com.hbm.items.armor.ArmorT51Item;
 import com.hbm.items.armor.ArmorHEVItem;
@@ -1695,6 +1696,21 @@ public class NtmItems {
      */
     public static final DeferredItem<Item> WATCH = ITEMS.register("watch", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
 
+    /*
+     * DER AJR-PANZERANZUG UND SEINE ORANGENE SPIELART. Zwei Garnituren mit denselben Werten
+     * und demselben Modell; sie unterscheiden sich allein in den Texturen. 2,5 Millionen
+     * Ladung, Sprungkraft I und Staerke I fuer den Satz, Geigerton, voller Gefahrenschutz.
+     */
+    public static final DeferredItem<Item> AJR_HELMET = ITEMS.register("ajr_helmet", () -> ajr(ArmorItem.Type.HELMET, false));
+    public static final DeferredItem<Item> AJR_PLATE = ITEMS.register("ajr_plate", () -> ajr(ArmorItem.Type.CHESTPLATE, false));
+    public static final DeferredItem<Item> AJR_LEGS = ITEMS.register("ajr_legs", () -> ajr(ArmorItem.Type.LEGGINGS, false));
+    public static final DeferredItem<Item> AJR_BOOTS = ITEMS.register("ajr_boots", () -> ajr(ArmorItem.Type.BOOTS, false));
+
+    public static final DeferredItem<Item> AJRO_HELMET = ITEMS.register("ajro_helmet", () -> ajr(ArmorItem.Type.HELMET, true));
+    public static final DeferredItem<Item> AJRO_PLATE = ITEMS.register("ajro_plate", () -> ajr(ArmorItem.Type.CHESTPLATE, true));
+    public static final DeferredItem<Item> AJRO_LEGS = ITEMS.register("ajro_legs", () -> ajr(ArmorItem.Type.LEGGINGS, true));
+    public static final DeferredItem<Item> AJRO_BOOTS = ITEMS.register("ajro_boots", () -> ajr(ArmorItem.Type.BOOTS, true));
+
     public static final DeferredItem<Item> HEV_HELMET = ITEMS.register("hev_helmet", () -> hev(ArmorItem.Type.HELMET));
     public static final DeferredItem<Item> HEV_PLATE = ITEMS.register("hev_plate", () -> hev(ArmorItem.Type.CHESTPLATE));
     public static final DeferredItem<Item> HEV_LEGS = ITEMS.register("hev_legs", () -> hev(ArmorItem.Type.LEGGINGS));
@@ -1746,6 +1762,19 @@ public class NtmItems {
                 .addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 5, 127))
                 .addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 5, 127))
                 .addEffect(new MobEffectInstance(MobEffects.SATURATION, 5, 127));
+    }
+
+    /**
+     * Der AJR-Anzug. Das Flag orange entscheidet ueber nichts als die vier Texturen, die das
+     * Modell bindet -- beide Garnituren tragen im Original dieselben Werte, denselben
+     * Werkstoff und dasselbe Modell.
+     */
+    private static ArmorFSBItem ajr(ArmorItem.Type type, boolean orange) {
+        return new ArmorAJRItem(NtmArmorMaterials.AJR, type, new Item.Properties().durability(type.getDurability(NtmArmorMaterials.DURABILITY_AJR)), 2_500_000, 10_000, 2_000, 25,
+                orange ? ArmorAJRItem.Variante.ORANGE : ArmorAJRItem.Variante.NORMAL)
+                .addEffect(new MobEffectInstance(MobEffects.JUMP, 20, 0))
+                .addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20, 0))
+                .setHasGeigerSound(true);
     }
 
     private static ArmorFSBItem hev(ArmorItem.Type type) {

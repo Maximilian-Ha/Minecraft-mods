@@ -10011,3 +10011,64 @@ Konstruktorklasse abgebildet (dreizehn Klassen), und jede dieser dreizehn liefer
 `ArmorModel` — genau die Art Fall, die der Klassennamen-Vergleich oben verschluckt hat.
 
 Alle 39 Tore grün.
+
+## Runde 216 — Der Stahlranger, und warum es nur eine Klasse braucht
+
+Die erste der elf OBJ-Garnituren aus der Restliste — und sie bringt gleich zwei Namen mit:
+`ajr_*` (im Spiel „Steel Ranger") und `ajro_*` („AJR Power Armor"). Acht Registriernamen in
+einer Runde, weil die beiden Garnituren im Original **Zeile für Zeile dieselben** sind.
+
+### Zwei Dateien, die sich nicht unterscheiden
+
+`ArmorAJR` und `ArmorAJRO` sind im Original 52 Zeilen lang und bis auf vier Texturnamen
+identisch. `ModelArmorAJR` und `ModelArmorAJRO` ebenso. Beide laden dasselbe
+Wellenfrontmodell, `AJR.obj`.
+
+Der Port schreibt das nicht ab. Es gibt **eine** Item-Klasse und **ein** Modell; welche der
+beiden Garnituren ein Stück ist, steht in einem Aufzählungswert, und die vier Texturen dazu
+stehen im Modell. Warum im Modell und nicht am Gegenstand: `ResourceManager` ist
+clientseitig, die Anmeldung in `NtmItems` läuft auf beiden Seiten. Ein Texturfeld am
+Gegenstand hätte den Server an eine Klasse gebunden, die es dort nicht gibt.
+
+### Die orangene Spielart ist ein Anstrich
+
+Im Original gibt es für `ajro_*` keine eigenen Baupläne, sondern vier formlose Rezepte:
+fertiges AJR-Stück plus roter und schwarzer Farbstoff. Kein zweiter Bauweg, eine
+Umlackierung — und ohne Weg zurück, im Original wie hier.
+
+Die vier AJR-Baupläne selbst sind Muster für Muster dieselben wie bei der T-51 aus Runde 214,
+nur mit der AJR-Platte statt der Titan-Panzerplatte, dem Deshmotor statt dem gewöhnlichen und
+Kunststoff statt Kautschuk.
+
+### Was der Satz kann
+
+| | |
+|---|---|
+| Energie | 2 500 000 HE, 10 000 Ladung, 2000 Verbrauch, 25 Abfluss |
+| Wirkung | Sprungkraft I und Stärke I, solange er Strom hat |
+| Schutz | `FULL_PACKAGE` — anders als die T-51 auch gegen Blendung |
+| Strahlung | 95 %, mit Geigerton |
+
+### Ein Teil im Modell, das niemand zeichnet
+
+`AJR.obj` enthält neun Teile, gezeichnet werden acht. Den `RocketBox` rührt auch im Original
+keine der beiden Modellklassen an. Er bleibt ungezeichnet, hier wie dort — festgehalten, nicht
+repariert.
+
+### Vier Garnituren teilen sich einen Werkstoff
+
+`HBM_T45AJR` trägt im Original AJR, AJRO, RPA und NCRPA. Die Satzprüfung vergleicht das
+Material der vier getragenen Teile, ein AJR-Helm über einer RPA-Brustplatte zählt also als
+vollständiger Satz. Das ist kein Fehler des Ports: `ArmorFSB.hasFSBArmor` vergleicht im
+Original (Z. 226) genauso über `getArmorMaterial`. Der Kommentar am Werkstoff sagt das jetzt,
+statt weiter „die beiden Panzerrüstungen" zu behaupten.
+
+### Nebenbei repariert
+
+Der Einschub von `FULL_NO_LIGHT` in Runde 214 hatte die Beschreibung von `FULL_PACKAGE` von
+ihrem Feld getrennt — sie stand seitdem über der falschen Liste. Ein Kommentar am falschen
+Ding ist schlimmer als keiner; beide stehen wieder bei dem, was sie beschreiben.
+
+Nach dieser Runde sind **38** Rüstungsnamen offen.
+
+Alle 39 Tore grün.

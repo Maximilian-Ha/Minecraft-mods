@@ -414,6 +414,17 @@ public class ResourceManager {
     public static final ResourceLocation T51_ARM = NuclearTechMod.withDefaultNamespace("textures/armor/t51_arm.png");
     public static final ResourceLocation T51_LEG = NuclearTechMod.withDefaultNamespace("textures/armor/t51_leg.png");
 
+    /* Der AJR-Anzug und seine orangene Spielart teilen sich ein Modell, aber nicht die
+     * Texturen -- deshalb zweimal vier. */
+    public static final ResourceLocation AJR_HELMET = NuclearTechMod.withDefaultNamespace("textures/armor/ajr_helmet.png");
+    public static final ResourceLocation AJR_CHEST = NuclearTechMod.withDefaultNamespace("textures/armor/ajr_chest.png");
+    public static final ResourceLocation AJR_ARM = NuclearTechMod.withDefaultNamespace("textures/armor/ajr_arm.png");
+    public static final ResourceLocation AJR_LEG = NuclearTechMod.withDefaultNamespace("textures/armor/ajr_leg.png");
+    public static final ResourceLocation AJRO_HELMET = NuclearTechMod.withDefaultNamespace("textures/armor/ajro_helmet.png");
+    public static final ResourceLocation AJRO_CHEST = NuclearTechMod.withDefaultNamespace("textures/armor/ajro_chest.png");
+    public static final ResourceLocation AJRO_ARM = NuclearTechMod.withDefaultNamespace("textures/armor/ajro_arm.png");
+    public static final ResourceLocation AJRO_LEG = NuclearTechMod.withDefaultNamespace("textures/armor/ajro_leg.png");
+
     /** Die Aschebrille -- im Original heisst die Datei ebenso. */
     public static final ResourceLocation ARMOR_GOGGLES = NuclearTechMod.withDefaultNamespace("textures/armor/goggles.png");
     public static final ResourceLocation HEV_LEG = NuclearTechMod.withDefaultNamespace("textures/armor/hev_leg.png");
@@ -785,6 +796,7 @@ public class ResourceManager {
     public static IModelCustom armor_no9;
     public static IModelCustom armor_goggles;
     public static IModelCustom armor_t51;
+    public static IModelCustom armor_ajr;
 
     public static IObjRenderer sphere;
     public static IModelCustom sphere_new;
@@ -1100,6 +1112,7 @@ public class ResourceManager {
         armor_no9 = new HFRWavefrontObject("models/obj/armor/no9.obj").asVBO();
         armor_goggles = new HFRWavefrontObject("models/obj/armor/goggles.obj").asVBO();
         armor_t51 = new HFRWavefrontObject("models/obj/armor/t51.obj").asVBO();
+        armor_ajr = new HFRWavefrontObject("models/obj/armor/ajr.obj").asVBO();
 
         sphere = new HFRWavefrontObject("models/obj/sphere.obj").getRenderer();
         sphere_new = new HFRWavefrontObject("models/obj/sphere_new.obj").asVBO();

@@ -145,10 +145,17 @@ public class NtmArmorMaterials {
      * Verzauberbarkeit. */
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> HEV = register("hev", LAYER_INVISIBLE, 0, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.PLATE_ARMOR_HEV.get()));
 
-    /* Die beiden Panzerruestungen teilen sich im Original den Werkstoff HBM_T45AJR:
-     * Haltbarkeitsfaktor 150, {3, 8, 6, 3}, ohne Verzauberbarkeit, Reparatur mit der
-     * AJR-Platte. Gezeichnet werden sie als eigenes Wellenfrontmodell, die Schicht bleibt
-     * darum unsichtbar. */
+    /*
+     * VIER Panzerruestungen teilen sich im Original den Werkstoff HBM_T45AJR -- AJR, AJRO,
+     * RPA und NCRPA: Haltbarkeitsfaktor 150, {3, 8, 6, 3}, ohne Verzauberbarkeit, Reparatur
+     * mit der AJR-Platte. Gezeichnet werden sie als eigenes Wellenfrontmodell, die Schicht
+     * bleibt darum unsichtbar.
+     *
+     * DASS SIE SICH EINEN WERKSTOFF TEILEN, HAT EINE FOLGE: die Satzpruefung vergleicht das
+     * Material der vier getragenen Teile, ein AJR-Helm ueber einer RPA-Brustplatte zaehlt
+     * also als vollstaendiger Satz. Das ist kein Versehen des Ports -- ArmorFSB.hasFSBArmor
+     * vergleicht im Original (Z. 226) genauso ueber getArmorMaterial.
+     */
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> AJR = register("ajr", LAYER_INVISIBLE, 0, 3, 8, 6, 3, () -> Ingredient.of(NtmItems.PLATE_ARMOR_AJR.get()));
 
     /** Haltbarkeitsfaktoren aus dem Original, gebraucht fuer Item.Properties.durability. */

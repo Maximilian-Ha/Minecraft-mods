@@ -60,12 +60,16 @@ public class ArmorUtil {
         for(Item teil : new Item[] { NtmItems.T51_HELMET.get(), NtmItems.T51_PLATE.get(), NtmItems.T51_LEGS.get(), NtmItems.T51_BOOTS.get() }) {
             ArmorRegistry.registerHazard(teil, FULL_NO_LIGHT);
         }
+
+        /* Der AJR-Anzug und seine orangene Spielart halten alles ab -- im Original steht an
+         * beiden FULL_PACKAGE, anders als bei der T-51. */
+        for(Item teil : new Item[] {
+                NtmItems.AJR_HELMET.get(), NtmItems.AJR_PLATE.get(), NtmItems.AJR_LEGS.get(), NtmItems.AJR_BOOTS.get(),
+                NtmItems.AJRO_HELMET.get(), NtmItems.AJRO_PLATE.get(), NtmItems.AJRO_LEGS.get(), NtmItems.AJRO_BOOTS.get() }) {
+            ArmorRegistry.registerHazard(teil, FULL_PACKAGE);
+        }
     }
 
-    /**
-     * Alles, wogegen ein geschlossener Anzug schuetzt. Uebernommen aus ArmorUtil des
-     * Originals, wo dieselbe Liste unter demselben Namen steht.
-     */
     /**
      * Dasselbe ohne LIGHT. Panzerruestungen mit Sichtfenster halten alles ab, was ein
      * geschlossener Anzug abhaelt -- nur vor Blendung schuetzen sie nicht. Im Original heisst
@@ -75,6 +79,10 @@ public class ArmorUtil {
             HazardClass.PARTICLE_COARSE, HazardClass.PARTICLE_FINE, HazardClass.GAS_LUNG, HazardClass.BACTERIA,
             HazardClass.GAS_BLISTERING, HazardClass.GAS_MONOXIDE, HazardClass.SAND };
 
+    /**
+     * Alles, wogegen ein geschlossener Anzug schuetzt. Uebernommen aus ArmorUtil des
+     * Originals, wo dieselbe Liste unter demselben Namen steht.
+     */
     public static final HazardClass[] FULL_PACKAGE = {
             HazardClass.PARTICLE_COARSE, HazardClass.PARTICLE_FINE, HazardClass.GAS_LUNG, HazardClass.BACTERIA,
             HazardClass.GAS_BLISTERING, HazardClass.GAS_MONOXIDE, HazardClass.LIGHT, HazardClass.SAND };

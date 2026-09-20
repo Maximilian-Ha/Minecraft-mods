@@ -924,6 +924,16 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicItem(NtmItems.EUPHEMIUM_LEGS.get());
         this.basicItem(NtmItems.EUPHEMIUM_BOOTS.get());
         this.basicItem(NtmItems.WATCH.get());
+
+        /* Anders als die T-51 haben beide AJR-Garnituren je vier eigene Bilder. */
+        this.basicItem(NtmItems.AJR_HELMET.get());
+        this.basicItem(NtmItems.AJR_PLATE.get());
+        this.basicItem(NtmItems.AJR_LEGS.get());
+        this.basicItem(NtmItems.AJR_BOOTS.get());
+        this.basicItem(NtmItems.AJRO_HELMET.get());
+        this.basicItem(NtmItems.AJRO_PLATE.get());
+        this.basicItem(NtmItems.AJRO_LEGS.get());
+        this.basicItem(NtmItems.AJRO_BOOTS.get());
         this.basicItem(NtmItems.ASBESTOS_CLOTH.get());
         this.basicItem(NtmItems.MASK_RAG.get());
         this.basicItem(NtmItems.MASK_PISS.get());

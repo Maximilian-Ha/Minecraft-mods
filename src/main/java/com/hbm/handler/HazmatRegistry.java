@@ -105,6 +105,18 @@ public class HazmatRegistry {
         HazmatRegistry.registerHazmat(NtmItems.T51_LEGS.get(), t51 * legs);
         HazmatRegistry.registerHazmat(NtmItems.T51_BOOTS.get(), t51 * boots);
 
+        /* Der AJR-Anzug und seine orangene Spielart: 1,3 auf den ganzen Satz, im Original
+         * als Kommentar "95%". Beide Garnituren tragen denselben Wert. */
+        double ajr = 1.3D;          // 95%
+        HazmatRegistry.registerHazmat(NtmItems.AJR_HELMET.get(), ajr * helmet);
+        HazmatRegistry.registerHazmat(NtmItems.AJR_PLATE.get(), ajr * chest);
+        HazmatRegistry.registerHazmat(NtmItems.AJR_LEGS.get(), ajr * legs);
+        HazmatRegistry.registerHazmat(NtmItems.AJR_BOOTS.get(), ajr * boots);
+        HazmatRegistry.registerHazmat(NtmItems.AJRO_HELMET.get(), ajr * helmet);
+        HazmatRegistry.registerHazmat(NtmItems.AJRO_PLATE.get(), ajr * chest);
+        HazmatRegistry.registerHazmat(NtmItems.AJRO_LEGS.get(), ajr * legs);
+        HazmatRegistry.registerHazmat(NtmItems.AJRO_BOOTS.get(), ajr * boots);
+
         /* Euphemium: Faktor 10, im Original mit dem Vermerk "<100%" -- der Satz haelt viel
          * ab, aber nicht alles. */
         double euph = 10D;

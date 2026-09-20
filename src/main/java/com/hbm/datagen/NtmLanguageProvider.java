@@ -4077,6 +4077,15 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.EUPHEMIUM_LEGS, "Euphemium Leggings");
         this.add(NtmItems.EUPHEMIUM_BOOTS, "Euphemium Boots");
         this.add(NtmItems.WATCH, "Broken Pocket Watch");
+
+        this.add(NtmItems.AJR_HELMET, "Steel Ranger Helmet");
+        this.add(NtmItems.AJR_PLATE, "Steel Ranger Chestplate");
+        this.add(NtmItems.AJR_LEGS, "Steel Ranger Leggings");
+        this.add(NtmItems.AJR_BOOTS, "Steel Ranger Boots");
+        this.add(NtmItems.AJRO_HELMET, "AJR Power Armor Helmet");
+        this.add(NtmItems.AJRO_PLATE, "AJR Power Armor Chestplate");
+        this.add(NtmItems.AJRO_LEGS, "AJR Power Armor Leggings");
+        this.add(NtmItems.AJRO_BOOTS, "AJR Power Armor Boots");
         this.add(NtmItems.ASBESTOS_CLOTH, "Asbestos Cloth");
         this.add(NtmItems.MASK_RAG, "Crude Protective Mask");
         this.add(NtmItems.MASK_PISS, "Trench Mask");

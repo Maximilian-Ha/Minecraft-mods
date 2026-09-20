@@ -3914,6 +3914,53 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .save(recipeOutput);
 
         /*
+         * DER AJR-ANZUG, ArmorRecipes.java Z. 65 bis 68. Muster fuer Muster dieselben vier
+         * wie bei der T-51 -- nur aus der AJR-Platte statt der Titan-Panzerplatte, mit dem
+         * Deshmotor statt dem gewoehnlichen und mit Kunststoff statt Kautschuk.
+         */
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.AJR_HELMET.get(), 1)
+                .pattern("PPC").pattern("PBP").pattern("IXI")
+                .define('P', NtmItems.PLATE_ARMOR_AJR.get())
+                .define('C', NtmItems.CIRCUIT_INTEGRATED_BOARD.get())
+                .define('I', anyPlasticIngot())
+                .define('X', NtmItems.GAS_MASK_M65.get())
+                .define('B', NtmItems.TITANIUM_HELMET.get())
+                .unlockedBy("has_plate_armor_ajr", has(NtmItems.PLATE_ARMOR_AJR.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.AJR_PLATE.get(), 1)
+                .pattern("MPM").pattern("TBT").pattern("PPP")
+                .define('M', NtmItems.MOTOR_DESH.get())
+                .define('P', NtmItems.PLATE_ARMOR_AJR.get())
+                .define('T', NtmItems.GAS_EMPTY.get())
+                .define('B', NtmItems.TITANIUM_PLATE.get())
+                .unlockedBy("has_plate_armor_ajr", has(NtmItems.PLATE_ARMOR_AJR.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.AJR_LEGS.get(), 1)
+                .pattern("MPM").pattern("PBP").pattern("P P")
+                .define('M', NtmItems.MOTOR_DESH.get())
+                .define('P', NtmItems.PLATE_ARMOR_AJR.get())
+                .define('B', NtmItems.TITANIUM_LEGS.get())
+                .unlockedBy("has_plate_armor_ajr", has(NtmItems.PLATE_ARMOR_AJR.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.AJR_BOOTS.get(), 1)
+                .pattern("P P").pattern("PBP")
+                .define('P', NtmItems.PLATE_ARMOR_AJR.get())
+                .define('B', NtmItems.TITANIUM_BOOTS.get())
+                .unlockedBy("has_plate_armor_ajr", has(NtmItems.PLATE_ARMOR_AJR.get()))
+                .save(recipeOutput);
+
+        /*
+         * DIE ORANGENE SPIELART IST EIN ANSTRICH, ArmorRecipes.java Z. 69 bis 72. Vier
+         * formlose Rezepte: das fertige AJR-Stueck plus roter und schwarzer Farbstoff. Das
+         * ist kein zweiter Bauweg, sondern eine Umlackierung -- es gibt keinen Weg zurueck,
+         * auch im Original nicht.
+         */
+        ajroUmlackieren(recipeOutput, NtmItems.AJRO_HELMET.get(), NtmItems.AJR_HELMET.get());
+        ajroUmlackieren(recipeOutput, NtmItems.AJRO_PLATE.get(), NtmItems.AJR_PLATE.get());
+        ajroUmlackieren(recipeOutput, NtmItems.AJRO_LEGS.get(), NtmItems.AJR_LEGS.get());
+        ajroUmlackieren(recipeOutput, NtmItems.AJRO_BOOTS.get(), NtmItems.AJR_BOOTS.get());
+
+        /*
          * DIE AUFSTIEGSKETTE. Das Original bietet zwei Wege an und stellt ueber
          * enableLBSMSimpleArmorRecipes um: entweder jede Garnitur schlicht aus ihrem Barren,
          * oder jede aus der vorigen. Der Port nimmt die Kette -- sie ist der Standardfall,
@@ -4446,6 +4493,16 @@ public class NtmRecipeProvider extends RecipeProvider {
         for(String zeile : muster) bauer.pattern(zeile);
         bauer.define('E', zutat)
                 .unlockedBy("has_material", has(NtmItems.INGOT_STEEL.get()))
+                .save(recipeOutput);
+    }
+
+    /** Die orangene AJR-Spielart: das fertige Stueck plus roter und schwarzer Farbstoff. */
+    private void ajroUmlackieren(RecipeOutput recipeOutput, Item ergebnis, Item ajr) {
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.COMBAT, ergebnis, 1)
+                .requires(ajr)
+                .requires(Tags.Items.DYES_RED)
+                .requires(Tags.Items.DYES_BLACK)
+                .unlockedBy("has_plate_armor_ajr", has(NtmItems.PLATE_ARMOR_AJR.get()))
                 .save(recipeOutput);
     }
 
