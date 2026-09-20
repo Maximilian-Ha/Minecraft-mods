@@ -33,6 +33,17 @@ public class Vec3NT {
         this(vec.x, vec.y, vec.z);
     }
 
+    /**
+     * DER ABSCHREIBE-ERZEUGER, und er ist nicht bequem, sondern noetig: add, multiply und die
+     * Drehungen aendern ALLE den Vektor selbst und geben ihn zurueck. Wer denselben Vektor
+     * mehrfach anders verrechnen will, muss ihn vorher abschreiben. Das Original hat diesen
+     * Erzeuger, der Port hatte ihn bis Runde 198 nicht -- und die Zielsuche aus Runde 197
+     * verlangte ihn dreimal.
+     */
+    public Vec3NT(Vec3NT vec) {
+        this(vec.xCoord, vec.yCoord, vec.zCoord);
+    }
+
     public Vec3NT crossProduct(Vec3NT other) {
         return new Vec3NT(this.yCoord * other.zCoord - this.zCoord * other.yCoord, this.zCoord * other.xCoord - this.xCoord * other.zCoord, this.xCoord * other.yCoord - this.yCoord * other.xCoord);
     }
