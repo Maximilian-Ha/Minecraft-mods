@@ -1915,6 +1915,8 @@ public class NtmCreativeTabs {
                         addMetaItems(output, NtmItems.GRENADE_FUZE.get());
                         addMetaItems(output, NtmItems.GRENADE_EXTRA.get());
                         addGrenadeCombinations(output, NtmItems.GRENADE_UNIVERSAL.get());
+                        /* Die Dynamitstange, Runde 234 -- im Original ebenfalls im Waffenreiter. */
+                        output.accept(NtmItems.STICK_DYNAMITE.get());
                         addMetaItems(output, NtmItems.AMMO_CONTAINER.get());
 
                     }).build());

@@ -11047,3 +11047,35 @@ Bauwerksblöcken aus Runde 227 ist damit einer weg:
 | `wand_jigsaw`, `wand_logic`, `wand_loot`, `wand_tandem` | vier Bauwerkzeuge, je 350–440 Zeilen |
 
 Alle 39 Tore grün.
+
+## Runde 235 — Die Dynamitstange schließt die Sockelliste
+
+Das siebzehnte und letzte Sockelrezept — der **Daybreaker** — hing allein an einer fehlenden
+Zutat. Sie ist da, und damit steht die Liste vollständig:
+
+| | |
+|---|---|
+| Runde 231 | 13 von 17 Rezepten, vier mit benannter Ursache offen |
+| Runde 232 | sechs Zutaten nachgereicht, drei Rezepte eingesetzt → 16 |
+| Runde 235 | die Dynamitstange → **17 von 17** |
+
+Keine der vier Ursachen war eine Vermutung: jede nannte den fehlenden Gegenstand beim
+Registriernamen.
+
+### Warum sie eine eigene Klasse bekommt
+
+Im Original hängt `stick_dynamite` an `ItemGenericGrenade` — der **alten, einfachen**
+Granatenfamilie: ein Zünder, ein Knall, keine Bauteile. Der Port hat diese Familie nicht;
+seine Granaten setzen sich aus Körper, Füllung, Zünder und Aufsatz zusammen.
+
+Eine Dynamitstange als Universalgranate auszugeben hieße, ihr eine Zusammenstellung
+anzudichten, die es im Original nicht gibt — und sie stünde dann im Spiel neben den
+zusammengebauten Granaten, als wäre sie eine von ihnen. Darum eine eigene, kurze Klasse.
+Die Sprengwerte sind die des Originals, Zahl für Zahl: Radius fünf,
+`EntityProcessorCrossSmooth(1, 15)`, `PlayerProcessorStandard`,
+`ExplosionEffectWeapon(10, 2.5F, 1F)`, drei Sekunden Zünder.
+
+Der Aufschlag zündet sie **nicht** — sie springt ab und rollt, bis die Zeit um ist. Das ist
+der Unterschied zum Aufschlagzünder der Universalgranate und steht so im Original.
+
+Alle 39 Tore grün.

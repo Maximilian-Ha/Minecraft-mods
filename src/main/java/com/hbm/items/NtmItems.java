@@ -21,6 +21,7 @@ import com.hbm.items.armor.ArmorFSBItem;
 import com.hbm.items.armor.ArmorHatItem;
 import com.hbm.items.food.PillItem;
 import com.hbm.items.machine.GunPartItem;
+import com.hbm.items.weapon.DynamiteItem;
 import com.hbm.items.component.NtmDataComponents;
 import com.hbm.items.special.ClayTabletItem;
 import com.hbm.items.special.SimpleConsumableItem;
@@ -1364,6 +1365,13 @@ public class NtmItems {
      * helle und eins die dunkle. Ein EnumMultiItem waere hier falsch -- das Original nennt
      * die beiden nicht, sondern unterscheidet sie nur am Wert.
      */
+    /**
+     * DIE DYNAMITSTANGE, Runde 234. Die letzte Zutat, die dem Sockelsystem gefehlt hat --
+     * ohne sie kein Rezept fuer den Daybreaker. Im Original haengt sie an der alten,
+     * einfachen Granatenfamilie; siehe die Entitaet, warum sie hier eine eigene Klasse hat.
+     */
+    public static final DeferredItem<Item> STICK_DYNAMITE = ITEMS.register("stick_dynamite", () -> new DynamiteItem(new Item.Properties()));
+
     public static final DeferredItem<Item> CLAY_TABLET = ITEMS.register("clay_tablet", () -> new ClayTabletItem(new Item.Properties().component(NtmDataComponents.META.get(), 0)));
 
     public static final DeferredItem<Item> ITEM_SECRET = ITEMS.register("item_secret", () -> new EnumMultiItem(new Item.Properties(), SecretType.class, true, true));

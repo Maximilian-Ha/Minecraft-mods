@@ -1,6 +1,7 @@
 package com.hbm.entity;
 
 import com.hbm.entity.effect.BlackHole;
+import com.hbm.entity.grenade.Dynamite;
 import com.hbm.entity.grenade.GrenadeUniversal;
 import com.hbm.entity.projectile.Boxcar;
 import com.hbm.entity.item.ParachuteCrate;
@@ -183,6 +184,10 @@ public class NtmEntityTypes {
             () -> EntityType.Builder.<DuchessGambit>of(DuchessGambit::new, MobCategory.MISC).noSummon().setTrackingRange(250).sized(10.0F, 8.0F).fireImmune().build("duchess_gambit"));
 
     /* Die geworfene Granate. Ein Viertelblock gross, wie im Original (setSize(0.25F, 0.25F)). */
+    /* Die Dynamitstange, Runde 234. Dieselben Masse wie die Granate -- ein Viertelblock. */
+    public static final DeferredHolder<EntityType<?>, EntityType<Dynamite>> DYNAMITE = ENTITY_TYPES.register("dynamite",
+            () -> EntityType.Builder.<Dynamite>of(Dynamite::new, MobCategory.MISC).sized(0.25F, 0.25F).build("dynamite"));
+
     public static final DeferredHolder<EntityType<?>, EntityType<GrenadeUniversal>> GRENADE_UNIVERSAL = ENTITY_TYPES.register("grenade_universal",
             () -> EntityType.Builder.<GrenadeUniversal>of(GrenadeUniversal::new, MobCategory.MISC).sized(0.25F, 0.25F).build("grenade_universal"));
 

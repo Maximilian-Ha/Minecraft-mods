@@ -9,6 +9,7 @@ import com.hbm.inventory.material.MaterialShapes;
 import com.hbm.inventory.material.Mats;
 import com.hbm.inventory.material.NTMMaterial;
 import com.hbm.items.ItemEnums.ChunkType;
+import com.hbm.items.food.ConserveItem.ConserveType;
 import com.hbm.items.ItemEnums.SecretType;
 import com.hbm.items.NtmItems;
 import com.hbm.items.weapon.sedna.factory.GunFactory.Ammo;
@@ -121,6 +122,14 @@ public class PedestalRecipes {
                 meta(NtmItems.WEAPON_MOD_SPECIAL.get(), 1, ModSpecial.SILENCER), st(NtmItems.GUN_AMAT.get()), meta(NtmItems.WEAPON_MOD_SPECIAL.get(), 1, ModSpecial.FURNITURE_BLACK),
                 st(NtmItems.INGOT_STARMETAL.get()), shape(MaterialShapes.CASTPLATE, Mats.MAT_DURA), st(NtmItems.INGOT_STARMETAL.get())));
 
+        /* Der Daybreaker -- das siebzehnte und letzte Sockelrezept, Runde 234. Es hing bis
+         * dahin allein an der Dynamitstange. */
+        register(new PedestalRecipe(new ItemStack(NtmItems.GUN_FLAMER_DAYBREAKER.get()),
+                shape(MaterialShapes.CASTPLATE, Mats.MAT_GOLD), meta(NtmItems.CANNED_CONSERVE.get(), 1, ConserveType.SLIME), shape(MaterialShapes.CASTPLATE, Mats.MAT_GOLD),
+                st(NtmItems.INGOT_PHOSPHORUS.get()), st(NtmItems.GUN_FLAMER.get()),                st(NtmItems.INGOT_PHOSPHORUS.get()),
+                shape(MaterialShapes.CASTPLATE, Mats.MAT_GOLD), st(NtmItems.STICK_DYNAMITE.get()), shape(MaterialShapes.CASTPLATE, Mats.MAT_GOLD))
+                .extra(PedestalExtraCondition.SUN));
+
         /* Die Sexy Shotgun. Das Rezept mit den meisten Beutestuecken: Spiessbolzen, Wild P
          * und die beiden Spielkarten -- alle vier kamen erst mit Runde 232. */
         register(new PedestalRecipe(new ItemStack(NtmItems.GUN_AUTOSHOTGUN_SEXY.get()),
@@ -182,14 +191,12 @@ public class PedestalRecipes {
     }
 
     /**
-     * WAS HIER NICHT STEHT, und warum -- nachgemessen in Runde 231, fortgeschrieben in 232.
-     * Damals fehlten vier Rezepte; Runde 232 hat sechs Zutaten nachgereicht und damit drei
-     * davon eingesetzt (Sexy Shotgun, Morning Glory, Folly-SM). UEBRIG BLEIBT EINES:
+     * DIE LISTE IST VOLLSTAENDIG. Alle siebzehn Rezepte des Originals stehen oben.
      *
-     *   gun_flamer_daybreaker            stick_dynamite fehlt
-     *
-     * Sechzehn der siebzehn Rezepte des Originals stehen oben. Ein Rezept auf eine Zutat,
-     * die es nicht gibt, waere kein Rezept, sondern eine Zeile, die nie zutrifft.
+     * Sie war es nicht immer: Runde 231 hat dreizehn angelegt und vier mit benannter Ursache
+     * offengelassen, Runde 232 hat sechs Zutaten nachgereicht und drei davon eingesetzt, und
+     * Runde 234 hat mit der Dynamitstange das letzte geschlossen. Keine der vier Ursachen
+     * war eine Vermutung -- jede nannte den fehlenden Gegenstand beim Registriernamen.
      */
     private PedestalRecipes() { }
 }
