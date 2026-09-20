@@ -89,6 +89,7 @@ public class GunFactoryClient {
         registerGunItemRenderer(event, new ItemRenderStinger(), NtmItems.GUN_STINGER.get());
         registerGunItemRenderer(event, new ItemRenderLAG(), NtmItems.GUN_LAG.get());
         registerGunItemRenderer(event, new ItemRenderCoilgun(), NtmItems.GUN_COILGUN.get());
+        registerGunItemRenderer(event, new ItemRenderTau(), NtmItems.GUN_TAU.get());
         registerGunItemRenderer(event, new ItemRenderMK108(), NtmItems.GUN_MK108.get());
         registerGunItemRenderer(event, new ItemRenderShredder(ResourceManager.SHREDDER_TEX), NtmItems.GUN_AUTOSHOTGUN.get());
         registerGunItemRenderer(event, new ItemRenderShredder(ResourceManager.SHREDDER_TEX), NtmItems.GUN_AUTOSHOTGUN_SHREDDER.get());
@@ -135,6 +136,8 @@ public class GunFactoryClient {
         XFactoryEnergy.energy_tesla_overcharge.setRendererBeam(LegoClient.RENDER_LIGHTNING);
         XFactoryEnergy.energy_tesla_ir.setRendererBeam(LegoClient.RENDER_LIGHTNING);
         XFactoryEnergy.energy_tesla_ir_sub.setRendererBeam(LegoClient.RENDER_LIGHTNING_SUB);
+        XFactoryAccelerator.tau_uranium.setRendererBeam(LegoClient.RENDER_TAU);
+        XFactoryAccelerator.tau_uranium_charge.setRendererBeam(LegoClient.RENDER_TAU_CHARGE);
         XFactory762mm.energy_lacunae.setRendererBeam(LegoClient.RENDER_LASER_PURPLE);
         XFactory762mm.energy_lacunae_overcharge.setRendererBeam(LegoClient.RENDER_LASER_PURPLE);
         XFactory762mm.energy_lacunae_ir.setRendererBeam(LegoClient.RENDER_LASER_PURPLE);
@@ -177,6 +180,7 @@ public class GunFactoryClient {
         ((GunBaseNTItem) NtmItems.GUN_AUTOSHOTGUN_HERETIC.get())	.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_LAG.get())					.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_COILGUN.get())				.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
+        ((GunBaseNTItem) NtmItems.GUN_TAU.get())					.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
         ((GunBaseNTItem) NtmItems.GUN_GREASEGUN.get())				.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO);
     }
 

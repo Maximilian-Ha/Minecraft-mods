@@ -157,6 +157,23 @@ public class LegoClient {
     public static BiConsumer<BulletBeamBase, Float> RENDER_LASER_PURPLE = (strahl, partialTick) ->
             zeichneStrahl(strahl, partialTick, 0xFF601580, 0xFF8080FF);
 
+    /**
+     * DIE TAU-KANONE, und sie ist BERNSTEINFARBEN, nicht violett. Das Original hat fuer sie
+     * zwei eigene Strahlrenderer statt einer Farbe: der gewoehnliche Schuss zieht einen dunklen
+     * Kern (0x302510) mit goldenem Saum (0xFFBF00), der aufgeladene einen helleren Kern
+     * (0x605030) mit fast weissem Saum (0xFFF0A0).
+     *
+     * Das Original faedelt den Kern ueber BeamPronter als gewellten Schlauch und zeichnet den
+     * Saum als Geschoss darueber; der Port hat BeamPronter nicht und nimmt denselben Weg wie
+     * fuer alle uebrigen Strahlen -- dunkler Kern, heller Saum. Die vier Farben sind die des
+     * Originals.
+     */
+    public static BiConsumer<BulletBeamBase, Float> RENDER_TAU = (strahl, partialTick) ->
+            zeichneStrahl(strahl, partialTick, 0xFF302510, 0xFFFFBF00);
+
+    public static BiConsumer<BulletBeamBase, Float> RENDER_TAU_CHARGE = (strahl, partialTick) ->
+            zeichneStrahl(strahl, partialTick, 0xFF605030, 0xFFFFF0A0);
+
     /** Der Schredder: derselbe Riss, nur gruen wie sein Plasma. */
     public static BiConsumer<BulletBeamBase, Float> RENDER_SHREDDER = (strahl, partialTick) ->
             zeichneStrahl(strahl, partialTick, 0xFF1E7A1E, 0xFFBFFFBF);

@@ -97,6 +97,12 @@ public class NtmSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SHREDDER_FIRE = reg("weapon.fire.shotgunauto");
     /** Das Lacunae-Lasergatling -- im Original HBMSoundHandler.fireLaserGatling. */
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_LASER_GATLING = reg("weapon.fire.lasergatling");
+    /* Die Tau-Kanone: der Schuss, die Ladeschleife und das Loslassen (drei Aufnahmen im Wechsel). */
+    public static final DeferredHolder<SoundEvent, SoundEvent> GUN_TAU_FIRE = reg("weapon.fire.tau");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GUN_TAU_LOOP = reg("weapon.fire.tau_loop");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GUN_TAU_RELEASE = reg("weapon.fire.tau_release");
+    /** Der Knall der Ueberladung -- im Original HBMSoundHandler.ufoBlast. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> UFO_BLAST = reg("entity.ufo_blast");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SWITCHMODE_1 = reg("weapon.switchmode1");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SWITCHMODE_2 = reg("weapon.switchmode2");
     public static final DeferredHolder<SoundEvent, SoundEvent> GUN_SILENCER_SHOOT = reg("weapon.fire.silencer_shoot");

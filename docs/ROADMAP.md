@@ -9332,3 +9332,48 @@ Erstdruck feuert, und ein aufgeladener Schuss kommt aus einem zweiten, eigenen M
 eine eigene Runde.
 
 Alle 38 Tore grün.
+
+---
+
+## Runde 203 — Die Tau-Kanone schließt den Beschleuniger
+
+Die letzte Waffe von `XFactoryAccelerator`, und die einzige des Ports, **die ihren Schützen
+töten kann.**
+
+### Zwei Tasten, zwei ganz verschiedene Dinge
+
+Die linke feuert einen gewöhnlichen Strahl. Die rechte **lädt auf** — und je länger man hält,
+desto stärker wird der Schuss beim Loslassen: eine Einheit je zehn Züge, bis zu dreizehn. Die
+Munition geht dabei im Aufladen drauf, nicht beim Schuss.
+
+Der aufgeladene Schuss kommt **nicht aus dem Magazin der Waffe**, sondern aus `tauChargeMag` —
+einem zweiten Gurt, der nur den spektralen Satz kennt. Verschleiß kostet er nach Stärke, nicht
+nach Schuss.
+
+**Nach zweihundert Zügen reißt es sie auseinander:** tausend Schaden auf den Schützen,
+zehntausend Verschleiß auf die Waffe, ein Plasmafächer und zwei Knalle. Deshalb verstummt die
+Ladeschleife bei dreihundert Zügen ohnehin — da lebt niemand mehr.
+
+### Zwei Funde beim Portieren
+
+**Eine Zeile, die nichts tut.** Der Zweitdruck ruft im Original
+`MagazineBelt.getMagType(stack)` mit dem Kommentar „caches the last loaded ammo". Diese Methode
+**liest nur** — sie schreibt nichts. Gespeichert wird die Sorte ohnehin beim gewöhnlichen
+Schuss, über `getType`. Die Zeile ist nicht mitgekommen.
+
+**Die Strahlen sind bernsteinfarben, nicht violett.** Ich hatte sie zunächst auf
+`RENDER_LASER_PURPLE` gelegt — geraten, nicht gemessen. Das Original hat für die Tau-Kanone
+**zwei eigene Renderer**: der gewöhnliche Schuss zieht einen dunklen Kern (`0x302510`) mit
+goldenem Saum (`0xFFBF00`), der aufgeladene einen helleren Kern (`0x605030`) mit fast weißem
+Saum (`0xFFF0A0`). Beide sind jetzt als `RENDER_TAU` und `RENDER_TAU_CHARGE` angelegt.
+
+### Abweichungen
+
+Der Kern kommt im Original von `BeamPronter` als gewellter Schlauch; der Port hat den nicht und
+nimmt denselben Weg wie für alle übrigen Strahlen — dunkler Kern, heller Saum, die vier Farben
+des Originals. Die Tau-Kanone hat wie die Spulenkanone **keinen Bauplan** und ist vorerst nur im
+Kreativreiter zu haben.
+
+**Damit ist `XFactoryAccelerator` vollständig** — Tau-Kanone, Spulenkanone und NI4NI.
+
+Alle 38 Tore grün.

@@ -2048,6 +2048,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.GUN_AUTOSHOTGUN_HERETIC, "The Heretic");
         this.add(NtmItems.GUN_LAG, "Comically Long Pistol");
         this.add(NtmItems.GUN_COILGUN, "Coilgun");
+        this.add(NtmItems.GUN_TAU, "Tau Cannon");
         this.add(NtmBlocks.WEAPON_TABLE, "Weapon Modification Table");
         this.add(NtmBlocks.ARMOR_TABLE, "Armor Modification Table");
         this.add("container.weaponTable", "Weapon Modification Table");

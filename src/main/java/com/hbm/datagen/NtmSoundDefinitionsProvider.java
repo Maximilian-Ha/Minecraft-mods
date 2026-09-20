@@ -248,6 +248,20 @@ public class NtmSoundDefinitionsProvider extends SoundDefinitionsProvider {
         this.add(NtmSoundEvents.GUN_LASER_GATLING, SoundDefinition.definition()
                 .with(sound(NuclearTechMod.withDefaultNamespace("weapon/fire/lasergatling")))
         );
+        this.add(NtmSoundEvents.GUN_TAU_FIRE, SoundDefinition.definition()
+                .with(sound(NuclearTechMod.withDefaultNamespace("weapon/fire/tau")))
+        );
+        this.add(NtmSoundEvents.GUN_TAU_LOOP, SoundDefinition.definition()
+                .with(sound(NuclearTechMod.withDefaultNamespace("weapon/fire/tauloop")))
+        );
+        this.add(NtmSoundEvents.GUN_TAU_RELEASE, SoundDefinition.definition()
+                .with(sound(NuclearTechMod.withDefaultNamespace("weapon/fire/taurelease1")))
+                .with(sound(NuclearTechMod.withDefaultNamespace("weapon/fire/taurelease2")))
+                .with(sound(NuclearTechMod.withDefaultNamespace("weapon/fire/taurelease3")))
+        );
+        this.add(NtmSoundEvents.UFO_BLAST, SoundDefinition.definition()
+                .with(sound(NuclearTechMod.withDefaultNamespace("entity/ufoblast")))
+        );
         /* Drei Aufnahmen, wie im Original -- welche kommt, entscheidet das Spiel. */
         this.add(NtmSoundEvents.GRENADE_BOUNCE, SoundDefinition.definition()
                 .with(sound(NuclearTechMod.withDefaultNamespace("weapon/grenade_bounce1")))

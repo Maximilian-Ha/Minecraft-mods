@@ -1,5 +1,6 @@
 package com.hbm.items.weapon.sedna.factory;
 
+import com.hbm.entity.projectile.BulletBeamBase;
 import com.hbm.entity.projectile.CoinEntity;
 import com.hbm.items.NtmItems;
 import com.hbm.items.weapon.sedna.BulletConfig;
@@ -11,6 +12,7 @@ import com.hbm.items.weapon.sedna.GunConfig;
 import com.hbm.items.weapon.sedna.factory.GunFactory.Ammo;
 import com.hbm.items.weapon.sedna.Receiver;
 import com.hbm.items.weapon.sedna.impl.NI4NIGunItem;
+import com.hbm.items.weapon.sedna.mags.MagazineBelt;
 import com.hbm.items.weapon.sedna.mags.MagazineInfinite;
 import com.hbm.items.weapon.sedna.mags.MagazineSingleReload;
 import com.hbm.registry.NtmSoundEvents;
@@ -26,6 +28,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -59,6 +62,16 @@ import java.util.function.Consumer;
  */
 public class XFactoryAccelerator {
 
+    public static BulletConfig tau_uranium;
+    public static BulletConfig tau_uranium_charge;
+
+    /**
+     * DAS ZWEITE MAGAZIN DER TAU-KANONE. Der aufgeladene Schuss kommt nicht aus dem Magazin
+     * der Waffe, sondern hieraus -- ein Gurt, der nur den einen Satz kennt. Er ist statisch,
+     * weil er keinen Vorrat fuehrt: verbraucht wird die Munition im Aufladen, Zug um Zug.
+     */
+    public static MagazineBelt tauChargeMag = new MagazineBelt();
+
     public static BulletConfig coil_tungsten;
     public static BulletConfig coil_ferrouranium;
     public static BulletConfig ni4ni_arc;
@@ -73,6 +86,22 @@ public class XFactoryAccelerator {
                 .setOnBeamImpact(BulletConfig.LAMBDA_STANDARD_BEAM_HIT);
 
         /*
+         * DIE TAU-LADUNG. Ein Strahl, der durch alles hindurchgeht, ohne an Schaden zu
+         * verlieren -- Subatomar, gegen das keine Panzerung hilft. Der aufgeladene Satz ist
+         * derselbe, nur SPEKTRAL: er faehrt auch durch Bloecke.
+         */
+        tau_uranium = new BulletConfig().setItem(Ammo.TAU_URANIUM).setCasing(() -> new ItemStack(NtmItems.PLATE_LEAD.get(), 2), 16)
+                .setupDamageClass(DamageClass.SUBATOMIC).setBeam().setLife(5).setRenderRotations(false)
+                .setDoesPenetrate(true).setDamageFalloffByPen(false)
+                .setOnBeamImpact(BulletConfig.LAMBDA_STANDARD_BEAM_HIT);
+        tau_uranium_charge = new BulletConfig().setItem(Ammo.TAU_URANIUM).setCasing(() -> new ItemStack(NtmItems.PLATE_LEAD.get(), 2), 16)
+                .setupDamageClass(DamageClass.SUBATOMIC).setBeam().setLife(5).setRenderRotations(false)
+                .setDoesPenetrate(true).setDamageFalloffByPen(false).setSpectral(true)
+                .setOnBeamImpact(BulletConfig.LAMBDA_STANDARD_BEAM_HIT);
+
+        tauChargeMag.addConfigs(tau_uranium_charge);
+
+        /*
          * DIE BEIDEN SPULENGESCHOSSE. Sie fliegen sehr schnell (7,5 Bloecke je Tick),
          * durchschlagen ohne Schadensverlust und sind SPEKTRAL -- sie gehen durch Bloecke
          * hindurch, statt an ihnen zu zerplatzen. Was sie auf dem Weg durchschlagen,
@@ -84,6 +113,30 @@ public class XFactoryAccelerator {
         coil_ferrouranium = new BulletConfig().setItem(Ammo.COIL_FERROURANIUM).setVel(7.5F).setLife(50)
                 .setDoesPenetrate(true).setDamageFalloffByPen(false).setSpectral(true)
                 .setOnUpdate(LAMBDA_UPDATE_FERRO);
+
+        /*
+         * DIE TAU-KANONE. Ihre linke Taste feuert einen gewoehnlichen Strahl; ihre rechte
+         * LAEDT AUF, und je laenger man haelt, desto staerker wird der Schuss beim Loslassen.
+         * Wer zu lange haelt, stirbt daran -- siehe ORCHESTRA_TAU.
+         *
+         * Sie hat keinen Standardentscheider und kein Standardgeruest: jede Taste ist einzeln
+         * angehaengt, weil der Zweitdruck nicht zielt, sondern laedt.
+         */
+        NtmItems.GUN_TAU = registry.register("gun_tau", () -> new GunBaseNTItem(WeaponQuality.A_SIDE, new GunConfig()
+                .dura(6_400).draw(10).inspect(10).crosshair(Crosshair.CIRCLE)
+                .rec(new Receiver(0)
+                        .dmg(25F).spreadHipfire(0F).delay(4).auto(true).spread(0F)
+                        .mag(new MagazineBelt().addConfigs(tau_uranium))
+                        .offset(1, -0.0625 * 2.5, -0.25D)
+                        .setupStandardFire().recoil(LAMBDA_RECOIL_TAU))
+                .pp(Lego.LAMBDA_STANDARD_CLICK_PRIMARY)
+                .rp(LAMBDA_TAU_PRIMARY_RELEASE)
+                .ps(LAMBDA_TAU_SECONDARY_PRESS)
+                .rs(LAMBDA_TAU_SECONDARY_RELEASE)
+                .pr(Lego.LAMBDA_STANDARD_RELOAD)
+                .decider(GunStateDecider.LAMBDA_STANDARD_DECIDER)
+                .anim(LAMBDA_TAU_ANIMS).orchestra(Orchestras.ORCHESTRA_TAU)
+        ).setDefaultAmmo(Ammo.TAU_URANIUM, 16));
 
         /*
          * DIE SPULENKANONE. Ein Schuss im Rohr, zwanzig Zuege Nachladen, und sie klemmt oft
@@ -122,6 +175,70 @@ public class XFactoryAccelerator {
      * OHNE MUENZE PASSIERT NICHTS. Der Zaehler laeuft in NI4NIGunItem weiter und fuellt ihn
      * nach.
      */
+    public static BiConsumer<ItemStack, LambdaContext> LAMBDA_RECOIL_TAU = (stack, ctx) ->
+            GunBaseNTItem.setupRecoil(2, (float) (ctx.getPlayer().random.nextGaussian() * 0.5));
+
+    /** Nach dem letzten Schuss der Salve faucht sie einmal ab. */
+    public static BiConsumer<ItemStack, LambdaContext> LAMBDA_TAU_PRIMARY_RELEASE = (stack, ctx) -> {
+        Player spieler = ctx.getPlayer();
+        if(spieler == null) return;
+        if(GunBaseNTItem.getLastAnim(stack, ctx.configIndex) != GunAnimation.CYCLE) return;
+        SoundUtils.playAtVec3(spieler.level, spieler.position(), NtmSoundEvents.GUN_TAU_RELEASE.get(), spieler.getSoundSource());
+    };
+
+    /**
+     * Der Zweitdruck laedt auf -- und zwar nur, wenn ueberhaupt Munition da ist.
+     *
+     * ABWEICHUNG: das Original ruft hier zusaetzlich MagazineBelt.getMagType(stack) mit dem
+     * Kommentar "caches the last loaded ammo". Diese Methode LIEST nur; sie schreibt nichts.
+     * Die Zeile tut also nichts, und eine Zeile, die nichts tut, kommt nicht mit. Gespeichert
+     * wird die Sorte ohnehin beim gewoehnlichen Schuss, ueber getType.
+     */
+    public static BiConsumer<ItemStack, LambdaContext> LAMBDA_TAU_SECONDARY_PRESS = (stack, ctx) -> {
+        Player spieler = ctx.getPlayer();
+        if(spieler == null) return;
+        if(ctx.config.getReceivers(stack)[0].getMagazine(stack).getAmount(stack, ctx.container) <= 0) return;
+        GunBaseNTItem.playAnimation(spieler, stack, GunAnimation.SPINUP, ctx.configIndex);
+    };
+
+    /**
+     * DAS LOSLASSEN. Wer mindestens zehn Zuege gehalten hat, schiesst; je zehn weitere Zuege
+     * ist der Schuss eine Einheit staerker, bis zu dreizehn. Wer zu frueh loslaesst, bekommt
+     * einen Leerschlag.
+     *
+     * Der Schuss nimmt nicht das Magazin der Waffe, sondern tauChargeMag -- und er kostet
+     * Verschleiss nach Staerke, nicht nach Schuss.
+     */
+    public static BiConsumer<ItemStack, LambdaContext> LAMBDA_TAU_SECONDARY_RELEASE = (stack, ctx) -> {
+
+        Player spieler = ctx.getPlayer();
+        if(spieler == null) return;
+        int timer = GunBaseNTItem.getAnimTimer(stack, ctx.configIndex);
+
+        if(timer < 10 || GunBaseNTItem.getLastAnim(stack, ctx.configIndex) != GunAnimation.SPINUP) {
+            GunBaseNTItem.playAnimation(spieler, stack, GunAnimation.CYCLE_DRY, ctx.configIndex);
+            return;
+        }
+
+        GunBaseNTItem.playAnimation(spieler, stack, GunAnimation.ALT_CYCLE, ctx.configIndex);
+        int einheiten = 1 + Math.min(12, timer / 10);
+
+        LivingEntity entity = ctx.entity;
+        int index = ctx.configIndex;
+
+        Receiver primaer = ctx.config.getReceivers(stack)[0];
+        BulletConfig config = tauChargeMag.getFirstConfig(stack, ctx.container);
+
+        Vec3 versatz = primaer.getProjectileOffset(stack);
+        float schaden = Lego.getStandardWearDamage(stack, ctx.config, index) * einheiten * 5F;
+        float streuung = Lego.calcSpread(ctx, stack, primaer, config, true, index, false);
+
+        BulletBeamBase strahl = new BulletBeamBase(entity, config, schaden, streuung, versatz.z, versatz.y, versatz.x);
+        entity.level.addFreshEntity(strahl);
+
+        GunBaseNTItem.setWear(stack, index, Math.min(GunBaseNTItem.getWear(stack, index) + config.wear * einheiten, ctx.config.getDurability(stack)));
+    };
+
     public static BiConsumer<ItemStack, LambdaContext> LAMBDA_RECOIL_COILGUN = (stack, ctx) ->
             GunBaseNTItem.setupRecoil(10, (float) (ctx.getPlayer().random.nextGaussian() * 1.5));
 
@@ -169,6 +286,29 @@ public class XFactoryAccelerator {
      * Die Spulenkanone kippt beim Schuss nach hinten und beim Nachladen zur Seite -- beides
      * derselbe Bus RELOAD beziehungsweise RECOIL, den der Renderer als Drehung auswertet.
      */
+    /**
+     * Die Tau-Kanone hat einen Rotor, der sich beim Aufladen immer schneller dreht: erst
+     * sechs Umdrehungen in drei Sekunden, dann vierzig in zehn. Wer bis dahin nicht losgelassen
+     * hat, hat ein Problem.
+     */
+    public static BiFunction<ItemStack, GunAnimation, BusAnimation> LAMBDA_TAU_ANIMS = (stack, type) -> switch(type) {
+        case EQUIP -> new BusAnimation()
+                .addBus("EQUIP", new BusAnimationSequence().addPos(45, 0, 0, 0).addPos(0, 0, 0, 500, IType.SIN_FULL));
+        case CYCLE -> new BusAnimation()
+                .addBus("RECOIL", new BusAnimationSequence().addPos(0, 0, -0.5, 50).addPos(0, 0, 0, 150, IType.SIN_FULL))
+                .addBus("ROTATE", new BusAnimationSequence().addPos(0, 0, -5, 50, IType.SIN_DOWN).addPos(0, 0, 5, 100, IType.SIN_FULL).addPos(0, 0, 0, 50, IType.SIN_UP));
+        case ALT_CYCLE -> new BusAnimation()
+                .addBus("RECOIL", new BusAnimationSequence().addPos(0, 0, -3, 100, IType.SIN_DOWN).addPos(0, 0, 0, 250, IType.SIN_FULL))
+                .addBus("ROTATE", new BusAnimationSequence().addPos(0, 0, -5, 50, IType.SIN_DOWN).addPos(0, 0, 5, 100, IType.SIN_FULL).addPos(0, 0, 0, 50, IType.SIN_UP));
+        case CYCLE_DRY -> new BusAnimation();
+        case INSPECT -> new BusAnimation()
+                .addBus("EQUIP", new BusAnimationSequence().addPos(2, 0, 0, 150, IType.SIN_DOWN).addPos(0, 0, 0, 100, IType.SIN_FULL))
+                .addBus("ROTATE", new BusAnimationSequence().addPos(0, 0, -360 * 3, 500 * 3, IType.SIN_DOWN));
+        case SPINUP -> new BusAnimation()
+                .addBus("ROTATE", new BusAnimationSequence().addPos(0, 0, 360 * 6, 3000, IType.SIN_UP).addPos(0, 0, 0, 0).addPos(0, 0, 360 * 40, 500 * 20));
+        default -> null;
+    };
+
     public static BiFunction<ItemStack, GunAnimation, BusAnimation> LAMBDA_COILGUN_ANIMS = (stack, type) -> {
         if(type == GunAnimation.EQUIP) return new BusAnimation()
                 .addBus("RELOAD", new BusAnimationSequence().addPos(1, 0, 0, 0).addPos(0, 0, 0, 250));

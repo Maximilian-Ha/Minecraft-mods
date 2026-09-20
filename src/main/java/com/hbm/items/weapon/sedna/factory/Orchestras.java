@@ -1,5 +1,9 @@
 package com.hbm.items.weapon.sedna.factory;
 
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import com.hbm.registry.NtmDamageTypes;
+import com.hbm.particle.helper.PlasmaBlastCreator;
 import com.hbm.items.NtmItems;
 import com.hbm.items.weapon.sedna.GunBaseNTItem;
 import com.hbm.items.weapon.sedna.impl.StingerGunItem;
@@ -85,6 +89,83 @@ public class Orchestras {
      * im ganzen Bausatz: ein Muendungsblitz beim Schuss, ein Ton beim Nachladen. Keine Huelse
      * -- ein Lichtbogen wirft nichts aus.
      */
+    /**
+     * DIE TAU-KANONE, und sie ist die einzige Waffe des Ports, DIE IHREN SCHUETZEN TOETEN KANN.
+     *
+     * Solange aufgeladen wird, frisst sie alle zehn Zuege eine Einheit Munition und laesst
+     * einen Ton mitlaufen, dessen Tonhoehe steigt. Geht die Munition aus, bricht sie ab.
+     *
+     * NACH ZWEIHUNDERT ZUEGEN REISST ES SIE AUSEINANDER: tausend Schaden auf den Schuetzen,
+     * zehntausend Verschleiss auf die Waffe, ein Plasmafaecher und zwei Knalle. Das ist im
+     * Original dasselbe, und es ist der Grund, warum die Ladeschleife bei dreihundert Zuegen
+     * ohnehin verstummt -- da lebt niemand mehr.
+     */
+    public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA_TAU = (stack, ctx) -> {
+
+        LivingEntity entity = ctx.entity;
+        Level level = entity.level;
+        GunAnimation type = GunBaseNTItem.getLastAnim(stack, ctx.configIndex);
+        int timer = GunBaseNTItem.getAnimTimer(stack, ctx.configIndex);
+
+        if(level.isClientSide) {
+
+            AudioWrapper laufend = GunBaseNTItem.loopedSounds.get(entity);
+
+            if(type == GunAnimation.SPINUP && timer < 300) {
+                if(laufend == null || !laufend.isPlaying()) {
+                    AudioWrapper ton = AudioWrapper.getLoopedSound(NtmSoundEvents.GUN_TAU_LOOP.get(), entity.getSoundSource(),
+                            (float) entity.getX(), (float) entity.getY(), (float) entity.getZ(), 1F, 15F, 0.75F, 10);
+                    GunBaseNTItem.loopedSounds.put(entity, ton);
+                    ton.startSound();
+                    ton.attachTo(entity);
+                } else {
+                    laufend.keepAlive();
+                    laufend.updatePitch(0.75F + timer * 0.01F);
+                }
+            } else if(laufend != null && laufend.isPlaying()) {
+                laufend.stopSound();
+            }
+
+            return;
+        }
+
+        if(type == GunAnimation.CYCLE) {
+            if(timer == 0) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_TAU_FIRE.get(), entity.getSoundSource(),
+                    0.5F, 0.9F + entity.random.nextFloat() * 0.2F);
+        }
+
+        if(type == GunAnimation.ALT_CYCLE) {
+            if(timer == 0) SoundUtils.playAtVec3(level, entity.position(), NtmSoundEvents.GUN_TAU_FIRE.get(), entity.getSoundSource(),
+                    0.5F, 0.7F + entity.random.nextFloat() * 0.2F);
+        }
+
+        if(type != GunAnimation.SPINUP) return;
+
+        /* Die Munition geht im Aufladen drauf, eine Einheit je zehn Zuege -- aber nur die
+         * ersten dreizehn Male, denn staerker als dreizehn Einheiten wird der Schuss nicht. */
+        if(timer % 10 == 0 && timer < 130) {
+            IMagazine<?> mag = ctx.config.getReceivers(stack)[0].getMagazine(stack);
+            if(mag.getAmount(stack, ctx.container) <= 0) {
+                GunBaseNTItem.playAnimation(ctx.getPlayer(), stack, GunAnimation.CYCLE_DRY, ctx.configIndex);
+                return;
+            }
+            mag.useUpAmmo(stack, ctx.container, 1);
+        }
+
+        if(timer <= 200) return;
+
+        GunBaseNTItem.playAnimation(ctx.getPlayer(), stack, GunAnimation.CYCLE_DRY, ctx.configIndex);
+
+        entity.hurt(level.damageSources().source(NtmDamageTypes.TAU_BLAST), 1_000F);
+        GunBaseNTItem.setWear(stack, ctx.configIndex, Math.min(GunBaseNTItem.getWear(stack, ctx.configIndex) + 10_000F, ctx.config.getDurability(stack)));
+
+        double augenhoehe = entity.getY() + entity.getEyeHeight();
+        SoundUtils.playAtVec3(level, new Vec3(entity.getX(), augenhoehe, entity.getZ()), NtmSoundEvents.UFO_BLAST.get(), SoundSource.HOSTILE, 5.0F, 0.9F);
+        level.playSound(null, entity.getX(), augenhoehe, entity.getZ(), SoundEvents.FIREWORK_ROCKET_BLAST, SoundSource.BLOCKS, 5.0F, 0.5F);
+
+        PlasmaBlastCreator.composeEffectTriple(level, entity.getX(), augenhoehe, entity.getZ(), 1.0F, 0.8F, 0.5F, 2F);
+    };
+
     /**
      * Spulenkanone und NI4NI teilen sich dieses Orchester. NUR DIE NI4NI BEKOMMT EIN
      * MUENDUNGSFEUER -- die Spulenkanone schiesst mit Magnetfeldern, da brennt nichts. Diese
