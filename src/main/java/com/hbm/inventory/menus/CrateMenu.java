@@ -15,7 +15,7 @@ public class CrateMenu extends MenuBase<CrateBaseBlockEntity> {
     public CrateMenu(int id, Inventory inventory, CrateBaseBlockEntity crate) {
         super(NtmMenuTypes.CRATE.get(), id, crate);
 
-        this.addSlots(crate, 0, crate.getSlotX(), crate.getSlotY(), crate.getRows(), crate.getColumns());
+        this.addSlots(crate, 0, crate.getSlotX(), crate.getSlotY(), crate.getRows(), crate.getColumns(), 18, crate.getRowPitch());
         this.playerInv(inventory, crate.getPlayerInvX(), crate.getPlayerInvY());
     }
 }

@@ -825,6 +825,14 @@ public class NtmBlockEntityTypes {
                             SafeBlockEntity::new,
                             NtmBlocks.SAFE.get())
                     .build(null));
+    /* Eine Blockentitaet fuer beide Sorten -- sie unterscheiden sich nur in der Textur. */
+    public static final Supplier<BlockEntityType<FileCabinetBlockEntity>> FILE_CABINET = BLOCK_ENTITY_TYPES.register(
+            "file_cabinet",
+            () -> BlockEntityType.Builder.of(
+                            FileCabinetBlockEntity::new,
+                            NtmBlocks.FILING_CABINET.get(),
+                            NtmBlocks.FILING_CABINET_STEEL.get())
+                    .build(null));
     public static final Supplier<BlockEntityType<CrateDeshBlockEntity>> CRATE_DESH = BLOCK_ENTITY_TYPES.register(
             "crate_desh",
             () -> BlockEntityType.Builder.of(

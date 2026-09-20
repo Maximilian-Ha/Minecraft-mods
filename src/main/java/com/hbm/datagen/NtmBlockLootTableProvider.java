@@ -423,6 +423,8 @@ public class NtmBlockLootTableProvider extends BlockLootSubProvider {
         this.dropSelf(NtmBlocks.CRATE_IRON.get());
         this.dropSelf(NtmBlocks.CRATE_TUNGSTEN.get());
         this.dropSelf(NtmBlocks.CRATE_STEEL.get());
+        this.dropSelf(NtmBlocks.FILING_CABINET.get());
+        this.dropSelf(NtmBlocks.FILING_CABINET_STEEL.get());
         this.dropSelf(NtmBlocks.SAFE.get());
         this.dropSelf(NtmBlocks.CRATE_DESH.get());
         this.dropSelf(NtmBlocks.CRATE_TEMPLATE.get());

@@ -2898,6 +2898,18 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_crafting_table", has(Items.CRAFTING_TABLE))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "82"));
 
+        /* Der Aktenschrank aus Stahl -- das Rezept des Originals (CraftingManager, Zeile 933):
+         * vier Stahlplatten ums Kreuz und eine Polymerplatte in die Mitte. Die gruene Sorte
+         * hat dort kein Rezept; sie steht nur in den Bauwerken. */
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.FILING_CABINET_STEEL.get(), 1)
+                .pattern(" A ")
+                .pattern("ABA")
+                .pattern(" A ")
+                .define('A', NtmItems.PLATE_STEEL)
+                .define('B', NtmItems.PLATE_POLYMER)
+                .unlockedBy("has_crafting_table", has(Items.CRAFTING_TABLE))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath("hbmsntm", "filing_cabinet_steel"));
+
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.CRATE_DESH.get(), 1)
                 .pattern(" B ")
                 .pattern("BAB")

@@ -848,6 +848,8 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.pileBrick();
         this.pileBlock();
         this.particleOnlyBlock(NtmBlocks.PILE_LOADER, modLoc("block/pile_block"));
+        this.particleOnlyBlock(NtmBlocks.FILING_CABINET, modLoc("block/block_steel"));
+        this.particleOnlyBlock(NtmBlocks.FILING_CABINET_STEEL, modLoc("block/block_steel"));
         this.particleOnlyBlock(NtmBlocks.PILE_VENT, modLoc("block/pile_block"));
         this.particleOnlyBlock(NtmBlocks.PILE_CONTROL, modLoc("block/pile_block"));
 

@@ -22,6 +22,7 @@ import com.hbm.blocks.machine.WatzStructBlock;
 import com.hbm.blocks.generic.ToolConversionBlock;
 import com.hbm.blocks.generic.SteelRoofBlock;
 import com.hbm.blocks.generic.LootDecoBlock;
+import com.hbm.blocks.generic.FileCabinetBlock;
 import com.hbm.blocks.generic.WandLootBlock;
 import com.hbm.blocks.generic.SupplyCrateBlock;
 import com.hbm.blocks.generic.DecoPoleSatelliteReceiverBlock;
@@ -1039,6 +1040,11 @@ public class NtmBlocks {
      * Kernwaffe ueberstehen.
      */
     public static final DeferredBlock<Block> SAFE = registerNew("safe", () -> new CrateBlock(BlockBehaviour.Properties.of().strength(7.5F, 10000.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops(), CrateBlock.Type.SAFE));
+    /* Der Aktenschrank: im Original ein Block mit zwei Metadatensorten, im Port zwei
+     * Anmeldungen derselben Klasse. Haerte und Sprengfestigkeit sind die des Originals
+     * (setHardness(10.0F).setResistance(15.0F)). */
+    public static final DeferredBlock<Block> FILING_CABINET = registerNew("filing_cabinet", () -> new FileCabinetBlock(BlockBehaviour.Properties.of().strength(10.0F, 15.0F).noOcclusion().sound(SoundType.METAL).mapColor(MapColor.COLOR_GREEN).requiresCorrectToolForDrops()));
+    public static final DeferredBlock<Block> FILING_CABINET_STEEL = registerNew("filing_cabinet_steel", () -> new FileCabinetBlock(BlockBehaviour.Properties.of().strength(10.0F, 15.0F).noOcclusion().sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops()));
     public static final DeferredBlock<Block> CRATE_DESH = registerNew("crate_desh", () -> new CrateBlock(BlockBehaviour.Properties.of().strength(0.6F, 6.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops(), CrateBlock.Type.DESH));
     public static final DeferredBlock<Block> CRATE_TEMPLATE = registerNew("crate_template", () -> new CrateBlock(BlockBehaviour.Properties.of().strength(0.6F, 6.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops(), CrateBlock.Type.TEMPLATE));
 

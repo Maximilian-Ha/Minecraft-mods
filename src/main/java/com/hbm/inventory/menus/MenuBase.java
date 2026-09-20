@@ -89,9 +89,14 @@ public class MenuBase<T extends Container> extends AbstractContainerMenu {
     }
 
     public void addSlots(Container container, int from, int x, int y, int rows, int cols, int slotSize) {
+        this.addSlots(container, from, x, y, rows, cols, slotSize, slotSize);
+    }
+
+    /** Wie oben, aber mit getrennten Abstaenden: der Aktenschrank setzt seine zwei Reihen weiter auseinander. */
+    public void addSlots(Container container, int from, int x, int y, int rows, int cols, int colPitch, int rowPitch) {
         for(int row = 0; row < rows; row++) {
             for(int col = 0; col < cols; col++) {
-                this.addSlot(new SlotNonRetarded(container, col + row * cols + from, x + col * slotSize, y + row * slotSize));
+                this.addSlot(new SlotNonRetarded(container, col + row * cols + from, x + col * colPitch, y + row * rowPitch));
             }
         }
     }

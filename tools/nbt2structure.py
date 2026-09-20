@@ -887,6 +887,9 @@ ERSATZ_BEUTE = {
     'hbm:tile.crate_steel': MODID + ':crate_steel',
     'hbm:tile.crate_iron': MODID + ':crate_iron',
     'hbm:tile.safe': MODID + ':safe',
+    # Der Aktenschrank, seit Runde 259 im Port. Er war die einzige Luecke in vier sonst
+    # umsetzbaren Dateien: aircraft_carrier, laboratory, oil_rig und radio_house.
+    'hbm:tile.filing_cabinet': MODID + ':filing_cabinet',
     # 1.7.10 loest einen Blocknamen, der eine Zahl ist, ueber die Blockkennziffer auf
     # (Block.getBlockFromName). 54 ist die Truhe. Die beiden anderen Zahlen, die in den
     # Dateien stehen -- 557 und 683 --, zeigen auf Bloecke, deren Kennziffer nur in der

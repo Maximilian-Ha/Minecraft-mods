@@ -29,7 +29,7 @@ dfcinjector 0,-2.5,0 5
 dfcreceiver 0,-2.5,0 5
 dfcstabilizer 0,-2.5,0 5
 fan 0,-2.5,0 5
-filingcabinet 0,0,0 1
+filingcabinet -1,0.5,-1 4
 floodlight 0,-1.5,0 6.5
 fluidpump 0,-2,0 5
 fractionspacer 0,0,0 3.25

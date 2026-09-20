@@ -12187,3 +12187,81 @@ Erfolgssystem, sondern auf Dinge, die es im Port noch nicht gibt:
 | `digammaUpOnTop` | seinen Vorgänger `digammaKauaiMoho` |
 | `potato` | die Kartoffelbatterie |
 | `SILEX` | `machine_silex` |
+
+## Runde 259 — Der Aktenschrank, und was an ihm hing
+
+`tools/structure-gap.py` hatte seit Runde 256 noch zwei echte Lücken: `filing_cabinet` und
+`wand_logic`. Diese Runde schließt die erste — und der Grund, sie zu schließen, ist messbar.
+
+**Nachgemessen, Datei für Datei:** von den 79 `.nbt`-Dateien des Originals setzte der Umsetzer
+**69** um. Die zehn übrigen scheiterten an genau drei Ursachen:
+
+| Ursache | Dateien |
+|---|---|
+| `wand_loot` zeigt auf `filing_cabinet` | aircraft_carrier, laboratory, oil_rig, radio_house |
+| `wand_logic` fehlt | crane, crane_mod, factory, tower_base |
+| unauflösbare Zahlen-ID / `wand_tandem` | test-rot, test-tandem-core (beides Testdateien) |
+
+Der Aktenschrank stand damit vier Bauwerken im Weg, die sonst vollständig umsetzbar sind. Nach
+dieser Runde sind es **73 von 79**.
+
+### Was er ist
+
+Im Original ein `BlockDecoContainer` mit `TileEntityFileCabinet` — und diese Blockentität stammt
+von `TileEntityCrateBase` ab. Er ist also eine Kiste, mit acht Fächern, Schloss und Spinnen.
+Im Port erbt seine Blockentität deshalb von `CrateBaseBlockEntity`, und das Schloss kommt mit.
+
+**Zwei Schubladen, nacheinander.** Die untere fährt sofort heraus, die obere erst zehn Ticks
+später — das ist der ganze Reiz des Stücks. Die Geräusche kommen aus dem Herausfahren, nicht aus
+dem Öffnen des Fensters; darum zählen `startOpen` und `stopOpen` hier nur die Benutzer, statt
+wie an jeder anderen Kiste einen Ton zu spielen.
+
+**Die Fachreihen stehen 36 Pixel auseinander**, nicht 18: jede Reihe ist eine Schublade, und im
+Fenster steht dazwischen die Front. Dafür hat `CrateBaseBlockEntity` jetzt `getRowPitch()` und
+`MenuBase.addSlots` eine Überladung mit getrennten Abständen. Alle anderen Kisten lassen beides
+bei 18 — die Vorgabe ändert nichts an ihnen.
+
+**Zwei Sorten, eine Blockentität.** Grün und stahlgrau sind im Original zwei Metadatenwerte
+desselben Blocks; im Port sind es zwei Blockanmeldungen, aber dieselbe Blockentitätsart. Welche
+Textur gilt, entscheidet darum der Block unter der Entität, nicht der Darsteller — die Schleife
+in `ClientProxy` legt je Blockentitätsart genau einen Darsteller an, und zwei Texturen in einem
+Darsteller gingen nur so.
+
+Nur die Stahlsorte hat ein Rezept; im Original ist das genauso (`CraftingManager`, Zeile 933).
+Die grüne steht ausschließlich in den Bauwerken.
+
+### Die Drehung ist ausgerechnet, nicht geraten
+
+`RenderFileCabinet` dreht im Original nach `getBlockMetadata() >> 2`: 0→180°, 1→0°, 2→270°,
+3→90°. Was die vier Werte bedeuten, sagt `BlockDecoModel.onBlockPlacedBy` in seinen eigenen
+Kommentaren: 0=Nord, 1=Süd, 2=West, 3=Ost. Daraus wird `NORD 180, OST 90, SUED 0, WEST 270` —
+und genau so steht der Eintrag jetzt in `tools/facing-list.txt`, wo das Blickrichtungs-Tor ihn
+gegen den Port hält.
+
+### Ein Fund des Beutetors
+
+`loot-check.sh` wurde rot: beide neuen Blöcke hatten `requiresCorrectToolForDrops()`, aber
+keinen `mineable`-Tag — sie wären mit keinem Werkzeug gefallen, und ihre Beutetabelle wäre tote
+Ladung gewesen. Nachgetragen, Tor wieder grün.
+
+### Ein Fund im Tor selbst
+
+`inventory-check.sh` wurde ebenfalls rot -- und der Fehler lag nicht am neuen Darsteller,
+sondern in der Vergleichsliste. Dort stand `filingcabinet 0,0,0 1`, also der Standardwert, den
+die Liste einträgt, wenn das Original **keinen** Aufruf hat. Das Original hat aber einen:
+`glTranslated(-1D, 0.5D, -1D)`, `glRotatef(180F)`, `glScalef(4F, 4F, 4F)`.
+
+**Warum die Liste ihn übersah, ist gemessen:** `RenderFileCabinet` ist der **einzige** der 225
+Darsteller des Originals, dessen `renderInventory` `glScalef` benutzt statt der sonst üblichen
+Form `double scale = X; glScaled(scale, scale, scale)`. Der Erzeuger der Liste kennt nur die
+zweite Form und fiel auf den Standardwert zurück. Kein anderer Eintrag der Liste trägt diesen
+Standardwert -- der Fehler ist dieser eine, und er lag still, solange der Aktenschrank nicht
+portiert war: das Tor vergleicht nur Paare, und ohne Gegenstück im Port gibt es kein Paar.
+
+Eintrag berichtigt, Darsteller auf die Zahlen des Originals gesetzt, Tor grün.
+
+### Was offen bleibt
+
+`wand_logic` — der Einstieg in ein rund tausendzeiliges Fallensystem, das vier Bauwerke
+benutzen. Das ist kein Block, den man nachreicht, sondern ein Teilsystem; es bekommt eine eigene
+Runde.

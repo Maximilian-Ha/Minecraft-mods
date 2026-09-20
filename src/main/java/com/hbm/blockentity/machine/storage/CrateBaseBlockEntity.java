@@ -272,6 +272,13 @@ public abstract class CrateBaseBlockEntity extends LockableBaseBlockEntity imple
         this.hasSpiders = buf.readBoolean();
     }
 
+    /**
+     * Der senkrechte Abstand der Fachreihen im Fenster. Jede Kiste setzt ihre Reihen lueckenlos
+     * aneinander -- 18 Pixel, die Fachbreite. Nur der Aktenschrank nicht: seine zwei Reihen sind
+     * zwei Schubladen, zwischen denen im Fenster die Front steht.
+     */
+    public int getRowPitch() { return 18; }
+
     public int getColumns() { return columns; }
     public int getRows() { return rows; }
     public int getSlotX() { return slotX; }

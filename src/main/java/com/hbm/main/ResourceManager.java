@@ -523,6 +523,10 @@ public class ResourceManager {
 
     //CHICAGO PILE
     public static final ResourceLocation PILE_LOADER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/pile/pile_loader.png");
+
+    /* Die zwei Sorten des Aktenschranks: gruen und stahlgrau, sonst dasselbe Modell. */
+    public static final ResourceLocation FILE_CABINET_TEX = NuclearTechMod.withDefaultNamespace("textures/models/storage/file_cabinet.png");
+    public static final ResourceLocation FILE_CABINET_STEEL_TEX = NuclearTechMod.withDefaultNamespace("textures/models/storage/file_cabinet_steel.png");
     public static final ResourceLocation PILE_VENT_TEX = NuclearTechMod.withDefaultNamespace("textures/models/pile/pile_vent.png");
     public static final ResourceLocation PILE_CONTROL_TEX = NuclearTechMod.withDefaultNamespace("textures/models/pile/pile_control.png");
 
@@ -892,6 +896,7 @@ public class ResourceManager {
 
     // CHICAGO PILE
     public static IModelCustom pile_loader;
+    public static IModelCustom file_cabinet;
     public static IModelCustom pile_vent;
     public static IModelCustom pile_control;
 
@@ -1215,6 +1220,7 @@ public class ResourceManager {
         reactor_small_base = new HFRWavefrontObject("models/obj/reactors/reactor_small_base.obj").asVBO();
         reactor_small_rods = new HFRWavefrontObject("models/obj/reactors/reactor_small_rods.obj").asVBO();
         pile_loader = new HFRWavefrontObject("models/obj/pile/pile_loader.obj").asVBO();
+        file_cabinet = new HFRWavefrontObject("models/obj/storage/file_cabinet.obj").asVBO();
         pile_vent = new HFRWavefrontObject("models/obj/pile/pile_vent.obj").asVBO();
         pile_control = new HFRWavefrontObject("models/obj/pile/pile_control.obj").asVBO();
         watz = new HFRWavefrontObject("models/obj/machines/watz.obj").asVBO();

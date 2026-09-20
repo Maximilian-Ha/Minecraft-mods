@@ -41,6 +41,7 @@ RenderCrystallizer 90 0 270 180
 RenderDerrick 180 90 0 270
 RenderExcavator 180 90 0 270
 RenderExposureChamber 90 0 270 180
+RenderFileCabinet 180 90 0 270
 RenderFluidTank 180 90 0 270
 RenderFurnaceIron 180 90 0 270
 RenderFurnaceSteel 180 90 0 270
