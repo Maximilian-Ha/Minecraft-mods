@@ -11,6 +11,10 @@ import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -44,6 +48,25 @@ public class NtmCriteria {
     /** Feuert die Marke fuer diesen Spieler. Der Aufruf, der triggerAchievement ersetzt. */
     public static void marke(ServerPlayer spieler, String kennung) {
         MARKE.get().feuere(spieler, kennung);
+    }
+
+    /**
+     * Feuert die Marke fuer jeden Spieler im Umkreis. Das Original macht das an mehreren
+     * Stellen gleich: eine Kugel um die Anlage ziehen und jeden darin bedenken -- wer
+     * weiter weg stand, hat es nicht miterlebt.
+     */
+    public static void markeImUmkreis(Level level, BlockPos pos, double reichweite, String kennung) {
+        for(ServerPlayer spieler : level.getEntitiesOfClass(ServerPlayer.class, new AABB(pos).inflate(reichweite))) {
+            marke(spieler, kennung);
+        }
+    }
+
+    /** Dasselbe um eine Entitaet herum. */
+    public static void markeImUmkreis(Entity mitte, double reichweite, String kennung) {
+        for(ServerPlayer spieler : mitte.level().getEntitiesOfClass(ServerPlayer.class,
+                mitte.getBoundingBox().inflate(reichweite))) {
+            marke(spieler, kennung);
+        }
     }
 
     public static class MarkeTrigger extends SimpleCriterionTrigger<MarkeTrigger.Bedingung> {

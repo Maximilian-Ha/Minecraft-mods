@@ -11694,3 +11694,21 @@ Vier Erfolge kommen damit nach. Drei Anmerkungen, die beim Bauen sichtbar wurden
 Der Erfolgsbaum steht damit bei **29 von 61**. Was noch fehlt, wartet auf Teilsysteme:
 die vier Bosse, das Digamma-System, die Gerald-Satelliten, der Sojus-Start, der
 ZIRNOX-Reaktor, der Speer und das Messer.
+
+#### CI-Fix zu Runde 249: die Hilfsmethode kam nie an
+
+Drei Fehler, alle derselbe: `cannot find symbol: method markeImUmkreis`. Die Methode war
+zuerst versehentlich in `RBMKBaseBlockEntity` gelandet, sollte nach `NtmCriteria` wandern
+-- und **das Skript, das sie dorthin verschieben sollte, ist auf halbem Weg abgebrochen**.
+Der Teil, der sie aus der Blockentität entfernte, lief; der Teil, der sie in `NtmCriteria`
+eintrug, nicht.
+
+Gesehen hätte man das mit einem Blick: ich habe nach dem Verschieben die *Aufrufstellen*
+geprüft und nicht das *Ziel*. Die Aufrufe standen alle da und sahen richtig aus -- nur gab
+es die Methode nirgends mehr.
+
+**Kein Tor kann das fangen**, obwohl es diesmal nicht an Minecraft liegt: `import-check`
+prüft, ob jeder benutzte **Typ** erreichbar ist, nicht jede benutzte **Methode**. Ein Tor
+für Methodenaufrufe müsste den ganzen Baum typauflösen -- das ist ein Übersetzer, kein
+Tor. Was bleibt, ist die Regel: nach einem Skript, das abbricht, prüfen was davon lief,
+und nicht nur, was man sehen wollte.
