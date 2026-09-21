@@ -13053,3 +13053,44 @@ entfernt, ohne den Rest zu lesen, und zurück blieb „die vier Bosse, das / der
 steht dort die gemessene Liste der neun übrigen, mit den Klassennamen, an denen sie hängen.
 
 **52 von 61.**
+
+## Runde 276 — Der Digamma-Speer: zwei Erfolge aus einer Kernschmelze
+
+Der nächste günstigste Blocker war der Speer — er entsperrt zwei Erfolge auf einmal,
+`digamma_kauai_moho` und den unerreichbaren `digamma_up_on_top`, der auf ihm aufbaut.
+
+`EntitySpear` entsteht, wenn eine RBMK-Kernschmelze einen DRX-Stab erwischt: hundert Blöcke
+über der Anlage, in der Mitte ihres Umrisses. Von dort sinkt er mit 0,2 je Tick herab und sät
+dabei Digamma — jeden Tick eine Explosion vom Radius 7,5 an einer gaußverteilten Stelle im
+Umkreis. Liegt die Stelle näher als zwanzig Blöcke, entsteht ein Schachbrett aus Digamma-Schutt,
+sonst Asche. Jeder Spieler der Welt bekommt dabei 0,05 Digamma — und den Erfolg.
+
+Trifft er auf Grund, wartet er hundert Ticks und verseucht dann **alles**, was in der Welt
+lebt, nicht nur seine Umgebung. Dazu spielt `weapon.dFlash`.
+
+### Zwei Namen, ein Block
+
+Der Gittermustersetzer des Originals verlangt `pribris_digamma`. Den gibt es im Port nicht —
+dachte ich. Gemessen: `ModBlocks.java:2144` ist die einzige Stelle, die `RBMKDebrisDigamma`
+anlegt, und der Port führt genau diese Klasse als `rbmk_debris_digamma`. Es ist derselbe Block,
+nur der Registrierungsname weicht ab. Zu portieren war also nur die **Asche** — und deren
+Textur `ash_digamma.png` lag schon seit einer früheren Runde verwaist im Port, ohne Block, der
+sie benutzt hätte.
+
+Der neue Block fiel prompt durch `tab-check`: ohne Kreativreiter ist er weder im Kreativbau
+noch in JEI auffindbar. Er steht jetzt neben `rbmk_debris_digamma`, wo er hingehört.
+
+### DIGAMMA2 gibt es hier nicht
+
+Das Original unterscheidet beim Verseuchen zwischen `DIGAMMA` und `DIGAMMA2`. Der Port kennt
+nur `DIGAMMA`, und seine `contaminate()` schaut bei Digamma ohnehin nicht auf die Art
+(`ContaminationUtil.java:176`). Beide Aufrufe des Originals gehen deshalb über dieselbe Art —
+ohne Verhaltensunterschied.
+
+### Der Darsteller
+
+`lance.obj` und `lance.png` kommen aus der CE-Abspaltung; der Darsteller verschiebt um +15,
+dreht 180° um X und skaliert zweifach — der Speer hängt also mit der Spitze nach unten,
+fünfzehn Blöcke über seinem eigenen Mittelpunkt.
+
+**54 von 61.**

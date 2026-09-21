@@ -1267,6 +1267,18 @@ public class NtmBlocks {
     
     // E
     public static final DeferredBlock<Block> BALEFIRE =     BLOCKS.register("balefire",     () -> new BalefireBlock(     BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GREEN).replaceable().noCollission().noOcclusion().strength(0F).lightLevel(state -> 15).sound(SoundType.WOOL).pushReaction(PushReaction.DESTROY)));
+    /*
+     * Die Digamma-Asche, Runde 276. Sie ist das, was der Speer hinterlaesst: ein fallender
+     * Block wie Sand, mit derselben Haerte und Sprengfestigkeit wie im Original (0.5 und 150).
+     *
+     * IHRE TEXTUR LAG SCHON IM PORT -- ash_digamma.png, ohne dass ein Block sie benutzt haette.
+     * Eine Textur ohne Block ist dasselbe wie ein Modell ohne Zeichner: sie liegt da und tut
+     * nichts. Jetzt hat sie einen.
+     *
+     * NICHT DABEI: der Ascheschleier, den BlockAshes im Original ueber den Bildschirm legt --
+     * der haengt an einem Client-Zaehler und an der Aschebrille, beides eigene Teilsysteme.
+     */
+    public static final DeferredBlock<Block> ASH_DIGAMMA = register("ash_digamma", () -> new SimpleFallingBlock(BlockBehaviour.Properties.of().strength(0.5F, 150.0F).sound(SoundType.SAND).mapColor(MapColor.COLOR_GRAY)));
     public static final DeferredBlock<Block> FIRE_DIGAMMA = BLOCKS.register("fire_digamma", () -> new DigammaFlameBlock( BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).replaceable().noCollission().noOcclusion().strength(0F, 150F).lightLevel(state -> 10).sound(SoundType.WOOL).pushReaction(PushReaction.DESTROY)));
     public static final DeferredBlock<Block> VOLCANO_CORE =     registerNew("volcano_core",     () -> new VolcanoBlock(BlockBehaviour.Properties.of().strength(-1.0F, 10000.0F).mapColor(MapColor.NETHER)));
     public static final DeferredBlock<Block> VOLCANO_RAD_CORE = registerNew("volcano_rad_core", () -> new VolcanoBlock(BlockBehaviour.Properties.of().strength(-1.0F, 10000.0F).mapColor(DyeColor.GREEN)));

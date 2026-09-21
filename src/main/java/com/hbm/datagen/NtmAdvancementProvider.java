@@ -75,8 +75,8 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
  *
  * DREI DER EINUNDSECHZIG SIND IM ORIGINAL SELBST UNERREICHBAR: tasteofblood, c20_5 und
  * digammaUpOnTop stehen in keinem triggerAchievement-Aufruf und in keiner Zeile des
- * AchievementHandlers. Die ersten beiden stehen hier; digammaUpOnTop haengt im Original an
- * digammaKauaiMoho, und den gibt es im Port noch nicht -- er kommt mit seinem Vorgaenger.
+ * AchievementHandlers. Alle drei stehen hier -- digammaUpOnTop seit Runde 276, als sein
+ * Vorgaenger digammaKauaiMoho mit dem Speer dazukam.
  *
  * GITTERPLAETZE GIBT ES IN 1.21 NICHT MEHR. Das Original setzt jeden Erfolg auf eine
  * Koordinate (x, y); 1.21 legt den Baum selbst aus der Vorgaengerkette. Die Kette ist
@@ -255,7 +255,19 @@ public class NtmAdvancementProvider extends AdvancementProvider {
              */
             AdvancementHolder digammaSee = erfolg(speichern, helper, wurzel, "digamma_see", NtmItems.PARTICLE_DIGAMMA.get(), false, "digamma_see");
             AdvancementHolder digammaFeel = erfolg(speichern, helper, digammaSee, "digamma_feel", NtmItems.PARTICLE_DIGAMMA.get(), false, "digamma_feel");
-            erfolg(speichern, helper, digammaFeel, "digamma_know", NtmItems.PARTICLE_DIGAMMA.get(), true, "digamma_know");
+            AdvancementHolder digammaKnow = erfolg(speichern, helper, digammaFeel, "digamma_know", NtmItems.PARTICLE_DIGAMMA.get(), true, "digamma_know");
+
+            /* Der Speer, Runde 276. Die Marke setzt DigammaSpear, waehrend er sinkt.
+             *
+             * UP_ON_TOP IST DER DRITTE DER IM ORIGINAL UNERREICHBAREN -- er steht in keinem
+             * triggerAchievement-Aufruf und in keiner Zeile des AchievementHandlers. Er stand
+             * bis hierher nicht hier, weil ihm sein Vorgaenger fehlte; jetzt hat er ihn.
+             *
+             * Beide nehmen im Original achievement_icon mit einem eigenen Merkmal als Sinnbild.
+             * Den Meta-Gegenstand hat der Port nicht, also steht dort das Digamma-Teilchen --
+             * dasselbe Sinnbild wie bei den drei Erfolgen davor. */
+            AdvancementHolder kauaiMoho = erfolg(speichern, helper, digammaKnow, "digamma_kauai_moho", NtmItems.PARTICLE_DIGAMMA.get(), true, "digamma_kauai_moho");
+            unerreichbar(speichern, helper, kauaiMoho, "digamma_up_on_top", NtmItems.PARTICLE_DIGAMMA.get(), true);
 
             erfolg(speichern, helper, wurzel, "inferno", NtmItems.CANISTER_NAPALM.get(), true, "inferno");
             erfolg(speichern, helper, centrifuge, "chicago_pile", NtmItems.BILLET_PU_MIX.get(), false);

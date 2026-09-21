@@ -30,6 +30,9 @@ public class ResourceManager {
     public static final ResourceLocation CHARGE_DYNAMITE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/bombs/charge_dynamite.png");
     public static final ResourceLocation CHARGE_MINER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/bombs/charge_miner.png");
 
+    /* Der Digamma-Speer, Runde 276. */
+    public static final ResourceLocation LANCE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/effect/lance.png");
+
     public static final ResourceLocation NUKE_GADGET_TEX = NuclearTechMod.withDefaultNamespace("textures/models/bombs/nuke_gadget.png");
     public static final ResourceLocation NUKE_LITTLE_BOY_TEX = NuclearTechMod.withDefaultNamespace("textures/models/bombs/nuke_little_boy.png");
     public static final ResourceLocation NUKE_FAT_MAN_TEX = NuclearTechMod.withDefaultNamespace("textures/models/bombs/nuke_fatman.png");
@@ -582,6 +585,7 @@ public class ResourceManager {
     public static IModelCustom mine_fat;
     public static IModelCustom charge_c4;
     public static IModelCustom charge_dynamite;
+    public static IModelCustom lance;
 
     // Tank
     public static IModelCustom bigasstank;
@@ -926,6 +930,7 @@ public class ResourceManager {
         mine_fat = new HFRWavefrontObject("models/obj/bomb/mine_fat.obj").asVBO();
         charge_c4 = new HFRWavefrontObject("models/obj/bomb/charge_c4.obj").asVBO();
         charge_dynamite = new HFRWavefrontObject("models/obj/bomb/charge_dynamite.obj").asVBO();
+        lance = new HFRWavefrontObject("models/obj/effect/lance.obj").asVBO();
 
         bigasstank = new HFRWavefrontObject("models/obj/machines/bigasstank.obj").asVBO();
         fluid_tank = new HFRWavefrontObject("models/obj/machines/fluid_tank.obj").asVBO();

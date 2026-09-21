@@ -730,6 +730,7 @@ public class NtmSoundDefinitionsProvider extends SoundDefinitionsProvider {
         this.add(NtmSoundEvents.WEAPON_BANG, SoundDefinition.definition().with(sound("hbmsntm:weapon/bang")));
         this.add(NtmSoundEvents.WEAPON_SLICE, SoundDefinition.definition().with(sound("hbmsntm:weapon/slice")));
         this.add(NtmSoundEvents.WEAPON_KAPENG, SoundDefinition.definition().with(sound("hbmsntm:weapon/kapeng")));
+        this.add(NtmSoundEvents.WEAPON_DFLASH, SoundDefinition.definition().with(sound("hbmsntm:weapon/dflash")));
         this.add(NtmSoundEvents.RADAWAY, SoundDefinition.definition().with(sound("hbmsntm:tool/radaway")));
         this.add(NtmSoundEvents.GEIGER1, SoundDefinition.definition().with(sound("hbmsntm:tool/geiger1")));
         this.add(NtmSoundEvents.GEIGER2, SoundDefinition.definition().with(sound("hbmsntm:tool/geiger2")));

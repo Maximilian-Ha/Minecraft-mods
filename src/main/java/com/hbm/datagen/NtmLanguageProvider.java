@@ -859,6 +859,10 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("advancements.hbmsntm.fiend.description", "Be mean.");
         this.add("advancements.hbmsntm.fiend2.title", "Delinquent 2: Delinquent Harder");
         this.add("advancements.hbmsntm.fiend2.description", "Be meaner.");
+        this.add("advancements.hbmsntm.digamma_kauai_moho.title", "SING, SING ME THE SONG OF THE KAUAI MOHO");
+        this.add("advancements.hbmsntm.digamma_kauai_moho.description", "Everything is awful, here's some hot choccy.");
+        this.add("advancements.hbmsntm.digamma_up_on_top.title", "ADMIRE ME, ADMIRE MY HOME");
+        this.add("advancements.hbmsntm.digamma_up_on_top.description", "Admire my son, he's my clone.");
         this.add("advancements.hbmsntm.watz.title", "The Power of Element-126");
         this.add("advancements.hbmsntm.watz.description", "F\u00f3lkvangr fields possibly included.");
         this.add("advancements.hbmsntm.rbmk.title", "3.6 Roentegen?");
@@ -2784,6 +2788,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.NTM_DIRT, "Dirt");
         this.add(NtmBlocks.TOXIC_BLOCK, "Toxic Sludge");
         this.add(NtmBlocks.SULFURIC_ACID_BLOCK, "Sulfuric Acid");
+        this.add(NtmBlocks.ASH_DIGAMMA, "Digamma Ash");
         this.add(NtmBlocks.WOOD_BARRIER, "Wooden Barrier");
         this.add(NtmBlocks.WOOD_STRUCTURE_ROOF, "Wooden Roof");
         this.add(NtmBlocks.WOOD_STRUCTURE_SCAFFOLD, "Wooden Scaffold");

@@ -394,6 +394,7 @@ public class ClientProxy extends ServerProxy {
         EntityRenderers.register(NtmEntityTypes.BOMBER.get(), RenderBomber::new);
         EntityRenderers.register(NtmEntityTypes.TOM.get(), RenderTom::new);
         EntityRenderers.register(NtmEntityTypes.RUBBLE.get(), RenderRubble::new);
+        EntityRenderers.register(NtmEntityTypes.DIGAMMA_SPEAR.get(), RenderDigammaSpear::new);
         EntityRenderers.register(NtmEntityTypes.SHRAPNEL.get(), RenderShrapnel::new);
         EntityRenderers.register(NtmEntityTypes.BOXCAR.get(), RenderBoxcar::new);
         EntityRenderers.register(NtmEntityTypes.DUCHESS_GAMBIT.get(), RenderDuchessGambit::new);

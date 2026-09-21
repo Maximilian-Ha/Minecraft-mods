@@ -1,5 +1,6 @@
 package com.hbm.entity;
 
+import com.hbm.entity.effect.DigammaSpear;
 import com.hbm.entity.effect.BlackHole;
 import com.hbm.entity.grenade.Dynamite;
 import com.hbm.entity.grenade.GrenadeUniversal;
@@ -79,6 +80,9 @@ public class NtmEntityTypes {
     /* Runde 42: die Truemmer einer Kernschmelze. Die Masse setzt jede Entitaet selbst nach ihrem Typ. */
     public static final DeferredHolder<EntityType<?>, EntityType<RBMKDebris>> RBMK_DEBRIS = ENTITY_TYPES.register("rbmk_debris", () -> EntityType.Builder.<RBMKDebris>of(RBMKDebris::new, MobCategory.MISC).noSummon().setTrackingRange(128).sized(1.0F, 1.0F).build("rbmk_debris"));
     public static final DeferredHolder<EntityType<?>, EntityType<ZirnoxDebris>> ZIRNOX_DEBRIS = ENTITY_TYPES.register("zirnox_debris", () -> EntityType.Builder.<ZirnoxDebris>of(ZirnoxDebris::new, MobCategory.MISC).noSummon().setTrackingRange(128).sized(1.0F, 1.0F).build("zirnox_debris"));
+    /* Der Digamma-Speer, Runde 276. Sichtweite wie im Original weit ueber dem Ueblichen --
+     * er ist zehn Bloecke hoch und soll von weitem zu sehen sein. */
+    public static final DeferredHolder<EntityType<?>, EntityType<DigammaSpear>> DIGAMMA_SPEAR = ENTITY_TYPES.register("digamma_spear", () -> EntityType.Builder.<DigammaSpear>of(DigammaSpear::new, MobCategory.MISC).noSummon().setTrackingRange(512).sized(2.0F, 10.0F).build("digamma_spear"));
     public static final DeferredHolder<EntityType<?>, EntityType<Sawblade>> SAWBLADE = ENTITY_TYPES.register("sawblade", () -> EntityType.Builder.<Sawblade>of(Sawblade::new, MobCategory.MISC).noSummon().setTrackingRange(250).sized(1.0F, 1.0F).build("sawblade"));
     public static final DeferredHolder<EntityType<?>, EntityType<Cog>> COG = ENTITY_TYPES.register("cog", () -> EntityType.Builder.<Cog>of(Cog::new, MobCategory.MISC).noSummon().setTrackingRange(250).sized(1.0F, 1.0F).build("cog"));
     public static final DeferredHolder<EntityType<?>, EntityType<Mist>> MIST = ENTITY_TYPES.register("mist", () -> EntityType.Builder.<Mist>of(Mist::new, MobCategory.MISC).noSummon().fireImmune().setTrackingRange(250).sized(1.0F, 1.0F).build("mist"));

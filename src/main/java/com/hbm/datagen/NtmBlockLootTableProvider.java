@@ -404,6 +404,8 @@ public class NtmBlockLootTableProvider extends BlockLootSubProvider {
         /* Die vier Haftladungen fallen nicht: wer sie zerschlaegt, zuendet sie. Nur der
          * Entschaerfer gibt sie zurueck, und der legt den Gegenstand selbst hin
          * (ChargeBaseBlock.onScrew). Im Original steht dafuer getItemDropped -> null. */
+        /* Die Digamma-Asche faellt wie Sand von selbst -- und laesst sich auch abbauen. */
+        this.dropSelf(NtmBlocks.ASH_DIGAMMA.get());
         this.add(NtmBlocks.CHARGE_DYNAMITE.get(), noDrop());
         this.add(NtmBlocks.CHARGE_MINER.get(), noDrop());
         this.add(NtmBlocks.CHARGE_C4.get(), noDrop());

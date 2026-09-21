@@ -1,5 +1,6 @@
 package com.hbm.blockentity.machine.rbmk;
 
+import com.hbm.entity.effect.DigammaSpear;
 import api.hbm.fluidmk2.FluidNetMK2;
 import api.hbm.fluidmk2.FluidNode;
 import api.hbm.fluidmk2.IFluidReceiverMK2;
@@ -379,6 +380,17 @@ public abstract class RBMKBaseBlockEntity extends LoadedBaseBlockEntity implemen
 
         columns.clear();
         pipes.clear();
+        /* Lag ein DRX-Stab in der Anlage, faellt aus hundert Bloecken Hoehe der Digamma-Speer.
+         * So steht es im Original (TileEntityRBMKBase.java:559-565), unmittelbar vor dem
+         * Zuruecksetzen der beiden Kennzeichen. */
+        if(digamma && this.level instanceof ServerLevel serverLevel) {
+            DigammaSpear speer = new DigammaSpear(serverLevel);
+            /* In der MITTE der Anlage, nicht an dieser Saeule: das Original nimmt avgX/avgZ,
+             * dieselben Werte, mit denen daneben die Pilzwolke gesetzt wird. */
+            speer.setPos((minX + maxX) / 2D + 0.5D, this.getBlockPos().getY() + 100D, (minZ + maxZ) / 2D + 0.5D);
+            serverLevel.addFreshEntity(speer);
+        }
+
         digamma = false;
     }
 

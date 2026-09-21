@@ -488,6 +488,7 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.blockItem(NtmBlocks.CONCRETE_PILLAR);
         this.simpleCubeAllBlock(NtmBlocks.CONCRETE_REBAR);
         this.simpleCubeAllBlock(NtmBlocks.CONCRETE_SUPER_BROKEN);
+        this.simpleCubeAllBlock(NtmBlocks.ASH_DIGAMMA);
         this.registerUberConcrete();
 
         this.registerBarbedWire();

@@ -1188,6 +1188,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.RBMK_DEBRIS_BURNING);
                         output.accept(NtmBlocks.RBMK_DEBRIS_RADIATING);
                         output.accept(NtmBlocks.RBMK_DEBRIS_DIGAMMA);
+                        output.accept(NtmBlocks.ASH_DIGAMMA);
                         output.accept(NtmBlocks.GAS_RADON);
                         output.accept(NtmBlocks.GAS_RADON_DENSE);
                         output.accept(NtmBlocks.GAS_RADON_TOMB);
