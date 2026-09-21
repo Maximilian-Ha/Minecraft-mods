@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import com.hbm.blocks.NtmBlocks;
 import com.hbm.inventory.MetaHelper;
 import com.hbm.items.food.DrinkItem;
+import com.hbm.items.machine.BatteryPackItem.BatteryPackType;
 import com.hbm.items.NtmItems;
 import com.hbm.main.NuclearTechMod;
 
@@ -72,8 +73,8 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
  * Koordinate (x, y); 1.21 legt den Baum selbst aus der Vorgaengerkette. Die Kette ist
  * uebernommen, die Koordinaten entfallen ersatzlos.
  *
- * NICHT DABEI: achSILEX -- machine_silex gibt es im Port nicht -- und achPotato, dem die
- * Kartoffelbatterie fehlt. achChicagoPile steht seit Runde 258 dabei: sein Symbol war der
+ * NICHT DABEI: achSILEX -- machine_silex gibt es im Port nicht. achPotato kam in Runde 274
+ * dazu: die Kartoffelbatterien sind dort in BatteryPackType nachgetragen. achChicagoPile steht seit Runde 258 dabei: sein Symbol war der
  * Grund fuer die Zurueckstellung, nicht sein Ausloeser, und ein Symbol laesst sich
  * ersetzen.
  *
@@ -197,6 +198,12 @@ public class NtmAdvancementProvider extends AdvancementProvider {
              * Elternteil); in 1.21 braucht jeder Erfolg einen, also die Wurzel. Kein
              * Herausforderungs-Rahmen -- setSpecial fehlt dort. */
             erfolg(speichern, helper, wurzel, "some_wounds", NtmItems.INJECTOR_KNIFE.get(), false, "some_wounds");
+
+            /* Die grosse Kartoffelbatterie. Im Original ein Bau-Erfolg ohne Vorgaenger, mit
+             * Herausforderungs-Rahmen; die Marke setzt BatteryPackItem, sobald sie im
+             * Inventar liegt -- das ist dasselbe, was Forges Bau-Erkennung dort abfaengt. */
+            erfolg(speichern, helper, wurzel, "potato",
+                    MetaHelper.newStack(NtmItems.BATTERY_PACK.get(), 1, BatteryPackType.BATTERY_POTATOS), true, "potato");
             erfolg(speichern, helper, wurzel, "stratum", NtmBlocks.STONE_GNEISS.get(), true, "stratum");
             erfolg(speichern, helper, wurzel, "hidden", NtmItems.MP_WARHEAD_15_BOXCAR.get(), false, "hidden");
             erfolg(speichern, helper, wurzel, "omega12", NtmItems.PARTICLE_DIGAMMA.get(), true, "omega12");

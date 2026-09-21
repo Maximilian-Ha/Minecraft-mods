@@ -41,6 +41,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.crafting.CompoundIngredient;
+import com.hbm.items.machine.BatteryPackItem.BatteryPackType;
 import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 import net.neoforged.neoforge.registries.DeferredItem;
 
@@ -5505,6 +5506,25 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .requires(NtmItems.DUCTTAPE.get())
                 .unlockedBy("has_stick_c4", has(NtmItems.STICK_C4.get()))
                 .save(recipeOutput, NuclearTechMod.withDefaultNamespace("charge_c4"));
+
+        /* Die beiden Kartoffelbatterien, Runde 274. Beide entstehen VOLL -- das Original
+         * baut sie mit ItemBattery.getFullBattery (CraftingManager.java:537-538), denn
+         * aufladen lassen sie sich nicht (Ladetempo null). */
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC,
+                        BatteryPackItem.makeFullBattery(MetaHelper.newStack(NtmItems.BATTERY_PACK.get(), 1, BatteryPackType.BATTERY_POTATO)))
+                .requires(Items.POTATO)
+                .requires(NtmItems.WIRE_ALUMINIUM.get())
+                .requires(NtmItems.WIRE_COPPER.get())
+                .unlockedBy("has_wire_copper", has(NtmItems.WIRE_COPPER.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("battery_potato"));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC,
+                        BatteryPackItem.makeFullBattery(MetaHelper.newStack(NtmItems.BATTERY_PACK.get(), 1, BatteryPackType.BATTERY_POTATOS)))
+                .requires(DataComponentIngredient.of(false, NtmDataComponents.META, BatteryPackType.BATTERY_POTATO.ordinal(), NtmItems.BATTERY_PACK.get()))
+                .requires(NtmItems.TURRET_CHIP.get())
+                .requires(Items.REDSTONE)
+                .unlockedBy("has_turret_chip", has(NtmItems.TURRET_CHIP.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("battery_potatos"));
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.CHARGE_MINER.get(), 1)
                 .pattern(" F ").pattern("FCF").pattern(" F ")

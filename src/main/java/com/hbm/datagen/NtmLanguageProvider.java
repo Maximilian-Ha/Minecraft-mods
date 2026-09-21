@@ -853,6 +853,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("advancements.hbmsntm.sulfuric.title", "I should not have dipped my balls in sulfuric acid.");
         /* Die Beschreibung ist im Original leer (achievement.sulfuric.desc= ohne Wert). */
         this.add("advancements.hbmsntm.sulfuric.description", "");
+        this.add("advancements.hbmsntm.potato.title", "Rogue AI");
+        this.add("advancements.hbmsntm.potato.description", "You stabbed me! What is WRONG with yo-WOOOAAH");
         this.add("advancements.hbmsntm.watz.title", "The Power of Element-126");
         this.add("advancements.hbmsntm.watz.description", "F\u00f3lkvangr fields possibly included.");
         this.add("advancements.hbmsntm.rbmk.title", "3.6 Roentegen?");
@@ -1532,6 +1534,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.BATTERY_PACK, this.getName(BatteryPackType.CAPACITOR_TANTALUM), "Tantalum Capacitor");
         this.add(NtmItems.BATTERY_PACK, this.getName(BatteryPackType.CAPACITOR_BISMUTH), "Bismuth Capacitor");
         this.add(NtmItems.BATTERY_PACK, this.getName(BatteryPackType.CAPACITOR_SPARK), "Spark Capacitor");
+        this.add(NtmItems.BATTERY_PACK, this.getName(BatteryPackType.BATTERY_POTATO), "Potato Battery");
+        this.add(NtmItems.BATTERY_PACK, this.getName(BatteryPackType.BATTERY_POTATOS), "PotatOS");
         this.add("item.hbmsntm.obj_battery_sc.desc", "Discharge rate: %s");
         this.add(NtmItems.BATTERY_SC, this.getName(BatterySCType.EMPTY), "Empty Self-Charging Battery");
         this.add(NtmItems.BATTERY_SC, this.getName(BatterySCType.WASTE), "Spent Fuel Self-Charging Battery");

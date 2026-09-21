@@ -12966,3 +12966,46 @@ Schleimball selbst, was ohnehin näher an dem liegt, was man tun muss. Vorgänge
 Original `slimeball`.
 
 **49 von 61.**
+
+## Runde 274 — Die Kartoffel, und wieder ein Meta-Gegenstand
+
+`achPotato` war der letzte Blocker, den ich für „die ganze Batteriefamilie fehlt" gehalten
+hatte. Auch das war falsch gemessen — zum zweiten Mal aus demselben Grund.
+
+### Dieselbe Falle, dasselbe Muster
+
+Die gewöhnlichen Batterien **gibt es** im Port: `battery_redstone` bis `battery_quantum` und
+sechs Kondensatoren, alle als `BatteryPackItem.BatteryPackType`. Ein Meta-Gegenstand, also
+wieder kein Registriername — und wieder an der Suche vorbei.
+
+Nach Runde 271 ist das der zweite Fall. Die Regel, die daraus folgt und die jetzt hier steht:
+**bei einem Namen aus dem Original, den man im Port nicht findet, ist die erste Frage nicht
+„fehlt er?", sondern „ist er ein Eintrag in einer Aufzählung?"** Die Meta-Gegenstände sind
+genau die Stellen, an denen 1.7.10-Namen keine Registriernamen mehr sind.
+
+Gefehlt haben also nur die beiden Kartoffeln.
+
+### Warum sie am Ende der Liste stehen
+
+Der Platz in dieser Aufzählung **ist** das Metadatum am Stapel. Ein Eintrag in der Mitte würde
+jeden dahinter verschieben — und damit jede Batterie in jeder gespeicherten Welt. Angehängt
+wird nichts verschoben.
+
+Das hatte eine Nebenwirkung: `isCapacitor()` las bis hierher die Reihenfolge ab
+(`ordinal() > BATTERY_QUANTUM.ordinal()`), und die beiden Kartoffeln hinter den Kondensatoren
+wären dadurch selbst zu Kondensatoren geworden — sichtbar am Modell, das der Sockel dafür
+zeichnet. Jetzt trägt jeder Eintrag die Antwort als eigenes Feld.
+
+### PotatOS spricht
+
+Die große Kartoffelbatterie meldet sich alle 200 bis 300 Ticks zu Wort, solange sie Ladung hat
+und in der Hand liegt — acht Ansagen, eine davon zufällig, und die **Tonhöhe hängt am
+Ladestand**: leer klingt sie tief, voll hoch. So steht es in `ItemPotatos.onUpdate`.
+
+Der Wartezähler liegt am Stapel, nicht im Gegenstand: ein Gegenstand ist ein Singleton, und
+zwei Kartoffeln im selben Rucksack sollen nicht im Gleichtakt reden. Das Original legt ihn aus
+demselben Grund ins NBT des Stapels.
+
+Beide entstehen **voll** — aufladen lassen sie sich nicht, ihr Ladetempo ist null.
+
+**50 von 61.**

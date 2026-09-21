@@ -713,6 +713,18 @@ public class NtmSoundDefinitionsProvider extends SoundDefinitionsProvider {
         this.add(NtmSoundEvents.TECH_BOOP, SoundDefinition.definition()
                 .with(sound("hbmsntm:tool/tech_boop"))
         );
+        /* Die acht Ansagen der Kartoffelbatterie -- im Original liegen sie unter
+         * hbm:potatos.random als Gruppe von randresponse0 bis randresponse7. */
+        this.add(NtmSoundEvents.POTATOS, SoundDefinition.definition()
+                .with(sound("hbmsntm:potatos/randresponse0"))
+                .with(sound("hbmsntm:potatos/randresponse1"))
+                .with(sound("hbmsntm:potatos/randresponse2"))
+                .with(sound("hbmsntm:potatos/randresponse3"))
+                .with(sound("hbmsntm:potatos/randresponse4"))
+                .with(sound("hbmsntm:potatos/randresponse5"))
+                .with(sound("hbmsntm:potatos/randresponse6"))
+                .with(sound("hbmsntm:potatos/randresponse7"))
+        );
         this.add(NtmSoundEvents.SUIT_BATTERY, SoundDefinition.definition().with(sound("hbmsntm:tool/battery")));
         this.add(NtmSoundEvents.SYRINGE, SoundDefinition.definition().with(sound("hbmsntm:tool/stim")));
         this.add(NtmSoundEvents.RADAWAY, SoundDefinition.definition().with(sound("hbmsntm:tool/radaway")));

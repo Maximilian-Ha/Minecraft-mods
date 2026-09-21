@@ -257,6 +257,8 @@ public class NtmSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> TURRET_HOWARD_RELOAD = reg("turret.howard_reload");
     public static final DeferredHolder<SoundEvent, SoundEvent> TURRET_CHEKHOV_FIRE = reg("turret.chekhov_fire");
     public static final DeferredHolder<SoundEvent, SoundEvent> TECH_BOOP = reg("item.tech_boop"); // boop
+    /* Die Kartoffelbatterie, Runde 274: acht Ansagen, eine davon zufaellig. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> POTATOS = reg("item.potatos");
     public static final DeferredHolder<SoundEvent, SoundEvent> GEIGER1 = reg("item.geiger1");
     public static final DeferredHolder<SoundEvent, SoundEvent> GEIGER2 = reg("item.geiger2");
     public static final DeferredHolder<SoundEvent, SoundEvent> GEIGER3 = reg("item.geiger3");

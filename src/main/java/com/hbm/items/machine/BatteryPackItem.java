@@ -17,6 +17,13 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import com.hbm.registry.NtmSoundEvents;
+import com.hbm.registry.NtmCriteria;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.item.TooltipFlag;
 
 import java.util.List;
@@ -37,32 +44,60 @@ public class BatteryPackItem extends EnumMultiItem implements IBatteryItem {
         CAPACITOR_NIOBIUM	("capacitor_niobium",	   100_000L, true),
         CAPACITOR_TANTALUM	("capacitor_tantalum",	   500_000L, true),
         CAPACITOR_BISMUTH	("capacitor_bismuth",	 2_500_000L, true),
-        CAPACITOR_SPARK		("capacitor_spark",		10_000_000L, true);
+        CAPACITOR_SPARK		("capacitor_spark",		10_000_000L, true),
+
+        /*
+         * DIE BEIDEN KARTOFFELN, RUNDE 274. Sie stehen am ENDE und nicht bei den uebrigen
+         * Batterien, obwohl sie dort hingehoeren: der Platz in dieser Aufzaehlung ist das
+         * Metadatum am Stapel. Wer einen Eintrag in der Mitte einfuegt, verschiebt jeden
+         * dahinter -- und damit jede Batterie in jeder gespeicherten Welt. Angehaengt wird
+         * nichts verschoben.
+         *
+         * Ihre Zahlen stehen so im Original (ModItems.java:3693-3694): tausend und
+         * fuenfhunderttausend HE, Ladetempo NULL -- beide lassen sich nicht aufladen, sie
+         * geben nur ab.
+         */
+        BATTERY_POTATO		("battery_potato",		    1_000L, 0L, 100L),
+        BATTERY_POTATOS		("battery_potatos",		  500_000L, 0L, 100L);
 
         public final ResourceLocation texture;
         public final long capacity;
         public final long chargeRate;
         public final long dischargeRate;
+        /** Kondensator statt Batterie -- frueher an der Reihenfolge abgelesen, siehe unten. */
+        public final boolean kondensator;
 
         BatteryPackType(String tex, long dischargeRate, boolean capacitor) {
             this(tex,
                     capacitor ? (dischargeRate * 20 * 30) : (dischargeRate * 20 * 60 * 15),
                     capacitor ? dischargeRate : dischargeRate * 10,
-                    dischargeRate);
+                    dischargeRate,
+                    capacitor);
         }
 
         BatteryPackType(String tex, long dischargeRate, long duration) {
-            this(tex, dischargeRate * duration, dischargeRate * 10, dischargeRate);
+            this(tex, dischargeRate * duration, dischargeRate * 10, dischargeRate, false);
         }
 
         BatteryPackType(String tex, long capacity, long chargeRate, long dischargeRate) {
+            this(tex, capacity, chargeRate, dischargeRate, false);
+        }
+
+        BatteryPackType(String tex, long capacity, long chargeRate, long dischargeRate, boolean kondensator) {
             this.texture = NuclearTechMod.withDefaultNamespace("textures/models/machines/" + tex + ".png");
             this.capacity = capacity;
             this.chargeRate = chargeRate;
             this.dischargeRate = dischargeRate;
+            this.kondensator = kondensator;
         }
 
-        public boolean isCapacitor() { return this.ordinal() > BATTERY_QUANTUM.ordinal(); }
+        /*
+         * FRUEHER STAND HIER ordinal() > BATTERY_QUANTUM.ordinal(). Das ging, solange die
+         * Kondensatoren die letzten der Liste waren -- mit den beiden Kartoffeln dahinter
+         * waeren sie ploetzlich auch Kondensatoren geworden. Jetzt traegt jeder Eintrag die
+         * Antwort selbst.
+         */
+        public boolean isCapacitor() { return this.kondensator; }
     }
 
     public BatteryPackItem(Properties properties) {
@@ -178,6 +213,57 @@ public class BatteryPackItem extends EnumMultiItem implements IBatteryItem {
         TagsUtil.putCustomData(stack, tag);
         return stack;
     }
+
+    /**
+     * Die grosse Kartoffelbatterie meldet sich zu Wort, solange sie noch Ladung hat.
+     *
+     * Portiert aus 1.7.10: com.hbm.items.special.ItemPotatos.onUpdate. Nur die GROSSE spricht
+     * -- die kleine ist dort eine gewoehnliche ItemBattery. Die Tonhoehe haengt am Ladestand:
+     * leer klingt sie tief, voll hoch (Ladung/Hoechstladung * 0,5 + 0,5).
+     *
+     * DER ZAEHLER STEHT AM STAPEL, nicht im Gegenstand: ein Gegenstand ist ein Singleton, und
+     * zwei Kartoffeln im selben Rucksack sollen nicht im Gleichtakt reden. Das Original legt
+     * ihn aus demselben Grund ins NBT des Stapels.
+     *
+     * NUR IN DER HAND. Das Original prueft getHeldItem() == stack; hier ist das der Fall,
+     * wenn der Gegenstand als ausgewaehlt gemeldet wird.
+     */
+    @Override
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
+
+        if(level.isClientSide) return;
+        if(MetaHelper.getMeta(stack) != BatteryPackType.BATTERY_POTATOS.ordinal()) return;
+        if(!(entity instanceof Player spieler)) return;
+
+        /* Der Erfolg haengt am Besitz, nicht am Tragen: im Original ist er ein Bau-Erfolg
+         * (AchievementHandler.craftingAchievements), und die faengt Forge ueber das Inventar
+         * ab. Darum steht die Marke vor der Pruefung auf "in der Hand". */
+        if(spieler instanceof ServerPlayer serverSpieler) NtmCriteria.marke(serverSpieler, "potato");
+
+        if(!selected) return;
+
+        long ladung = this.getCharge(stack);
+        if(ladung <= 0L) return;
+
+        CompoundTag tafel = TagsUtil.getCustomData(stack);
+        int wartezeit = tafel.getInt(UHR_KEY);
+
+        if(wartezeit > 0) {
+            tafel.putInt(UHR_KEY, wartezeit - 1);
+            TagsUtil.putCustomData(stack, tafel);
+            return;
+        }
+
+        float hoehe = (float) ladung / (float) this.getMaxCharge(stack) * 0.5F + 0.5F;
+        level.playSound(null, spieler.getX(), spieler.getY(), spieler.getZ(),
+                NtmSoundEvents.POTATOS.get(), SoundSource.PLAYERS, 1.0F, hoehe);
+
+        tafel.putInt(UHR_KEY, 200 + level.random.nextInt(100));
+        TagsUtil.putCustomData(stack, tafel);
+    }
+
+    /** Wie lange die grosse Kartoffel noch schweigt. */
+    private static final String UHR_KEY = "PotatoTimer";
 
     @Override
     public void getSubItems(Item item, List<ItemStack> stacks) {
