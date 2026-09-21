@@ -193,6 +193,11 @@ jobs:
           chmod +x ./tools/projmeth-check.sh
           ./tools/projmeth-check.sh
 
+      - name: Check NBT super calls
+        run: |
+          chmod +x ./tools/nbtsuper-check.sh
+          ./tools/nbtsuper-check.sh
+
       - name: Check forward references
         run: |
           chmod +x ./tools/forward-check.sh

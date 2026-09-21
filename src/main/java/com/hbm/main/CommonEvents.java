@@ -23,6 +23,7 @@ import com.hbm.entity.mob.glyphid.Glyphid;
 import com.hbm.entity.mob.glyphid.GlyphidBlaster;
 import com.hbm.entity.mob.glyphid.GlyphidBombardier;
 import com.hbm.entity.mob.glyphid.GlyphidBrawler;
+import com.hbm.entity.mob.glyphid.GlyphidDigger;
 import com.hbm.entity.mob.FbiAgent;
 import com.hbm.entity.mob.FbiDrone;
 import com.hbm.entity.mob.ParasiteMaggot;
@@ -260,6 +261,7 @@ public class CommonEvents {
         event.put(NtmEntityTypes.GLYPHID_BRAWLER.get(), GlyphidBrawler.createAttributes().build());
         event.put(NtmEntityTypes.GLYPHID_BOMBARDIER.get(), GlyphidBombardier.createAttributes().build());
         event.put(NtmEntityTypes.GLYPHID_BLASTER.get(), GlyphidBlaster.createAttributes().build());
+        event.put(NtmEntityTypes.GLYPHID_DIGGER.get(), GlyphidDigger.createAttributes().build());
         event.put(NtmEntityTypes.CREEPER_NUCLEAR.get(), CreeperNuclear.createAttributes().build());
         event.put(NtmEntityTypes.UNDEAD_SOLDIER.get(), UndeadSoldier.createAttributes().build());
         event.put(NtmEntityTypes.CYBER_CRAB.get(), CyberCrab.createAttributes().build());

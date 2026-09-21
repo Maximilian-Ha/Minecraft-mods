@@ -180,8 +180,12 @@ public class Glyphid extends Monster implements IResistanceProvider {
         return ResourceManager.GLYPHID_TEX;
     }
 
-    /** Wie gross er im Vergleich zum gewoehnlichen Glyphiden ist. */
-    public double getScale() {
+    /**
+     * Wie gross er im Vergleich zum gewoehnlichen Glyphiden ist. Im Original heisst das
+     * getScale -- DIESER NAME IST AUF 1.21 BELEGT: LivingEntity.getScale() liefert ein
+     * float, und ein double dazu ist kein Ueberschreiben, sondern ein Uebersetzungsfehler.
+     */
+    public double getGlyphidScale() {
         return 1.0D;
     }
 
@@ -192,12 +196,12 @@ public class Glyphid extends Monster implements IResistanceProvider {
 
     /** Wie weit er beim Graben sprengt -- groessere Glyphiden reissen groessere Loecher. */
     public int blastSize() {
-        return Math.min((int) (3 * this.getScale()) / 2, 5);
+        return Math.min((int) (3 * this.getGlyphidScale()) / 2, 5);
     }
 
     /** Wie hart ein Block hoechstens sein darf, damit er ihn weggraebt. */
     public int blastResToDig() {
-        return Math.min((int) (50 * (this.getScale() * 2)), 150);
+        return Math.min((int) (50 * (this.getGlyphidScale() * 2)), 150);
     }
 
     /** Ob er Merkpunkte annimmt. Spaeher und Atomglyphid tun das nicht. */
@@ -383,7 +387,7 @@ public class Glyphid extends Monster implements IResistanceProvider {
 
         if(!this.hasWaypoint) return;
 
-        if(this.canDig() && this.getScale() >= 1 && this.getCurrentTask() != TASK_DIG) {
+        if(this.canDig() && this.getGlyphidScale() >= 1 && this.getCurrentTask() != TASK_DIG) {
 
             BlockHitResult hindernis = this.findWaypointObstruction();
 
@@ -430,7 +434,7 @@ public class Glyphid extends Monster implements IResistanceProvider {
 
         ItemStack fleisch = new ItemStack(this.isOnFire()
                 ? NtmItems.GLYPHID_MEAT_GRILLED.get()
-                : NtmItems.GLYPHID_MEAT.get(), (int) this.getScale() * 2);
+                : NtmItems.GLYPHID_MEAT.get(), (int) this.getGlyphidScale() * 2);
 
         if(!fleisch.isEmpty()) this.spawnAtLocation(fleisch);
     }

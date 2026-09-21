@@ -14232,3 +14232,72 @@ einem Metawert von `Rubble`, Scout und Nuclear am Bau und am `glyphid_spawner`-B
 vier Abhängigkeiten sind gemessen und fehlen im Port.
 
 **46 Tore grün.**
+
+---
+
+## Runde 300 — CI-Fix 489, der Digger, und ein Tor mehr
+
+### Ein Name, der auf 1.21 nicht mehr frei ist
+
+CI 489 war rot, drei Übersetzungsfehler, alle derselbe:
+
+```
+error: getScale() in Glyphid cannot override getScale() in LivingEntity
+```
+
+`LivingEntity.getScale()` liefert ein `float`. Der Glyphid brachte aus dem Original ein
+`getScale()` mit, das ein `double` liefert — das ist kein Überschreiben, sondern ein Fehler.
+Umbenannt in `getGlyphidScale()`.
+
+**Warum Tor 34 das nicht sah:** `vanilla-name-check.sh` kennt eine Liste fest belegter
+Vanilla-Methodennamen, und die enthielt genau einen Eintrag — `Entity.getType`, den Fall aus
+Runde 188. Jetzt enthält sie auch `LivingEntity.getScale`. Dafür musste das Tor umgebaut
+werden: eine Klasse steht unter **mehreren** Wurzeln (ein Monster ist ein `LivingEntity`
+*und* ein `Entity`), und bisher blieb die Suche bei der ersten stehen — welche das war, hing
+von der Reihenfolge im Wörterbuch ab. Gegenprobe: benennt man zurück, meldet das Tor alle
+vier betroffenen Zeilen und sonst nichts.
+
+### Der Digger — und vier Abhängigkeiten, die es längst gibt
+
+Die Notiz aus Runde 299 sagte, der Digger hänge an `Library.getBlockPosInPath` und einem
+Metawert von `Rubble`. **Nachgemessen stimmt davon nur die Hälfte:** `getBlockPosInPath` ist
+sechs Zeilen und jetzt portiert; `setMetaBasedOnBlock` braucht der Port gar nicht, weil er
+statt Block-plus-Metawert einen `Block` speichert (`Rubble.setBlock`). `DummyableBlock` und
+`NtmBlocks.CONCRETE` waren ohnehin da. Der Digger war also nie blockiert.
+
+Er schlägt alle sechs Sekunden auf den Boden: ein waagerechter Strahl von sechs Blöcken in
+Blickrichtung, dann acht weitere, je ein Sechzehntel Bogenmaß weitergedreht und einen Block
+tiefer. Alles darauf, dessen Sprengfestigkeit unter der von Beton liegt, wird herausgerissen
+und dem Ziel entgegengeworfen — fünfzehn Schaden je Trümmerstück.
+
+Auch bei ihm ist die Zielvorhersage des Originals **wirkungslos**, aus denselben zwei Gründen
+wie beim Brawler. Nachgemessen, nicht nachgebaut.
+
+### Die Streuung an einer Stelle
+
+Drei Klassen hatten inzwischen dieselbe zehn Zeilen: Richtung normieren, gaußisch mit 0,0075
+streuen, strecken. Jetzt steht das einmal als `BobMathUtil.throwableHeading`. Das ist kein
+Schönheitsgriff: `ProjectileNT.getMovementToShoot` sieht genauso aus, **normiert aber nicht
+und streut mit dem Pfeilwert 0,0172275**. Wer im Vorbeigehen das eine für das andere hält,
+baut einen doppelt so breiten Fächer und eine um ein Fünftel zu schnelle Bombe.
+
+### Ein vertauschtes `super`, und das 47. Tor
+
+Beim Nachmessen der Digger-Abhängigkeiten fiel in `Rubble` auf:
+
+```java
+protected void addAdditionalSaveData(CompoundTag tag) {
+    super.readAdditionalSaveData(tag);   // <- LESEN im Speicherzweig
+```
+
+Das übersetzt sauber und fällt in keinem der 46 Tore auf. Es ist trotzdem ein Fehler mit
+Wirkung: der Aufruf liest aus dem noch **leeren** Etikett, schreibt also nichts aus der
+Oberklasse weg und setzt deren Felder obendrein zurück — bei einem `Projectile` ist das der
+Werfer, der damit beim Speichern verlorengeht.
+
+Die beiden Methoden sehen sich zum Verwechseln ähnlich, nehmen dasselbe `CompoundTag` und
+stehen in jeder Entitätsklasse direkt untereinander. `tools/nbtsuper-check.sh` grenzt jeden
+Rumpf über die Klammerbilanz ab und sucht darin den `super`-Aufruf der jeweils anderen
+Methode. Gemessen: **96 Rümpfe, ein Fund** — genau dieser. Gegenprobe meldet ihn wieder.
+
+**47 Tore grün.**

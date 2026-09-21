@@ -73,7 +73,10 @@ public class Rubble extends ProjectileNT {
 
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
-        super.readAdditionalSaveData(tag);
+        /* Hier stand ein super.readAdditionalSaveData -- beim Speichern also ein Lesen aus
+         * dem noch leeren Etikett. Das schrieb nicht nur nichts aus der Oberklasse weg, es
+         * loeschte obendrein den Werfer, den Projectile dort ablegt. */
+        super.addAdditionalSaveData(tag);
 
         tag.putString("Block", entityData.get(BLOCK_ID));
     }

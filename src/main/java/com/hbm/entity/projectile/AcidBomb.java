@@ -3,6 +3,7 @@ package com.hbm.entity.projectile;
 import com.hbm.entity.NtmEntityTypes;
 import com.hbm.entity.mob.glyphid.Glyphid;
 import com.hbm.registry.NtmDamageTypes;
+import com.hbm.util.BobMathUtil;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
@@ -45,21 +46,10 @@ public class AcidBomb extends ThrowableNT implements ItemSupplier {
         this.setPos(x, y, z);
     }
 
-    /**
-     * Die Richtungsgebung des Originals (EntityThrowable.setThrowableHeading), Zahl fuer
-     * Zahl: Richtung normieren, Gauss mal 0,0075 mal Streuung aufschlagen, mit der
-     * Geschwindigkeit strecken. Projectile.shoot koennte das fast -- aber es streut
-     * dreieckig mit 0,0172275 statt gaussisch mit 0,0075, also mehr als doppelt so weit.
-     * Der Blaster wirft zehn Bomben mit aufsteigender Streuung; mit der falschen Zahl
-     * waere das ein anderer Faecher.
-     */
+    /** Richtung und Nase setzen, mit der Streuung des Originals (BobMathUtil.throwableHeading). */
     public void richten(double x, double y, double z, float geschwindigkeit, float streuung) {
 
-        Vec3 richtung = new Vec3(x, y, z).normalize()
-                .add(this.random.nextGaussian() * 0.0075D * streuung,
-                        this.random.nextGaussian() * 0.0075D * streuung,
-                        this.random.nextGaussian() * 0.0075D * streuung)
-                .scale(geschwindigkeit);
+        Vec3 richtung = BobMathUtil.throwableHeading(this.random, x, y, z, geschwindigkeit, streuung);
 
         this.setDeltaMovement(richtung);
 

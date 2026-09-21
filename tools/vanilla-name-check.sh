@@ -24,6 +24,12 @@
 #
 # NACHGEMESSEN (Runde 188): ueber den ganzen Baum null Funde. Benennt man Chemical.getFluidType
 # zurueck in getType, meldet die Pruefung genau diese Zeile -- und sonst nichts.
+#
+# ZWEITER FALL, Runde 300: LivingEntity.getScale() liefert ein float. Der Glyphid brachte aus
+# dem Original ein getScale() mit, das ein double liefert -- drei Uebersetzungsfehler in CI 489.
+# Das Tor sah es nicht, weil seine Liste nur Entity.getType kannte. Jetzt kennt sie auch
+# LivingEntity.getScale; benennt man die Glyphiden-Methode zurueck, meldet die Pruefung alle
+# betroffenen Zeilen und sonst nichts.
 
 set -uo pipefail
 cd "$(dirname "$0")/.."
@@ -36,14 +42,24 @@ JAVA = 'src/main/java'
 # Wurzel -> { Methodenname: erlaubter Rueckgabetyp }
 FESTE_NAMEN = {
     'Entity': {'getType': 'EntityType'},
+    'LivingEntity': {'getScale': 'float'},
 }
 
 # Was im Baum als diese Wurzel zaehlt (Vanilla-Klassen, die selbst davon erben).
+#
+# EINE KLASSE KANN UNTER MEHREREN WURZELN STEHEN: ein Monster ist ein LivingEntity und ein
+# Entity zugleich, und beide Wurzeln bringen eigene feste Namen mit. Darum sammelt
+# wurzeln_von alle zutreffenden ein, statt bei der ersten stehenzubleiben -- sonst haengt es
+# von der Reihenfolge im Woerterbuch ab, welche Regeln greifen.
 VANILLA_ERBEN = {
     'Entity': {
         'Entity', 'Projectile', 'LivingEntity', 'Mob', 'PathfinderMob', 'Monster',
         'AbstractArrow', 'ThrowableProjectile', 'AbstractHurtingProjectile', 'ItemEntity',
         'ExperienceOrb', 'AbstractMinecart', 'Boat', 'Display', 'PartEntity',
+    },
+    'LivingEntity': {
+        'LivingEntity', 'Mob', 'PathfinderMob', 'Monster', 'AgeableMob', 'Animal',
+        'TamableAnimal', 'AbstractGolem', 'FlyingMob', 'Player', 'ArmorStand',
     },
 }
 
@@ -76,37 +92,38 @@ for wurzel, _dirs, namen in os.walk(JAVA):
         methoden[kls] = eigene
 
 
-def wurzel_von(kls):
-    """Die Vanilla-Wurzel dieser Klasse, oder None."""
+def wurzeln_von(kls):
+    """Alle Vanilla-Wurzeln dieser Klasse. Leer, wenn sie unter keiner steht."""
     gesehen = set()
     aktuell = kls
     while aktuell and aktuell not in gesehen:
         gesehen.add(aktuell)
         eintrag = klassen.get(aktuell)
         ober = eintrag[0] if eintrag else aktuell
-        if ober is None: return None
-        for name, erben in VANILLA_ERBEN.items():
-            if ober in erben: return name
-        if ober not in klassen: return None
+        if ober is None: return []
+        treffer = [name for name, erben in VANILLA_ERBEN.items() if ober in erben]
+        if treffer: return treffer
+        if ober not in klassen: return []
         aktuell = ober
-    return None
+    return []
 
 
 probleme = []
 geprueft = 0
 
 for kls, eigene in methoden.items():
-    wurzel = wurzel_von(kls)
-    if wurzel is None: continue
+    wurzeln = wurzeln_von(kls)
+    if not wurzeln: continue
     geprueft += 1
 
     for name, rueck, zeile in eigene:
-        erlaubt = FESTE_NAMEN[wurzel].get(name)
-        if erlaubt is None: continue
-        if rueck != erlaubt:
-            probleme.append('%s:%d: %s.%s() liefert %s -- in %s liefert %s() aber %s, und der '
-                            'Name ist dort fest belegt'
-                            % (klassen[kls][1], zeile, kls, name, rueck, wurzel, name, erlaubt))
+        for wurzel in wurzeln:
+            erlaubt = FESTE_NAMEN[wurzel].get(name)
+            if erlaubt is None: continue
+            if rueck != erlaubt:
+                probleme.append('%s:%d: %s.%s() liefert %s -- in %s liefert %s() aber %s, und der '
+                                'Name ist dort fest belegt'
+                                % (klassen[kls][1], zeile, kls, name, rueck, wurzel, name, erlaubt))
 
 print('Pruefe Namenskollisionen mit festen Vanilla-Methoden ... %d Klassen unter bekannten Wurzeln'
       % geprueft)

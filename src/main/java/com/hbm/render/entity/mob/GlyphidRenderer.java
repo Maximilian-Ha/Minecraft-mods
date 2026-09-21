@@ -58,7 +58,7 @@ public class GlyphidRenderer extends EntityRenderer<Glyphid> {
 
         double biss = glyphid.getAttackAnim(partialTick);
         byte panzer = glyphid.getArmorBits();
-        double groesse = glyphid.getScale();
+        double groesse = glyphid.getGlyphidScale();
 
         float schritt = glyphid.walkAnimation.position(partialTick);
 

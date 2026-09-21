@@ -2,6 +2,7 @@ package com.hbm.entity.mob.glyphid;
 
 import com.hbm.entity.mob.glyphid.GlyphidStats.StatBundle;
 import com.hbm.main.ResourceManager;
+import com.hbm.util.BobMathUtil;
 import com.hbm.util.Vec3NT;
 
 import net.minecraft.resources.ResourceLocation;
@@ -62,7 +63,7 @@ public class GlyphidBrawler extends Glyphid {
     }
 
     @Override
-    public double getScale() {
+    public double getGlyphidScale() {
         return 1.25D;
     }
 
@@ -116,18 +117,10 @@ public class GlyphidBrawler extends Glyphid {
         this.richten(sprung.xCoord, sprung.yCoord, sprung.zCoord, (float) v0, this.random.nextFloat());
     }
 
-    /**
-     * Wie beim Wurfkoerper: Richtung normieren, gaussische Streuung mal 0,0075 mal
-     * Ungenauigkeit aufschlagen, mit der Geschwindigkeit strecken -- und die Nase in die
-     * Flugrichtung drehen.
-     */
+    /** Wie beim Wurfkoerper -- dieselbe Streuung, nur dass hier der Glyphid selbst fliegt. */
     protected void richten(double x, double y, double z, float geschwindigkeit, float streuung) {
 
-        Vec3 richtung = new Vec3(x, y, z).normalize()
-                .add(this.random.nextGaussian() * 0.0075D * streuung,
-                        this.random.nextGaussian() * 0.0075D * streuung,
-                        this.random.nextGaussian() * 0.0075D * streuung)
-                .scale(geschwindigkeit);
+        Vec3 richtung = BobMathUtil.throwableHeading(this.random, x, y, z, geschwindigkeit, streuung);
 
         this.setDeltaMovement(richtung);
         this.hasImpulse = true;

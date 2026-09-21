@@ -1,6 +1,7 @@
 package com.hbm.util;
 
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
@@ -196,5 +197,24 @@ public class BobMathUtil {
 
     public static int[] collectionToIntArray(Collection<?> in, ToIntFunction<? super Object> mapper) {
         return Arrays.stream(in.toArray()).mapToInt(mapper).toArray();
+    }
+
+    /**
+     * Die Wurfrichtung eines Wurfkoerpers, Zahl fuer Zahl nach 1.7.10
+     * (EntityThrowable.setThrowableHeading): Richtung normieren, gaussisches Rauschen mal
+     * 0,0075 mal Ungenauigkeit aufschlagen, mit der Geschwindigkeit strecken.
+     *
+     * NICHT DASSELBE WIE Projectile.shoot und auch nicht wie ProjectileNT.getMovementToShoot:
+     * Vanille streut dreieckig mit 0,0172275, ProjectileNT nimmt denselben Pfeilwert und
+     * normiert ausserdem nicht. Ueber eine Salve mit wachsender Ungenauigkeit -- der Blaster
+     * wirft zehn Bomben, der Digger neun Strahlen Truemmer -- macht das einen sichtbar
+     * anderen Faecher.
+     */
+    public static Vec3 throwableHeading(RandomSource zufall, double x, double y, double z, float geschwindigkeit, float streuung) {
+        return new Vec3(x, y, z).normalize()
+                .add(zufall.nextGaussian() * 0.0075D * streuung,
+                        zufall.nextGaussian() * 0.0075D * streuung,
+                        zufall.nextGaussian() * 0.0075D * streuung)
+                .scale(geschwindigkeit);
     }
 }

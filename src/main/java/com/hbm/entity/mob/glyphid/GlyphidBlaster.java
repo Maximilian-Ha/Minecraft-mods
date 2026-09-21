@@ -42,7 +42,7 @@ public class GlyphidBlaster extends GlyphidBombardier {
     }
 
     @Override
-    public double getScale() {
+    public double getGlyphidScale() {
         return 1.25D;
     }
 

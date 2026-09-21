@@ -13,6 +13,7 @@ import com.hbm.entity.mob.glyphid.Glyphid;
 import com.hbm.entity.mob.glyphid.GlyphidBlaster;
 import com.hbm.entity.mob.glyphid.GlyphidBombardier;
 import com.hbm.entity.mob.glyphid.GlyphidBrawler;
+import com.hbm.entity.mob.glyphid.GlyphidDigger;
 import com.hbm.entity.mob.FbiAgent;
 import com.hbm.entity.mob.FbiDrone;
 import com.hbm.entity.mob.ParasiteMaggot;
@@ -247,6 +248,14 @@ public class NtmEntityTypes {
                     .sized(2.0F, 1.125F)
                     .clientTrackingRange(16)
                     .build("glyphid_blaster"));
+
+    /* Runde 300: der Digger. Noch etwas groesser als der Brawler -- Faktor 1,3. */
+    public static final DeferredHolder<EntityType<?>, EntityType<GlyphidDigger>> GLYPHID_DIGGER = ENTITY_TYPES.register(
+            "glyphid_digger",
+            () -> EntityType.Builder.of(GlyphidDigger::new, MobCategory.MONSTER)
+                    .sized(1.75F, 1.0F)
+                    .clientTrackingRange(16)
+                    .build("glyphid_digger"));
 
     /* Runde 298: der Merkpunkt. Unsichtbar, ohne Ausdehnung, und nur der Glyphid sieht ihn. */
     public static final DeferredHolder<EntityType<?>, EntityType<Waypoint>> WAYPOINT = ENTITY_TYPES.register(

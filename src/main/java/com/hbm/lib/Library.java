@@ -34,6 +34,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Spaghetti("this whole class")
 public class Library {
     // what even is this
@@ -387,5 +390,28 @@ public class Library {
 
     public static boolean isObstructed(Level level, double x, double y, double z, double a, double b, double c) {
         return level.clip(new ClipContext(new Vec3(x, y, z), new Vec3(a, b, c), ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, CollisionContext.empty())).getType() != HitResult.Type.MISS;
+    }
+
+    /**
+     * Die Blockstellen auf einem Strahl: vom Anfangsort aus laenge Schritte weit in die
+     * Richtung vec, je Schritt eine Stelle. Portiert aus 1.7.10 (Library.getBlockPosInPath).
+     *
+     * DIE HOEHE BLEIBT, WIE SIE IST -- der Strahl laeuft waagerecht, die y-Achse der Richtung
+     * wird nicht benutzt. Das ist im Original so und hat einen Grund: der Benutzer dieser
+     * Liste ist der Bodenschlag des Diggers, und der geht ueber den Boden, nicht durch ihn.
+     *
+     * Der Schritt wird abgeschnitten, nicht gerundet (wie im Original). Bei kurzen Strecken
+     * kommt dieselbe Stelle deshalb mehrfach vor; wer die Liste abarbeitet, muss damit
+     * rechnen.
+     */
+    public static List<BlockPos> getBlockPosInPath(int x, int y, int z, int laenge, Vec3 vec) {
+
+        List<BlockPos> liste = new ArrayList<>();
+
+        for(int i = 0; i <= laenge; i++) {
+            liste.add(new BlockPos((int) (x + vec.x * i), y, (int) (z + vec.z * i)));
+        }
+
+        return liste;
     }
 }

@@ -127,6 +127,8 @@ public class ResourceManager {
     public static final ResourceLocation GLYPHID_BOMBARDIER_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/glyphid_bombardier.png");
     /** Der Blaster, Runde 299. */
     public static final ResourceLocation GLYPHID_BLASTER_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/glyphid_blaster.png");
+    /** Der Digger, Runde 300. */
+    public static final ResourceLocation GLYPHID_DIGGER_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/glyphid_digger.png");
     /** Die Blockspinne, Runde 296. */
     public static final ResourceLocation BLOCKSPIDER_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/blockspider.png");
     public static final ResourceLocation MASKMAN_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/maskman.png");

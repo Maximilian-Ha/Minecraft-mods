@@ -99,6 +99,11 @@ public class Vec3NT {
         return this;
     }
 
+    /** Als unveraenderlicher Vec3 -- fuer alles, was die Minecraft-Schnittstelle erwartet. */
+    public Vec3 toVec3() {
+        return new Vec3(this.xCoord, this.yCoord, this.zCoord);
+    }
+
     public double length() {
         return Math.sqrt(xCoord * xCoord + yCoord * yCoord + zCoord * zCoord);
     }
