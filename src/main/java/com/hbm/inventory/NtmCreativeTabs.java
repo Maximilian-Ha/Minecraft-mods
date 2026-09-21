@@ -1966,6 +1966,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.SPIDER_MILK);
                         output.accept(NtmItems.INK);
                         output.accept(NtmItems.HEART_CONTAINER);
+                        output.accept(NtmItems.INJECTOR_KNIFE);
                         output.accept(NtmItems.BLACK_DIAMOND);
                         output.accept(NtmItems.SCRUMPY);
 

@@ -12885,3 +12885,50 @@ Gegenstände fehlen trotzdem. Dabei ist eine Schiefheit entstanden: `shimmer_axe
 `shimmer_sledge` steht daneben **auskommentiert** — ein Modell im Speicher, das niemand
 zeichnet, und ein Feld, das immer `null` ist. Das gehört in die Runde, die die beiden Waffen
 nachreicht, und ist hier nur vermerkt.
+
+## Runde 272 — Das Messer, und ein Herzcontainer, der nie etwas gab
+
+Nächster Blocker aus der Liste: `injector_knife`, Auslöser von `achSomeWounds`. Er ist ein
+**Rüstungsmodul**, und das Modulsystem steht seit Runde 137 mit achtzehn Einträgen — gefehlt
+hat nur die Klasse.
+
+### Der Fund: ein Summand, den niemand liest
+
+`ItemModHealth` (Herzcontainer, schwarzer Diamant) legt seit seiner Portierung
+`Attributes.MAX_HEALTH` in die Eigenschaftskarte, die `ArmorModHandler.updateMods` jeden Tick
+zusammenrechnet. Angewandt wird die Karte danach aber nur über `TRACKED_ATTRIBUTES` — und
+darin standen **nur Tempo und Rückstoß**.
+
+Beide Module gaben also **gar keine Lebensenergie**. Zwanzig Punkte der eine, vierzig der
+andere, und beide wirkungslos, seit sie im Port stehen. Aufgefallen ist das erst, weil das
+Messer denselben Weg benutzt — nur mit umgekehrtem Vorzeichen.
+
+`MAX_HEALTH` steht jetzt in der Liste, mit `ADD_VALUE`: im Original hängt der Wert als
+absolute Attributänderung am Rüstungsteil (`ItemModHealth.getModifiers`), nicht anteilig.
+
+### Das Messer
+
+Alle 50 Ticks zwei Punkte höchster Lebensenergie, bis zwei übrig sind; dann hört es auf, und
+genau in dem Augenblick fällt der Erfolg.
+
+Zwei Stellen weichen bewusst ab:
+
+**Wo der Abzug steht.** Das Original hängt eine Attributänderung mit fester Kennung an den
+Träger und ersetzt sie bei jedem Schnitt durch eine größere — die Summe steht also im Träger.
+In 1.21 rechnet `ArmorModHandler` die Summe jeden Tick neu aus den Modulen zusammen, darum
+steht der Stand am Rüstungsteil, an derselben Stelle wie die Module selbst. Das überlebt
+Abnehmen und Wiederanlegen, wie im Original.
+
+**Wann der Erfolg fällt.** Das Original liest die Gesundheit *nach* dem Setzen der Änderung.
+Im Port läuft `addAttributes` erst nach `modUpdate`, die neue Grenze steht also noch nicht —
+sie wird vorgerechnet. Es ist derselbe Schnitt.
+
+Nicht übernommen: der `bloodvomit`-Partikel und der Bildschirmruckler `properJolt`. Beides
+gibt es im Port nicht. Der Klang (`entity.slicer`) bleibt.
+
+**Ohne Rezept, und warum.** Im Original baut sich das Messer aus `injector_5htp` und einem
+Eisenschwert. Der 5-HTP-Injektor fehlt dem Port — und mit ihm der Stabilitätseffekt, an dem
+seine ganze Wirkung hängt (er zieht fünf Digamma ab und gibt Stabilität). Ein halber Injektor
+wäre ein Gegenstand, der nichts tut. Das Rezept kommt darum mit ihm.
+
+**48 von 61.**

@@ -61,6 +61,7 @@ import com.hbm.items.armor.ItemModShield;
 import com.hbm.items.food.FlaskItem;
 import com.hbm.items.armor.ItemModDefuser;
 import com.hbm.items.armor.ItemModHealth;
+import com.hbm.items.armor.ItemModKnife;
 import com.hbm.items.armor.ItemModInk;
 import com.hbm.items.armor.ItemModMilk;
 import com.hbm.items.armor.ItemModPolish;
@@ -1141,6 +1142,16 @@ public class NtmItems {
     /* Zwanzig und vierzig Lebenspunkte, wie im Original (ItemModHealth(20F) und (40F)). */
     public static final DeferredItem<Item> HEART_CONTAINER = ITEMS.register("heart_container", () -> new ItemModHealth(new Item.Properties(), 20D));
     public static final DeferredItem<Item> BLACK_DIAMOND = ITEMS.register("black_diamond", () -> new ItemModHealth(new Item.Properties(), 40D));
+    /**
+     * Das Messer, Runde 272. Es nimmt dem Traeger die Lebensenergie, die der Herzcontainer
+     * ihm gibt -- und schaltet damit den Erfolg someWounds frei.
+     *
+     * OHNE REZEPT. Im Original baut es sich aus injector_5htp und einem Eisenschwert
+     * (ConsumableRecipes.java:202); der 5-HTP-Injektor fehlt dem Port noch, und mit ihm der
+     * Stabilitaetseffekt, an dem seine ganze Wirkung haengt. Ein halber Injektor waere ein
+     * Gegenstand, der nichts tut; das Rezept kommt darum mit ihm.
+     */
+    public static final DeferredItem<Item> INJECTOR_KNIFE = ITEMS.register("injector_knife", () -> new ItemModKnife(new Item.Properties()));
     /* Ein Leben, wie im Original (ItemModRevive(1)) -- der Wild-P hat drei. */
     public static final DeferredItem<Item> SCRUMPY = ITEMS.register("scrumpy", () -> new ModReviveItem(new Item.Properties(), 1));
 

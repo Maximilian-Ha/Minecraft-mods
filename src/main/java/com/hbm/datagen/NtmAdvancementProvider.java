@@ -50,7 +50,10 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
  * den Start einer Sojus. Nach Runde 258 stehen 20 der 32 (nachgezaehlt an den Aufrufen mit
  * Kennung); die uebrigen 12 warten auf Entitaeten und Gegenstaende, die der Port noch nicht
  * hat: die Sojus (soyuz, space), die vier Bosse, die Schimmerwaffen (fiend, fiend2), das
- * Messer (someWounds), die Schwefelsaeure und der Speer (kauaiMoho).
+ * die Schwefelsaeure und der Speer (kauaiMoho).
+ *
+ * DAS MESSER KAM IN RUNDE 272 (someWounds). Es ist ein Ruestungsmodul, und das Modulsystem
+ * stand schon -- gefehlt hat nur die Klasse.
  *
  * DER RADIUMKAFFEE STAND HIER ZU UNRECHT (berichtigt in Runde 271). Er ist im Port laengst da
  * -- aber als DrinkType.COFFEE_RADIUM, ein Meta-Gegenstand ohne eigenen Registriereintrag. Die
@@ -179,6 +182,11 @@ public class NtmAdvancementProvider extends AdvancementProvider {
              *   achievement_icon QUESTIONMARK  -> der Gueterwagen-Sprengkopf
              */
             erfolg(speichern, helper, wurzel, "slimeball", Items.SLIME_BALL, false, "slimeball");
+
+            /* Das Messer haengt im Original an keinem Vorgaenger (initIndependentStat ohne
+             * Elternteil); in 1.21 braucht jeder Erfolg einen, also die Wurzel. Kein
+             * Herausforderungs-Rahmen -- setSpecial fehlt dort. */
+            erfolg(speichern, helper, wurzel, "some_wounds", NtmItems.INJECTOR_KNIFE.get(), false, "some_wounds");
             erfolg(speichern, helper, wurzel, "stratum", NtmBlocks.STONE_GNEISS.get(), true, "stratum");
             erfolg(speichern, helper, wurzel, "hidden", NtmItems.MP_WARHEAD_15_BOXCAR.get(), false, "hidden");
             erfolg(speichern, helper, wurzel, "omega12", NtmItems.PARTICLE_DIGAMMA.get(), true, "omega12");

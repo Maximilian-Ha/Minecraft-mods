@@ -848,6 +848,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("advancements.hbmsntm.technetium.description", "It's medicinal, it's medicinal!");
         this.add("advancements.hbmsntm.radium.title", "MISTER INCREDIBLE");
         this.add("advancements.hbmsntm.radium.description", "YOU'RE FIRED FOR POURING RADIUM IN MY COFFEE!");
+        this.add("advancements.hbmsntm.some_wounds.title", "Some Wounds Never Heal");
+        this.add("advancements.hbmsntm.some_wounds.description", "Get ready");
         this.add("advancements.hbmsntm.watz.title", "The Power of Element-126");
         this.add("advancements.hbmsntm.watz.description", "F\u00f3lkvangr fields possibly included.");
         this.add("advancements.hbmsntm.rbmk.title", "3.6 Roentegen?");
@@ -1930,6 +1932,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.SPIDER_MILK, "Spider Milk");
         this.add(NtmItems.INK, "Ink");
         this.add(NtmItems.HEART_CONTAINER, "Heart Container");
+        this.add(NtmItems.INJECTOR_KNIFE, "Injector Knife");
         this.add(NtmItems.BLACK_DIAMOND, "Black Diamond");
         this.add(NtmItems.SCRUMPY, "Scrumpy");
         /* Die Hinweiszeilen der zehn Aufsaetze, Runde 241. */

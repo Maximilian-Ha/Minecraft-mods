@@ -266,5 +266,11 @@ public class ArmorModHandler {
      */
     private static final List<TrackedAttribute> TRACKED_ATTRIBUTES = List.of(
             new TrackedAttribute(Attributes.MOVEMENT_SPEED, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),
-            new TrackedAttribute(Attributes.KNOCKBACK_RESISTANCE, AttributeModifier.Operation.ADD_VALUE));
+            new TrackedAttribute(Attributes.KNOCKBACK_RESISTANCE, AttributeModifier.Operation.ADD_VALUE),
+            /* HOECHSTE LEBENSENERGIE, NACHGETRAGEN IN RUNDE 272. Sie fehlte hier, obwohl
+             * ItemModHealth sie seit seiner Portierung in die Karte legt -- der Herzcontainer
+             * und der schwarze Diamant gaben also GAR NICHTS. Ein Summand, den niemand liest,
+             * ist dasselbe wie keiner. Im Original haengt der Wert als Attributaenderung am
+             * Ruestungsteil (ItemModHealth.getModifiers), also absolut, nicht anteilig. */
+            new TrackedAttribute(Attributes.MAX_HEALTH, AttributeModifier.Operation.ADD_VALUE));
 }

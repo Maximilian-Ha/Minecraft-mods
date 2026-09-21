@@ -1201,6 +1201,7 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicItem(NtmItems.SPIDER_MILK.get());
         this.basicItem(NtmItems.INK.get());
         this.basicItem(NtmItems.HEART_CONTAINER.get());
+        this.basicItem(NtmItems.INJECTOR_KNIFE.get());
         this.basicItem(NtmItems.BLACK_DIAMOND.get());
         this.basicItem(NtmItems.SCRUMPY.get());
         this.basicItem(NtmItems.RING_PULL.get());
