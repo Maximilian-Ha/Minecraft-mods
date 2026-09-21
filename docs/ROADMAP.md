@@ -13620,3 +13620,64 @@ herein und soll erst einmal ankommen. Dafür hat `Ufo` jetzt `anlaufZeit(int)`; 
 bleibt privat.
 
 **44 Tore grün.**
+
+## CI-Fix 479 — Ein Wort zu wenig, und das 45. Tor
+
+`Quackos.mobInteract` stand als `protected` da, weil `Mob` es so deklariert. `Animal` hebt es
+auf `public`, und damit ist die Überschreibung unzulässig:
+
+> error: attempting to assign weaker access privileges; was public
+
+**Kein Tor konnte das sehen** — `syntax-check` übersetzt ohne Minecraft und kennt die
+Oberklasse nicht.
+
+Das 45. Tor, `access-check`, prüft dieselbe Frage nach dem Verfahren von `signature-check`:
+die richtige Sichtbarkeit steht vielfach im Projekt selbst, und wer als einziger enger schreibt
+als die Mehrheit, ist es, der falsch ist.
+
+**Diesen einen Fall fängt es nicht, und das ist gemessen:** `mobInteract` steht im ganzen Port
+genau einmal. Gegen eine Mehrheit von eins lässt sich nichts prüfen — dieselbe Grenze steht
+seit Runde 181 im Kopf von `signature-check`. Was es fängt, ist die nächste Stelle dieser Art
+bei einem häufigen Namen; gegengeprobt: setzt man das `render` einer einzigen Oberfläche auf
+`protected`, meldet es genau diese Zeile gegen 149 andere, und sonst nichts.
+
+Die erste Fassung meldete vier Stellen, die **alle richtig waren**: eine Schnittstelle hat
+keine Sichtbarkeitswörter, und ein wiederholter Regex fing nur das letzte Wort (`public final`
+wurde zu `final`). Beides berichtigt, danach null Funde über den ganzen Baum.
+
+## Runde 289 — Was die Bosse in die Welt bringt
+
+Vier Bosse stehen seit den Runden 280 bis 283 im Port bereit — und **nichts brachte sie in die
+Welt**. Man kam nur mit Befehlen oder den Rufgegenständen aus Runde 288 an sie heran. Der Teil
+des Originals, der sie von selbst schickt, fehlte ganz.
+
+### Drei Regeln, und jede hat eine Bedingung, die der Spieler selbst herstellt
+
+**Der Maskenmann** kommt nach zwanzig Minuten, in denen der Spieler ununterbrochen drei Blöcke
+unter der Oberfläche war, mindestens fünfzig Rad im Blut hatte und schon einmal einen
+Kristallisator gebaut oder gesetzt hat. Eine Minute vorher kommt eine Warnung; reißt eine der
+drei Bedingungen ab, fängt die Uhr von vorn an.
+
+**Die Strahlenbiester** kommen nach einer Kernschmelze. ZIRNOX und Forschungsreaktor setzen
+jedem Spieler im Umkreis von hundert Blöcken eine Marke; alle neunzig Minuten wird gewürfelt,
+und wer die Marke trägt, bekommt zehn von ihnen vor die Tür gesetzt — das erste ist der
+Anführer. Danach ist die Marke verbraucht.
+
+**Das Gespenst** kommt zu dem, der Digamma im Blut hat: alle zwanzig Takte eine Chance von eins
+zu fünf, fünfundsiebzig Blöcke entfernt. Es tut nichts, man kann ihm nichts anhaben — und es
+verschwindet, sobald irgendein Spieler näher als fünfzig Blöcke kommt. Man sieht es nur von
+weitem stehen und findet nichts mehr, wenn man hingeht.
+
+### Eine Einstellung, die nie gelesen wird
+
+Das Original führt `elementalAttackDistance` und macht sie konfigurierbar — liest sie aber
+**nie**: der Strahlenbiest-Zweig nimmt `raidAttackDistance`, die Einstellung der FBI-Razzia.
+Beide stehen auf 32, darum fällt es nie auf. Der Port führt nur die eine Zahl, die wirklich
+zählt.
+
+### Nicht übernommen
+
+Die FBI-Razzia. Sie braucht `EntityFBI` und `EntityFBIDrone`, und die gibt es im Port nicht;
+mit ihnen kommt sie nach. Das steht jetzt als Grund im Kopf des Systems statt gar nicht.
+
+**45 Tore grün.**

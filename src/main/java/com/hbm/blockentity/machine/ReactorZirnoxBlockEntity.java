@@ -6,6 +6,7 @@ import com.hbm.blockentity.NtmBlockEntityTypes;
 import com.hbm.entity.projectile.ZirnoxDebris;
 import com.hbm.entity.projectile.ZirnoxDebris.DebrisType;
 import com.hbm.explosion.ExplosionNukeGeneric;
+import com.hbm.world.MobSpawnSystem;
 import com.hbm.blocks.DummyableBlock;
 import com.hbm.blocks.NtmBlocks;
 import com.hbm.registry.NtmCriteria;
@@ -342,6 +343,10 @@ public class ReactorZirnoxBlockEntity extends MachineBaseBlockEntity implements 
         /* Wer im Umkreis von hundert Bloecken stand, hat es miterlebt -- dieselbe Kugel wie
          * im Original (TileEntityReactorZirnox.java:397). */
         NtmCriteria.markeImUmkreis(this.level, this.getBlockPos(), 100, "zirnox_boom");
+
+        /* Runde 289: und sie tragen die Strahlenmarke davon -- irgendwann in den naechsten
+         * neunzig Minuten stehen dafuer zehn Strahlenbiester vor der Tuer. */
+        MobSpawnSystem.markiereStrahlung(this.level, this.getBlockPos(), 100D);
     }
 
     /** Was beim Zerlegen davonfliegt -- Anzahl und Sorten unveraendert aus dem Original. */

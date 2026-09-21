@@ -4,6 +4,7 @@ import com.hbm.blockentity.MachineBaseBlockEntity;
 import com.hbm.blockentity.NtmBlockEntityTypes;
 import com.hbm.blocks.NtmBlocks;
 import com.hbm.handler.radiation.ChunkRadiationManager;
+import com.hbm.world.MobSpawnSystem;
 import com.hbm.interfaces.IControlReceiver;
 import com.hbm.inventory.menus.ReactorResearchMenu;
 import com.hbm.items.NtmItems;
@@ -267,6 +268,10 @@ public class ReactorResearchBlockEntity extends MachineBaseBlockEntity implement
         this.level.setBlock(this.worldPosition.above(2), NtmBlocks.DECO_STEEL.get().defaultBlockState(), 3);
 
         ChunkRadiationManager.proxy.incrementRad(this.level, this.worldPosition, 50F);
+
+        /* Runde 289: wer im Umkreis von hundert Bloecken stand, traegt die Strahlenmarke
+         * davon -- die Rechnung, die das Original in TileEntityReactorResearch.java:332 zieht. */
+        MobSpawnSystem.markiereStrahlung(this.level, this.worldPosition, 100D);
     }
 
     /* ----- Steuerstaebe ----- */

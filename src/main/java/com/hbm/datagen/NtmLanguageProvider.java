@@ -3652,6 +3652,10 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("container.radiolysis", "RTG and Radiolysis Chamber");
         this.add("container.machineSILEX", "SILEX Isotope Separation Chamber");
         this.add("container.machineFEL", "Free Electron Laser");
+        this.add("chat.hbmsntm.maskman.near", "The mask man draws near.");
+        this.add("chat.hbmsntm.maskman.spawn", "The mask man is about to claim another victim.");
+        this.add("chat.hbmsntm.maskman.fail", "Seems like mask man couldn't come today.");
+        this.add("chat.hbmsntm.elemental.near", "You hear a faint clicking...");
         this.add("desc.gui.silex.void", "Void contents");
         this.add("desc.gui.radiolysis.desc", "\u00a79Description\u00a7r$This RTG is more efficient then others, and$comes equipped with a radiolysis chamber for$cracking.");
         this.add("container.cable_diode", "Red Copper Diode");

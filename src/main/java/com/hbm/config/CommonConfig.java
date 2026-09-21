@@ -45,6 +45,17 @@ public class CommonConfig {
     public final IntValue METEOR_SHOWER_CHACE;
     public final IntValue METEOR_SHOWER_DURATION;
 
+    // MOBS (12)
+    public final BooleanValue ENABLE_MASKMAN;
+    public final IntValue MASKMAN_DELAY;
+    public final IntValue MASKMAN_MIN_RAD;
+    public final BooleanValue MASKMAN_UNDERGROUND;
+    public final BooleanValue ENABLE_ELEMENTALS;
+    public final IntValue ELEMENTAL_DELAY;
+    public final IntValue ELEMENTAL_CHANCE;
+    public final IntValue ELEMENTAL_AMOUNT;
+    public final IntValue ELEMENTAL_DISTANCE;
+
     // EXPLOSIONS (06)
     public final IntValue MK5;
     public final IntValue BLAST_SPEED;
@@ -221,6 +232,48 @@ public class CommonConfig {
                 .comment("Radius of dropped anti schrabidium.")
                 .translation("hbmsntm.configuration.aSchrabRadius")
                 .defineInRange("aSchrabRadius", 20, 0, Integer.MAX_VALUE);
+
+        builder.pop();
+
+        /// MOBS ///
+        builder.push("mobs");
+
+        ENABLE_MASKMAN = builder
+                .comment("Whether mask man should spawn.")
+                .translation("hbmsntm.configuration.enableMaskman")
+                .define("enableMaskman", true);
+        MASKMAN_DELAY = builder
+                .comment("How many checks (one per 20 ticks) need to pass for mask man to spawn, if the requirements are met.")
+                .translation("hbmsntm.configuration.maskmanTimer")
+                .defineInRange("maskmanTimer", 20 * 60, 61, Integer.MAX_VALUE);
+        MASKMAN_MIN_RAD = builder
+                .comment("The amount of radiation needed for mask man to spawn.")
+                .translation("hbmsntm.configuration.maskmanMinRad")
+                .defineInRange("maskmanMinRad", 50, 0, Integer.MAX_VALUE);
+        MASKMAN_UNDERGROUND = builder
+                .comment("Whether players need to be underground for mask man to spawn.")
+                .translation("hbmsntm.configuration.maskmanUnderground")
+                .define("maskmanUnderground", true);
+        ENABLE_ELEMENTALS = builder
+                .comment("Whether there should be radiation elementals after a meltdown.")
+                .translation("hbmsntm.configuration.enableMeltdownElementals")
+                .define("enableMeltdownElementals", true);
+        ELEMENTAL_DELAY = builder
+                .comment("How many world ticks need to pass for a check to be performed.")
+                .translation("hbmsntm.configuration.elementalDelay")
+                .defineInRange("elementalDelay", 30 * 60 * 60, 1, Integer.MAX_VALUE);
+        ELEMENTAL_CHANCE = builder
+                .comment("1:x chance to spawn elementals, must be at least 1.")
+                .translation("hbmsntm.configuration.elementalChance")
+                .defineInRange("elementalChance", 2, 1, Integer.MAX_VALUE);
+        ELEMENTAL_AMOUNT = builder
+                .comment("How many elementals are spawned each raid.")
+                .translation("hbmsntm.configuration.elementalAmount")
+                .defineInRange("elementalAmount", 10, 1, Integer.MAX_VALUE);
+        ELEMENTAL_DISTANCE = builder
+                .comment("How far away elementals will spawn from the targeted player.")
+                .translation("hbmsntm.configuration.elementalAttackDistance")
+                .defineInRange("elementalAttackDistance", 32, 1, Integer.MAX_VALUE);
 
         builder.pop();
 

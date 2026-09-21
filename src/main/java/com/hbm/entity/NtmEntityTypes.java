@@ -37,6 +37,7 @@ import com.hbm.entity.missile.SatellitePod;
 import com.hbm.entity.missile.Soyuz;
 import com.hbm.entity.missile.SoyuzCapsule;
 import com.hbm.entity.mob.CreeperNuclear;
+import com.hbm.entity.mob.Ghost;
 import com.hbm.entity.mob.Quackos;
 import com.hbm.entity.mob.CreeperGold;
 import com.hbm.entity.mob.CreeperPhosgene;
@@ -147,6 +148,14 @@ public class NtmEntityTypes {
                     .sized(7.5F, 17.5F)
                     .clientTrackingRange(10)
                     .build("quackos"));
+
+    /* Das Gespenst: Menschenmass, und es verschwindet, sobald jemand hinsieht. */
+    public static final DeferredHolder<EntityType<?>, EntityType<Ghost>> GHOST = ENTITY_TYPES.register(
+            "ghost",
+            () -> EntityType.Builder.of(Ghost::new, MobCategory.MONSTER)
+                    .sized(0.6F, 1.8F)
+                    .clientTrackingRange(16)
+                    .build("ghost"));
 
     public static final DeferredHolder<EntityType<?>, EntityType<CreeperNuclear>> CREEPER_NUCLEAR =
             ENTITY_TYPES.register("creeper_nuclear",

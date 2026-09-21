@@ -66,6 +66,16 @@ public class HbmPlayerAttachments {
 
     public boolean isOnLadder = false;
 
+    /**
+     * Runde 289: die Uhr des Maskenmanns. Sie zaehlt einmal je zwanzig Takte hoch, solange der
+     * Spieler unter Tage steht, Strahlung im Blut hat und schon einen Kristallisator gebaut
+     * hat -- und faellt auf null zurueck, sobald eine der drei Bedingungen abreisst.
+     */
+    public int maskManTimer = 0;
+
+    /** Wer eine Kernschmelze aus der Naehe gesehen hat, traegt diese Marke bis zum Besuch. */
+    public boolean radMark = false;
+
     public static HbmPlayerAttachments getData(Player player) {
         return player.getData(ModAttachments.PLAYER_ATTACHMENT);
     }
@@ -186,6 +196,8 @@ public class HbmPlayerAttachments {
         props.putInt("reputation", this.reputation);
         props.putBoolean("isOnLadder", this.isOnLadder);
         props.putBoolean("enableMagnet", this.enableMagnet);
+        props.putInt("maskManTimer", this.maskManTimer);
+        props.putBoolean("radMark", this.radMark);
 
         return props;
     }
@@ -201,6 +213,8 @@ public class HbmPlayerAttachments {
             this.reputation = props.getInt("reputation");
             this.isOnLadder = props.getBoolean("isOnLadder");
             this.enableMagnet = props.getBoolean("enableMagnet");
+            this.maskManTimer = props.getInt("maskManTimer");
+            this.radMark = props.getBoolean("radMark");
         }
     }
 }

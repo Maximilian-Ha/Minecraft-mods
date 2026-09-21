@@ -17,6 +17,7 @@ import com.hbm.entity.mob.CreeperNuclear;
 import com.hbm.entity.mob.CreeperGold;
 import com.hbm.entity.mob.CreeperPhosgene;
 import com.hbm.entity.mob.CreeperTainted;
+import com.hbm.entity.mob.Ghost;
 import com.hbm.entity.mob.MaskMan;
 import com.hbm.entity.mob.RadBeast;
 import com.hbm.entity.mob.Ufo;
@@ -238,6 +239,7 @@ public class CommonEvents {
         event.put(NtmEntityTypes.DUCK.get(), Duck.createAttributes().build());
         /* Die Quackos erbt die Attribute der Ente -- das Original gibt ihr keine eigenen. */
         event.put(NtmEntityTypes.QUACKOS.get(), Duck.createAttributes().build());
+        event.put(NtmEntityTypes.GHOST.get(), Ghost.createAttributes().build());
         event.put(NtmEntityTypes.CREEPER_NUCLEAR.get(), CreeperNuclear.createAttributes().build());
         event.put(NtmEntityTypes.UNDEAD_SOLDIER.get(), UndeadSoldier.createAttributes().build());
         event.put(NtmEntityTypes.CYBER_CRAB.get(), CyberCrab.createAttributes().build());

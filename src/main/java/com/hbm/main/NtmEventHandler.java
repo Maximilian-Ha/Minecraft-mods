@@ -11,6 +11,7 @@ import com.hbm.saveddata.satellite.SatelliteDetector;
 import com.hbm.handler.neutron.NeutronHandler;
 import com.hbm.uninos.UniNodespace;
 import com.hbm.world.MeteorStrikeSystem;
+import com.hbm.world.MobSpawnSystem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
@@ -80,6 +81,8 @@ public class NtmEventHandler {
         MachineRadarBlockEntity.updateSystem(event.getServer());
         // Meteor strike handling
         MeteorStrikeSystem.update(event.getServer());
+        // Maskenmann, Strahlenbiester und Gespenster
+        MobSpawnSystem.update(event.getServer());
     }
 
     @SubscribeEvent
