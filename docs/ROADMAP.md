@@ -12787,3 +12787,59 @@ die Minute ist gesetzt und nie zu sehen. Übernommen, wie es dasteht.
 Der Logikstab ist damit vollständig: acht von acht auflösbaren Aktionen, fünf von fünf
 Bedingungen, die eine Wechselwirkung. Die neunte Aktion, `DEAD_GUY_BASE_TOWER`, kommt nie —
 ihre Anmeldezeile ist im Original auskommentiert und zudem anders geschrieben.
+
+## Runde 270 — Standortbestimmung: die drei offenen Punkte sind zu
+
+Die Standortbestimmung nach Runde 249 nannte drei offene Punkte: das **Meteoritenverlies**,
+die **vier Bauzauberstäbe** und das **Erfolgssystem**. Diese Runde misst alle drei nach,
+statt sie für erledigt zu halten.
+
+### Der vierte Bauzauberstab kommt nicht, und das ist messbar
+
+Von den vier Stäben sind drei erledigt: `wand_jigsaw` (wird zum Jigsaw-Block von 1.21),
+`wand_loot` (Runde 254) und `wand_logic` (Runden 265 bis 269). Offen blieb `wand_tandem`.
+
+Ich habe alle 79 Rohdateien mit dem Lader des Umsetzers eingelesen und gezählt, welche
+Stabsorte wo vorkommt:
+
+| Stab | Vorkommen | Dateien |
+|---|---|---|
+| `wand_jigsaw` | 72 | 40 Dateien |
+| `wand_loot` | 67 | 27 Dateien |
+| `wand_logic` | 11 | crane, crane_mod, factory, tower_base |
+| `wand_tandem` | 3 | **nur** `test-tandem-core.nbt` |
+
+Und diese eine Datei wird im Original **nur in einer auskommentierten Zeile** angemeldet —
+`StructureManager.java:102-103`, daneben `:98` für `test-rot.nbt`. Beide Testdateien kommen
+also auch im Original nie in die Welt.
+
+Damit ist der Tandemstab kein Rückstand, sondern ein Werkzeug des Urhebers, das er selbst
+abgeschaltet hat. Ihn zu portieren hieße, eine Mechanik zu bauen, die nichts benutzt — und
+zwar eine, deren Zweck 1.21 gar nicht mehr hat: der Stab ist ausdrücklich ein Umweg um die
+Schwäche des 1.7.10-Systems, Bauwerksteile vor der Geländeerzeugung zusammenzusetzen
+(„*NBTStructures have the inherent flaws of the vanilla structure system*", schreibt der
+Kommentar dort selbst). Das Jigsaw-System von 1.21 hat diese Schwäche nicht.
+
+**Die Deckung des Umsetzers liest sich damit anders:** nicht 77 von 79, sondern **77 von 77**
+Dateien, die das Original tatsächlich benutzt. Der Hinweis steht jetzt auch im Kopf von
+`tools/nbt2structure.py`.
+
+### Das Erfolgssystem: nachgemessen, unverändert blockiert
+
+46 von 61. Die 15 übrigen hängen an Inhalt, der dem Port fehlt. Ich habe die sieben
+Symbolgegenstände, an denen sie hängen, einzeln gegen `NtmItems` und `NtmBlocks` geprüft:
+`battery_potatos`, `shimmer_sledge`, `shimmer_axe`, `injector_knife`, `coffee_radium`,
+`achievement_icon` und `machine_silex` — **keiner davon ist angemeldet**. Dazu die Sojus, die
+vier Bosse und der Speer.
+
+Das ist keine Vermutung mehr, sondern gemessen: der Kommentar in `NtmAdvancementProvider`
+stimmt unverändert. Der Punkt bleibt offen, aber er wartet auf andere Runden, nicht auf
+Erfolgsarbeit.
+
+### Stand
+
+| Punkt | Stand |
+|---|---|
+| Meteoritenverlies | steht in der Welt (Runden 250–256, 266) |
+| Bauzauberstäbe | 3 von 3 erreichbaren; der vierte ist im Original abgeschaltet |
+| Erfolgssystem | 46 von 61; die 15 übrigen messbar durch fehlenden Inhalt blockiert |

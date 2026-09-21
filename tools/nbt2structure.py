@@ -17,6 +17,13 @@ bricht den Lauf ab. Ein stillschweigend zu Luft gewordener Block waere im fertig
 ein Loch, das niemand bemerkt -- und genau das macht das Original heute mit
 hbm:tile.ladder_tungsten, dessen Block es nicht mehr gibt (siehe LEITER unten).
 
+77 VON 79 -- UND DIE ZWEI SIND AUCH IM ORIGINAL TOT. Der Umsetzer laesst zwei Dateien
+stehen: test-rot.nbt nennt eine reine Blocknummer, die nur in der Welt ihres Urhebers galt,
+und test-tandem-core.nbt den Tandemstab. Nachgemessen (Runde 270): beide werden im Original
+NUR in auskommentierten Zeilen angemeldet (StructureManager.java:98 und 102-103). Sie kommen
+dort also ebenso wenig in die Welt wie hier. Die Deckung betraegt damit 77 von 77 Dateien,
+die das Original tatsaechlich benutzt.
+
 Aufruf:
     tools/nbt2structure.py <quellverzeichnis> <zielverzeichnis>
     tools/nbt2structure.py --pruefe <quellverzeichnis>     nur Tabelle pruefen, nichts schreiben
