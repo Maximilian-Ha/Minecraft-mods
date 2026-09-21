@@ -397,6 +397,7 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicItem(NtmItems.SAFETY_FUSE.get());
         this.basicItem(NtmItems.STICK_TNT.get());
         this.basicItem(NtmItems.STICK_SEMTEX.get());
+        this.basicItem(NtmItems.STICK_C4.get());
         this.basicItem(NtmItems.BALL_TATB.get());
         this.basicItem(NtmItems.BALL_TATB.get());
         this.basicItem(NtmItems.PELLET_CLUSTER.get());

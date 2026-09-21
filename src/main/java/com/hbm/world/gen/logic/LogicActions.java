@@ -1,9 +1,11 @@
 package com.hbm.world.gen.logic;
 
 import com.hbm.blockentity.SkeletonHolderBlockEntity;
+import com.hbm.blockentity.bomb.ChargeBlockEntity;
 import com.hbm.blockentity.WandLogicBlockEntity;
 import com.hbm.blockentity.machine.LockableBaseBlockEntity;
 import com.hbm.blocks.NtmBlocks;
+import com.hbm.blocks.bomb.ChargeBaseBlock;
 import com.hbm.entity.ai.FireGunGoal;
 import com.hbm.items.NtmItems;
 import com.hbm.util.MobUtil;
@@ -31,8 +33,8 @@ import java.util.function.Consumer;
 /**
  * Portiert aus 1.7.10: com.hbm.world.gen.util.LogicBlockActions.
  *
- * NACHGEZAEHLT ueber die drei Bauwerke mit Logikstaeben (Kran, Fabrik, Turmsockel) nennen sie
- * ZEHN Aktionen, von denen das Original neun aufloesen kann. Acht davon stehen hier:
+ * NACHGEZAEHLT ueber die drei Bauwerke mit Logikstaeben: 31 Staebe, die zusammen NEUN
+ * Aktionsnamen nennen. Acht davon kann das Original aufloesen, und alle acht stehen hier:
  *
  *   COLLAPSE_ROOF_RAD_5     die Decke faellt herunter
  *   POWER_LOCK              der Tresor nebenan schliesst sich zu
@@ -41,19 +43,18 @@ import java.util.function.Consumer;
  *   SKELETON_GUN_TIER_1     drei Skelette mit Waffe und Fernkampfruestung
  *   SKELETON_GUN_TIER_2/3   dieselben mit besseren Waffen; Stufe 3 traegt die bessere
  *                           Ruestung und haelt auf doppelter Weite genauer
+ *   BOMB_CRANE              eine C4-Haftladung mit einer Minute auf der Uhr
+ *
+ * STUFE 3 STEHT IN KEINEM BAUWERK. Von den neun Namen kommt SKELETON_GUN_TIER_3 in keiner der
+ * drei Dateien vor; angemeldet ist sie im Original trotzdem, und darum auch hier -- wer einen
+ * Stab von Hand setzt, soll sie benutzen koennen.
  *
  * DAS SCHUSS-ZIEL HAENGT NICHT NUR AN DEN BEIDEN OBEREN STUFEN. MobUtil.ausruesten gibt es
  * jedem Skelett mit, das etwas in die Hand bekommt -- so wie im Original. Stufe 1 schiesst
  * also auch, nur mit den weiten Standardwerten (20 Bloecke, 30 Grad daneben). Die beiden
  * oberen Stufen haengen ihr eigenes, schaerfer eingestelltes Ziel vorher an.
  *
- * DIE NEUNTE wartet auf ein Teil, das der Port noch nicht hat, und ist hier deshalb NICHT
- * eingetragen -- ein Stab mit ihrem Namen verschwindet, genau wie im Original einer mit einem
- * unbekannten Namen:
- *
- *   BOMB_CRANE              die C4-Ladung mit Zeitzuender
- *
- * DIE ZEHNTE, DEAD_GUY_BASE_TOWER, kommt nie: im Original ist die einzige Zeile, die sie
+ * DIE NEUNTE, DEAD_GUY_BASE_TOWER, kommt nie: im Original ist die einzige Zeile, die sie
  * anmelden wuerde, auskommentiert UND anders geschrieben (LogicBlockActions.java:537). Der
  * Logikstab im Turmsockel loescht sich dort also selbst, und hier tut er dasselbe.
  */
@@ -69,7 +70,8 @@ public class LogicActions {
             "SKELETON_GUN_TIER_2", be -> mobs(be, EntityType.SKELETON, MobUtil.WAFFEN_2, MobUtil.FERNKAMPF,
                     mob -> MobUtil.schussZiel(mob, feuerZiel(mob, 50, 5F))),
             "SKELETON_GUN_TIER_3", be -> mobs(be, EntityType.SKELETON, MobUtil.WAFFEN_3, MobUtil.FERNKAMPF_ADV,
-                    mob -> MobUtil.schussZiel(mob, feuerZiel(mob, 100, 1F))));
+                    mob -> MobUtil.schussZiel(mob, feuerZiel(mob, 100, 1F))),
+            "BOMB_CRANE", LogicActions::bombeAmKran);
 
     /**
      * Das Schuss-Ziel der beiden hoeheren Schuetzenstufen.
@@ -225,6 +227,53 @@ public class LogicActions {
         }
 
         level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+    }
+
+    /**
+     * BOMB_CRANE: In Phase 0 setzt der Stab ueber sich eine C4-Haftladung und stellt sie auf
+     * eine Minute. Ab Phase 1 scharf, und aus dem Stab wird ein Stahlblock.
+     *
+     * DIE LADUNG ZEIGT NACH OBEN -- das Original schreibt ForgeDirection.UP in die Metadaten,
+     * also steht sie auf dem Boden des Feldes darueber. Dass unter ihr der Stab steht und
+     * gleich zu Stahl wird, passt dazu.
+     *
+     * DASSELBE NOCH EINMAL ALS BEDINGUNG. Im Original heisst auch eine Bedingung BOMB_CRANE,
+     * und sie setzt in Phase 0 dieselbe Ladung, nur auf zehn Sekunden. Der Kran benutzt beide
+     * an einem Stab -- actionID und conditionID stehen dort beide auf BOMB_CRANE (nachgemessen
+     * in crane_mod.nbt). Da jeder Tick erst die Aktion und dann die Bedingung ruft, ueberschreibt
+     * die Bedingung die eine Minute sofort mit zehn Sekunden. Die Minute hier ist also gesetzt
+     * und nie wirksam; sie steht trotzdem, weil sie im Original steht -- und weil ein von Hand
+     * gesetzter Stab mit BOMB_CRANE als Aktion und einer anderen Bedingung sie braucht.
+     */
+    private static void bombeAmKran(WandLogicBlockEntity be) {
+
+        Level level = be.getLevel();
+        BlockPos pos = be.getBlockPos();
+        if(level == null || level.isClientSide) return;
+
+        if(be.phase == 0) {
+            ladungSetzen(level, pos.above(), 1200);
+        }
+
+        if(be.phase >= 1) {
+            if(level.getBlockEntity(pos.above()) instanceof ChargeBlockEntity bombe) {
+                bombe.started = true;
+                bombe.sync();
+            }
+            level.setBlock(pos, NtmBlocks.BLOCK_STEEL.get().defaultBlockState(), 3);
+        }
+    }
+
+    /** Setzt eine nach oben gerichtete C4-Haftladung und stellt ihre Uhr. */
+    static void ladungSetzen(Level level, BlockPos pos, int zeit) {
+
+        level.setBlock(pos, NtmBlocks.CHARGE_C4.get().defaultBlockState()
+                .setValue(ChargeBaseBlock.FACING, Direction.UP), 3);
+
+        if(level.getBlockEntity(pos) instanceof ChargeBlockEntity bombe) {
+            bombe.timer = zeit;
+            bombe.sync();
+        }
     }
 
     /** Der erste Tresor in den sechs Nachbarfeldern, oder null. */

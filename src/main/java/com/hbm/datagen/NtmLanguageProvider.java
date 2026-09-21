@@ -1315,6 +1315,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.SAFETY_FUSE, "Safety Fuse");
         this.add(NtmItems.STICK_TNT, "Stick of TNT");
         this.add(NtmItems.STICK_SEMTEX, "Stick of Semtex");
+        this.add(NtmItems.STICK_C4, "Stick of C4");
         this.add(NtmItems.BALL_TATB, "TATB");
         this.add(NtmItems.PELLET_CLUSTER, "Explosive Pellets");
         this.add(NtmItems.MAGNETRON, "Magnetron");
@@ -2606,6 +2607,10 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.TNT, "Actual TNT");
         this.add(NtmBlocks.SEMTEX, "Semtex");
         this.add(NtmBlocks.C4, "C-4");
+        this.add(NtmBlocks.CHARGE_DYNAMITE, "Dynamite Charge");
+        this.add(NtmBlocks.CHARGE_MINER, "Mining Charge");
+        this.add(NtmBlocks.CHARGE_C4, "C-4 Charge");
+        this.add(NtmBlocks.CHARGE_SEMTEX, "Semtex Charge");
         this.add(NtmBlocks.FISSURE_BOMB, "Fissure Bomb");
 
         this.add(NtmBlocks.MINE_AP, "Anti-Personell Mine");

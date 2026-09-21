@@ -25,7 +25,7 @@ import java.util.function.Consumer;
  *
  * DAS ARGUMENT IST EIN OBJEKTFELD, wie im Original: Welt, Blockentitaet, Ort, Spieler. Das
  * ist unschoen und bleibt trotzdem so -- die Tabelle soll sich lesen wie ihre Vorlage, und
- * eine eigene Schnittstelle fuer einen einzigen Eintrag waere mehr Gerüst als Inhalt.
+ * eine eigene Schnittstelle fuer einen einzigen Eintrag waere mehr Geruest als Inhalt.
  */
 public class LogicInteractions {
 

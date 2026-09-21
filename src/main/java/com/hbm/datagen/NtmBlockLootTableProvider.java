@@ -401,6 +401,13 @@ public class NtmBlockLootTableProvider extends BlockLootSubProvider {
         this.dropSelf(NtmBlocks.C4.get());
         this.dropSelf(NtmBlocks.FISSURE_BOMB.get());
 
+        /* Die vier Haftladungen fallen nicht: wer sie zerschlaegt, zuendet sie. Nur der
+         * Entschaerfer gibt sie zurueck, und der legt den Gegenstand selbst hin
+         * (ChargeBaseBlock.onScrew). Im Original steht dafuer getItemDropped -> null. */
+        this.add(NtmBlocks.CHARGE_DYNAMITE.get(), noDrop());
+        this.add(NtmBlocks.CHARGE_MINER.get(), noDrop());
+        this.add(NtmBlocks.CHARGE_C4.get(), noDrop());
+        this.add(NtmBlocks.CHARGE_SEMTEX.get(), noDrop());
         this.dropSelf(NtmBlocks.MINE_AP.get());
         this.dropSelf(NtmBlocks.MINE_HE.get());
         this.dropSelf(NtmBlocks.MINE_SHRAP.get());

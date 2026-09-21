@@ -764,6 +764,14 @@ public class NtmBlocks {
     public static final DeferredBlock<Block> DET_CORD =    register("det_cord",    () -> new DetCordBlock(BlockBehaviour.Properties.of().strength(0.1F, 0.0F).noOcclusion().isSuffocating(NtmBlocks::never).isViewBlocking(NtmBlocks::never).sound(SoundType.METAL)));
     public static final DeferredBlock<Block> DET_NUKE =    register("det_nuke",    () -> new ExplosiveChargeBlock(BlockBehaviour.Properties.of().strength(0.1F, 0.0F).sound(SoundType.METAL)));
     public static final DeferredBlock<Block> DET_MINER =   register("det_miner",   () -> new ExplosiveChargeBlock(BlockBehaviour.Properties.of().strength(0.1F, 0.0F).sound(SoundType.METAL)));
+    /* Die vier Haftladungen mit Schaltuhr, Runde 269. Sie kleben an der angeklickten Flaeche,
+     * zaehlen herunter und lassen sich nur mit dem Entschaerfer wieder abnehmen. Im Original
+     * steht ihre Sprengfestigkeit ausdruecklich auf 1.0F -- sie sollen von einer fremden
+     * Explosion nicht einfach weggeraeumt werden, sondern selbst hochgehen. */
+    public static final DeferredBlock<Block> CHARGE_DYNAMITE = register("charge_dynamite", () -> new ChargeDynamiteBlock(BlockBehaviour.Properties.of().noOcclusion().strength(0.1F, 1.0F).sound(SoundType.METAL)));
+    public static final DeferredBlock<Block> CHARGE_MINER =    register("charge_miner",    () -> new ChargeMinerBlock(BlockBehaviour.Properties.of().noOcclusion().strength(0.1F, 1.0F).sound(SoundType.METAL)));
+    public static final DeferredBlock<Block> CHARGE_C4 =       register("charge_c4",       () -> new ChargeC4Block(BlockBehaviour.Properties.of().noOcclusion().strength(0.1F, 1.0F).sound(SoundType.METAL)));
+    public static final DeferredBlock<Block> CHARGE_SEMTEX =   register("charge_semtex",   () -> new ChargeSemtexBlock(BlockBehaviour.Properties.of().noOcclusion().strength(0.1F, 1.0F).sound(SoundType.METAL)));
     public static final DeferredBlock<Block> BARREL_RED =   register("barrel_red",   () -> new RedBarrelBlock(BlockBehaviour.Properties.of().noOcclusion().strength(0.1F, 2.5F).sound(SoundType.METAL), true));
     /* Stufe 5: die beiden Strahlenfaesser. Das gelbe strahlt zehnmal so stark wie das
      * verglaste und zuendet als einziges mit, wenn nebenan etwas hochgeht. */

@@ -12720,3 +12720,70 @@ nie — ihre Anmeldezeile ist im Original auskommentiert und zudem anders geschr
 Das ist nach `DEAD_GUY_BASE_TOWER` (Runde 265) und `slotPoolMasks` (Runde 267) der dritte Fund
 dieser Art im selben Teilsystem — mit dem Unterschied, dass dieser hier nicht nichts tut,
 sondern mehr, als der Kommentar daneben behauptet.
+
+## Runde 269 — Die Haftladungen, und eine Stange, die nie angemeldet war
+
+`BOMB_CRANE` war die letzte offene Aktion des Logikstabs. Sie setzt eine C4-Haftladung über
+sich und stellt ihr eine Uhr — und die ganze Familie dieser Ladungen fehlte dem Port.
+
+### Was gefehlt hat
+
+Vier Blöcke (`BlockChargeBase` mit `BlockChargeC4`, `BlockChargeDynamite`, `BlockChargeMiner`,
+`BlockChargeSemtex`) und ihre Blockentität `TileEntityCharge`. Sie sind etwas anderes als die
+schon portierten `det_*`-Blöcke: die kleben an der Fläche, auf die man sie setzt, tragen eine
+Schaltuhr und lassen sich **nur mit dem Entschärfer** wieder abnehmen — wer sie zerschlägt,
+zündet sie.
+
+Portiert als `ChargeBaseBlock` samt den vier Ableitungen und `ChargeBlockEntity`.
+
+Im Original malt ein Blockdarsteller (ISBRH) den Körper und ein Blockentitäten-Darsteller
+(TESR) die Restzeit darauf. 1.21 kennt kein ISBRH mehr; der Block ist hier unsichtbar und
+`RenderExplosiveCharge` macht beides. Zwei Formen reichen für vier Ladungen — im Original steht
+das als `getRenderType()`, der die `renderID` der jeweils anderen Klasse zurückgibt.
+
+### Die Stange, die es nie gab
+
+Beim Nachbauen der Rezepte fiel auf: `stick_c4` ist im Port **nicht angemeldet**. Keine Zutat
+fehlte — `ingot_c4`, `det_cord`, Papier, `safety_fuse` sind alle da —, nur die Stange selbst
+war übersprungen worden. Damit fehlten still zwei Rezepte: das der Stange und das des
+**C-4-Blocks**, der seit seiner Portierung unbaubar im Spiel stand.
+
+Nachgereicht samt Textur, Gefahreneintrag (`EXPLOSIVE, 2.5F`, wie im Original), Kreativ-Reiter
+und beiden Rezepten. Dazu die vier Rezepte der Ladungen: drei Stangen plus Klebeband, und die
+Bergbauladung als Dynamitladung mit vier Feuersteinen darum.
+
+### Nachgemessen: neun Aktionen, nicht zehn
+
+Beim Anschluss von `BOMB_CRANE` habe ich die Zahlen im Kommentar von `LogicActions`
+nachgerechnet, indem ich die drei Bauwerksdateien mit dem Lader des Umsetzers eingelesen und
+die Felder `actionID`/`conditionID`/`interactionID` **aller 31 Stäbe** gezogen habe. Ergebnis:
+
+| | genannt | auflösbar | jetzt live |
+|---|---|---|---|
+| Aktionen | 9 | 8 | 8 |
+| Bedingungen | 5 | 5 | 5 |
+| Wechselwirkungen | 1 | 1 | 1 |
+
+Der alte Kommentar sagte „zehn Aktionen, neun auflösbar". Beide Zahlen waren um eins zu hoch.
+
+Zwei Dinge fallen dabei auf:
+
+**`SKELETON_GUN_TIER_3` kommt in keinem Bauwerk vor.** Runde 268 hat sie eingeschaltet, ohne
+dass ein Stab sie nennt. Angemeldet ist sie im Original trotzdem, und darum bleibt sie auch
+hier — wer einen Stab von Hand setzt, soll sie benutzen können.
+
+**`BOMB_CRANE` ist zugleich eine Bedingung.** Derselbe Name steht im Original in beiden
+Tabellen, und der Kran benutzt beide an ein und demselben Stab: `actionID` und `conditionID`
+stehen dort beide auf `BOMB_CRANE`. Dem Port fehlte die Bedingung — `LogicConditions` kannte
+nur vier Namen, dieser Stab hätte sich also gelöscht. Jetzt kennt er fünf.
+
+Beide setzen dieselbe Ladung, mit verschiedenen Zeiten: die Aktion 1200 Ticks, die Bedingung
+200. Da jeder Tick **erst die Aktion und dann die Bedingung** ruft
+(`LogicBlock.java:117-118`), überschreibt die Bedingung die Minute sofort mit zehn Sekunden —
+die Minute ist gesetzt und nie zu sehen. Übernommen, wie es dasteht.
+
+### Stand
+
+Der Logikstab ist damit vollständig: acht von acht auflösbaren Aktionen, fünf von fünf
+Bedingungen, die eine Wechselwirkung. Die neunte Aktion, `DEAD_GUY_BASE_TOWER`, kommt nie —
+ihre Anmeldezeile ist im Original auskommentiert und zudem anders geschrieben.

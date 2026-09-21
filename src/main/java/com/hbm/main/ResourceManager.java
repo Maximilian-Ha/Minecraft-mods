@@ -21,6 +21,15 @@ public class ResourceManager {
     public static final ResourceLocation MINE_NAVAL_TEX = NuclearTechMod.withDefaultNamespace("textures/models/bombs/mine_naval.png");
     public static final ResourceLocation MINE_FAT_TEX = NuclearTechMod.withDefaultNamespace("textures/models/bombs/mine_fat.png");
 
+    /* Die vier Haftladungen, Runde 269. Zwei Formen und vier Texturen: Bergbau und Dynamit
+     * teilen sich eine Form, Semtex und C4 die andere -- genau wie im Original, wo
+     * BlockChargeMiner die renderID von BlockChargeDynamite und BlockChargeSemtex die von
+     * BlockChargeC4 uebernimmt. */
+    public static final ResourceLocation CHARGE_C4_TEX = NuclearTechMod.withDefaultNamespace("textures/models/bombs/charge_c4.png");
+    public static final ResourceLocation CHARGE_SEMTEX_TEX = NuclearTechMod.withDefaultNamespace("textures/models/bombs/charge_semtex.png");
+    public static final ResourceLocation CHARGE_DYNAMITE_TEX = NuclearTechMod.withDefaultNamespace("textures/models/bombs/charge_dynamite.png");
+    public static final ResourceLocation CHARGE_MINER_TEX = NuclearTechMod.withDefaultNamespace("textures/models/bombs/charge_miner.png");
+
     public static final ResourceLocation NUKE_GADGET_TEX = NuclearTechMod.withDefaultNamespace("textures/models/bombs/nuke_gadget.png");
     public static final ResourceLocation NUKE_LITTLE_BOY_TEX = NuclearTechMod.withDefaultNamespace("textures/models/bombs/nuke_little_boy.png");
     public static final ResourceLocation NUKE_FAT_MAN_TEX = NuclearTechMod.withDefaultNamespace("textures/models/bombs/nuke_fatman.png");
@@ -571,6 +580,8 @@ public class ResourceManager {
     public static IModelCustom mine_he;
     public static IModelCustom mine_naval;
     public static IModelCustom mine_fat;
+    public static IModelCustom charge_c4;
+    public static IModelCustom charge_dynamite;
 
     // Tank
     public static IModelCustom bigasstank;
@@ -913,6 +924,8 @@ public class ResourceManager {
         mine_he = new HFRWavefrontObject("models/obj/bomb/mine_he.obj").asVBO();
         mine_naval = new HFRWavefrontObject("models/obj/bomb/mine_naval.obj").asVBO();
         mine_fat = new HFRWavefrontObject("models/obj/bomb/mine_fat.obj").asVBO();
+        charge_c4 = new HFRWavefrontObject("models/obj/bomb/charge_c4.obj").asVBO();
+        charge_dynamite = new HFRWavefrontObject("models/obj/bomb/charge_dynamite.obj").asVBO();
 
         bigasstank = new HFRWavefrontObject("models/obj/machines/bigasstank.obj").asVBO();
         fluid_tank = new HFRWavefrontObject("models/obj/machines/fluid_tank.obj").asVBO();

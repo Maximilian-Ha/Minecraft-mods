@@ -571,6 +571,10 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.simpleCubeBottomTopBlock(NtmBlocks.FISSURE_BOMB);
 
         this.particleOnlyBlock(NtmBlocks.MINE_AP, blockTexture(NtmBlocks.MINE_AP));
+        this.particleOnlyBlock(NtmBlocks.CHARGE_DYNAMITE, blockTexture(NtmBlocks.CHARGE_DYNAMITE));
+        this.particleOnlyBlock(NtmBlocks.CHARGE_MINER, blockTexture(NtmBlocks.CHARGE_MINER));
+        this.particleOnlyBlock(NtmBlocks.CHARGE_C4, blockTexture(NtmBlocks.CHARGE_C4));
+        this.particleOnlyBlock(NtmBlocks.CHARGE_SEMTEX, blockTexture(NtmBlocks.CHARGE_SEMTEX));
         this.particleOnlyBlock(NtmBlocks.MINE_HE, blockTexture(NtmBlocks.MINE_HE));
         this.particleOnlyBlock(NtmBlocks.MINE_SHRAP, blockTexture(NtmBlocks.MINE_SHRAP));
         this.particleOnlyBlock(NtmBlocks.MINE_FAT, blockTexture(NtmBlocks.MINE_FAT));

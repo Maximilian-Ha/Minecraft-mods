@@ -5468,6 +5468,50 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .define('S', NtmItems.SAFETY_FUSE.get())
                 .unlockedBy("has_stick_semtex", has(NtmItems.STICK_SEMTEX.get()))
                 .save(recipeOutput, NuclearTechMod.withDefaultNamespace("semtex"));
+
+        /* Die vierte Stange und ihr Block, Runde 269. Bis dahin gab es beide Rezepte nicht:
+         * jede Zutat war da, nur die Stange selbst war nie angemeldet worden. */
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmItems.STICK_C4.get(), 4)
+                .pattern(" S ").pattern("PDP").pattern("PDP")
+                .define('S', NtmBlocks.DET_CORD.get())
+                .define('P', Items.PAPER)
+                .define('D', NtmItems.INGOT_C4.get())
+                .unlockedBy("has_ingot_c4", has(NtmItems.INGOT_C4.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("stick_c4"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.C4.get(), 1)
+                .pattern("DDD").pattern("DSD").pattern("DDD")
+                .define('D', NtmItems.STICK_C4.get())
+                .define('S', NtmItems.SAFETY_FUSE.get())
+                .unlockedBy("has_stick_c4", has(NtmItems.STICK_C4.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("c4"));
+
+        /* Die vier Haftladungen: drei Stangen und ein Klebeband, die Bergbauladung dagegen
+         * eine Dynamitladung mit vier Feuersteinen darum. */
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, NtmBlocks.CHARGE_DYNAMITE.get(), 1)
+                .requires(NtmItems.STICK_DYNAMITE.get(), 3)
+                .requires(NtmItems.DUCTTAPE.get())
+                .unlockedBy("has_stick_dynamite", has(NtmItems.STICK_DYNAMITE.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("charge_dynamite"));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, NtmBlocks.CHARGE_SEMTEX.get(), 1)
+                .requires(NtmItems.STICK_SEMTEX.get(), 3)
+                .requires(NtmItems.DUCTTAPE.get())
+                .unlockedBy("has_stick_semtex", has(NtmItems.STICK_SEMTEX.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("charge_semtex"));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, NtmBlocks.CHARGE_C4.get(), 1)
+                .requires(NtmItems.STICK_C4.get(), 3)
+                .requires(NtmItems.DUCTTAPE.get())
+                .unlockedBy("has_stick_c4", has(NtmItems.STICK_C4.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("charge_c4"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, NtmBlocks.CHARGE_MINER.get(), 1)
+                .pattern(" F ").pattern("FCF").pattern(" F ")
+                .define('F', Items.FLINT)
+                .define('C', NtmBlocks.CHARGE_DYNAMITE.get())
+                .unlockedBy("has_charge_dynamite", has(NtmBlocks.CHARGE_DYNAMITE.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("charge_miner"));
     }
 
     private void gunRecipes(RecipeOutput recipeOutput) {

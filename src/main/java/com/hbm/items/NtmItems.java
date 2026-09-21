@@ -590,6 +590,12 @@ public class NtmItems {
     public static final DeferredItem<Item> STICK_TNT = ITEMS.register("stick_tnt", () -> new Item(new Item.Properties()));
     /** Die Semtexstange. Sie ist die staerkste der drei. */
     public static final DeferredItem<Item> STICK_SEMTEX = ITEMS.register("stick_semtex", () -> new Item(new Item.Properties()));
+    /**
+     * Die C4-Stange, Runde 269. Sie fehlte, und mit ihr zwei Rezepte: der C4-Block
+     * (WeaponRecipes.java:297 im Original) und die C4-Haftladung
+     * (CraftingManager.java:530). Beide sind damit nachgereicht.
+     */
+    public static final DeferredItem<Item> STICK_C4 = ITEMS.register("stick_c4", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> PELLET_CLUSTER = ITEMS.register("pellet_cluster", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> MAGNETRON = ITEMS.register("magnetron", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> PHOTO_PANEL = ITEMS.register("photo_panel", () -> new Item(new Item.Properties()));

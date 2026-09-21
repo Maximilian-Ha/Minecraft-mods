@@ -1671,6 +1671,11 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.DET_NUKE);
                         output.accept(NtmBlocks.DET_MINER);
 
+                        output.accept(NtmBlocks.CHARGE_DYNAMITE);
+                        output.accept(NtmBlocks.CHARGE_MINER);
+                        output.accept(NtmBlocks.CHARGE_C4);
+                        output.accept(NtmBlocks.CHARGE_SEMTEX);
+
                         output.accept(NtmBlocks.BARREL_RED);
                         output.accept(NtmBlocks.YELLOW_BARREL);
                         output.accept(NtmBlocks.VITRIFIED_BARREL);
@@ -1928,6 +1933,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.STICK_DYNAMITE.get());
                         output.accept(NtmItems.STICK_TNT.get());
                         output.accept(NtmItems.STICK_SEMTEX.get());
+                        output.accept(NtmItems.STICK_C4.get());
                         addMetaItems(output, NtmItems.AMMO_CONTAINER.get());
 
                     }).build());
