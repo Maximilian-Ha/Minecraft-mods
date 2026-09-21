@@ -1346,6 +1346,29 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.BOTTLED_CLOUD, "Cloud in a Bottle");
         this.add(NtmItems.COIN_RADIATION, "Radiation Coin");
         this.add(NtmItems.COIN_UFO, "UFO Coin");
+        this.add(NtmItems.LASER_CRYSTAL_CO2, "CO2-Desh Laser Crystal");
+        this.add(NtmItems.LASER_CRYSTAL_CO2, DESC, "Carbon Dioxide encased in Crystalline Desh");
+        this.add(NtmItems.LASER_CRYSTAL_CMB, "CMB-Schrabidate Antimatter Laser Crystal");
+        this.add(NtmItems.LASER_CRYSTAL_CMB, DESC, "Antischrabidium Suspended in a CMB-Schrabidate Alloy Lattice");
+        this.add(NtmItems.LASER_CRYSTAL_DNT, "Spark Laser Crystal");
+        this.add(NtmItems.LASER_CRYSTAL_DNT, DESC, "Dineutronium-Spark Fermion Supercrystal");
+        this.add(NtmItems.LASER_CRYSTAL_DIGAMMA, "Digamma Laser Crystal");
+
+        /* Die Wellenlaengen. NULL traegt im Original zwei Scherznamen ("la creatura",
+         * "6 dollar") -- der Zustand ohne Kristall wird nie angezeigt, weil ein FEL ohne
+         * Kristall nichts einblendet. Hier stehen sie, wie sie dort stehen. */
+        this.add("wavelengths.name.null", "la creatura");
+        this.add("wavelengths.waveRange.null", "6 dollar");
+        this.add("wavelengths.name.ir", "Infrared");
+        this.add("wavelengths.waveRange.ir", "780nm-1mm");
+        this.add("wavelengths.name.visible", "Visible Light");
+        this.add("wavelengths.waveRange.visible", "400nm-780nm");
+        this.add("wavelengths.name.uv", "Ultraviolet");
+        this.add("wavelengths.waveRange.uv", "100nm-400nm");
+        this.add("wavelengths.name.gamma", "Gamma");
+        this.add("wavelengths.waveRange.gamma", "<100pm");
+        this.add("wavelengths.name.drx", "Digamma");
+        this.add("wavelengths.waveRange.drx", "1916169 planck lengths");
         /* Der Text, den 1.21 beim Abspielen einblendet. Im Original steht er als
          * item.record.glass.desc im Sprachbestand -- drei Fragezeichen, mehr verraet der
          * Mod ueber diese Platte nicht. */
@@ -4335,6 +4358,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.BISMUTH_LEGS, "Bismuth Kneeguards");
         this.add(NtmItems.BISMUTH_BOOTS, "Bismuth Sandals");
         this.add(NtmItems.LASER_CRYSTAL_BISMUTH, "BiSmUTh Laser Crystal");
+        this.add(NtmItems.LASER_CRYSTAL_BISMUTH, DESC, "Bismuth-Samarium-Uranium-Thorium crystal matrix");
 
         this.add(NtmItems.FAU_HELMET, "Fau Helmet");
         this.add(NtmItems.FAU_PLATE, "Fau Chestplate");

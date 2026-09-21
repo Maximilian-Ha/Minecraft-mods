@@ -13396,3 +13396,40 @@ Jetzt steht sie einmal, in `ExplosionNukeSmall`, und die Spaltbombe ruft dieselb
 UFO. Das ist keine neue Mechanik, sondern eine, die schon zweimal dastand.
 
 **60 von 61.** Offen bleibt allein `SILEX` — und dafür braucht es den FEL.
+
+## Runde 284 — Die fünf Laserkristalle, und eine Behauptung, die nicht stimmte
+
+Der letzte offene Erfolg heißt `SILEX`. Vor der Maschine kommt, was sie steuert: die fünf
+Laserkristalle des FEL.
+
+Jeder gibt dem Laser eine **Wellenlänge**, und die entscheidet, welche Rezepte die SILEX
+darunter fahren kann — von Kohlendioxid in Desh (infrarot) über BiSmUTh (sichtbar), CMB-
+Schrabidat (ultraviolett) und Dineutronium-Funken (Gamma) bis zum Digamma-Kristall, dessen
+Beschreibung das Original mit dem Verschleierungsformat schreibt: man liest sie nie, sie
+flackert.
+
+### Einer war schon da — und vier Tore haben es gemerkt
+
+Der BiSmUTh-Kristall steckt in der Wismut-Brustplatte und kam deshalb früher als die anderen.
+Beim Nachtragen der übrigen vier fiel er doppelt an, und **vier Tore meldeten es gleichzeitig**:
+`dupreg-check` (zweimal derselbe Anmeldename), `location-check` (dieselbe ResourceLocation),
+`lang-check` (derselbe Übersetzungsschlüssel) und `syntax-check` (dieselbe Konstante). Jedes
+davon hätte den Start des Spiels abgebrochen.
+
+Sein Kommentar sagte: die vier anderen gehören zum FEL, „den der Port nicht hat", und die
+Wellenlängen-Anzeige bleibe darum draußen. Beides ist jetzt überholt; der Kommentar sagt das.
+
+### Eine Behauptung, die nicht stimmte
+
+In Runde 277 stand hier und im Kopf von `NtmAdvancementProvider`, die SILEX prüfe `hasLaser`.
+Nachgemessen mit `git grep` über das ganze Original: **das Feld wird nirgends gesetzt.**
+`TileEntitySILEX.java:39` ist die einzige Fundstelle im ganzen Mod.
+
+Was sie wirklich prüft, ist ihr Feld `mode` — und das setzt ihr der FEL von außen
+(`TileEntityFEL.java:84 ff.`, über den Kristall in seinem Schacht). Ohne FEL bleibt der Modus
+auf `NULL`, und nur Rezepte ohne Wellenlängenanforderung laufen.
+
+Und noch etwas ist nachgemessen: der Erfolg hängt am **Bau** der Maschine
+(`AchievementHandler.craftingAchievements`), nicht an ihrem Betrieb.
+
+**60 von 61** — unverändert, aber der Weg zum letzten ist jetzt vermessen statt vermutet.

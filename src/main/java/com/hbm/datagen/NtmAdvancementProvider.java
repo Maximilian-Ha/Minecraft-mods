@@ -50,17 +50,24 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
  * Stelle im Port, die ihn feuert -- den Tod durch Strahlung, das Betreten des roten Zimmers,
  * den Start einer Sojus.
  *
- * STAND NACH RUNDE 277: 56 von 61. Die FUENF uebrigen warten auf Teile, die der Port noch
+ * STAND NACH RUNDE 284: 60 von 61. Der EINE uebrige wartet auf ein Teil, das der Port noch
  * nicht hat -- und das ist nachgemessen, nicht geschaetzt:
  *
- *   bossMeltdown, bossMaskman,        vier Bossentitaeten (EntityRADBeast, EntityMaskMan,
- *   bossWorm, bossUFO                 EntityBOTPrimeHead, EntityUFO) -- keine davon portiert
- *   SILEX                             die Maschine, und die braucht erst den FEL: ihre
- *                                     TileEntitySILEX prueft hasLaser und vergleicht die
- *                                     Wellenlaenge des Rezepts mit ihrem eigenen Modus
+ *   SILEX                             die Maschine. Sie faellt, sobald machine_silex baubar
+ *                                     ist: das Original haengt den Erfolg an den BAU
+ *                                     (AchievementHandler.craftingAchievements), nicht an
+ *                                     den Betrieb.
+ *
+ * DIE VIER BOSSE KAMEN IN DEN RUNDEN 280 BIS 283: der Maskenmann, das Strahlenbiest, der
+ * Wurm und das UFO.
  *
  * (Diese Aufzaehlung stand zwischen Runde 272 und 275 halb zerbrochen da -- ein Glied wurde
  * entfernt, ohne den Rest zu lesen. Seit Runde 275 steht hier die gemessene Liste.)
+ *
+ * BERICHTIGT IN RUNDE 284: hier stand, die SILEX pruefe hasLaser. Das Feld gibt es, aber
+ * NIEMAND SETZT ES -- gemessen mit git grep ueber das ganze Original: die Zeile
+ * TileEntitySILEX.java:39 ist die einzige Fundstelle. Was sie wirklich prueft, ist ihr Feld
+ * mode, und das setzt ihr der FEL von aussen (TileEntityFEL.java:84 ff.).
  *
  * DIE SOJUS STAND HIER ZU UNRECHT (berichtigt in Runde 277) -- das dritte Mal, dass die
  * Messung aus Runde 270 danebenlag. Sie ist als Soyuz samt Startrampe, Satellitenregister und

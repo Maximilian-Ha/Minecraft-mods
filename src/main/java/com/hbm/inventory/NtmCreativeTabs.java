@@ -313,6 +313,12 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.CIRCUIT_CONTROL_UNIT_CASING.get());
                         output.accept(NtmItems.CIRCUIT_CONTROL_UNIT.get());
                         output.accept(NtmItems.CIRCUIT_ADVANCED_CONTROL_UNIT.get());
+                        /* Runde 284: die fuenf Laserkristalle. Im Original stehen sie im
+                         * Steuerreiter, dort, wo auch die Schaltkreise liegen. */
+                        output.accept(NtmItems.LASER_CRYSTAL_CO2);
+                        output.accept(NtmItems.LASER_CRYSTAL_CMB);
+                        output.accept(NtmItems.LASER_CRYSTAL_DNT);
+                        output.accept(NtmItems.LASER_CRYSTAL_DIGAMMA);
                         output.accept(NtmItems.CIRCUIT_SOLID_STATE_QUANTUM_PROCESSOR.get());
                         output.accept(NtmItems.CIRCUIT_QUANTUM_PROCESSING_UNIT.get());
                         output.accept(NtmItems.CIRCUIT_QUANTUM_COMPUTER.get());

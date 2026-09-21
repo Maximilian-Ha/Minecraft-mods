@@ -54,6 +54,8 @@ import com.hbm.items.armor.ItemModCladding;
 import com.hbm.items.armor.ItemModIndestructible;
 import com.hbm.items.armor.ItemModInsert;
 import com.hbm.items.armor.ItemModCloud;
+import com.hbm.items.machine.FelCrystalItem;
+import com.hbm.items.machine.FelCrystalItem.Wellenlaenge;
 import com.hbm.items.armor.ItemModKnockback;
 import com.hbm.items.armor.ModCardItem;
 import com.hbm.items.armor.ModMorningGloryItem;
@@ -1945,15 +1947,15 @@ public class NtmItems {
     public static final DeferredItem<Item> BISMUTH_BOOTS = ITEMS.register("bismuth_boots", () -> bismuth(ArmorItem.Type.BOOTS));
 
     /**
-     * Der Wismut-Laserkristall. Im Original einer von fuenf FEL-Kristallen; der Port hat nur
-     * diesen einen, weil nur er gebraucht wird -- er steckt in der Wismut-Brustplatte und
-     * hat ein eigenes Werkbankrezept. Die vier anderen gehoeren zum Freie-Elektronen-Laser,
-     * den der Port nicht hat, und kaemen sonst als Gegenstand ohne Zweck.
+     * Der Wismut-Laserkristall. Er steckt in der Wismut-Brustplatte und hat ein eigenes
+     * Werkbankrezept -- deshalb kam er frueher als die anderen vier.
      *
-     * Ebenso bleibt die Wellenlaengen-Anzeige der Originalklasse draussen: sie beschreibt,
-     * was der Kristall IM LASER tut, und das gibt es hier noch nicht.
+     * BERICHTIGT IN RUNDE 284: hier stand, die vier anderen gehoerten zum
+     * Freie-Elektronen-Laser, "den der Port nicht hat", und die Wellenlaengen-Anzeige bleibe
+     * darum draussen. Seit Runde 284 stehen alle fuenf und tragen ihre Wellenlaenge; dieser
+     * hier ist das sichtbare Licht.
      */
-    public static final DeferredItem<Item> LASER_CRYSTAL_BISMUTH = ITEMS.register("laser_crystal_bismuth", () -> new Item(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> LASER_CRYSTAL_BISMUTH = ITEMS.register("laser_crystal_bismuth", () -> new FelCrystalItem(new Item.Properties(), Wellenlaenge.VISIBLE));
 
     /*
      * DER FAU-ANZUG. Zehn Millionen Ladung, Sprungkraft II fuer den Satz, Geigerton und
@@ -2024,6 +2026,16 @@ public class NtmItems {
     /* Runde 283: die Muenze des UFOs. Jeder Spieler im Umkreis von zweihundert Bloecken
      * bekommt sie beim Absturz unmittelbar ins Inventar gelegt. */
     public static final DeferredItem<Item> COIN_UFO = ITEMS.register("coin_ufo", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON)));
+
+    /*
+     * Runde 284: die FUENF LASERKRISTALLE. Jeder gibt dem FEL eine Wellenlaenge, und die
+     * entscheidet, welche Rezepte die SILEX darunter fahren kann. Der Digamma-Kristall traegt
+     * als einziger keine lesbare Beschreibung -- das Original schreibt sie verschleiert.
+     */
+    public static final DeferredItem<Item> LASER_CRYSTAL_CO2 = ITEMS.register("laser_crystal_co2", () -> new FelCrystalItem(new Item.Properties(), Wellenlaenge.IR));
+    public static final DeferredItem<Item> LASER_CRYSTAL_CMB = ITEMS.register("laser_crystal_cmb", () -> new FelCrystalItem(new Item.Properties(), Wellenlaenge.UV));
+    public static final DeferredItem<Item> LASER_CRYSTAL_DNT = ITEMS.register("laser_crystal_dnt", () -> new FelCrystalItem(new Item.Properties(), Wellenlaenge.GAMMA));
+    public static final DeferredItem<Item> LASER_CRYSTAL_DIGAMMA = ITEMS.register("laser_crystal_digamma", () -> new FelCrystalItem(new Item.Properties().rarity(Rarity.EPIC), Wellenlaenge.DRX, true));
 
     /*
      * DER DAMPFANZUG. Der erste Satz des Ports mit einem TANK statt eines Akkus: er laeuft
