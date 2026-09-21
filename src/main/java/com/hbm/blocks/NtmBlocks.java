@@ -21,7 +21,10 @@ import com.hbm.blocks.machine.WatzPumpBlock;
 import com.hbm.blocks.machine.WatzStructBlock;
 import com.hbm.blocks.generic.ToolConversionBlock;
 import com.hbm.blocks.generic.SteelRoofBlock;
+import com.hbm.blocks.generic.GlyphidBaseBlock;
+import com.hbm.blocks.generic.GlyphidSpawnerBlock;
 import com.hbm.blocks.generic.LootDecoBlock;
+import com.hbm.entity.mob.glyphid.Glyphid;
 import com.hbm.blocks.generic.FileCabinetBlock;
 import com.hbm.blocks.generic.WandLogicBlock;
 import com.hbm.blocks.generic.WandLootBlock;
@@ -1077,6 +1080,24 @@ public class NtmBlocks {
      * noOcclusion. Werte aus ModBlocks.java:2169 des Originals. */
     /* Der Beutesockel. Hart wie nichts und ohne Widerstand, wie im Original
      * (ModBlocks.java:1446) -- er soll nicht im Weg stehen. */
+    /**
+     * DER GLYPHIDENBAU, Runde 303. Drei Unterarten mal zwei Bauteile: Fleisch und Gelege,
+     * je gewoehnlich, verseucht und radioaktiv. Auf 1.7.10 waren das zwei Bloecke mit drei
+     * Metawerten; auf 1.21 sind es sechs Bloecke, denn ein Metawert ist dort ein eigener
+     * Block.
+     *
+     * WEICH UND OHNE BEUTE: Haerte 0,5, und das Fleisch laesst nichts fallen (im Original
+     * gibt getItemDropped null zurueck). Das Gelege faellt als Ei -- das steht in seiner
+     * Beutetafel.
+     */
+    public static final DeferredBlock<Block> GLYPHID_BASE =           register("glyphid_base",           () -> new GlyphidBaseBlock(hiveProperties().noLootTable(), Glyphid.TYPE_NORMAL));
+    public static final DeferredBlock<Block> GLYPHID_BASE_INFESTED =  register("glyphid_base_infested",  () -> new GlyphidBaseBlock(hiveProperties().noLootTable(), Glyphid.TYPE_INFECTED));
+    public static final DeferredBlock<Block> GLYPHID_BASE_RAD =       register("glyphid_base_rad",       () -> new GlyphidBaseBlock(hiveProperties().noLootTable(), Glyphid.TYPE_RADIOACTIVE));
+
+    public static final DeferredBlock<Block> GLYPHID_SPAWNER =          register("glyphid_spawner",          () -> new GlyphidSpawnerBlock(hiveProperties(), Glyphid.TYPE_NORMAL));
+    public static final DeferredBlock<Block> GLYPHID_SPAWNER_INFESTED = register("glyphid_spawner_infested", () -> new GlyphidSpawnerBlock(hiveProperties(), Glyphid.TYPE_INFECTED));
+    public static final DeferredBlock<Block> GLYPHID_SPAWNER_RAD =      register("glyphid_spawner_rad",      () -> new GlyphidSpawnerBlock(hiveProperties(), Glyphid.TYPE_RADIOACTIVE));
+
     public static final DeferredBlock<Block> DECO_LOOT = register("deco_loot", () -> new LootDecoBlock(BlockBehaviour.Properties.of().strength(0.0F, 0.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().noLootTable()));
     /*
      * Runde 251: der BEUTESTAB. Er steht in den Bauwerksdateien an jeder Stelle, an der spaeter
@@ -1335,6 +1356,11 @@ public class NtmBlocks {
         DeferredBlock<T> defBlock = BLOCKS.register(name, block);
         NtmItems.ITEMS.register(name, () -> new BlockItem(defBlock.get(), new Properties()));
         return defBlock;
+    }
+
+    /** Gemeinsame Eigenschaften der Bauteile des Glyphidenbaus: weich und fleischig. */
+    private static BlockBehaviour.Properties hiveProperties() {
+        return BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.SLIME_BLOCK).mapColor(MapColor.COLOR_BROWN);
     }
 
     /** Gemeinsame Eigenschaften der Foerderbaender: vier Pixel hoch, also nicht deckend. */

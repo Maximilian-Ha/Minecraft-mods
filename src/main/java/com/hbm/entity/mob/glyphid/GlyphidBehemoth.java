@@ -153,7 +153,7 @@ public class GlyphidBehemoth extends Glyphid {
     }
 
     @Override
-    protected int getCurrentSwingDuration() {
+    public int schlagDauer() {
         return 100;
     }
 }

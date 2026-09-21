@@ -383,6 +383,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.CANISTER_NAPALM.get());
                         addMetaItems(output, NtmItems.FUEL_ADDITIVE.get());
                         output.accept(NtmItems.BIOMASS.get());
+                        output.accept(NtmItems.EGG_GLYPHID.get());
                         output.accept(NtmItems.GLYPHID_MEAT.get());
                         output.accept(NtmItems.GLYPHID_MEAT_GRILLED.get());
                         output.accept(NtmItems.PELLET_CHARGED.get());
@@ -890,6 +891,14 @@ public class NtmCreativeTabs {
 
                         addMetaItems(output, NtmBlocks.BOBBLEHEAD.asItem());
                         addMetaItems(output, NtmBlocks.PLUSHIE.asItem());
+
+                        /* Runde 303: der Glyphidenbau. Drei Bauteile, drei Gelege. */
+                        output.accept(NtmBlocks.GLYPHID_BASE);
+                        output.accept(NtmBlocks.GLYPHID_BASE_INFESTED);
+                        output.accept(NtmBlocks.GLYPHID_BASE_RAD);
+                        output.accept(NtmBlocks.GLYPHID_SPAWNER);
+                        output.accept(NtmBlocks.GLYPHID_SPAWNER_INFESTED);
+                        output.accept(NtmBlocks.GLYPHID_SPAWNER_RAD);
 
                         output.accept(NtmBlocks.GRAVEL_OBSIDIAN);
                         output.accept(NtmBlocks.GRAVEL_DIAMOND);

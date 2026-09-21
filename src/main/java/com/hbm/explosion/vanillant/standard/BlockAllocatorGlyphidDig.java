@@ -1,5 +1,6 @@
 package com.hbm.explosion.vanillant.standard;
 
+import com.hbm.blocks.generic.GlyphidSpawnerBlock;
 import com.hbm.explosion.vanillant.ExplosionVNT;
 import com.hbm.explosion.vanillant.interfaces.IBlockAllocator;
 import net.minecraft.core.BlockPos;
@@ -16,8 +17,10 @@ import java.util.HashSet;
  * hier laeuft eine FESTE STRECKE und bricht nur ab, wenn ein Block HAERTER ist als die
  * Obergrenze -- der Glyphid graebt sich durch alles Weiche und prallt an allem Harten ab.
  *
- * NICHT UEBERNOMMEN: die Sonderabfrage auf den Glyphidenbau (ModBlocks.glyphid_spawner). Den
- * Block gibt es im Port noch nicht; kommt er, kommt die Abfrage mit.
+ * DAS GELEGE IST TABU: davor bricht der Strahl immer ab, wie hart es auch sei. Sonst wuerde
+ * ein grabender Glyphid seine eigene Brut wegsprengen. Im Original ist das eine
+ * Sonderabfrage auf ModBlocks.glyphid_spawner; seit Runde 303 gibt es den Block im Port,
+ * und mit ihm kam die Abfrage -- vorher stand hier, dass sie fehlt.
  */
 public class BlockAllocatorGlyphidDig implements IBlockAllocator {
 
@@ -69,7 +72,10 @@ public class BlockAllocatorGlyphidDig implements IBlockAllocator {
                             BlockPos pos = BlockPos.containing(currentX, currentY, currentZ);
                             BlockState state = level.getBlockState(pos);
 
-                            if(!state.isAir() && this.maximum < state.getExplosionResistance(level, pos, explosion.compat)) break;
+                            if(!state.isAir()) {
+                                if(this.maximum < state.getExplosionResistance(level, pos, explosion.compat)) break;
+                                if(state.getBlock() instanceof GlyphidSpawnerBlock) break;
+                            }
 
                             affectedBlocks.add(pos);
 

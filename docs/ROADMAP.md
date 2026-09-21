@@ -14406,3 +14406,80 @@ ohne Angreifer bekommt er Eile IV, und beim **Umformen der Landschaft setzt er s
 Lebenspunkte auf null** — das ist bei ihm das Umformen.
 
 **47 Tore grün.**
+
+---
+
+## Runde 303 — Der Bau, der Späher, und der Ruß als Regler
+
+Die letzte offene Notiz: Späher und Nuclear hingen am `glyphid_base`-Block und an
+`GlyphidHive`. Diesmal stimmte sie — beides fehlte wirklich. Jetzt ist es da, und damit ist
+die Glyphiden-Familie vollständig: **neun von neun Klassen portiert.**
+
+### Der Ruß ist der Regler
+
+Das Gelege bringt alle zwei Minuten einen Schwarm hervor. Wie **groß** er ist und **was**
+darin steckt, hängt beides am Ruß in der Luft:
+
+```
+Schwarmgröße        = Grundgröße × max(Faktor × Ruß/Rußschritt, 1), höchstens zehn
+Chance je Art       = Grundwert + (Aufschlag − Aufschlag / max((Ruß+1)/3, 1))
+```
+
+Die zweite Formel liest sich sperrig, tut aber etwas Einfaches: bei null Ruß bleibt der
+Grundwert stehen, mit steigendem Ruß wächst der Aufschlag auf seinen vollen Wert zu. Arten
+mit **negativem** Grundwert kommen darum überhaupt erst ab einer gewissen Verschmutzung vor —
+Brenda ab zwanzig, Big Man Johnson ab fünfzig. Wer sauber wirtschaftet, sieht nur gewöhnliche
+Glyphiden; wer die Gegend zurußt, bekommt zehnköpfige Schwärme mit Kernwaffen darin.
+
+Zwei Bremsen halten das im Rahmen: über fünfzig Glyphiden in der Welt, und es kommt nichts
+mehr; stehen schon mehr als drei neben dem Gelege, wartet es — außer es ist ein radioaktives,
+das kennt diese Bremse nicht.
+
+### Der Späher baut den nächsten Bau — und überlebt es nicht
+
+Er ist der Grund, warum ein Befall sich ausbreitet statt an einer Stelle zu bleiben. In fünf
+Schritten: eine Stelle im Umkreis von fünfundvierzig Blöcken würfeln, prüfen (fester Boden,
+noch kein Baufleisch, weit genug weg), Merkpunkt setzen und rufen, am Ziel acht Richtungen
+absuchen — und dann **sprengt er sich selbst und hinterlässt den Bau.**
+
+Auf Basalt baut er groß, wird dafür schneller, und der Merkpunkt bekommt Vorrang. Steht ein
+Big Man Johnson neben ihm, schaltet er auf Umformen um: weiter weg suchen, mehr Abstand
+halten.
+
+Sein Biss vergiftet, und das ist Absicht — das Original nennt es wörtlich *"extreme measures
+for anti-scout bullying"*. Wer den Späher jagt, soll es merken.
+
+**Nicht übernommen:** der Rampant-Zweig, der ihn gezielt auf den Spielerstützpunkt zulaufen
+lässt. Er hängt an `PollutionHandler.targetCoords`, das der Port nicht hat; ohne diese
+Koordinate fällt das Original selbst in den einfachen Zweig zurück, und genau der steht hier.
+
+### Zwei Eigenheiten, die man gerade ziehen möchte
+
+Die Suche nach Nachbarbauten dreht um **360/16** Grad je Schritt und läuft acht Schritte —
+also nur einen **halben** Kreis. Übernommen, wie es dasteht; wer auf 360/8 geht, prüft andere
+Richtungen als das Original.
+
+Und das Bauschema wird von **oben nach unten** gelesen (`schematicSmall[4 - j]`). Wer die
+Schichten umdreht, baut ein anderes Nest.
+
+### Was CI 491 gefunden hat
+
+`LivingEntity.getCurrentSwingDuration()` ist auf 1.21.1 **privat** und lässt sich gar nicht
+überschreiben. Runde 301 wollte darüber die 15 Takte des Originals setzen — zwei
+Übersetzungsfehler, und diesmal ohne jeden Hinweis auf einen Rückgabetyp. Jetzt steht dort,
+was das Original auch tut: `updateSwingTime` selbst neu geschrieben, Zeile für Zeile wie die
+Vorlage, nur mit der eigenen Dauer.
+
+Das Tor bekam dafür eine **zweite Liste**: Namen, die in der Wurzel privat sind und deshalb
+mit *jedem* Rückgabetyp ein Fehler wären. Gegenprobe meldet genau die Stelle.
+
+### Und was zwei Tore abgefangen haben
+
+`claim-check` meldete einen Satz in `BlockAllocatorGlyphidDig`, der behauptete, es gebe
+`glyphid_spawner` im Port nicht — seit dieser Runde gibt es ihn. Mit dem Block kam die
+Sonderabfrage des Originals: **vor dem Gelege bricht der Grabstrahl immer ab**, wie hart es
+auch sei. Sonst sprengte ein grabender Glyphid seine eigene Brut weg.
+
+`tab-check` meldete sieben neue Einträge ohne Kreativreiter. Eingetragen.
+
+**47 Tore grün.**

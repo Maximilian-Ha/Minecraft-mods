@@ -1285,6 +1285,12 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.CRATE_AMMO, "Starmetal Crate");
         this.add(NtmBlocks.CRATE_CAN, "Canned Food Crate");
         this.add(NtmBlocks.CRATE_SUPPLY, "Supply Crate");
+        this.add(NtmBlocks.GLYPHID_BASE, "Glyphid Hive");
+        this.add(NtmBlocks.GLYPHID_BASE_INFESTED, "Infested Glyphid Hive");
+        this.add(NtmBlocks.GLYPHID_BASE_RAD, "Irradiated Glyphid Hive");
+        this.add(NtmBlocks.GLYPHID_SPAWNER, "Glyphid Eggs");
+        this.add(NtmBlocks.GLYPHID_SPAWNER_INFESTED, "Infested Glyphid Eggs");
+        this.add(NtmBlocks.GLYPHID_SPAWNER_RAD, "Irradiated Glyphid Eggs");
         this.add(NtmBlocks.DECO_LOOT, "Loot Pedestal");
         this.add(NtmBlocks.WAND_LOOT, "Loot Wand");
         this.add(NtmBlocks.WAND_LOGIC, "Logic Wand");
@@ -1342,6 +1348,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("desc.gui.arcfurnace.empty", "Empty");
         this.add("subtitles.block.chemplantOperate", "Synthesizing");
         this.add(NtmItems.BIOMASS, "Biomass");
+        this.add(NtmItems.EGG_GLYPHID, "Glyphid Egg");
         this.add(NtmItems.GLYPHID_MEAT, "Glyphid Meat");
         this.add(NtmItems.GLYPHID_MEAT_GRILLED, "Grilled Glyphid Meat");
         this.add(NtmItems.PELLET_CHARGED, "Ionized Particles");
@@ -4508,6 +4515,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("entity.hbmsntm.glyphid_behemoth", "Glyphid Behemoth");
         this.add("entity.hbmsntm.glyphid_brenda", "Brenda");
         this.add("entity.hbmsntm.glyphid_nuclear", "Big Man Johnson");
+        this.add("entity.hbmsntm.glyphid_scout", "Glyphid Scout");
         this.add("entity.hbmsntm.disperser_canister", "Disperser Canister");
         this.add("entity.hbmsntm.bullet_mk4", "Bullet");
         this.add("entity.hbmsntm.rocket", "Rocket");

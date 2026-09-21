@@ -775,6 +775,7 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicCustomLayerItem(NtmItems.DISPERSER_CANISTER_EMPTY.get(), "disperser_canister");
         this.layeredItem(NtmItems.DISPERSER_CANISTER.get(), "disperser_canister", "disperser_canister_overlay");
         this.basicCustomLayerItem(NtmItems.GLYPHID_GLAND_EMPTY.get(), "glyphid_gland");
+        this.basicItem(NtmItems.EGG_GLYPHID.get());
         this.layeredItem(NtmItems.GLYPHID_GLAND.get(), "glyphid_gland", "glyphid_gland_overlay");
         this.basicItem(NtmItems.GAS_EMPTY.get());
         /* Drei Schichten: Rumpf, gefaerbter Flaschenkoerper, gefaerbtes Etikett. */

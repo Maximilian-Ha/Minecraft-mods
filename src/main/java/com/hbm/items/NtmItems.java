@@ -568,6 +568,8 @@ public class NtmItems {
     public static final DeferredItem<Item> PART_PLUTONIUM = ITEMS.register("part_plutonium", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> BIOMASS = ITEMS.register("biomass", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> PELLET_CHARGED = ITEMS.register("pellet_charged", () -> new Item(new Item.Properties()));
+    /** Das Glyphidenei, Runde 303. Es faellt aus dem Gelege und ist nur Beute, kein Essen. */
+    public static final DeferredItem<Item> EGG_GLYPHID = ITEMS.register("egg_glyphid", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> GLYPHID_MEAT = ITEMS.register("glyphid_meat", () -> new Item(new Item.Properties().food(NtmFoods.GLYPHID_MEAT)));
     /* Runde 298: das gebratene Stueck. Acht Punkte und Staerke II fuer neun Sekunden -- der
      * Ofen macht es aus dem rohen. */

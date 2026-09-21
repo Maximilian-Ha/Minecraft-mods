@@ -24,6 +24,7 @@ import com.hbm.entity.mob.glyphid.GlyphidBehemoth;
 import com.hbm.entity.mob.glyphid.GlyphidBlaster;
 import com.hbm.entity.mob.glyphid.GlyphidBrenda;
 import com.hbm.entity.mob.glyphid.GlyphidNuclear;
+import com.hbm.entity.mob.glyphid.GlyphidScout;
 import com.hbm.entity.mob.glyphid.GlyphidBombardier;
 import com.hbm.entity.mob.glyphid.GlyphidBrawler;
 import com.hbm.entity.mob.glyphid.GlyphidDigger;
@@ -268,6 +269,7 @@ public class CommonEvents {
         event.put(NtmEntityTypes.GLYPHID_BEHEMOTH.get(), GlyphidBehemoth.createAttributes().build());
         event.put(NtmEntityTypes.GLYPHID_BRENDA.get(), GlyphidBrenda.createAttributes().build());
         event.put(NtmEntityTypes.GLYPHID_NUCLEAR.get(), GlyphidNuclear.createAttributes().build());
+        event.put(NtmEntityTypes.GLYPHID_SCOUT.get(), GlyphidScout.createAttributes().build());
         event.put(NtmEntityTypes.CREEPER_NUCLEAR.get(), CreeperNuclear.createAttributes().build());
         event.put(NtmEntityTypes.UNDEAD_SOLDIER.get(), UndeadSoldier.createAttributes().build());
         event.put(NtmEntityTypes.CYBER_CRAB.get(), CyberCrab.createAttributes().build());

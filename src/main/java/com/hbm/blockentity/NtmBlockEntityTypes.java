@@ -890,6 +890,16 @@ public class NtmBlockEntityTypes {
                             NtmBlocks.MACHINE_PRECASS.get())
                     .build(null));
 
+    /* Runde 303: das Gelege. Drei Bloecke, ein Blockinhalt -- die Unterart steht im Block. */
+    public static final Supplier<BlockEntityType<GlyphidSpawnerBlockEntity>> GLYPHID_SPAWNER = BLOCK_ENTITY_TYPES.register(
+            "glyphid_spawner",
+            () -> BlockEntityType.Builder.of(
+                            GlyphidSpawnerBlockEntity::new,
+                            NtmBlocks.GLYPHID_SPAWNER.get(),
+                            NtmBlocks.GLYPHID_SPAWNER_INFESTED.get(),
+                            NtmBlocks.GLYPHID_SPAWNER_RAD.get())
+                    .build(null));
+
     public static final Supplier<BlockEntityType<LootDecoBlockEntity>> LOOT_DECO = BLOCK_ENTITY_TYPES.register(
             "loot_deco",
             () -> BlockEntityType.Builder.of(

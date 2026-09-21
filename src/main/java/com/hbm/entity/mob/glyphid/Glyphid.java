@@ -190,14 +190,35 @@ public class Glyphid extends Monster implements IResistanceProvider {
     }
 
     /**
-     * Wie lange ein Kieferschlag dauert. Das Original setzt dafuer swingDuration auf 15 und
-     * rechnet updateArmSwingProgress selbst nach; auf 1.21 genuegt diese Stelle, denn
-     * LivingEntity fragt sie an derselben Stelle ab. Vanille nimmt sonst 6 -- Runde 298
-     * hatte das uebersehen, der Biss lief also zweieinhalbmal zu schnell.
+     * Wie lange ein Kieferschlag dauert. Vanille nimmt 6, das Original 15 -- Runde 298 hatte
+     * das uebersehen, der Biss lief also zweieinhalbmal zu schnell.
+     *
+     * WARUM DAS NICHT ueber getCurrentSwingDuration geht: die Methode ist auf 1.21.1
+     * PRIVAT in LivingEntity und laesst sich gar nicht ueberschreiben (CI 491). Das Original
+     * schreibt an dieser Stelle updateArmSwingProgress selbst neu; genau das tut der Port
+     * hier mit updateSwingTime, Zeile fuer Zeile wie die Vorlage aus LivingEntity, nur mit
+     * dieser Dauer statt der von Vanille.
      */
-    @Override
-    protected int getCurrentSwingDuration() {
+    public int schlagDauer() {
         return 15;
+    }
+
+    @Override
+    protected void updateSwingTime() {
+
+        int dauer = this.schlagDauer();
+
+        if(this.swinging) {
+            this.swingTime++;
+            if(this.swingTime >= dauer) {
+                this.swingTime = 0;
+                this.swinging = false;
+            }
+        } else {
+            this.swingTime = 0;
+        }
+
+        this.attackAnim = (float) this.swingTime / (float) dauer;
     }
 
     /** Die Werte seiner Art. */

@@ -30,6 +30,12 @@
 # Das Tor sah es nicht, weil seine Liste nur Entity.getType kannte. Jetzt kennt sie auch
 # LivingEntity.getScale; benennt man die Glyphiden-Methode zurueck, meldet die Pruefung alle
 # betroffenen Zeilen und sonst nichts.
+#
+# DRITTER FALL, Runde 303: LivingEntity.getCurrentSwingDuration() ist PRIVAT. Runde 301
+# wollte sie ueberschreiben, um dem Glyphiden die 15 Takte des Originals zu geben -- zwei
+# Uebersetzungsfehler in CI 491, und diesmal ohne jeden Hinweis auf einen Rueckgabetyp
+# ("cannot override ... in LivingEntity"). Dafuer gibt es jetzt eine zweite Liste: Namen, die
+# in der Wurzel privat sind und deshalb mit JEDEM Rueckgabetyp ein Fehler waeren.
 
 set -uo pipefail
 cd "$(dirname "$0")/.."
@@ -43,6 +49,13 @@ JAVA = 'src/main/java'
 FESTE_NAMEN = {
     'Entity': {'getType': 'EntityType'},
     'LivingEntity': {'getScale': 'float'},
+}
+
+# Namen, die in der Wurzel PRIVAT sind: sie lassen sich ueberhaupt nicht ueberschreiben,
+# egal mit welchem Rueckgabetyp. Eine eigene Methode desselben Namens ist deshalb immer ein
+# Fehler -- javac meldet "cannot override ... in <Wurzel>" ohne jeden Hinweis auf den Typ.
+PRIVATE_NAMEN = {
+    'LivingEntity': {'getCurrentSwingDuration'},
 }
 
 # Was im Baum als diese Wurzel zaehlt (Vanilla-Klassen, die selbst davon erben).
@@ -118,6 +131,13 @@ for kls, eigene in methoden.items():
 
     for name, rueck, zeile in eigene:
         for wurzel in wurzeln:
+
+            if name in PRIVATE_NAMEN.get(wurzel, ()):
+                probleme.append('%s:%d: %s.%s() -- in %s ist %s() PRIVAT und laesst sich gar '
+                                'nicht ueberschreiben'
+                                % (klassen[kls][1], zeile, kls, name, wurzel, name))
+                continue
+
             erlaubt = FESTE_NAMEN[wurzel].get(name)
             if erlaubt is None: continue
             if rueck != erlaubt:

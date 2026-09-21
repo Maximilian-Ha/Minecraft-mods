@@ -110,6 +110,17 @@ public class CommonConfig {
     public final BooleanValue ENABLE_CONTAMINATION;
     public final BooleanValue ENABLE_CHUNK_RADS;
 
+    /* Runde 303: der Glyphidenbau. Die Werte stehen im Original in MobConfig; die
+     * Wahrscheinlichkeiten je Art sind dort int[3] -- Grundwert, Russ-Aufschlag und
+     * Mindestruss --, hier drei Eintraege je Art, damit sie einzeln einstellbar bleiben. */
+    public final IntValue SWARM_COOLDOWN;
+    public final IntValue BASE_SWARM_SIZE;
+    public final DoubleValue SWARM_SCALING_MULT;
+    public final IntValue SOOT_STEP;
+    public final DoubleValue GLYPHID_SPAWN_MAX;
+    public final DoubleValue SCOUT_THRESHOLD;
+    public final IntValue SCOUT_SWARM_SPAWN_CHANCE;
+
     public final BooleanValue ENABLE_SOOT_FOG;
     public final DoubleValue SOOT_FOG_THRESHOLD;
     public final DoubleValue SOOT_FOG_DIVISOR;
@@ -489,6 +500,36 @@ public class CommonConfig {
                 .comment("A multiplier for soot emitted")
                 .translation("hbmsntm.configuration.pollutionMult")
                 .defineInRange("pollutionMult", 1.0, Double.MIN_VALUE, Double.MAX_VALUE);
+
+        /* DER GLYPHIDENBAU, Runde 303. Die Zahlen sind die des Originals (MobConfig). */
+        SWARM_COOLDOWN = builder
+                .comment("Ticks between two swarms spawning from a glyphid hive.")
+                .translation("hbmsntm.configuration.swarmCooldown")
+                .defineInRange("swarmCooldown", 120 * 20, 1, Integer.MAX_VALUE);
+        BASE_SWARM_SIZE = builder
+                .comment("The basic, soot-less swarm size.")
+                .translation("hbmsntm.configuration.baseSwarmSize")
+                .defineInRange("baseSwarmSize", 5, 1, 64);
+        SWARM_SCALING_MULT = builder
+                .comment("By how much swarm size scales per soot step.")
+                .translation("hbmsntm.configuration.swarmScalingMult")
+                .defineInRange("swarmScalingMult", 1.2, 0D, Double.MAX_VALUE);
+        SOOT_STEP = builder
+                .comment("The amount of soot that counts as one step for swarm scaling.")
+                .translation("hbmsntm.configuration.sootStep")
+                .defineInRange("sootStep", 50, 1, Integer.MAX_VALUE);
+        GLYPHID_SPAWN_MAX = builder
+                .comment("Maximum amount of glyphids able to exist at once through natural spawning.")
+                .translation("hbmsntm.configuration.glyphidSpawnMax")
+                .defineInRange("glyphidSpawnMax", 50D, 0D, Double.MAX_VALUE);
+        SCOUT_THRESHOLD = builder
+                .comment("Minimum amount of soot for scouts to spawn.")
+                .translation("hbmsntm.configuration.scoutThreshold")
+                .defineInRange("scoutThreshold", 5D, 0D, Double.MAX_VALUE);
+        SCOUT_SWARM_SPAWN_CHANCE = builder
+                .comment("How likely scouts are to spawn in swarms, 1 in (x+1) chance.")
+                .translation("hbmsntm.configuration.scoutSwarmSpawnChance")
+                .defineInRange("scoutSwarmSpawnChance", 2, 0, Integer.MAX_VALUE);
 
         builder.pop();
 

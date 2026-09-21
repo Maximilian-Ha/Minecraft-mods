@@ -41,6 +41,12 @@ public class NtmBlockLootTableProvider extends BlockLootSubProvider {
 
 
         /* RBMK: die Saeulen fallen als Block, der Schutt bleibt liegen. */
+        /* Runde 303: das Gelege faellt als Ei, ein bis drei Stueck -- im Original steht das
+         * in quantityDropped. Das Baufleisch faellt gar nicht (noLootTable am Block). */
+        this.add(NtmBlocks.GLYPHID_SPAWNER.get(), block -> this.eiAusGelege());
+        this.add(NtmBlocks.GLYPHID_SPAWNER_INFESTED.get(), block -> this.eiAusGelege());
+        this.add(NtmBlocks.GLYPHID_SPAWNER_RAD.get(), block -> this.eiAusGelege());
+
         this.dropSelf(NtmBlocks.RBMK_BLANK.get());
         this.dropSelf(NtmBlocks.RBMK_MODERATOR.get());
         this.dropSelf(NtmBlocks.RBMK_ABSORBER.get());
@@ -896,5 +902,18 @@ public class NtmBlockLootTableProvider extends BlockLootSubProvider {
                 .hasBlockStateProperties(block)
                 .setProperties(StatePropertiesPredicate.Builder.properties()
                         .hasProperty(property, equals));
+    }
+
+    /**
+     * Ein bis drei Glyphideneier, mit Gluecksbonus. Das Original hat dafuer
+     * quantityDropped(meta, fortune, rand) = 1 + rand.nextInt(3) + fortune.
+     */
+    private LootTable.Builder eiAusGelege() {
+        return LootTable.lootTable().withPool(this.applyExplosionCondition(NtmItems.EGG_GLYPHID.get(),
+                LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1.0F))
+                        .add(LootItem.lootTableItem(NtmItems.EGG_GLYPHID.get())
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 3.0F)))
+                                .apply(ApplyBonusCount.addUniformBonusCount(this.registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE))))));
     }
 }

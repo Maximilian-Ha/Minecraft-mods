@@ -157,6 +157,20 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.simpleBlockWithItem(NtmBlocks.DECO_RBMK.get(), this.models().cubeAll(this.name(NtmBlocks.DECO_RBMK.get()), modLoc("block/rbmk_top")));
         this.simpleBlockWithItem(NtmBlocks.DECO_RBMK_SMOOTH.get(), this.models().cubeAll(this.name(NtmBlocks.DECO_RBMK_SMOOTH.get()), modLoc("block/rbmk_blank_top")));
 
+        /*
+         * DER GLYPHIDENBAU, Runde 303. Je Unterart zwei Modelle, damit die Flaeche nicht
+         * gekachelt wirkt -- das Original rechnet dafuer selbst einen Hash aus den
+         * Koordinaten, auf 1.21 wuerfelt das Spiel unter den aufgezaehlten Modellen.
+         * Das Gelege hat je Unterart nur eine Textur, so wie im Original.
+         */
+        this.glyphidBaseBlock(NtmBlocks.GLYPHID_BASE.get(), "glyphid_base", "glyphid_base_alt");
+        this.glyphidBaseBlock(NtmBlocks.GLYPHID_BASE_INFESTED.get(), "glyphid_base_infested", "glyphid_base_infested_alt");
+        this.glyphidBaseBlock(NtmBlocks.GLYPHID_BASE_RAD.get(), "glyphid_base_rad", "glyphid_base_rad_alt");
+
+        this.glyphidSpawnerBlock(NtmBlocks.GLYPHID_SPAWNER.get(), "glyphid_eggs_alt");
+        this.glyphidSpawnerBlock(NtmBlocks.GLYPHID_SPAWNER_INFESTED.get(), "glyphid_eggs_infested");
+        this.glyphidSpawnerBlock(NtmBlocks.GLYPHID_SPAWNER_RAD.get(), "glyphid_eggs_rad");
+
         this.registerOreBasalt();
 
         this.logBlock(NtmBlocks.BASALT.get());
@@ -3087,5 +3101,27 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         }
 
         public abstract BakedModelType getType();
+    }
+
+    /** Ein Bauteil mit zwei gleichwertigen Texturen, nach dem Ort gewuerfelt. */
+    private void glyphidBaseBlock(net.minecraft.world.level.block.Block block, String textur, String texturAlt) {
+
+        ModelFile eins = this.models().cubeAll(this.name(block), modLoc("block/" + textur));
+        ModelFile zwei = this.models().cubeAll(this.name(block) + "_alt", modLoc("block/" + texturAlt));
+
+        this.getVariantBuilder(block).partialState().setModels(
+                new ConfiguredModel(eins), new ConfiguredModel(zwei));
+
+        this.simpleBlockItem(block, eins);
+    }
+
+    /** Ein Gelege: eine Textur, aber ein Blockzustand mit dem LIT-Merkmal. */
+    private void glyphidSpawnerBlock(net.minecraft.world.level.block.Block block, String textur) {
+
+        ModelFile modell = this.models().cubeAll(this.name(block), modLoc("block/" + textur));
+
+        this.getVariantBuilder(block).forAllStates(state -> ConfiguredModel.builder().modelFile(modell).build());
+
+        this.simpleBlockItem(block, modell);
     }
 }

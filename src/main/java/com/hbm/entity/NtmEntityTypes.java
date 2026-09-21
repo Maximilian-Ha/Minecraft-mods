@@ -15,6 +15,7 @@ import com.hbm.entity.mob.glyphid.GlyphidBehemoth;
 import com.hbm.entity.mob.glyphid.GlyphidBlaster;
 import com.hbm.entity.mob.glyphid.GlyphidBrenda;
 import com.hbm.entity.mob.glyphid.GlyphidNuclear;
+import com.hbm.entity.mob.glyphid.GlyphidScout;
 import com.hbm.entity.mob.glyphid.GlyphidBombardier;
 import com.hbm.entity.mob.glyphid.GlyphidBrawler;
 import com.hbm.entity.mob.glyphid.GlyphidDigger;
@@ -287,6 +288,14 @@ public class NtmEntityTypes {
                     .fireImmune()
                     .clientTrackingRange(16)
                     .build("glyphid_nuclear"));
+
+    /* Runde 303: der Spaeher. Der kleinste der Familie -- im Original setSize(1.25F, 0.75F). */
+    public static final DeferredHolder<EntityType<?>, EntityType<GlyphidScout>> GLYPHID_SCOUT = ENTITY_TYPES.register(
+            "glyphid_scout",
+            () -> EntityType.Builder.of(GlyphidScout::new, MobCategory.MONSTER)
+                    .sized(1.25F, 0.75F)
+                    .clientTrackingRange(16)
+                    .build("glyphid_scout"));
 
     /* Runde 298: der Merkpunkt. Unsichtbar, ohne Ausdehnung, und nur der Glyphid sieht ihn. */
     public static final DeferredHolder<EntityType<?>, EntityType<Waypoint>> WAYPOINT = ENTITY_TYPES.register(

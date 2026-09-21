@@ -35,6 +35,9 @@ public class LootGenerator {
     public static final String LOOT_MEDICINE = "LOOT_MEDICINE";
     public static final String LOOT_CAPSTASH = "LOOT_CAPSTASH";
     public static final String LOOT_METEOR = "LOOT_METEOR";
+    /** Runde 303: der Glyphidenbau. Knochen in der Kammer, Beute im Kern. */
+    public static final String LOOT_BONES = "LOOT_BONES";
+    public static final String LOOT_GLYPHID_HIVE = "LOOT_GLYPHID_HIVE";
 
     /**
      * Legt die Beute auf den Sockel an der angegebenen Stelle. Steht dort kein Sockel oder
@@ -52,6 +55,8 @@ public class LootGenerator {
             case LOOT_CAPNUKE -> lootCapNuke(sockel, random);
             case LOOT_MEDICINE -> lootMedicine(sockel, random);
             case LOOT_CAPSTASH -> lootCapStash(sockel, random);
+            case LOOT_BONES -> haufen(sockel, random, ItemPoolsPile.POOL_PILE_BONES);
+            case LOOT_GLYPHID_HIVE -> haufen(sockel, random, ItemPoolsPile.POOL_PILE_HIVE);
             /* LOOT_METEOR: siehe Klassenkopf. Der Sockel bleibt leer. */
             default -> { return; }
         }
@@ -84,6 +89,25 @@ public class LootGenerator {
             addItemWithDeviation(sockel, random, new ItemStack(NtmItems.SYRINGE_METAL_STIMPAK.get(), 1), -0.25, i * 0.03125, 0.25);
         for(int i = 0; i < 6; i++)
             addItemWithDeviation(sockel, random, new ItemStack(NtmItems.CAP_NUKA.get(), 2), 0.125, i * 0.03125, -0.25);
+    }
+
+    /**
+     * Ein schlichter Haufen: drei bis fuenf Zuege aus dem Vorrat, jeder an einer zufaelligen
+     * Stelle des Sockels und ein Zweiunddreissigstel hoeher als der davor. Das Original hat
+     * dafuer zwei Methoden mit demselben Rumpf (lootBones und lootGlyphidHive); hier ist es
+     * eine mit dem Vorrat als Angabe.
+     */
+    private static void haufen(LootDecoBlockEntity sockel, RandomSource random, String vorrat) {
+
+        ItemPool pool = ItemPool.get(vorrat);
+        if(pool == null) return;
+
+        int anzahl = random.nextInt(3) + 3;
+
+        for(int i = 0; i < anzahl; i++) {
+            addItemWithDeviation(sockel, random, pool.draw(random),
+                    random.nextDouble() - 0.5, i * 0.03125, random.nextDouble() - 0.5);
+        }
     }
 
     /** Vier Spritzen und eine Handvoll Pillen. */
