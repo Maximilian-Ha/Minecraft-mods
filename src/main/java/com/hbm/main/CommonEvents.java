@@ -17,6 +17,8 @@ import com.hbm.entity.mob.CreeperNuclear;
 import com.hbm.entity.mob.CreeperGold;
 import com.hbm.entity.mob.CreeperPhosgene;
 import com.hbm.entity.mob.CreeperTainted;
+import com.hbm.entity.mob.BlockSpider;
+import com.hbm.entity.mob.Dummy;
 import com.hbm.entity.mob.FbiAgent;
 import com.hbm.entity.mob.FbiDrone;
 import com.hbm.entity.mob.Pigeon;
@@ -246,6 +248,8 @@ public class CommonEvents {
         event.put(NtmEntityTypes.FBI_AGENT.get(), FbiAgent.createAttributes().build());
         event.put(NtmEntityTypes.FBI_DRONE.get(), FbiDrone.createAttributes().build());
         event.put(NtmEntityTypes.PIGEON.get(), Pigeon.createAttributes().build());
+        event.put(NtmEntityTypes.DUMMY.get(), Dummy.createAttributes().build());
+        event.put(NtmEntityTypes.BLOCK_SPIDER.get(), BlockSpider.createAttributes().build());
         event.put(NtmEntityTypes.CREEPER_NUCLEAR.get(), CreeperNuclear.createAttributes().build());
         event.put(NtmEntityTypes.UNDEAD_SOLDIER.get(), UndeadSoldier.createAttributes().build());
         event.put(NtmEntityTypes.CYBER_CRAB.get(), CyberCrab.createAttributes().build());

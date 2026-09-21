@@ -6,6 +6,8 @@ import com.hbm.entity.grenade.Dynamite;
 import com.hbm.entity.grenade.DynamiteFishing;
 import com.hbm.entity.item.BuoyantItemEntity;
 import com.hbm.entity.item.WasteItemEntity;
+import com.hbm.entity.mob.BlockSpider;
+import com.hbm.entity.mob.Dummy;
 import com.hbm.entity.mob.FbiAgent;
 import com.hbm.entity.mob.FbiDrone;
 import com.hbm.entity.mob.Pigeon;
@@ -181,6 +183,22 @@ public class NtmEntityTypes {
                     .sized(0.5F, 1.0F)
                     .clientTrackingRange(8)
                     .build("pigeon"));
+
+    /* Runde 296: die Puppe. Menschenmass, aber sie ruehrt sich nicht. */
+    public static final DeferredHolder<EntityType<?>, EntityType<Dummy>> DUMMY = ENTITY_TYPES.register(
+            "dummy",
+            () -> EntityType.Builder.of(Dummy::new, MobCategory.MISC)
+                    .sized(0.6F, 1.8F)
+                    .clientTrackingRange(10)
+                    .build("dummy"));
+
+    /* Runde 296: die Blockspinne. Knapp einen Block breit, ein Viertel hoeher als breit. */
+    public static final DeferredHolder<EntityType<?>, EntityType<BlockSpider>> BLOCK_SPIDER = ENTITY_TYPES.register(
+            "block_spider",
+            () -> EntityType.Builder.of(BlockSpider::new, MobCategory.MONSTER)
+                    .sized(0.95F, 1.25F)
+                    .clientTrackingRange(10)
+                    .build("block_spider"));
 
     /* Das Gespenst: Menschenmass, und es verschwindet, sobald jemand hinsieht. */
     public static final DeferredHolder<EntityType<?>, EntityType<Ghost>> GHOST = ENTITY_TYPES.register(

@@ -13996,3 +13996,39 @@ Wer ihr auf einmal doppelt so viel Schaden zufügt, wie sie Leben hat, bekommt k
 sondern **zehn Federn in alle Richtungen**.
 
 **46 Tore grün.**
+
+## Runde 296 — Die Puppe und die Blockspinne
+
+Zwei kleine Wesen, die im Original nur über das Spawn-Ei in die Welt kommen und trotzdem
+fehlten.
+
+### Die Puppe
+
+Sie hat keine Aufgaben, läuft nicht weg und schlägt nicht zurück. Sie steht da und **sagt an,
+wieviel Leben sie noch hat**: ihr Name ist `Leben / Höchstleben`, auf ein Zehntel gerundet,
+und er wird immer angezeigt. Ein Rechtsklick mit einem Rüstungsteil legt es ihr an — das
+Original rechnet dafür `4 - armorType`, auf 1.21 nennt das Teil seinen Platz selbst.
+
+Fallen lässt sie **nichts**, auch nicht die Rüstung, die sie trägt: das Original überschreibt
+`dropEquipment` leer, und eine Beutetabelle hat sie nie gehabt.
+
+### Die Blockspinne
+
+Ein Block auf acht Beinen. Was sie trägt, entscheidet, wie zäh sie ist: ihre Lebensenergie ist
+der **Sprengwiderstand** des Blocks, mindestens aber eins. Obsidian macht sie also zu einem
+Brocken, Wolle zu nichts.
+
+Das Original führt Blocknummer und Metawert in zwei DataWatcher-Feldern. Auf 1.21 gibt es
+weder das eine noch das andere — ein Blockzustand trägt beides zusammen, und `Block.getId` /
+`Block.stateById` bilden ihn auf eine Zahl ab, die sich übertragen lässt.
+
+Ihre acht Beine laufen **gegenläufig**: die ungeraden schwenken in die eine Richtung und heben
+sich dabei, die geraden in die andere und senken sich — fünf Tausendstel je Grad. Darüber
+zeichnet der Zeichner den getragenen Block; das Original nimmt dafür den Gegenstandszeichner,
+auf 1.21 tut es der Blockzeichner unmittelbar.
+
+Eine Kleinigkeit am Rande: das Original ruft `getExplosionResistance(null)` — mit einer
+Entität, die es nicht gibt. Auf 1.21 steht der Wert am Block selbst und braucht kein
+Gegenüber.
+
+**46 Tore grün.**

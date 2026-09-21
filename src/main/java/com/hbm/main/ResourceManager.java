@@ -119,6 +119,8 @@ public class ResourceManager {
     public static final ResourceLocation TAINTCRAB_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/taintcrab.png");
     /** Der FBI-Quadrokopter, Runde 292. */
     public static final ResourceLocation QUADCOPTER_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/quadcopter.png");
+    /** Die Blockspinne, Runde 296. */
+    public static final ResourceLocation BLOCKSPIDER_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/blockspider.png");
     public static final ResourceLocation MASKMAN_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/maskman.png");
     public static final ResourceLocation WORM_HEAD_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/mark_zero_head.png");
     public static final ResourceLocation WORM_BODY_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/mark_zero_body.png");
@@ -739,6 +741,7 @@ public class ResourceManager {
     public static IModelCustom tesla;
     public static IModelCustom teslacrab;
     public static IModelCustom quadcopter;
+    public static IModelCustom blockspider;
     public static IModelCustom taintcrab;
     public static IModelCustom maskman;
     public static IModelCustom bot_prime_head;
@@ -1084,6 +1087,7 @@ public class ResourceManager {
         tesla = new HFRWavefrontObject("models/obj/machines/tesla.obj").asVBO();
         teslacrab = new HFRWavefrontObject("models/obj/mobs/teslacrab.obj").asVBO();
         quadcopter = new HFRWavefrontObject("models/obj/mobs/quadcopter.obj").asVBO();
+        blockspider = new HFRWavefrontObject("models/obj/mobs/blockspider.obj").asVBO();
         taintcrab = new HFRWavefrontObject("models/obj/mobs/taintcrab.obj").asVBO();
         maskman = new HFRWavefrontObject("models/obj/mobs/maskman.obj").asVBO();
         bot_prime_head = new HFRWavefrontObject("models/obj/mobs/bot_prime_head.obj").asVBO();
