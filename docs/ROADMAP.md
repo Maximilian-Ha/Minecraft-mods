@@ -13226,3 +13226,59 @@ eingesetzt, genau einen. Was es nicht sieht, steht in seinem Kopf: zusammengeset
 `modLoc("block/" + name)`.
 
 **44 Tore.**
+
+## Runde 280 — Der Maskenmann, und Munition, die kein Spieler abfeuert
+
+Von den fünf übrigen Erfolgen hängen vier an Bossentitäten. Der Maskenmann ist mit 122 Zeilen
+der kleinste — aber nicht der einfachste: er brachte ein ganzes Teilsystem mit, das der Port
+bisher gar nicht hatte.
+
+### Munition ohne Waffe
+
+Die drei KI-Klassen des Maskenmanns verschießen Geschosse aus `BulletConfigSyncingUtil` — dem
+**alten** Geschosssystem des Originals (`BulletConfiguration`, `EntityBulletBaseNT`), das eine
+Zahlentabelle führt, damit Server und Klient dieselbe Einstellung meinen. Der Port kennt nur
+das neue (`BulletConfig`, `BulletBaseMK4`), und dort bringt jedes Geschoss seine Einstellung
+selbst mit; die Tabelle entfällt ersatzlos.
+
+`XFactoryNPC` ist die Übersetzung: fünf Geschosse, die kein Spieler abfeuert. Vorbild war
+`XFactoryTurret` — die Munition der Geschütztürme, die im Port denselben Weg schon gegangen
+ist.
+
+Der Munitionsgegenstand bleibt bei allen fünf die Maskenmann-Münze. Nicht weil sie verschossen
+würde, sondern weil das alte System ohne Munitionsangabe nicht auskam; eine andere Angabe wäre
+eine Änderung ohne Anlass.
+
+### Drei Angriffe, und einer davon feuert selbst
+
+Der Maskenmann hält von sich aus Abstand: seine Annäherung zielt nicht auf den Spieler, sondern
+auf einen Punkt **zehn Blöcke davor**. Unter zehn Blöcken feuert die Minigun, darüber der Laser
+mit drei Angriffen im Wechsel — Kugel, Rakete, Salve.
+
+Die **Kugel** ist die interessanteste: sie fliegt langsam, hält eine Minute und schickt alle
+zehn Ticks einen Bolzen auf *jeden* Spieler im Umkreis von fünfzig Blöcken. Die **Salve** wirft
+fünf Leuchtspuren, und wo eine aufschlägt, fällt ein Meteor aus dreißig Blöcken Höhe.
+
+Der Wechsel zwischen den Angriffen ist nicht reihum: das Original zählt die Ordnungszahl um
+null oder eins weiter und nimmt den Rest bei drei — nie zweimal derselbe hintereinander.
+
+### Tausend Lebenspunkte, und ein Ei
+
+Er nimmt Feuer und Magie gar nicht, Geschosse und Sprengungen halb, und alles über fünfzig wird
+darüber hinaus halbiert: ein Schlag von tausend kommt als 525 an. Bei halber Lebensenergie
+sprengt er einmal über sich, und ab da trägt er statt eines Kopfes einen Schädel — mit einem
+Zettel daneben: IOU.
+
+Ein geworfenes **Ei** tötet ihn mit einem Zehntel Wahrscheinlichkeit auf der Stelle, ohne
+Erfahrung. Das ist die Hintertür des Originals und steht hier, wie sie dort steht.
+
+### Die Wolkenflasche, halb
+
+Eines seiner Beutestücke ist `bottled_cloud` — im Original kein einfacher Gegenstand, sondern
+ein **Rüstungsmodul** für die Brustplatte: ein Achtel mehr Tempo, und drei waagerechte Sprünge.
+Der Temposchub steht; die Sprünge nicht. Der Port hat die Taste dafür (`HbmKeybinds.DASH`), aber
+niemanden, der sie ausliest — das ganze Dash-System steht im Original in
+`EntityEffectHandler:716` und ist nicht übernommen. Das steht so in der Klasse, statt ein
+Verhalten zu erfinden, das es nicht gibt.
+
+**57 von 61.** Offen: drei Bosse und die SILEX.

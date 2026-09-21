@@ -846,6 +846,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("advancements.hbmsntm.soyuz.description", "Become crunchy.");
         this.add("advancements.hbmsntm.space.title", "The Final Front-ah forget it");
         this.add("advancements.hbmsntm.space.description", "Fail in every way possible and waste funds worth 90 million dollars.");
+        this.add("advancements.hbmsntm.boss_maskman.title", "6 Months of mandatory service and all I got was a lousy t-shirt");
+        this.add("advancements.hbmsntm.boss_maskman.description", "Bonk the big boy.");
         this.add("advancements.hbmsntm.centrifuge.title", "Centrifugal Force");
         this.add("advancements.hbmsntm.centrifuge.description", "centrifugal force is real don't @ me");
         this.add("advancements.hbmsntm.technetium.title", "Big Man, Pig Man");
@@ -1335,6 +1337,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.BALL_TNT, "TNT");
         this.add(NtmItems.SAFETY_FUSE, "Safety Fuse");
         this.add(NtmItems.RECORD_GLASS, "Music Disc");
+        this.add(NtmItems.BOTTLED_CLOUD, "Cloud in a Bottle");
         /* Der Text, den 1.21 beim Abspielen einblendet. Im Original steht er als
          * item.record.glass.desc im Sprachbestand -- drei Fragezeichen, mehr verraet der
          * Mod ueber diese Platte nicht. */
@@ -4115,6 +4118,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("armorMod.type.battery", "Battery");
         this.add("armorMod.radRes", "+%s radiation resistance");
         this.add("armorMod.knockback", "+%s knockback resistance");
+        this.add("armorMod.cloud", "Grants horizontal dashes");
         this.add("armorMod.indestructible", "Makes dropped armor indestructible");
         this.add("armorMod.insert.damage", "%s damage");
         this.add("armorMod.insert.projectile", "%s projectile damage");
@@ -4407,6 +4411,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("entity.hbmsntm.undead_soldier", "Undead Soldier");
         this.add("entity.hbmsntm.cyber_crab", "Cybercrab");
         this.add("entity.hbmsntm.tesla_crab", "Teslacrab");
+        this.add("entity.hbmsntm.maskman", "Maskman");
         this.add("entity.hbmsntm.taint_crab", "Taintcrab");
         this.add("entity.hbmsntm.tau_shot", "Tau Bolt");
         this.add("entity.hbmsntm.duck", "Duck");

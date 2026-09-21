@@ -40,6 +40,7 @@ import com.hbm.entity.mob.CreeperNuclear;
 import com.hbm.entity.mob.CreeperGold;
 import com.hbm.entity.mob.CreeperPhosgene;
 import com.hbm.entity.mob.CreeperTainted;
+import com.hbm.entity.mob.MaskMan;
 import com.hbm.entity.mob.CreeperVolatile;
 import com.hbm.entity.mob.CyberCrab;
 import com.hbm.entity.mob.TaintCrab;
@@ -182,6 +183,18 @@ public class NtmEntityTypes {
                     () -> EntityType.Builder.<CreeperTainted>of(CreeperTainted::new, MobCategory.MONSTER)
                             .sized(0.6F, 1.7F)
                             .build("creeper_tainted"));
+
+    /**
+     * Der Maskenmann, Runde 280. Zwei Bloecke breit und fuenf hoch -- setSize(2F, 5F) des
+     * Originals. Er erscheint nicht von selbst und ist feuerfest.
+     */
+    public static final DeferredHolder<EntityType<?>, EntityType<MaskMan>> MASKMAN =
+            ENTITY_TYPES.register("maskman",
+                    () -> EntityType.Builder.<MaskMan>of(MaskMan::new, MobCategory.MONSTER)
+                            .sized(2.0F, 5.0F)
+                            .fireImmune()
+                            .noSummon()
+                            .build("maskman"));
 
     /**
      * Die Kybernetische Krabbe, Runde 236. Masse wie im Original: drei Viertel breit,

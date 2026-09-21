@@ -190,6 +190,7 @@ public class NtmAdvancementProvider extends AdvancementProvider {
             erfolg(speichern, helper, rbmk, "rbmk_boom", NtmItems.DEBRIS_FUEL.get(), true, "rbmk_boom");
             erfolg(speichern, helper, wurzel, "watz_boom", NtmItems.WATZ_PELLET.get(), true, "watz_boom");
             erfolg(speichern, helper, wurzel, "boss_creeper", Items.CREEPER_HEAD, false, "boss_creeper");
+            erfolg(speichern, helper, wurzel, "boss_maskman", NtmItems.COIN_MASKMAN.get(), true, "boss_maskman");
             erfolg(speichern, helper, polymer, "manhattan", NtmBlocks.NUKE_LITTLE_BOY.get(), true, "manhattan");
 
             /*

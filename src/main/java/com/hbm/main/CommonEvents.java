@@ -17,6 +17,7 @@ import com.hbm.entity.mob.CreeperNuclear;
 import com.hbm.entity.mob.CreeperGold;
 import com.hbm.entity.mob.CreeperPhosgene;
 import com.hbm.entity.mob.CreeperTainted;
+import com.hbm.entity.mob.MaskMan;
 import com.hbm.registry.NtmCriteria;
 import com.hbm.registry.NtmDamageTypes;
 import com.hbm.entity.mob.CyberCrab;
@@ -238,6 +239,7 @@ public class CommonEvents {
         event.put(NtmEntityTypes.TESLA_CRAB.get(), TeslaCrab.createAttributes().build());
         event.put(NtmEntityTypes.TAINT_CRAB.get(), TaintCrab.createAttributes().build());
         event.put(NtmEntityTypes.CREEPER_TAINTED.get(), CreeperTainted.createAttributes().build());
+        event.put(NtmEntityTypes.MASKMAN.get(), MaskMan.createAttributes().build());
         event.put(NtmEntityTypes.CREEPER_GOLD.get(), CreeperGold.createAttributes().build());
         event.put(NtmEntityTypes.CREEPER_VOLATILE.get(), CreeperGold.createAttributes().build());
         event.put(NtmEntityTypes.CREEPER_PHOSGENE.get(), CreeperPhosgene.createAttributes().build());

@@ -53,6 +53,7 @@ import com.hbm.items.armor.GasMaskItem;
 import com.hbm.items.armor.ItemModCladding;
 import com.hbm.items.armor.ItemModIndestructible;
 import com.hbm.items.armor.ItemModInsert;
+import com.hbm.items.armor.ItemModCloud;
 import com.hbm.items.armor.ItemModKnockback;
 import com.hbm.items.armor.ModCardItem;
 import com.hbm.items.armor.ModMorningGloryItem;
@@ -1452,6 +1453,10 @@ public class NtmItems {
     /* Zwei Sonderstuecke der roten Kiste. */
     public static final DeferredItem<Item> MYSTERYSHOVEL = ITEMS.register("mysteryshovel", () -> new MysteryShovelItem(new Item.Properties()));
     public static final DeferredItem<Item> FLAME_PONY = ITEMS.register("flame_pony", () -> new LoreItem(new Item.Properties()));
+
+    /* Runde 280: die WOLKENFLASCHE, eines der Beutestuecke des Maskenmanns -- und ein
+     * Ruestungsmodul fuer die Brustplatte, das ein Achtel Tempo gibt. */
+    public static final DeferredItem<Item> BOTTLED_CLOUD = ITEMS.register("bottled_cloud", () -> new ItemModCloud(new Item.Properties().rarity(Rarity.UNCOMMON)));
 
     /*
      * Runde 279: die SCHALLPLATTE. Die einzige des Mods, und im Original

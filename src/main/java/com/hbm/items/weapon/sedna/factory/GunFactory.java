@@ -83,6 +83,7 @@ public class GunFactory {
         XFactoryTool.init(itemRegistry);
         XFactoryPA.init(itemRegistry);
         XFactoryTurret.init();
+        XFactoryNPC.init();
     }
 
     public static BiConsumer<ItemStack, LambdaContext> LAMBDA_DEBUG_DECIDER = (stack, ctx) -> {

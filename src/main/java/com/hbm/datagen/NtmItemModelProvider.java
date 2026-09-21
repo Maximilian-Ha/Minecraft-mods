@@ -1230,6 +1230,7 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicItem(NtmItems.MYSTERYSHOVEL.get());
         this.basicItem(NtmItems.FLAME_PONY.get());
         this.basicItem(NtmItems.RECORD_GLASS.get());
+        this.basicItem(NtmItems.BOTTLED_CLOUD.get());
         this.basicItem(NtmItems.CHOCOLATE_MILK.get());
         this.handheldItem(NtmItems.CIGARETTE.get());
         this.handheldItem(NtmItems.CRACKPIPE.get());
