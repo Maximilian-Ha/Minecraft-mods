@@ -13136,3 +13136,44 @@ Offen geblieben ist auch das zweite `todo` der Sojus: die Landekapsel (`EntitySo
 samt `soyuz_capsule`-Block). Sie hängt an keinem Erfolg.
 
 **56 von 61.**
+
+## Runde 278 — Die Landekapsel, und eine Fracht, die ins Leere ging
+
+Das zweite `todo` der Sojus: `EntitySoyuzCapsule`. Die Rakete kennt zwei Modi — Modus 0 bringt
+einen Satelliten in den Orbit, Modus 1 ist der **Rückflug**: statt zu steigen, setzt sie ihre
+Fracht in sechshundert Blöcken Höhe über einem Zielpunkt ab. Von dort kommt die Kapsel am
+Fallschirm herunter, schlägt ein und steht danach als Block in der Welt, mit der Fracht darin
+— und der Rakete, mit der sie gekommen ist, im neunzehnten Fach.
+
+Portiert sind fünf Klassen: die fallende Entität, ihr Darsteller, der Block, seine
+Blockentität und deren Darsteller. Alle Modelle und Texturen lagen schon im Port —
+`soyuz_lander.obj` war sogar bereits in einen VBO geladen, aber nur der Fallschirm daraus
+wurde benutzt (von der Fallschirmkiste). Die Kapsel selbst zeichnete niemand.
+
+### Eine Fracht, die ins Leere ging
+
+Beim Anschließen fiel ein echter Portierungsfehler auf. Das Original baut in der Startrampe
+eine **leere** Liste und hängt die achtzehn Frachtfächer an; sie liegen danach auf 0 bis 17,
+und genau dort liest die Kapsel sie wieder aus. Der Port hatte stattdessen eine Liste der
+Länge 27 **vorbelegt** und trotzdem angehängt — die Fracht landete auf 27 bis 44 und war weg.
+
+Das war folgenlos, solange es die Kapsel nicht gab: `deployPayload()` hatte für Modus 1 nur
+ein `todo`. Jetzt nicht mehr.
+
+### Ein Fach außerhalb des Rasters
+
+Neunzehn Fächer passen in kein Rechteck. Die Kistenbasis des Ports kennt bisher nur Raster;
+sie hat jetzt einen Haken für Fächer daneben — die Kapsel setzt ihr neunzehntes links neben
+das Raster, genau wie das Original.
+
+Der Haken gibt **Zahlen** zurück, kein Menü. Gemessen: nimmt er das Menü als Parameter, meldet
+der javac-Lauf des Torwächters (der ohne Minecraft-API läuft) im Menü einen rekursiven
+Konstruktoraufruf. Mit einem Zahlenfeld bleibt er still.
+
+### Was offen bleibt
+
+Das Original streut verrostete Kapseln an Stränden, mit einer Schallplatte darin
+(`record_glass`, die einzige des Mods, `setCreativeTab(null)` — nur dort zu finden). Beides
+fehlt noch: der Port hat keine Jukebox-Unterstützung, und eine Schallplatte auf 1.21 braucht
+einen `JukeboxSong`-Datenpackeintrag. Sound, Textur und Modell dafür liegen in der
+CE-Abspaltung bereit.

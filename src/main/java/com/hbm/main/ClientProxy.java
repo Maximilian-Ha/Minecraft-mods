@@ -222,6 +222,7 @@ public class ClientProxy extends ServerProxy {
         //mines
         BlockEntityRenderers.register(NtmBlockEntityTypes.LANDMINE.get(), new RenderLandmine());
         BlockEntityRenderers.register(NtmBlockEntityTypes.CHARGE.get(), new RenderExplosiveCharge());
+        BlockEntityRenderers.register(NtmBlockEntityTypes.SOYUZ_CAPSULE.get(), new RenderCapsule());
         //machines
         BlockEntityRenderers.register(NtmBlockEntityTypes.MACHINE_SOLDERING_STATION.get(), new RenderSolderingStation());
         BlockEntityRenderers.register(NtmBlockEntityTypes.MACHINE_ARC_WELDER.get(), new RenderArcWelder());
@@ -395,6 +396,7 @@ public class ClientProxy extends ServerProxy {
         EntityRenderers.register(NtmEntityTypes.TOM.get(), RenderTom::new);
         EntityRenderers.register(NtmEntityTypes.RUBBLE.get(), RenderRubble::new);
         EntityRenderers.register(NtmEntityTypes.DIGAMMA_SPEAR.get(), RenderDigammaSpear::new);
+        EntityRenderers.register(NtmEntityTypes.SOYUZ_CAPSULE.get(), RenderSoyuzCapsule::new);
         EntityRenderers.register(NtmEntityTypes.SHRAPNEL.get(), RenderShrapnel::new);
         EntityRenderers.register(NtmEntityTypes.BOXCAR.get(), RenderBoxcar::new);
         EntityRenderers.register(NtmEntityTypes.DUCHESS_GAMBIT.get(), RenderDuchessGambit::new);

@@ -2683,6 +2683,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.FILING_CABINET, "Filing Cabinet");
         this.add(NtmBlocks.FILING_CABINET_STEEL, "Steel Filing Cabinet");
         this.add(NtmBlocks.SAFE, "Safe");
+        this.add(NtmBlocks.SOYUZ_CAPSULE, "Cargo Landing Capsule");
         this.add(NtmBlocks.CRATE_DESH, "Desh Crate");
         this.add(NtmBlocks.CRATE_TEMPLATE, "Template Crate");
         this.add(NtmBlocks.CRATE_LEAD, "Lead-Lined Crate");

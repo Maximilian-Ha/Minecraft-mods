@@ -12,6 +12,7 @@ import com.hbm.registry.NtmSoundEvents;
 import com.hbm.saveddata.satellite.XSatelliteRegistry;
 import com.hbm.util.SoundUtils;
 import com.hbm.util.particle.ParticleUtil;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -26,6 +27,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -121,8 +123,21 @@ public class Soyuz extends Entity {
             }
         }
 
-        if(mode == 1) {
-            // todo EntitySoyuzCapsule
+        // MODUS 1 IST DER RUECKFLUG: statt in den Orbit zu gehen, setzt die Rakete ihre
+        // Nutzlast ueber dem Zielpunkt ab. Das Original laedt dabei den Zielchunk von Hand
+        // (provider.loadChunk), damit die Kapsel nicht ins Leere faellt. getChunk tut
+        // dasselbe -- es laedt synchron und laesst den Chunk danach wieder los, waehrend
+        // setChunkForced ihn dauerhaft festhielte.
+        if(mode == 1 && this.level() instanceof ServerLevel serverLevel) {
+
+            ChunkPos chunk = new ChunkPos(new BlockPos(this.targetX, 0, this.targetZ));
+            serverLevel.getChunk(chunk.x, chunk.z);
+
+            SoyuzCapsule kapsel = new SoyuzCapsule(serverLevel);
+            kapsel.setPayload(this.payload);
+            kapsel.soyuz = this.getSkin();
+            kapsel.setPos(this.targetX + 0.5, 600, this.targetZ + 0.5);
+            serverLevel.addFreshEntity(kapsel);
         }
 
         this.discard();

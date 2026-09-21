@@ -273,6 +273,18 @@ public abstract class CrateBaseBlockEntity extends LockableBaseBlockEntity imple
     }
 
     /**
+     * Faecher, die ausserhalb des Rasters liegen -- als Folge von Tripeln (Fachnummer, x, y).
+     * Jede Kiste setzt ihre Faecher in ein Rechteck; nur die Sojus-Landekapsel nicht: ihr
+     * neunzehntes Fach steht links daneben und traegt die Rakete, mit der sie
+     * heruntergekommen ist. Die Standardfassung liefert keines.
+     *
+     * ZAHLEN, NICHT DAS MENUE: gemessen -- nimmt diese Methode das Menue als Parameter,
+     * meldet der javac-Lauf des Torwaechters (der ohne Minecraft-API laeuft) im Menue einen
+     * rekursiven Konstruktoraufruf. Mit einem Zahlenfeld als Rueckgabe bleibt er still.
+     */
+    public int[] zusatzFaecher() { return new int[0]; }
+
+    /**
      * Der senkrechte Abstand der Fachreihen im Fenster. Jede Kiste setzt ihre Reihen lueckenlos
      * aneinander -- 18 Pixel, die Fachbreite. Nur der Aktenschrank nicht: seine zwei Reihen sind
      * zwei Schubladen, zwischen denen im Fenster die Front steht.

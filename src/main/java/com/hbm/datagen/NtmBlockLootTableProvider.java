@@ -436,6 +436,7 @@ public class NtmBlockLootTableProvider extends BlockLootSubProvider {
         this.dropSelf(NtmBlocks.FILING_CABINET.get());
         this.dropSelf(NtmBlocks.FILING_CABINET_STEEL.get());
         this.dropSelf(NtmBlocks.SAFE.get());
+        this.dropSelf(NtmBlocks.SOYUZ_CAPSULE.get());
         this.dropSelf(NtmBlocks.CRATE_DESH.get());
         this.dropSelf(NtmBlocks.CRATE_TEMPLATE.get());
         this.dropSelf(NtmBlocks.CRATE_LEAD.get());

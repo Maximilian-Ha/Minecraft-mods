@@ -30,6 +30,7 @@ import com.hbm.blocks.generic.DecoPoleSatelliteReceiverBlock;
 import com.hbm.blocks.generic.MushBlock;
 import com.hbm.blocks.generic.MushHugeBlock;
 import com.hbm.blocks.generic.LootCrateBlock;
+import com.hbm.blocks.machine.SoyuzCapsuleBlock;
 import com.hbm.blocks.machine.FloodlightBlock;
 import com.hbm.blocks.machine.ChargerBlock;
 import com.hbm.blocks.machine.BroadcasterBlock;
@@ -1057,6 +1058,12 @@ public class NtmBlocks {
     public static final DeferredBlock<Block> FILING_CABINET_STEEL = registerNew("filing_cabinet_steel", () -> new FileCabinetBlock(BlockBehaviour.Properties.of().strength(10.0F, 15.0F).noOcclusion().sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops()));
     public static final DeferredBlock<Block> CRATE_DESH = registerNew("crate_desh", () -> new CrateBlock(BlockBehaviour.Properties.of().strength(0.6F, 6.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops(), CrateBlock.Type.DESH));
     public static final DeferredBlock<Block> CRATE_TEMPLATE = registerNew("crate_template", () -> new CrateBlock(BlockBehaviour.Properties.of().strength(0.6F, 6.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops(), CrateBlock.Type.TEMPLATE));
+    /*
+     * Runde 278: die SOJUS-LANDEKAPSEL. Haerte und Sprengfestigkeit sind die des Originals
+     * (ModBlocks.java:2091). Sie hat kein Blockmodell -- ihr Aussehen kommt aus
+     * soyuz_lander.obj, deshalb noOcclusion().
+     */
+    public static final DeferredBlock<Block> SOYUZ_CAPSULE = registerNew("soyuz_capsule", () -> new SoyuzCapsuleBlock(BlockBehaviour.Properties.of().strength(5.0F, 10.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops().noOcclusion()));
 
     /* Stufe 5: die Beutekisten. Sie fallen wie Kies und geben ihren Inhalt nur der
      * Brechstange her. Werte aus ModBlocks.java:2079 ff. des Originals. */

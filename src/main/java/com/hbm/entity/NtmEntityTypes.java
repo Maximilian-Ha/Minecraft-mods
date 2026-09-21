@@ -35,6 +35,7 @@ import com.hbm.entity.missile.MissileTier4.*;
 import com.hbm.entity.missile.MissileCustom;
 import com.hbm.entity.missile.SatellitePod;
 import com.hbm.entity.missile.Soyuz;
+import com.hbm.entity.missile.SoyuzCapsule;
 import com.hbm.entity.mob.CreeperNuclear;
 import com.hbm.entity.mob.CreeperGold;
 import com.hbm.entity.mob.CreeperPhosgene;
@@ -357,6 +358,14 @@ public class NtmEntityTypes {
     public static final DeferredHolder<EntityType<?>, EntityType<EMP>> EMP = ENTITY_TYPES.register("emp", () -> EntityType.Builder.of(EMP::new, MobCategory.MISC).build("emp"));
 
     public static final DeferredHolder<EntityType<?>, EntityType<Soyuz>> SOYUZ_MISSILE = ENTITY_TYPES.register("soyuz", () -> EntityType.Builder.<Soyuz>of(Soyuz::new, MobCategory.MISC).noSummon().sized(5.0F, 50.0F).build("soyuz"));
+
+    /**
+     * Die Landekapsel, Runde 278. Sie kommt am Fallschirm herunter und setzt sich als Block
+     * ab. Feuerfest wie im Original (isImmuneToFire), und so gross wie das Modell, das sie
+     * zeigt.
+     */
+    public static final DeferredHolder<EntityType<?>, EntityType<SoyuzCapsule>> SOYUZ_CAPSULE = ENTITY_TYPES.register("soyuz_capsule",
+            () -> EntityType.Builder.<SoyuzCapsule>of(SoyuzCapsule::new, MobCategory.MISC).noSummon().fireImmune().sized(2.0F, 2.0F).build("soyuz_capsule"));
 
     /**
      * Die Eigenbau-Rakete, Runde 132. Sie traegt ihre vier Bauteile mit sich; wie gross sie

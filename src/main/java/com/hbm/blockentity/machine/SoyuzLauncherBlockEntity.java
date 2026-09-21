@@ -243,10 +243,17 @@ public class SoyuzLauncherBlockEntity extends MachineBaseBlockEntity implements 
         }
 
         if(mode == 1) {
-            NonNullList<ItemStack> payload = NonNullList.withSize(27, ItemStack.EMPTY);
+            /*
+             * ACHTZEHN FAECHER, BEI NULL BEGINNEND. Das Original baut hier eine LEERE Liste
+             * und haengt die achtzehn Fracht-Faecher an; sie liegen danach auf 0 bis 17, und
+             * genau so liest die Kapsel sie wieder aus. Der Port hatte stattdessen eine
+             * Liste der Laenge 27 vorbelegt und AUCH angehaengt -- die Fracht landete auf 27
+             * bis 44 und ging verloren. Das fiel nicht auf, solange es die Kapsel nicht gab.
+             */
+            NonNullList<ItemStack> payload = NonNullList.withSize(18, ItemStack.EMPTY);
 
             for(int i = 9; i < 27; i++) {
-                payload.add(slots.get(i));
+                payload.set(i - 9, slots.get(i));
                 this.setItem(i, ItemStack.EMPTY);
             }
 

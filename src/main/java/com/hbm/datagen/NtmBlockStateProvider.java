@@ -601,6 +601,9 @@ public class NtmBlockStateProvider extends BlockStateProvider {
         this.crateBlock(NtmBlocks.CRATE_TUNGSTEN.get(), "crate_tungsten_side", "crate_tungsten_top");
         this.crateBlock(NtmBlocks.CRATE_STEEL.get(), "crate_steel_side", "crate_steel_top");
         this.safeBlock(NtmBlocks.SAFE.get(), "safe_side", "safe_front");
+        /* Die Landekapsel hat kein Blockmodell -- soyuz_lander.obj zeichnet der
+         * Blockentitaetsdarsteller. Als Partikeltextur dient die Kapselhaut selbst. */
+        this.particleOnlyBlock(NtmBlocks.SOYUZ_CAPSULE, NuclearTechMod.withDefaultNamespace("textures/models/soyuz_capsule/soyuz_lander.png"));
         this.crateBlock(NtmBlocks.CRATE_DESH.get(), "crate_desh_side", "crate_desh_top");
         this.crateBlock(NtmBlocks.CRATE_TEMPLATE.get(), "crate_template", "crate_template");
 

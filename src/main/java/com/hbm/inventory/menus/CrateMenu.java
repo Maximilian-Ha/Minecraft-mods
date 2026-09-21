@@ -16,6 +16,12 @@ public class CrateMenu extends MenuBase<CrateBaseBlockEntity> {
         super(NtmMenuTypes.CRATE.get(), id, crate);
 
         this.addSlots(crate, 0, crate.getSlotX(), crate.getSlotY(), crate.getRows(), crate.getColumns(), 18, crate.getRowPitch());
+
+        /* Faecher ausserhalb des Rasters: je drei Zahlen -- Fachnummer, x, y. */
+        int[] extra = crate.zusatzFaecher();
+        for(int i = 0; i + 2 < extra.length; i += 3) {
+            this.addSlots(crate, extra[i], extra[i + 1], extra[i + 2], 1, 1);
+        }
         this.playerInv(inventory, crate.getPlayerInvX(), crate.getPlayerInvY());
     }
 }

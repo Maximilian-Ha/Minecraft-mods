@@ -825,6 +825,14 @@ public class NtmBlockEntityTypes {
                             SafeBlockEntity::new,
                             NtmBlocks.SAFE.get())
                     .build(null));
+    /* Runde 278: die Sojus-Landekapsel. Neunzehn Faecher, eine Kiste wie die anderen --
+     * nur mit einem Fach ausserhalb des Rasters. */
+    public static final Supplier<BlockEntityType<SoyuzCapsuleBlockEntity>> SOYUZ_CAPSULE = BLOCK_ENTITY_TYPES.register(
+            "soyuz_capsule",
+            () -> BlockEntityType.Builder.of(
+                            SoyuzCapsuleBlockEntity::new,
+                            NtmBlocks.SOYUZ_CAPSULE.get())
+                    .build(null));
     /* Eine Blockentitaet fuer beide Sorten -- sie unterscheiden sich nur in der Textur. */
     public static final Supplier<BlockEntityType<FileCabinetBlockEntity>> FILE_CABINET = BLOCK_ENTITY_TYPES.register(
             "file_cabinet",
