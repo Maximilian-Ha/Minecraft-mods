@@ -43,6 +43,7 @@ public class NtmEntityTypeTagsProvider extends EntityTypeTagsProvider {
                 NtmEntityTypes.GLYPHID_BLASTER.get(),
                 NtmEntityTypes.GLYPHID_DIGGER.get(),
                 NtmEntityTypes.GLYPHID_BEHEMOTH.get(),
-                NtmEntityTypes.GLYPHID_BRENDA.get());
+                NtmEntityTypes.GLYPHID_BRENDA.get(),
+                NtmEntityTypes.GLYPHID_NUCLEAR.get());
     }
 }

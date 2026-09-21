@@ -505,6 +505,7 @@ public class ClientProxy extends ServerProxy {
         EntityRenderers.register(NtmEntityTypes.GLYPHID_DIGGER.get(), GlyphidRenderer::new);
         EntityRenderers.register(NtmEntityTypes.GLYPHID_BEHEMOTH.get(), GlyphidRenderer::new);
         EntityRenderers.register(NtmEntityTypes.GLYPHID_BRENDA.get(), GlyphidRenderer::new);
+        EntityRenderers.register(NtmEntityTypes.GLYPHID_NUCLEAR.get(), GlyphidRenderer::new);
         /* Der Merkpunkt ist unsichtbar -- im Original zeichnet ihn nur die Fehlersuche. */
         EntityRenderers.register(NtmEntityTypes.WAYPOINT.get(), EmptyEntityRenderer::new);
         EntityRenderers.register(NtmEntityTypes.UNDEAD_SOLDIER.get(), UndeadSoldierRenderer::new);

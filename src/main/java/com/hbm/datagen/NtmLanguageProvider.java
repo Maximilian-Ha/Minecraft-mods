@@ -4507,6 +4507,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("entity.hbmsntm.glyphid_digger", "Glyphid Digger");
         this.add("entity.hbmsntm.glyphid_behemoth", "Glyphid Behemoth");
         this.add("entity.hbmsntm.glyphid_brenda", "Brenda");
+        this.add("entity.hbmsntm.glyphid_nuclear", "Big Man Johnson");
         this.add("entity.hbmsntm.disperser_canister", "Disperser Canister");
         this.add("entity.hbmsntm.bullet_mk4", "Bullet");
         this.add("entity.hbmsntm.rocket", "Rocket");

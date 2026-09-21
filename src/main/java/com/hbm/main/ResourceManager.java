@@ -133,6 +133,8 @@ public class ResourceManager {
     public static final ResourceLocation GLYPHID_BEHEMOTH_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/glyphid_behemoth.png");
     /** Brenda, Runde 301. */
     public static final ResourceLocation GLYPHID_BRENDA_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/glyphid_brenda.png");
+    /** Big Man Johnson, Runde 302. */
+    public static final ResourceLocation GLYPHID_NUCLEAR_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/glyphid_nuclear.png");
     /** Die Blockspinne, Runde 296. */
     public static final ResourceLocation BLOCKSPIDER_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/blockspider.png");
     public static final ResourceLocation MASKMAN_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/maskman.png");

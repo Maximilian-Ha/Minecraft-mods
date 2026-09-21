@@ -14,6 +14,7 @@ import com.hbm.entity.mob.glyphid.Glyphid;
 import com.hbm.entity.mob.glyphid.GlyphidBehemoth;
 import com.hbm.entity.mob.glyphid.GlyphidBlaster;
 import com.hbm.entity.mob.glyphid.GlyphidBrenda;
+import com.hbm.entity.mob.glyphid.GlyphidNuclear;
 import com.hbm.entity.mob.glyphid.GlyphidBombardier;
 import com.hbm.entity.mob.glyphid.GlyphidBrawler;
 import com.hbm.entity.mob.glyphid.GlyphidDigger;
@@ -277,6 +278,15 @@ public class NtmEntityTypes {
                     .fireImmune()
                     .clientTrackingRange(16)
                     .build("glyphid_brenda"));
+
+    /* Runde 302: Big Man Johnson. Masse und Feuerfestigkeit wie Brenda. */
+    public static final DeferredHolder<EntityType<?>, EntityType<GlyphidNuclear>> GLYPHID_NUCLEAR = ENTITY_TYPES.register(
+            "glyphid_nuclear",
+            () -> EntityType.Builder.of(GlyphidNuclear::new, MobCategory.MONSTER)
+                    .sized(2.5F, 1.75F)
+                    .fireImmune()
+                    .clientTrackingRange(16)
+                    .build("glyphid_nuclear"));
 
     /* Runde 298: der Merkpunkt. Unsichtbar, ohne Ausdehnung, und nur der Glyphid sieht ihn. */
     public static final DeferredHolder<EntityType<?>, EntityType<Waypoint>> WAYPOINT = ENTITY_TYPES.register(

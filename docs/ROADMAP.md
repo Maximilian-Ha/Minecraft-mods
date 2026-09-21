@@ -14366,3 +14366,43 @@ dem leeren und dem vollen Behälter dieselbe Grundtextur (`setTextureName` steht
 auf demselben Namen). Statt Dateien zu erfinden, teilen sich die Modelle die Textur.
 
 **47 Tore grün.**
+
+---
+
+## Runde 302 — Big Man Johnson
+
+Auch hier stimmte die Notiz nicht: der Nuclear sollte an `volcanic_lava_block` hängen. Den
+gibt es im Port seit langem als `NtmBlocks.VOLCANIC_LAVA`. **Er war nie blockiert.**
+
+Er greift nicht an, er wird gebracht. Sein Tod ist eine Kernexplosion vom Radius
+fünfundzwanzig, und davor liegen fünf Sekunden Piepsen: ab dem Tod zählt `deathTicks`, alle
+zehn Takte ein Ping, bei neunzig bekommen seine Artgenossen Widerstand und Feuerschutz, bei
+hundert geht er hoch.
+
+Was zurückbleibt, hängt an seiner Unterart. Der gewöhnliche und der radioaktive reißen einen
+Krater und lassen vulkanische Lava stehen; der **verseuchte** sprengt stattdessen fünfzehn
+bis zwanzig Maden heraus und lässt die Blöcke in Ruhe.
+
+### Ein Fehler des Originals, bewusst übernommen
+
+Die Stelle, die seine Artgenossen schützen soll, zählt die Nachbarn im Umkreis von acht
+Blöcken — und legt Widerstand und Feuerschutz dann **auf sich selbst**. Das
+`addPotionEffect` im Original hat keinen Empfänger. Die Schleife entscheidet also nur, wie
+oft er sich selbst stärkt, nicht wen er schützt.
+
+Nicht geradegezogen, und das mit Absicht: wer das repariert, lässt die ganze Schar seinen
+Knall überleben statt nur ihn selbst — der ohnehin stirbt. Das wäre ein anderes Spiel.
+Vermerkt steht es an der Stelle.
+
+### Er spricht nur mit Spähern
+
+Die Grundform gibt ihre Aufgabe an jeden Artgenossen weiter, der Merkpunkte annimmt; er nur
+an die, die spähen. Beim Sterben schickt er ihnen als erstes den Rückzugsbefehl — wer neben
+einer Bombe steht, soll laufen. Im Port steht dieselbe Frage als `istSpaeher()` statt als
+`instanceof EntityGlyphidScout`, was den Späher als Abhängigkeit erspart.
+
+Und drei Aufgaben behandelt er eigen: am Ziel angekommen geht er in den Leerlauf, beim Bauen
+ohne Angreifer bekommt er Eile IV, und beim **Umformen der Landschaft setzt er seine
+Lebenspunkte auf null** — das ist bei ihm das Umformen.
+
+**47 Tore grün.**
