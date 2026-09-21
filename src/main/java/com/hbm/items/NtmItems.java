@@ -1112,6 +1112,13 @@ public class NtmItems {
 
     // Spawners
     public static final DeferredItem<Item> SPAWN_DUCK = ITEMS.register("spawn_duck", () -> new EntitySpawnerItem(new Item.Properties().stacksTo(16)));
+    /* Runde 288: die beiden Rufgegenstaende, deren Entitaeten seit den Runden 282 und 283
+     * stehen. Im Original sind alle vier derselbe ItemChopper; nur der Kopterruf fehlt noch,
+     * weil es den Jagdkopter im Port nicht gibt. */
+    public static final DeferredItem<Item> SPAWN_WORM = ITEMS.register("spawn_worm", () -> new EntitySpawnerItem(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> SPAWN_UFO = ITEMS.register("spawn_ufo", () -> new EntitySpawnerItem(new Item.Properties().stacksTo(1)));
+    /** Erbsen. Der einzige Weg, eine Quackos wieder loszuwerden. */
+    public static final DeferredItem<Item> PEAS = ITEMS.register("peas", () -> new PeasItem(new Item.Properties()));
 
     // Computer Tools
     public static final DeferredItem<Item> DESIGNATOR = ITEMS.register("designator", () -> new DesignatorItem(new Item.Properties().stacksTo(1)));

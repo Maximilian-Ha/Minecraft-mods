@@ -1958,6 +1958,9 @@ public class NtmCreativeTabs {
                     .title(Component.translatable("itemGroup.consumable"))
                     .displayItems((itemDisplayParameters, output) -> {
                         output.accept(NtmItems.SPAWN_DUCK);
+                        output.accept(NtmItems.SPAWN_WORM);
+                        output.accept(NtmItems.SPAWN_UFO);
+                        output.accept(NtmItems.PEAS);
 
                         output.accept(NtmItems.DOSIMETER);
                         output.accept(NtmItems.GEIGER_COUNTER);

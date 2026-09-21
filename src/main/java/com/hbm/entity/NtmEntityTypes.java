@@ -37,6 +37,7 @@ import com.hbm.entity.missile.SatellitePod;
 import com.hbm.entity.missile.Soyuz;
 import com.hbm.entity.missile.SoyuzCapsule;
 import com.hbm.entity.mob.CreeperNuclear;
+import com.hbm.entity.mob.Quackos;
 import com.hbm.entity.mob.CreeperGold;
 import com.hbm.entity.mob.CreeperPhosgene;
 import com.hbm.entity.mob.CreeperTainted;
@@ -138,6 +139,14 @@ public class NtmEntityTypes {
                     .eyeHeight(0.644F)
                     .clientTrackingRange(10)
                     .build("duck"));
+
+    /* Fuenfundzwanzigmal die Ente: 0,3 x 0,7 mal 25, wie im Original. */
+    public static final DeferredHolder<EntityType<?>, EntityType<Quackos>> QUACKOS = ENTITY_TYPES.register(
+            "quackos",
+            () -> EntityType.Builder.of(Quackos::new, MobCategory.CREATURE)
+                    .sized(7.5F, 17.5F)
+                    .clientTrackingRange(10)
+                    .build("quackos"));
 
     public static final DeferredHolder<EntityType<?>, EntityType<CreeperNuclear>> CREEPER_NUCLEAR =
             ENTITY_TYPES.register("creeper_nuclear",

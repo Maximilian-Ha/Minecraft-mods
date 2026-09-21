@@ -236,6 +236,8 @@ public class CommonEvents {
     @SubscribeEvent
     public static void onEntityAttributeCreation(EntityAttributeCreationEvent event) {
         event.put(NtmEntityTypes.DUCK.get(), Duck.createAttributes().build());
+        /* Die Quackos erbt die Attribute der Ente -- das Original gibt ihr keine eigenen. */
+        event.put(NtmEntityTypes.QUACKOS.get(), Duck.createAttributes().build());
         event.put(NtmEntityTypes.CREEPER_NUCLEAR.get(), CreeperNuclear.createAttributes().build());
         event.put(NtmEntityTypes.UNDEAD_SOLDIER.get(), UndeadSoldier.createAttributes().build());
         event.put(NtmEntityTypes.CYBER_CRAB.get(), CyberCrab.createAttributes().build());

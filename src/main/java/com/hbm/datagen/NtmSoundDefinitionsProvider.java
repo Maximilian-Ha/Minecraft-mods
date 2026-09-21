@@ -451,6 +451,9 @@ public class NtmSoundDefinitionsProvider extends SoundDefinitionsProvider {
                         sound("hbmsntm:entity/ducc2")
                 )
         );
+        this.add(NtmSoundEvents.MEGAQUACC, SoundDefinition.definition()
+                .with(sound("hbmsntm:entity/megaquacc"))
+        );
         this.add(NtmSoundEvents.SLICER, SoundDefinition.definition()
                 .with(
                         sound("hbmsntm:entity/slicer1"),

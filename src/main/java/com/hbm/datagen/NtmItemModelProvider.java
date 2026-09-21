@@ -1060,6 +1060,9 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicItem(NtmItems.ROD_ZIRNOX_ZFB_MOX_DEPLETED.get());
 
         this.basicItem(NtmItems.SPAWN_DUCK.get());
+        this.basicItem(NtmItems.SPAWN_WORM.get());
+        this.basicItem(NtmItems.SPAWN_UFO.get());
+        this.basicItem(NtmItems.PEAS.get());
 
         this.basicItem(NtmItems.DESIGNATOR.get());
         this.handheldItem(NtmItems.DESIGNATOR_RANGE.get());

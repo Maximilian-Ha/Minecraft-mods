@@ -3,6 +3,7 @@ package com.hbm.util;
 import api.hbm.entity.IRadiationImmune;
 import com.hbm.entity.mob.CreeperNuclear;
 import com.hbm.entity.mob.Duck;
+import com.hbm.entity.mob.Quackos;
 import com.hbm.extprop.HbmLivingAttachments;
 import com.hbm.handler.HazmatRegistry;
 import com.hbm.handler.radiation.ChunkRadiationManager;
@@ -33,7 +34,7 @@ public class ContaminationUtil {
             immuneEntities.add(MushroomCow.class);
             immuneEntities.add(Zombie.class);
             immuneEntities.add(Skeleton.class);
-//            immuneEntities.add(EntityQuackos.class);
+            immuneEntities.add(Quackos.class);
             immuneEntities.add(Ocelot.class);
             immuneEntities.add(IRadiationImmune.class);
         }

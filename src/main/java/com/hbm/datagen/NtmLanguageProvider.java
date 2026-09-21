@@ -1721,6 +1721,14 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.ROD_QUAD, this.getName(BreedingRodType.AC227), "Actinium-227 Quad Rod");
 
         this.add(NtmItems.SPAWN_DUCK, "Golden Egg");
+        this.add(NtmItems.SPAWN_WORM, "Balls-O-Tron Prime");
+        this.add("item.hbmsntm.spawn_worm.desc0", "Without a player in survival mode");
+        this.add("item.hbmsntm.spawn_worm.desc1", "to target, he struggles around a lot.");
+        this.add("item.hbmsntm.spawn_worm.desc2", "He's doing his best so please show him");
+        this.add("item.hbmsntm.spawn_worm.desc3", "some consideration.");
+        this.add(NtmItems.SPAWN_UFO, "Martian Invasion Ship");
+        this.add(NtmItems.PEAS, "Peas");
+        this.add(NtmItems.PEAS, DESC, "He accepts your offering.");
 
         this.add("item.hbmsntm.obj_designator.pos_set", "Position set!");
         this.add("item.hbmsntm.obj_designator.pos_target", "Target Coordinates:");

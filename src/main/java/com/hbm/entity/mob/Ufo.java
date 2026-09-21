@@ -85,6 +85,13 @@ public class Ufo extends Mob implements Enemy, IRadiationImmune {
     private Entity hauptziel;
     private final List<Entity> nebenziele = new ArrayList<>();
 
+    /**
+     * Wie lange es wartet, ehe es das erste Mal nach Zielen sucht. Der Rufgegenstand setzt
+     * das auf hundert Ticks -- das UFO kommt fuenfunddreissig Bloecke hoch herein und soll
+     * erst einmal ankommen (im Original scanCooldown, gesetzt in ItemChopper).
+     */
+    public void anlaufZeit(int ticks) { this.suchZaehler = ticks; }
+
     /** Wie weit hinter dem Ziel der angesteuerte Punkt liegt. */
     private static final double UEBERSCHIESSEN = 35D;
 

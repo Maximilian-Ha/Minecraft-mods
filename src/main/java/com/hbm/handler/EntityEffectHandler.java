@@ -1,6 +1,9 @@
 package com.hbm.handler;
 
 import com.hbm.config.NtmConfig;
+import com.hbm.entity.NtmEntityTypes;
+import com.hbm.entity.mob.Duck;
+import com.hbm.entity.mob.Quackos;
 import com.hbm.extprop.HbmLivingAttachments;
 import com.hbm.extprop.HbmLivingAttachments.ContaminationEffect;
 import com.hbm.extprop.HbmPlayerAttachments;
@@ -181,6 +184,16 @@ public class EntityEffectHandler {
             zombie.moveTo(entity.getX(), entity.getY(), entity.getZ(), entity.getYRot(), entity.getXRot());
             level.addFreshEntity(zombie);
             entity.discard();
+        } else if (entity.getClass() == Duck.class && eRad >= 200) {
+            /* Runde 288: aus der Ente wird die Quackos. Der Vergleich prueft die Klasse GENAU,
+             * nicht instanceof -- sonst wuerde die Quackos selbst wieder zur Quackos, und das
+             * in jedem Tick. Das Original schreibt es an dieser Stelle genauso. */
+            Quackos quackos = NtmEntityTypes.QUACKOS.get().create(level);
+            if (quackos != null) {
+                quackos.moveTo(entity.getX(), entity.getY(), entity.getZ(), entity.getYRot(), entity.getXRot());
+                level.addFreshEntity(quackos);
+                entity.discard();
+            }
         }
 
         if (eRad < 200 || ContaminationUtil.isRadImmune(entity)) return;

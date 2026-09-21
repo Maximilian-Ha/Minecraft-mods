@@ -13577,3 +13577,46 @@ sieben zeigen und zeigt sie auch.
 
 **44 Tore grün.** Der SILEX-Zweig ist damit vollständig: Rezepte, Maschine, Laser, Kristalle,
 Erfolg und Ansicht.
+
+## Runde 288 — Die Ente, die zu lange in der Strahlung stand
+
+Drei auskommentierte Stellen im Port haben auf diese Runde gewartet, und alle drei gehören
+zusammen.
+
+### Ab 200 Rad ist es keine Ente mehr
+
+`EntityEffectHandler` verwandelt bestrahlte Tiere: die Kuh wird ab 50 Rad zum Pilzkuh, der
+Dorfbewohner ab 500 zum Zombie. Der dritte Fall fehlte — **die Ente wird ab 200 Rad zur
+Quackos**, fünfundzwanzigmal so groß, unverwundbar, reitbar und selbst gegen Strahlung immun.
+
+Der Vergleich prüft die Klasse **genau**, nicht `instanceof`: sonst würde die Quackos in jedem
+Tick wieder zur Quackos. Das Original schreibt es an dieser Stelle ebenso.
+
+Sie lässt sich nicht loswerden. Ihre drei Methoden sind im Original mit „prank'd" kommentiert:
+der Tod wird auf dem Server verweigert, die Gesundheit springt bei jedem Setzen auf das Maximum
+zurück, und fiele sie doch unter die Welt, setzt sie sich selbst wieder auf Höhe 256.
+
+Der einzige Ausweg sind **Erbsen**. Ein Rechtsklick lässt jede Quackos im Umkreis von fünfzig
+Blöcken in einer Wolke aus hundertfünfzig Teilchen verschwinden; sie hinterlässt drei goldene
+Eier. Warum ausgerechnet Erbsen, sagt das Original nicht.
+
+In `ContaminationUtil` stand die Zeile `immuneEntities.add(EntityQuackos.class)` seit Runden
+auskommentiert da. Jetzt steht sie.
+
+### Zwei Rufgegenstände, die es längst hätten geben können
+
+`EntitySpawnerItem` trug drei auskommentierte Zweige: Kopter, Wurm, UFO. Der Wurm steht seit
+Runde 282, das UFO seit Runde 283 — **beide Rufgegenstände sind jetzt da**, samt dem
+Hinweistext des Wurms, der ebenfalls als Kommentar dastand:
+
+> Without a player in survival mode to target, he struggles around a lot.
+> He's doing his best so please show him some consideration.
+
+Der Kopterruf bleibt aus, und der Grund steht jetzt im Kommentar statt in einem
+auskommentierten Block: den Jagdkopter gibt es im Port nicht.
+
+Das UFO braucht beim Rufen seine hundert Ticks Anlauf — es kommt fünfunddreißig Blöcke hoch
+herein und soll erst einmal ankommen. Dafür hat `Ufo` jetzt `anlaufZeit(int)`; das Feld selbst
+bleibt privat.
+
+**44 Tore grün.**

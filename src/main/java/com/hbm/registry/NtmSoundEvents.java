@@ -169,6 +169,8 @@ public class NtmSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> PLANE_CRASH = reg("entity.plane_crash"); // HOSTILE CATEGORY
     public static final DeferredHolder<SoundEvent, SoundEvent> PLANE_SHOT_DOWN = reg("entity.plane_shot_down"); // HOSTILE CATEGORY
     public static final DeferredHolder<SoundEvent, SoundEvent> DUCC = reg("entity.ducc"); // NEUTRAL CATEGORY
+    /** Dieselbe Ente, nur fuenfundzwanzigmal so gross -- und entsprechend laut. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> MEGAQUACC = reg("entity.megaquacc");
     public static final DeferredHolder<SoundEvent, SoundEvent> SLICER = reg("entity.slicer"); // NEUTRAL CATEGORY
     /* Die drei Klaenge der Schimmerwaffen, Runde 275. */
     public static final DeferredHolder<SoundEvent, SoundEvent> WEAPON_BANG = reg("weapon.bang");

@@ -2,6 +2,7 @@ package com.hbm.items.special;
 
 import com.hbm.entity.NtmEntityTypes;
 import com.hbm.entity.mob.Duck;
+import com.hbm.entity.mob.Ufo;
 import com.hbm.items.NtmItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -12,11 +13,15 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Item.TooltipContext;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+
+import java.util.List;
 
 public class EntitySpawnerItem extends Item {
 
@@ -85,17 +90,21 @@ public class EntitySpawnerItem extends Item {
     private Entity spawnCreature(Level level, ItemStack stack, double x, double y, double z) {
         Entity entity = null;
 
-//        if (stack.is(ModItems.SPAWN_CHOPPER.get())) {
-//            entity = new EntityHunterChopper(level);
-//        }
-//        if (stack.is(ModItems.SPAWN_WORM.get())) {
-//            entity = new EntityBOTPrimeHead(level);
-//        }
-//        if (stack.is(ModItems.SPAWN_UFO.get())) {
-//            entity = new EntityUFO(level);
-//            ((EntityUFO) entity).scanCooldown = 100;
-//            y += 35;
-//        }
+        /* Der Kopterruf fehlt weiter: den Jagdkopter gibt es im Port nicht. Die beiden
+         * anderen stehen seit den Runden 282 und 283 und werden hier nachgezogen. */
+        if (stack.is(NtmItems.SPAWN_WORM.get())) {
+            entity = NtmEntityTypes.BOT_PRIME_HEAD.get().create(level);
+        }
+        if (stack.is(NtmItems.SPAWN_UFO.get())) {
+            Ufo ufo = NtmEntityTypes.UFO.get().create(level);
+            if (ufo != null) {
+                /* Das UFO kommt von oben herein und braucht seine hundert Ticks Anlauf,
+                 * ehe es das erste Mal nach einem Ziel sucht -- so steht es im Original. */
+                ufo.anlaufZeit(100);
+                y += 35;
+                entity = ufo;
+            }
+        }
         if (stack.is(NtmItems.SPAWN_DUCK.get())) {
             Duck duck = NtmEntityTypes.DUCK.get().create(level);
             if (duck != null) {
@@ -116,14 +125,19 @@ public class EntitySpawnerItem extends Item {
         return entity;
     }
 
-//    @Override
-//    public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, net.minecraft.world.item.TooltipFlag flag) {
-//        if (stack.is(ModItems.SPAWN_WORM.get())) {
-//            tooltip.add(Component.literal("Without a player in survival mode"));
-//            tooltip.add(Component.literal("to target, he struggles around a lot."));
-//            tooltip.add(Component.empty());
-//            tooltip.add(Component.literal("He's doing his best so please show him"));
-//            tooltip.add(Component.literal("some consideration."));
-//        }
-//    }
+    /**
+     * Der Hinweistext des Wurmrufs. Er stand hier seit Runde 282 auskommentiert, weil es den
+     * Gegenstand noch nicht gab; seit Runde 288 gibt es ihn.
+     */
+    @Override
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+
+        if(stack.is(NtmItems.SPAWN_WORM.get())) {
+            tooltip.add(Component.translatable("item.hbmsntm.spawn_worm.desc0"));
+            tooltip.add(Component.translatable("item.hbmsntm.spawn_worm.desc1"));
+            tooltip.add(Component.empty());
+            tooltip.add(Component.translatable("item.hbmsntm.spawn_worm.desc2"));
+            tooltip.add(Component.translatable("item.hbmsntm.spawn_worm.desc3"));
+        }
+    }
 }
