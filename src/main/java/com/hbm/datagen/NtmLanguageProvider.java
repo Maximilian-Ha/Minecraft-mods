@@ -4468,21 +4468,45 @@ public class NtmLanguageProvider extends LanguageProvider {
          * ebenfalls keinen Eintrag; hier bekommen alle drei einen, weil ein roher Schluessel
          * im Todesbildschirm und am Namensschild zu sehen ist. */
         this.add("entity.hbmsntm.undead_soldier", "Undead Soldier");
-        this.add("entity.hbmsntm.cyber_crab", "Cybercrab");
-        this.add("entity.hbmsntm.tesla_crab", "Teslacrab");
-        this.add("entity.hbmsntm.maskman", "Maskman");
+        this.add("entity.hbmsntm.cyber_crab", "Cyber Crab");
+        this.add("entity.hbmsntm.tesla_crab", "Tesla Crab");
+        this.add("entity.hbmsntm.maskman", "Mask Man");
         this.add("entity.hbmsntm.rad_beast", "Radiation Beast");
         this.add("entity.hbmsntm.bot_prime_head", "Balls-O-Tron Prime");
-        this.add("entity.hbmsntm.bot_prime_body", "Balls-O-Tron Prime");
-        this.add("entity.hbmsntm.ufo", "UFO");
-        this.add("entity.hbmsntm.taint_crab", "Taintcrab");
+        this.add("entity.hbmsntm.bot_prime_body", "Balls-O-Tron Segment");
+        this.add("entity.hbmsntm.ufo", "Martian Invasion Ship");
+        this.add("entity.hbmsntm.taint_crab", "Taint Crab");
         this.add("entity.hbmsntm.tau_shot", "Tau Bolt");
         this.add("entity.hbmsntm.duck", "Duck");
         this.add("entity.hbmsntm.creeper_nuclear", "Nuclear Creeper");
         this.add("entity.hbmsntm.creeper_tainted", "Tainted Creeper");
-        this.add("entity.hbmsntm.creeper_gold", "Gold Creeper");
+        this.add("entity.hbmsntm.creeper_gold", "Golden Creeper");
         this.add("entity.hbmsntm.creeper_volatile", "Volatile Creeper");
         this.add("entity.hbmsntm.creeper_phosgene", "Phosgene Creeper");
+
+        /* Runde 299: die uebrigen Wesen. Die Namen stehen im Original (en_US.lang,
+         * entity.hbm.*) -- hier ist nichts erfunden. Gleichzeitig berichtigt: das Original
+         * schreibt "Cyber Crab", "Tesla Crab", "Taint Crab", "Mask Man", "Golden Creeper",
+         * nennt das UFO "Martian Invasion Ship" und das Rumpfteil des Balls-O-Tron
+         * "Balls-O-Tron Segment". Der Port hatte sich das anders zurechtgelegt. */
+        this.add("entity.hbmsntm.fbi_agent", "FBI Agent");
+        this.add("entity.hbmsntm.fbi_drone", "FBI Drone");
+        this.add("entity.hbmsntm.parasite_maggot", "Parasitic Maggot");
+        this.add("entity.hbmsntm.pigeon", "Pigeon");
+        this.add("entity.hbmsntm.quackos", "Quackos The Elder One");
+        this.add("entity.hbmsntm.glyphid", "Glyphid");
+        this.add("entity.hbmsntm.glyphid_brawler", "Glyphid Brawler");
+        this.add("entity.hbmsntm.glyphid_bombardier", "Glyphid Bombardier");
+        this.add("entity.hbmsntm.glyphid_blaster", "Glyphid Blaster");
+        this.add("entity.hbmsntm.bullet_mk4", "Bullet");
+        this.add("entity.hbmsntm.rocket", "Rocket");
+        this.add("entity.hbmsntm.shrapnel", "Schrabnel");
+
+        /* Fuer diese drei hat das Original keinen Eintrag -- sie bekommen hier einen, weil
+         * ein roher Schluessel im Todesbildschirm und am Namensschild zu sehen waere. */
+        this.add("entity.hbmsntm.block_spider", "Block Spider");
+        this.add("entity.hbmsntm.dummy", "Dummy");
+        this.add("entity.hbmsntm.ghost", "Ghost");
     }
 
     // HELPERS //

@@ -10,6 +10,9 @@ import com.hbm.entity.item.WasteItemEntity;
 import com.hbm.entity.mob.BlockSpider;
 import com.hbm.entity.mob.Dummy;
 import com.hbm.entity.mob.glyphid.Glyphid;
+import com.hbm.entity.mob.glyphid.GlyphidBlaster;
+import com.hbm.entity.mob.glyphid.GlyphidBombardier;
+import com.hbm.entity.mob.glyphid.GlyphidBrawler;
 import com.hbm.entity.mob.FbiAgent;
 import com.hbm.entity.mob.FbiDrone;
 import com.hbm.entity.mob.ParasiteMaggot;
@@ -18,6 +21,7 @@ import com.hbm.entity.grenade.GrenadeUniversal;
 import com.hbm.entity.projectile.Boxcar;
 import com.hbm.entity.item.ParachuteCrate;
 import com.hbm.entity.projectile.DuchessGambit;
+import com.hbm.entity.projectile.AcidBomb;
 import com.hbm.entity.projectile.Chemical;
 import com.hbm.entity.projectile.CoinEntity;
 import com.hbm.entity.projectile.Torpedo;
@@ -218,6 +222,31 @@ public class NtmEntityTypes {
                     .sized(1.75F, 1.0F)
                     .clientTrackingRange(16)
                     .build("glyphid"));
+
+    /* Runde 299: der Brawler. Ein Viertel groesser als der gewoehnliche Glyphid -- zwei
+     * Bloecke breit, gut einer hoch, genau wie im Original (setSize(2F, 1.125F)). */
+    public static final DeferredHolder<EntityType<?>, EntityType<GlyphidBrawler>> GLYPHID_BRAWLER = ENTITY_TYPES.register(
+            "glyphid_brawler",
+            () -> EntityType.Builder.of(GlyphidBrawler::new, MobCategory.MONSTER)
+                    .sized(2.0F, 1.125F)
+                    .clientTrackingRange(16)
+                    .build("glyphid_brawler"));
+
+    /* Runde 299: der Bombardier. Dieselben Masse wie der gewoehnliche Glyphid. */
+    public static final DeferredHolder<EntityType<?>, EntityType<GlyphidBombardier>> GLYPHID_BOMBARDIER = ENTITY_TYPES.register(
+            "glyphid_bombardier",
+            () -> EntityType.Builder.of(GlyphidBombardier::new, MobCategory.MONSTER)
+                    .sized(1.75F, 1.0F)
+                    .clientTrackingRange(16)
+                    .build("glyphid_bombardier"));
+
+    /* Runde 299: der Blaster. Der grosse Bombardier, Masse wie der Brawler. */
+    public static final DeferredHolder<EntityType<?>, EntityType<GlyphidBlaster>> GLYPHID_BLASTER = ENTITY_TYPES.register(
+            "glyphid_blaster",
+            () -> EntityType.Builder.of(GlyphidBlaster::new, MobCategory.MONSTER)
+                    .sized(2.0F, 1.125F)
+                    .clientTrackingRange(16)
+                    .build("glyphid_blaster"));
 
     /* Runde 298: der Merkpunkt. Unsichtbar, ohne Ausdehnung, und nur der Glyphid sieht ihn. */
     public static final DeferredHolder<EntityType<?>, EntityType<Waypoint>> WAYPOINT = ENTITY_TYPES.register(
@@ -440,6 +469,10 @@ public class NtmEntityTypes {
     /* Die Dynamitstange, Runde 234. Dieselben Masse wie die Granate -- ein Viertelblock. */
     public static final DeferredHolder<EntityType<?>, EntityType<Dynamite>> DYNAMITE = ENTITY_TYPES.register("dynamite",
             () -> EntityType.Builder.<Dynamite>of(Dynamite::new, MobCategory.MISC).sized(0.25F, 0.25F).build("dynamite"));
+
+    /* Runde 299: der Saeureklecks des Bombardiers. Ein Viertelblock, wie jeder Wurfkoerper. */
+    public static final DeferredHolder<EntityType<?>, EntityType<AcidBomb>> ACID_BOMB = ENTITY_TYPES.register("acid_bomb",
+            () -> EntityType.Builder.<AcidBomb>of(AcidBomb::new, MobCategory.MISC).noSummon().sized(0.25F, 0.25F).build("acid_bomb"));
 
     /* Runde 293: der Fischerdynamit -- dieselbe Stange, anderer Knall. */
     public static final DeferredHolder<EntityType<?>, EntityType<DynamiteFishing>> DYNAMITE_FISHING = ENTITY_TYPES.register("dynamite_fishing",

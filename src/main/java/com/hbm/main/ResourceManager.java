@@ -121,6 +121,12 @@ public class ResourceManager {
     public static final ResourceLocation QUADCOPTER_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/quadcopter.png");
     /** Der Glyphid, Runde 298. Neunzehn Teile in einem OBJ. */
     public static final ResourceLocation GLYPHID_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/glyphid.png");
+    /** Der Brawler, Runde 299. Derselbe Koerper, andere Haut. */
+    public static final ResourceLocation GLYPHID_BRAWLER_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/glyphid_brawler.png");
+    /** Der Bombardier, Runde 299. */
+    public static final ResourceLocation GLYPHID_BOMBARDIER_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/glyphid_bombardier.png");
+    /** Der Blaster, Runde 299. */
+    public static final ResourceLocation GLYPHID_BLASTER_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/glyphid_blaster.png");
     /** Die Blockspinne, Runde 296. */
     public static final ResourceLocation BLOCKSPIDER_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/blockspider.png");
     public static final ResourceLocation MASKMAN_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/maskman.png");

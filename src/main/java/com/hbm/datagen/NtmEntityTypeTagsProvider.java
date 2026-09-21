@@ -30,8 +30,16 @@ public class NtmEntityTypeTagsProvider extends EntityTypeTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider provider) {
         this.tag(EntityTypeTags.UNDEAD).add(NtmEntityTypes.UNDEAD_SOLDIER.get());
-        /* Runde 297: die Made ist ein Gliederfuesser. Das Original sagt das ueber
-         * getCreatureAttribute, das es auf 1.21 nicht mehr gibt -- hier traegt es der Tag. */
-        this.tag(EntityTypeTags.SENSITIVE_TO_BANE_OF_ARTHROPODS).add(NtmEntityTypes.PARASITE_MAGGOT.get());
+        /* Made und Glyphid sind Gliederfuesser. Das Original sagt das ueber
+         * getCreatureAttribute, das es auf 1.21 nicht mehr gibt -- hier traegt es der Tag.
+         * Die Made kam in Runde 297 dazu, die Glyphiden in Runde 299 nachgereicht: in
+         * Runde 298 war das uebersehen worden, das Schwert der Gliederfuesser tat ihnen
+         * nichts. */
+        this.tag(EntityTypeTags.SENSITIVE_TO_BANE_OF_ARTHROPODS).add(
+                NtmEntityTypes.PARASITE_MAGGOT.get(),
+                NtmEntityTypes.GLYPHID.get(),
+                NtmEntityTypes.GLYPHID_BRAWLER.get(),
+                NtmEntityTypes.GLYPHID_BOMBARDIER.get(),
+                NtmEntityTypes.GLYPHID_BLASTER.get());
     }
 }

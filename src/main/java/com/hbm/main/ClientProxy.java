@@ -423,6 +423,8 @@ public class ClientProxy extends ServerProxy {
         EntityRenderers.register(NtmEntityTypes.GRENADE_UNIVERSAL.get(), ThrownItemRenderer::new);
         EntityRenderers.register(NtmEntityTypes.DYNAMITE.get(), ThrownItemRenderer::new);
         EntityRenderers.register(NtmEntityTypes.DYNAMITE_FISHING.get(), ThrownItemRenderer::new);
+        /* Runde 299: der Saeureklecks -- das Original zeichnet ihn als Schleimball. */
+        EntityRenderers.register(NtmEntityTypes.ACID_BOMB.get(), ThrownItemRenderer::new);
         EntityRenderers.register(NtmEntityTypes.SAWBLADE.get(), RenderSawblade::new);
         EntityRenderers.register(NtmEntityTypes.COG.get(), RenderCog::new);
         EntityRenderers.register(NtmEntityTypes.RBMK_DEBRIS.get(), RenderRBMKDebris::new);
@@ -493,6 +495,11 @@ public class ClientProxy extends ServerProxy {
         EntityRenderers.register(NtmEntityTypes.BLOCK_SPIDER.get(), BlockSpiderRenderer::new);
         EntityRenderers.register(NtmEntityTypes.PARASITE_MAGGOT.get(), ParasiteMaggotRenderer::new);
         EntityRenderers.register(NtmEntityTypes.GLYPHID.get(), GlyphidRenderer::new);
+        /* Runde 299: Brawler, Bombardier und Blaster teilen sich das Modell des Glyphiden --
+         * der Zeichner holt Haut und Groesse aus dem Wesen, nicht aus sich selbst. */
+        EntityRenderers.register(NtmEntityTypes.GLYPHID_BRAWLER.get(), GlyphidRenderer::new);
+        EntityRenderers.register(NtmEntityTypes.GLYPHID_BOMBARDIER.get(), GlyphidRenderer::new);
+        EntityRenderers.register(NtmEntityTypes.GLYPHID_BLASTER.get(), GlyphidRenderer::new);
         /* Der Merkpunkt ist unsichtbar -- im Original zeichnet ihn nur die Fehlersuche. */
         EntityRenderers.register(NtmEntityTypes.WAYPOINT.get(), EmptyEntityRenderer::new);
         EntityRenderers.register(NtmEntityTypes.UNDEAD_SOLDIER.get(), UndeadSoldierRenderer::new);

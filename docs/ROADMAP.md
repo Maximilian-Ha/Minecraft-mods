@@ -14154,3 +14154,81 @@ Berichtigt. Dazu kommt das gebratene Stück, das bisher ganz fehlte — acht Pun
 für neun Sekunden, und der Ofen macht es aus dem rohen.
 
 **46 Tore grün.**
+
+---
+
+## Runde 299 — Die Glyphiden, zweiter Teil: die Werfer
+
+Drei Untiere und ein Wurfkörper. Der **Brawler** springt, der **Bombardier** wirft, der
+**Blaster** wirft mehr — und die Säurebombe ist das, was dabei fliegt.
+
+### Ballistik statt Zielhilfe
+
+Der Bombardier rät nicht, er rechnet. Alle zwanzig Takte merkt er sich, wo sein Ziel stand;
+die Differenz zum Jetzt ist seine Schätzung der Zielgeschwindigkeit. Damit sagt er voraus, wo
+das Ziel in zwanzig (nahes Ziel) oder sechzig Takten (fernes) sein wird, und löst dann die
+Wurfparabel nach dem Abwurfwinkel auf. Die Wurzel hat zwei Lösungen: die **flache Bahn** für
+nahe Ziele, die **steile** für ferne — daher der Vorzeichenschalter. Ist die Wurzel negativ,
+liegt das Ziel außer Reichweite, und er wirft gar nicht erst.
+
+Die Schwerkraft in dieser Rechnung ist 0,04. Genau dieselbe Zahl trägt die Säurebombe als
+`getGravityVelocity`, und ihr Luftwiderstand ist 1,0 statt der üblichen 0,99 — sie wird also
+überhaupt nicht gebremst. **Die drei Zahlen müssen zusammenpassen**, sonst geht jeder Wurf
+daneben; das ist der Grund, warum die Bombe eine eigene Klasse und nicht eine Granate mit
+anderem Zünder ist.
+
+Aus einer Salve wird ein Fächer, weil die i-te Bombe die Streuung `i × getSpreadMult`
+bekommt: die erste fliegt genau, die letzte am weitesten daneben. Der Bombardier wirft fünf
+mit Faktor 1, der Blaster zehn mit Faktor 0,5 — enger gestreut, aber dreimal so viel Schaden
+je Klecks.
+
+Dabei ist die Streuung selbst gebaut und nicht von `Projectile.shoot` geliehen: Vanille streut
+**dreieckig mit 0,0172275**, das Original **gaußisch mit 0,0075**. Über eine Zehnerserie mit
+wachsendem Faktor wäre das mehr als der doppelte Fächer.
+
+### Der Glyphid als Geschoss
+
+Der Brawler benutzt dieselbe Rechnung für sich selbst — das Original sagt dazu trocken „yeag
+this is now a motherfucking projectile". Nur sind die Zahlen andere: v0 ist 1,5 statt 1, die
+Schwerkraft in der Rechnung 0,01 statt 0,04, und der gefundene Winkel wird **durch 3,5
+geteilt**, bevor er die Richtung dreht. Das ist keine saubere Ballistik mehr: die Rechnung
+liefert den Winkel für einen hohen Bogen, und ein Siebtel Neigung daraus macht einen flachen
+Satz nach vorn.
+
+Damit ihm der eigene Sprung nichts tut, nimmt er **Fallschaden bis zehn** nicht an — ein Sturz
+aus großer Höhe aber schon. Nicht Unverwundbarkeit, eine Grenze.
+
+### Toter Code, der nicht mitkommt
+
+Der Brawler des Originals führt dieselbe Vorhersage wie der Bombardier — und sie ist
+**wirkungslos**, gleich zweifach: `lastX/lastY/lastZ` werden in jedem Takt auf den Ort des
+Ziels gesetzt und im selben Takt gelesen, die Differenz ist also immer null; und das Feld
+`lastTarget` wird nie belegt, weshalb die Rechnung sie ohnehin verwerfen würde. Nachgemessen,
+nicht vermutet. Der Port baut die Felder deshalb nicht nach und schreibt stattdessen hin,
+warum. Beim Bombardier, der nur alle zwanzig Takte misst, ist dieselbe Vorhersage echt.
+
+### Zwei Löcher aus Runde 298 gestopft
+
+Der Glyphid ist im Original ein **Gliederfüßer** (`getCreatureAttribute`). Auf 1.21 trägt das
+ein Entity-Type-Tag, und in Runde 298 war es übersehen worden — das Schwert der Gliederfüßer
+tat ihm nichts. Jetzt trägt es die ganze Familie.
+
+Und die Wesen hatten keine Namen. Gemessen: von 104 angemeldeten Entitätsarten trugen **16**
+einen Namen. Nachgereicht sind die zwölf, für die das Original einen hat (Glyphid und seine
+drei neuen Verwandten, FBI-Agent und -Drohne, Made, Taube, Quackos, Kugel, Rakete, Schrabnel),
+dazu drei ohne Vorlage (Blockspinne, Attrappe, Geist), die sonst ihren rohen Schlüssel im
+Todesbildschirm zeigen würden.
+
+Dabei **sieben Berichtigungen**: der Port hatte sich „Cybercrab", „Teslacrab", „Taintcrab",
+„Maskman", „Gold Creeper" zurechtgelegt, nannte das UFO schlicht „UFO" und das Rumpfteil des
+Balls-O-Tron wie seinen Kopf. Original und CE-Abspaltung sagen übereinstimmend „Cyber Crab",
+„Tesla Crab", „Taint Crab", „Mask Man", „Golden Creeper", **„Martian Invasion Ship"** und
+**„Balls-O-Tron Segment"**.
+
+### Was die Familie noch braucht
+
+Behemoth und Brenda hängen an `glyphid_gland`, der Digger an `Library.getBlockPosInPath` und
+einem Metawert von `Rubble`, Scout und Nuclear am Bau und am `glyphid_spawner`-Block. Alle
+vier Abhängigkeiten sind gemessen und fehlen im Port.
+
+**46 Tore grün.**
