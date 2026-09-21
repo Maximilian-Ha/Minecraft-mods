@@ -12932,3 +12932,37 @@ seine ganze Wirkung hängt (er zieht fünf Digamma ab und gibt Stabilität). Ein
 wäre ein Gegenstand, der nichts tut. Das Rezept kommt darum mit ihm.
 
 **48 von 61.**
+
+## Runde 273 — Die Schwefelsäure, und wie man einen Schleimball auflöst
+
+Nächster Blocker: `achSulfuric`. Beim Nachlesen zeigt sich, dass der Erfolg etwas anderes
+verlangt, als sein Name nahelegt.
+
+### Der Auslöser ist kein Trinken und kein Bauen
+
+Er steht in `GenericFluidBlock.onEntityCollidedWithBlock`: fällt ein **Gegenstand** in eine
+Flüssigkeit mit Schadensquelle, friert seine Bewegung ein und er nimmt jede Sekunde ein
+Zehntel des Schadens. Stirbt er dabei und war er ein **Schleimball**, bekommen alle Spieler im
+Umkreis von zehn Blöcken den Erfolg.
+
+Und diese Stelle gilt nur für einen einzigen Block. Nachgemessen über alle
+`new GenericFluidBlock`-Anmeldungen des Originals: **genau eine** setzt eine Schadensquelle,
+nämlich `sulfuric_acid_block` (`ModBlocks.java:2345`). Der Zweig steht darum im Port nicht in
+einer gemeinsamen Oberklasse, sondern in `SulfuricAcidLiquidBlock`.
+
+### Was dazukam
+
+Ein Fluidtyp mit den Zahlen des Originals (Dichte 1840, Zähigkeit 1000, Temperatur 273), die
+beiden Fluide, der Block mit Sprengfestigkeit 500, beide Texturen aus der CE-Abspaltung.
+
+Die Wirkung auf Lebewesen ist die des Originals: fünf Schaden je Tick, und wer schneller als
+0,2 hineinfällt, wird auf halbe Geschwindigkeit gebremst. Das Zischen alle fünf Ticks bleibt;
+die Wolkenpartikel entfallen, weil das Original sie auf dem Server erzeugt und das auf 1.21
+ein Paketthema für sich wäre.
+
+**Das Sinnbild ist ersetzt, der Auslöser nicht.** Das Original nimmt `achievement_icon` mit
+dem Merkmal `BALLS` — einen Meta-Gegenstand, den der Port nicht hat. Dort steht jetzt der
+Schleimball selbst, was ohnehin näher an dem liegt, was man tun muss. Vorgänger ist wie im
+Original `slimeball`.
+
+**49 von 61.**

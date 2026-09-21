@@ -31,6 +31,8 @@ public class NtmFluids {
     public static final DeferredHolder<Fluid, MudBaseFlowing> MUD_FLOWING = FLUIDS.register("mud_flowing", () -> new MudBaseFlowing(mudProps()));
     public static final DeferredHolder<Fluid, BaseFlowingFluid.Source> TOXIC = FLUIDS.register("toxic", () -> new BaseFlowingFluid.Source(toxicProps()));
     public static final DeferredHolder<Fluid, BaseFlowingFluid.Flowing> TOXIC_FLOWING = FLUIDS.register("toxic_flowing", () -> new BaseFlowingFluid.Flowing(toxicProps()));
+    public static final DeferredHolder<Fluid, BaseFlowingFluid.Source> SULFURIC_ACID = FLUIDS.register("sulfuric_acid", () -> new BaseFlowingFluid.Source(saeureProps()));
+    public static final DeferredHolder<Fluid, BaseFlowingFluid.Flowing> SULFURIC_ACID_FLOWING = FLUIDS.register("sulfuric_acid_flowing", () -> new BaseFlowingFluid.Flowing(saeureProps()));
 
     private static BaseFlowingFluid.Properties volcanicLavaProps() {
         return new BaseFlowingFluid.Properties(NtmFluidTypes.VOLCANIC_LAVA_TYPE, NtmFluids.VOLCANIC_LAVA, NtmFluids.VOLCANIC_LAVA_FLOWING)
@@ -82,6 +84,19 @@ public class NtmFluids {
                 .levelDecreasePerBlock(2)
                 .explosionResistance(500F)
                 .tickRate(15);
+    }
+
+    /**
+     * Die Schwefelsaeure. Sprengfestigkeit 500 wie im Original (setResistance(500F)); die
+     * Stufenzahl steht dort nicht ausdruecklich, GenericFluidBlock bleibt also beim Vanilla-Mass.
+     */
+    private static BaseFlowingFluid.Properties saeureProps() {
+        return new BaseFlowingFluid.Properties(NtmFluidTypes.SULFURIC_ACID_TYPE, NtmFluids.SULFURIC_ACID, NtmFluids.SULFURIC_ACID_FLOWING)
+                /* Ein fremder Eimer als Platzhalter, wie bei der Giftbruehe daneben: das
+                 * Original kennt fuer diese Fluessigkeit keinen eigenen. */
+                .bucket(() -> Items.WATER_BUCKET)
+                .block(NtmBlocks.SULFURIC_ACID_BLOCK)
+                .explosionResistance(500F);
     }
 
     public static void register(IEventBus eventBus) { FLUIDS.register(eventBus); }

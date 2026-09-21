@@ -172,5 +172,23 @@ public class NtmFluidTypes {
                     .motionScale(0.0023333333333333335D)
             ));
 
+    /**
+     * Die Schwefelsaeure, Runde 273. Die Zahlen stehen so im Original (ModBlocks.java:2343):
+     * Dichte 1840, Zaehigkeit 1000, Temperatur 273. Sie leuchtet nicht.
+     */
+    public static final DeferredHolder<FluidType, FluidType> SULFURIC_ACID_TYPE = FLUID_TYPES.register(
+            "sulfuric_acid_fluid",
+            () -> new FluidType(FluidType.Properties.create()
+                    .canSwim(false)
+                    .canDrown(false)
+                    .pathType(PathType.DAMAGE_OTHER)
+                    .adjacentPathType(null)
+                    .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
+                    .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
+                    .density(1840)
+                    .viscosity(1000)
+                    .temperature(273)
+            ));
+
     public static void register(IEventBus eventBus) { FLUID_TYPES.register(eventBus); }
 }

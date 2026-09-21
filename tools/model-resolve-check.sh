@@ -122,7 +122,7 @@ for key in sorted(models):
 # Die Liste enthaelt auch Fluide, Toene und Menues; das schadet nicht, denn nur item.- und
 # block.-Zeilen werden ueberhaupt gegen sie gehalten. Umgekehrt gilt: was der Ausdruck nicht
 # faengt, bleibt unbemerkt -- eine blinde Stelle, kein Fehlalarm.
-# Elf Bloecke bekommen absichtlich KEINEN Gegenstand: sie stehen mit dem blanken
+# Vierzehn Bloecke bekommen absichtlich KEINEN Gegenstand: sie stehen mit dem blanken
 # BLOCKS.register im Quelltext statt mit einem der register-Helfer, die sonst jedem Block
 # einen BlockItem mitgeben. Fluessigkeiten, Feuer, Wrapper -- nichts davon soll in der Hand
 # liegen. Eine Namenszeile haben sie trotzdem, deshalb muessen sie hier ausgenommen werden.
@@ -135,6 +135,9 @@ OHNE_GEGENSTAND = {
     # Die Schlackenpfuetze: entsteht nur unter dem Schlackenabstich und gibt beim Abbauen
     # einen Schrottklumpen her, nicht sich selbst. Im Original ebenso ohne Kreativreiter.
     'slag',
+    # Die Schwefelsaeure (Runde 273): eine Fluessigkeit wie toxic_block und mud, also auch
+    # hier nichts zum Anfassen -- der Eimer macht das Fluidsystem.
+    'sulfuric_acid_block',
 }
 
 def registry_namen(quelle='src/main/java'):

@@ -49,6 +49,7 @@ import com.hbm.blocks.network.RadioTelexBlock;
 import com.hbm.blocks.machine.FloodlightBeamBlock;
 import com.hbm.blocks.fluids.CoriumLiquidBlock;
 import com.hbm.blocks.fluids.MudLiquidBlock;
+import com.hbm.blocks.fluids.SulfuricAcidLiquidBlock;
 import com.hbm.blocks.fluids.ToxicLiquidBlock;
 import com.hbm.blocks.fluids.VolcanicLiquidBlock;
 import com.hbm.blocks.gas.*;
@@ -1286,6 +1287,9 @@ public class NtmBlocks {
     public static final DeferredBlock<LiquidBlock> MUD = BLOCKS.register("mud", () -> new MudLiquidBlock(NtmFluids.MUD.get(), BlockBehaviour.Properties.of().randomTicks().noCollission().replaceable().strength(500F).lightLevel(state -> 5).pushReaction(PushReaction.DESTROY).noLootTable().liquid().sound(SoundType.EMPTY)));
     /* Stufe 5: die Giftbruehe aus dem gelben Fass. Leuchtkraft 15 wie im Original. */
     public static final DeferredBlock<LiquidBlock> TOXIC_BLOCK = BLOCKS.register("toxic_block", () -> new ToxicLiquidBlock(NtmFluids.TOXIC.get(), BlockBehaviour.Properties.of().randomTicks().noCollission().replaceable().strength(500F).lightLevel(state -> 15).pushReaction(PushReaction.DESTROY).noLootTable().liquid().sound(SoundType.EMPTY)));
+    /* Die Schwefelsaeure, Runde 273 -- der einzige Fluidblock des Originals mit
+     * Schadensquelle, und damit der einzige Weg zum Erfolg "sulfuric". */
+    public static final DeferredBlock<LiquidBlock> SULFURIC_ACID_BLOCK = BLOCKS.register("sulfuric_acid_block", () -> new SulfuricAcidLiquidBlock(NtmFluids.SULFURIC_ACID.get(), BlockBehaviour.Properties.of().randomTicks().noCollission().replaceable().strength(500F).pushReaction(PushReaction.DESTROY).noLootTable().liquid().sound(SoundType.EMPTY)));
 
     // Other Technical Blocks
     public static final DeferredBlock<Block> GAS_RADON =       register("gas_radon",       () -> new GasRadonBlock(      BlockBehaviour.Properties.of().replaceable().noCollission().noOcclusion().noLootTable()));

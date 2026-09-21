@@ -50,7 +50,10 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
  * den Start einer Sojus. Nach Runde 258 stehen 20 der 32 (nachgezaehlt an den Aufrufen mit
  * Kennung); die uebrigen 12 warten auf Entitaeten und Gegenstaende, die der Port noch nicht
  * hat: die Sojus (soyuz, space), die vier Bosse, die Schimmerwaffen (fiend, fiend2), das
- * die Schwefelsaeure und der Speer (kauaiMoho).
+ * der Speer (kauaiMoho).
+ *
+ * DIE SCHWEFELSAEURE KAM IN RUNDE 273: sie ist der einzige Fluidblock des Originals mit
+ * Schadensquelle, und ihr Erfolg faellt, wenn sich darin ein Schleimball aufloest.
  *
  * DAS MESSER KAM IN RUNDE 272 (someWounds). Es ist ein Ruestungsmodul, und das Modulsystem
  * stand schon -- gefehlt hat nur die Klasse.
@@ -181,7 +184,14 @@ public class NtmAdvancementProvider extends AdvancementProvider {
              *   achievement_icon ACID          -> der Schleimball selbst
              *   achievement_icon QUESTIONMARK  -> der Gueterwagen-Sprengkopf
              */
-            erfolg(speichern, helper, wurzel, "slimeball", Items.SLIME_BALL, false, "slimeball");
+            AdvancementHolder slimeball = erfolg(speichern, helper, wurzel, "slimeball", Items.SLIME_BALL, false, "slimeball");
+
+            /* Die Saeure haengt im Original am Schleimball -- und das ist woertlich gemeint:
+             * der Erfolg faellt, wenn sich ein Schleimball darin aufloest. Als Sinnbild nimmt
+             * das Original achievement_icon mit dem Merkmal BALLS; den Meta-Gegenstand hat der
+             * Port nicht, also steht dort der Schleimball selbst. Ein Sinnbild laesst sich
+             * ersetzen, ein Ausloeser nicht. */
+            erfolg(speichern, helper, slimeball, "sulfuric", Items.SLIME_BALL, true, "sulfuric");
 
             /* Das Messer haengt im Original an keinem Vorgaenger (initIndependentStat ohne
              * Elternteil); in 1.21 braucht jeder Erfolg einen, also die Wurzel. Kein

@@ -850,6 +850,9 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("advancements.hbmsntm.radium.description", "YOU'RE FIRED FOR POURING RADIUM IN MY COFFEE!");
         this.add("advancements.hbmsntm.some_wounds.title", "Some Wounds Never Heal");
         this.add("advancements.hbmsntm.some_wounds.description", "Get ready");
+        this.add("advancements.hbmsntm.sulfuric.title", "I should not have dipped my balls in sulfuric acid.");
+        /* Die Beschreibung ist im Original leer (achievement.sulfuric.desc= ohne Wert). */
+        this.add("advancements.hbmsntm.sulfuric.description", "");
         this.add("advancements.hbmsntm.watz.title", "The Power of Element-126");
         this.add("advancements.hbmsntm.watz.description", "F\u00f3lkvangr fields possibly included.");
         this.add("advancements.hbmsntm.rbmk.title", "3.6 Roentegen?");
@@ -2765,6 +2768,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.BLOCK_ELECTRICAL_SCRAP, "Block of Electrical Scrap");
         this.add(NtmBlocks.NTM_DIRT, "Dirt");
         this.add(NtmBlocks.TOXIC_BLOCK, "Toxic Sludge");
+        this.add(NtmBlocks.SULFURIC_ACID_BLOCK, "Sulfuric Acid");
         this.add(NtmBlocks.WOOD_BARRIER, "Wooden Barrier");
         this.add(NtmBlocks.WOOD_STRUCTURE_ROOF, "Wooden Roof");
         this.add(NtmBlocks.WOOD_STRUCTURE_SCAFFOLD, "Wooden Scaffold");

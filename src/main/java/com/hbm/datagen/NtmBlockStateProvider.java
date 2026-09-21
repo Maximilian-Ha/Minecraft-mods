@@ -84,6 +84,7 @@ public class NtmBlockStateProvider extends BlockStateProvider {
          * fehlendes Modell und zeichnet schwarz-violette Partikel. */
         this.fluidBlock(NtmBlocks.CORIUM, "corium_still");
         this.fluidBlock(NtmBlocks.TOXIC_BLOCK, "toxic_still");
+        this.fluidBlock(NtmBlocks.SULFURIC_ACID_BLOCK, "sulfuric_acid_still");
         this.fluidBlock(NtmBlocks.MUD, "mud_still");
         this.fluidBlock(NtmBlocks.RAD_LAVA, "rad_lava_still");
         this.fluidBlock(NtmBlocks.VOLCANIC_LAVA, "volcanic_lava_still");
