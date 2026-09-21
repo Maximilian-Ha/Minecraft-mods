@@ -22,6 +22,7 @@ import com.hbm.items.armor.ArmorFSBItem;
 import com.hbm.items.armor.ArmorHatItem;
 import com.hbm.items.food.PillItem;
 import com.hbm.items.machine.GunPartItem;
+import com.hbm.items.weapon.DynamiteFishingItem;
 import com.hbm.items.weapon.DynamiteItem;
 import com.hbm.items.component.NtmDataComponents;
 import com.hbm.items.special.ClayTabletItem;
@@ -1527,6 +1528,12 @@ public class NtmItems {
      * einfachen Granatenfamilie; siehe die Entitaet, warum sie hier eine eigene Klasse hat.
      */
     public static final DeferredItem<Item> STICK_DYNAMITE = ITEMS.register("stick_dynamite", () -> new DynamiteItem(new Item.Properties()));
+
+    /**
+     * DER FISCHERDYNAMIT, Runde 293. Dieselbe Stange, anderer Knall: schwaecher, ohne
+     * Blockschaden -- und in jedem Wasser im Umkreis treibt danach ein Fisch auf.
+     */
+    public static final DeferredItem<Item> STICK_DYNAMITE_FISHING = ITEMS.register("stick_dynamite_fishing", () -> new DynamiteFishingItem(new Item.Properties()));
 
     public static final DeferredItem<Item> CLAY_TABLET = ITEMS.register("clay_tablet", () -> new ClayTabletItem(new Item.Properties().component(NtmDataComponents.META.get(), 0)));
 

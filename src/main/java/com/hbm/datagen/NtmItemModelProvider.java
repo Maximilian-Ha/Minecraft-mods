@@ -1190,6 +1190,7 @@ public class NtmItemModelProvider extends ItemModelProvider {
         // ITEM_SECRET nutzt ICustomItemModelRegister (EnumMultiItem), fuenf Modelle
         // CHUNK_ORE nutzt ICustomItemModelRegister (EnumMultiItem), vier Modelle
         this.basicItem(NtmItems.STICK_DYNAMITE.get());
+        this.basicItem(NtmItems.STICK_DYNAMITE_FISHING.get());
         this.basicItem(NtmItems.CLAY_TABLET.get());
         this.basicItem(NtmItems.BOLT_SPIKE.get());
         this.basicItem(NtmItems.CARD_AOS.get());

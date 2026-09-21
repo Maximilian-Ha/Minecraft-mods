@@ -3,6 +3,8 @@ package com.hbm.entity;
 import com.hbm.entity.effect.DigammaSpear;
 import com.hbm.entity.effect.BlackHole;
 import com.hbm.entity.grenade.Dynamite;
+import com.hbm.entity.grenade.DynamiteFishing;
+import com.hbm.entity.item.BuoyantItemEntity;
 import com.hbm.entity.item.WasteItemEntity;
 import com.hbm.entity.mob.FbiAgent;
 import com.hbm.entity.mob.FbiDrone;
@@ -383,6 +385,21 @@ public class NtmEntityTypes {
     /* Die Dynamitstange, Runde 234. Dieselben Masse wie die Granate -- ein Viertelblock. */
     public static final DeferredHolder<EntityType<?>, EntityType<Dynamite>> DYNAMITE = ENTITY_TYPES.register("dynamite",
             () -> EntityType.Builder.<Dynamite>of(Dynamite::new, MobCategory.MISC).sized(0.25F, 0.25F).build("dynamite"));
+
+    /* Runde 293: der Fischerdynamit -- dieselbe Stange, anderer Knall. */
+    public static final DeferredHolder<EntityType<?>, EntityType<DynamiteFishing>> DYNAMITE_FISHING = ENTITY_TYPES.register("dynamite_fishing",
+            () -> EntityType.Builder.<DynamiteFishing>of(DynamiteFishing::new, MobCategory.MISC).sized(0.25F, 0.25F).build("dynamite_fishing"));
+
+    /* Runde 293: der treibende Gegenstand. Wie der gewoehnliche, nur dass er im Wasser
+     * nicht sinkt. */
+    public static final DeferredHolder<EntityType<?>, EntityType<BuoyantItemEntity>> BUOYANT_ITEM = ENTITY_TYPES.register(
+            "buoyant_item",
+            () -> EntityType.Builder.<BuoyantItemEntity>of(BuoyantItemEntity::new, MobCategory.MISC)
+                    .noSummon()
+                    .sized(0.25F, 0.25F)
+                    .clientTrackingRange(6)
+                    .updateInterval(20)
+                    .build("buoyant_item"));
 
     public static final DeferredHolder<EntityType<?>, EntityType<GrenadeUniversal>> GRENADE_UNIVERSAL = ENTITY_TYPES.register("grenade_universal",
             () -> EntityType.Builder.<GrenadeUniversal>of(GrenadeUniversal::new, MobCategory.MISC).sized(0.25F, 0.25F).build("grenade_universal"));

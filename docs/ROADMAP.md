@@ -13861,3 +13861,39 @@ flackern.
 liest, ist schlimmer als keine. Jetzt liest sie jemand, und jetzt steht sie da.
 
 **46 Tore grün.**
+
+## Runde 293 — Fischen mit Sprengstoff
+
+`stick_dynamite_fishing` fehlte im Port, und mit ihm `EntityItemBuoyant` — eine Klasse von
+einunddreißig Zeilen, die genau eine Sache kann: **im Wasser nicht sinken**.
+
+### Der treibende Gegenstand
+
+Steht unter ihm Wasser, bekommt er jeden Takt einen Schubs von 0,045 nach oben. Das Original
+schaut dabei einen Sechzehntelblock unter sich und verlangt Wasser mit einem Metadatenwert
+**unter acht** — acht und darüber ist auf 1.7.10 der senkrechte Strahl unter einer Quelle.
+Auf 1.21 heißt dieselbe Unterscheidung `FALLING`.
+
+### Der Knall, der schwächer ist als der der Stange
+
+Der Fischerdynamit sprengt mit Stärke **drei**, einen Viertelblock über seiner Stelle, ohne
+Feuer und **ohne Blockschaden** — die gewöhnliche Stange nimmt fünf und reißt Löcher. Danach
+werden fünfzehn Punkte in einem Würfel von fünfzehn Blöcken Kante gezogen; wo Wasser steht,
+treibt ein Fisch auf, mit einem Aufwärtsschwung von eins.
+
+### Eine Abweichung, die aus einer Zahl folgt
+
+Das Original zieht seine Beute mit `FishingHooks.getRandomFishable(rand, chance, 0, 100)`. Die
+**hundert** ist die Anzahl Ticks, die eine Angel gebraucht hätte, und sie drückt in Forges
+eigener Rechnung Schrott und Schätze auf nahezu null: es kommt praktisch nur Fisch heraus.
+Diese Rechnung gibt es auf 1.21 nicht mehr, und die Tabelle `gameplay/fishing` würfelt Schrott
+und Schätze mit. Der Port nimmt darum gleich `gameplay/fishing/fish` — die Untertabelle, die
+genau das enthält, was das Original praktisch ausgibt. Das Werkzeug ist ein anderes, das
+Ergebnis dasselbe.
+
+### Keine Gefahrenmeldung
+
+`stick_dynamite` steht im Gefahrensystem als Sprengstoff, der Fischerdynamit **nicht** —
+nachgemessen: im Original steht dort nur die eine Zeile. Der Port reicht keine zweite nach.
+
+**46 Tore grün.**

@@ -1986,6 +1986,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.CHUNK_ORE, this.getName(ChunkType.CRYOLITE), "Cryolite Chunk");
         this.add(NtmItems.CHUNK_ORE, this.getName(ChunkType.MOONSTONE), "Moonstone");
         this.add(NtmItems.STICK_DYNAMITE, "Stick of Dynamite");
+        this.add(NtmItems.STICK_DYNAMITE_FISHING, "Fishing Dynamite");
         this.add(NtmItems.CLAY_TABLET, "Clay Tablet");
         this.add(NtmItems.BOLT_SPIKE, "Railroad Spike");
         this.add(NtmItems.BOLT_SPIKE, DESC, "Radiates a threatening aura, somehow");

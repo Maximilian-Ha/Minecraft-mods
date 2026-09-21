@@ -76,7 +76,8 @@ public class Dynamite extends ThrowableNT implements ItemSupplier {
         return new ItemStack(NtmItems.STICK_DYNAMITE.get());
     }
 
-    private void zuende() {
+    /** Geschuetzt, damit der Fischerdynamit sie ersetzen kann -- er sprengt anders. */
+    protected void zuende() {
 
         ExplosionVNT knall = new ExplosionVNT(this.level(), this.getX(), this.getY(), this.getZ(), 5F,
                 this.getOwner() instanceof LivingEntity werfer ? werfer : null);

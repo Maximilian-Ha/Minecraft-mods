@@ -5491,6 +5491,15 @@ public class NtmRecipeProvider extends RecipeProvider {
 
         /* Die vier Haftladungen: drei Stangen und ein Klebeband, die Bergbauladung dagegen
          * eine Dynamitladung mit vier Feuersteinen darum. */
+        /* Runde 293: der Fischerdynamit -- drei Stangen, ein Blatt Papier und irgendein Teer.
+         * Der Teer steht im Original als Wildcard ANY_TAR; im Port traegt ihn der Tag. */
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, NtmItems.STICK_DYNAMITE_FISHING.get(), 1)
+                .requires(NtmItems.STICK_DYNAMITE.get(), 3)
+                .requires(Items.PAPER)
+                .requires(ItemTags.create(ResourceLocation.fromNamespaceAndPath("ntm", "any_tars")))
+                .unlockedBy("has_stick_dynamite", has(NtmItems.STICK_DYNAMITE.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("stick_dynamite_fishing"));
+
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, NtmBlocks.CHARGE_DYNAMITE.get(), 1)
                 .requires(NtmItems.STICK_DYNAMITE.get(), 3)
                 .requires(NtmItems.DUCTTAPE.get())

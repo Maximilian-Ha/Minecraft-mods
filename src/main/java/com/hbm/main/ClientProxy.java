@@ -417,6 +417,7 @@ public class ClientProxy extends ServerProxy {
         /* Die Granate zeigt ihr Gegenstandsbild -- siehe GrenadeUniversal.getItem(). */
         EntityRenderers.register(NtmEntityTypes.GRENADE_UNIVERSAL.get(), ThrownItemRenderer::new);
         EntityRenderers.register(NtmEntityTypes.DYNAMITE.get(), ThrownItemRenderer::new);
+        EntityRenderers.register(NtmEntityTypes.DYNAMITE_FISHING.get(), ThrownItemRenderer::new);
         EntityRenderers.register(NtmEntityTypes.SAWBLADE.get(), RenderSawblade::new);
         EntityRenderers.register(NtmEntityTypes.COG.get(), RenderCog::new);
         EntityRenderers.register(NtmEntityTypes.RBMK_DEBRIS.get(), RenderRBMKDebris::new);
@@ -474,6 +475,7 @@ public class ClientProxy extends ServerProxy {
         EntityRenderers.register(NtmEntityTypes.MOVING_PACKAGE.get(), RenderMovingPackage::new);
         /* Runde 290: der Atommuell am Boden sieht aus wie jeder andere liegende Gegenstand. */
         EntityRenderers.register(NtmEntityTypes.WASTE_ITEM.get(), ItemEntityRenderer::new);
+        EntityRenderers.register(NtmEntityTypes.BUOYANT_ITEM.get(), ItemEntityRenderer::new);
         //mobs
         EntityRenderers.register(NtmEntityTypes.CREEPER_NUCLEAR.get(), CreeperNuclearRenderer::new);
         EntityRenderers.register(NtmEntityTypes.DUCK.get(), DuckRenderer::new);
