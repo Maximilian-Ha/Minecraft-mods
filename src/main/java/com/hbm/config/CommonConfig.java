@@ -62,6 +62,7 @@ public class CommonConfig {
     public final IntValue RAID_ATTACK_DELAY;
     public final IntValue RAID_ATTACK_REACH;
     public final IntValue RAID_DISTANCE;
+    public final IntValue RAID_DRONES;
 
     // EXPLOSIONS (06)
     public final IntValue MK5;
@@ -310,6 +311,10 @@ public class CommonConfig {
                 .comment("How far away agents will spawn from the targeted player.")
                 .translation("hbmsntm.configuration.raidAttackDistance")
                 .defineInRange("raidAttackDistance", 32, 1, Integer.MAX_VALUE);
+        RAID_DRONES = builder
+                .comment("How many quadcopter drones are spawned each raid.")
+                .translation("hbmsntm.configuration.raidDrones")
+                .defineInRange("raidDrones", 5, 0, Integer.MAX_VALUE);
 
         builder.pop();
 

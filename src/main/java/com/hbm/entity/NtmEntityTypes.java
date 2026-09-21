@@ -5,6 +5,7 @@ import com.hbm.entity.effect.BlackHole;
 import com.hbm.entity.grenade.Dynamite;
 import com.hbm.entity.item.WasteItemEntity;
 import com.hbm.entity.mob.FbiAgent;
+import com.hbm.entity.mob.FbiDrone;
 import com.hbm.entity.grenade.GrenadeUniversal;
 import com.hbm.entity.projectile.Boxcar;
 import com.hbm.entity.item.ParachuteCrate;
@@ -160,6 +161,15 @@ public class NtmEntityTypes {
                     .fireImmune()
                     .clientTrackingRange(16)
                     .build("fbi_agent"));
+
+    /* Runde 292: der Quadrokopter der Razzia. Ein knapper Block breit, flach, und er
+     * haengt in der Luft -- Schwerkraft hat er keine. */
+    public static final DeferredHolder<EntityType<?>, EntityType<FbiDrone>> FBI_DRONE = ENTITY_TYPES.register(
+            "fbi_drone",
+            () -> EntityType.Builder.<FbiDrone>of(FbiDrone::new, MobCategory.MONSTER)
+                    .sized(0.9F, 0.4F)
+                    .clientTrackingRange(16)
+                    .build("fbi_drone"));
 
     /* Das Gespenst: Menschenmass, und es verschwindet, sobald jemand hinsieht. */
     public static final DeferredHolder<EntityType<?>, EntityType<Ghost>> GHOST = ENTITY_TYPES.register(

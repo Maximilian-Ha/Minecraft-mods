@@ -4,6 +4,7 @@ import com.hbm.blocks.NtmBlocks;
 import com.hbm.config.NtmConfig;
 import com.hbm.entity.NtmEntityTypes;
 import com.hbm.entity.mob.FbiAgent;
+import com.hbm.entity.mob.FbiDrone;
 import com.hbm.entity.mob.Ghost;
 import com.hbm.entity.mob.MaskMan;
 import com.hbm.entity.mob.RadBeast;
@@ -48,11 +49,10 @@ import java.util.List;
  * DAS GESPENST kommt zu dem, der Digamma im Blut hat. Alle zwanzig Takte eine Chance von eins
  * zu fuenf, fuenfundsiebzig Bloecke entfernt.
  *
- * DIE FBI-RAZZIA (Runde 291) schickt fuenfzehn Beamte auf einmal, wenn die Einstellung sie
- * einschaltet -- ausgeschaltet ist sie im Original wie im Port die Voreinstellung. Sie stehen
- * alle in derselben Richtung, zweiunddreissig Bloecke entfernt, jeder mit fuenf Bloecken
- * Streuung. Die Quadrokopter, die das Original dazustellt, fehlen noch: sie brauchen
- * EntityUFOBase, und der Port fuehrt sein Ufo ohne Grundklasse.
+ * DIE FBI-RAZZIA (Runden 291 und 292) schickt fuenfzehn Beamte und fuenf Quadrokopter auf
+ * einmal, wenn die Einstellung sie einschaltet -- ausgeschaltet ist sie im Original wie im
+ * Port die Voreinstellung. Sie kommen alle aus derselben Richtung, zweiunddreissig Bloecke
+ * entfernt, jeder mit fuenf Bloecken Streuung; die Kopter stehen dabei zehn Bloecke hoeher.
  *
  * GEMESSEN: das Original prueft vor der Razzia eine Marke fbiMark, die eine Schonfrist von
  * zwanzig Minuten setzen soll. Geschrieben wird sie nur in markFBI -- und markFBI wird im
@@ -166,6 +166,15 @@ public final class MobSpawnSystem {
             FbiAgent beamter = NtmEntityTypes.FBI_AGENT.get().create(level);
             if(beamter != null) trySpawn(level, x, z, beamter);
         }
+
+        for(int i = 0; i < NtmConfig.COMMON.RAID_DRONES.get(); i++) {
+
+            double x = player.getX() + dx + level.random.nextGaussian() * 5D;
+            double z = player.getZ() + dz + level.random.nextGaussian() * 5D;
+
+            FbiDrone kopter = NtmEntityTypes.FBI_DRONE.get().create(level);
+            if(kopter != null) trySpawn(level, x, z, kopter, 10);
+        }
     }
 
     /** Nach der Kernschmelze: zehn Strahlenbiester, das erste als Anfuehrer. */
@@ -229,9 +238,14 @@ public final class MobSpawnSystem {
      * der Maskenmann sagt dem Spieler beides an.
      */
     private static boolean trySpawn(ServerLevel level, double x, double z, Mob mob) {
+        return trySpawn(level, x, z, mob, 0);
+    }
+
+    /** Dasselbe, nur hoeher: die Quadrokopter kommen zehn Bloecke ueber dem Boden herein. */
+    private static boolean trySpawn(ServerLevel level, double x, double z, Mob mob, int hoehe) {
 
         BlockPos pos = new BlockPos((int) Math.floor(x), 0, (int) Math.floor(z));
-        int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, pos.getX(), pos.getZ());
+        int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, pos.getX(), pos.getZ()) + hoehe;
 
         mob.moveTo(x, y, z, level.random.nextFloat() * 360.0F, 0.0F);
         mob.finalizeSpawn(level, level.getCurrentDifficultyAt(mob.blockPosition()), MobSpawnType.EVENT, null);

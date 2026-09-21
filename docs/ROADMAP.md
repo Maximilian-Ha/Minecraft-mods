@@ -13818,3 +13818,46 @@ herausgelöst werden. Deshalb steht in den Einstellungen auch **kein** `raidDron
 die niemand liest, ist schlimmer als keine.
 
 **46 Tore grün.**
+
+## Runde 292 — Die Quadrokopter, und eine Namensfalle
+
+Die Razzia war seit Runde 291 halb da: fünfzehn Beamte, aber keine Drohnen. Die fehlten, weil
+`EntityFBIDrone` von `EntityUFOBase` erbt — einer Flugsteuerung, die der Port nicht hatte.
+
+### Warum der Port sein UFO nicht darauf umstellt
+
+Das Original hat `EntityUFO extends EntityUFOBase`. Der Port hat `Ufo` als eigenständige
+Klasse, und das war keine Nachlässigkeit: die Werte, mit denen das UFO fliegt, sind **andere**
+als die der Grundklasse — fünfunddreißig Blöcke Überschießen statt zehn bis zwanzig, die
+Drehung nur in zwei von drei Fällen, Höhe plus zwanzig statt plus zwei. `UfoBase` kommt darum
+als das dazu, was sie im Original ist: die Steuerung für **alle anderen** Scheiben. Das UFO
+nachträglich darauf zu setzen wäre eine eigene Runde mit eigener Messung, keine Nebensache.
+
+### Die Falle, die ein Port sich hier stellt
+
+Im Original heißen die drei Lesestellen des Wegpunkts `getX()`, `getY()` und `getZ()`. Auf
+1.7.10 ging das, denn die Position hieß `posX`. **Auf 1.21 sind `getX`/`getY`/`getZ` die
+Position der Entität selbst.** Wer die Klasse Zeile für Zeile überträgt, bekommt Code, der
+anstandslos übersetzt und etwas völlig anderes rechnet: `getX() - posX` wird zu
+`getX() - getX()`, also null. Der Wegpunkt heißt im Port darum `getWegpunkt()`, und der Kopf
+der Klasse warnt davor.
+
+### Der Kopter
+
+Fünfunddreißig Lebenspunkte, sieht hundert Blöcke weit, hält sich sieben bis zehn Blöcke über
+seinem Ziel. Steht er genau darüber — weniger als fünf Blöcke in beiden waagerechten
+Richtungen, mehr als drei Blöcke höher —, **lässt er eine Splittergranate fallen**: keine
+geworfene, eine fallende. Das Original setzt sie auf seine eigene Stelle und gibt ihr keinen
+Schwung. Danach sechzig Takte Pause.
+
+Sein Aussehen ist ein OBJ-Modell mit einer Drehung, die **keine Zufallsdrehung ist**: der
+Generator wird aus der Nummer der Entität gesät und einmal gezogen. Dieselbe Drohne steht
+damit in jedem Bild gleich, zwei Drohnen aber verschieden. Ein gewöhnlicher Zufall ließe sie
+flackern.
+
+### Die Einstellung, die jetzt gelesen wird
+
+`raidDrones` stand in Runde 291 bewusst **nicht** in der Konfiguration — eine Zahl, die niemand
+liest, ist schlimmer als keine. Jetzt liest sie jemand, und jetzt steht sie da.
+
+**46 Tore grün.**
