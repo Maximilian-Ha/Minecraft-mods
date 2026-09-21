@@ -735,6 +735,7 @@ public class NtmSoundDefinitionsProvider extends SoundDefinitionsProvider {
          * Minecraft mit allen Schallplatten. */
         this.add(NtmSoundEvents.MUSIC_DISC_GLASS, SoundDefinition.definition().with(sound("hbmsntm:music/recordglass").stream()));
         this.add(NtmSoundEvents.WEAPON_BALLS_LASER, SoundDefinition.definition().with(sound("hbmsntm:weapon/ballslaser")));
+        this.add(NtmSoundEvents.UFO_BEAM, SoundDefinition.definition().with(sound("hbmsntm:entity/ufobeam").stream()));
         this.add(NtmSoundEvents.RADAWAY, SoundDefinition.definition().with(sound("hbmsntm:tool/radaway")));
         this.add(NtmSoundEvents.GEIGER1, SoundDefinition.definition().with(sound("hbmsntm:tool/geiger1")));
         this.add(NtmSoundEvents.GEIGER2, SoundDefinition.definition().with(sound("hbmsntm:tool/geiger2")));

@@ -19,6 +19,7 @@ import com.hbm.entity.mob.CreeperPhosgene;
 import com.hbm.entity.mob.CreeperTainted;
 import com.hbm.entity.mob.MaskMan;
 import com.hbm.entity.mob.RadBeast;
+import com.hbm.entity.mob.Ufo;
 import com.hbm.entity.mob.botprime.BotPrimeBase;
 import com.hbm.registry.NtmCriteria;
 import com.hbm.registry.NtmDamageTypes;
@@ -245,6 +246,7 @@ public class CommonEvents {
         event.put(NtmEntityTypes.RAD_BEAST.get(), RadBeast.createAttributes().build());
         event.put(NtmEntityTypes.BOT_PRIME_HEAD.get(), BotPrimeBase.createAttributes().build());
         event.put(NtmEntityTypes.BOT_PRIME_BODY.get(), BotPrimeBase.createAttributes().build());
+        event.put(NtmEntityTypes.UFO.get(), Ufo.createAttributes().build());
         event.put(NtmEntityTypes.CREEPER_GOLD.get(), CreeperGold.createAttributes().build());
         event.put(NtmEntityTypes.CREEPER_VOLATILE.get(), CreeperGold.createAttributes().build());
         event.put(NtmEntityTypes.CREEPER_PHOSGENE.get(), CreeperPhosgene.createAttributes().build());

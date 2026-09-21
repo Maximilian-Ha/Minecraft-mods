@@ -42,6 +42,8 @@ public class XFactoryNPC {
     public static BulletConfig worm_laser;
     public static BulletConfig worm_bolt;
 
+    public static BulletConfig ufo_rocket;
+
     /** Wie weit die Kugel nach Spielern sucht, in Bloecken. */
     private static final double KUGEL_REICHWEITE = 50D;
 
@@ -79,6 +81,15 @@ public class XFactoryNPC {
 
         worm_bolt = new BulletConfig().setItem(NtmItems.COIN_WORM).setSpread(0F).setLife(60)
                 .setDamage(25F).setupDamageClass(DamageClass.LASER).setRicochetCount(0).setGrav(0D);
+
+        /*
+         * DIE RAKETE DES UFOS. Das Original nimmt die gewoehnliche Rakete und nimmt ihr
+         * zweierlei: den Blockschaden und die Sprengwirkung (destroysBlocks = false,
+         * explosive = 0F). Was bleibt, ist der Aufschlagschaden -- und die Lenkung, die das
+         * UFO ihr beim Abschuss mitgibt.
+         */
+        ufo_rocket = new BulletConfig().setItem(NtmItems.COIN_UFO).setVel(2F).setGrav(0D).setLife(200)
+                .setDamage(30F).setRicochetCount(0);
     }
 
     /**

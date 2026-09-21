@@ -2021,6 +2021,9 @@ public class NtmItems {
     /* Runde 281: die Muenze des Strahlenbiests. Nur der Anfuehrer traegt sie, und nur er
      * laesst sie fallen -- das Original setzt ihm dafuer eigens die Fallchance auf eins. */
     public static final DeferredItem<Item> COIN_RADIATION = ITEMS.register("coin_radiation", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON)));
+    /* Runde 283: die Muenze des UFOs. Jeder Spieler im Umkreis von zweihundert Bloecken
+     * bekommt sie beim Absturz unmittelbar ins Inventar gelegt. */
+    public static final DeferredItem<Item> COIN_UFO = ITEMS.register("coin_ufo", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON)));
 
     /*
      * DER DAMPFANZUG. Der erste Satz des Ports mit einem TANK statt eines Akkus: er laeuft

@@ -182,6 +182,9 @@ public class NtmSoundEvents {
 
     /** Der Laser des Wurms und des UFOs. Im Original "hbm:weapon.ballsLaser". */
     public static final DeferredHolder<SoundEvent, SoundEvent> WEAPON_BALLS_LASER = reg("weapon.balls_laser");
+
+    /** Der Fangstrahl des UFOs. Im Original "hbm:entity.ufoBeam". */
+    public static final DeferredHolder<SoundEvent, SoundEvent> UFO_BEAM = reg("entity.ufo_beam");
     public static final DeferredHolder<SoundEvent, SoundEvent> METEORITE_FALLING_LOOP = reg("entity.meteorite_falling_loop"); // BLOCKS CATEGORY???
     // PLAYERS
     public static final DeferredHolder<SoundEvent, SoundEvent> VOMIT = reg("player.vomit"); // PLAYERS CATEGORY

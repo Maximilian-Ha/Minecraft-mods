@@ -2163,6 +2163,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.SHIMMER_AXE);
                         output.accept(NtmItems.COIN_MASKMAN);
                         output.accept(NtmItems.COIN_RADIATION);
+                        output.accept(NtmItems.COIN_UFO);
                         output.accept(NtmItems.FLAME_PONY);
                         addMetaItems(output, NtmItems.CANNED_CONSERVE.get());
                         output.accept(NtmItems.PUDDING);

@@ -42,6 +42,7 @@ import com.hbm.entity.mob.CreeperPhosgene;
 import com.hbm.entity.mob.CreeperTainted;
 import com.hbm.entity.mob.MaskMan;
 import com.hbm.entity.mob.RadBeast;
+import com.hbm.entity.mob.Ufo;
 import com.hbm.entity.mob.botprime.BotPrimeBody;
 import com.hbm.entity.mob.botprime.BotPrimeHead;
 import com.hbm.entity.mob.CreeperVolatile;
@@ -231,6 +232,18 @@ public class NtmEntityTypes {
                             .fireImmune()
                             .noSummon()
                             .build("bot_prime_body"));
+
+    /**
+     * Das UFO, Runde 283. Fuenfzehn Bloecke breit und vier hoch -- setSize(15F, 4F) des
+     * Originals. Es fliegt durch Bloecke und erscheint nicht von selbst.
+     */
+    public static final DeferredHolder<EntityType<?>, EntityType<Ufo>> UFO =
+            ENTITY_TYPES.register("ufo",
+                    () -> EntityType.Builder.<Ufo>of(Ufo::new, MobCategory.MONSTER)
+                            .sized(15.0F, 4.0F)
+                            .fireImmune()
+                            .noSummon()
+                            .build("ufo"));
 
     /**
      * Die Kybernetische Krabbe, Runde 236. Masse wie im Original: drei Viertel breit,

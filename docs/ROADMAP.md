@@ -13359,3 +13359,40 @@ einmal, jeden mit wachsender Streuung; ein Glied einen einzigen, schwächeren. B
 Glas und Laub — die Sichtprüfung des Originals fragt nur nach festen Blöcken.
 
 **59 von 61.** Offen: der UFO und die SILEX.
+
+## Runde 283 — Das UFO, und eine Explosion, die zweimal dastand
+
+Der letzte der vier Bosse. Zwanzigtausend Lebenspunkte, fünfzehn Blöcke breit, und er schlägt
+auf drei Arten zu.
+
+**Der Fangstrahl** geht senkrecht nach unten bis zum ersten festen Block. Wer darin steht, nimmt
+tausend Punkte, fängt fünf Sekunden Feuer und bekommt fünf Einheiten Strahlung. Er geht an,
+sobald das Ziel waagerecht näher als fünfundzwanzig Blöcke ist.
+
+**Der Laser** kommt nicht aus der Mitte, sondern aus einem Drehpunkt **zehn Blöcke neben** dem
+UFO, in einem Winkel von minus achtzig bis plus achtzig Grad zur Zielrichtung — deshalb wirkt
+es, als schösse der Rand der Scheibe.
+
+**Die Raketen** sind gelenkt, richten aber keinen Blockschaden an und sprengen nicht. Was tötet,
+ist der Aufschlag.
+
+Welche Waffe dran ist, entscheidet **die Uhr, nicht die Lage**: in den ersten zweihundert Ticks
+jedes Dreihunderterblocks der Laser, in den letzten hundert die Raketen.
+
+### Der Flug ist ein Überschießen
+
+Es steuert einen Punkt an, der fünfunddreißig Blöcke **hinter** seinem Ziel liegt, und das
+meistens aus einer zufällig gedrehten Richtung — daraus entsteht das Kreisen. Bewegt wird nur,
+solange der Kurszähler läuft; sonst steht es still in der Luft.
+
+### Eine Explosion, die zweimal dastand
+
+Sein Tod ist eine kleine Atomexplosion. Die gab es im Port noch nicht als Klasse — aber
+**Zeile für Zeile** in `FissureBombBlock.explodeEntity`: dieselben fünf Schritte, dieselben
+Zahlen (Druckwelle 20, Todeskreis 55, Strahlungsstufe 3), also genau `PARAMS_MEDIUM` des
+Originals.
+
+Jetzt steht sie einmal, in `ExplosionNukeSmall`, und die Spaltbombe ruft dieselbe Stelle wie das
+UFO. Das ist keine neue Mechanik, sondern eine, die schon zweimal dastand.
+
+**60 von 61.** Offen bleibt allein `SILEX` — und dafür braucht es den FEL.

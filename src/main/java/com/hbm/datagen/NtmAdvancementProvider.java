@@ -193,6 +193,7 @@ public class NtmAdvancementProvider extends AdvancementProvider {
             erfolg(speichern, helper, wurzel, "boss_maskman", NtmItems.COIN_MASKMAN.get(), true, "boss_maskman");
             erfolg(speichern, helper, wurzel, "boss_meltdown", NtmItems.COIN_RADIATION.get(), true, "boss_meltdown");
             erfolg(speichern, helper, wurzel, "boss_worm", NtmItems.COIN_WORM.get(), true, "boss_worm");
+            erfolg(speichern, helper, wurzel, "boss_ufo", NtmItems.COIN_UFO.get(), true, "boss_ufo");
             erfolg(speichern, helper, polymer, "manhattan", NtmBlocks.NUKE_LITTLE_BOY.get(), true, "manhattan");
 
             /*

@@ -22,6 +22,7 @@ import com.hbm.render.entity.mob.CreeperPhosgeneRenderer;
 import com.hbm.render.entity.mob.CreeperTaintedRenderer;
 import com.hbm.render.entity.mob.MaskManRenderer;
 import com.hbm.render.entity.mob.RadBeastRenderer;
+import com.hbm.render.entity.mob.UfoRenderer;
 import com.hbm.render.entity.mob.WormRenderer;
 import com.hbm.render.entity.mob.CreeperVolatileRenderer;
 import com.hbm.render.entity.mob.DuckRenderer;
@@ -476,6 +477,7 @@ public class ClientProxy extends ServerProxy {
         EntityRenderers.register(NtmEntityTypes.RAD_BEAST.get(), RadBeastRenderer::new);
         EntityRenderers.register(NtmEntityTypes.BOT_PRIME_HEAD.get(), WormRenderer::kopf);
         EntityRenderers.register(NtmEntityTypes.BOT_PRIME_BODY.get(), WormRenderer::glied);
+        EntityRenderers.register(NtmEntityTypes.UFO.get(), UfoRenderer::new);
         EntityRenderers.register(NtmEntityTypes.CREEPER_GOLD.get(), CreeperGoldRenderer::new);
         EntityRenderers.register(NtmEntityTypes.CREEPER_VOLATILE.get(), CreeperVolatileRenderer::new);
         EntityRenderers.register(NtmEntityTypes.CREEPER_PHOSGENE.get(), CreeperPhosgeneRenderer::new);

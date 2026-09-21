@@ -852,6 +852,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("advancements.hbmsntm.boss_meltdown.description", "More terrible than great, but I take what I can get.");
         this.add("advancements.hbmsntm.boss_worm.title", "Disassembling Balls-O-Tron");
         this.add("advancements.hbmsntm.boss_worm.description", "Just a small metal worm.");
+        this.add("advancements.hbmsntm.boss_ufo.title", "Ayy Lmao");
+        this.add("advancements.hbmsntm.boss_ufo.description", "Yo, what do we have here? A huge spacecraft pulling up to the blockship?");
         this.add("advancements.hbmsntm.centrifuge.title", "Centrifugal Force");
         this.add("advancements.hbmsntm.centrifuge.description", "centrifugal force is real don't @ me");
         this.add("advancements.hbmsntm.technetium.title", "Big Man, Pig Man");
@@ -1343,6 +1345,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.RECORD_GLASS, "Music Disc");
         this.add(NtmItems.BOTTLED_CLOUD, "Cloud in a Bottle");
         this.add(NtmItems.COIN_RADIATION, "Radiation Coin");
+        this.add(NtmItems.COIN_UFO, "UFO Coin");
         /* Der Text, den 1.21 beim Abspielen einblendet. Im Original steht er als
          * item.record.glass.desc im Sprachbestand -- drei Fragezeichen, mehr verraet der
          * Mod ueber diese Platte nicht. */
@@ -4420,6 +4423,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("entity.hbmsntm.rad_beast", "Radiation Beast");
         this.add("entity.hbmsntm.bot_prime_head", "Balls-O-Tron Prime");
         this.add("entity.hbmsntm.bot_prime_body", "Balls-O-Tron Prime");
+        this.add("entity.hbmsntm.ufo", "UFO");
         this.add("entity.hbmsntm.taint_crab", "Taintcrab");
         this.add("entity.hbmsntm.tau_shot", "Tau Bolt");
         this.add("entity.hbmsntm.duck", "Duck");
