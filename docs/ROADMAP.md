@@ -13681,3 +13681,48 @@ Die FBI-Razzia. Sie braucht `EntityFBI` und `EntityFBIDrone`, und die gibt es im
 mit ihnen kommt sie nach. Das steht jetzt als Grund im Kopf des Systems statt gar nicht.
 
 **45 Tore grün.**
+
+## CI-Fix 480 — Zwei Fehler, ein neues Tor
+
+Lauf 480 blieb an zwei Stellen aus Runde 289 hängen, und beide gehören zu Klassen, die kein
+Tor sah.
+
+**Erstens der Zeichner des Gespenstes.** Er setzte den durchscheinenden Zeichentyp so, wie man
+es auf 1.7.10 täte: durch Überschreiben von `Model.renderType`.
+
+> error: renderType(ResourceLocation) in DurchscheinendesModell cannot override
+> renderType(ResourceLocation) in Model — overridden method is final
+
+Auf 1.21 ist diese Methode endgültig; der Zeichentyp wird entweder im Konstruktor des Modells
+übergeben oder — wie jetzt hier — am Zeichner über `getRenderType` bestimmt. Dass es
+überhaupt einen durchscheinenden Typ braucht, ist nachgemessen und nicht geraten: `ghost.png`
+hat 88 Bildpunkte mit Alpha 112 neben 1372 undurchsichtigen. Ein Ausschnitt-Typ würde genau
+diese 88 hart machen, und das Original blendet sie weich ein.
+
+**Zweitens ein Name aus dem falschen Jahrzehnt.** `MobSpawnSystem` fragte die Strahlung mit
+`ContaminationUtil.getRads(player)` ab — so heißt sie im Original von 1.7.10. Im Port las bis
+jetzt nur `HbmLivingAttachments.getRadiation` diesen Wert, `getRads` gab es nicht. Statt die
+Aufrufstelle umzubiegen, ist jetzt die Methode selbst nachgereicht: sie steht im Original in
+`ContaminationUtil` und bündelt dort zwei Dinge, die im Port getrennt liegen — das Lesen des
+Wertes und die Prüfung auf Strahlenimmunität. Getrennt gemessen: `EntityEffectHandler` fragt
+`isRadImmune` an zwei Stellen von Hand ab, neben dem Lesen. Wer `getRads` ruft, bekommt beides
+in einem, so wie im Original.
+
+### Das 46. Tor: `projmeth-check`
+
+Der zweite Fehler ist der lehrreichere, denn **Empfänger und Methode liegen beide im Port**.
+Was hier fehlt, fehlt wirklich — dafür braucht es keinen Minecraft-Klassenpfad, nur den
+eigenen Quelltext. Genau das prüft das neue Tor: jeder Aufruf `Projektklasse.methode(...)`
+muss eine Methode nennen, die die Klasse oder eine ihrer **Projekt**-Oberklassen erklärt.
+
+Drei Bedingungen halten es sauber, und die erste war teuer erkauft: über den nackten Namen
+gemessen meldete es 62 Stellen, an denen der Empfänger gar nicht aus dem Port kam
+(`Item.getId`, `Pair.of` — Namensgleichheit mit Minecraft). Erst als der Empfänger über die
+Einfuhrzeilen der Datei aufgelöst wurde, blieb null übrig.
+
+**Die Lücke ist benannt:** Klassen, die von einer Fremdklasse erben, bleiben außen vor — was
+sie erben, steht in der Bibliothek. Gemessen sind das 176 der 11733 Aufrufstellen; die übrigen
+11557 werden geprüft. Gegenprobe: nimmt man `getRads` wieder heraus, meldet das Tor genau
+`MobSpawnSystem.java:119` und sonst nichts.
+
+**46 Tore grün.**

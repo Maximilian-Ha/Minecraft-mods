@@ -188,6 +188,11 @@ jobs:
           chmod +x ./tools/access-check.sh
           ./tools/access-check.sh
 
+      - name: Check project method calls
+        run: |
+          chmod +x ./tools/projmeth-check.sh
+          ./tools/projmeth-check.sh
+
       - name: Check forward references
         run: |
           chmod +x ./tools/forward-check.sh

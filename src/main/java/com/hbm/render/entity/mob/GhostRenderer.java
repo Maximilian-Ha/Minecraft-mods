@@ -15,7 +15,11 @@ import net.neoforged.api.distmarker.OnlyIn;
  * Portiert aus 1.7.10: com.hbm.render.entity.mob.RenderGhost.
  *
  * Eine gewoehnliche Menschengestalt mit einer durchscheinenden Haut. Das Original schaltet
- * dafuer von Hand die Blende ein; auf 1.21 genuegt der durchscheinende Zeichentyp.
+ * dafuer von Hand die Blende ein und laesst die Durchsicht allein aus dem Alphakanal der
+ * Haut kommen -- gemessen hat ghost.png 88 Bildpunkte mit Alpha 112 neben 1372 undurchsichtigen.
+ * Auf 1.21 leistet der durchscheinende Zeichentyp dasselbe. Er wird hier am Zeichner gesetzt
+ * und nicht am Modell: Model.renderType ist endgueltig und laesst sich nicht ueberschreiben
+ * (gemessen in CI-Lauf 480).
  */
 @OnlyIn(Dist.CLIENT)
 public class GhostRenderer extends HumanoidMobRenderer<Ghost, HumanoidModel<Ghost>> {
@@ -23,7 +27,7 @@ public class GhostRenderer extends HumanoidMobRenderer<Ghost, HumanoidModel<Ghos
     private static final ResourceLocation TEXTURE = NuclearTechMod.withDefaultNamespace("textures/entity/ghost.png");
 
     public GhostRenderer(EntityRendererProvider.Context context) {
-        super(context, new DurchscheinendesModell(context), 0.5F);
+        super(context, new HumanoidModel<>(context.bakeLayer(ModelLayers.ZOMBIE)), 0.5F);
     }
 
     @Override
@@ -31,16 +35,8 @@ public class GhostRenderer extends HumanoidMobRenderer<Ghost, HumanoidModel<Ghos
         return TEXTURE;
     }
 
-    /** Dasselbe Menschenmodell, nur durchscheinend gezeichnet. */
-    private static class DurchscheinendesModell extends HumanoidModel<Ghost> {
-
-        DurchscheinendesModell(EntityRendererProvider.Context context) {
-            super(context.bakeLayer(ModelLayers.ZOMBIE));
-        }
-
-        @Override
-        public RenderType renderType(ResourceLocation texture) {
-            return RenderType.entityTranslucent(texture);
-        }
+    @Override
+    protected RenderType getRenderType(Ghost ghost, boolean bodyVisible, boolean translucent, boolean glowing) {
+        return RenderType.entityTranslucent(TEXTURE);
     }
 }

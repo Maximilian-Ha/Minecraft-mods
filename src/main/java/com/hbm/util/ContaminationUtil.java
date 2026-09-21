@@ -47,6 +47,13 @@ public class ContaminationUtil {
         return false;
     }
 
+    /** Strahlenmenge einer Entitaet, 0 fuer alles, was nicht lebt oder immun ist. */
+    public static float getRads(Entity entity) {
+        if(!(entity instanceof LivingEntity living)) return 0F;
+        if(isRadImmune(entity)) return 0F;
+        return HbmLivingAttachments.getRadiation(living);
+    }
+
     /// DIGAMMA ///
     public static void applyDigammaData(Entity entity, float dig) {
 
