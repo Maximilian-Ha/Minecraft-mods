@@ -30,6 +30,9 @@ public class NtmBiomeModifiers {
 
     public static final ResourceKey<BiomeModifier> ADD_CRASHED_BOMB = registerKey("add_crashed_bomb");
 
+    /** Nur am Strand -- im Original biome == BiomeGenBase.beach. */
+    public static final ResourceKey<BiomeModifier> ADD_SOYUZ_CAPSULE = registerKey("add_soyuz_capsule");
+
     /**
      * Die drei Creeper, die von selbst erscheinen, Runde 240. Das Original meldet sie in
      * EntityMappings an: Phosgen mit Gewicht 5, der fluechtige mit 10, der goldene mit 1 --
@@ -53,6 +56,8 @@ public class NtmBiomeModifiers {
         context.register(ADD_LANDMINE, new AddFeaturesBiomeModifier(biomes.getOrThrow(BiomeTags.IS_OVERWORLD), HolderSet.direct(placedFeatures.getOrThrow(NtmPlacedFeatures.LANDMINE_PLACED)), GenerationStep.Decoration.UNDERGROUND_DECORATION));
 
         context.register(ADD_CRASHED_BOMB, new AddFeaturesBiomeModifier(biomes.getOrThrow(BiomeTags.IS_OVERWORLD), HolderSet.direct(placedFeatures.getOrThrow(NtmPlacedFeatures.CRASHED_BOMB_PLACED)), GenerationStep.Decoration.UNDERGROUND_DECORATION));
+
+        context.register(ADD_SOYUZ_CAPSULE, new AddFeaturesBiomeModifier(biomes.getOrThrow(BiomeTags.IS_BEACH), HolderSet.direct(placedFeatures.getOrThrow(NtmPlacedFeatures.SOYUZ_CAPSULE_PLACED)), GenerationStep.Decoration.UNDERGROUND_DECORATION));
 
         context.register(ADD_CREEPERS, new AddSpawnsBiomeModifier(
                 biomes.getOrThrow(BiomeTags.IS_OVERWORLD),

@@ -1334,6 +1334,11 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.BALL_DYNAMITE, "Dynamite");
         this.add(NtmItems.BALL_TNT, "TNT");
         this.add(NtmItems.SAFETY_FUSE, "Safety Fuse");
+        this.add(NtmItems.RECORD_GLASS, "Music Disc");
+        /* Der Text, den 1.21 beim Abspielen einblendet. Im Original steht er als
+         * item.record.glass.desc im Sprachbestand -- drei Fragezeichen, mehr verraet der
+         * Mod ueber diese Platte nicht. */
+        this.add("jukebox_song.hbmsntm.glass", "? ? ?");
         this.add(NtmItems.STICK_TNT, "Stick of TNT");
         this.add(NtmItems.STICK_SEMTEX, "Stick of Semtex");
         this.add(NtmItems.STICK_C4, "Stick of C4");

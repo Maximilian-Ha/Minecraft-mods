@@ -6,6 +6,7 @@ import com.hbm.handler.ability.IToolAreaAbility;
 import com.hbm.handler.ability.IToolHarvestAbility;
 import com.hbm.handler.ability.IWeaponAbility;
 import com.hbm.inventory.MetaHelper;
+import com.hbm.registry.NtmJukeboxSongs;
 import com.hbm.inventory.NtmFoods;
 import com.hbm.inventory.material.MaterialShapes;
 import com.hbm.inventory.NtmTiers;
@@ -1451,6 +1452,15 @@ public class NtmItems {
     /* Zwei Sonderstuecke der roten Kiste. */
     public static final DeferredItem<Item> MYSTERYSHOVEL = ITEMS.register("mysteryshovel", () -> new MysteryShovelItem(new Item.Properties()));
     public static final DeferredItem<Item> FLAME_PONY = ITEMS.register("flame_pony", () -> new LoreItem(new Item.Properties()));
+
+    /*
+     * Runde 279: die SCHALLPLATTE. Die einzige des Mods, und im Original
+     * setCreativeTab(null) -- sie ist nirgends im Kreativbau zu finden, sondern nur in einer
+     * verrosteten Landekapsel am Strand. Auf 1.21 zeigt der Gegenstand auf einen
+     * JukeboxSong-Datenpackeintrag; der Klangname steckt nicht mehr in ihm selbst.
+     */
+    public static final DeferredItem<Item> RECORD_GLASS = ITEMS.register("record_glass",
+            () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(NtmJukeboxSongs.GLASS)));
 
     // Money
     public static final DeferredItem<Item> CAP = ITEMS.register("cap", () -> new EnumMultiItem(new Item.Properties(), CapType.class, true, true));

@@ -2,6 +2,7 @@ package com.hbm.datagen;
 
 import com.hbm.main.NuclearTechMod;
 import com.hbm.registry.NtmDamageTypes;
+import com.hbm.registry.NtmJukeboxSongs;
 import com.hbm.registry.NtmBiomes;
 import com.hbm.world.gen.NtmBiomeModifiers;
 import com.hbm.world.gen.NtmConfiguredFeatures;
@@ -44,6 +45,7 @@ public class NtmDataGenerators {
         // Datapack things
         RegistrySetBuilder builder = new RegistrySetBuilder();
         builder.add(Registries.DAMAGE_TYPE, NtmDamageTypes::bootstrap);
+        builder.add(Registries.JUKEBOX_SONG, NtmJukeboxSongs::bootstrap);
         builder.add(Registries.BIOME, NtmBiomes::bootstrap);
         builder.add(Registries.CONFIGURED_FEATURE, NtmConfiguredFeatures::bootstrap);
         builder.add(Registries.PLACED_FEATURE, NtmPlacedFeatures::bootstrap);

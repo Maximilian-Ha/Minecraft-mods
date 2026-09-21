@@ -731,6 +731,9 @@ public class NtmSoundDefinitionsProvider extends SoundDefinitionsProvider {
         this.add(NtmSoundEvents.WEAPON_SLICE, SoundDefinition.definition().with(sound("hbmsntm:weapon/slice")));
         this.add(NtmSoundEvents.WEAPON_KAPENG, SoundDefinition.definition().with(sound("hbmsntm:weapon/kapeng")));
         this.add(NtmSoundEvents.WEAPON_DFLASH, SoundDefinition.definition().with(sound("hbmsntm:weapon/dflash")));
+        /* Eine Minute Musik wird gestreamt, nicht in den Speicher geladen -- so haelt es
+         * Minecraft mit allen Schallplatten. */
+        this.add(NtmSoundEvents.MUSIC_DISC_GLASS, SoundDefinition.definition().with(sound("hbmsntm:music/recordglass").stream()));
         this.add(NtmSoundEvents.RADAWAY, SoundDefinition.definition().with(sound("hbmsntm:tool/radaway")));
         this.add(NtmSoundEvents.GEIGER1, SoundDefinition.definition().with(sound("hbmsntm:tool/geiger1")));
         this.add(NtmSoundEvents.GEIGER2, SoundDefinition.definition().with(sound("hbmsntm:tool/geiger2")));

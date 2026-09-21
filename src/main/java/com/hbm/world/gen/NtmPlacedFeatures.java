@@ -24,6 +24,8 @@ public class NtmPlacedFeatures {
 
     public static final ResourceKey<PlacedFeature> CRASHED_BOMB_PLACED = registerKey("crashed_bomb_placed");
 
+    public static final ResourceKey<PlacedFeature> SOYUZ_CAPSULE_PLACED = registerKey("soyuz_capsule_placed");
+
     public static void bootstrap(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
@@ -36,6 +38,8 @@ public class NtmPlacedFeatures {
         register(context, BEDROCK_ORE_PLACED, configuredFeatures.getOrThrow(NtmConfiguredFeatures.BEDROCK_ORE), List.of(RarityFilter.onAverageOnceEvery(8), InSquarePlacement.spread()));
         register(context, LANDMINE_PLACED, configuredFeatures.getOrThrow(NtmConfiguredFeatures.LANDMINE), List.of(RarityFilter.onAverageOnceEvery(64), InSquarePlacement.spread(), HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)));
         register(context, CRASHED_BOMB_PLACED, configuredFeatures.getOrThrow(NtmConfiguredFeatures.CRASHED_BOMB), List.of(RarityFilter.onAverageOnceEvery(500), InSquarePlacement.spread(), HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)));
+        /* Jeder hundertste Chunk -- WorldConfig.capsuleStructure des Originals. */
+        register(context, SOYUZ_CAPSULE_PLACED, configuredFeatures.getOrThrow(NtmConfiguredFeatures.SOYUZ_CAPSULE), List.of(RarityFilter.onAverageOnceEvery(100), InSquarePlacement.spread(), HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)));
     }
 
     private static ResourceKey<PlacedFeature> registerKey(String name) {

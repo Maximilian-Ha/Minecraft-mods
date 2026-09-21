@@ -19,6 +19,8 @@ public class NtmFeatures {
 
     public static final DeferredHolder<Feature<?>, CrashedBombFeature> CRASHED_BOMB = FEATURES.register("crashed_bomb", () -> new CrashedBombFeature(NoneFeatureConfiguration.CODEC));
 
+    public static final DeferredHolder<Feature<?>, SoyuzCapsuleFeature> SOYUZ_CAPSULE = FEATURES.register("soyuz_capsule", () -> new SoyuzCapsuleFeature(NoneFeatureConfiguration.CODEC));
+
     public static void register(IEventBus eventBus) {
         FEATURES.register(eventBus);
     }

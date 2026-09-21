@@ -13177,3 +13177,52 @@ Das Original streut verrostete Kapseln an Stränden, mit einer Schallplatte dari
 fehlt noch: der Port hat keine Jukebox-Unterstützung, und eine Schallplatte auf 1.21 braucht
 einen `JukeboxSong`-Datenpackeintrag. Sound, Textur und Modell dafür liegen in der
 CE-Abspaltung bereit.
+
+## Runde 279 — Die Platte im Sand, und ein Tor, das fünfzehn Minuten spart
+
+Die Kapsel aus Runde 278 stand in der Welt, aber niemand konnte eine finden: das Original
+streut sie an Stränden, und das fehlte noch. Dazu gehört die einzige Schallplatte des Mods.
+
+### Die Schallplatte
+
+`record_glass` trägt im Original `setCreativeTab(null)` — sie steht in keinem Reiter, in
+keinem Rezept, in keiner Beutetabelle. Der **einzige** Weg zu ihr führt über eine verrostete
+Landekapsel, vier Blöcke tief im Strandsand.
+
+Auf 1.7.10 war eine Platte ein Gegenstand, der seinen Klangnamen selbst kannte. Auf 1.21 ist
+sie ein Datenpackeintrag — Klang, Anzeigename, Spieldauer und die Zahl, die ein Komparator
+neben dem Plattenspieler ausgibt; der Gegenstand zeigt nur noch darauf. Der Port hatte
+bisher gar keine Jukebox-Unterstützung; `NtmJukeboxSongs` ist die erste.
+
+Die Spieldauer ist nachgemessen, nicht geschätzt: 2 986 977 Abtastwerte bei 48 kHz, also
+62,23 Sekunden. Der Anzeigename ist der des Originals — `item.record.glass.desc=? ? ?`, mehr
+verrät der Mod über diese Platte nicht.
+
+### Vier Blöcke tief
+
+Das Original setzt die Kapsel auf `getHeightValue - 4` und prüft, ob drei Blöcke über ihr noch
+fester Grund steht. Sie liegt also **begraben**; was man am Strand sieht, ist Sand. Häufigkeit
+und Biom sind die des Originals: jeder hundertste Chunk (`WorldConfig.capsuleStructure`), nur
+am Strand.
+
+### Das 44. Tor
+
+Runde 278 ist in der CI durchgefallen — nach vier Minuten Bauzeit, an einer Zeile, die in
+Sekunden zu prüfen gewesen wäre:
+
+```
+particleOnlyBlock(SOYUZ_CAPSULE, withDefaultNamespace("textures/models/.../soyuz_lander.png"))
+```
+
+`ModelBuilder.texture` hängt `textures/` und `.png` **selbst** an. Richtig ist
+`modLoc("models/soyuz_capsule/soyuz_lander")`. Der Fehler stand im Quelltext; kein Tor hat
+hingeschaut. `model-resolve-check` läuft erst hinter `runData` — und `runData` war genau daran
+gescheitert.
+
+`tools/texture-ref-check.sh` sammelt jetzt jedes ausgeschriebene `modLoc("…")` aus den
+Datenerzeugern und fragt, ob es auf eine Textur, ein Modell von Hand oder ein erzeugtes Modell
+zeigt. 467 Literale, null Funde — und in der Gegenprobe, mit der falschen Zeile wieder
+eingesetzt, genau einen. Was es nicht sieht, steht in seinem Kopf: zusammengesetzte Pfade wie
+`modLoc("block/" + name)`.
+
+**44 Tore.**

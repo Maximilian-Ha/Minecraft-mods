@@ -108,6 +108,7 @@ VERBORGENE_ITEMS = {
     'WASTE_PLATE_U233':    'Abbrandrueckstand, nur aus dem Reaktor (Original: null)',
     'WASTE_PLATE_U235':    'Abbrandrueckstand, nur aus dem Reaktor (Original: null)',
     'BOOK_OF_':            'Stecker des Zyklotrons; im Original ueber ein verstecktes Bobmazon-Angebot zu haben, nicht aus einem Reiter (Original: setCreativeTab(null))',
+    'RECORD_GLASS':        'die Schallplatte; nur in einer verrosteten Landekapsel am Strand zu finden (Original: setCreativeTab(null))',
     'DIAMOND_GAVEL':       'Stecker des Zyklotrons; im Original nur ueber MagicRecipes herzustellen (Original: kein setCreativeTab)',
     'WOOD_GAVEL':          'Vorstufe des Bleihammers, an der Werkbank zu bauen (Original: kein setCreativeTab)',
     'LEAD_GAVEL':          'Vorstufe des Diamanthammers, an der Werkbank zu bauen (Original: kein setCreativeTab)',

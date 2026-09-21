@@ -176,6 +176,9 @@ public class NtmSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> WEAPON_KAPENG = reg("weapon.kapeng");
     /* Der Digamma-Blitz des Speers, Runde 276. */
     public static final DeferredHolder<SoundEvent, SoundEvent> WEAPON_DFLASH = reg("weapon.dflash");
+
+    /** Die einzige Schallplatte des Mods. Im Original ItemModRecord("glass"). */
+    public static final DeferredHolder<SoundEvent, SoundEvent> MUSIC_DISC_GLASS = reg("music.recordglass");
     public static final DeferredHolder<SoundEvent, SoundEvent> METEORITE_FALLING_LOOP = reg("entity.meteorite_falling_loop"); // BLOCKS CATEGORY???
     // PLAYERS
     public static final DeferredHolder<SoundEvent, SoundEvent> VOMIT = reg("player.vomit"); // PLAYERS CATEGORY

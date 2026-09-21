@@ -59,6 +59,12 @@ jobs:
           chmod +x ./tools/model-check.sh
           ./tools/model-check.sh
 
+      - name: Check datagen texture references
+        run: |
+          chmod +x ./tools/texture-ref-check.sh
+          ./tools/texture-ref-check.sh --selbstprobe
+          ./tools/texture-ref-check.sh
+
       - name: Check block state definitions
         run: |
           chmod +x ./tools/state-check.sh
