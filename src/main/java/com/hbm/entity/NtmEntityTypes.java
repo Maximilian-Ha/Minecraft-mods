@@ -4,6 +4,7 @@ import com.hbm.entity.effect.DigammaSpear;
 import com.hbm.entity.effect.BlackHole;
 import com.hbm.entity.grenade.Dynamite;
 import com.hbm.entity.item.WasteItemEntity;
+import com.hbm.entity.mob.FbiAgent;
 import com.hbm.entity.grenade.GrenadeUniversal;
 import com.hbm.entity.projectile.Boxcar;
 import com.hbm.entity.item.ParachuteCrate;
@@ -149,6 +150,16 @@ public class NtmEntityTypes {
                     .sized(7.5F, 17.5F)
                     .clientTrackingRange(10)
                     .build("quackos"));
+
+    /* Runde 291: der FBI-Beamte. Menschenmass, feuerfest -- im Original setzt er
+     * isImmuneToFire im Konstruktor. */
+    public static final DeferredHolder<EntityType<?>, EntityType<FbiAgent>> FBI_AGENT = ENTITY_TYPES.register(
+            "fbi_agent",
+            () -> EntityType.Builder.of(FbiAgent::new, MobCategory.MONSTER)
+                    .sized(0.6F, 1.8F)
+                    .fireImmune()
+                    .clientTrackingRange(16)
+                    .build("fbi_agent"));
 
     /* Das Gespenst: Menschenmass, und es verschwindet, sobald jemand hinsieht. */
     public static final DeferredHolder<EntityType<?>, EntityType<Ghost>> GHOST = ENTITY_TYPES.register(

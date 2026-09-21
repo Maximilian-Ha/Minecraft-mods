@@ -3,6 +3,7 @@ package com.hbm.world;
 import com.hbm.blocks.NtmBlocks;
 import com.hbm.config.NtmConfig;
 import com.hbm.entity.NtmEntityTypes;
+import com.hbm.entity.mob.FbiAgent;
 import com.hbm.entity.mob.Ghost;
 import com.hbm.entity.mob.MaskMan;
 import com.hbm.entity.mob.RadBeast;
@@ -47,8 +48,16 @@ import java.util.List;
  * DAS GESPENST kommt zu dem, der Digamma im Blut hat. Alle zwanzig Takte eine Chance von eins
  * zu fuenf, fuenfundsiebzig Bloecke entfernt.
  *
- * NICHT UEBERNOMMEN: die FBI-Razzia. Sie braucht EntityFBI und EntityFBIDrone, und die gibt es
- * im Port nicht; mit ihnen kommt sie nach.
+ * DIE FBI-RAZZIA (Runde 291) schickt fuenfzehn Beamte auf einmal, wenn die Einstellung sie
+ * einschaltet -- ausgeschaltet ist sie im Original wie im Port die Voreinstellung. Sie stehen
+ * alle in derselben Richtung, zweiunddreissig Bloecke entfernt, jeder mit fuenf Bloecken
+ * Streuung. Die Quadrokopter, die das Original dazustellt, fehlen noch: sie brauchen
+ * EntityUFOBase, und der Port fuehrt sein Ufo ohne Grundklasse.
+ *
+ * GEMESSEN: das Original prueft vor der Razzia eine Marke fbiMark, die eine Schonfrist von
+ * zwanzig Minuten setzen soll. Geschrieben wird sie nur in markFBI -- und markFBI wird im
+ * ganzen Original NIE gerufen. Die Pruefung ist damit immer wahr. Der Port fuehrt weder Marke
+ * noch Pruefung.
  *
  * GEMESSEN: das Original fuehrt eine Einstellung elementalAttackDistance, liest sie aber nie --
  * der Strahlenbiest-Zweig nimmt raidAttackDistance, die Einstellung der Razzia. Beide stehen
@@ -61,6 +70,7 @@ public final class MobSpawnSystem {
     public static void update(MinecraftServer server) {
         for(ServerLevel level : server.getAllLevels()) {
             maskMan(level);
+            raids(level);
             elementals(level);
             ghosts(level);
         }
@@ -124,6 +134,38 @@ public final class MobSpawnSystem {
         if(!NtmConfig.COMMON.MASKMAN_UNDERGROUND.get()) return true;
         int oberflaeche = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, player.getBlockX(), player.getBlockZ());
         return oberflaeche > player.getY() + 3;
+    }
+
+    /** Die Razzia: fuenfzehn Beamte, alle aus derselben Richtung. */
+    private static void raids(ServerLevel level) {
+
+        if(!NtmConfig.COMMON.ENABLE_RAIDS.get()) return;
+        if(level.getGameTime() % NtmConfig.COMMON.RAID_DELAY.get() != 0) return;
+        if(level.random.nextInt(NtmConfig.COMMON.RAID_CHANCE.get()) != 0) return;
+        if(!level.dimensionType().natural()) return;
+
+        List<ServerPlayer> players = level.players();
+        if(players.isEmpty()) return;
+
+        ServerPlayer player = players.get(level.random.nextInt(players.size()));
+        player.sendSystemMessage(Component.translatable("chat.hbmsntm.raid.spawn").withStyle(ChatFormatting.RED));
+
+        /* EIN Winkel fuer die ganze Gruppe -- das Original dreht den Vektor einmal und
+         * streut danach nur noch jeden einzelnen um fuenf Bloecke. Sie kommen also
+         * gemeinsam aus einer Richtung, nicht im Kreis verteilt wie die Strahlenbiester. */
+        double winkel = level.random.nextFloat() * Math.PI * 2D;
+        int distance = NtmConfig.COMMON.RAID_DISTANCE.get();
+        double dx = Math.cos(winkel) * distance;
+        double dz = Math.sin(winkel) * distance;
+
+        for(int i = 0; i < NtmConfig.COMMON.RAID_AMOUNT.get(); i++) {
+
+            double x = player.getX() + dx + level.random.nextGaussian() * 5D;
+            double z = player.getZ() + dz + level.random.nextGaussian() * 5D;
+
+            FbiAgent beamter = NtmEntityTypes.FBI_AGENT.get().create(level);
+            if(beamter != null) trySpawn(level, x, z, beamter);
+        }
     }
 
     /** Nach der Kernschmelze: zehn Strahlenbiester, das erste als Anfuehrer. */

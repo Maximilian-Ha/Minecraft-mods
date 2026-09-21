@@ -13767,3 +13767,54 @@ Nicht übernommen: `trinitite` und `nuclear_waste_vitrified_tiny` gibt es im Por
 nicht; sie gehören zur offenen Gegenstandsliste, nicht hierher.
 
 **46 Tore grün.**
+
+## Runde 291 — Die Razzia
+
+Seit Runde 289 steht im Kopf von `MobSpawnSystem`, dass die FBI-Razzia fehlt, weil ihre beiden
+Entitäten nicht portiert sind. Eine davon ist jetzt da.
+
+### Der Beamte, der nie schießt
+
+`EntityFBI` trägt einen Revolver oder eine Spas-12, und `attackEntityWithRangedAttack` ist im
+Original **leer** — kein einziger Befehl im Rumpf. Die Fernkampf-Aufgabe läuft trotzdem mit
+Priorität 2, also **über** dem Nahkampf: sie lässt ihn auf fünfzehn Blöcke herangehen,
+stehenbleiben und alle zwanzig bis fünfundzwanzig Takte nichts tun.
+
+Der Port hat mit `FireGunGoal` durchaus eine Aufgabe, die eine Waffe abfeuert. Sie hier
+einzusetzen wäre bequem — und wäre eine **Erfindung**. Die leere Methode steht darum leer im
+Port, samt der Aufgabe, die sie ruft, und der Kopf der Klasse sagt warum.
+
+Gefährlich ist er trotzdem, nur anders als man denkt: alle vierzig Takte schießt er einen
+Strahl in eine zufällige Richtung, und trifft der eine Maschine aus seiner Liste — Presse,
+Chemiefabrik, Kristallisator, Turbine, Zyklotron, RTG, Kisten, Türen —, ist sie weg. Und alles,
+was in anderthalb Blöcken Umkreis am Boden liegt, brennt zehn Sekunden.
+
+### Die Grabe-Aufgabe
+
+`EntityAIBreaking` ist die zweite Hälfte: wer keinen Weg zum Spieler findet, gräbt sich einen.
+Die Rechnung des Originals steht unverändert im Port — Härte durch drei, fünf Hundertstel
+Fortschritt je Takt, alle fünf Takte Klopfen und Sprungbild. Dass Stein dabei **sofort**
+fällt, ist keine Nachlässigkeit des Ports: die Ganzzahldivision macht aus 1,5 eine Null, und
+eine Division durch null ergibt im Original Unendlich. Ausgeschrieben statt erschlichen, aber
+dasselbe Ergebnis.
+
+Das Abtasten der Umrisse hat der Port vereinfacht: das Original wandert mit einem Zähler über
+Breite mal Breite mal Höhe Punkte, um bei großen Wesen alle Ecken zu erwischen, und hält im
+eigenen Kommentar fest, dass Zweibeiner nur zwei davon brauchen. Der Port tastet Augen- und
+Fußhöhe ab — dieselben zwei.
+
+### Eine Marke, die nie gesetzt wird
+
+Das Original prüft vor jeder Razzia eine Marke `fbiMark`, die eine Schonfrist von zwanzig
+Minuten setzen soll. Geschrieben wird sie einzig in `markFBI` — und **`markFBI` wird im ganzen
+Original nie gerufen**. Die Prüfung ist immer wahr. Der Port führt weder Marke noch Prüfung;
+was er stattdessen hat, ist diese Zeile hier.
+
+### Was noch fehlt
+
+Die fünf Quadrokopter. `EntityFBIDrone` erbt von `EntityUFOBase`, einer Flugsteuerung mit
+Sichtkegel und Höhenwahl, und der Port führt sein Ufo ohne Grundklasse — die müsste erst
+herausgelöst werden. Deshalb steht in den Einstellungen auch **kein** `raidDrones`: eine Zahl,
+die niemand liest, ist schlimmer als keine.
+
+**46 Tore grün.**

@@ -55,6 +55,13 @@ public class CommonConfig {
     public final IntValue ELEMENTAL_CHANCE;
     public final IntValue ELEMENTAL_AMOUNT;
     public final IntValue ELEMENTAL_DISTANCE;
+    public final BooleanValue ENABLE_RAIDS;
+    public final IntValue RAID_DELAY;
+    public final IntValue RAID_CHANCE;
+    public final IntValue RAID_AMOUNT;
+    public final IntValue RAID_ATTACK_DELAY;
+    public final IntValue RAID_ATTACK_REACH;
+    public final IntValue RAID_DISTANCE;
 
     // EXPLOSIONS (06)
     public final IntValue MK5;
@@ -274,6 +281,35 @@ public class CommonConfig {
                 .comment("How far away elementals will spawn from the targeted player.")
                 .translation("hbmsntm.configuration.elementalAttackDistance")
                 .defineInRange("elementalAttackDistance", 32, 1, Integer.MAX_VALUE);
+
+        ENABLE_RAIDS = builder
+                .comment("Whether there should be FBI raids.")
+                .translation("hbmsntm.configuration.enableFBIRaids")
+                .define("enableFBIRaids", false);
+        RAID_DELAY = builder
+                .comment("How many world ticks need to pass for a check to be performed.")
+                .translation("hbmsntm.configuration.raidDelay")
+                .defineInRange("raidDelay", 30 * 60 * 60, 1, Integer.MAX_VALUE);
+        RAID_CHANCE = builder
+                .comment("1:x chance to spawn a raid, must be at least 1.")
+                .translation("hbmsntm.configuration.raidChance")
+                .defineInRange("raidChance", 3, 1, Integer.MAX_VALUE);
+        RAID_AMOUNT = builder
+                .comment("How many FBI agents are spawned each raid.")
+                .translation("hbmsntm.configuration.raidAmount")
+                .defineInRange("raidAmount", 15, 1, Integer.MAX_VALUE);
+        RAID_ATTACK_DELAY = builder
+                .comment("Time between individual attempts to break machines.")
+                .translation("hbmsntm.configuration.raidAttackDelay")
+                .defineInRange("raidAttackDelay", 40, 1, Integer.MAX_VALUE);
+        RAID_ATTACK_REACH = builder
+                .comment("How far away machines can be broken.")
+                .translation("hbmsntm.configuration.raidAttackReach")
+                .defineInRange("raidAttackReach", 2, 1, Integer.MAX_VALUE);
+        RAID_DISTANCE = builder
+                .comment("How far away agents will spawn from the targeted player.")
+                .translation("hbmsntm.configuration.raidAttackDistance")
+                .defineInRange("raidAttackDistance", 32, 1, Integer.MAX_VALUE);
 
         builder.pop();
 
