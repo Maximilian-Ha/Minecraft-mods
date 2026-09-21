@@ -41,6 +41,7 @@ import com.hbm.entity.mob.CreeperGold;
 import com.hbm.entity.mob.CreeperPhosgene;
 import com.hbm.entity.mob.CreeperTainted;
 import com.hbm.entity.mob.MaskMan;
+import com.hbm.entity.mob.RadBeast;
 import com.hbm.entity.mob.CreeperVolatile;
 import com.hbm.entity.mob.CyberCrab;
 import com.hbm.entity.mob.TaintCrab;
@@ -195,6 +196,18 @@ public class NtmEntityTypes {
                             .fireImmune()
                             .noSummon()
                             .build("maskman"));
+
+    /**
+     * Das Strahlenbiest, Runde 281. Masse der Vanilla-Lohe, die es auch darstellt. Es faellt
+     * nicht von selbst vom Himmel -- das Original setzt es ueber den Bosszaehler.
+     */
+    public static final DeferredHolder<EntityType<?>, EntityType<RadBeast>> RAD_BEAST =
+            ENTITY_TYPES.register("rad_beast",
+                    () -> EntityType.Builder.<RadBeast>of(RadBeast::new, MobCategory.MONSTER)
+                            .sized(0.6F, 1.8F)
+                            .fireImmune()
+                            .noSummon()
+                            .build("rad_beast"));
 
     /**
      * Die Kybernetische Krabbe, Runde 236. Masse wie im Original: drei Viertel breit,

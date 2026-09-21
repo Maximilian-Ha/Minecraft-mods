@@ -13282,3 +13282,37 @@ niemanden, der sie ausliest — das ganze Dash-System steht im Original in
 Verhalten zu erfinden, das es nicht gibt.
 
 **57 von 61.** Offen: drei Bosse und die SILEX.
+
+## Runde 281 — Das Strahlenbiest: eine Lohe, die nicht brennt
+
+Der zweite Boss. `EntityRADBeast` sieht aus wie eine Lohe, verhält sich wie eine — und schießt
+doch keine Feuerbälle: bis dreißig Blöcke bestrahlt es sein Ziel **unmittelbar**, sechzehn
+Punkte, und lädt dabei den Chunk unter sich mit hundert Einheiten Strahlung auf. Was man fliegen
+sieht, ist kein Geschoss, sondern der grüne Strahl des Darstellers.
+
+### Zwei Größen, ein Erfolg
+
+Das gewöhnliche Biest hat 120 Lebenspunkte, der Anführer 360. Das Original unterscheidet beide
+nirgends durch ein Feld, sondern **an der Höchstenergie** (`getMaxHealth() > 150`) — und daran
+hängt dreierlei: ob die Münze fällt, welche Teilchen es versprüht, und ob sein Tod den Erfolg
+auslöst. Der Port führt dieselbe Prüfung an derselben Stelle.
+
+### Was es sonst ausmacht
+
+Es steigt auf, wenn sein Ziel über ihm ist — um eine Höhe, die es sich alle hundert Ticks neu
+auswürfelt, gaußverteilt um einen halben Block mit einer Streuung von drei. Es fällt nur
+gebremst und nimmt keinen Fallschaden. Wasser dagegen tut ihm jede Runde weh.
+
+Seine Beute sind ein bis drei abgebrannte ZIRNOX-Stäbe — und wenn es im Wasser stirbt,
+stattdessen doppelt so viel Abfall.
+
+### Zwei Dinge blieben liegen
+
+Die **M65-Maske**: das Original legt der Lohe ein eigenes Kopfmodell auf, ein Techne-Modell aus
+zehn Formen. Auf 1.21 wäre das eine eigene LayerDefinition. Das Biest steht ohne sie — die Maske
+ist Schmuck, kein Verhalten.
+
+Die **Geiger-Stimme**: das Original nimmt als Lebenslaut `item.geiger1` bis `6`. Die Klänge hat
+der Port, aber keinen Mob, der sie als Stimme führt; das wäre eine Klangtabelle für sich.
+
+**58 von 61.** Offen: zwei Bosse und die SILEX.

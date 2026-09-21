@@ -2018,6 +2018,9 @@ public class NtmItems {
      * ueber den Kreativreiter zu haben. Gebraucht wird sie fuer das DNS-Beinzeug.
      */
     public static final DeferredItem<Item> COIN_WORM = ITEMS.register("coin_worm", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON)));
+    /* Runde 281: die Muenze des Strahlenbiests. Nur der Anfuehrer traegt sie, und nur er
+     * laesst sie fallen -- das Original setzt ihm dafuer eigens die Fallchance auf eins. */
+    public static final DeferredItem<Item> COIN_RADIATION = ITEMS.register("coin_radiation", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON)));
 
     /*
      * DER DAMPFANZUG. Der erste Satz des Ports mit einem TANK statt eines Akkus: er laeuft
