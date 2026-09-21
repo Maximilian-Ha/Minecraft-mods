@@ -31,4 +31,12 @@ public class NtmTiers {
     public static Tier TOOL_ZERO_POWER = new SimpleTier(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 0, 50.0F, 0.0F, 200, () -> Ingredient.of(NtmItems.INGOT_BISMUTH.get()));
     public static Tier TOOL_STARMETAL = new SimpleTier(BlockTags.INCORRECT_FOR_DIAMOND_TOOL, 1000, 20.0F, 0.0F, 30, () -> Ingredient.of(NtmItems.INGOT_STARMETAL.get()));
     public static Tier TOOL_SCHRABIDIUM = new SimpleTier(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 10000, 50.0F, 0.0F, 200, () -> Ingredient.of(NtmItems.INGOT_SCHRABIDIUM.get()));
+
+    /*
+     * Die beiden Schimmerwaffen, Runde 275. Das Original legt dafuer ein eigenes Material an:
+     * EnumHelper.addToolMaterial("SHIMMERSLEDGE", 1, 0, 25.0F, 26F, 200) -- Abbaustufe 1,
+     * Haltbarkeit NULL (also unzerstoerbar, wie beim Desh- und Wismutwerkzeug hier), Tempo 25,
+     * Schadensbonus 26, Verzauberbarkeit 200.
+     */
+    public static Tier SHIMMER = new SimpleTier(BlockTags.INCORRECT_FOR_STONE_TOOL, 0, 25.0F, 26.0F, 200, () -> Ingredient.of(NtmItems.NOTHING.get()));
 }

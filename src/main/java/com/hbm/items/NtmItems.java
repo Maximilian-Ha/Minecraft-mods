@@ -1385,6 +1385,49 @@ public class NtmItems {
             ).setHurtEnemy(SpecialSwordItem.LAMBDA_GAVEL_LEAD_HURT_ENEMY)
     );
 
+    /* ------------------------------------------------------------------------------------
+     * Die Schimmerausruestung, Runde 275.
+     *
+     * Vier Teile, die zusammengehoeren, weil die beiden Erfolge fiend und fiend2 sie
+     * PAARWEISE verlangen: die Jacke am Leib UND die passende Waffe in der Hand
+     * (ArmorUtil.checkForFiend). Eine Waffe allein reicht dort nicht.
+     *
+     * Die Waffen sind unzerstoerbar (Haltbarkeit null im Material) und schlagen mit 30 --
+     * im Original ergibt sich das aus 4 + 26 des Materials, hier aus dem Schadensbonus 26
+     * des Tiers plus den 3 der Schwertformel plus dem Grundschlag des Spielers.
+     * ---------------------------------------------------------------------------------- */
+    public static final DeferredItem<Item> SHIMMER_HANDLE = ITEMS.register("shimmer_handle", () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> SHIMMER_HEAD = ITEMS.register("shimmer_head", () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> SHIMMER_AXE_HEAD = ITEMS.register("shimmer_axe_head", () -> new Item(new Item.Properties()));
+
+    public static final DeferredItem<Item> SHIMMER_SLEDGE = ITEMS.register(
+            "shimmer_sledge",
+            () -> new SpecialSwordItem(
+                    NtmTiers.SHIMMER,
+                    new Item.Properties()
+                            .stacksTo(1)
+                            .rarity(Rarity.EPIC)
+                            .attributes(SwordItem.createAttributes(NtmTiers.SHIMMER, 3, -2.4F))
+            ).setHurtEnemy(SpecialSwordItem.LAMBDA_SHIMMER_SLEDGE_HURT_ENEMY)
+             .setUseOn(SpecialSwordItem.LAMBDA_SHIMMER_SLEDGE_USE_ON)
+    );
+
+    public static final DeferredItem<Item> SHIMMER_AXE = ITEMS.register(
+            "shimmer_axe",
+            () -> new SpecialSwordItem(
+                    NtmTiers.SHIMMER,
+                    new Item.Properties()
+                            .stacksTo(1)
+                            .rarity(Rarity.EPIC)
+                            .attributes(SwordItem.createAttributes(NtmTiers.SHIMMER, 3, -2.4F))
+            ).setHurtEnemy(SpecialSwordItem.LAMBDA_SHIMMER_AXE_HURT_ENEMY)
+             .setUseOn(SpecialSwordItem.LAMBDA_SHIMMER_AXE_USE_ON)
+    );
+
+    /* Die beiden Jacken. Im Original schlichte ModArmor auf Stahl, Platz Brustplatte. */
+    public static final DeferredItem<Item> JACKT = ITEMS.register("jackt", () -> new ArmorItem(NtmArmorMaterials.STEEL, ArmorItem.Type.CHESTPLATE, plainArmorProperties(ArmorItem.Type.CHESTPLATE, NtmArmorMaterials.DURABILITY_STEEL)));
+    public static final DeferredItem<Item> JACKT2 = ITEMS.register("jackt2", () -> new ArmorItem(NtmArmorMaterials.STEEL, ArmorItem.Type.CHESTPLATE, plainArmorProperties(ArmorItem.Type.CHESTPLATE, NtmArmorMaterials.DURABILITY_STEEL)));
+
     /* Die Schrotkugeln aus dem Rezept des Bleihammers. Das Original nimmt fuer sie die
      * Textur pellets_lead. */
     public static final DeferredItem<Item> PELLET_BUCKSHOT = ITEMS.register("pellet_buckshot", () -> new Item(new Item.Properties()));

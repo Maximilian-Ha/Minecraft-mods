@@ -855,6 +855,10 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("advancements.hbmsntm.sulfuric.description", "");
         this.add("advancements.hbmsntm.potato.title", "Rogue AI");
         this.add("advancements.hbmsntm.potato.description", "You stabbed me! What is WRONG with yo-WOOOAAH");
+        this.add("advancements.hbmsntm.fiend.title", "Delinquent");
+        this.add("advancements.hbmsntm.fiend.description", "Be mean.");
+        this.add("advancements.hbmsntm.fiend2.title", "Delinquent 2: Delinquent Harder");
+        this.add("advancements.hbmsntm.fiend2.description", "Be meaner.");
         this.add("advancements.hbmsntm.watz.title", "The Power of Element-126");
         this.add("advancements.hbmsntm.watz.description", "F\u00f3lkvangr fields possibly included.");
         this.add("advancements.hbmsntm.rbmk.title", "3.6 Roentegen?");
@@ -1940,6 +1944,13 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.INK, "Ink");
         this.add(NtmItems.HEART_CONTAINER, "Heart Container");
         this.add(NtmItems.INJECTOR_KNIFE, "Injector Knife");
+        this.add(NtmItems.SHIMMER_HANDLE, "Reinforced Polymer Handle");
+        this.add(NtmItems.SHIMMER_HEAD, "Heavy Hammer Head");
+        this.add(NtmItems.SHIMMER_AXE_HEAD, "Heavy Axe Head");
+        this.add(NtmItems.SHIMMER_SLEDGE, "Shimmer Sledge");
+        this.add(NtmItems.SHIMMER_AXE, "Shimmer Axe");
+        this.add(NtmItems.JACKT, "Damn Stylish Ballistic Jacket");
+        this.add(NtmItems.JACKT2, "Damn Stylish Ballistic Jacket 2: Tokyo Drift");
         this.add(NtmItems.BLACK_DIAMOND, "Black Diamond");
         this.add(NtmItems.SCRUMPY, "Scrumpy");
         /* Die Hinweiszeilen der zehn Aufsaetze, Runde 241. */

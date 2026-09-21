@@ -5507,6 +5507,62 @@ public class NtmRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_stick_c4", has(NtmItems.STICK_C4.get()))
                 .save(recipeOutput, NuclearTechMod.withDefaultNamespace("charge_c4"));
 
+        /* Die Schimmerausruestung, Runde 275. Die drei Bauteile, die beiden Waffen und die
+         * beiden Jacken -- alle Muster stehen so im Original (CraftingManager.java:188-192
+         * und 613-614). */
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.SHIMMER_HEAD.get(), 1)
+                .pattern("SSS").pattern("DTD").pattern("SSS")
+                .define('S', NtmItems.INGOT_STEEL.get())
+                .define('D', NtmBlocks.BLOCK_DESH.get())
+                .define('T', NtmBlocks.BLOCK_TUNGSTEN.get())
+                .unlockedBy("has_block_desh", has(NtmBlocks.BLOCK_DESH.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("shimmer_head"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.SHIMMER_AXE_HEAD.get(), 1)
+                .pattern("PII").pattern("PBB").pattern("PII")
+                .define('P', NtmItems.PLATE_STEEL.get())
+                .define('B', NtmBlocks.BLOCK_DESH.get())
+                .define('I', NtmItems.INGOT_TUNGSTEN.get())
+                .unlockedBy("has_block_desh", has(NtmBlocks.BLOCK_DESH.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("shimmer_axe_head"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.SHIMMER_HANDLE.get(), 1)
+                .pattern("GP").pattern("GP").pattern("GP")
+                .define('G', NtmItems.PLATE_GOLD.get())
+                .define('P', NtmItems.INGOT_POLYMER.get())
+                .unlockedBy("has_plate_gold", has(NtmItems.PLATE_GOLD.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("shimmer_handle"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.SHIMMER_SLEDGE.get(), 1)
+                .pattern("H").pattern("G").pattern("G")
+                .define('H', NtmItems.SHIMMER_HEAD.get())
+                .define('G', NtmItems.SHIMMER_HANDLE.get())
+                .unlockedBy("has_shimmer_head", has(NtmItems.SHIMMER_HEAD.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("shimmer_sledge"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.SHIMMER_AXE.get(), 1)
+                .pattern("H").pattern("G").pattern("G")
+                .define('H', NtmItems.SHIMMER_AXE_HEAD.get())
+                .define('G', NtmItems.SHIMMER_HANDLE.get())
+                .unlockedBy("has_shimmer_axe_head", has(NtmItems.SHIMMER_AXE_HEAD.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("shimmer_axe"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.JACKT.get(), 1)
+                .pattern("S S").pattern("LIL").pattern("LIL")
+                .define('S', NtmItems.PLATE_STEEL.get())
+                .define('L', Items.LEATHER)
+                .define('I', NtmItems.INGOT_RUBBER.get())
+                .unlockedBy("has_ingot_rubber", has(NtmItems.INGOT_RUBBER.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("jackt"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, NtmItems.JACKT2.get(), 1)
+                .pattern("S S").pattern("LIL").pattern("III")
+                .define('S', NtmItems.PLATE_STEEL.get())
+                .define('L', Items.LEATHER)
+                .define('I', NtmItems.INGOT_RUBBER.get())
+                .unlockedBy("has_ingot_rubber", has(NtmItems.INGOT_RUBBER.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("jackt2"));
+
         /* Die beiden Kartoffelbatterien, Runde 274. Beide entstehen VOLL -- das Original
          * baut sie mit ItemBattery.getFullBattery (CraftingManager.java:537-538), denn
          * aufladen lassen sie sich nicht (Ladetempo null). */

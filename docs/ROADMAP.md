@@ -13009,3 +13009,47 @@ demselben Grund ins NBT des Stapels.
 Beide entstehen **voll** — aufladen lassen sie sich nicht, ihr Ladetempo ist null.
 
 **50 von 61.**
+
+## Runde 275 — Die Schimmerausrüstung: vier Teile für zwei Erfolge
+
+`fiend` und `fiend2` verlangen etwas, das keine der bisherigen Runden verlangt hat: **zwei
+Dinge gleichzeitig**. `ArmorUtil.checkForFiend` prüft die Jacke am Leib **und** die passende
+Waffe in der Hand. Eine Waffe allein reicht nicht, eine Jacke allein auch nicht.
+
+Portiert sind deshalb sieben Gegenstände: die drei Bauteile (`shimmer_handle`, `shimmer_head`,
+`shimmer_axe_head`), die beiden Waffen und die beiden Jacken — mit allen sieben Rezepten des
+Originals.
+
+### Was die beiden Waffen tun
+
+Der **Hammer** schleudert sein Ziel in Blickrichtung des Angreifers davon, fünffach genommen.
+Auf einen Block angewandt schlägt er ihn heraus und wirft ihn als Trümmerstück hinterher —
+`Rubble` gibt es im Port längst, samt Darsteller.
+
+Die **Axt** halbiert die *aktuelle* Lebensenergie des Ziels (nicht die höchste — das tut der
+Diamanthammer) und schlägt auf einen Block eine Spalte aus dreien heraus.
+
+Beide respektieren die Grenze 6000: alles mit dieser Sprengfestigkeit oder mehr bleibt stehen.
+
+Dafür brauchte `SpecialSwordItem` zwei Erweiterungen: einen `useOn`-Haken, den es bisher nicht
+hatte, und eine zweite Fassung von `setHurtEnemy`, die auch den **Angreifer** durchreicht —
+der Hammer stößt in *dessen* Blickrichtung, nicht in die des Ziels.
+
+### Der Schadenswert, nachgerechnet
+
+Das Original legt für beide ein eigenes Material an: `addToolMaterial("SHIMMERSLEDGE", 1, 0,
+25.0F, 26F, 200)`. Haltbarkeit **null** heißt dort unzerstörbar; der Port hat das schon beim
+Desh- und Wismutwerkzeug so.
+
+Der Schaden geht in 1.7.10 aus `4 + 26` des Materials hervor, also 30. In 1.21 setzt sich
+derselbe Wert anders zusammen: 26 Schadensbonus des Tiers + 3 der Schwertformel + 1
+Grundschlag des Spielers. Dieselbe 30, auf einem anderen Weg.
+
+### Ein zerbrochener Satz
+
+Beim Eintragen fiel auf, dass der Kopfkommentar von `NtmAdvancementProvider` seit Runde 272
+einen halben Satz enthielt: dort wurde „das Messer (someWounds)," aus einer Aufzählung
+entfernt, ohne den Rest zu lesen, und zurück blieb „die vier Bosse, das / der Speer". Jetzt
+steht dort die gemessene Liste der neun übrigen, mit den Klassennamen, an denen sie hängen.
+
+**52 von 61.**

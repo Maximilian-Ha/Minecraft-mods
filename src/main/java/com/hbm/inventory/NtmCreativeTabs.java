@@ -1967,6 +1967,8 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.INK);
                         output.accept(NtmItems.HEART_CONTAINER);
                         output.accept(NtmItems.INJECTOR_KNIFE);
+                        output.accept(NtmItems.JACKT);
+                        output.accept(NtmItems.JACKT2);
                         output.accept(NtmItems.BLACK_DIAMOND);
                         output.accept(NtmItems.SCRUMPY);
 
@@ -2151,6 +2153,11 @@ public class NtmCreativeTabs {
                         addMetaItems(output, NtmItems.FLASK_INFUSION.get());
                         output.accept(NtmItems.CROWBAR);
                         output.accept(NtmItems.BOTTLE_OPENER);
+                        output.accept(NtmItems.SHIMMER_HANDLE);
+                        output.accept(NtmItems.SHIMMER_HEAD);
+                        output.accept(NtmItems.SHIMMER_AXE_HEAD);
+                        output.accept(NtmItems.SHIMMER_SLEDGE);
+                        output.accept(NtmItems.SHIMMER_AXE);
                         output.accept(NtmItems.COIN_MASKMAN);
                         output.accept(NtmItems.FLAME_PONY);
                         addMetaItems(output, NtmItems.CANNED_CONSERVE.get());

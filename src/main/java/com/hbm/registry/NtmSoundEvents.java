@@ -170,6 +170,10 @@ public class NtmSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> PLANE_SHOT_DOWN = reg("entity.plane_shot_down"); // HOSTILE CATEGORY
     public static final DeferredHolder<SoundEvent, SoundEvent> DUCC = reg("entity.ducc"); // NEUTRAL CATEGORY
     public static final DeferredHolder<SoundEvent, SoundEvent> SLICER = reg("entity.slicer"); // NEUTRAL CATEGORY
+    /* Die drei Klaenge der Schimmerwaffen, Runde 275. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> WEAPON_BANG = reg("weapon.bang");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WEAPON_SLICE = reg("weapon.slice");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WEAPON_KAPENG = reg("weapon.kapeng");
     public static final DeferredHolder<SoundEvent, SoundEvent> METEORITE_FALLING_LOOP = reg("entity.meteorite_falling_loop"); // BLOCKS CATEGORY???
     // PLAYERS
     public static final DeferredHolder<SoundEvent, SoundEvent> VOMIT = reg("player.vomit"); // PLAYERS CATEGORY

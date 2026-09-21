@@ -48,10 +48,19 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
  *
  * DIE GETRIGGERTEN KOMMEN MIT IHREN AUSLOESERN, NICHT VORHER: jeder von ihnen braucht eine
  * Stelle im Port, die ihn feuert -- den Tod durch Strahlung, das Betreten des roten Zimmers,
- * den Start einer Sojus. Nach Runde 258 stehen 20 der 32 (nachgezaehlt an den Aufrufen mit
- * Kennung); die uebrigen 12 warten auf Entitaeten und Gegenstaende, die der Port noch nicht
- * hat: die Sojus (soyuz, space), die vier Bosse, die Schimmerwaffen (fiend, fiend2), das
- * der Speer (kauaiMoho).
+ * den Start einer Sojus.
+ *
+ * STAND NACH RUNDE 275: 52 von 61. Die NEUN uebrigen warten auf Teile, die der Port noch
+ * nicht hat -- und das ist nachgemessen, nicht geschaetzt:
+ *
+ *   soyuz, space                      die Sojus
+ *   bossMeltdown, bossMaskman,        vier Bossentitaeten (EntityRADBeast, EntityMaskMan,
+ *   bossWorm, bossUFO                 EntityBOTPrimeHead, EntityUFO) -- keine davon portiert
+ *   digammaKauaiMoho, digammaUpOnTop  der Speer; der zweite haengt am ersten
+ *   SILEX                             die Maschine, und die braucht erst den FEL
+ *
+ * (Dieser Satz stand zwischen Runde 272 und 275 halb zerbrochen da -- eine Aufzaehlung, aus
+ * der ein Glied entfernt wurde, ohne den Rest zu lesen. Jetzt steht die gemessene Liste.)
  *
  * DIE SCHWEFELSAEURE KAM IN RUNDE 273: sie ist der einzige Fluidblock des Originals mit
  * Schadensquelle, und ihr Erfolg faellt, wenn sich darin ein Schleimball aufloest.
@@ -202,6 +211,12 @@ public class NtmAdvancementProvider extends AdvancementProvider {
             /* Die grosse Kartoffelbatterie. Im Original ein Bau-Erfolg ohne Vorgaenger, mit
              * Herausforderungs-Rahmen; die Marke setzt BatteryPackItem, sobald sie im
              * Inventar liegt -- das ist dasselbe, was Forges Bau-Erkennung dort abfaengt. */
+            /* Die beiden Fiend-Erfolge, Runde 275. Im Original ohne Vorgaenger und mit
+             * Herausforderungs-Rahmen; die Marke setzt SpecialSwordItem, wenn Jacke und
+             * passende Waffe zusammenkommen. */
+            erfolg(speichern, helper, wurzel, "fiend", NtmItems.SHIMMER_SLEDGE.get(), true, "fiend");
+            erfolg(speichern, helper, wurzel, "fiend2", NtmItems.SHIMMER_AXE.get(), true, "fiend2");
+
             erfolg(speichern, helper, wurzel, "potato",
                     MetaHelper.newStack(NtmItems.BATTERY_PACK.get(), 1, BatteryPackType.BATTERY_POTATOS), true, "potato");
             erfolg(speichern, helper, wurzel, "stratum", NtmBlocks.STONE_GNEISS.get(), true, "stratum");
