@@ -39,6 +39,9 @@ public class XFactoryNPC {
     public static BulletConfig maskman_tracer;
     public static BulletConfig maskman_meteor;
 
+    public static BulletConfig worm_laser;
+    public static BulletConfig worm_bolt;
+
     /** Wie weit die Kugel nach Spielern sucht, in Bloecken. */
     private static final double KUGEL_REICHWEITE = 50D;
 
@@ -64,6 +67,18 @@ public class XFactoryNPC {
         maskman_meteor = new BulletConfig().setItem(NtmItems.COIN_MASKMAN).setVel(1F).setGrav(0.1D)
                 .setDamage(30F)
                 .setOnImpact((geschoss, treffer) -> { Lego.standardExplode(geschoss, treffer, 2.5F); geschoss.discard(); });
+
+        /*
+         * DIE BEIDEN DES WURMS. Der Kopf schiesst den staerkeren (getWormHeadBolt: 35 bis 60,
+         * hundert Ticks Flugzeit), die Glieder den schwaecheren (getWormBolt: 15 bis 25,
+         * sechzig Ticks). Beide prallen nicht ab und streuen nicht von sich aus -- die
+         * Streuung kommt vom Schuetzen.
+         */
+        worm_laser = new BulletConfig().setItem(NtmItems.COIN_WORM).setSpread(0F).setLife(100)
+                .setDamage(60F).setupDamageClass(DamageClass.LASER).setRicochetCount(0).setGrav(0D);
+
+        worm_bolt = new BulletConfig().setItem(NtmItems.COIN_WORM).setSpread(0F).setLife(60)
+                .setDamage(25F).setupDamageClass(DamageClass.LASER).setRicochetCount(0).setGrav(0D);
     }
 
     /**

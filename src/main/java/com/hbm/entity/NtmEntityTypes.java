@@ -42,6 +42,8 @@ import com.hbm.entity.mob.CreeperPhosgene;
 import com.hbm.entity.mob.CreeperTainted;
 import com.hbm.entity.mob.MaskMan;
 import com.hbm.entity.mob.RadBeast;
+import com.hbm.entity.mob.botprime.BotPrimeBody;
+import com.hbm.entity.mob.botprime.BotPrimeHead;
 import com.hbm.entity.mob.CreeperVolatile;
 import com.hbm.entity.mob.CyberCrab;
 import com.hbm.entity.mob.TaintCrab;
@@ -208,6 +210,27 @@ public class NtmEntityTypes {
                             .fireImmune()
                             .noSummon()
                             .build("rad_beast"));
+
+    /**
+     * Der Wurm, Runde 282. Kopf drei Bloecke, Glieder zwei -- die Masse des Originals
+     * (setSize(3F, 3F) beim Kopf, (2F, 2F) in der Basis). Beide fliegen durch Bloecke
+     * hindurch und erscheinen nicht von selbst.
+     */
+    public static final DeferredHolder<EntityType<?>, EntityType<BotPrimeHead>> BOT_PRIME_HEAD =
+            ENTITY_TYPES.register("bot_prime_head",
+                    () -> EntityType.Builder.<BotPrimeHead>of(BotPrimeHead::new, MobCategory.MONSTER)
+                            .sized(3.0F, 3.0F)
+                            .fireImmune()
+                            .noSummon()
+                            .build("bot_prime_head"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<BotPrimeBody>> BOT_PRIME_BODY =
+            ENTITY_TYPES.register("bot_prime_body",
+                    () -> EntityType.Builder.<BotPrimeBody>of(BotPrimeBody::new, MobCategory.MONSTER)
+                            .sized(2.0F, 2.0F)
+                            .fireImmune()
+                            .noSummon()
+                            .build("bot_prime_body"));
 
     /**
      * Die Kybernetische Krabbe, Runde 236. Masse wie im Original: drei Viertel breit,

@@ -13316,3 +13316,46 @@ Die **Geiger-Stimme**: das Original nimmt als Lebenslaut `item.geiger1` bis `6`.
 der Port, aber keinen Mob, der sie als Stimme führt; das wäre eine Klangtabelle für sich.
 
 **58 von 61.** Offen: zwei Bosse und die SILEX.
+
+## Runde 282 — Balls-O-Tron Prime: ein Wesen aus fünfundsiebzig Teilen
+
+Der dritte Boss, und der einzige, der kein einzelnes Wesen ist: ein Kopf und
+**vierundsiebzig Glieder**, die er beim Erscheinen selbst anlegt. Alle tragen dieselbe
+Kopfkennung und finden sich daran wieder; jedes Glied folgt seinem Vordermann auf dreieinhalb
+Blöcke Abstand.
+
+### Er läuft nicht, er schwimmt durch die Welt
+
+Keines der Teile nutzt die Wegsuche. Jedes setzt seine Bewegung unmittelbar aus dem Abstand zu
+seinem Wegpunkt, und Blöcke halten ihn nicht auf. Nur die Reibung unterscheidet sich: in der
+Luft 0,995, im Boden 0,98 — und ein Glied nimmt davon noch neun Zehntel, damit die Kette hinten
+nachhängt.
+
+Der Kopf hat zwei Zustände. Ohne Ziel kreist er um seinen Erscheinungsort, hundert Blöcke breit
+und sechzig hoch. Mit Ziel taucht er erst auf zehn Blöcke Höhe herunter; erst wenn er einmal
+unter fünfzehn war, geht er gerade auf sein Ziel zu — und vergisst das mit einer
+Wahrscheinlichkeit von eins zu achtzig wieder.
+
+### Schaden geht immer an den Kopf
+
+Nur der Kopf führt Lebensenergie. Trifft etwas ein Glied, reicht es den Schlag an seinen
+Vordermann weiter, bis er beim Kopf ankommt. Ertrinken und Ersticken prallen ab, und der Wurm
+kann sich nicht selbst verletzen: das Original prüft dafür die **Kopfkennung des Angreifers** —
+dieselbe Kennung heißt dieselbe Kette.
+
+Der Schlag eines Glieds nimmt **drei Viertel der aktuellen** Lebensenergie, nicht der höchsten.
+Wer mit einem Prozent hineinläuft, verliert drei Viertel davon.
+
+### Wie ein Glied stirbt
+
+Findet es niemanden mehr vor sich, zieht es sich 1999 Punkte ab — im Original der Weg, ein
+Glied zu entfernen, ohne `setDead` zu rufen. Und hat es seinen Kopf verloren, zerplatzt es mit
+einer Wahrscheinlichkeit von eins zu sechzig je Tick.
+
+### Zwei Laser mehr
+
+`XFactoryNPC` ist um `worm_laser` und `worm_bolt` gewachsen. Der Kopf schießt fünf Strahlen auf
+einmal, jeden mit wachsender Streuung; ein Glied einen einzigen, schwächeren. Beide sehen durch
+Glas und Laub — die Sichtprüfung des Originals fragt nur nach festen Blöcken.
+
+**59 von 61.** Offen: der UFO und die SILEX.

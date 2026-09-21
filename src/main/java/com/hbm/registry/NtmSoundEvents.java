@@ -179,6 +179,9 @@ public class NtmSoundEvents {
 
     /** Die einzige Schallplatte des Mods. Im Original ItemModRecord("glass"). */
     public static final DeferredHolder<SoundEvent, SoundEvent> MUSIC_DISC_GLASS = reg("music.recordglass");
+
+    /** Der Laser des Wurms und des UFOs. Im Original "hbm:weapon.ballsLaser". */
+    public static final DeferredHolder<SoundEvent, SoundEvent> WEAPON_BALLS_LASER = reg("weapon.balls_laser");
     public static final DeferredHolder<SoundEvent, SoundEvent> METEORITE_FALLING_LOOP = reg("entity.meteorite_falling_loop"); // BLOCKS CATEGORY???
     // PLAYERS
     public static final DeferredHolder<SoundEvent, SoundEvent> VOMIT = reg("player.vomit"); // PLAYERS CATEGORY

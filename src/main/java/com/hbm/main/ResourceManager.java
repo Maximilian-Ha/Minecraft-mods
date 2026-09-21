@@ -118,6 +118,8 @@ public class ResourceManager {
     /** Die Taint-Krabbe, Runde 237. Auch sie traegt ein OBJ-Modell. */
     public static final ResourceLocation TAINTCRAB_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/taintcrab.png");
     public static final ResourceLocation MASKMAN_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/maskman.png");
+    public static final ResourceLocation WORM_HEAD_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/mark_zero_head.png");
+    public static final ResourceLocation WORM_BODY_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/mark_zero_body.png");
     /** Der Zettel, den der Maskenmann statt eines Kopfes traegt, wenn es ihm schlecht geht. */
     public static final ResourceLocation IOU_TEX = NuclearTechMod.withDefaultNamespace("textures/entity/iou.png");
     /* Der Sockel nimmt im Original die Partikeltextur des Skeletts -- keine eigene Haut. */
@@ -733,6 +735,8 @@ public class ResourceManager {
     public static IModelCustom teslacrab;
     public static IModelCustom taintcrab;
     public static IModelCustom maskman;
+    public static IModelCustom bot_prime_head;
+    public static IModelCustom bot_prime_body;
     public static IModelCustom skeleton_holder;
     public static IModelCustom demon_lamp;
 
@@ -1072,6 +1076,8 @@ public class ResourceManager {
         teslacrab = new HFRWavefrontObject("models/obj/mobs/teslacrab.obj").asVBO();
         taintcrab = new HFRWavefrontObject("models/obj/mobs/taintcrab.obj").asVBO();
         maskman = new HFRWavefrontObject("models/obj/mobs/maskman.obj").asVBO();
+        bot_prime_head = new HFRWavefrontObject("models/obj/mobs/bot_prime_head.obj").asVBO();
+        bot_prime_body = new HFRWavefrontObject("models/obj/mobs/bot_prime_body.obj").asVBO();
         skeleton_holder = new HFRWavefrontObject("models/obj/blocks/skeleton_holder.obj").noSmooth().asVBO();
         demon_lamp = new HFRWavefrontObject("models/obj/blocks/demon_lamp.obj").asVBO();
 
