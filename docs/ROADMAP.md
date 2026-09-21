@@ -14063,3 +14063,23 @@ Beim Sterben kippt sie ganz um: `getDeathMaxRotation` gibt im Original hundertac
 statt der üblichen neunzig.
 
 **46 Tore grün.**
+
+## CI-Fix 486 — Ein Punkt zu viel
+
+Ein einziger Fehler, und es war genau die Stelle, die ich beim Schreiben als riskant notiert
+hatte:
+
+> EatBreadGoal.java:100: error: cannot find symbol — method value(), location: variable
+> GENERIC_EAT of type SoundEvent
+
+`SoundEvents.GENERIC_EAT` ist auf 1.21.1 ein **`SoundEvent`**, kein `Holder`. Andere Felder
+derselben Klasse sind sehr wohl Holder — die über `registerForHolder` angelegten —, und genau
+deshalb steht im `api-check` jetzt **nur dieser eine Name** und keine Regel über die ganze
+Klasse: was gemessen ist, ist dieser eine Fall.
+
+Gegenprobe: mit wieder eingesetztem `.value()` meldet das Tor genau diese Zeile, ohne es
+schweigt es.
+
+**Der Rest der beiden Runden ist durchgelaufen** — die Taube mit ihren vier Aufgaben, das
+Modell mit den zwei Rümpfen, die Puppe und die Blockspinne standen alle im selben Lauf und
+hatten keinen einzigen Fehler.

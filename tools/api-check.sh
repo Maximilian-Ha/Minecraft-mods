@@ -34,6 +34,14 @@ PITFALLS = [
      'AABB hat keinen Konstruktor aus zwei BlockPos; die zweistellige Form nimmt Vec3',
      'new AABB(x, y, z, x + 1, y + 1, z + 1) oder AABB.encapsulatingFullBlocks(a, b)'),
 
+    # Gemessen in CI-Lauf 486: SoundEvents.GENERIC_EAT ist auf 1.21.1 ein SoundEvent, KEIN
+    # Holder -- value() gibt es darauf nicht. Andere Felder derselben Klasse sind sehr wohl
+    # Holder (die ueber registerForHolder angelegten), darum steht hier nur der eine Name,
+    # der gemessen ist, und keine Regel ueber die ganze Klasse.
+    (r'SoundEvents\s*\.\s*GENERIC_EAT\s*\.\s*value\s*\(',
+     'SoundEvents.GENERIC_EAT ist ein SoundEvent, kein Holder -- es hat kein value()',
+     'SoundEvents.GENERIC_EAT ohne value()'),
+
     (r'ItemInteractionResult\s*\.\s*(?!SUCCESS|CONSUME_PARTIAL|CONSUME|PASS_TO_DEFAULT_BLOCK_INTERACTION|SKIP_DEFAULT_BLOCK_INTERACTION|FAIL|sidedSuccess|consumesAction|indicateItemUse|values|valueOf)([A-Za-z_]\w*)',
      'ItemInteractionResult kennt diesen Wert nicht -- es gibt kein PASS',
      'SUCCESS, CONSUME, CONSUME_PARTIAL, PASS_TO_DEFAULT_BLOCK_INTERACTION, SKIP_DEFAULT_BLOCK_INTERACTION, FAIL'),

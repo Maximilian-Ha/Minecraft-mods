@@ -97,7 +97,7 @@ public class EatBreadGoal extends Goal {
 
         this.taube.setFat(true);
         this.taube.level().playSound(null, this.taube.getX(), this.taube.getY(), this.taube.getZ(),
-                SoundEvents.GENERIC_EAT.value(), SoundSource.NEUTRAL,
+                SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL,
                 0.5F + 0.5F * this.taube.getRandom().nextInt(2),
                 (this.taube.getRandom().nextFloat() - this.taube.getRandom().nextFloat()) * 0.2F + 1.0F);
     }
