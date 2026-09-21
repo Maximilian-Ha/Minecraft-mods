@@ -14083,3 +14083,74 @@ schweigt es.
 **Der Rest der beiden Runden ist durchgelaufen** — die Taube mit ihren vier Aufgaben, das
 Modell mit den zwei Rümpfen, die Puppe und die Blockspinne standen alle im selben Lauf und
 hatten keinen einzigen Fehler.
+
+## Runde 298 — Die Glyphiden, erster Teil: die Grundform
+
+Die größte offene Entitätengruppe des Ports: zehn Klassen, rund zweitausend Zeilen. Diese
+Runde bringt das Fundament — die Grundform, ihre Wertetabelle, den Merkpunkt und das Graben.
+
+### Ein Untier mit Aufgaben
+
+Ein Glyphid ist kein Zombie. Er hat ein **Zuhause**, das er sich beim ersten Takt merkt, eine
+**Aufgabe** aus sieben möglichen, und einen **Draht zu seinen Artgenossen**: was er tut, gibt
+er per `communicate` an alle im Umkreis weiter. Aus einzelnen Untieren wird so ein Zug.
+
+Der Merkpunkt ist dabei der Zettel, auf dem die Aufgabe steht — eine unsichtbare Entität, die
+zwei Minuten lebt. Wer sie erreicht, bekommt ihre Aufgabe, und sie verschwindet. Sie kann
+**einen zweiten nach sich ziehen**: so entsteht „geh nach Hause, hol Verstärkung, komm
+zurück".
+
+### Fünf Bits Panzer
+
+Die Panzerung ist ein Bitmuster: fünf Bits, fünf Stücke. Jeder Treffer kann eines absprengen —
+die Wahrscheinlichkeit ist (Schaden mal 0,6) **zum Quadrat** in Prozent, bei zehn Schaden also
+sechsunddreißig. Was noch dran ist, zählt für Schadensschwelle und Widerstand, beide gewichtet
+mit Stücken durch fünf. Und man **sieht** es: der Zeichner lässt jedes abgeschlagene Stück weg.
+
+Welcher Schaden durchkommt, ist fein abgestuft und Zahl für Zahl übernommen — Atomsprengungen
+zerreißen ihn, Teilchenstrahlen kümmern ihn kaum.
+
+### Nur eine Werte-Tabelle, und das ist gemessen
+
+Das Original führt zwei Tabellen, `GlyphidStats70K` und `GlyphidStatsNT`, und stellt beide in
+statische Felder. Aber `getStats()` gibt **immer** die NT-Tabelle zurück, und keine andere
+Stelle im ganzen Original nennt die 70K-Tabelle je wieder. Der Port führt nur die eine, die
+etwas entscheidet. Ebenso fehlen `divisor` und `damageThreshold`: beide sind im Original mit
+`@Deprecated` gekennzeichnet, und die NT-Tabelle liest sie nicht.
+
+### Der Graber
+
+Steht etwas im Weg, sprengt er es weg — mit einer eigenen Zuteilung, die anders rechnet als
+die gewöhnliche: die verbraucht Kraft an jedem Block und bleibt stehen, wenn sie alle ist;
+der Graber läuft eine **feste Strecke** und bricht nur ab, wenn ein Block härter ist als
+seine Obergrenze. Größere Glyphiden reißen größere Löcher.
+
+### Was nicht mitkommt, und warum
+
+* **Der eigene Wegfinder** des Originals (`PathFinderUtils`, der Teilwege annimmt) fehlt im
+  Port; hier läuft die gewöhnliche Navigation. Der Unterschied fällt dort auf, wo kein
+  vollständiger Weg existiert — und genau dann greift das Graben.
+* **Das Zerschlagen der Laternen**, wenn er geblendet ist: den Block `lantern` gibt es im Port
+  nicht. Was bleibt, ist die Flucht.
+* **Die Sonderabfrage auf den Glyphidenbau** im Graber: auch diesen Block gibt es noch nicht.
+* **Der zweite Zeichendurchgang** für die verseuchte Haut. Auf 1.21 wäre das eine eigene Lage,
+  und die braucht einen Modelltyp, den ein OBJ-Zeichner nicht hat. Der Port zeichnet die
+  verseuchte Haut stattdessen **als** Haut.
+
+### Eine Zahl, die man nicht glauben mag
+
+Das Tempo des Glyphiden steht in der Tabelle als **eins**. Ein Spieler hat 0,1, ein Zombie
+0,23 — der Glyphid ist damit um ein Vielfaches schneller als alles Gewohnte. Beim Schreiben
+hatte ich das für einen Maßstabsunterschied zwischen 1.7.10 und 1.21 gehalten und
+stillschweigend geviertelt. **Ist es nicht:** beide Fassungen rechnen auf derselben Skala, und
+die Blockspinne aus Runde 296 trägt dieselbe Eins. Zurückgenommen — wer hier teilt, macht ein
+anderes Spiel daraus.
+
+### Eine Berichtigung nebenbei
+
+`glyphid_meat` stand im Port mit fünf Sättigungspunkten und Faktor null. Weder das Original
+noch die CE-Abspaltung geben das her: **beide sagen drei Punkte und Faktor ein halb.**
+Berichtigt. Dazu kommt das gebratene Stück, das bisher ganz fehlte — acht Punkte und Stärke II
+für neun Sekunden, und der Ofen macht es aus dem rohen.
+
+**46 Tore grün.**

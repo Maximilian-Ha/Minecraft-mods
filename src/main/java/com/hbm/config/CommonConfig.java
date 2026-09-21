@@ -63,6 +63,9 @@ public class CommonConfig {
     public final IntValue RAID_ATTACK_REACH;
     public final IntValue RAID_DISTANCE;
     public final IntValue RAID_DRONES;
+    public final BooleanValue RAMPANT_DIG;
+    public final BooleanValue RAMPANT_EXTENDED_TARGETING;
+    public final DoubleValue TARGETING_THRESHOLD;
 
     // EXPLOSIONS (06)
     public final IntValue MK5;
@@ -315,6 +318,18 @@ public class CommonConfig {
                 .comment("How many quadcopter drones are spawned each raid.")
                 .translation("hbmsntm.configuration.raidDrones")
                 .defineInRange("raidDrones", 5, 0, Integer.MAX_VALUE);
+        RAMPANT_DIG = builder
+                .comment("Whether glyphids may dig through obstacles to reach their waypoint.")
+                .translation("hbmsntm.configuration.rampantDig")
+                .define("rampantDig", false);
+        RAMPANT_EXTENDED_TARGETING = builder
+                .comment("Whether glyphids always use their extended targeting range of 128 blocks.")
+                .translation("hbmsntm.configuration.rampantExtendedTargetting")
+                .define("rampantExtendedTargetting", false);
+        TARGETING_THRESHOLD = builder
+                .comment("Minimum amount of soot required for glyphids' extended targeting range to activate.")
+                .translation("hbmsntm.configuration.targetingThreshold")
+                .defineInRange("targetingThreshold", 1D, 0D, Double.MAX_VALUE);
 
         builder.pop();
 

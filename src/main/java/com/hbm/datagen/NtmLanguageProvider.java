@@ -1337,6 +1337,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("subtitles.block.chemplantOperate", "Synthesizing");
         this.add(NtmItems.BIOMASS, "Biomass");
         this.add(NtmItems.GLYPHID_MEAT, "Glyphid Meat");
+        this.add(NtmItems.GLYPHID_MEAT_GRILLED, "Grilled Glyphid Meat");
         this.add(NtmItems.PELLET_CHARGED, "Ionized Particles");
         this.add(NtmItems.SOLID_FUEL, "Solid Fuel");
         this.add(NtmItems.ROCKET_FUEL, "Solid Fuel (Rocket Propellant)");

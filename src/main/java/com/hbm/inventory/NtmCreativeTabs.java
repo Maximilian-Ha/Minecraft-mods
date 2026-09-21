@@ -384,6 +384,7 @@ public class NtmCreativeTabs {
                         addMetaItems(output, NtmItems.FUEL_ADDITIVE.get());
                         output.accept(NtmItems.BIOMASS.get());
                         output.accept(NtmItems.GLYPHID_MEAT.get());
+                        output.accept(NtmItems.GLYPHID_MEAT_GRILLED.get());
                         output.accept(NtmItems.PELLET_CHARGED.get());
                         output.accept(NtmItems.SOLID_FUEL.get());
                         output.accept(NtmItems.ROCKET_FUEL.get());

@@ -7,7 +7,15 @@ import net.minecraft.world.food.FoodProperties;
 public class NtmFoods {
 
     public static final FoodProperties SMORE = new FoodProperties.Builder().nutrition(10).saturationModifier(20F).build();
-    public static final FoodProperties GLYPHID_MEAT = new FoodProperties.Builder().nutrition(5).saturationModifier(0F).build();
+    /* Portiert aus 1.7.10: ItemLemon(3, 0.5F, true). BERICHTIGT in Runde 298 -- hier standen
+     * vorher fuenf Punkte ohne Saettigung, und weder das Original noch die CE-Abspaltung
+     * geben das her: beide sagen drei Punkte und Faktor ein halb. */
+    public static final FoodProperties GLYPHID_MEAT = new FoodProperties.Builder().nutrition(3).saturationModifier(0.5F).build();
+    /* Portiert aus 1.7.10: ItemLemon(8, 0.75F, true) mit Staerke II fuer neun Sekunden. */
+    public static final FoodProperties GLYPHID_MEAT_GRILLED = new FoodProperties.Builder()
+            .nutrition(8).saturationModifier(0.75F)
+            .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST, 180, 1), 1.0F)
+            .build();
     /* Portiert aus 1.7.10: ItemLemon(4, 2F, false) -- vier Punkte, Saettigungsfaktor zwei. */
     public static final FoodProperties BIO_WAFER = new FoodProperties.Builder().nutrition(4).saturationModifier(2F).build();
     /* Portiert aus 1.7.10: ItemLemon(6, 1F, false). Der Pudding aus der Dosenkiste. */

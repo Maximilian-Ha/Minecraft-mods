@@ -5491,6 +5491,13 @@ public class NtmRecipeProvider extends RecipeProvider {
 
         /* Die vier Haftladungen: drei Stangen und ein Klebeband, die Bergbauladung dagegen
          * eine Dynamitladung mit vier Feuersteinen darum. */
+        /* Runde 298: gebratenes Glyphidenfleisch. Im Original eine Zeile in SmeltingRecipes,
+         * mit einer Erfahrung von genau eins. */
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(NtmItems.GLYPHID_MEAT.get()), RecipeCategory.FOOD,
+                        NtmItems.GLYPHID_MEAT_GRILLED.get(), 1.0F, 200)
+                .unlockedBy("has_glyphid_meat", has(NtmItems.GLYPHID_MEAT.get()))
+                .save(recipeOutput, NuclearTechMod.withDefaultNamespace("glyphid_meat_grilled"));
+
         /* Runde 293: der Fischerdynamit -- drei Stangen, ein Blatt Papier und irgendein Teer.
          * Der Teer steht im Original als Wildcard ANY_TAR; im Port traegt ihn der Tag. */
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, NtmItems.STICK_DYNAMITE_FISHING.get(), 1)

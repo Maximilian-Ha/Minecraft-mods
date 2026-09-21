@@ -389,6 +389,7 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicItem(NtmItems.BIOMASS.get());
         this.basicItem(NtmItems.PELLET_CHARGED.get());
         this.basicItem(NtmItems.GLYPHID_MEAT.get());
+        this.basicItem(NtmItems.GLYPHID_MEAT_GRILLED.get());
         this.basicItem(NtmItems.SOLID_FUEL.get());
         this.basicItem(NtmItems.ROCKET_FUEL.get());
         this.basicItem(NtmItems.BALLISTITE.get());

@@ -4,10 +4,12 @@ import com.hbm.entity.effect.DigammaSpear;
 import com.hbm.entity.effect.BlackHole;
 import com.hbm.entity.grenade.Dynamite;
 import com.hbm.entity.grenade.DynamiteFishing;
+import com.hbm.entity.logic.Waypoint;
 import com.hbm.entity.item.BuoyantItemEntity;
 import com.hbm.entity.item.WasteItemEntity;
 import com.hbm.entity.mob.BlockSpider;
 import com.hbm.entity.mob.Dummy;
+import com.hbm.entity.mob.glyphid.Glyphid;
 import com.hbm.entity.mob.FbiAgent;
 import com.hbm.entity.mob.FbiDrone;
 import com.hbm.entity.mob.ParasiteMaggot;
@@ -208,6 +210,23 @@ public class NtmEntityTypes {
                     .sized(0.3F, 0.7F)
                     .clientTrackingRange(8)
                     .build("parasite_maggot"));
+
+    /* Runde 298: der Glyphid. Fast zwei Bloecke breit und einer hoch -- er ist flach. */
+    public static final DeferredHolder<EntityType<?>, EntityType<Glyphid>> GLYPHID = ENTITY_TYPES.register(
+            "glyphid",
+            () -> EntityType.Builder.of(Glyphid::new, MobCategory.MONSTER)
+                    .sized(1.75F, 1.0F)
+                    .clientTrackingRange(16)
+                    .build("glyphid"));
+
+    /* Runde 298: der Merkpunkt. Unsichtbar, ohne Ausdehnung, und nur der Glyphid sieht ihn. */
+    public static final DeferredHolder<EntityType<?>, EntityType<Waypoint>> WAYPOINT = ENTITY_TYPES.register(
+            "waypoint",
+            () -> EntityType.Builder.<Waypoint>of(Waypoint::new, MobCategory.MISC)
+                    .noSummon()
+                    .sized(0.1F, 0.1F)
+                    .clientTrackingRange(8)
+                    .build("waypoint"));
 
     /* Das Gespenst: Menschenmass, und es verschwindet, sobald jemand hinsieht. */
     public static final DeferredHolder<EntityType<?>, EntityType<Ghost>> GHOST = ENTITY_TYPES.register(

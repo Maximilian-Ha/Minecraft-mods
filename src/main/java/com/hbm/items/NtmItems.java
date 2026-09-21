@@ -568,6 +568,9 @@ public class NtmItems {
     public static final DeferredItem<Item> BIOMASS = ITEMS.register("biomass", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> PELLET_CHARGED = ITEMS.register("pellet_charged", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> GLYPHID_MEAT = ITEMS.register("glyphid_meat", () -> new Item(new Item.Properties().food(NtmFoods.GLYPHID_MEAT)));
+    /* Runde 298: das gebratene Stueck. Acht Punkte und Staerke II fuer neun Sekunden -- der
+     * Ofen macht es aus dem rohen. */
+    public static final DeferredItem<Item> GLYPHID_MEAT_GRILLED = ITEMS.register("glyphid_meat_grilled", () -> new Item(new Item.Properties().food(NtmFoods.GLYPHID_MEAT_GRILLED)));
     public static final DeferredItem<Item> SOLID_FUEL = ITEMS.register("solid_fuel", () -> new Item(new Item.Properties()));
     /*
      * DIE GASFLASCHE. Das Gegenstueck des Kanisters fuer alles Gasfoermige: der Kanister
