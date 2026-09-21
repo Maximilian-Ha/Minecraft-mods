@@ -3534,6 +3534,8 @@ public class NtmRecipeProvider extends RecipeProvider {
         addTinyPowderRecipe(recipeOutput, NtmItems.POWDER_SR90_TINY.get(), NtmItems.POWDER_SR90.get());
         addTinyPowderRecipe(recipeOutput, NtmItems.POWDER_STEEL_TINY.get(), NtmItems.POWDER_STEEL.get());
         addTinyPowderRecipe(recipeOutput, NtmItems.POWDER_XE135_TINY.get(), NtmItems.POWDER_XE135.get());
+        /* Runde 285: kein Pulver, aber dasselbe Paar -- MineralRecipes.add1To9Pair(dust, dust_tiny). */
+        addTinyPowderRecipe(recipeOutput, NtmItems.DUST_TINY.get(), NtmItems.DUST.get());
     }
 
     private void registerCrystalSmeltingRecipes(RecipeOutput recipeOutput) {

@@ -1078,6 +1078,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.POWDER_ASH_MISC, "Miscellaneous Ashes");
         this.add(NtmItems.POWDER_ASH_FLY, "Fly Ash");
         this.add(NtmItems.POWDER_ASH_SOOT, "Fine Soot");
+        this.add(NtmItems.POWDER_ASH_FULLERENE, "Fullerene");
         this.add(NtmItems.FILTER_COAL, "Activated Carbon Filter");
         this.add(NtmItems.FRAGMENT_NIOBIUM, "Niobium Fragment");
         this.add(NtmItems.FRAGMENT_NEODYMIUM, "Niobium Neodymium");
@@ -1102,6 +1103,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmItems.OIL_TAR_WOOD, "Wood Tar");
         this.add(NtmItems.OIL_TAR_WAX, "Chlorinated Petroleum Wax");
         this.add(NtmItems.DUST, "Dust");
+        this.add(NtmItems.DUST_TINY, "Tiny Pile of Dust");
         this.add(NtmItems.NUCLEAR_WASTE, "Nuclear Waste");
         this.add(NtmItems.NUCLEAR_WASTE_TINY, "Tiny Pile of Nuclear Waste");
         this.add(NtmItems.NUCLEAR_WASTE_VITRIFIED, "Vitrified Nuclear Waste");

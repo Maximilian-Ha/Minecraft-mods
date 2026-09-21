@@ -166,6 +166,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.POWDER_ASH_MISC.get());
                         output.accept(NtmItems.POWDER_ASH_FLY.get());
                         output.accept(NtmItems.POWDER_ASH_SOOT.get());
+                        output.accept(NtmItems.POWDER_ASH_FULLERENE.get());
                         output.accept(NtmItems.NUCLEAR_WASTE.get());
                         output.accept(NtmItems.NUCLEAR_WASTE_TINY.get());
                         output.accept(NtmItems.NUCLEAR_WASTE_VITRIFIED.get());
@@ -500,6 +501,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmItems.OIL_TAR_WOOD);
                         output.accept(NtmItems.OIL_TAR_WAX);
                         output.accept(NtmItems.DUST);
+                        output.accept(NtmItems.DUST_TINY);
                         output.accept(NtmItems.CRYSTAL_IRON);
                         output.accept(NtmItems.CRYSTAL_GOLD);
                         output.accept(NtmItems.CRYSTAL_REDSTONE);

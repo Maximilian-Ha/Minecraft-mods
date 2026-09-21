@@ -13433,3 +13433,54 @@ Und noch etwas ist nachgemessen: der Erfolg hängt am **Bau** der Maschine
 (`AchievementHandler.craftingAchievements`), nicht an ihrem Betrieb.
 
 **60 von 61** — unverändert, aber der Weg zum letzten ist jetzt vermessen statt vermutet.
+
+## Runde 285 — Die SILEX-Rezepte: 295 Einträge, und keiner davon ist Zufall
+
+Vor der Maschine kommen ihre Rezepte. `SILEXRecipes` bringt **91 Rezeptzeilen** in den Port —
+51 davon stehen in der Fünferschleife der Brennstoffpellets, macht **295 Einträge** in der
+Karte und **391 gewichtete Ausgaben**, genau so viele wie im Original.
+
+### Drei Zahlen machen ein Rezept
+
+Die erste sagt, wie viel Lösung ein Stück des Eingangs ergibt — ein Barren 900, ein Pellet 600,
+Balefire nur 400. Die zweite, was ein einzelner Ausgang davon kostet; bei 900 und 100 sind das
+die neun Nuggets, die man erwartet. Die dritte ist die **Wellenlänge**: der Strahl des FEL muss
+mindestens so weit oben liegen, und liegt er höher, läuft die Maschine schneller. Deshalb ist
+ein Digamma-Kristall auch dann etwas wert, wenn man nur Uran trennt.
+
+### Die Gewichte sind Zusagen, keine Chancen
+
+Das Original würfelt nicht. Es zählt mit einem festen Primzahlschritt durch die Gewichtsleiter —
+wer eine Tonne unangereichertes Uran durchlässt, bekommt am Ende exakt die 86:10:2:2, die im
+Rezept stehen. Das Durchzählen gehört der Maschine; hier stehen nur die Anteile.
+
+### Der Metawert des Abfalls ist nicht die Ordnungszahl
+
+Das Original führt zwei getrennte Aufzählungen — `ItemWasteLong.WasteClass` mit fünf Klassen,
+`ItemWasteShort.WasteClass` mit acht. Der Port hat sie in **eine** Aufzählung mit neun Klassen
+zusammengelegt, und die Reihenfolge der beiden Listen steht als `SHORT` und `LONG` daneben.
+
+Wer hier `WasteClass.THORIUM.ordinal()` einsetzte, bekäme stillschweigend den falschen Abfall:
+Thorium ist die siebte Klasse der Gesamtliste, aber die **vierte** des langlebigen Abfalls. Der
+Port schlägt den Platz deshalb am Gegenstand selbst nach und wirft, wenn er ihn nicht findet.
+
+### Zwei Gegenstände, die es noch nicht gab
+
+**`dust_tiny`** fällt an, wenn abgeklungener Abfall zerlegt wird — neun davon ergeben einen
+ganzen Staubhaufen, wie im Original (`MineralRecipes.add1To9Pair`); das Paar ist mitgeliefert.
+
+**`powder_ash_fullerene`**, die sechste Aschesorte, entsteht nur an einer Stelle: sichtbares
+Licht auf Fullerenlösung. Im Kristallisator stand seit Runden ein Kommentar, der genau das
+festhielt — das Rezept zum CFT-Barren fehle, weil seine einzige Quelle der nicht portierte
+SILEX sei. Der Kommentar ist jetzt ein Rezept.
+
+### Ein Übertragungsfehler, der auffiel
+
+Beim Zirkonium-Brüter zahlen Wismut und Plutonium-241 in der xenonvergifteten Reihe drei
+Zirkoniumnuggets für drei Xenonpulver — 147 statt 150. Beim Americium-Brüter **nicht**: dort
+stehen in beiden Reihen 150. Die erste Fassung hier glich das an und erfand damit eine Wirkung
+ohne Ursache; nachgemessen und zurückgenommen, mit einem Satz im Kommentar, damit es beim
+nächsten Lesen nicht wieder „korrigiert" wird.
+
+**44 Tore grün.** Was fehlt, ist die Maschine selbst — und mit ihr der letzte Erfolg, denn der
+hängt an ihrem **Bau**, nicht an ihrem Betrieb.

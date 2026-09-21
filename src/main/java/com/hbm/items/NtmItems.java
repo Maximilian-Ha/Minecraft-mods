@@ -343,6 +343,11 @@ public class NtmItems {
     // im Industrieschornstein (TileEntityChimneyIndustrial.cpaturesSoot).
     public static final DeferredItem<Item> POWDER_ASH_FLY = ITEMS.register("powder_ash_fly", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> POWDER_ASH_SOOT = ITEMS.register("powder_ash_soot", () -> new Item(new Item.Properties()));
+    /* Runde 285: die sechste Aschesorte. Sie entsteht nur an einer Stelle -- die SILEX schiesst
+     * sichtbares Licht auf Fullerenloesung -- und wird nur an einer weiteren gebraucht: der
+     * Kristallisator macht aus ihr in Xylol den CFT-Barren. Solange die SILEX fehlte, fehlte
+     * auch sie, und das Rezept des Kristallisators stand als Kommentar da. */
+    public static final DeferredItem<Item> POWDER_ASH_FULLERENE = ITEMS.register("powder_ash_fullerene", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> POWDER_BISMUTH = ITEMS.register("powder_bismuth", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> POWDER_LIGNITE = ITEMS.register("powder_lignite", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> POWDER_ZIRCONIUM = ITEMS.register("powder_zirconium", () -> new Item(new Item.Properties()));
@@ -659,6 +664,9 @@ public class NtmItems {
     public static final DeferredItem<Item> OIL_TAR_WOOD = ITEMS.register("oil_tar_wood", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> OIL_TAR_WAX = ITEMS.register("oil_tar_wax", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> DUST = ITEMS.register("dust", () -> new Item(new Item.Properties()));
+    /* Runde 285: der kleine Staub. Er faellt in der SILEX an, wenn abgereicherter Abfall
+     * zerlegt wird -- neun davon ergeben einen ganzen. */
+    public static final DeferredItem<Item> DUST_TINY = ITEMS.register("dust_tiny", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> NUCLEAR_WASTE = ITEMS.register("nuclear_waste", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> NUCLEAR_WASTE_TINY = ITEMS.register("nuclear_waste_tiny", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> NUCLEAR_WASTE_VITRIFIED = ITEMS.register("nuclear_waste_vitrified", () -> new Item(new Item.Properties()));

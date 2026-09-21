@@ -252,6 +252,7 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicItem(NtmItems.POWDER_ASH_MISC.get());
         this.basicItem(NtmItems.POWDER_ASH_FLY.get());
         this.basicItem(NtmItems.POWDER_ASH_SOOT.get());
+        this.basicItem(NtmItems.POWDER_ASH_FULLERENE.get());
         this.basicItem(NtmItems.FILTER_COAL.get());
 
         this.basicItem(NtmItems.FRAGMENT_NIOBIUM.get());
@@ -283,6 +284,7 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicItem(NtmItems.NITER.get());
         this.basicItem(NtmItems.RARE_EARTH_ORE_CHUNK.get());
         this.basicItem(NtmItems.DUST.get());
+        this.basicItem(NtmItems.DUST_TINY.get());
         this.basicItem(NtmItems.CHUNK_MALACHITE.get());
         this.basicItem(NtmItems.CHUNK_CRYOLITE.get());
         this.basicItem(NtmItems.NUCLEAR_WASTE.get());

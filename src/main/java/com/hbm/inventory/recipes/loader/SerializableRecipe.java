@@ -48,6 +48,7 @@ import com.hbm.inventory.recipes.CentrifugeRecipes;
 import com.hbm.inventory.material.MatDistribution;
 import com.hbm.inventory.recipes.CrystallizerRecipes;
 import com.hbm.inventory.recipes.CyclotronRecipes;
+import com.hbm.inventory.recipes.SILEXRecipes;
 import com.hbm.inventory.recipes.CompressorRecipes;
 import com.hbm.inventory.recipes.MixerRecipes;
 import com.hbm.inventory.recipes.RockMillRecipes;
@@ -91,6 +92,7 @@ public abstract class SerializableRecipe {
         recipeHandlers.add(new MixerRecipes());
         recipeHandlers.add(new CrystallizerRecipes());
         recipeHandlers.add(new CyclotronRecipes());
+        recipeHandlers.add(new SILEXRecipes());
         recipeHandlers.add(new AmmoPressRecipes());
         recipeHandlers.add(new AnnihilatorRecipes());
         recipeHandlers.add(new ParticleAcceleratorRecipes());
