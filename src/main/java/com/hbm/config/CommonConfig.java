@@ -113,6 +113,7 @@ public class CommonConfig {
     /* Runde 303: der Glyphidenbau. Die Werte stehen im Original in MobConfig; die
      * Wahrscheinlichkeiten je Art sind dort int[3] -- Grundwert, Russ-Aufschlag und
      * Mindestruss --, hier drei Eintraege je Art, damit sie einzeln einstellbar bleiben. */
+    public final BooleanValue ENABLE_HIVES;
     public final IntValue SWARM_COOLDOWN;
     public final IntValue BASE_SWARM_SIZE;
     public final DoubleValue SWARM_SCALING_MULT;
@@ -502,6 +503,10 @@ public class CommonConfig {
                 .defineInRange("pollutionMult", 1.0, Double.MIN_VALUE, Double.MAX_VALUE);
 
         /* DER GLYPHIDENBAU, Runde 303. Die Zahlen sind die des Originals (MobConfig). */
+        ENABLE_HIVES = builder
+                .comment("Whether glyphid hives should spawn during world generation.")
+                .translation("hbmsntm.configuration.enableHives")
+                .define("enableHives", true);
         SWARM_COOLDOWN = builder
                 .comment("Ticks between two swarms spawning from a glyphid hive.")
                 .translation("hbmsntm.configuration.swarmCooldown")

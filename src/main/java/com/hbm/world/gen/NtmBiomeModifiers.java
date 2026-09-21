@@ -27,6 +27,7 @@ public class NtmBiomeModifiers {
     public static final ResourceKey<BiomeModifier> ADD_BEDROCK_ORE = registerKey("add_bedrock_ore");
 
     public static final ResourceKey<BiomeModifier> ADD_LANDMINE = registerKey("add_landmine");
+    public static final ResourceKey<BiomeModifier> ADD_GLYPHID_HIVE = registerKey("add_glyphid_hive");
 
     public static final ResourceKey<BiomeModifier> ADD_CRASHED_BOMB = registerKey("add_crashed_bomb");
 
@@ -54,6 +55,9 @@ public class NtmBiomeModifiers {
         context.register(ADD_BEDROCK_OIL, new AddFeaturesBiomeModifier(biomes.getOrThrow(BiomeTags.IS_OVERWORLD), HolderSet.direct(placedFeatures.getOrThrow(NtmPlacedFeatures.BEDROCK_OIL_PLACED)), GenerationStep.Decoration.UNDERGROUND_ORES));
         context.register(ADD_BEDROCK_ORE, new AddFeaturesBiomeModifier(biomes.getOrThrow(BiomeTags.IS_OVERWORLD), HolderSet.direct(placedFeatures.getOrThrow(NtmPlacedFeatures.BEDROCK_ORE_PLACED)), GenerationStep.Decoration.UNDERGROUND_ORES));
         context.register(ADD_LANDMINE, new AddFeaturesBiomeModifier(biomes.getOrThrow(BiomeTags.IS_OVERWORLD), HolderSet.direct(placedFeatures.getOrThrow(NtmPlacedFeatures.LANDMINE_PLACED)), GenerationStep.Decoration.UNDERGROUND_DECORATION));
+        /* Der Bau steht an der Oberflaeche, nicht unter Tage -- deshalb SURFACE_STRUCTURES
+         * und nicht UNDERGROUND_DECORATION wie bei der Mine. */
+        context.register(ADD_GLYPHID_HIVE, new AddFeaturesBiomeModifier(biomes.getOrThrow(BiomeTags.IS_OVERWORLD), HolderSet.direct(placedFeatures.getOrThrow(NtmPlacedFeatures.GLYPHID_HIVE_PLACED)), GenerationStep.Decoration.SURFACE_STRUCTURES));
 
         context.register(ADD_CRASHED_BOMB, new AddFeaturesBiomeModifier(biomes.getOrThrow(BiomeTags.IS_OVERWORLD), HolderSet.direct(placedFeatures.getOrThrow(NtmPlacedFeatures.CRASHED_BOMB_PLACED)), GenerationStep.Decoration.UNDERGROUND_DECORATION));
 

@@ -21,6 +21,7 @@ public class NtmPlacedFeatures {
     public static final ResourceKey<PlacedFeature> BEDROCK_ORE_PLACED = registerKey("bedrock_ore_placed");
 
     public static final ResourceKey<PlacedFeature> LANDMINE_PLACED = registerKey("landmine_placed");
+    public static final ResourceKey<PlacedFeature> GLYPHID_HIVE_PLACED = registerKey("glyphid_hive_placed");
 
     public static final ResourceKey<PlacedFeature> CRASHED_BOMB_PLACED = registerKey("crashed_bomb_placed");
 
@@ -37,6 +38,9 @@ public class NtmPlacedFeatures {
          * weil ein Bagger eine ganze Weile an einem Fleck arbeitet. */
         register(context, BEDROCK_ORE_PLACED, configuredFeatures.getOrThrow(NtmConfiguredFeatures.BEDROCK_ORE), List.of(RarityFilter.onAverageOnceEvery(8), InSquarePlacement.spread()));
         register(context, LANDMINE_PLACED, configuredFeatures.getOrThrow(NtmConfiguredFeatures.LANDMINE), List.of(RarityFilter.onAverageOnceEvery(64), InSquarePlacement.spread(), HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)));
+        /* Ein Bau je 256 Chunks im Mittel -- das ist MobConfig.hiveSpawn des Originals.
+         * Auf 1.7.10 stand diese Zahl im Weltgenerator selbst, auf 1.21 steht sie hier. */
+        register(context, GLYPHID_HIVE_PLACED, configuredFeatures.getOrThrow(NtmConfiguredFeatures.GLYPHID_HIVE), List.of(RarityFilter.onAverageOnceEvery(256), InSquarePlacement.spread(), HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)));
         register(context, CRASHED_BOMB_PLACED, configuredFeatures.getOrThrow(NtmConfiguredFeatures.CRASHED_BOMB), List.of(RarityFilter.onAverageOnceEvery(500), InSquarePlacement.spread(), HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)));
         /* Jeder hundertste Chunk -- WorldConfig.capsuleStructure des Originals. */
         register(context, SOYUZ_CAPSULE_PLACED, configuredFeatures.getOrThrow(NtmConfiguredFeatures.SOYUZ_CAPSULE), List.of(RarityFilter.onAverageOnceEvery(100), InSquarePlacement.spread(), HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)));

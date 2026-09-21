@@ -16,6 +16,8 @@ public class NtmFeatures {
     public static final DeferredHolder<Feature<?>, BedrockOilDepositFeature> BEDROCK_OIL = FEATURES.register("bedrock_oil", () -> new BedrockOilDepositFeature(NoneFeatureConfiguration.CODEC));
     public static final DeferredHolder<Feature<?>, BedrockOreFeature> BEDROCK_ORE = FEATURES.register("bedrock_ore", () -> new BedrockOreFeature(NoneFeatureConfiguration.CODEC));
     public static final DeferredHolder<Feature<?>, LandmineFeature> LANDMINE = FEATURES.register("landmine", () -> new LandmineFeature(NoneFeatureConfiguration.CODEC));
+    /* Runde 304: der Glyphidenbau. Ohne ihn stuende die ganze Familie nie in der Welt. */
+    public static final DeferredHolder<Feature<?>, GlyphidHiveFeature> GLYPHID_HIVE = FEATURES.register("glyphid_hive", () -> new GlyphidHiveFeature(NoneFeatureConfiguration.CODEC));
 
     public static final DeferredHolder<Feature<?>, CrashedBombFeature> CRASHED_BOMB = FEATURES.register("crashed_bomb", () -> new CrashedBombFeature(NoneFeatureConfiguration.CODEC));
 

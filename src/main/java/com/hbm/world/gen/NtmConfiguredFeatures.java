@@ -18,6 +18,7 @@ public class NtmConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> BEDROCK_ORE = registerKey("bedrock_ore");
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> LANDMINE = registerKey("landmine");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLYPHID_HIVE = registerKey("glyphid_hive");
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> CRASHED_BOMB = registerKey("crashed_bomb");
 
@@ -31,6 +32,7 @@ public class NtmConfiguredFeatures {
         register(context, BEDROCK_ORE, NtmFeatures.BEDROCK_ORE.get(), NoneFeatureConfiguration.INSTANCE);
 
         register(context, LANDMINE, NtmFeatures.LANDMINE.get(), NoneFeatureConfiguration.INSTANCE);
+        register(context, GLYPHID_HIVE, NtmFeatures.GLYPHID_HIVE.get(), NoneFeatureConfiguration.INSTANCE);
 
         register(context, CRASHED_BOMB, NtmFeatures.CRASHED_BOMB.get(), NoneFeatureConfiguration.INSTANCE);
 

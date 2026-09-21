@@ -14483,3 +14483,32 @@ auch sei. Sonst sprengte ein grabender Glyphid seine eigene Brut weg.
 `tab-check` meldete sieben neue Einträge ohne Kreativreiter. Eingetragen.
 
 **47 Tore grün.**
+
+---
+
+## Runde 304 — Der Bau in die Welt gesetzt
+
+Runde 303 hat den Bau gebaut, aber nirgends hingestellt. **Ohne diese Runde wäre die ganze
+Familie im Überlebensspiel unerreichbar gewesen:** der Späher baut neue Nester, aber nur
+ausgehend von einem, das schon steht. Das erste muss die Welt mitbringen.
+
+Im Original steht das als zwölf Zeilen mitten in `HbmWorldGen` (Z. 191–202). Auf 1.21 sind
+daraus vier Teile geworden — Feature, konfiguriertes Feature, platziertes Feature und
+Biom-Änderer —, aber die Zahlen sind dieselben: **ein Bau je 256 Chunks im Mittel**, jeder
+**zehnte verseucht**, und Beute gibt es immer.
+
+Der Unterschied zu den Nestern, die der Späher hinterlässt: dort steht `beute = false`. Das
+hat einen Grund — ein Nest, das gerade erst entstanden ist, hatte noch niemanden, der es
+hätte füllen können.
+
+Die Höhensuche ist Schleife für Schleife übernommen: vom Oberflächenwert drei Blöcke hoch
+und einen tief, von oben nach unten, bis der Block darunter fest ist. Findet sich keiner,
+entsteht nichts.
+
+Eine Entscheidung, die das Original nicht treffen musste: der Bau steht an der **Oberfläche**,
+kommt also in `SURFACE_STRUCTURES` und nicht in `UNDERGROUND_DECORATION` wie die Landmine.
+
+Damit ist **die Glyphiden-Familie vollständig**: neun Klassen, der Bau, das Gelege, der
+Schwarm, die Beute — und ein Weg, auf dem all das in einer neuen Welt zu finden ist.
+
+**47 Tore grün.**
