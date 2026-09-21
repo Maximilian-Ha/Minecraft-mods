@@ -13897,3 +13897,45 @@ Ergebnis dasselbe.
 nachgemessen: im Original steht dort nur die eine Zeile. Der Port reicht keine zweite nach.
 
 **46 Tore grün.**
+
+## Runde 294 — Ein Dünger, der nichts tat
+
+`powder_fertilizer` steht seit Runde 56 im Port — als **gewöhnlicher Gegenstand ohne jede
+Wirkung**. Im Original ist er `ItemFertilizer`, und ein Klick düngt den ganzen Würfel von drei
+mal drei mal drei Blöcken um die angeklickte Stelle.
+
+Der angeklickte Block wird dabei **erzwungen**: bei ihm entfällt der Wurf, der sonst
+entscheidet, ob Knochenmehl anschlägt. Die sechsundzwanzig Nachbarn müssen würfeln wie immer.
+Verbraucht wird höchstens einer, egal wie viele Pflanzen angeschlagen haben.
+
+### Zwei Dinge, die der Port nicht mitnimmt
+
+`useFertillizer` — die zweite öffentliche Methode — bedient im Original den Werfer. **Der Port
+hat kein Werferverhalten**, keine einzige Stelle registriert eines; eine Methode ohne Aufrufer
+wäre toter Code. Kommt das Werferverhalten, kommt sie mit.
+
+Das `BonemealEvent` fragt im Original andere Mods, ob sie das Düngen übernehmen wollen. Auf
+1.21 trägt NeoForge dieses Ereignis an anderer Stelle, und der Port würde hier entweder doppelt
+fragen oder eine fremde Rechnung nachbauen. Was wachsen darf, entscheidet die Pflanze selbst.
+
+### Und einer, den er ändern muss
+
+Das Original gibt aus `onItemUse` **immer false** zurück, auch wenn etwas gewachsen ist — auf
+1.7.10 hat das nur zur Folge, dass die Hand nicht ausschlägt. Auf 1.21 entscheidet der
+Rückgabewert über Handschlag **und** darüber, ob der Klick als erledigt gilt. Der Port gibt
+darum `sidedSuccess` zurück, wenn etwas angeschlagen hat.
+
+### Was offen bleibt, und warum
+
+**Herstellbar ist er noch nicht.** Das Original kennt zwei Rezepte, beide vier Stück:
+Calciumstaub oder irgendeine Asche, dazu roter Phosphor, Salpeter und Schwefel. Alle vier
+Stäube kommen dort aus dem Mats-System (`CA.dust()`, `P_RED.dust()`, …). Im Port stehen die
+Materialien in `Mats` mit `setAutogen(DUST)` bereit, aber **keine einzige Stelle außerhalb von
+`Mats` greift auf einen dieser Stäube zu** — nachgemessen. Das Rezept gehört damit in die
+Runde, die das Autogen-System erschließt, nicht hierher; eine Zutat zu erfinden, die es so
+nicht gibt, wäre schlimmer als ein Gegenstand, den man vorerst nur im Schöpfermodus bekommt.
+
+Nebenbei ist damit die erste Hälfte dessen da, was die Taube braucht: sie düngt im Flug, wenn
+sie fett ist, und ruft dafür genau diese Methode.
+
+**46 Tore grün.**

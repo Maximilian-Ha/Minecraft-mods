@@ -22,6 +22,7 @@ import com.hbm.items.armor.ArmorFSBItem;
 import com.hbm.items.armor.ArmorHatItem;
 import com.hbm.items.food.PillItem;
 import com.hbm.items.machine.GunPartItem;
+import com.hbm.items.tools.FertilizerItem;
 import com.hbm.items.weapon.DynamiteFishingItem;
 import com.hbm.items.weapon.DynamiteItem;
 import com.hbm.items.component.NtmDataComponents;
@@ -2498,7 +2499,11 @@ public class NtmItems {
     public static final DeferredItem<Item> POWDER_DESH_MIX = ITEMS.register("powder_desh_mix", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> POWDER_DESH_READY = ITEMS.register("powder_desh_ready", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> POWDER_EUPHEMIUM = ITEMS.register("powder_euphemium", () -> new Item(new Item.Properties()));
-    public static final DeferredItem<Item> POWDER_FERTILIZER = ITEMS.register("powder_fertilizer", () -> new Item(new Item.Properties()));
+    /**
+     * DER INDUSTRIEDUENGER, Runde 294. Bis hierher war er ein Gegenstand ohne Wirkung; im
+     * Original duengt ein Klick den ganzen Wuerfel von drei mal drei mal drei Bloecken.
+     */
+    public static final DeferredItem<Item> POWDER_FERTILIZER = ITEMS.register("powder_fertilizer", () -> new FertilizerItem(new Item.Properties()));
     public static final DeferredItem<Item> POWDER_FIRE = ITEMS.register("powder_fire", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> POWDER_FLUX = ITEMS.register("powder_flux", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> POWDER_I131 = ITEMS.register("powder_i131", () -> new Item(new Item.Properties()));
