@@ -6,6 +6,7 @@ import com.hbm.inventory.MetaHelper;
 import com.hbm.items.EnumMultiItem;
 import com.hbm.items.ItemEnums.CapType;
 import com.hbm.items.NtmItems;
+import com.hbm.registry.NtmCriteria;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
@@ -126,6 +127,9 @@ public class DrinkItem extends EnumMultiItem {
         drinker.heal(10F);
         drinker.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 60 * 20, 2));
         HbmLivingAttachments.incrementRadiation(drinker, 500F);
+        /* Der Erfolg haengt am Trinken, nicht am Besitz -- so steht es im Original
+         * (ItemEnergy.java:182, unmittelbar nach der Strahlendosis). */
+        if(drinker instanceof ServerPlayer spieler) NtmCriteria.marke(spieler, "radium");
     };
     public static final Consumer<LivingEntity> LAMBDA_NUKA = (drinker) -> {
         drinker.heal(4F);

@@ -5,6 +5,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 import com.hbm.blocks.NtmBlocks;
+import com.hbm.inventory.MetaHelper;
+import com.hbm.items.food.DrinkItem;
 import com.hbm.items.NtmItems;
 import com.hbm.main.NuclearTechMod;
 
@@ -19,6 +21,7 @@ import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.data.AdvancementProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -47,7 +50,12 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
  * den Start einer Sojus. Nach Runde 258 stehen 20 der 32 (nachgezaehlt an den Aufrufen mit
  * Kennung); die uebrigen 12 warten auf Entitaeten und Gegenstaende, die der Port noch nicht
  * hat: die Sojus (soyuz, space), die vier Bosse, die Schimmerwaffen (fiend, fiend2), das
- * Messer (someWounds), der Radiumkaffee, die Schwefelsaeure und der Speer (kauaiMoho).
+ * Messer (someWounds), die Schwefelsaeure und der Speer (kauaiMoho).
+ *
+ * DER RADIUMKAFFEE STAND HIER ZU UNRECHT (berichtigt in Runde 271). Er ist im Port laengst da
+ * -- aber als DrinkType.COFFEE_RADIUM, ein Meta-Gegenstand ohne eigenen Registriereintrag. Die
+ * Messung in Runde 270 suchte nur nach Registriernamen in NtmItems und hat ihn deshalb
+ * uebersehen. Sein Erfolg haengt jetzt an einer Marke in LAMBDA_COFFEE_RADIUM.
  *
  * DREI DER EINUNDSECHZIG SIND IM ORIGINAL SELBST UNERREICHBAR: tasteofblood, c20_5 und
  * digammaUpOnTop stehen in keinem triggerAchievement-Aufruf und in keiner Zeile des
@@ -109,6 +117,11 @@ public class NtmAdvancementProvider extends AdvancementProvider {
 
             AdvancementHolder centrifuge = erfolg(speichern, helper, polymer, "centrifuge", NtmBlocks.MACHINE_CENTRIFUGE.get(), false);
             erfolg(speichern, helper, centrifuge, "technetium", NtmItems.INGOT_TCALLOY.get(), false);
+            /* Der Radiumkaffee ist ein Meta-Gegenstand, kein eigener Registriereintrag --
+             * darum ein Stapel statt eines ItemLike. Genau das hat ihn in Runde 270 als
+             * "fehlt im Port" erscheinen lassen: die Suche sah nur NtmItems. */
+            erfolg(speichern, helper, centrifuge, "radium",
+                    MetaHelper.newStack(NtmItems.DRINK, DrinkItem.DrinkType.COFFEE_RADIUM), true, "radium");
 
             erfolg(speichern, helper, schrab, "watz", NtmItems.WATZ_PELLET.get(), false);
 
@@ -267,6 +280,23 @@ public class NtmAdvancementProvider extends AdvancementProvider {
             return bauen(speichern, helper, vorgaenger, name, symbol, besonders, "marke",
                     NtmCriteria.MARKE.get().createCriterion(
                             new NtmCriteria.MarkeTrigger.Bedingung(Optional.empty(), kennung)));
+        }
+
+        /** Wie oben, aber mit einem fertigen Stapel als Sinnbild -- fuer Meta-Gegenstaende. */
+        private static AdvancementHolder erfolg(Consumer<AdvancementHolder> speichern, ExistingFileHelper helper,
+                AdvancementHolder vorgaenger, String name, ItemStack symbol, boolean besonders, String kennung) {
+
+            return Advancement.Builder.advancement()
+                    .parent(vorgaenger)
+                    .display(symbol,
+                            Component.translatable("advancements.hbmsntm." + name + ".title"),
+                            Component.translatable("advancements.hbmsntm." + name + ".description"),
+                            null,
+                            besonders ? AdvancementType.CHALLENGE : AdvancementType.TASK,
+                            true, true, false)
+                    .addCriterion("marke", NtmCriteria.MARKE.get().createCriterion(
+                            new NtmCriteria.MarkeTrigger.Bedingung(Optional.empty(), kennung)))
+                    .save(speichern, NuclearTechMod.withDefaultNamespace(name), helper);
         }
 
         private static AdvancementHolder bauen(Consumer<AdvancementHolder> speichern, ExistingFileHelper helper,

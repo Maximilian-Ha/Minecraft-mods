@@ -12832,9 +12832,10 @@ Symbolgegenstände, an denen sie hängen, einzeln gegen `NtmItems` und `NtmBlock
 `achievement_icon` und `machine_silex` — **keiner davon ist angemeldet**. Dazu die Sojus, die
 vier Bosse und der Speer.
 
-Das ist keine Vermutung mehr, sondern gemessen: der Kommentar in `NtmAdvancementProvider`
-stimmt unverändert. Der Punkt bleibt offen, aber er wartet auf andere Runden, nicht auf
-Erfolgsarbeit.
+> **Berichtigt in Runde 271:** Diese Messung war bei einem der sieben falsch. `coffee_radium`
+> **gibt es** im Port — als `DrinkType.COFFEE_RADIUM`, ein Meta-Gegenstand ohne eigenen
+> Registriereintrag. Die Suche ging nur über `NtmItems` und `NtmBlocks` und konnte ihn dort
+> nicht finden. Siehe *Runde 271*.
 
 ### Stand
 
@@ -12842,4 +12843,45 @@ Erfolgsarbeit.
 |---|---|
 | Meteoritenverlies | steht in der Welt (Runden 250–256, 266) |
 | Bauzauberstäbe | 3 von 3 erreichbaren; der vierte ist im Original abgeschaltet |
-| Erfolgssystem | 46 von 61; die 15 übrigen messbar durch fehlenden Inhalt blockiert |
+| Erfolgssystem | 46 von 61; die 15 übrigen messbar durch fehlenden Inhalt blockiert (eine Messung davon in Runde 271 berichtigt) |
+
+## Runde 271 — Der Radiumkaffee war die ganze Zeit da
+
+Der Stop-Haken hat die Standortbestimmung aus Runde 270 zu Recht nicht gelten lassen: der
+Punkt „Erfolgssystem" war nicht fertig, sondern nur als blockiert erklärt. Beim ersten Griff
+nach dem günstigsten Blocker fiel auf, dass diese Erklärung bei einem von sieben **falsch**
+war.
+
+### Der Messfehler
+
+Runde 270 suchte die sieben Symbolgegenstände über `NtmItems` und `NtmBlocks` — also über die
+**Registriernamen**. `coffee_radium` hat keinen. Er existiert im Port als
+`DrinkItem.DrinkType.COFFEE_RADIUM`, ein Eintrag in einem Meta-Gegenstand, und war der Suche
+deshalb unsichtbar. Die zweite Suche, über den ganzen Quelltext statt über die
+Registrierlisten, hat ihn sofort gefunden.
+
+Die Lehre ist eine alte in diesem Port: **wer nur dort nachsieht, wo er etwas erwartet, misst
+die eigene Erwartung.** Die Meta-Gegenstände sind genau die Stellen, an denen die Namen des
+Originals keine Registriernamen mehr sind.
+
+### Der Erfolg hängt jetzt
+
+`achRadium` ist damit nicht blockiert, sondern war nur nie angeschlossen. Sein Auslöser steht
+im Original in `ItemEnergy.java:182`, unmittelbar nach der Strahlendosis von 500 — im Port
+also in `LAMBDA_COFFEE_RADIUM`. Er hängt, wie im Original, an der Zentrifuge als Vorgänger und
+trägt den Herausforderungs-Rahmen (`setSpecial()`).
+
+Dafür brauchte der Erfolgsgeber eine zweite Fassung von `erfolg(...)`, die einen **Stapel**
+statt eines `ItemLike` als Sinnbild nimmt: ein Meta-Gegenstand lässt sich anders nicht
+bezeichnen.
+
+**47 von 61.** Die Zählung im Kopf von `NtmAdvancementProvider` ist entsprechend berichtigt.
+
+### Was dabei noch auffiel
+
+Die **Schimmerwaffen** haben im Port bereits Modelle und Texturen — `shimmer_sledge.obj`,
+`shimmer_axe.obj` und beide Texturen liegen da, und `ResourceManager` hält Felder dafür. Die
+Gegenstände fehlen trotzdem. Dabei ist eine Schiefheit entstanden: `shimmer_axe` wird geladen,
+`shimmer_sledge` steht daneben **auskommentiert** — ein Modell im Speicher, das niemand
+zeichnet, und ein Feld, das immer `null` ist. Das gehört in die Runde, die die beiden Waffen
+nachreicht, und ist hier nur vermerkt.

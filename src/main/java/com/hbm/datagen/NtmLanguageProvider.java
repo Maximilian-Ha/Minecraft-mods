@@ -846,6 +846,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("advancements.hbmsntm.centrifuge.description", "centrifugal force is real don't @ me");
         this.add("advancements.hbmsntm.technetium.title", "Big Man, Pig Man");
         this.add("advancements.hbmsntm.technetium.description", "It's medicinal, it's medicinal!");
+        this.add("advancements.hbmsntm.radium.title", "MISTER INCREDIBLE");
+        this.add("advancements.hbmsntm.radium.description", "YOU'RE FIRED FOR POURING RADIUM IN MY COFFEE!");
         this.add("advancements.hbmsntm.watz.title", "The Power of Element-126");
         this.add("advancements.hbmsntm.watz.description", "F\u00f3lkvangr fields possibly included.");
         this.add("advancements.hbmsntm.rbmk.title", "3.6 Roentegen?");
