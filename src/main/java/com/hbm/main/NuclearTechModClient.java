@@ -964,6 +964,7 @@ public class NuclearTechModClient {
         event.registerLayerDefinition(SkeletonModel.SKELETON_PART_LAYER, SkeletonModel::createLayer);
 
         event.registerLayerDefinition(com.hbm.render.model.ModelSatelliteReceiver.LAYER, com.hbm.render.model.ModelSatelliteReceiver::createBodyLayer);
+        event.registerLayerDefinition(com.hbm.render.model.ModelPigeon.LAYER, com.hbm.render.model.ModelPigeon::createBodyLayer);
 
         /* Die Kybernetische Krabbe, Runde 236. Ihre Teslaschwester hat kein solches Modell --
          * die ist ein OBJ und kommt ueber den ResourceManager. */

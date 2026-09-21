@@ -8,6 +8,7 @@ import com.hbm.entity.item.BuoyantItemEntity;
 import com.hbm.entity.item.WasteItemEntity;
 import com.hbm.entity.mob.FbiAgent;
 import com.hbm.entity.mob.FbiDrone;
+import com.hbm.entity.mob.Pigeon;
 import com.hbm.entity.grenade.GrenadeUniversal;
 import com.hbm.entity.projectile.Boxcar;
 import com.hbm.entity.item.ParachuteCrate;
@@ -172,6 +173,14 @@ public class NtmEntityTypes {
                     .sized(0.9F, 0.4F)
                     .clientTrackingRange(16)
                     .build("fbi_drone"));
+
+    /* Runde 295: die Taube. Ein halber Block breit, einer hoch -- die Masse des Originals. */
+    public static final DeferredHolder<EntityType<?>, EntityType<Pigeon>> PIGEON = ENTITY_TYPES.register(
+            "pigeon",
+            () -> EntityType.Builder.of(Pigeon::new, MobCategory.CREATURE)
+                    .sized(0.5F, 1.0F)
+                    .clientTrackingRange(8)
+                    .build("pigeon"));
 
     /* Das Gespenst: Menschenmass, und es verschwindet, sobald jemand hinsieht. */
     public static final DeferredHolder<EntityType<?>, EntityType<Ghost>> GHOST = ENTITY_TYPES.register(

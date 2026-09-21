@@ -19,6 +19,7 @@ import com.hbm.render.entity.item.RenderTNTPrimedBase;
 import com.hbm.render.entity.mob.CreeperNuclearRenderer;
 import com.hbm.render.entity.mob.FbiAgentRenderer;
 import com.hbm.render.entity.mob.FbiDroneRenderer;
+import com.hbm.render.entity.mob.PigeonRenderer;
 import com.hbm.render.entity.mob.GhostRenderer;
 import com.hbm.render.entity.mob.QuackosRenderer;
 import com.hbm.render.entity.mob.CreeperGoldRenderer;
@@ -483,6 +484,7 @@ public class ClientProxy extends ServerProxy {
         EntityRenderers.register(NtmEntityTypes.GHOST.get(), GhostRenderer::new);
         EntityRenderers.register(NtmEntityTypes.FBI_AGENT.get(), FbiAgentRenderer::new);
         EntityRenderers.register(NtmEntityTypes.FBI_DRONE.get(), FbiDroneRenderer::new);
+        EntityRenderers.register(NtmEntityTypes.PIGEON.get(), PigeonRenderer::new);
         EntityRenderers.register(NtmEntityTypes.UNDEAD_SOLDIER.get(), UndeadSoldierRenderer::new);
         EntityRenderers.register(NtmEntityTypes.CYBER_CRAB.get(), CyberCrabRenderer::new);
         EntityRenderers.register(NtmEntityTypes.TESLA_CRAB.get(), TeslaCrabRenderer::new);

@@ -13939,3 +13939,60 @@ Nebenbei ist damit die erste Hälfte dessen da, was die Taube braucht: sie düng
 sie fett ist, und ruft dafür genau diese Methode.
 
 **46 Tore grün.**
+
+## Runde 295 — Die Taube
+
+Sechs Klassen für einen Vogel: die Taube selbst, die Schnittstelle `IFlyingCreature` und vier
+Aufgaben. Sie steht seit Runde 228 auf der Liste, und sie war der einzige Grund, warum diese
+Schnittstelle fehlte.
+
+### Zwei Zustände, und ein Zufall für jeden
+
+Abgehoben wird bei Angriff, bei Feuer oder aus Laune — eins zu sechshundert je Takt, im Mittel
+alle dreißig Sekunden. Gelandet wird **allein** aus Laune, eins zu zweihundert. Im Flug steigt
+sie mit einem Rauschen um 0,04 pro Takt, bis sie zehn Blöcke über dem Boden ist, läuft mit
+anderthalb vorwärts und dreht alle zwanzig Takte ein Stück.
+
+Drei Aufgaben — Schwimmen, Umherziehen, Brotfressen — laufen **nur am Boden**. Das Original
+hängt dafür ein `Predicate` an eigens abgeschriebene Fassungen von `EntityAIWander` und
+`EntityAISwimming`; auf 1.21 genügt es, `RandomStrollGoal` und `FloatGoal` zu erben und die
+Frage zu erweitern. Der Wurf ist derselbe: eins zu hundertzwanzig, und genau das ist auch die
+Voreinstellung von `RandomStrollGoal`.
+
+### Brot macht fett, und fett macht Dünger
+
+Sie sucht Brot am Boden, zehn Blöcke weit, läuft hin und frisst. Näher als einen Block würfelt
+sie eins zu drei; trifft der Wurf, ist der Gegenstand weg und der Rest des Stapels bleibt
+liegen. **Fett wird sie bei jedem Versuch**, auch wenn der Wurf danebengeht — so steht es im
+Original.
+
+Und fett bleibt sie, bis sie im Flug düngt: eins zu fünfzig je Takt sucht sie sich
+fünfundzwanzig Blöcke unter sich die erste Pflanze, die Knochenmehl annimmt, und lässt etwas
+fallen. Das ist **erzwungenes** Düngen, ohne den üblichen Wurf — und es ruft genau die Methode,
+die Runde 294 dafür freigelegt hat. Danach wird sie mit eins zu zehn wieder dünn.
+
+### Zwei Merkwürdigkeiten, unverändert übernommen
+
+Der Ton des Fressens hat im Original die Lautstärke `0.5F + 0.5F * rand.nextInt(2)` — eine
+**ganzzahlige** Wahl zwischen halb und ganz, wo man eine gleitende erwarten würde.
+
+Und der Flügelschlag ist keiner: das Modell setzt `rotateAngleZ = ageInTicks`, also den
+fortlaufenden Zähler selbst. Die Flügel **wirbeln durch**, statt zu schwingen. Der Zähler kommt
+dabei nicht von der Lebenszeit, sondern aus `handleRotationFloat`, das die Taube mit ihrem
+eigenen `fallTime` überschreibt — er steigt, solange sie in der Luft ist, und steht still, wenn
+sie sitzt.
+
+### Ein Modell mit zwei Rümpfen
+
+Es gibt den Rumpf zweimal: schlank und um einen Bildpunkt aufgeblasen. Im Original hängen die
+**gleichen zwei Flügel** an beiden — derselbe `ModelRenderer` wird zweimal als Kind
+eingehängt. Auf 1.21 gehört ein gebackenes Teil zu genau einem Elternteil; hier gibt es deshalb
+zwei Flügelpaare, und gezeichnet wird das Paar des Rumpfes, der gerade dran ist. Sichtbar ist
+kein Unterschied, weil das Original ohnehin nie beide Rümpfe zeichnet.
+
+### Zwei Schläge lassen sie platzen
+
+Wer ihr auf einmal doppelt so viel Schaden zufügt, wie sie Leben hat, bekommt keine Leiche,
+sondern **zehn Federn in alle Richtungen**.
+
+**46 Tore grün.**
