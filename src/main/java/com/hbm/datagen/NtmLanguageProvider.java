@@ -842,6 +842,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("advancements.hbmsntm.schrab.description", "Regardless, I wouldn't look at it for too long.");
         this.add("advancements.hbmsntm.acidizer.title", "Acidic");
         this.add("advancements.hbmsntm.acidizer.description", "oof ow my skin");
+        this.add("advancements.hbmsntm.silex.title", "Separation of Isotopes by Laser Exitation");
+        this.add("advancements.hbmsntm.silex.description", "It's cooler then it sounds, I promise.");
         this.add("advancements.hbmsntm.soyuz.title", "Baked Potato");
         this.add("advancements.hbmsntm.soyuz.description", "Become crunchy.");
         this.add("advancements.hbmsntm.space.title", "The Final Front-ah forget it");
@@ -3135,6 +3137,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.MACHINE_TOWER_SMALL, "Cooling Tower");
         this.add(NtmBlocks.MACHINE_TOWER_LARGE, "Large Cooling Tower");
         this.add(NtmBlocks.MACHINE_CYCLOTRON, "Cyclotron");
+        this.add(NtmBlocks.MACHINE_SILEX, "SILEX Isotope Separation Chamber");
         this.add(NtmBlocks.MACHINE_MINING_LASER, "Mining Laser");
 
         /* Runde 133: der Teilchenbeschleuniger. */
@@ -3635,6 +3638,8 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("desc.gui.upgrade.power", " * \u00a71Power-Saving\u00a7r: Stacks to level 3");
         this.add("container.rtg", "RT Generator");
         this.add("container.radiolysis", "RTG and Radiolysis Chamber");
+        this.add("container.machineSILEX", "SILEX Isotope Separation Chamber");
+        this.add("desc.gui.silex.void", "Void contents");
         this.add("desc.gui.radiolysis.desc", "\u00a79Description\u00a7r$This RTG is more efficient then others, and$comes equipped with a radiolysis chamber for$cracking.");
         this.add("container.cable_diode", "Red Copper Diode");
         this.add("desc.gui.rtg.heat", "\u00a7eCurrent heat level: %s");

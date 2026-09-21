@@ -348,6 +348,23 @@ public class AssemblyMachineRecipes extends GenericRecipes<GenericRecipe> {
                 .inputItems(new ComparableStack(NtmItems.POWDER_PLUTONIUM.get(), 1)));
 
         /*
+         * Die SILEX, Runde 286. Original: ass.silex, 400 Ticks. Sechzehn Quarzglas, acht
+         * Stahlgussplatten, vier Desh, acht Kautschuk, acht Stahlrohre.
+         *
+         * ABWEICHUNG: das Original nennt Platten, Barren und Rohre ueber das Erzwoerterbuch;
+         * der Port nennt die Gegenstaende selbst. Der zweite Bauplan des Originals -- derselbe
+         * Ausgang aus Ferroplatten statt Stahl -- faellt weg, wie bei allen Maschinen davor.
+         */
+        this.register(new GenericRecipe("ass.silex").setup(400, 100).outputItems(new ItemStack(NtmBlocks.MACHINE_SILEX, 1))
+                .inputItems(
+                        new ComparableStack(NtmBlocks.GLASS_QUARTZ.get(), 16),
+                        NtmItems.castPlateIngredient(CastPlateItem.Type.STEEL, 8),
+                        new ComparableStack(NtmItems.INGOT_DESH.get(), 4),
+                        new ComparableStack(NtmItems.INGOT_RUBBER.get(), 8),
+                        new ComparableStack(NtmItems.PIPE_STEEL.get(), 8)
+                ));
+
+        /*
          * Original "ass.gascent", Runde 115. ABWEICHUNGEN: das Zentrifugenelement gibt es im
          * Port nicht. Statt vier Stueck davon stehen hier seine Bestandteile ausgeschrieben --
          * das Original baut eines aus vier Duraplatten, vier Titanplatten und einem Motor, also

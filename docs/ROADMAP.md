@@ -13484,3 +13484,47 @@ nächsten Lesen nicht wieder „korrigiert" wird.
 
 **44 Tore grün.** Was fehlt, ist die Maschine selbst — und mit ihr der letzte Erfolg, denn der
 hängt an ihrem **Bau**, nicht an ihrem Betrieb.
+
+## Runde 286 — Die SILEX: 61 von 61
+
+Die Maschine, auf die der letzte Erfolg wartete. Fünf Blöcke lang, drei breit, zwei hoch, mit
+zwei Anschlüssen quer über dem Kern — dort, wo im Modell die Rohre sitzen.
+
+### Sie kann von sich aus nichts
+
+Ihr Feld `mode` wird **an jedem Tickende auf NULL zurückgesetzt**. Nur ein FEL über ihr setzt es
+neu, und der kommt erst in der nächsten Runde. Bis dahin steht die Maschine da, nimmt Peroxid
+an, löst ihren Eingang darin — und wartet auf Licht. Das ist kein halber Port, sondern genau
+das Verhalten des Originals: ohne Strahl laufen nur Rezepte ohne Wellenlängenanforderung, und
+davon gibt es keines.
+
+### Die Ausgabe wird nicht gewürfelt
+
+Ein Zähler springt nach jedem Ausgang um **137** weiter — eine Primzahl — und wird auf die
+Summe der Gewichte umgebrochen. Über viele Durchgänge trifft er damit genau die Anteile des
+Rezepts. Deshalb sind die Zahlen aus Runde 285 Zusagen und keine Hoffnungen.
+
+### Eine Tabelle, die nichts tat
+
+Das Original führt neben den Rezepten eine zweite Tabelle mit drei Flüssigkeiten — UF6, PUF6,
+Todeslösung — und fragt sie, ehe es nach einem Rezept sucht. Nachgemessen: sie bildet jede der
+drei auf **ihr eigenes Sinnbild** ab, also auf genau das, was der zweite Zweig ohnehin bildet,
+und für alle drei findet sich ein Rezept (die Hexafluoride über die Übersetzung auf ihren
+Barren, die Todeslösung unmittelbar). Die Tabelle ändert nichts; im Port steht sie nicht, und
+im Kommentar steht, warum.
+
+### Die Welle
+
+Quer über das Fenster läuft eine Sinuskurve, deren Frequenz sich mit jeder Stufe der
+Wellenlänge verdoppelt: Infrarot schwingt träge, Digamma flimmert. Sichtbares Licht hat keine
+feste Farbe, sondern schillert durch den Farbkreis. Ohne Kristall steht gar keine Welle da —
+und das ist die ehrlichste Anzeige, die diese Maschine haben kann.
+
+### 61 von 61
+
+`achSILEX` hängt im Original am **Bau** der Maschine, nicht an ihrem Betrieb
+(`AchievementHandler.craftingAchievements`). Mit dem Block ist er fällig. Die Erfolgsliste ist
+damit geschlossen; Aufgabe #150 ist erledigt.
+
+**44 Tore grün.** Offen für die nächste Runde: der FEL, der ihr den Strahl gibt, und die
+JEI-Ansicht ihrer 295 Rezepte.

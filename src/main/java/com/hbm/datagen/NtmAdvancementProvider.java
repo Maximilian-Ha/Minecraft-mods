@@ -50,13 +50,9 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
  * Stelle im Port, die ihn feuert -- den Tod durch Strahlung, das Betreten des roten Zimmers,
  * den Start einer Sojus.
  *
- * STAND NACH RUNDE 284: 60 von 61. Der EINE uebrige wartet auf ein Teil, das der Port noch
- * nicht hat -- und das ist nachgemessen, nicht geschaetzt:
- *
- *   SILEX                             die Maschine. Sie faellt, sobald machine_silex baubar
- *                                     ist: das Original haengt den Erfolg an den BAU
- *                                     (AchievementHandler.craftingAchievements), nicht an
- *                                     den Betrieb.
+ * STAND NACH RUNDE 286: 61 von 61. Die Liste ist geschlossen. Der letzte -- SILEX -- hing an
+ * der Maschine selbst, und die steht seit dieser Runde; wie im Original faellt er beim BAU
+ * (AchievementHandler.craftingAchievements), nicht beim Betrieb.
  *
  * DIE VIER BOSSE KAMEN IN DEN RUNDEN 280 BIS 283: der Maskenmann, das Strahlenbiest, der
  * Wurm und das UFO.
@@ -96,7 +92,8 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
  * Koordinate (x, y); 1.21 legt den Baum selbst aus der Vorgaengerkette. Die Kette ist
  * uebernommen, die Koordinaten entfallen ersatzlos.
  *
- * NICHT DABEI: achSILEX -- machine_silex gibt es im Port nicht. achPotato kam in Runde 274
+ * NICHT MEHR OFFEN: achSILEX stand hier lange als "machine_silex gibt es im Port nicht". Seit
+ * Runde 286 gibt es sie. achPotato kam in Runde 274
  * dazu: die Kartoffelbatterien sind dort in BatteryPackType nachgetragen. achChicagoPile steht seit Runde 258 dabei: sein Symbol war der
  * Grund fuer die Zurueckstellung, nicht sein Ausloeser, und ein Symbol laesst sich
  * ersetzen.
@@ -143,7 +140,13 @@ public class NtmAdvancementProvider extends AdvancementProvider {
 
             erfolg(speichern, helper, desh, "gas_cent", NtmItems.INGOT_URANIUM_FUEL.get(), false);
             AdvancementHolder schrab = erfolg(speichern, helper, desh, "schrab", NtmItems.INGOT_SCHRABIDIUM.get(), false);
-            erfolg(speichern, helper, desh, "acidizer", NtmBlocks.MACHINE_CRYSTALLIZER.get(), false);
+            AdvancementHolder acidizer = erfolg(speichern, helper, desh, "acidizer", NtmBlocks.MACHINE_CRYSTALLIZER.get(), false);
+
+            // DIE SILEX, RUNDE 286. Der letzte Erfolg der Liste. Im Original haengt er an
+            // achAcidizer und wird beim BAU vergeben (AchievementHandler.craftingAchievements),
+            // nicht beim Betrieb -- das Gegenstueck dazu ist hier wie ueberall das Stueck im
+            // Inventar.
+            erfolg(speichern, helper, acidizer, "silex", NtmBlocks.MACHINE_SILEX.get(), false);
 
             // DIE SOJUS, RUNDE 277. Beide haengen im Original an achDesh und tragen beide
             // setSpecial(). Die Symbole sind die des Originals: die Ofenkartoffel fuer den,
