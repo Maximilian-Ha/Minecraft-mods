@@ -55,7 +55,9 @@ public class GlyphidHiveFeature extends Feature<NoneFeatureConfiguration> {
 
             if(!zustand.isFaceSturdy(level, darunter, Direction.UP)) continue;
 
-            GlyphidHive.generateSmall(level.getLevel(), new BlockPos(x, y + k, z),
+            /* NICHT level.getLevel(): der echte ServerLevel aus dem worldgen-Faden heraus
+             * laesst den Server in der Vorbereitung des Startgebiets haengen (CI 493). */
+            GlyphidHive.generateSmall(level, new BlockPos(x, y + k, z),
                     context.random(), context.random().nextInt(10) == 0, true);
             return true;
         }

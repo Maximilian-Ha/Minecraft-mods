@@ -10,7 +10,7 @@ import com.hbm.items.weapon.sedna.factory.GunFactory.Ammo;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 /**
@@ -43,7 +43,7 @@ public class LootGenerator {
      * Legt die Beute auf den Sockel an der angegebenen Stelle. Steht dort kein Sockel oder
      * liegt schon etwas darauf, geschieht nichts -- so wie im Original.
      */
-    public static void applyLoot(Level level, BlockPos pos, String name) {
+    public static void applyLoot(LevelAccessor level, BlockPos pos, String name) {
 
         BlockEntity be = level.getBlockEntity(pos);
         if(!(be instanceof LootDecoBlockEntity sockel)) return;

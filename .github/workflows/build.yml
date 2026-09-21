@@ -198,6 +198,11 @@ jobs:
           chmod +x ./tools/nbtsuper-check.sh
           ./tools/nbtsuper-check.sh
 
+      - name: Check world generation level access
+        run: |
+          chmod +x ./tools/worldgen-check.sh
+          ./tools/worldgen-check.sh
+
       - name: Check forward references
         run: |
           chmod +x ./tools/forward-check.sh

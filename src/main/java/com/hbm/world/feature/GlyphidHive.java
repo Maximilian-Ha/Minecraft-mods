@@ -5,7 +5,7 @@ import com.hbm.util.LootGenerator;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SkullBlock;
@@ -30,6 +30,13 @@ import net.minecraft.world.level.block.state.BlockState;
  *
  * DER MITTELPUNKT liegt bei fuenf, fuenf und zwei: der Bau waechst um den Uebergabepunkt
  * herum und zwei Bloecke tief.
+ *
+ * WARUM LevelAccessor UND NICHT Level: beim Setzen durch den Weltgenerator laeuft das hier
+ * auf dem worldgen-Faden, und der hat nur einen WorldGenLevel. Wer sich von dort den echten
+ * ServerLevel holt und darauf schreibt, loest Chunk-Ladungen aus, die auf denselben Faden
+ * warten -- der Server haengt dann in der Vorbereitung des Startgebiets und kommt nie
+ * heraus. Genau das ist in CI 493 passiert: keine Ausnahme, nur Stillstand bei 34 Prozent.
+ * LevelAccessor deckt beide Faelle ab, den Weltgenerator und den Spaeher zur Laufzeit.
  */
 public class GlyphidHive {
 
@@ -108,7 +115,7 @@ public class GlyphidHive {
      * @param beute erlaubt den Beutesockel in der Kammer; ist sie false, steht dort
      *              stattdessen Baufleisch
      */
-    public static void generateSmall(Level level, BlockPos mitte, RandomSource zufall, boolean verseucht, boolean beute) {
+    public static void generateSmall(LevelAccessor level, BlockPos mitte, RandomSource zufall, boolean verseucht, boolean beute) {
 
         Block fleisch = verseucht ? NtmBlocks.GLYPHID_BASE_INFESTED.get() : NtmBlocks.GLYPHID_BASE.get();
         Block gelege = verseucht ? NtmBlocks.GLYPHID_SPAWNER_INFESTED.get() : NtmBlocks.GLYPHID_SPAWNER.get();
@@ -137,7 +144,7 @@ public class GlyphidHive {
     }
 
     /** Ein Feld der Kammer: Schaedel, Knochen oder Beute -- je ein Drittel. */
-    private static void kammer(Level level, BlockPos stelle, RandomSource zufall, Block fleisch, boolean beute) {
+    private static void kammer(LevelAccessor level, BlockPos stelle, RandomSource zufall, Block fleisch, boolean beute) {
 
         int wurf = zufall.nextInt(3);
 
@@ -146,7 +153,10 @@ public class GlyphidHive {
              * und dreht ihn auf eine von sechzehn Richtungen. */
             BlockState schaedel = Blocks.SKELETON_SKULL.defaultBlockState()
                     .setValue(SkullBlock.ROTATION, zufall.nextInt(16));
-            level.setBlock(stelle, schaedel, 3);
+            /* Flagge 2 statt der 3 des Originals: die 3 benachrichtigt die Nachbarn, und
+             * das ist waehrend der Weltgenerierung derselbe Fallstrick wie oben -- es kann
+             * weitere Chunks nachladen. Der Blockinhalt entsteht auch mit der 2. */
+            level.setBlock(stelle, schaedel, 2);
             return;
         }
 

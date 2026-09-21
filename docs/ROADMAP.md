@@ -14512,3 +14512,53 @@ Damit ist **die Glyphiden-Familie vollständig**: neun Klassen, der Bau, das Gel
 Schwarm, die Beute — und ein Weg, auf dem all das in einer neuen Welt zu finden ist.
 
 **47 Tore grün.**
+
+---
+
+## Runde 305 — CI-Fix 493: ein Fehler ohne Fehlermeldung, und das 48. Tor
+
+CI 493 war rot, und das Protokoll enthielt **keine einzige Ausnahme**. Der Server blieb
+zwanzig Minuten lang bei
+
+```
+[worldgen/INFO] Preparing spawn area: 34%
+```
+
+stehen und lief in die Zeitgrenze. Kein Absturz, kein Hinweis, nichts, woran man sich
+festhalten könnte.
+
+### Was da passiert ist
+
+Ein Feature läuft auf dem **worldgen-Faden** und bekommt einen `WorldGenLevel` — der ist
+absichtlich eingeschränkt und schreibt nur in die Chunks, die gerade entstehen. Mein
+`GlyphidHiveFeature` holte sich davon mit `getLevel()` den **echten ServerLevel** und
+schrieb darauf. Das löst Chunk-Ladungen aus, die ihrerseits auf den worldgen-Faden warten.
+Ein Deadlock, der sich als Stillstand tarnt.
+
+Der Beweis ist sauber: Runde 303 (CI 492) war **ohne** die Weltgenerierung grün, Runde 304
+**mit** ihr hängt. Dazwischen liegt genau diese Datei.
+
+`GlyphidHive.generateSmall` nimmt jetzt einen `LevelAccessor` statt eines `Level` — das
+deckt beide Fälle ab, den Weltgenerator und den Späher zur Laufzeit. `LootGenerator.applyLoot`
+ebenso; es brauchte ohnehin nur `getBlockEntity` und `getRandom`.
+
+Dazu eine zweite, kleinere Stelle derselben Art: der Schädel in der Kammer wurde mit
+**Blockflagge 3** gesetzt, wie im Original. Die 3 benachrichtigt die Nachbarn, und das kann
+während der Weltgenerierung ebenfalls Chunks nachladen. Jetzt 2 — der Blockinhalt entsteht
+auch damit.
+
+### Das 48. Tor
+
+Ein Fehler, der zwanzig Minuten CI kostet und **keine Zeile Fehlermeldung** hinterlässt,
+gehört gefangen, bevor er in CI kommt. `tools/worldgen-check.sh` durchsucht jede Klasse
+unter `world/`, die von `Feature` erbt, nach `getLevel()` — außerhalb von Kommentaren, damit
+die Warnung nicht selbst anschlägt.
+
+Gemessen: **0 Funde bei 8 geprüften Features.** Setzt man den Aufruf aus CI 493 wieder ein,
+meldet das Tor genau `GlyphidHiveFeature.java`.
+
+Bemerkenswert daran: kein anderes der 47 Tore konnte das sehen. Es übersetzt sauber, es ist
+kein Namensproblem, kein fehlender Verweis. Nur der Server-Test fällt darüber — und der
+braucht zwanzig Minuten, um es zu merken.
+
+**48 Tore grün.**
