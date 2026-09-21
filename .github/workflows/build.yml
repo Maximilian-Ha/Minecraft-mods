@@ -183,6 +183,11 @@ jobs:
           chmod +x ./tools/signature-check.sh
           ./tools/signature-check.sh
 
+      - name: Check override visibility
+        run: |
+          chmod +x ./tools/access-check.sh
+          ./tools/access-check.sh
+
       - name: Check forward references
         run: |
           chmod +x ./tools/forward-check.sh

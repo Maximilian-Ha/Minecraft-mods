@@ -74,8 +74,11 @@ public class Quackos extends Duck {
         return false;
     }
 
+    /* OEFFENTLICH, nicht geschuetzt: Mob deklariert mobInteract als protected, Animal hebt es
+     * auf public. Wer hier protected schreibt, bekommt vom Uebersetzer ein "attempting to
+     * assign weaker access privileges" -- gemessen in CI-Lauf 479. */
     @Override
-    protected InteractionResult mobInteract(Player player, InteractionHand hand) {
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
 
         InteractionResult result = super.mobInteract(player, hand);
         if(result.consumesAction()) return result;
