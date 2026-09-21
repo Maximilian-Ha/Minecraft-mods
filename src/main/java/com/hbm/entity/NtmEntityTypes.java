@@ -3,6 +3,7 @@ package com.hbm.entity;
 import com.hbm.entity.effect.DigammaSpear;
 import com.hbm.entity.effect.BlackHole;
 import com.hbm.entity.grenade.Dynamite;
+import com.hbm.entity.item.WasteItemEntity;
 import com.hbm.entity.grenade.GrenadeUniversal;
 import com.hbm.entity.projectile.Boxcar;
 import com.hbm.entity.item.ParachuteCrate;
@@ -156,6 +157,18 @@ public class NtmEntityTypes {
                     .sized(0.6F, 1.8F)
                     .clientTrackingRange(16)
                     .build("ghost"));
+
+    /* Runde 290: der fallengelassene Atommuell. Unzerstoerbar, sonst ein gewoehnlicher
+     * liegender Gegenstand -- ein Viertelblock gross, kurze Verfolgungsweite, traege
+     * Nachfuehrung. */
+    public static final DeferredHolder<EntityType<?>, EntityType<WasteItemEntity>> WASTE_ITEM = ENTITY_TYPES.register(
+            "waste_item",
+            () -> EntityType.Builder.<WasteItemEntity>of(WasteItemEntity::new, MobCategory.MISC)
+                    .noSummon()
+                    .sized(0.25F, 0.25F)
+                    .clientTrackingRange(6)
+                    .updateInterval(20)
+                    .build("waste_item"));
 
     public static final DeferredHolder<EntityType<?>, EntityType<CreeperNuclear>> CREEPER_NUCLEAR =
             ENTITY_TYPES.register("creeper_nuclear",

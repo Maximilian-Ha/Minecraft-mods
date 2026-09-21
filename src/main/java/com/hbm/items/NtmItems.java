@@ -100,6 +100,7 @@ import com.hbm.items.machine.OrbitalAssemblyItem;
 import com.hbm.items.machine.PACoilItem;
 import com.hbm.items.special.NuclearWasteItem;
 import com.hbm.items.special.NuclearWasteItem.WasteClass;
+import com.hbm.items.special.WasteDropItem;
 import com.hbm.items.machine.PlateFuelItem;
 import com.hbm.items.machine.PlateFuelItem.FunctionType;
 import com.hbm.items.machine.ReactorSensorItem;
@@ -667,22 +668,22 @@ public class NtmItems {
     /* Runde 285: der kleine Staub. Er faellt in der SILEX an, wenn abgereicherter Abfall
      * zerlegt wird -- neun davon ergeben einen ganzen. */
     public static final DeferredItem<Item> DUST_TINY = ITEMS.register("dust_tiny", () -> new Item(new Item.Properties()));
-    public static final DeferredItem<Item> NUCLEAR_WASTE = ITEMS.register("nuclear_waste", () -> new Item(new Item.Properties()));
-    public static final DeferredItem<Item> NUCLEAR_WASTE_TINY = ITEMS.register("nuclear_waste_tiny", () -> new Item(new Item.Properties()));
-    public static final DeferredItem<Item> NUCLEAR_WASTE_VITRIFIED = ITEMS.register("nuclear_waste_vitrified", () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> NUCLEAR_WASTE = ITEMS.register("nuclear_waste", () -> new WasteDropItem(new Item.Properties()));
+    public static final DeferredItem<Item> NUCLEAR_WASTE_TINY = ITEMS.register("nuclear_waste_tiny", () -> new WasteDropItem(new Item.Properties()));
+    public static final DeferredItem<Item> NUCLEAR_WASTE_VITRIFIED = ITEMS.register("nuclear_waste_vitrified", () -> new WasteDropItem(new Item.Properties()));
 
     /* Runde 135: kurz- und langlebiger Abfall samt ihren abgeklungenen Fassungen. Die
      * Abfallklasse steckt als Metawert im Gegenstand, nicht in eigenen Registriernamen -- so
      * haelt es auch das Original. */
-    public static final DeferredItem<Item> NUCLEAR_WASTE_SHORT = ITEMS.register("nuclear_waste_short", () -> new NuclearWasteItem(new Item.Properties(), WasteClass.SHORT));
-    public static final DeferredItem<Item> NUCLEAR_WASTE_SHORT_TINY = ITEMS.register("nuclear_waste_short_tiny", () -> new NuclearWasteItem(new Item.Properties(), WasteClass.SHORT));
-    public static final DeferredItem<Item> NUCLEAR_WASTE_SHORT_DEPLETED = ITEMS.register("nuclear_waste_short_depleted", () -> new NuclearWasteItem(new Item.Properties(), WasteClass.SHORT));
-    public static final DeferredItem<Item> NUCLEAR_WASTE_SHORT_DEPLETED_TINY = ITEMS.register("nuclear_waste_short_depleted_tiny", () -> new NuclearWasteItem(new Item.Properties(), WasteClass.SHORT));
+    public static final DeferredItem<Item> NUCLEAR_WASTE_SHORT = ITEMS.register("nuclear_waste_short", () -> new NuclearWasteItem(new Item.Properties(), WasteClass.SHORT, false));
+    public static final DeferredItem<Item> NUCLEAR_WASTE_SHORT_TINY = ITEMS.register("nuclear_waste_short_tiny", () -> new NuclearWasteItem(new Item.Properties(), WasteClass.SHORT, false));
+    public static final DeferredItem<Item> NUCLEAR_WASTE_SHORT_DEPLETED = ITEMS.register("nuclear_waste_short_depleted", () -> new NuclearWasteItem(new Item.Properties(), WasteClass.SHORT, false));
+    public static final DeferredItem<Item> NUCLEAR_WASTE_SHORT_DEPLETED_TINY = ITEMS.register("nuclear_waste_short_depleted_tiny", () -> new NuclearWasteItem(new Item.Properties(), WasteClass.SHORT, false));
 
-    public static final DeferredItem<Item> NUCLEAR_WASTE_LONG = ITEMS.register("nuclear_waste_long", () -> new NuclearWasteItem(new Item.Properties(), WasteClass.LONG));
-    public static final DeferredItem<Item> NUCLEAR_WASTE_LONG_TINY = ITEMS.register("nuclear_waste_long_tiny", () -> new NuclearWasteItem(new Item.Properties(), WasteClass.LONG));
-    public static final DeferredItem<Item> NUCLEAR_WASTE_LONG_DEPLETED = ITEMS.register("nuclear_waste_long_depleted", () -> new NuclearWasteItem(new Item.Properties(), WasteClass.LONG));
-    public static final DeferredItem<Item> NUCLEAR_WASTE_LONG_DEPLETED_TINY = ITEMS.register("nuclear_waste_long_depleted_tiny", () -> new NuclearWasteItem(new Item.Properties(), WasteClass.LONG));
+    public static final DeferredItem<Item> NUCLEAR_WASTE_LONG = ITEMS.register("nuclear_waste_long", () -> new NuclearWasteItem(new Item.Properties(), WasteClass.LONG, true));
+    public static final DeferredItem<Item> NUCLEAR_WASTE_LONG_TINY = ITEMS.register("nuclear_waste_long_tiny", () -> new NuclearWasteItem(new Item.Properties(), WasteClass.LONG, true));
+    public static final DeferredItem<Item> NUCLEAR_WASTE_LONG_DEPLETED = ITEMS.register("nuclear_waste_long_depleted", () -> new NuclearWasteItem(new Item.Properties(), WasteClass.LONG, true));
+    public static final DeferredItem<Item> NUCLEAR_WASTE_LONG_DEPLETED_TINY = ITEMS.register("nuclear_waste_long_depleted_tiny", () -> new NuclearWasteItem(new Item.Properties(), WasteClass.LONG, true));
 
     /* Radioaktiver Schrott -- der Bodensatz des Radiothermalgenerators, und der einzige seiner
      * Brennstoffe, der im Port schon eine Quelle hat: der Schredder macht ihn aus Truemmern. */

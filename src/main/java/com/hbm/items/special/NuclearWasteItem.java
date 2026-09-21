@@ -20,24 +20,26 @@ import java.util.List;
  * und die entscheidet spaeter, was bei der Trennung herauskommt. Im Radiothermalgenerator zaehlt
  * sie nicht: dort ist jeder Abfall gleich viel wert.
  *
- * ER VERSCHWINDET NICHT. Liegt er auf dem Boden, bleibt er dort -- fuenf Minuten reichen nicht,
- * um ein Fass Atommuell loszuwerden. Das ist Absicht des Originals und hier uebernommen.
- *
- * ABWEICHUNG: das Original ersetzt den fallengelassenen Gegenstand durch eine eigene Entitaet,
- * die leuchtet und ihre Umgebung verstrahlt. Die gibt es im Port nicht; geblieben ist, dass der
- * Abfall nicht verfaellt.
+ * LANGLEBIGER ABFALL VERSCHWINDET NICHT. Liegt er auf dem Boden, bleibt er dort, und
+ * zerstoeren laesst er sich auch nicht -- das leistet die Grundklasse WasteDropItem.
+ * KURZLEBIGER ABFALL DAGEGEN SCHON: im Original leitet ItemWasteShort von Item ab, nur
+ * ItemWasteLong von ItemNuclearWaste. Diese Unterscheidung traegt der Port seit Runde 290 im
+ * Wahrheitswert persistent; vorher galt die lange Regel fuer beide.
  *
  * ABWEICHUNG: eine Textur je Gegenstand, nicht je Klasse -- so steht es auch im Original. Die
  * Klasse steht nur im Hinweistext.
  */
-public class NuclearWasteItem extends Item implements IMetaItem {
+public class NuclearWasteItem extends WasteDropItem implements IMetaItem {
 
     /** Wieviele Klassen dieser Gegenstand kennt; alles darueber wird umgebrochen. */
     private final WasteClass[] classes;
+    /** Langlebiger Abfall bleibt liegen und ist unzerstoerbar, kurzlebiger nicht. */
+    private final boolean persistent;
 
-    public NuclearWasteItem(Properties properties, WasteClass[] classes) {
+    public NuclearWasteItem(Properties properties, WasteClass[] classes, boolean persistent) {
         super(properties.component(NtmDataComponents.META.get(), 0));
         this.classes = classes;
+        this.persistent = persistent;
     }
 
     public WasteClass[] getClasses() {
@@ -62,10 +64,18 @@ public class NuclearWasteItem extends Item implements IMetaItem {
         components.add(Component.literal(this.getWasteClass(stack).label).withStyle(ChatFormatting.ITALIC));
     }
 
-    /** Atommuell verfaellt nicht, egal wie lange er herumliegt. */
+    @Override
+    public boolean hasCustomEntity(ItemStack stack) {
+        return this.persistent;
+    }
+
+    /** Fuenf Minuten -- die Lebensdauer, die jeder gewoehnliche Gegenstand am Boden hat. */
+    private static final int VANILLA_LIFESPAN = 6000;
+
+    /** Langlebiger Abfall verfaellt nicht, kurzlebiger so schnell wie jeder Gegenstand. */
     @Override
     public int getEntityLifespan(ItemStack stack, Level level) {
-        return Integer.MAX_VALUE;
+        return this.persistent ? super.getEntityLifespan(stack, level) : VANILLA_LIFESPAN;
     }
 
     /**

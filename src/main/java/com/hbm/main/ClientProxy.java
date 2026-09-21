@@ -54,6 +54,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.entity.ItemEntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -469,6 +470,8 @@ public class ClientProxy extends ServerProxy {
         EntityRenderers.register(NtmEntityTypes.FALLING_BLOCK.get(), RenderFallingBlockEntityNT::new);
         EntityRenderers.register(NtmEntityTypes.MOVING_ITEM.get(), RenderMovingItem::new);
         EntityRenderers.register(NtmEntityTypes.MOVING_PACKAGE.get(), RenderMovingPackage::new);
+        /* Runde 290: der Atommuell am Boden sieht aus wie jeder andere liegende Gegenstand. */
+        EntityRenderers.register(NtmEntityTypes.WASTE_ITEM.get(), ItemEntityRenderer::new);
         //mobs
         EntityRenderers.register(NtmEntityTypes.CREEPER_NUCLEAR.get(), CreeperNuclearRenderer::new);
         EntityRenderers.register(NtmEntityTypes.DUCK.get(), DuckRenderer::new);

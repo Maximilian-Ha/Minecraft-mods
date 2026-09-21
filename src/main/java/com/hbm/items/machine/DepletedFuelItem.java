@@ -6,6 +6,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import com.hbm.inventory.MetaHelper;
 import com.hbm.items.ICustomItemModelRegister;
 import com.hbm.items.IMetaItem;
+import com.hbm.items.special.WasteDropItem;
 import com.hbm.items.component.NtmDataComponents;
 import com.hbm.main.NuclearTechMod;
 import net.minecraft.ChatFormatting;
@@ -29,11 +30,10 @@ import java.util.List;
  *
  * Der Zustand steckt wie im Original in einer Zahl: null ist abgekuehlt, eins ist heiss.
  *
- * ABWEICHUNG: das Original leitet von ItemNuclearWaste ab, damit fallen gelassener Abfall zu
- * einer EntityItemWaste wird, die nie verfaellt. Diese Entitaet ist noch nicht portiert -- wie
- * bei den RBMK-Pellets in Runde 32.
+ * Wie im Original leitet die Klasse von der Muell-Grundlage ab: fallen gelassener Abfall
+ * verfaellt nicht und laesst sich nicht zerstoeren (Runde 290).
  */
-public class DepletedFuelItem extends Item implements IMetaItem, ICustomItemModelRegister {
+public class DepletedFuelItem extends WasteDropItem implements IMetaItem, ICustomItemModelRegister {
 
     /** Abgekuehlt. */
     public static final int COOL = 0;

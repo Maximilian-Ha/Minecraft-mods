@@ -13726,3 +13726,44 @@ sie erben, steht in der Bibliothek. Gemessen sind das 176 der 11733 Aufrufstelle
 `MobSpawnSystem.java:119` und sonst nichts.
 
 **46 Tore grün.**
+
+## Runde 290 — Der Müll, den man nicht los wird
+
+Im Original gibt es eine winzige Entität, `EntityItemWaste`, und sie tut genau **eine** Sache:
+sie lässt sich nicht zerstören. Zwei Überschreibungen, beide mit fester Antwort — mehr steht
+dort nicht. Der Port hatte sie nicht, und der Kommentar in `NuclearWasteItem` behauptete, sie
+**leuchte und verstrahle ihre Umgebung**. Das steht nirgends im Original. Nachgemessen, im
+Kommentar berichtigt und die Entität nachgereicht.
+
+### Was dabei auffiel: eine Unterscheidung, die der Port eingeebnet hatte
+
+Das Original hat drei Klassen, wo der Port eine hat:
+
+| Original | erbt von | Folge |
+|---|---|---|
+| `ItemNuclearWaste` | `Item` | verfällt nie, unzerstörbar am Boden |
+| `ItemWasteLong` | `ItemNuclearWaste` | ebenso |
+| `ItemWasteShort` | **`Item`** | verfällt nach fünf Minuten wie alles andere |
+
+Der Port gab **allen** Abfallsorten die unendliche Lebensdauer, auch dem kurzlebigen. Das ist
+jetzt berichtigt: `NuclearWasteItem` trägt einen Wahrheitswert `persistent`, und die vier
+kurzlebigen Gegenstände stehen auf `false`.
+
+Drei weitere Gegenstände lagen ebenfalls falsch herum: `nuclear_waste`, `nuclear_waste_tiny`
+und `nuclear_waste_vitrified` waren im Port **gewöhnliche Items** — im Original sind es
+`ItemNuclearWaste`. Sie hatten also nicht einmal die unendliche Lebensdauer. Auch das steht
+jetzt richtig.
+
+`DepletedFuelItem` und `RBMKPelletItem` tragen die Regel nun ebenfalls; bei beiden stand seit
+den Runden 32 und 135 ein „noch nicht portiert" im Kopf, das jetzt weg kann.
+
+### Wo die Unzerstörbarkeit wirklich herkommt
+
+Nicht aus der Entität allein. Die Entität fängt den Schaden ab, aber **dass der Müll liegen
+bleibt, kommt von `getEntityLifespan` des Gegenstandes** — auf 1.21 genau wie auf 1.7.10. Das
+ist im Kopf beider Klassen festgehalten, damit es niemand an der falschen Stelle sucht.
+
+Nicht übernommen: `trinitite` und `nuclear_waste_vitrified_tiny` gibt es im Port noch gar
+nicht; sie gehören zur offenen Gegenstandsliste, nicht hierher.
+
+**46 Tore grün.**

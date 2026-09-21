@@ -6,6 +6,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import com.hbm.inventory.MetaHelper;
 import com.hbm.items.ICustomItemModelRegister;
 import com.hbm.items.IMetaItem;
+import com.hbm.items.special.WasteDropItem;
 import com.hbm.items.component.NtmDataComponents;
 import com.hbm.main.NuclearTechMod;
 import net.minecraft.ChatFormatting;
@@ -27,12 +28,11 @@ import java.util.List;
  * Zustand steckt wie im Original in einer Zahl von 0 bis 9: die Einerstelle modulo fuenf
  * nennt den Abbrand, ab fuenf ist das Pellet zusaetzlich stark xenonvergiftet.
  *
- * ABWEICHUNG: das Original leitet von ItemNuclearWaste ab, damit fallen gelassene Pellets zu
- * einer EntityItemWaste werden, die nie verfaellt. Diese Entitaet ist noch nicht portiert;
- * bis dahin ist das Pellet ein gewoehnliches Item. Ebenso fehlt noch der Eintrag im
+ * Wie im Original leitet die Klasse von der Muell-Grundlage ab: fallen gelassene Pellets
+ * verfallen nicht und lassen sich nicht zerstoeren (Runde 290). Offen bleibt der Eintrag im
  * HazardSystem -- den tragen Staebe und Pellets gemeinsam nach, wenn die Strahlung drankommt.
  */
-public class RBMKPelletItem extends Item implements IMetaItem, ICustomItemModelRegister {
+public class RBMKPelletItem extends WasteDropItem implements IMetaItem, ICustomItemModelRegister {
 
     /** Voller Name des Brennstoffs, wird im Tooltip angezeigt. */
     public final String fullName;
