@@ -3138,6 +3138,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add(NtmBlocks.MACHINE_TOWER_LARGE, "Large Cooling Tower");
         this.add(NtmBlocks.MACHINE_CYCLOTRON, "Cyclotron");
         this.add(NtmBlocks.MACHINE_SILEX, "SILEX Isotope Separation Chamber");
+        this.add(NtmBlocks.MACHINE_FEL, "Free Electron Laser");
         this.add(NtmBlocks.MACHINE_MINING_LASER, "Mining Laser");
 
         /* Runde 133: der Teilchenbeschleuniger. */
@@ -3207,8 +3208,11 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("jei.category.hbmsntm.compressor", "Compressor");
         this.add("jei.category.hbmsntm.gas_centrifuge", "Gas Centrifuge");
         this.add("jei.category.hbmsntm.cyclotron", "Cyclotron");
+        this.add("jei.category.hbmsntm.silex", "SILEX Isotope Separation");
         this.add("jei.category.hbmsntm.book", "Black Book");
         this.add("jei.hbmsntm.cyclotron.antimatter", "%s mB antimatter");
+        this.add("jei.hbmsntm.silex.wavelength", "Requires: %s");
+        this.add("jei.hbmsntm.silex.solution", "%s mB solution, %s mB per output");
         this.add("jei.hbmsntm.gas_centrifuge.exhausted", "Depleted");
         this.add("jei.hbmsntm.gas_centrifuge.fast", "Requires overclocking upgrade");
         this.add(NtmBlocks.MACHINE_COMPRESSOR_COMPACT, "Compact Compressor");
@@ -3639,6 +3643,7 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("container.rtg", "RT Generator");
         this.add("container.radiolysis", "RTG and Radiolysis Chamber");
         this.add("container.machineSILEX", "SILEX Isotope Separation Chamber");
+        this.add("container.machineFEL", "Free Electron Laser");
         this.add("desc.gui.silex.void", "Void contents");
         this.add("desc.gui.radiolysis.desc", "\u00a79Description\u00a7r$This RTG is more efficient then others, and$comes equipped with a radiolysis chamber for$cracking.");
         this.add("container.cable_diode", "Red Copper Diode");

@@ -1481,6 +1481,7 @@ public class NtmCreativeTabs {
                         output.accept(NtmBlocks.MACHINE_TOWER_LARGE);
                         output.accept(NtmBlocks.MACHINE_CYCLOTRON);
                         output.accept(NtmBlocks.MACHINE_SILEX);
+                        output.accept(NtmBlocks.MACHINE_FEL);
                         output.accept(NtmBlocks.MACHINE_PA_SOURCE);
                         output.accept(NtmBlocks.MACHINE_PA_BEAMLINE);
                         output.accept(NtmBlocks.MACHINE_PA_RFC);

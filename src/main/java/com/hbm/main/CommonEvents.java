@@ -513,6 +513,7 @@ public class CommonEvents {
         event.register(NtmMenuTypes.MACHINE_GAS_CENT.get(), MachineGasCentScreen::new);
         event.register(NtmMenuTypes.MACHINE_CYCLOTRON.get(), MachineCyclotronScreen::new);
         event.register(NtmMenuTypes.MACHINE_SILEX.get(), MachineSILEXScreen::new);
+        event.register(NtmMenuTypes.MACHINE_FEL.get(), MachineFELScreen::new);
         event.register(NtmMenuTypes.MACHINE_PA_SOURCE.get(), MachinePASourceScreen::new);
         event.register(NtmMenuTypes.MACHINE_PA_RFC.get(), MachinePARFCScreen::new);
         event.register(NtmMenuTypes.MACHINE_PA_QUADRUPOLE.get(), MachinePAQuadrupoleScreen::new);

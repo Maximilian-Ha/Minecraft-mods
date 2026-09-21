@@ -842,6 +842,7 @@ public class NtmBlocks {
 
     public static final DeferredBlock<Block> MACHINE_CYCLOTRON = register("machine_cyclotron", () -> new MachineCyclotronBlock(BlockBehaviour.Properties.of().strength(0.6F, 100.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops().noOcclusion()));
     public static final DeferredBlock<Block> MACHINE_SILEX = register("machine_silex", () -> new MachineSILEXBlock(BlockBehaviour.Properties.of().strength(0.6F, 100.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops().noOcclusion()));
+    public static final DeferredBlock<Block> MACHINE_FEL = register("machine_fel", () -> new MachineFELBlock(BlockBehaviour.Properties.of().strength(0.6F, 100.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops().noOcclusion()));
 
     /* Der Teilchenbeschleuniger: sechs Bauteile, die einzeln nichts tun und nur zusammen einen Ring ergeben. */
     public static final DeferredBlock<Block> MACHINE_PA_SOURCE = register("machine_pa_source", () -> new MachinePASourceBlock(BlockBehaviour.Properties.of().strength(0.6F, 100.0F).sound(SoundType.METAL).mapColor(MapColor.METAL).requiresCorrectToolForDrops().noOcclusion()));

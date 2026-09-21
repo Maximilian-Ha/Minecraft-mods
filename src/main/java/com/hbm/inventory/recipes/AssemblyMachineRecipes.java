@@ -365,6 +365,25 @@ public class AssemblyMachineRecipes extends GenericRecipes<GenericRecipe> {
                 ));
 
         /*
+         * Der FEL, Runde 287. Original: ass.fel, 400 Ticks. Ein Lithium-Batteriepack,
+         * 64 Golddichtdraht, zwoelf Stahlgussplatten, sechzehn Kunststoff, vier polarisierte
+         * Glaeser, sechzehn Kondensatoren und vier Leiterplatten.
+         *
+         * ABWEICHUNG wie ueberall: das Erzwoerterbuch entfaellt, der zweite Bauplan aus
+         * Ferroplatten ebenfalls.
+         */
+        this.register(new GenericRecipe("ass.fel").setup(400, 100).outputItems(new ItemStack(NtmBlocks.MACHINE_FEL, 1))
+                .inputItems(
+                        new ComparableStack(NtmItems.BATTERY_PACK.get(), 1, BatteryPackItem.BatteryPackType.BATTERY_LITHIUM.ordinal()),
+                        new ComparableStack(NtmItems.WIRE_DENSE.get(), 64, WireDenseItem.Type.GOLD.meta),
+                        NtmItems.castPlateIngredient(CastPlateItem.Type.STEEL, 12),
+                        new ComparableStack(NtmItems.INGOT_POLYMER.get(), 16),
+                        new ComparableStack(NtmItems.PART_GENERIC.get(), 4, PartGenericItem.Type.GLASS_POLARIZED),
+                        new ComparableStack(NtmItems.CIRCUIT_CAPACITOR.get(), 16),
+                        new ComparableStack(NtmItems.CIRCUIT_PRINTED_BOARD.get(), 4)
+                ));
+
+        /*
          * Original "ass.gascent", Runde 115. ABWEICHUNGEN: das Zentrifugenelement gibt es im
          * Port nicht. Statt vier Stueck davon stehen hier seine Bestandteile ausgeschrieben --
          * das Original baut eines aus vier Duraplatten, vier Titanplatten und einem Motor, also

@@ -648,6 +648,7 @@ public class NtmBlockLootTableProvider extends BlockLootSubProvider {
         this.dropSelf(NtmBlocks.MACHINE_TOWER_LARGE.get());
         this.dropSelf(NtmBlocks.MACHINE_CYCLOTRON.get());
         this.dropSelf(NtmBlocks.MACHINE_SILEX.get());
+        this.dropSelf(NtmBlocks.MACHINE_FEL.get());
         this.dropSelf(NtmBlocks.MACHINE_PA_SOURCE.get());
         this.dropSelf(NtmBlocks.MACHINE_PA_BEAMLINE.get());
         this.dropSelf(NtmBlocks.MACHINE_PA_RFC.get());

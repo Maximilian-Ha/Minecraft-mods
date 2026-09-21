@@ -43,6 +43,7 @@ public class NtmMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<MachineMiningLaserMenu>> MACHINE_MINING_LASER = reg("machine_mining_laser", MachineMiningLaserMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<MachineCyclotronMenu>> MACHINE_CYCLOTRON = reg("machine_cyclotron", MachineCyclotronMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<MachineSILEXMenu>> MACHINE_SILEX = reg("machine_silex", MachineSILEXMenu::new);
+    public static final DeferredHolder<MenuType<?>, MenuType<MachineFELMenu>> MACHINE_FEL = reg("machine_fel", MachineFELMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<MachinePASourceMenu>> MACHINE_PA_SOURCE = reg("machine_pa_source", MachinePASourceMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<MachinePARFCMenu>> MACHINE_PA_RFC = reg("machine_pa_rfc", MachinePARFCMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<MachinePAQuadrupoleMenu>> MACHINE_PA_QUADRUPOLE = reg("machine_pa_quadrupole", MachinePAQuadrupoleMenu::new);

@@ -13528,3 +13528,52 @@ damit geschlossen; Aufgabe #150 ist erledigt.
 
 **44 Tore grün.** Offen für die nächste Runde: der FEL, der ihr den Strahl gibt, und die
 JEI-Ansicht ihrer 295 Rezepte.
+
+## Runde 287 — Der FEL gibt der SILEX ihr Licht
+
+Neun Blöcke lang, drei breit, und der Strom kommt hinten herein. Der Freie-Elektronen-Laser tut
+selbst nichts Nützliches: er schießt einen Strahl geradeaus, und was in dieser Bahn steht, hat
+ein Problem. Sein Zweck ist die Maschine aus Runde 286.
+
+### Der Kristall bestimmt alles
+
+Ohne Kristall im Schacht ist der Modus NULL, der Strahl bleibt aus und die Maschine zieht keinen
+Strom. Mit Kristall kostet ein Tick **1250 · 3^Stufe**: infrarot 3750, Digamma gut 300.000. Die
+Bahn ist 24 Blöcke lang und läuft einen Block über dem Kern; das erste Undurchsichtige hält sie
+auf und fängt mit einem Fünftel Wahrscheinlichkeit zu brennen an, sofern es nicht sprengfester
+als 75 ist.
+
+Wer in der Bahn steht: sichtbares Licht blendet **und** zündet (das Original schreibt hier einen
+absichtlichen Durchfall im `switch`), Infrarot und UV zünden, Gamma verstrahlt, Digamma tut das,
+was Digamma tut.
+
+### Zwei Funde beim Messen
+
+**Die ERR.-Anzeige kam nie zurück.** Das Original setzt `missingValidSilex` genau einmal auf
+`false` und nie wieder auf `true`. Nach dem ersten Treffer zeigt das Fenster also für immer
+LIVE, auch wenn die SILEX längst abgebaut ist. Hier wird die Marke vor jedem Durchlauf
+zurückgesetzt — damit zeigt das Fenster das, was sein Name sagt.
+
+**Ein Zweig, den niemand erreicht.** Das Original lässt Flüssigkeiten in der Bahn verdampfen.
+Der Zweig ist tot: eine Flüssigkeit ist nicht undurchsichtig, der Strahl ist im Zweig darüber
+schon durch sie hindurch. Er steht im Port nicht, und der Kommentar sagt, warum.
+
+### Zwei Tore haben mitgelesen
+
+`dupreg-check` fand, dass `block.fel` **längst angemeldet war** — als `FEL_LOOP`, samt
+Klangdefinition und `.ogg`, seit einer Runde, die den Klang schon vorbereitet hatte. Meine
+zweite Anmeldung hätte das Hochfahren geworfen.
+
+`offscreen-check` fand, dass `RenderFEL` ohne `shouldRenderOffScreen` dasteht. Ein großer
+Sichtkasten reicht dafür nicht — er kann nur zusätzlich wegschneiden. Der Strahl wäre
+verschwunden, sobald die Maschine selbst aus dem Bild fällt.
+
+### Und die Ansicht der 295 Rezepte
+
+Die SILEX hat jetzt ihre JEI-Kategorie: ein Eingang, bis zu sieben Ausgänge, unter jedem sein
+Anteil in Prozent. Das Original zeigt höchstens sechs und lässt deshalb bei den drei
+Schrabidiumpellets das Xenon weg; die Rezepte bleiben, wie sie sind, aber diese Ansicht kann
+sieben zeigen und zeigt sie auch.
+
+**44 Tore grün.** Der SILEX-Zweig ist damit vollständig: Rezepte, Maschine, Laser, Kristalle,
+Erfolg und Ansicht.

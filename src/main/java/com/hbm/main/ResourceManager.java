@@ -156,6 +156,7 @@ public class ResourceManager {
     // Zyklotron (Runde 163): je Sockel ein Bild fuer leer und eines fuer gesteckt
     public static final ResourceLocation CYCLOTRON_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/cyclotron.png");
     public static final ResourceLocation SILEX_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/silex.png");
+    public static final ResourceLocation FEL_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/fel.png");
     public static final ResourceLocation CYCLOTRON_ASHES_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/cyclotron_ashes.png");
     public static final ResourceLocation CYCLOTRON_ASHES_FILLED_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/cyclotron_ashes_filled.png");
     public static final ResourceLocation CYCLOTRON_BOOK_TEX = NuclearTechMod.withDefaultNamespace("textures/models/machines/cyclotron_book.png");
@@ -764,6 +765,7 @@ public class ResourceManager {
     public static IModelCustom radgen;
     public static IModelCustom cyclotron;
     public static IModelCustom silex;
+    public static IModelCustom fel;
 
     // Teilchenbeschleuniger (Runde 168)
     public static IModelCustom pa_source;
@@ -1107,6 +1109,7 @@ public class ResourceManager {
         radgen = new HFRWavefrontObject("models/obj/machines/radgen.obj").asVBO();
         cyclotron = new HFRWavefrontObject("models/obj/machines/cyclotron.obj").asVBO();
         silex = new HFRWavefrontObject("models/obj/machines/silex.obj").asVBO();
+        fel = new HFRWavefrontObject("models/obj/machines/fel.obj").asVBO();
 
         pa_source = new HFRWavefrontObject("models/obj/particleaccelerator/source.obj").asVBO();
         pa_beamline = new HFRWavefrontObject("models/obj/particleaccelerator/beamline.obj").asVBO();

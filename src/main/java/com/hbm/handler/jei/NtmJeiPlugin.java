@@ -77,6 +77,7 @@ public class NtmJeiPlugin implements IModPlugin {
                 new CompressorRecipeHandler(guiHelper),
                 new GasCentrifugeRecipeHandler(guiHelper),
                 new CyclotronRecipeHandler(guiHelper),
+                new SILEXRecipeHandler(guiHelper),
                 new BookRecipeHandler(guiHelper),
                 new ArcFurnaceRecipeHandler(guiHelper),
                 new CrucibleAlloyingRecipeHandler(guiHelper),
@@ -122,6 +123,7 @@ public class NtmJeiPlugin implements IModPlugin {
         registration.addRecipes(CompressorRecipeHandler.RECIPE_TYPE, CompressorRecipeHandler.getRecipes());
         registration.addRecipes(GasCentrifugeRecipeHandler.RECIPE_TYPE, GasCentrifugeRecipeHandler.getRecipes());
         registration.addRecipes(CyclotronRecipeHandler.RECIPE_TYPE, CyclotronRecipeHandler.getRecipes());
+        registration.addRecipes(SILEXRecipeHandler.RECIPE_TYPE, SILEXRecipeHandler.getRecipes());
         registration.addRecipes(BookRecipeHandler.RECIPE_TYPE, BookRecipeHandler.getRecipes());
         registration.addRecipes(ArcFurnaceRecipeHandler.RECIPE_TYPE, ArcFurnaceRecipeHandler.getRecipes());
         registration.addRecipes(CrucibleAlloyingRecipeHandler.RECIPE_TYPE, CrucibleRecipes.INSTANCE.recipeOrderedList);
@@ -286,6 +288,14 @@ public class NtmJeiPlugin implements IModPlugin {
         registration.addRecipeCatalyst(
                 NtmBlocks.MACHINE_CYCLOTRON.asItem(),
                 CyclotronRecipeHandler.RECIPE_TYPE
+        );
+        registration.addRecipeCatalyst(
+                NtmBlocks.MACHINE_SILEX.asItem(),
+                SILEXRecipeHandler.RECIPE_TYPE
+        );
+        registration.addRecipeCatalyst(
+                NtmBlocks.MACHINE_FEL.asItem(),
+                SILEXRecipeHandler.RECIPE_TYPE
         );
         registration.addRecipeCatalyst(
                 NtmItems.BOOK_OF_.get(),
