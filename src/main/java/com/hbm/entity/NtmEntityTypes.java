@@ -10,6 +10,7 @@ import com.hbm.entity.mob.BlockSpider;
 import com.hbm.entity.mob.Dummy;
 import com.hbm.entity.mob.FbiAgent;
 import com.hbm.entity.mob.FbiDrone;
+import com.hbm.entity.mob.ParasiteMaggot;
 import com.hbm.entity.mob.Pigeon;
 import com.hbm.entity.grenade.GrenadeUniversal;
 import com.hbm.entity.projectile.Boxcar;
@@ -199,6 +200,14 @@ public class NtmEntityTypes {
                     .sized(0.95F, 1.25F)
                     .clientTrackingRange(10)
                     .build("block_spider"));
+
+    /* Runde 297: die Made. Klein und flach, wie ein Silberfischchen. */
+    public static final DeferredHolder<EntityType<?>, EntityType<ParasiteMaggot>> PARASITE_MAGGOT = ENTITY_TYPES.register(
+            "parasite_maggot",
+            () -> EntityType.Builder.of(ParasiteMaggot::new, MobCategory.MONSTER)
+                    .sized(0.3F, 0.7F)
+                    .clientTrackingRange(8)
+                    .build("parasite_maggot"));
 
     /* Das Gespenst: Menschenmass, und es verschwindet, sobald jemand hinsieht. */
     public static final DeferredHolder<EntityType<?>, EntityType<Ghost>> GHOST = ENTITY_TYPES.register(

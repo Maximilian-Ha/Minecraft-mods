@@ -14032,3 +14032,34 @@ Entität, die es nicht gibt. Auf 1.21 steht der Wert am Block selbst und braucht
 Gegenüber.
 
 **46 Tore grün.**
+
+## Runde 297 — Die Made
+
+Neunundvierzig Zeilen, und zwei davon sind auf 1.21 nicht mehr übersetzbar.
+
+Die Made hat acht Leben, doppeltes Lauftempo und zwei Schaden, und sie greift jeden Spieler
+an, den sie sechzehn Blöcke weit sieht — **bei jedem Licht**. Sie kommt nicht von selbst in
+die Welt; im Original kriecht sie aus dem Glyphid, und der ist noch nicht portiert.
+
+### Zwei Stellen, die es nicht mehr gibt
+
+`getCreatureAttribute` sagte im Original, dass sie ein **Gliederfüßer** ist — davon hängt ab,
+ob das Mal der Gliederfüßer gegen sie wirkt. Auf 1.21 gibt es diese Methode nicht mehr; die
+Frage entscheidet der Tag `sensitive_to_bane_of_arthropods`, und der steht jetzt im
+Tag-Erzeuger.
+
+`isValidLightLevel` gab im Original **immer wahr** zurück, damit sie auch im Hellen erscheinen
+kann. Sie gehört zu `getCanSpawnHere` — und die Made erscheint nirgends von selbst. Eine Regel
+für eine Erscheinung, die es nicht gibt, wäre toter Code; der Port lässt sie weg und sagt
+warum.
+
+### Und eine, die der Port dazutun muss
+
+Ein `MeleeAttackGoal`. Das Original sucht sein Ziel in `findPlayerToAttack` und läuft in
+`EntityMob.attackEntity` von selbst hin; in 1.21 gibt es beides nicht mehr, und ohne diese
+Aufgabe stünde die Made nur da — dieselbe Stelle wie beim Untoten Soldaten in Runde 232.
+
+Beim Sterben kippt sie ganz um: `getDeathMaxRotation` gibt im Original hundertachtzig Grad
+statt der üblichen neunzig.
+
+**46 Tore grün.**

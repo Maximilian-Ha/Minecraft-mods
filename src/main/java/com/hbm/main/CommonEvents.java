@@ -21,6 +21,7 @@ import com.hbm.entity.mob.BlockSpider;
 import com.hbm.entity.mob.Dummy;
 import com.hbm.entity.mob.FbiAgent;
 import com.hbm.entity.mob.FbiDrone;
+import com.hbm.entity.mob.ParasiteMaggot;
 import com.hbm.entity.mob.Pigeon;
 import com.hbm.entity.mob.Ghost;
 import com.hbm.entity.mob.MaskMan;
@@ -250,6 +251,7 @@ public class CommonEvents {
         event.put(NtmEntityTypes.PIGEON.get(), Pigeon.createAttributes().build());
         event.put(NtmEntityTypes.DUMMY.get(), Dummy.createAttributes().build());
         event.put(NtmEntityTypes.BLOCK_SPIDER.get(), BlockSpider.createAttributes().build());
+        event.put(NtmEntityTypes.PARASITE_MAGGOT.get(), ParasiteMaggot.createAttributes().build());
         event.put(NtmEntityTypes.CREEPER_NUCLEAR.get(), CreeperNuclear.createAttributes().build());
         event.put(NtmEntityTypes.UNDEAD_SOLDIER.get(), UndeadSoldier.createAttributes().build());
         event.put(NtmEntityTypes.CYBER_CRAB.get(), CyberCrab.createAttributes().build());

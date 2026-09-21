@@ -30,5 +30,8 @@ public class NtmEntityTypeTagsProvider extends EntityTypeTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider provider) {
         this.tag(EntityTypeTags.UNDEAD).add(NtmEntityTypes.UNDEAD_SOLDIER.get());
+        /* Runde 297: die Made ist ein Gliederfuesser. Das Original sagt das ueber
+         * getCreatureAttribute, das es auf 1.21 nicht mehr gibt -- hier traegt es der Tag. */
+        this.tag(EntityTypeTags.SENSITIVE_TO_BANE_OF_ARTHROPODS).add(NtmEntityTypes.PARASITE_MAGGOT.get());
     }
 }
