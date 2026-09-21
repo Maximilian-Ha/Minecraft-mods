@@ -1,9 +1,13 @@
 package com.hbm.entity.missile;
 
 import com.hbm.entity.NtmEntityTypes;
+import com.hbm.explosion.ExplosionLarge;
 import com.hbm.items.ISatChip;
+import com.hbm.items.NtmItems;
 import com.hbm.particle.NtmParticleTypes;
 import com.hbm.particle.vanilla.NbtParticleOptions;
+import com.hbm.registry.NtmCriteria;
+import com.hbm.registry.NtmDamageTypes;
 import com.hbm.registry.NtmSoundEvents;
 import com.hbm.saveddata.satellite.XSatelliteRegistry;
 import com.hbm.util.SoundUtils;
@@ -15,6 +19,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.network.syncher.SynchedEntityData.Builder;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.Entity;
@@ -63,14 +68,15 @@ public class Soyuz extends Entity {
 
             for(Entity e : entities) {
                 e.igniteForSeconds(15);
-                // todo ModDamageSource.exhaust
-                e.hurt(e.damageSources().magic(), 100F);
+                e.hurt(e.damageSources().source(NtmDamageTypes.EXHAUST), 100F);
 
                 if(e instanceof Player) {
                     if(!memed) {
                         memed = true;
                         SoundUtils.playAtVec3(this.level, this.position(), NtmSoundEvents.ALARM_SOYUZED.get(), SoundSource.AMBIENT, 100F, 1F);
                     }
+
+                    if(e instanceof ServerPlayer spieler) NtmCriteria.marke(spieler, "soyuz");
                 }
             }
         } else {
@@ -97,6 +103,16 @@ public class Soyuz extends Entity {
         if(mode == 0) {
 
             ItemStack stack = this.payload.get(0);
+
+            // NEUNZIG MILLIONEN DOLLAR FUER EIN PLUESCHPONY. Das Original laesst die
+            // Rakete in diesem Fall nichts weiter tun, als fuenfundzwanzig Leuchtspuren
+            // zu versprengen -- und gibt JEDEM Spieler der Welt den Erfolg, nicht nur dem,
+            // der gestartet hat.
+            if(stack.is(NtmItems.FLAME_PONY.get()) && this.level instanceof ServerLevel serverLevel) {
+                ExplosionLarge.spawnTracers(serverLevel, this.getX(), this.getY(), this.getZ(), 25);
+                NtmCriteria.markeFuerAlle(serverLevel, "space");
+            }
+
             if(stack.getItem() instanceof ISatChip) {
                 int freq = ISatChip.getFreqS(stack);
                 if(this.level instanceof ServerLevel serverLevel) {

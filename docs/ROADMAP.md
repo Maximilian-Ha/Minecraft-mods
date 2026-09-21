@@ -13094,3 +13094,45 @@ dreht 180° um X und skaliert zweifach — der Speer hängt also mit der Spitze 
 fünfzehn Blöcke über seinem eigenen Mittelpunkt.
 
 **54 von 61.**
+
+## Runde 277 — Die Sojus stand zu Unrecht auf der Blockerliste
+
+Nach dem Speer blieben sieben Erfolge. Zwei davon, `soyuz` und `space`, führte die Liste unter
+„die Sojus" — als wäre die Rakete nicht portiert.
+
+Sie ist es. `com.hbm.entity.missile.Soyuz` steht seit einer früheren Runde im Port, samt
+Startrampe (`SoyuzLauncherBlockEntity`), Satellitenregister (`XSatelliteRegistry`),
+Abgaspartikeln und dem `alarm.soyuzed`-Schrei. Gefehlt haben **zwei Auslöserzeilen** und eine
+Schadensart.
+
+Das ist das **dritte Mal**, dass die Messung aus Runde 270 danebenlag — nach dem Radiumkaffee
+(Runde 271) und der Kartoffelbatterie (Runde 274). Alle drei Male hat dieselbe Messung nur
+nach Registriernamen gesucht und übersehen, dass die Sache unter einem anderen Namen oder in
+einer anderen Klasse längst da war.
+
+### Was gefehlt hat
+
+**Die Abgasfahne hatte keinen eigenen Schaden.** Im Port stand dort `damageSources().magic()`
+mit einem `todo`. Das Original nimmt `ModDamageSource.exhaust` mit `setDamageIsAbsolute()` und
+`setDamageBypassesArmor()`: wer beim Start unter der Rakete steht, verbrennt, ganz gleich, was
+er trägt. Jetzt gibt es `NtmDamageTypes.EXHAUST` mit den drei Tags, die dieses Paar in 1.21
+ausmachen — `BYPASSES_ARMOR`, `BYPASSES_EFFECTS`, `BYPASSES_RESISTANCE`.
+
+**Der erste Erfolg** fällt genau dort: Spieler in der Abgasfahne, jeden Tick.
+
+**Der zweite Erfolg** hing an einem Zweig, den der Port gar nicht hatte. Liegt beim Start ein
+`flame_pony` in Nutzlastschacht 0, tut die Rakete im Orbit nichts weiter, als fünfundzwanzig
+Leuchtspuren zu versprengen — und gibt **jedem Spieler der Welt** den Erfolg, nicht nur dem,
+der gestartet hat. Neunzig Millionen Dollar für ein Plüschpony.
+
+### Was noch offen bleibt
+
+Fünf Erfolge: die vier Bosse (`EntityRADBeast`, `EntityMaskMan`, `EntityBOTPrimeHead`,
+`EntityUFO` — keine davon portiert) und `SILEX`. Für die SILEX gilt die Begründung geprüft:
+ihre `TileEntitySILEX` hat ein Feld `hasLaser` und vergleicht `recipe.laserStrength` mit ihrem
+eigenen `mode` — sie braucht den FEL wirklich, das ist keine Vermutung.
+
+Offen geblieben ist auch das zweite `todo` der Sojus: die Landekapsel (`EntitySoyuzCapsule`
+samt `soyuz_capsule`-Block). Sie hängt an keinem Erfolg.
+
+**56 von 61.**

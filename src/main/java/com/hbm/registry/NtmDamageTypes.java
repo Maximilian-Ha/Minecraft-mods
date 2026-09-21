@@ -47,6 +47,10 @@ public interface NtmDamageTypes {
      *  absolut und ruestungsdurchdringend -- die Kybernetik im Schaedel hoert auf zu
      *  arbeiten, und dagegen hilft keine Panzerung. */
     ResourceKey<DamageType> LUNAR = key("lunar");
+    /** Die Abgasfahne der Sojus. Im Original ModDamageSource.exhaust: setDamageIsAbsolute()
+     *  und setDamageBypassesArmor() -- wer beim Start unter der Rakete steht, verbrennt,
+     *  ganz gleich, was er traegt. */
+    ResourceKey<DamageType> EXHAUST = key("exhaust");
 
     ResourceKey<DamageType> PHYSICAL = key("physical");
     ResourceKey<DamageType> FIRE = key("fire");
@@ -82,6 +86,7 @@ public interface NtmDamageTypes {
         context.register(BOXCAR, new DamageType("boxcar", 0.1F));
         context.register(BOAT, new DamageType("boat", 0.1F));
         context.register(LUNAR, new DamageType("lunar", 0.1F));
+        context.register(EXHAUST, new DamageType("exhaust", 0.1F));
         context.register(MUD_POISONING, new DamageType("mudPoisoning", 0.1F));
 
         context.register(PHYSICAL, new DamageType("sednaPhysical", 0.1F));

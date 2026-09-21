@@ -49,13 +49,14 @@ public class NtmDamageTypeTagsProvider extends DamageTypeTagsProvider {
                         NtmDamageTypes.BROADCAST,
                         NtmDamageTypes.BOXCAR,
                         NtmDamageTypes.BOAT,
-                        NtmDamageTypes.LUNAR
+                        NtmDamageTypes.LUNAR,
+                        NtmDamageTypes.EXHAUST
                 );
 
         // Gegenstueck zu setDamageIsAbsolute() des Originals: der Turbofan ignoriert
         // Resistenz und Schutzeffekte.
-        this.tag(DamageTypeTags.BYPASSES_EFFECTS).add(NtmDamageTypes.TURBOFAN, NtmDamageTypes.CLOUD, NtmDamageTypes.ELECTRICITY, NtmDamageTypes.BROADCAST, NtmDamageTypes.BOXCAR, NtmDamageTypes.BOAT, NtmDamageTypes.LUNAR);
-        this.tag(DamageTypeTags.BYPASSES_RESISTANCE).add(NtmDamageTypes.TURBOFAN, NtmDamageTypes.CLOUD, NtmDamageTypes.ELECTRICITY, NtmDamageTypes.BROADCAST, NtmDamageTypes.BOXCAR, NtmDamageTypes.BOAT, NtmDamageTypes.LUNAR);
+        this.tag(DamageTypeTags.BYPASSES_EFFECTS).add(NtmDamageTypes.TURBOFAN, NtmDamageTypes.CLOUD, NtmDamageTypes.ELECTRICITY, NtmDamageTypes.BROADCAST, NtmDamageTypes.BOXCAR, NtmDamageTypes.BOAT, NtmDamageTypes.LUNAR, NtmDamageTypes.EXHAUST);
+        this.tag(DamageTypeTags.BYPASSES_RESISTANCE).add(NtmDamageTypes.TURBOFAN, NtmDamageTypes.CLOUD, NtmDamageTypes.ELECTRICITY, NtmDamageTypes.BROADCAST, NtmDamageTypes.BOXCAR, NtmDamageTypes.BOAT, NtmDamageTypes.LUNAR, NtmDamageTypes.EXHAUST);
 
         this.tag(DamageTypeTags.IS_PROJECTILE)
                 .add(

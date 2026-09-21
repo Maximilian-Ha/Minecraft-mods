@@ -50,17 +50,24 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
  * Stelle im Port, die ihn feuert -- den Tod durch Strahlung, das Betreten des roten Zimmers,
  * den Start einer Sojus.
  *
- * STAND NACH RUNDE 275: 52 von 61. Die NEUN uebrigen warten auf Teile, die der Port noch
+ * STAND NACH RUNDE 277: 56 von 61. Die FUENF uebrigen warten auf Teile, die der Port noch
  * nicht hat -- und das ist nachgemessen, nicht geschaetzt:
  *
- *   soyuz, space                      die Sojus
  *   bossMeltdown, bossMaskman,        vier Bossentitaeten (EntityRADBeast, EntityMaskMan,
  *   bossWorm, bossUFO                 EntityBOTPrimeHead, EntityUFO) -- keine davon portiert
- *   digammaKauaiMoho, digammaUpOnTop  der Speer; der zweite haengt am ersten
- *   SILEX                             die Maschine, und die braucht erst den FEL
+ *   SILEX                             die Maschine, und die braucht erst den FEL: ihre
+ *                                     TileEntitySILEX prueft hasLaser und vergleicht die
+ *                                     Wellenlaenge des Rezepts mit ihrem eigenen Modus
  *
- * (Dieser Satz stand zwischen Runde 272 und 275 halb zerbrochen da -- eine Aufzaehlung, aus
- * der ein Glied entfernt wurde, ohne den Rest zu lesen. Jetzt steht die gemessene Liste.)
+ * (Diese Aufzaehlung stand zwischen Runde 272 und 275 halb zerbrochen da -- ein Glied wurde
+ * entfernt, ohne den Rest zu lesen. Seit Runde 275 steht hier die gemessene Liste.)
+ *
+ * DIE SOJUS STAND HIER ZU UNRECHT (berichtigt in Runde 277) -- das dritte Mal, dass die
+ * Messung aus Runde 270 danebenlag. Sie ist als Soyuz samt Startrampe, Satellitenregister und
+ * Abgasfahne portiert; gefehlt haben nur zwei Ausloeserzeilen und die Schadensart der
+ * Abgasfahne. Der zweite Erfolg haengt am Plueschpony als Nutzlast.
+ *
+ * DER SPEER KAM IN RUNDE 276 und brachte digammaKauaiMoho und digammaUpOnTop.
  *
  * DIE SCHWEFELSAEURE KAM IN RUNDE 273: sie ist der einzige Fluidblock des Originals mit
  * Schadensquelle, und ihr Erfolg faellt, wenn sich darin ein Schleimball aufloest.
@@ -130,6 +137,13 @@ public class NtmAdvancementProvider extends AdvancementProvider {
             erfolg(speichern, helper, desh, "gas_cent", NtmItems.INGOT_URANIUM_FUEL.get(), false);
             AdvancementHolder schrab = erfolg(speichern, helper, desh, "schrab", NtmItems.INGOT_SCHRABIDIUM.get(), false);
             erfolg(speichern, helper, desh, "acidizer", NtmBlocks.MACHINE_CRYSTALLIZER.get(), false);
+
+            // DIE SOJUS, RUNDE 277. Beide haengen im Original an achDesh und tragen beide
+            // setSpecial(). Die Symbole sind die des Originals: die Ofenkartoffel fuer den,
+            // der in der Abgasfahne steht, die Rakete fuer den, der ein Plueschpony in den
+            // Orbit schiesst.
+            erfolg(speichern, helper, desh, "soyuz", Items.BAKED_POTATO, true, "soyuz");
+            erfolg(speichern, helper, desh, "space", NtmItems.MISSILE_SOYUZ.get(), true, "space");
 
             AdvancementHolder centrifuge = erfolg(speichern, helper, polymer, "centrifuge", NtmBlocks.MACHINE_CENTRIFUGE.get(), false);
             erfolg(speichern, helper, centrifuge, "technetium", NtmItems.INGOT_TCALLOY.get(), false);

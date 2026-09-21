@@ -842,6 +842,10 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("advancements.hbmsntm.schrab.description", "Regardless, I wouldn't look at it for too long.");
         this.add("advancements.hbmsntm.acidizer.title", "Acidic");
         this.add("advancements.hbmsntm.acidizer.description", "oof ow my skin");
+        this.add("advancements.hbmsntm.soyuz.title", "Baked Potato");
+        this.add("advancements.hbmsntm.soyuz.description", "Become crunchy.");
+        this.add("advancements.hbmsntm.space.title", "The Final Front-ah forget it");
+        this.add("advancements.hbmsntm.space.description", "Fail in every way possible and waste funds worth 90 million dollars.");
         this.add("advancements.hbmsntm.centrifuge.title", "Centrifugal Force");
         this.add("advancements.hbmsntm.centrifuge.description", "centrifugal force is real don't @ me");
         this.add("advancements.hbmsntm.technetium.title", "Big Man, Pig Man");
