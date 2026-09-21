@@ -12642,3 +12642,81 @@ es im Original.
 Offen bleiben `SKELETON_GUN_TIER_2/3` (sie brauchen das KI-Ziel `EntityAIFireGun` — ohne es
 stünde ein Skelett mit einer Waffe da, die es nie abfeuert, und das wäre schlimmer als keines)
 und `BOMB_CRANE` (die C4-Ladung mit Zeitzünder).
+
+## Runde 268 — Das Schuss-Ziel, und eine Bedingung, die immer wahr ist
+
+`SKELETON_GUN_TIER_2` und `SKELETON_GUN_TIER_3` waren die letzten beiden auflösbaren Aktionen
+des Logikstabs. Beide hängen am KI-Ziel `EntityAIFireGun`: die Waffen des Mods werden über
+Tastendrücke bedient, nicht über den Bogen-Angriff der Vanilla-KI, und ohne ein Ziel, das
+diese Tasten drückt, stünde dort ein Skelett mit einer Waffe, die es nie abfeuert.
+
+Portiert als `com.hbm.entity.ai.FireGunGoal`. Die Waffen-API des Ports gibt jeden Aufruf des
+Originals her — `inventoryTick` statt `onUpdate`, sonst dieselben Namen —, und
+`MagazineBelt.getAmount` behandelt einen `null`-Behälter bereits, weil das Original dort
+denselben Sonderfall für genau diese KI hat.
+
+### Der Schalter ohne `break`
+
+`updateState` sieht im Original so aus (`EntityAIFireGun.java:98-110`):
+
+```java
+switch(state) {
+case FIRING: updateKeybind(gun, stack, EnumKeybind.GUN_PRIMARY);
+case RELOADING: updateKeybind(gun, stack, EnumKeybind.RELOAD);
+default: clearKeybinds(gun, stack); break;
+}
+```
+
+Kein Zweig hat ein `break`, jeder endet also in `clearKeybinds`. Druck und Loslassen derselben
+Taste landen damit in **einem** Tick.
+
+Wirkungslos ist das nicht — das Press-Lambda einer Waffe feuert unmittelbar
+(`Lego.LAMBDA_STANDARD_FIRE` ruft `doStandardFire` direkt auf) —, es hält die Taste nur nicht.
+Dauerfeuer kommt deshalb nicht aus dem gehaltenen Druck, sondern daraus, dass `tick()` während
+`FIRING` jeden Tick erneut drückt. Ein nachgetragenes `break` würde das Verhalten ändern;
+deshalb steht im Port derselbe Schalter, mit einem Kommentar, warum er so bleibt.
+
+### Die Bedingung, die immer wahr ist
+
+Der eigentliche Fund der Runde steht nicht im KI-Ziel, sondern in `MobUtil.assignItemsToEntity`
+(`MobUtil.java:253-256`):
+
+```java
+//Give skeleton AI if it has a gun
+if (slot == 0 && entity instanceof EntitySkeleton && pool == slotPools.get(0)) {
+	addFireTask((EntityLiving) entity);
+}
+```
+
+`slotPools` ist der **Parameter** der Methode, nicht ein statisches Feld, und `pool` ist
+`entry.getValue()` der laufenden Schleife. Bei `slot == 0` sind beide dasselbe Objekt — der
+dritte Teil der Bedingung ist immer wahr und prüft nichts.
+
+Damit bekommt **jedes** Skelett, dem eine der Listen etwas in die Hand legt, das Schuss-Ziel,
+nicht nur die beiden oberen Stufen. `SKELETON_GUN_TIER_1` schoss im Original also die ganze
+Zeit — nur mit den weiten Standardwerten (20 Blöcke Reichweite, 30 Grad Streuung) statt mit den
+scharf eingestellten der Stufen 2 und 3. Der Port hatte das bis hierher nicht; jetzt hat er es.
+
+Der Kommentar daneben stimmt außerdem nicht: er sagt "if it has a gun", die Bedingung fragt
+aber nur nach dem Platz, nicht nach dem Gegenstand. Ein Skelett mit einer Schaufel bekommt das
+Ziel ebenfalls. Schaden tut das nichts, denn `canUse()` verlangt eine Waffe und lässt das Ziel
+sonst schlafen — übernommen, wie es dasteht.
+
+### Warum die Doppelprüfung bleibt
+
+`MobUtil.schussZiel` hängt höchstens ein Ziel an. Im Original steht über der entsprechenden
+Methode der Kommentar, die Ziele würden sich sonst übereinanderstapeln — und genau das ist der
+Grund: die Stufen 2 und 3 hängen ihr eigenes Ziel **vor** dem Ausrüsten an, das Ausrüsten würde
+danach ein zweites, schwächeres nachlegen. Die Prüfung hat also auch im Port eine Ursache; sie
+steht nicht vorsorglich da.
+
+### Stand
+
+Acht der neun auflösbaren Aktionen sind live. Offen bleibt `BOMB_CRANE` (die C4-Ladung mit
+Zeitzünder — `BlockChargeC4` plus `TileEntityCharge`; der Port hat mit `ExplosiveChargeBlock`
+den Block, aber keine Block-Entität mit Zeitzünder). Die zehnte, `DEAD_GUY_BASE_TOWER`, kommt
+nie — ihre Anmeldezeile ist im Original auskommentiert und zudem anders geschrieben.
+
+Das ist nach `DEAD_GUY_BASE_TOWER` (Runde 265) und `slotPoolMasks` (Runde 267) der dritte Fund
+dieser Art im selben Teilsystem — mit dem Unterschied, dass dieser hier nicht nichts tut,
+sondern mehr, als der Kommentar daneben behauptet.

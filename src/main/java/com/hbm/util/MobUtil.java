@@ -1,10 +1,14 @@
 package com.hbm.util;
 
+import com.hbm.entity.ai.FireGunGoal;
 import com.hbm.items.NtmItems;
 
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.AbstractSkeleton;
+import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -164,6 +168,25 @@ public class MobUtil {
             }
 
             entity.setItemSlot(PLAETZE[eintrag.getKey()], stapel);
+
+            /* Ein Skelett, das etwas in die Hand bekommt, bekommt auch das Schuss-Ziel.
+             *
+             * DIE BEDINGUNG DES ORIGINALS IST EINE MEHR ALS NOETIG: dort steht
+             * "slot == 0 && entity instanceof EntitySkeleton && pool == slotPools.get(0)"
+             * (MobUtil.java:254). slotPools ist der Parameter, pool ist entry.getValue() --
+             * bei slot == 0 sind beide dasselbe Objekt, der dritte Teil ist also immer wahr.
+             * Hier steht darum nur, was er tatsaechlich prueft.
+             *
+             * DER KOMMENTAR DANEBEN STIMMT NICHT: er sagt "if it has a gun", die Bedingung
+             * fragt aber nur nach dem Platz, nicht nach dem Gegenstand. Ein Skelett mit einer
+             * Schaufel bekommt das Ziel ebenfalls. Schaden tut das nichts, denn canUse()
+             * verlangt eine Waffe und laesst das Ziel sonst schlafen. Uebernommen wie es ist.
+             *
+             * Die hoeheren Schuetzenstufen haengen ihr eigenes, schaerfer eingestelltes Ziel
+             * vorher an; schussZiel() laesst dann kein zweites zu. */
+            if(eintrag.getKey() == 0 && entity instanceof AbstractSkeleton skelett) {
+                schussZiel(skelett, new FireGunGoal(skelett));
+            }
         }
     }
 
@@ -191,5 +214,26 @@ public class MobUtil {
 
     private static Eintrag e(Supplier<? extends Item> gegenstand, int gewicht) {
         return new Eintrag(gegenstand::get, gewicht);
+    }
+
+    /**
+     * Haengt einem Mob das Schuss-Ziel an, aber hoechstens eines.
+     *
+     * Der Kommentar des Originals an dieser Stelle lautet sinngemaess, die Ziele wuerden sich
+     * sonst uebereinanderstapeln -- die Aktionen des Logikstabs laufen mehrfach ueber dieselbe
+     * Kreatur. Die Pruefung davor steht deshalb auch hier.
+     *
+     * Die Fallwahrscheinlichkeit der Hand wird auf null gesetzt, damit die Skelette ihre
+     * Waffen nicht fallen lassen.
+     */
+    public static void schussZiel(Mob mob, FireGunGoal ziel) {
+
+        mob.setDropChance(EquipmentSlot.MAINHAND, 0F);
+
+        for(WrappedGoal vorhanden : mob.goalSelector.getAvailableGoals()) {
+            if(vorhanden.getGoal() instanceof FireGunGoal) return;
+        }
+
+        mob.goalSelector.addGoal(3, ziel);
     }
 }

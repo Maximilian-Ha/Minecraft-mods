@@ -4,6 +4,7 @@ import com.hbm.blockentity.SkeletonHolderBlockEntity;
 import com.hbm.blockentity.WandLogicBlockEntity;
 import com.hbm.blockentity.machine.LockableBaseBlockEntity;
 import com.hbm.blocks.NtmBlocks;
+import com.hbm.entity.ai.FireGunGoal;
 import com.hbm.items.NtmItems;
 import com.hbm.util.MobUtil;
 
@@ -31,20 +32,25 @@ import java.util.function.Consumer;
  * Portiert aus 1.7.10: com.hbm.world.gen.util.LogicBlockActions.
  *
  * NACHGEZAEHLT ueber die drei Bauwerke mit Logikstaeben (Kran, Fabrik, Turmsockel) nennen sie
- * ZEHN Aktionen, von denen das Original neun aufloesen kann. Sechs davon stehen hier:
+ * ZEHN Aktionen, von denen das Original neun aufloesen kann. Acht davon stehen hier:
  *
- *   COLLAPSE_ROOF_RAD_5   die Decke faellt herunter
- *   POWER_LOCK            der Tresor nebenan schliesst sich zu
- *   DEAD_GUY_CRANE        aus dem Stab wird ein Skeletthalter mit einer Waffe
- *   ZOMBIE_TIER_1/2       drei Zombies, ausgeruestet aus den Listen von MobUtil
- *   SKELETON_GUN_TIER_1   drei Skelette mit Waffe und Fernkampfruestung
+ *   COLLAPSE_ROOF_RAD_5     die Decke faellt herunter
+ *   POWER_LOCK              der Tresor nebenan schliesst sich zu
+ *   DEAD_GUY_CRANE          aus dem Stab wird ein Skeletthalter mit einer Waffe
+ *   ZOMBIE_TIER_1/2         drei Zombies, ausgeruestet aus den Listen von MobUtil
+ *   SKELETON_GUN_TIER_1     drei Skelette mit Waffe und Fernkampfruestung
+ *   SKELETON_GUN_TIER_2/3   dieselben mit besseren Waffen; Stufe 3 traegt die bessere
+ *                           Ruestung und haelt auf doppelter Weite genauer
  *
- * DIE UEBRIGEN DREI warten auf Teile, die der Port noch nicht hat, und sind hier deshalb
- * NICHT eingetragen -- ein Stab mit ihrem Namen verschwindet, genau wie im Original einer mit
- * einem unbekannten Namen:
+ * DAS SCHUSS-ZIEL HAENGT NICHT NUR AN DEN BEIDEN OBEREN STUFEN. MobUtil.ausruesten gibt es
+ * jedem Skelett mit, das etwas in die Hand bekommt -- so wie im Original. Stufe 1 schiesst
+ * also auch, nur mit den weiten Standardwerten (20 Bloecke, 30 Grad daneben). Die beiden
+ * oberen Stufen haengen ihr eigenes, schaerfer eingestelltes Ziel vorher an.
  *
- *   SKELETON_GUN_TIER_2/3   das KI-Ziel EntityAIFireGun (ohne es stuende ein Skelett mit
- *                           einer Waffe da, die es nie abfeuert -- schlimmer als keines)
+ * DIE NEUNTE wartet auf ein Teil, das der Port noch nicht hat, und ist hier deshalb NICHT
+ * eingetragen -- ein Stab mit ihrem Namen verschwindet, genau wie im Original einer mit einem
+ * unbekannten Namen:
+ *
  *   BOMB_CRANE              die C4-Ladung mit Zeitzuender
  *
  * DIE ZEHNTE, DEAD_GUY_BASE_TOWER, kommt nie: im Original ist die einzige Zeile, die sie
@@ -57,9 +63,30 @@ public class LogicActions {
             "COLLAPSE_ROOF_RAD_5", LogicActions::deckeFaellt,
             "POWER_LOCK", LogicActions::stromschloss,
             "DEAD_GUY_CRANE", LogicActions::toterAmKran,
-            "ZOMBIE_TIER_1", be -> mobs(be, EntityType.ZOMBIE, MobUtil.GEWOEHNLICH, null),
-            "ZOMBIE_TIER_2", be -> mobs(be, EntityType.ZOMBIE, MobUtil.FORTGESCHRITTEN, null),
-            "SKELETON_GUN_TIER_1", be -> mobs(be, EntityType.SKELETON, MobUtil.WAFFEN_1, MobUtil.FERNKAMPF));
+            "ZOMBIE_TIER_1", be -> mobs(be, EntityType.ZOMBIE, MobUtil.GEWOEHNLICH, null, null),
+            "ZOMBIE_TIER_2", be -> mobs(be, EntityType.ZOMBIE, MobUtil.FORTGESCHRITTEN, null, null),
+            "SKELETON_GUN_TIER_1", be -> mobs(be, EntityType.SKELETON, MobUtil.WAFFEN_1, MobUtil.FERNKAMPF, null),
+            "SKELETON_GUN_TIER_2", be -> mobs(be, EntityType.SKELETON, MobUtil.WAFFEN_2, MobUtil.FERNKAMPF,
+                    mob -> MobUtil.schussZiel(mob, feuerZiel(mob, 50, 5F))),
+            "SKELETON_GUN_TIER_3", be -> mobs(be, EntityType.SKELETON, MobUtil.WAFFEN_3, MobUtil.FERNKAMPF_ADV,
+                    mob -> MobUtil.schussZiel(mob, feuerZiel(mob, 100, 1F))));
+
+    /**
+     * Das Schuss-Ziel der beiden hoeheren Schuetzenstufen.
+     *
+     * Die vier gemeinsamen Werte stehen so im Original (LogicBlockActions.java:203-208 und
+     * 228-233); auseinander gehen nur Weite und Zielgenauigkeit, und die kommen als Argument.
+     */
+    private static FireGunGoal feuerZiel(Mob wirt, double weite, float streuung) {
+        FireGunGoal ziel = new FireGunGoal(wirt);
+        ziel.mindestPause = 4;
+        ziel.hoechstPause = 5;
+        ziel.feuerdauer = 6;
+        ziel.zufallsStoss = false;
+        ziel.maximalWeite = weite;
+        ziel.streuung = streuung;
+        return ziel;
+    }
 
     /** Null, wenn der Name unbekannt ist -- dann loescht sich der Stab, wie im Original. */
     public static Consumer<WandLogicBlockEntity> finde(String name) {
@@ -176,7 +203,8 @@ public class LogicActions {
      * Kranes und der Fabrik heisst das: ein Spieler war nah genug.
      */
     private static void mobs(WandLogicBlockEntity be, EntityType<? extends Mob> art,
-            Map<Integer, List<MobUtil.Eintrag>> handListe, Map<Integer, List<MobUtil.Eintrag>> ruestungsListe) {
+            Map<Integer, List<MobUtil.Eintrag>> handListe, Map<Integer, List<MobUtil.Eintrag>> ruestungsListe,
+            Consumer<Mob> nachbehandlung) {
 
         if(be.phase != 1) return;
 
@@ -190,6 +218,7 @@ public class LogicActions {
             if(mob == null) return;
 
             mob.moveTo(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, 0F, 0F);
+            if(nachbehandlung != null) nachbehandlung.accept(mob);
             MobUtil.ausruesten(mob, handListe, serverLevel.random);
             if(ruestungsListe != null) MobUtil.ausruesten(mob, ruestungsListe, serverLevel.random);
             serverLevel.addFreshEntity(mob);
