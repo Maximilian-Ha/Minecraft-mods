@@ -58,6 +58,17 @@ public class FluidContainerRegistry {
              */
             if(type.getContainer(CD_Gastank.class) != null)
                 FluidContainerRegistry.registerContainer(new FluidContainer(MetaHelper.newStack(NtmItems.GAS_FULL.get(), 1, id), new ItemStack(NtmItems.GAS_EMPTY.get()), type, 1000));
+
+            /*
+             * Verteilerkanne und Glyphidendruese, Runde 301. Beide nehmen nur, was
+             * verspruehbar ist -- im Original steht diese Bedingung einmal und gilt fuer
+             * beide Zeilen (FluidContainerRegistry Z. 80-83). Die Druese fasst doppelt so
+             * viel wie die Kanne.
+             */
+            if(type.isDispersable()) {
+                FluidContainerRegistry.registerContainer(new FluidContainer(MetaHelper.newStack(NtmItems.DISPERSER_CANISTER.get(), 1, id), new ItemStack(NtmItems.DISPERSER_CANISTER_EMPTY.get()), type, 2000));
+                FluidContainerRegistry.registerContainer(new FluidContainer(MetaHelper.newStack(NtmItems.GLYPHID_GLAND.get(), 1, id), new ItemStack(NtmItems.GLYPHID_GLAND_EMPTY.get()), type, 4000));
+            }
         }
     }
 

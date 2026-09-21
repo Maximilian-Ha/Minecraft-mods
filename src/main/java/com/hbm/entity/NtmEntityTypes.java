@@ -2,6 +2,7 @@ package com.hbm.entity;
 
 import com.hbm.entity.effect.DigammaSpear;
 import com.hbm.entity.effect.BlackHole;
+import com.hbm.entity.grenade.DisperserCanister;
 import com.hbm.entity.grenade.Dynamite;
 import com.hbm.entity.grenade.DynamiteFishing;
 import com.hbm.entity.logic.Waypoint;
@@ -10,7 +11,9 @@ import com.hbm.entity.item.WasteItemEntity;
 import com.hbm.entity.mob.BlockSpider;
 import com.hbm.entity.mob.Dummy;
 import com.hbm.entity.mob.glyphid.Glyphid;
+import com.hbm.entity.mob.glyphid.GlyphidBehemoth;
 import com.hbm.entity.mob.glyphid.GlyphidBlaster;
+import com.hbm.entity.mob.glyphid.GlyphidBrenda;
 import com.hbm.entity.mob.glyphid.GlyphidBombardier;
 import com.hbm.entity.mob.glyphid.GlyphidBrawler;
 import com.hbm.entity.mob.glyphid.GlyphidDigger;
@@ -257,6 +260,24 @@ public class NtmEntityTypes {
                     .clientTrackingRange(16)
                     .build("glyphid_digger"));
 
+    /* Runde 301: der Behemoth. Zweieinhalb Bloecke breit, anderthalb hoch. */
+    public static final DeferredHolder<EntityType<?>, EntityType<GlyphidBehemoth>> GLYPHID_BEHEMOTH = ENTITY_TYPES.register(
+            "glyphid_behemoth",
+            () -> EntityType.Builder.of(GlyphidBehemoth::new, MobCategory.MONSTER)
+                    .sized(2.5F, 1.5F)
+                    .clientTrackingRange(16)
+                    .build("glyphid_behemoth"));
+
+    /* Runde 301: Brenda. Dieselbe Breite wie der Behemoth, aber hoeher -- und feuerfest,
+     * was im Original ihr Bauweg setzt (isImmuneToFire). */
+    public static final DeferredHolder<EntityType<?>, EntityType<GlyphidBrenda>> GLYPHID_BRENDA = ENTITY_TYPES.register(
+            "glyphid_brenda",
+            () -> EntityType.Builder.of(GlyphidBrenda::new, MobCategory.MONSTER)
+                    .sized(2.5F, 1.75F)
+                    .fireImmune()
+                    .clientTrackingRange(16)
+                    .build("glyphid_brenda"));
+
     /* Runde 298: der Merkpunkt. Unsichtbar, ohne Ausdehnung, und nur der Glyphid sieht ihn. */
     public static final DeferredHolder<EntityType<?>, EntityType<Waypoint>> WAYPOINT = ENTITY_TYPES.register(
             "waypoint",
@@ -478,6 +499,10 @@ public class NtmEntityTypes {
     /* Die Dynamitstange, Runde 234. Dieselben Masse wie die Granate -- ein Viertelblock. */
     public static final DeferredHolder<EntityType<?>, EntityType<Dynamite>> DYNAMITE = ENTITY_TYPES.register("dynamite",
             () -> EntityType.Builder.<Dynamite>of(Dynamite::new, MobCategory.MISC).sized(0.25F, 0.25F).build("dynamite"));
+
+    /* Runde 301: die geworfene Verteilerkanne. Ein Viertelblock, wie jeder Wurfkoerper. */
+    public static final DeferredHolder<EntityType<?>, EntityType<DisperserCanister>> DISPERSER_CANISTER = ENTITY_TYPES.register("disperser_canister",
+            () -> EntityType.Builder.<DisperserCanister>of(DisperserCanister::new, MobCategory.MISC).noSummon().sized(0.25F, 0.25F).build("disperser_canister"));
 
     /* Runde 299: der Saeureklecks des Bombardiers. Ein Viertelblock, wie jeder Wurfkoerper. */
     public static final DeferredHolder<EntityType<?>, EntityType<AcidBomb>> ACID_BOMB = ENTITY_TYPES.register("acid_bomb",

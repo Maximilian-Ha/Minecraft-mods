@@ -25,6 +25,7 @@ import com.hbm.items.machine.GunPartItem;
 import com.hbm.items.tools.FertilizerItem;
 import com.hbm.items.weapon.DynamiteFishingItem;
 import com.hbm.items.weapon.DynamiteItem;
+import com.hbm.items.weapon.DisperserItem;
 import com.hbm.items.component.NtmDataComponents;
 import com.hbm.items.special.ClayTabletItem;
 import com.hbm.items.special.SimpleConsumableItem;
@@ -588,6 +589,22 @@ public class NtmItems {
      * fuer die mit einem CD_Canister -- das ist im Original dieselbe Bedingung, und sie
      * entscheidet zugleich ueber die Farbe des Aufdrucks. */
     public static final DeferredItem<Item> CANISTER_FULL = ITEMS.register("canister_full", () -> new FluidTankItem(new Item.Properties()));
+
+    /**
+     * DIE VERTEILERKANNE, Runde 301. Ein Behaelter je verspruehbarer Fluessigkeit -- man
+     * wirft ihn, er platzt, und es bleibt eine Wolke zurueck. Zweitausend Millibar.
+     */
+    public static final DeferredItem<Item> DISPERSER_CANISTER_EMPTY = ITEMS.register("disperser_canister_empty", () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> DISPERSER_CANISTER = ITEMS.register("disperser_canister", () -> new DisperserItem(new Item.Properties().stacksTo(16), false));
+
+    /**
+     * DIE GLYPHIDENDRUESE, Runde 301. Dieselbe Mechanik wie die Kanne, doppelt so gross
+     * (viertausend Millibar) -- aber nicht herstellbar: sie faellt vom Behemoth (mit
+     * Schwefelsaeure) und mit einem Drittel Wahrscheinlichkeit von Brenda (mit Pheromon).
+     * Die leere Druese laesst sich zu zweitausend Millibar Biogas verfluessigen.
+     */
+    public static final DeferredItem<Item> GLYPHID_GLAND_EMPTY = ITEMS.register("glyphid_gland_empty", () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> GLYPHID_GLAND = ITEMS.register("glyphid_gland", () -> new DisperserItem(new Item.Properties().stacksTo(16), true));
     public static final DeferredItem<Item> FUEL_ADDITIVE = ITEMS.register("fuel_additive", () -> new FuelAdditiveItem(new Item.Properties()));
     public static final DeferredItem<Item> ROCKET_FUEL = ITEMS.register("rocket_fuel", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> BALLISTITE = ITEMS.register("ballistite", () -> new Item(new Item.Properties()));

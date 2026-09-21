@@ -189,6 +189,17 @@ public class Glyphid extends Monster implements IResistanceProvider {
         return 1.0D;
     }
 
+    /**
+     * Wie lange ein Kieferschlag dauert. Das Original setzt dafuer swingDuration auf 15 und
+     * rechnet updateArmSwingProgress selbst nach; auf 1.21 genuegt diese Stelle, denn
+     * LivingEntity fragt sie an derselben Stelle ab. Vanille nimmt sonst 6 -- Runde 298
+     * hatte das uebersehen, der Biss lief also zweieinhalbmal zu schnell.
+     */
+    @Override
+    protected int getCurrentSwingDuration() {
+        return 15;
+    }
+
     /** Die Werte seiner Art. */
     public StatBundle getStats() {
         return GlyphidStats.getStats().grunt;

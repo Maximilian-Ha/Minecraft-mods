@@ -425,6 +425,8 @@ public class ClientProxy extends ServerProxy {
         EntityRenderers.register(NtmEntityTypes.DYNAMITE_FISHING.get(), ThrownItemRenderer::new);
         /* Runde 299: der Saeureklecks -- das Original zeichnet ihn als Schleimball. */
         EntityRenderers.register(NtmEntityTypes.ACID_BOMB.get(), ThrownItemRenderer::new);
+        /* Runde 301: die geworfene Kanne zeichnet ihren eigenen Gegenstand. */
+        EntityRenderers.register(NtmEntityTypes.DISPERSER_CANISTER.get(), ThrownItemRenderer::new);
         EntityRenderers.register(NtmEntityTypes.SAWBLADE.get(), RenderSawblade::new);
         EntityRenderers.register(NtmEntityTypes.COG.get(), RenderCog::new);
         EntityRenderers.register(NtmEntityTypes.RBMK_DEBRIS.get(), RenderRBMKDebris::new);
@@ -501,6 +503,8 @@ public class ClientProxy extends ServerProxy {
         EntityRenderers.register(NtmEntityTypes.GLYPHID_BOMBARDIER.get(), GlyphidRenderer::new);
         EntityRenderers.register(NtmEntityTypes.GLYPHID_BLASTER.get(), GlyphidRenderer::new);
         EntityRenderers.register(NtmEntityTypes.GLYPHID_DIGGER.get(), GlyphidRenderer::new);
+        EntityRenderers.register(NtmEntityTypes.GLYPHID_BEHEMOTH.get(), GlyphidRenderer::new);
+        EntityRenderers.register(NtmEntityTypes.GLYPHID_BRENDA.get(), GlyphidRenderer::new);
         /* Der Merkpunkt ist unsichtbar -- im Original zeichnet ihn nur die Fehlersuche. */
         EntityRenderers.register(NtmEntityTypes.WAYPOINT.get(), EmptyEntityRenderer::new);
         EntityRenderers.register(NtmEntityTypes.UNDEAD_SOLDIER.get(), UndeadSoldierRenderer::new);

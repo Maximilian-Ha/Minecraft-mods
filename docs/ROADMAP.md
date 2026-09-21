@@ -14301,3 +14301,68 @@ Rumpf über die Klammerbilanz ab und sucht darin den `super`-Aufruf der jeweils 
 Methode. Gemessen: **96 Rümpfe, ein Fund** — genau dieser. Gegenprobe meldet ihn wieder.
 
 **47 Tore grün.**
+
+---
+
+## Runde 301 — Die Drüse, die Kanne, und die beiden Schweren
+
+Die Notiz sagte, Behemoth und Brenda hingen an `glyphid_gland`, und das an einem
+unportierten Teilsystem. Nachgemessen ist das Teilsystem **76 Zeilen groß** — also portiert.
+
+### Ein Behälter, den man wirft
+
+`ItemDisperser` ist im Original eine Klasse für **zwei** Gegenstände: die Verteilerkanne,
+die jede versprühbare Flüssigkeit nimmt und hergestellt wird, und die Glyphidendrüse, die
+nur Schwefelsäure oder Pheromon enthält und erbeutet wird. Beide tragen ihre Flüssigkeit im
+Metawert, beide fliegen beim Rechtsklick davon, beide platzen beim ersten Anstoßen und
+lassen eine Wolke zurück — zehn Blöcke breit, fünf hoch, vier Sekunden. Was die Wolke tut,
+steht nicht in der Kanne, sondern in den Merkmalen der Flüssigkeit.
+
+Die Drüse fasst mit **viertausend Millibar doppelt so viel** wie die Kanne, und leer lässt
+sie sich zu **zweitausend Millibar Biogas** verflüssigen — mit Abstand die ergiebigste Zeile
+dieser Rezeptliste.
+
+Eine Kleinigkeit, die das Original bewusst so hält: bei der Drüse steht der Flüssigkeitsname
+**vorne** („Sulfuric Acid Gland"), bei der Kanne hinten („Disperser Canister: Sulfuric
+Acid"). Über zwei Übersetzungsschlüssel übernommen.
+
+### Der Behemoth speit sechs Sekunden am Stück
+
+Alle sechs Sekunden holt er Luft, dann speit er sechs Sekunden lang — in **jedem** dieser
+hundertzwanzig Takte eine Säurewolke. Währenddessen legt er sich selbst Langsamkeit VI auf
+und hält seine Blickrichtung auf dem Wert des vorigen Takts fest. Ein Strahl, der sich nicht
+mitdreht, ist ein Strahl, dem man ausweichen kann; das ist der Sinn der Zeile
+`rotationYaw = prevRotationYaw`.
+
+Dabei ein Fallstrick: der Port hat für die Chemikalienwolke einen Bauweg mit Düsenversatz
+und Geschwindigkeit 1 — für den Chemiewerfer. Das Original gibt dem Behemoth
+`EntityChemical(world, this, 0, 0, 0)`, und dieser Bauweg **wirft die drei Versätze weg** und
+reicht nur an `EntityThrowable(world, thrower)` weiter: Augenhöhe, Geschwindigkeit **1,5**,
+Streuung 1. Nachgelesen, nicht angenommen.
+
+Sein Tod ist eine Säurewolke, seine Drüse fällt **immer** (das Original legt die Zeile vor
+den Aufruf der Oberklasse, ohne `byPlayer`-Abfrage), und sein Panzer ist der zäheste der
+Familie: Faktor 0,15 statt 0,6.
+
+### Brenda stirbt nicht allein
+
+Vierzehn Blöcke Pheromon, und **zwölf Glyphiden**, die im selben Augenblick schlüpfen und
+auseinanderstieben. Wer sie im Nahkampf erlegt, steht in der Mitte. Ihr Panzer ist mit 0,12
+noch zäher als der des Behemoth, und sie ist feuerfest — im Original setzt das ihr Bauweg,
+auf 1.21 steht es am `EntityType`.
+
+### Noch ein Loch aus Runde 298
+
+Der Glyphid des Originals überschreibt `swingDuration()` auf **15** Takte. Vanille nimmt 6.
+Runde 298 hatte das übersehen, der Kieferbiss lief also zweieinhalbmal zu schnell. Auf 1.21
+heißt die Stelle `getCurrentSwingDuration()`; der Behemoth setzt sie auf 100 — er holt weit
+aus.
+
+### Was ein Tor abgefangen hat
+
+`model-check` meldete zwei fehlende Texturen: `disperser_canister_empty.png` und
+`glyphid_gland_empty.png`. Die gibt es nicht, und zwar **mit Absicht** — das Original gibt
+dem leeren und dem vollen Behälter dieselbe Grundtextur (`setTextureName` steht bei beiden
+auf demselben Namen). Statt Dateien zu erfinden, teilen sich die Modelle die Textur.
+
+**47 Tore grün.**

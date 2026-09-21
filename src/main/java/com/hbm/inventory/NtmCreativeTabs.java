@@ -657,6 +657,22 @@ public class NtmCreativeTabs {
                             if(type.getContainer(CD_Gastank.class) == null) continue;
                             output.accept(MetaHelper.metaStack(new ItemStack(NtmItems.GAS_FULL.get(), 1), type.getID()));
                         }
+                        /*
+                         * Die Verteilerkanne -- nur die verspruehbaren Fluessigkeiten, genau
+                         * wie im Original (ItemDisperser.getSubItems: type.isDispersable()).
+                         * Die Glyphidendruese steht NICHT hier: sie ist Beute, kein Bauteil,
+                         * und das Original gibt ihr auch nur Schwefelsaeure und Pheromon.
+                         */
+                        output.accept(NtmItems.DISPERSER_CANISTER_EMPTY.get());
+                        for(int i = 1; i < types.length; ++i) {
+                            FluidType type = types[i];
+                            if(!type.isDispersable()) continue;
+                            output.accept(MetaHelper.metaStack(new ItemStack(NtmItems.DISPERSER_CANISTER.get(), 1), type.getID()));
+                        }
+                        output.accept(NtmItems.GLYPHID_GLAND_EMPTY.get());
+                        output.accept(MetaHelper.metaStack(new ItemStack(NtmItems.GLYPHID_GLAND.get(), 1), Fluids.SULFURIC_ACID.getID()));
+                        output.accept(MetaHelper.metaStack(new ItemStack(NtmItems.GLYPHID_GLAND.get(), 1), Fluids.PHEROMONE.getID()));
+
                         // fluid packs
                         output.accept(NtmItems.FLUID_PACK_EMPTY.get());
                         for(int i = 1; i < types.length; ++i) {

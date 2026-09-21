@@ -850,6 +850,17 @@ public class NuclearTechModClient {
                 NtmItems.CANISTER_FULL.get()
         );
 
+        /* Verteilerkanne und Glyphidendruese faerben sich nach der Fluessigkeit selbst --
+         * sie haben keinen CD_Canister, auf den sie ausweichen koennten. */
+        event.register(
+                (stack, tintIndex) -> {
+                    if(tintIndex != 1) return 0xFFFFFFFF;
+                    return 0xFF000000 | Fluids.fromID(MetaHelper.getMeta(stack)).getColor();
+                },
+                NtmItems.DISPERSER_CANISTER.get(),
+                NtmItems.GLYPHID_GLAND.get()
+        );
+
         /*
          * Die Gasflasche hat ZWEI gefaerbte Schichten: der Flaschenkoerper (Schicht 1) und
          * das Etikett (Schicht 2). Beide Farben stehen in CD_Gastank, und das Original malt

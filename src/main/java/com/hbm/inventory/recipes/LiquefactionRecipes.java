@@ -79,6 +79,9 @@ public class LiquefactionRecipes extends SerializableRecipe {
         register(Items.MELON_SLICE, Fluids.ETHANOL, 100);
         register(NtmBlocks.PLANT_FLOWER.get(), Fluids.ETHANOL, 100);
         register(NtmItems.BIOMASS.get(), Fluids.BIOGAS, 125);
+        /* Die leere Glyphidendruese, Runde 301 -- zweitausend Millibar Biogas, mit
+         * Abstand die ergiebigste Zeile dieser Liste. Steht so im Original. */
+        register(NtmItems.GLYPHID_GLAND_EMPTY.get(), Fluids.BIOGAS, 2000);
         register(Items.COD, Fluids.FISHOIL, 100);
         register(Items.SALMON, Fluids.FISHOIL, 100);
         register(Items.TROPICAL_FISH, Fluids.FISHOIL, 100);

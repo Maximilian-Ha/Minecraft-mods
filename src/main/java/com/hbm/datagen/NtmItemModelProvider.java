@@ -764,6 +764,18 @@ public class NtmItemModelProvider extends ItemModelProvider {
         this.basicCustomLayerItem(NtmItems.FLUID_BARREL_EMPTY.get(), "fluid_barrel_empty");
         this.layeredItem(NtmItems.FLUID_BARREL_FULL.get(), "fluid_barrel", "fluid_barrel_overlay");
         this.layeredItem(NtmItems.CANISTER_FULL.get(), "canister_empty", "canister_overlay");
+        /*
+         * Verteilerkanne und Glyphidendruese, Runde 301. Das Original nimmt fuer die Druese
+         * die Ueberlagerung des Fluidkennzeichens (ItemDisperser.registerIcons); die
+         * CE-Abspaltung hat ihr eine eigene gegeben, und die uebernimmt der Port -- wie schon
+         * in Runde 155 fuer die ueberarbeiteten Texturen beschlossen.
+         */
+        /* Leer und voll teilen sich die Grundtextur -- im Original steht bei beiden
+         * setTextureName("hbm:disperser_canister") bzw. "hbm:glyphid_gland". */
+        this.basicCustomLayerItem(NtmItems.DISPERSER_CANISTER_EMPTY.get(), "disperser_canister");
+        this.layeredItem(NtmItems.DISPERSER_CANISTER.get(), "disperser_canister", "disperser_canister_overlay");
+        this.basicCustomLayerItem(NtmItems.GLYPHID_GLAND_EMPTY.get(), "glyphid_gland");
+        this.layeredItem(NtmItems.GLYPHID_GLAND.get(), "glyphid_gland", "glyphid_gland_overlay");
         this.basicItem(NtmItems.GAS_EMPTY.get());
         /* Drei Schichten: Rumpf, gefaerbter Flaschenkoerper, gefaerbtes Etikett. */
         this.layeredItem(NtmItems.GAS_FULL.get(), "gas_empty", "gas_bottle").texture("layer2", modLoc("item/gas_label"));

@@ -1260,6 +1260,12 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("item.hbmsntm.part_generic.glass_polarized", "Polarized Lens");
         this.add(NtmItems.CANISTER_EMPTY, "Empty Canister");
         this.add(NtmItems.CANISTER_FULL, "Canister: %s");
+        this.add(NtmItems.DISPERSER_CANISTER_EMPTY, "Empty Disperser Canister");
+        this.add(NtmItems.DISPERSER_CANISTER, "Disperser Canister: %s");
+        this.add(NtmItems.GLYPHID_GLAND_EMPTY, "Empty Glyphid Gland");
+        /* Bei der Druese steht der Fluessigkeitsname VORNE -- so macht es das Original
+         * (ItemDisperser.getItemStackDisplayName). */
+        this.add(NtmItems.GLYPHID_GLAND, "%s Gland");
         this.add(NtmItems.GAS_EMPTY, "Empty Gas Tank");
         this.add(NtmItems.GAS_FULL, "Gas Tank: %s");
         this.add(NtmItems.CANISTER_NAPALM, "Napalm B");
@@ -4499,6 +4505,9 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("entity.hbmsntm.glyphid_bombardier", "Glyphid Bombardier");
         this.add("entity.hbmsntm.glyphid_blaster", "Glyphid Blaster");
         this.add("entity.hbmsntm.glyphid_digger", "Glyphid Digger");
+        this.add("entity.hbmsntm.glyphid_behemoth", "Glyphid Behemoth");
+        this.add("entity.hbmsntm.glyphid_brenda", "Brenda");
+        this.add("entity.hbmsntm.disperser_canister", "Disperser Canister");
         this.add("entity.hbmsntm.bullet_mk4", "Bullet");
         this.add("entity.hbmsntm.rocket", "Rocket");
         this.add("entity.hbmsntm.shrapnel", "Schrabnel");
