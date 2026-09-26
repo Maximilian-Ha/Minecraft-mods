@@ -83,11 +83,20 @@ public class RBMKConsoleScreen extends Screen {
         return false;
     }
 
+    /**
+     * Screen.render ruft renderBackground selbst auf. Stand hier vorher ein eigener Aufruf samt
+     * Konsolenbild VOR super.render, legte der zweite Aufruf den 1.21-Weichzeichner ueber die
+     * fertig gezeichnete Konsole -- das Menue war verschwommen. Jetzt einmal, ohne Weichzeichner:
+     * der abgedunkelte Hintergrund wie in 1.7.10, darauf die Konsole.
+     */
+    @Override
+    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+        this.renderTransparentBackground(guiGraphics);
+        this.drawBackgroundLayer(guiGraphics);
+    }
+
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
-
-        this.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
-        this.drawBackgroundLayer(guiGraphics);
 
         super.render(guiGraphics, mouseX, mouseY, partialTicks);
 

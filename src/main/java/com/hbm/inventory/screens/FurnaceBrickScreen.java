@@ -27,7 +27,7 @@ public class FurnaceBrickScreen extends AbstractContainerScreen<FurnaceBrickMenu
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
+        // Kein eigener renderBackground-Aufruf: super.render zeichnet den Hintergrund schon.
         super.render(guiGraphics, mouseX, mouseY, partialTicks);
         this.renderTooltip(guiGraphics, mouseX, mouseY);
     }

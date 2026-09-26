@@ -52,10 +52,20 @@ public class ClayTabletScreen extends Screen {
 
     @Override public boolean isPauseScreen() { return false; }
 
+    /** Abgedunkelt wie in 1.7.10, ohne den 1.21-Weichzeichner. */
+    @Override
+    public void renderBackground(GuiGraphics gui, int mouseX, int mouseY, float partialTick) {
+        this.renderTransparentBackground(gui);
+    }
+
+    /**
+     * super.render zuerst: es zeichnet den Hintergrund. Stand es wie vorher am Ende, lag der
+     * Hintergrund -- samt Weichzeichner -- ueber der schon gezeichneten Tafel.
+     */
     @Override
     public void render(GuiGraphics gui, int mouseX, int mouseY, float partialTick) {
 
-        this.renderBackground(gui, mouseX, mouseY, partialTick);
+        super.render(gui, mouseX, mouseY, partialTick);
 
         int links = (this.width - BREITE) / 2;
         int oben = (this.height - HOEHE) / 2;
@@ -73,7 +83,6 @@ public class ClayTabletScreen extends Screen {
 
         if(kern == null || menge.isEmpty()) {
             zeichneAllesVerdeckt(gui, links, oben, bildVersatz);
-            super.render(gui, mouseX, mouseY, partialTick);
             return;
         }
 
@@ -121,8 +130,6 @@ public class ClayTabletScreen extends Screen {
 
         Component name = erzeugnis.getHoverName();
         gui.drawString(this.font, name, links + (BREITE - this.font.width(name)) / 2, oben - 30, 0xFFFFFF, false);
-
-        super.render(gui, mouseX, mouseY, partialTick);
     }
 
     private void zeichneAllesVerdeckt(GuiGraphics gui, int links, int oben, int bildVersatz) {

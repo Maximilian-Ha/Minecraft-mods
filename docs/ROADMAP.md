@@ -14704,3 +14704,36 @@ nur, was man von oben durch den Kopf sieht.
 
 Offen: ob „der Brennstoffkanal ist unsichtbar“ allein daher kam (eine Kappe mit Licht 0 über
 einem Rohr ohne Deckfläche) oder eine zweite Ursache hat, zeigt erst der nächste Blick ins Spiel.
+
+---
+
+## Runde 309 — der Brennstoffkanal verschwindet beim Drehen, die Konsole ist verschwommen
+
+Zwei neue Bildschirmfotos. Der Steuerstab-Deckel ist jetzt richtig beleuchtet (Runde 308 wirkt).
+Zwei andere Fehler bleiben:
+
+### Brennstoffkanal: je nach Blickwinkel unsichtbar
+
+Blickwinkelabhängig heißt: der Renderer wird gar nicht erst aufgerufen. Minecraft 1.21 sammelt
+Blockentitäten nur aus **sichtbaren Chunk-Abschnitten** ein. Beim RBMK sitzt die Blockentität im
+Kernblock ganz unten in der Säule, mitten im undurchsichtigen Reaktor; gezeichnet wird bis zu
+sechzehn Blöcke höher. Fällt der Abschnitt des Kernblocks aus der Sichtbarkeit, verschwindet
+der ganze Kopf. Genau das hatte die Leviathan-Turbine in Runde 153/160 schon einmal.
+
+`RenderRBMKFuelChannel` und `RenderRBMKControlRod` setzen jetzt `shouldRenderOffScreen`. Das
+Offscreen-Tor kannte bisher nur Renderer, deren Vorlage `INFINITE_EXTENT_AABB` nimmt — beide
+RBMK-Renderer tun das im Original nicht. **Zweite Regel:** ein Sichtkasten über mehr als 16
+Blöcke liegt immer zum Teil in einem anderen Abschnitt und braucht die Methode ebenfalls.
+Gemessen: genau diese zwei Renderer (je `y + 17`); ohne die Methode meldet das Tor genau sie.
+
+### RBMK-Konsole: das ganze Menü verschwommen
+
+`RBMKConsoleScreen.render` rief `renderBackground`, zeichnete die Konsole und rief dann
+`super.render` — das in 1.21 **noch einmal** `renderBackground` aufruft, samt Weichzeichner, über
+der fertigen Konsole. Jetzt überschreibt der Bildschirm `renderBackground` (abgedunkelt wie in
+1.7.10, ohne Weichzeichner, darauf die Konsole) und ruft nur noch `super.render`.
+
+Dasselbe Muster gemessen in allen 149 `render`-Methoden: drei Funde — die Konsole, die
+Tontafel (ebenfalls ein `Screen`, dort lag der Hintergrund über der Tafel) und der Ziegelofen
+(ein Container-Bildschirm; dort nur doppelt abgedunkelt). Alle drei behoben;
+`tools/screen-check.sh` hält es fest (0 Funde, mit dem alten Aufruf genau die Konsole).

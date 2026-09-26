@@ -213,6 +213,11 @@ jobs:
           chmod +x ./tools/mip-check.sh
           ./tools/mip-check.sh
 
+      - name: Check screens draw their background once
+        run: |
+          chmod +x ./tools/screen-check.sh
+          ./tools/screen-check.sh
+
       - name: Check forward references
         run: |
           chmod +x ./tools/forward-check.sh

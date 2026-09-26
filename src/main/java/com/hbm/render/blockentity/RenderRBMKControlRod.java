@@ -74,6 +74,19 @@ public class RenderRBMKControlRod extends BlockEntityRendererNT<RBMKControlBlock
     }
 
     /** Der Deckel sitzt bis zu sechzehn Bloecke ueber dem Kernblock. */
+    /**
+     * Die Blockentitaet sitzt im Kernblock ganz unten in der Saeule, sichtbar ist der Kopf bis zu
+     * sechzehn Bloecke hoeher -- fast immer in einem anderen Chunk-Abschnitt. Minecraft sammelt
+     * Blockentitaeten aber nur aus SICHTBAREN Abschnitten ein, und der Abschnitt des Kernblocks
+     * steckt im undurchsichtigen Reaktor und faellt je nach Blickwinkel heraus. Dann verschwand
+     * der ganze Kopf. shouldRenderOffScreen haengt den Renderer in die immer gezeichnete Liste;
+     * der Sichtkasten unten schneidet weiter weg, was nicht im Bild ist.
+     */
+    @Override
+    public boolean shouldRenderOffScreen(RBMKControlBlockEntity control) {
+        return true;
+    }
+
     @Override
     public AABB getRenderBoundingBox(RBMKControlBlockEntity control) {
         int x = control.getBlockPos().getX();
