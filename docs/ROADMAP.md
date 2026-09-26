@@ -14632,3 +14632,46 @@ verglichen. Die Modelle rechnen UV-Koordinaten relativ zum Sprite (`GeometryBake
 `geiger.png` meldet es genau diese Datei.
 
 **50 Tore grün.**
+
+---
+
+## Runde 307 — der zweite Client-Absturz, und endlich ein Client in CI
+
+Mit der neuen Jar kam der Spielstart an `rbmk_element.obj` vorbei und fiel an der nächsten
+Stelle:
+
+```
+IllegalArgumentException: No model for layer hbmsntm:pole_satellite_receiver#main
+  at EntityModelSet.bakeLayer
+  at RenderPoleSatelliteReceiver.getRenderer(RenderPoleSatelliteReceiver.java:85)
+  at ClientProxy.registerClientExtensions
+```
+
+`getRenderer()` läuft in `onClientSetup`. Dort hat `EntityModelSet` seine Schichten aber noch
+**nicht** — die kommen erst mit dem Ressourcen-Neuladen danach. Der Kommentar an der Stelle
+behauptete das Gegenteil. Jetzt wird die Schicht erst beim ersten Zeichnen gebacken, genau
+wie es `GasMaskItem` schon immer tat. Alle anderen `bakeLayer`-Aufrufe außerhalb eines
+Renderer-Kontexts sind gemessen: sie laufen erst beim Zeichnen.
+
+### Der eigentliche Fehler: CI sah den Client nie
+
+Zwei Abstürze hintereinander, beide nur beim Spieler zu sehen — und jeder weitere käme genauso,
+einer pro Spielstart. Der Rauchtest in CI startete bisher nur einen **Server**, der kein
+Modell, keine Textur und keinen Renderer lädt.
+
+Neu in `build.yml`: **„Run client (startup smoke test)“**. Ein echter Client startet unter Xvfb
+mit Mesa-Software-OpenGL und läuft über das Ressourcen-Neuladen hinaus. Geurteilt wird über das
+Protokoll, mit genau den Zeilen, die die beiden echten Abstürze geschrieben haben
+(`encountered an error in a deferred task`, `Crash report saved`, `broken mod state`, …).
+
+Vorab gemessen, indem der Schritt lokal mit einem Ersatzprozess lief, der ein Protokoll Zeile
+für Zeile ausgibt:
+
+| Eingabe | Ergebnis |
+|---|---|
+| Protokoll des OBJ-Absturzes | rot |
+| Protokoll des Schicht-Absturzes | rot |
+| dasselbe ohne die Absturzzeilen | grün |
+| dasselbe ohne Ende des Neuladens | rot (Zeitgrenze) |
+
+Ob Xvfb und Software-OpenGL auf dem CI-Rechner tragen, zeigt erst der erste echte Lauf.

@@ -383,6 +383,76 @@ jobs:
             grep -m 10 '/ERROR\]' server.log | cut -c1-200
           fi
 
+      # Der Server-Test oben laedt kein einziges Modell, keine Textur, keinen Renderer: all das
+      # geschieht nur auf dem Client, in onClientSetup und im Ressourcen-Neuladen danach. Ein
+      # Fehler dort legt den Spielstart lahm und war bisher erst beim Spieler zu sehen (Runde
+      # 306/307: rbmk_element.obj, dann eine zu frueh gebackene Modellschicht).
+      #
+      # Darum startet hier ein echter Client -- ohne Bildschirm unter Xvfb, mit Mesa-Software-
+      # OpenGL -- bis ueber das Neuladen der Ressourcen hinaus. Geurteilt wird ueber das
+      # Protokoll: die Absturzzeilen sind genau die, die ein echter Spielstart geschrieben hat.
+      - name: Run client (startup smoke test)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq xvfb libgl1-mesa-dri libglx-mesa0 \
+            libxrandr2 libxinerama1 libxcursor1 libxi6 libxxf86vm1 > /dev/null
+
+          export LIBGL_ALWAYS_SOFTWARE=1
+          setsid xvfb-run -a -s "-screen 0 1280x720x24" \
+            ./gradlew runClient --console=plain > client.log 2>&1 &
+          PID=$!
+
+          FEHLER_MUSTER='encountered an error in a deferred task|Crash report saved|Failed to wait for future|broken mod state|Exception in thread "Render thread"'
+          FERTIG=0
+          for i in $(seq 1 180); do
+            sleep 5
+            if grep -qE "$FEHLER_MUSTER" client.log; then break; fi
+            if ! kill -0 $PID 2>/dev/null; then break; fi
+            # Das Neuladen der Ressourcen endet mit dem Tonsystem -- ob es startet oder mangels
+            # Geraet abgeschaltet wird. Danach noch eine Minute: ein Ladefehler meldet sich erst
+            # am Ende des Neuladens mit dem Absturzbericht.
+            if [ $FERTIG -eq 0 ] && grep -qE 'Sound engine started|Turning off sounds|Failed to open OpenAL device' client.log; then
+              FERTIG=$i
+            fi
+            if [ $FERTIG -gt 0 ] && [ $((i - FERTIG)) -ge 12 ]; then break; fi
+          done
+
+          kill -- -$PID 2>/dev/null || true
+          sleep 5
+          kill -9 -- -$PID 2>/dev/null || true
+          pkill -9 -f 'runClient|fml.neoForgeVersion' 2>/dev/null || true
+
+          echo "----- letzte 60 Zeilen -----"
+          tail -60 client.log | cut -c1-240
+
+          if grep -qE "$FEHLER_MUSTER" client.log; then
+            echo
+            echo "FEHLER: Der Client ist beim Start gescheitert."
+            grep -n -m 3 -A 15 -E 'encountered an error in a deferred task|Exception in thread' client.log | cut -c1-240 || true
+            exit 1
+          fi
+
+          if ! grep -q 'Reloading ResourceManager' client.log; then
+            echo
+            echo "FEHLER: Der Client kam nie bis zum Laden der Ressourcen."
+            grep -n -m 5 -A 12 'Exception\|Caused by:' client.log | cut -c1-240 || true
+            exit 1
+          fi
+
+          if [ $FERTIG -eq 0 ]; then
+            echo
+            echo "FEHLER: Das Neuladen der Ressourcen ist nicht innerhalb der Zeitgrenze fertig geworden."
+            exit 1
+          fi
+
+          echo "OK - Client gestartet, Ressourcen geladen, kein Ladefehler."
+          FEHLER=$(grep -c '/ERROR\]' client.log || true)
+          echo "Fehlerzeilen im Protokoll: $FEHLER"
+          if [ "$FEHLER" -gt 0 ]; then
+            echo "Die ersten zehn:"
+            grep -m 10 '/ERROR\]' client.log | cut -c1-200
+          fi
+
       # Das Protokoll laeuft mit logLevel DEBUG und wird schnell hunderte Megabyte gross --
       # hochgeladen wird deshalb nur das Ende, und alles, was nach einem Fehler aussieht.
       - name: Upload server log
@@ -391,6 +461,10 @@ jobs:
           if [ -f server.log ]; then
             tail -n 5000 server.log > server-tail.log
             grep -n -B 2 -A 30 'Exception\|Caused by:\|ERROR\]' server.log | head -n 4000 > server-errors.log || true
+          fi
+          if [ -f client.log ]; then
+            tail -n 5000 client.log > client-tail.log
+            grep -n -B 2 -A 30 'Exception\|Caused by:\|ERROR\]' client.log | head -n 4000 > client-errors.log || true
           fi
         continue-on-error: true
 
@@ -402,4 +476,6 @@ jobs:
           path: |
             server-tail.log
             server-errors.log
+            client-tail.log
+            client-errors.log
           if-no-files-found: ignore

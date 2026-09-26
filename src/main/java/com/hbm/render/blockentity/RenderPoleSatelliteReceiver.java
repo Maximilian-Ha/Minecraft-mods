@@ -80,11 +80,14 @@ public class RenderPoleSatelliteReceiver extends BlockEntityRendererNT<DecoPoleS
     @Override
     public BlockEntityWithoutLevelRenderer getRenderer() {
 
-        // Zum Zeitpunkt der Anmeldung der Client-Erweiterungen stehen die Modellschichten
-        // bereit; einmal backen reicht.
-        ModelPart teil = Minecraft.getInstance().getEntityModels().bakeLayer(ModelSatelliteReceiver.LAYER);
-
         return new ItemRenderBase() {
+
+            // Erst beim ersten Zeichnen backen: getRenderer() laeuft in onClientSetup, und dort
+            // hat EntityModelSet seine Schichten noch nicht -- die kommen erst mit dem
+            // Ressourcen-Neuladen danach. Frueher gebacken warf das beim Spielstart
+            // "No model for layer hbmsntm:pole_satellite_receiver#main".
+            private ModelPart teil;
+
             @Override
             public void renderInventory(ItemStack stack, MultiBufferSource buffer) {
                 RenderContext.translate(0F, -0.25F, 0F);
@@ -99,6 +102,7 @@ public class RenderPoleSatelliteReceiver extends BlockEntityRendererNT<DecoPoleS
                 RenderContext.scale(0.5F, 0.5F, 0.5F);
                 RenderContext.mulPose(Axis.XP.rotationDegrees(180F));
                 RenderContext.translate(0F, -1F, 0F);
+                if(teil == null) teil = Minecraft.getInstance().getEntityModels().bakeLayer(ModelSatelliteReceiver.LAYER);
                 teil.render(RenderContext.poseStack(), buffer.getBuffer(RenderType.entityCutoutNoCull(TEXTUR)),
                         RenderContext.light(), RenderContext.overlay());
             }
