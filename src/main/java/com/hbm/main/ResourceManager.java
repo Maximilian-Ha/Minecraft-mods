@@ -1097,7 +1097,7 @@ public class ResourceManager {
         rbmk_autoloader = new HFRWavefrontObject("models/obj/machines/rbmk_autoloader.obj").asVBO();
         rbmk_rods = new HFRWavefrontObject("models/obj/machines/rbmk_rods.obj").asVBO();
         rbmk_element_rods = new HFRWavefrontObject("models/obj/machines/rbmk_element_rods.obj").asVBO();
-        rbmk_element = new HFRWavefrontObject("models/obj/machines/rbmk_element.obj").asVBO();
+        rbmk_element = new HFRWavefrontObject("models/obj/machines/rbmk_element.obj", true).asVBO();
         rbmk_crane = new HFRWavefrontObject("models/obj/machines/rbmk_crane.obj").asVBO();
         rbmk_crane_console = new HFRWavefrontObject("models/obj/machines/rbmk_crane_console.obj").asVBO();
         heater_oilburner = new HFRWavefrontObject("models/obj/machines/oilburner.obj").asVBO();

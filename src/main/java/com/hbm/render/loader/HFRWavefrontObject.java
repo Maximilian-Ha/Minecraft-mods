@@ -6,6 +6,7 @@ import com.hbm.render.loader.old.TextureCoordinate;
 import com.hbm.render.loader.old.Vertex;
 import com.hbm.render.util.NtmShaders;
 import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.MeshData;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexBuffer;
 import com.mojang.blaze3d.vertex.VertexFormat;
@@ -384,6 +385,50 @@ public class HFRWavefrontObject {
         return groupObjectMatcher.get().reset(line).matches();
     }
 
+    /**
+     * Schreibt eine Gruppe in einen Puffer, den die Grafikkarte zeichnen kann.
+     *
+     * Im Mischbetrieb (mixedMode) darf eine Gruppe Drei- und Vierecke enthalten; ihr Modus
+     * bleibt dann ungesetzt, weil parseFace die Pruefung ueberspringt. Das Original zeichnete
+     * solche Modelle nur Ecke fuer Ecke ueber den Tessellator. Ein Puffer kennt aber nur EINE
+     * Primitivart -- darum wird eine solche Gruppe als Dreiecke abgelegt und jedes Viereck
+     * entlang der Diagonale 0-2 in zwei Dreiecke geteilt. Reine Gruppen bleiben, wie sie sind.
+     */
+    static MeshData baueGruppe(S_GroupObject g) {
+        boolean dreiecke = g.mode == VertexFormat.Mode.TRIANGLES;
+        boolean vierecke = g.mode == VertexFormat.Mode.QUADS;
+
+        if(g.mode == null) {
+            dreiecke = g.faces.stream().anyMatch(f -> f.vertices.length == 3);
+            vierecke = !dreiecke;
+        }
+
+        BufferBuilder builder = Tesselator.getInstance().begin(dreiecke ? VertexFormat.Mode.TRIANGLES : VertexFormat.Mode.QUADS,
+                NtmShaders.NtmVertexFormat.POSITION_TEX_NORMAL);
+
+        for(S_Face face : g.faces) {
+            if(vierecke || face.vertices.length == 3) {
+                for(int i = 0; i < face.vertices.length; i++) ecke(builder, face, i);
+            } else {
+                for(int i : VIERECK_ALS_DREIECKE) ecke(builder, face, i);
+            }
+        }
+
+        return builder.buildOrThrow();
+    }
+
+    private static final int[] VIERECK_ALS_DREIECKE = {0, 1, 2, 0, 2, 3};
+
+    private static void ecke(BufferBuilder builder, S_Face face, int i) {
+        Vertex vert = face.vertices[i];
+        TextureCoordinate tex = face.textureCoordinates != null && face.textureCoordinates.length > 0
+                ? face.textureCoordinates[i]
+                : new TextureCoordinate(0, 0);
+        Vertex normal = face.vertexNormals[i];
+
+        builder.addVertex(vert.x, vert.y, vert.z).setUv(tex.u, tex.v).setNormal(normal.x, normal.y, normal.z);
+    }
+
     public HFRWavefrontObjectVBO asVBO() {
         HFRWavefrontObjectVBO vbo = new HFRWavefrontObjectVBO(this);
         allVBOs.put(vbo, this);
@@ -405,23 +450,9 @@ public class HFRWavefrontObject {
         Map<String, VertexBuffer> buffers = new HashMap<>();
 
         for(S_GroupObject g : obj.groupObjects) {
-            BufferBuilder builder = Tesselator.getInstance().begin(g.mode, NtmShaders.NtmVertexFormat.POSITION_TEX_NORMAL);
-
-            for(S_Face face : g.faces) {
-                for(int i = 0; i < face.vertices.length; i++) {
-                    Vertex vert = face.vertices[i];
-                    TextureCoordinate tex = face.textureCoordinates != null && face.textureCoordinates.length > 0
-                            ? face.textureCoordinates[i]
-                            : new TextureCoordinate(0, 0);
-                    Vertex normal = face.vertexNormals[i];
-
-                    builder.addVertex(vert.x, vert.y, vert.z).setUv(tex.u, tex.v).setNormal(normal.x, normal.y, normal.z);
-                }
-            }
-
             VertexBuffer buffer = new VertexBuffer(VertexBuffer.Usage.STATIC);
             buffer.bind();
-            buffer.upload(builder.buildOrThrow());
+            buffer.upload(baueGruppe(g));
             VertexBuffer.unbind();
 
             buffers.put(g.name, buffer);

@@ -14562,3 +14562,73 @@ kein Namensproblem, kein fehlender Verweis. Nur der Server-Test fällt darüber 
 braucht zwanzig Minuten, um es zu merken.
 
 **48 Tore grün.**
+
+---
+
+## Runde 306 — der Client startet nicht: rbmk_element.obj, und das 49. Tor
+
+Ein echter Spielstart (ATLauncher, NeoForge 21.1.238) brach beim Laden ab:
+
+```
+ModelFormatException: Error parsing entry ('f 136/305/19 189/306/19 187/307/19', line 738)
+in file 'hbmsntm:models/obj/machines/rbmk_element.obj'
+- Invalid number of points for face (expected 4, found 3)
+  at com.hbm.main.ResourceManager.init(ResourceManager.java:1100)
+```
+
+Die Modelle werden in `onClientSetup` geladen — eine verzögerte Aufgabe; wirft sie, startet
+das Spiel gar nicht. **CI hat das nie gesehen**, weil der Rauchtest einen dedizierten Server
+startet, und der lädt kein einziges Modell.
+
+### Ursache
+
+Die Datei ist byte-gleich mit dem Original. Ihre Gruppe `Cap` mischt Vier- und
+**24 Dreiecke**. Das Original lädt sie darum mit `mixedMode = true`; der Port hatte das
+zweite Argument weggelassen, und der Lader lehnte das erste Dreieck ab.
+
+Das Flag allein hätte nicht gereicht: im Mischbetrieb bleibt der Modus der Gruppe ungesetzt,
+und beide Hochladewege (`asVBO()` und `getRenderer()`) übergaben ihn ungeprüft an
+`Tesselator.begin`. Das Original zeichnete solche Modelle Ecke für Ecke; ein Puffer kennt nur
+eine Primitivart. Der neue gemeinsame Helfer `HFRWavefrontObject.baueGruppe` legt eine
+gemischte Gruppe als Dreiecke ab und teilt jedes Viereck entlang der Diagonale 0–2. Reine
+Gruppen bleiben unverändert. Die beiden bisher doppelt geschriebenen Hochladeschleifen
+laufen jetzt durch denselben Helfer.
+
+### Das 49. Tor
+
+`tools/obj-check.sh` bildet die Regeln des Laders für **jeden** aktiven
+`new HFRWavefrontObject("...")`-Aufruf nach: Zeilenmuster (etwa `1e-05`, das der Lader
+ablehnt), Indizes, Drei- und Vierecke ohne `mixedMode`, und bei hochgeladenen Modellen
+Flächen ohne Normale und Gruppen ohne Fläche. Auskommentierte Aufrufe zählen nicht.
+
+Gemessen: **0 Funde bei 312 Ladeaufrufen**; nur eine Datei im ganzen Bestand mischt überhaupt.
+Gegenproben: ohne das `true` meldet das Tor als ersten Fund **Zeile 738** — dieselbe Zeile
+wie das Absturzprotokoll; der auskommentierte `shimmer_sledge`-Aufruf eingesetzt meldet eine
+leere Gruppe; eine Ecke `1e-05`, eine Fläche ohne Normale und ein Index 99999 in `sphere.obj`
+werden alle drei gemeldet.
+
+Damit prüft CI zum ersten Mal etwas, das nur auf dem Client geschieht.
+
+### Dieselbe Protokolldatei, eine zweite Zeile: das 50. Tor
+
+```
+Texture hbmsntm:block/geiger with size 55x55 limits mip level from 4 to 0
+```
+
+Kein Absturz, aber eine Wirkung auf **jeden Block im Spiel**: alles unter `textures/block/`
+und `textures/item/` landet in einem gemeinsamen Atlas, dessen Mipmap-Stufe sich nach der
+schlechtesten Textur richtet. Eine ungerade Seitenlänge setzt sie auf 0 — entfernte Blöcke
+flimmern. Die Texturen stammen unverändert aus dem Original; 1.7.10 hatte Mipmaps
+standardmäßig aus, darum fiel es dort nie auf.
+
+Gemessen: sieben Texturen senkten die Stufe — `geiger` 55×55, `deco_computer` 66×66,
+`deco_pole_top` 20×20, `rtg` 84×84, `deco_tape_recorder` 56×56, `nuke_little_boy` 184×112,
+`ingot_nikonium` 200×200. Jede ist jetzt **ganzzahlig** vergrößert (Faktor 16, 8, 4, 4, 2, 2, 2),
+jedes Pixel zu einem k×k-Block; ein Prüflauf hat jedes Zielpixel gegen sein Quellpixel
+verglichen. Die Modelle rechnen UV-Koordinaten relativ zum Sprite (`GeometryBakeUtil`,
+`lerp` zwischen `getU0`/`getU1`), das Bild bleibt also identisch.
+
+`tools/mip-check.sh` prüft das künftig: **0 Funde bei 2879 Texturen**; mit dem alten
+`geiger.png` meldet es genau diese Datei.
+
+**50 Tore grün.**

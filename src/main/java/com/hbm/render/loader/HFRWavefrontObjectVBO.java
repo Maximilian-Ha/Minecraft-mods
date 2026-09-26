@@ -1,13 +1,8 @@
 package com.hbm.render.loader;
 
 import com.hbm.render.NtmRenderTypes;
-import com.hbm.render.loader.old.TextureCoordinate;
-import com.hbm.render.loader.old.Vertex;
-import com.hbm.render.util.NtmShaders.NtmVertexFormat;
 import com.hbm.render.util.RenderContext;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexBuffer;
 import com.mojang.blaze3d.vertex.VertexBuffer.Usage;
 import net.minecraft.client.renderer.ShaderInstance;
@@ -36,28 +31,9 @@ public class HFRWavefrontObjectVBO implements IModelCustomNamed {
 
     public void load(HFRWavefrontObject obj) {
         for(S_GroupObject g : obj.groupObjects) {
-            Tesselator tess = Tesselator.getInstance();
-            BufferBuilder builder = tess.begin(g.mode, NtmVertexFormat.POSITION_TEX_NORMAL);
-
-            for(S_Face face : g.faces) {
-                for(int i = 0; i < face.vertices.length; i++) {
-                    Vertex vert = face.vertices[i];
-                    TextureCoordinate tex = new TextureCoordinate(0, 0);
-                    Vertex normal = face.vertexNormals[i];
-
-                    if(face.textureCoordinates != null && face.textureCoordinates.length > 0) {
-                        tex = face.textureCoordinates[i];
-                    }
-
-                    builder.addVertex(vert.x, vert.y, vert.z)
-                            .setUv(tex.u, tex.v)
-                            .setNormal(normal.x, normal.y, normal.z);
-                }
-            }
-
             VertexBuffer buffer = new VertexBuffer(Usage.STATIC);
             buffer.bind();
-            buffer.upload(builder.buildOrThrow());
+            buffer.upload(HFRWavefrontObject.baueGruppe(g));
             VertexBuffer.unbind();
 
             GroupVBO cachedGroup = new GroupVBO(g.name, buffer);

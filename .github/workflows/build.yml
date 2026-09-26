@@ -203,6 +203,16 @@ jobs:
           chmod +x ./tools/worldgen-check.sh
           ./tools/worldgen-check.sh
 
+      - name: Check OBJ models against the client loader
+        run: |
+          chmod +x ./tools/obj-check.sh
+          ./tools/obj-check.sh
+
+      - name: Check block atlas textures for mip level
+        run: |
+          chmod +x ./tools/mip-check.sh
+          ./tools/mip-check.sh
+
       - name: Check forward references
         run: |
           chmod +x ./tools/forward-check.sh
