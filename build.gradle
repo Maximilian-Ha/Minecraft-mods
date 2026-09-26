@@ -153,8 +153,10 @@ dependencies {
     compileOnly "dev.ryanhcode.sable:sable-neoforge-1.21.1:2.0.3"
     compileOnly "dev.ryanhcode.sable:sable-sable_rapier-1.21.1:2.0.3"
 
-    // Iris
-    implementation "maven.modrinth:YL57xq9U:KduFYu4t"
+    // Iris steht absichtlich NICHT hier: der Code fragt nur ModList.isLoaded("iris") ab und
+    // braucht keine einzige Iris-Klasse. Als implementation landete Iris im Entwicklungs-
+    // Client -- ohne Sodium, das es voraussetzt -- und brachte den Client-Start in CI zum
+    // Absturz (NoClassDefFoundError: net/caffeinemc/mods/sodium/...).
 }
 
 tasks.withType(ProcessResources).configureEach {

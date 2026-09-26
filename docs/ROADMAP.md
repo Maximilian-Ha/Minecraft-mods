@@ -14675,3 +14675,12 @@ für Zeile ausgibt:
 | dasselbe ohne Ende des Neuladens | rot (Zeitgrenze) |
 
 Ob Xvfb und Software-OpenGL auf dem CI-Rechner tragen, zeigt erst der erste echte Lauf.
+
+### Erster echter Lauf (CI 496): rot — aber nicht wegen unserer Mod
+
+Der neue Schritt lief und scheiterte im Absturzbericht selbst:
+`NoClassDefFoundError: net/caffeinemc/mods/sodium/api/vertex/serializer/VertexSerializer`
+aus einem Iris-Mixin. `build.gradle` hatte Iris als `implementation` — damit lag Iris im
+Entwicklungs-Client, ohne das Sodium, das es voraussetzt. Gemessen: der Code nutzt **keine**
+Iris-Klasse, nur `ModList.isLoaded("iris")`. Die Abhängigkeit hatte also genau eine Wirkung,
+und die war dieser Absturz. Sie ist entfernt.
