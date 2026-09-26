@@ -7,6 +7,7 @@ import com.hbm.blocks.machine.rbmk.RBMKBaseBlock;
 import com.hbm.main.NuclearTechMod;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.util.RenderContext;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -19,9 +20,9 @@ import net.minecraft.world.phys.AABB;
  * je weiter der Stab eingefahren ist, desto tiefer sitzt er. Damit ist von aussen ablesbar, wie
  * weit ein Stab steht -- die Zahl steht sonst nur in der Oberflaeche.
  *
- * ABWEICHUNG: das Original liest die Helligkeit am Saeulenkopf von Hand aus und setzt die
- * Lichtkarte selbst. In 1.21 kommt das Licht ueber den PoseStack-Aufruf herein; der Deckel wird
- * daher mit dem Licht des Kernblocks gezeichnet statt mit dem des Saeulenkopfs.
+ * Das Licht liest der Renderer wie das Original ueber dem Saeulenkopf (getPacketLight). Das
+ * Licht, das 1.21 mitgibt, gehoert zum Kernblock -- einem undurchsichtigen Block, in dem es
+ * immer 0 ist. Damit gezeichnet, war der Deckel schwarz.
  */
 public class RenderRBMKControlRod extends BlockEntityRendererNT<RBMKControlBlockEntity> {
 
@@ -63,6 +64,13 @@ public class RenderRBMKControlRod extends BlockEntityRendererNT<RBMKControlBlock
         float level = (float) (control.lastRodLevel + (control.rodLevel - control.lastRodLevel) * partialTicks);
         RenderContext.translate(0F, level, 0F);
         ResourceManager.rbmk_rods.renderPart("Lid");
+    }
+
+    @Override
+    public int getPacketLight(int packedLight, RBMKControlBlockEntity control) {
+        if(control.getLevel() == null) return packedLight;
+        int offset = RBMKBaseBlock.columnHeight(control.getLevel(), control.getBlockPos(), control.getBlockState().getBlock());
+        return LevelRenderer.getLightColor(control.getLevel(), control.getBlockPos().above(offset + 1));
     }
 
     /** Der Deckel sitzt bis zu sechzehn Bloecke ueber dem Kernblock. */

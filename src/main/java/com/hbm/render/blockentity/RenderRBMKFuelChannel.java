@@ -9,6 +9,7 @@ import com.hbm.render.NtmRenderTypes;
 import com.hbm.render.util.RenderContext;
 import com.hbm.util.ColorUtil;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -114,6 +115,18 @@ public class RenderRBMKFuelChannel extends BlockEntityRendererNT<RBMKRodBlockEnt
         }
 
         RenderContext.popPose();
+    }
+
+    /**
+     * Sichtbar ist vom Kanal nur, was man von oben durch den Saeulenkopf sieht -- also gilt das
+     * Licht ueber dem Kopf, wie beim Steuerstab. Das mitgegebene Licht des Kernblocks ist in
+     * einem undurchsichtigen Block immer 0.
+     */
+    @Override
+    public int getPacketLight(int packedLight, RBMKRodBlockEntity rod) {
+        if(rod.getLevel() == null) return packedLight;
+        int offset = RBMKBaseBlock.columnHeight(rod.getLevel(), rod.getBlockPos(), rod.getBlockState().getBlock());
+        return LevelRenderer.getLightColor(rod.getLevel(), rod.getBlockPos().above(offset + 1));
     }
 
     /** Das Stabbuendel reicht bis zum Deckel hinauf. */

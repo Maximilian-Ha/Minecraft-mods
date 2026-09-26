@@ -14684,3 +14684,23 @@ aus einem Iris-Mixin. `build.gradle` hatte Iris als `implementation` — damit l
 Entwicklungs-Client, ohne das Sodium, das es voraussetzt. Gemessen: der Code nutzt **keine**
 Iris-Klasse, nur `ModList.isLoaded("iris")`. Die Abhängigkeit hatte also genau eine Wirkung,
 und die war dieser Absturz. Sie ist entfernt.
+
+---
+
+## Runde 308 — schwarze Steuerstäbe: Licht aus dem falschen Block
+
+Erster Blick ins Spiel (Bildschirmfoto): die Deckel der Steuerstäbe sind schwarz, die
+Brennstoffkanäle von oben kaum zu sehen.
+
+Ursache, im Kommentar des Steuerstab-Renderers sogar als „ABWEICHUNG“ festgehalten: gezeichnet
+wurde mit dem Licht, das 1.21 dem Renderer mitgibt — dem des **Kernblocks**. Der ist
+undurchsichtig; in ihm ist das Licht immer 0. Das Original liest die Helligkeit dagegen von Hand
+**über dem Säulenkopf** (`yCoord + offset + 1`).
+
+`RenderRBMKControlRod` und `RenderRBMKFuelChannel` überschreiben jetzt `getPacketLight` und
+nehmen das Licht über dem Kopf — dasselbe Muster, das `RenderWatz` schon benutzt. Beim
+Brennstoffkanal gilt es für Kappe, Innenrohr und Stabbündel gleichermaßen: sichtbar ist davon
+nur, was man von oben durch den Kopf sieht.
+
+Offen: ob „der Brennstoffkanal ist unsichtbar“ allein daher kam (eine Kappe mit Licht 0 über
+einem Rohr ohne Deckfläche) oder eine zweite Ursache hat, zeigt erst der nächste Blick ins Spiel.
