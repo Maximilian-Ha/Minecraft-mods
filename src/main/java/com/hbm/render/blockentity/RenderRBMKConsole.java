@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,11 +32,12 @@ import org.joml.Matrix4f;
  * Rasteranzeige im Kleinen zeigt, darum kommt es aus RBMKGridPainter. Davor haengen sechs
  * Anzeigen mit je einem gemittelten Wert.
  *
+ * Jede Anzeige zeigt wie im Original Beschriftung und Wert ("Temp: 345.2C"). Der Port haelt in
+ * screen.display nur die Zahl; Schluessel und Einheit kommen aus ScreenType. Eine Anzeige
+ * zeigt erst etwas, wenn ihr am Pult eine Messgroesse UND Saeulen zugeteilt sind.
+ *
  * ABWEICHUNGEN:
- * - Das Original setzt die Beschriftung aus einem Uebersetzungsschluessel und dem Wert zusammen
- *   ("rbmk.screen.temp=123.4 Grad"). Der Port haelt in screen.display nur die Zahl und holt die
- *   Einheit aus ScreenType -- so macht es auch schon die Oberflaeche des Pults. Die Beschriftung
- *   davor entfaellt damit; am Pult steht neben jeder Anzeige ohnehin, was sie zeigt.
+ * - Ohne passende Saeule zeigt das Original "NaN", der Port bleibt leer.
  * - Das Original schaltet fuer die Schrift das Tiefenschreiben ab. Das gibt es beim
  *   Stapelzeichnen nicht mehr; die Schrift liegt weit genug vor dem Pult, um nicht zu streiten.
  */
@@ -106,7 +108,7 @@ public class RenderRBMKConsole extends BlockEntityRendererNT<RBMKConsoleBlockEnt
             RBMKScreen screen = be.screens[i];
             if(screen.display == null || screen.display.isEmpty()) continue;
 
-            String text = screen.display + screen.type.unit();
+            Component text = Component.translatable(screen.type.key(), screen.display + screen.type.unit());
 
             RenderContext.pushPose();
 

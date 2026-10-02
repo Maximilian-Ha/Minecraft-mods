@@ -355,6 +355,18 @@ public class RBMKConsoleBlockEntity extends LoadedBaseBlockEntity implements ITi
             this.offset = offset;
         }
 
+        /** Der Uebersetzungsschluessel der Beschriftung, die das Pult vor den Wert setzt ("Temp: %s"). */
+        public String key() {
+            return switch(this) {
+                case COL_TEMP -> "rbmk.screen.temp";
+                case ROD_EXTRACTION -> "rbmk.screen.rod";
+                case FUEL_DEPLETION -> "rbmk.screen.depletion";
+                case FUEL_POISON -> "rbmk.screen.xenon";
+                case FUEL_TEMP -> "rbmk.screen.core";
+                default -> "";
+            };
+        }
+
         /** Die Einheit, die hinter dem gemittelten Wert steht. */
         public String unit() {
             return switch(this) {

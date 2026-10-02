@@ -14737,3 +14737,20 @@ Dasselbe Muster gemessen in allen 149 `render`-Methoden: drei Funde — die Kons
 Tontafel (ebenfalls ein `Screen`, dort lag der Hintergrund über der Tafel) und der Ziegelofen
 (ein Container-Bildschirm; dort nur doppelt abgedunkelt). Alle drei behoben;
 `tools/screen-check.sh` hält es fest (0 Funde, mit dem alten Aufruf genau die Konsole).
+
+---
+
+## Runde 310 — die Anzeigen am RBMK-Pult
+
+Bildschirmfoto: die sechs Anzeigen am Pult zeigen nichts.
+
+Gemessen: die Mechanik ist portiert und entspricht dem Original — eine Anzeige zeigt erst etwas,
+wenn ihr in der Oberfläche **eine Messgröße** (linkes Feld, schaltet none → temp → rod → …)
+**und Säulen** (rechtes Feld, übernimmt die Auswahl im Raster) zugeteilt sind. Auf dem früheren
+Bild der Oberfläche standen alle sechs auf „none“; dann bleibt auch im Original jede leer.
+
+Eine echte Abweichung gab es trotzdem: das Original schreibt **Beschriftung und Wert**
+(„Temp: 345.2°C“), der Port nur die Zahl. Begründet war das im Code mit „am Pult steht neben
+jeder Anzeige ohnehin, was sie zeigt“ — das stimmt nicht, das Bild zeigt es. Die fünf
+Übersetzungen `rbmk.screen.*` aus dem Original sind zurück, `ScreenType.key()` liefert den
+Schlüssel, der Renderer zeichnet `Component.translatable(key, Wert + Einheit)`.

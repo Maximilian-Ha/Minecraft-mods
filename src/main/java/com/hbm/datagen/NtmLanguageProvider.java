@@ -674,6 +674,11 @@ public class NtmLanguageProvider extends LanguageProvider {
         this.add("container.rbmkOutgasser", "Irradiation Channel");
         this.add("container.rbmkReaSim", "ReaSim Fuel Rod Channel");
         this.add("container.rbmkControlAuto", "Automatic Control Rod");
+        this.add("rbmk.screen.core", "Core: %s");
+        this.add("rbmk.screen.depletion", "Depl: %s");
+        this.add("rbmk.screen.rod", "Control: %s");
+        this.add("rbmk.screen.temp", "Temp: %s");
+        this.add("rbmk.screen.xenon", "Xenon: %s");
         this.add("container.rbmkConsole", "RBMK Console");
         this.add("item.hbmsntm.rbmk_link.desc", "Right click a column, then the console.");
         this.add("item.hbmsntm.rbmk_link.linked", "Linked to %s / %s / %s");
